@@ -203,6 +203,37 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'kaseya-quote-manager',
+    name: 'Kaseya Quote Manager',
+    vendor: 'Kaseya',
+    description: 'Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org',
+    category: 'sales',
+    maturity: 'beta',
+    features: [
+      'Purchasing',
+      'Quote Generation'
+    ],
+    skills: [
+      { name: 'purchasing', description: 'Use this skill when navigating Kaseya Quote Manager procurement data — purchase orders, their lines and costs, suppliers, and product-supplier relationships.' },
+      { name: 'quotes', description: 'Use this skill when navigating Kaseya Quote Manager quotes — drilling from a quote into its sections and line items, and following quotes through to sales orders, order lines, and payments.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Kaseya Quote Manager (Datto Commerce) MCP tools — API-key authentication, the read-only tool surface, page/pageSize pagination with modifiedAfter, rate limits, and error handling.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/get-quote', description: 'Get a Kaseya Quote Manager quote with its sections and line items' },
+      { name: '/get-sales-order', description: 'Get a Kaseya Quote Manager sales order with its lines and payments' },
+      { name: '/list-quotes', description: 'List Kaseya Quote Manager quotes, optionally scoped to a recent window' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'kaseya-quote-manager/kaseya-quote-manager',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'betterstack',
     name: 'BetterStack',
     vendor: 'BetterStack',

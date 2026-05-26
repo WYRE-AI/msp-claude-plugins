@@ -1,0 +1,6 @@
+{
+  "name": "kaseya-quote-manager",
+  "version": "1.0.0",
+  "description": "Kaseya Quote Manager (Datto Commerce) - read-only access to quotes, sales orders, purchasing, catalog, CRM, and org data",
+  "author": "WYRE Technology"
+}

@@ -38,6 +38,7 @@ function deriveVendor(sourcePath: string): string {
 
   const vendorMap: Record<string, string> = {
     kaseya: 'Kaseya',
+    'kaseya-quote-manager': 'Kaseya',
     connectwise: 'ConnectWise',
     ninjaone: 'NinjaOne',
     syncro: 'Syncro',

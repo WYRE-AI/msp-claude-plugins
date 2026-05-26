@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.6.0",
+  "version": "1.7.0",
   "owner": {
     "name": "Aaron Sachs"
   },
@@ -45,6 +45,21 @@
         "autotask",
         "psa",
         "tickets",
+        "msp"
+      ]
+    },
+    {
+      "name": "kaseya-quote-manager",
+      "source": "./msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager",
+      "description": "Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org",
+      "version": "1.0.0",
+      "category": "sales",
+      "tags": [
+        "kaseya",
+        "kaseya-quote-manager",
+        "datto-commerce",
+        "sales",
+        "quotes",
         "msp"
       ]
     },

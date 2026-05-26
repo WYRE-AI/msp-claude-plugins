@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Kaseya Quote Manager plugin (sales): read-only access to Kaseya Quote Manager (Datto Commerce). 3 skills (api-patterns, quotes, purchasing) + 3 commands (list-quotes, get-quote, get-sales-order). Tools follow `kqm_<entity>_list` / `kqm_<entity>_get` across sales, procurement, catalog, CRM, and org domains. Marketplace version bumped to 1.7.0
 - Docs: new **Advanced Workflows** section in the gateway docs, with its first guide — the Autotask Ticket Triage Agent (a Claude-managed scheduled agent that classifies new Autotask tickets by priority, advances them to In Progress, and notifies Slack)
 - Docs: **Advanced Workflows batch 1** — six new workflow guides, each a Claude-managed scheduled routine built and verified against WYRE's MCP Gateway: Patch Drift Reporter (Datto RMM), Device Health Auditor (Datto RMM), M365 License Auditor (CIPP), Compliance Drift Reporter (Liongard), Billing Reconciler (QuickBooks Online), and QBR Prep (Autotask + Datto RMM + CIPP + Liongard + IT Glue). Plus a **Delivery Adapters** reference (how a routine delivers its report — Slack, IT Glue — and the adapter contract for new targets) and an **Agent → Routine Catalog** classifying every marketplace subagent by routine-fitness archetype
 - Subagent coverage for four previously thin plugins, bringing them to parity with the strongest sibling plugins. All content grounded in the real MCP server tool surface:
