@@ -84,9 +84,9 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>contract-renewal-tracker</td><td>autotask</td><td>✅</td><td>autotask</td><td>weekly</td><td>✅ built — batch 2 (Contract Renewal Tracker).</td></tr>
       <tr><td>rmm-health-auditor</td><td>datto-rmm</td><td>✅</td><td>datto-rmm</td><td>daily</td><td>✅ built — batch 1 (Device Health Auditor).</td></tr>
       <tr><td>asset-documentation-linker</td><td>it-glue</td><td>✅</td><td>itglue</td><td>monthly</td><td>Finds broken IT Glue object linkages.</td></tr>
-      <tr><td>documentation-auditor</td><td>it-glue</td><td>✅</td><td>itglue</td><td>monthly</td><td>IT Glue completeness/freshness audit.</td></tr>
+      <tr><td>documentation-auditor</td><td>it-glue</td><td>✅</td><td>itglue</td><td>monthly</td><td>✅ built — batch 3 (IT Glue Documentation Auditor).</td></tr>
       <tr><td>compliance-drift-reporter</td><td>liongard</td><td>✅</td><td>liongard, cipp</td><td>weekly</td><td>✅ built — batch 1, expanded to CIPP baseline + posture drift.</td></tr>
-      <tr><td>identity-auditor</td><td>m365</td><td>✅</td><td>m365</td><td>monthly</td><td>M365 tenant security audit; auditor.</td></tr>
+      <tr><td>identity-auditor</td><td>m365</td><td>✅</td><td>m365</td><td>monthly</td><td>✅ built — batch 3 (M365 Identity Auditor), via CIPP; identity-posture snapshot distinct from the Compliance Drift Reporter's standards-drift view.</td></tr>
       <tr><td>license-auditor</td><td>m365</td><td>✅</td><td>m365</td><td>monthly</td><td>✅ built — batch 1 (M365 License Auditor).</td></tr>
       <tr><td>email-continuity-checker</td><td>mimecast</td><td>✅</td><td>mimecast</td><td>daily</td><td>Continuity/archive health check.</td></tr>
       <tr><td>device-health-auditor</td><td>ninjaone-rmm</td><td>✅</td><td>ninjaone-rmm</td><td>daily</td><td>NinjaOne fleet health audit; auditor.</td></tr>
@@ -111,7 +111,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>technician-performance-coach</td><td>wyre-gateway</td><td>✅</td><td>wyre-gateway (multi)</td><td>monthly</td><td>Technician-performance trend report.</td></tr>
       <tr><td>qbr-prep-agent</td><td>wyre-gateway</td><td>✅</td><td>wyre-gateway (multi)</td><td>weekly</td><td>✅ built — batch 1 (QBR Prep).</td></tr>
       <tr><td>onboarding-completeness-checker</td><td>wyre-gateway</td><td>⚠️</td><td>wyre-gateway (multi)</td><td>on-demand</td><td>Onboarding checklist; routine-shaped but naturally event-triggered per new client.</td></tr>
-      <tr><td>gateway-ops</td><td>wyre-gateway</td><td>✅</td><td>wyre-gateway (admin)</td><td>weekly</td><td>Gateway usage/anomaly audit; reporter.</td></tr>
+      <tr><td>gateway-ops</td><td>wyre-gateway</td><td>✅</td><td>wyre-gateway (admin)</td><td>weekly</td><td>✅ built — batch 3 (Gateway Usage &amp; Anomaly Auditor); the meta-routine that audits the gateway itself.</td></tr>
       <tr><td>billing-reconciler</td><td>xero</td><td>✅</td><td>xero</td><td>weekly</td><td>Xero billing reconciliation; reporter.</td></tr>
       <tr><td>cash-flow-analyzer</td><td>xero</td><td>✅</td><td>xero</td><td>weekly</td><td>✅ built — batch 2 (Cash Flow Analyzer), built on the live QuickBooks Online connector; Xero is a connector swap once that connector is live.</td></tr>
     </tbody>

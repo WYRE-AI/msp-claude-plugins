@@ -1,0 +1,357 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled M365 Identity Auditor agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and CIPP is reachable: call
+   cipp_list_tenants and check it returns your managed Microsoft 365 tenants.
+2. Decide on the tenants this audit should cover. cipp_list_mfa_users and
+   cipp_list_users return per-user records for every user in a tenant — across
+   a large MSP estate, sweeping every tenant in one routine run is heavy. If
+   you manage more than ~10 tenants, choose a fixed set of about six and record
+   each tenant's tenantFilter (domain or ID). These get baked into the routine
+   prompt. With a modest tenant count you may keep it portfolio-wide.
+3. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #sw-dev). If Slack does not show in the /schedule connector
+   list, read its connector_uuid and url from an existing routine that already
+   uses Slack (RemoteTrigger list -> get -> mcp_connections).
+4. Create a Claude-managed scheduled routine named "M365 Identity Auditor":
+   - Schedule: monthly, cron "0 13 1 * *" (1st of the month, 09:00
+     America/New_York = 13:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: cipp_list_tenants, cipp_list_mfa_users,
+         cipp_list_conditional_access_policies, cipp_list_users
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, enumerate tenants (or iterate the baked-in
+     list), per tenant pull MFA user status, conditional access policies, and
+     the full user list; compute MFA enrollment %; flag every admin without
+     MFA as critical; count global admins; check CA policy presence; flag
+     stale and disabled accounts; rank tenants by identity risk; publish a
+     canvas "M365 Identity Audit - <month year>" with the per-tenant report
+     and portfolio roll-up; post a one-line summary to the destination
+     channel. Use the exact routine prompt below, with your own tenant filters.
+5. Trigger a manual run and verify: a canvas titled "M365 Identity Audit -
+   <month year>" was created, a one-line summary landed in the destination
+   channel, and the report content matches the live tenants (spot-check one).`;
+
+const routinePrompt = `You are the M365 Identity Auditor. You run monthly. Keep it lean.
+
+Use ONLY: cipp_list_tenants, cipp_list_mfa_users,
+cipp_list_conditional_access_policies, cipp_list_users,
+slack_create_canvas, slack_send_message.
+
+Tenants to audit (tenantFilter - name):
+- <tenant-id-1> - <tenant name 1>
+- <tenant-id-2> - <tenant name 2>
+- ... about six tenants total ...
+
+For each tenant above, run these steps in order. If a tenant fails at any
+step, record it in a "could not read" section — do not score it 0. A read
+failure is not the same as "no MFA."
+
+STEP 1 — MFA STATUS
+Call cipp_list_mfa_users with that tenantFilter. Each record has at minimum:
+  UPN / DisplayName, MFAEmail, MFAPhone, MFAAuthApp, AuthStrongMethods,
+  IsLicensed, AccountEnabled, Roles.
+Separate users into: enabled-licensed, enabled-unlicensed, disabled.
+For enabled-licensed users only:
+  - A user is MFA-ENROLLED if they have at least one strong auth method
+    registered (AuthStrongMethods is non-empty, or any MFA* field is set).
+  - MFA enrollment % = enrolled / total enabled-licensed * 100.
+  - MFA COVERAGE TARGET: flag any tenant below 90 % as amber; below 75 % as red.
+  - CRITICAL: any enabled user who holds an admin role (Roles is non-empty)
+    and is NOT enrolled in MFA is a CRITICAL finding. Surface this at the top
+    of the tenant section, not buried in a table.
+
+STEP 2 — CONDITIONAL ACCESS
+Call cipp_list_conditional_access_policies with that tenantFilter.
+  - If zero policies are returned: flag as RED — no CA policies present.
+  - Count enabled vs disabled policies. Note any policy that enforces MFA
+    (state=enabled, grantControls includes mfa or authenticationStrength).
+  - If no enabled policy requires MFA: flag as AMBER — CA present but MFA
+    not enforced by policy.
+
+STEP 3 — USERS AND ADMIN EXPOSURE
+Call cipp_list_users with that tenantFilter. From this list:
+  - Count global admins (role contains "Global Administrator" or equivalent).
+    Flag any tenant with more than 3 global admins as amber; more than 5 as red.
+  - Flag disabled accounts that still exist (AccountEnabled=false). A large
+    count of disabled accounts indicates deprovisioning debt — note the count.
+  - Flag accounts with no sign-in for 90+ days if LastSignIn is available.
+    If LastSignIn is not in the payload, skip this check and note it.
+
+STEP 4 — PER-TENANT POSTURE SUMMARY
+For each tenant, write a short section:
+  Tenant: <name>
+  MFA enrollment: N % (N enrolled / N total enabled-licensed)
+  CRITICAL — admins without MFA: list UPNs, or "none"
+  CA policies: N total (N enabled); MFA enforced by policy: yes / no / none
+  Global admins: N
+  Disabled accounts still present: N
+  Stale accounts (90+ days): N or "data unavailable"
+  Risk level: CRITICAL / RED / AMBER / GREEN
+    CRITICAL if any admin lacks MFA.
+    RED if MFA < 75 % OR no CA policies present.
+    AMBER if MFA 75–89 % OR CA present but no MFA enforcement OR > 3 global admins.
+    GREEN otherwise.
+
+STEP 5 — PORTFOLIO ROLL-UP
+After all tenants:
+  - List tenants ranked by risk: CRITICAL first, then RED, AMBER, GREEN.
+  - Portfolio MFA enrollment: weighted average across enabled-licensed users.
+  - Count of tenants at each risk level.
+  - Count of total admins-without-MFA findings across the portfolio.
+  - "Could not read" section for any tenant that returned errors.
+
+STEP 6 — DELIVERY
+slack_create_canvas titled "M365 Identity Audit - <current month and year>"
+with the full per-tenant report and portfolio roll-up.
+Then slack_send_message to #sw-dev (channel ID C0931CKJ75X): a one-line
+summary ("M365 identity audit: N CRITICAL, N RED, N AMBER, N GREEN across
+N tenants — see canvas") linking the canvas.`;
+---
+<DocsLayout title="M365 Identity Auditor" description="Build a Claude-managed scheduled agent that sweeps Microsoft 365 tenants monthly via CIPP, checks MFA enrollment, conditional access coverage, admin exposure, and stale accounts, then posts a per-tenant identity-posture report to Slack as a canvas — no servers, no code.">
+  <h1>M365 Identity Auditor</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a month, reads the identity posture of
+    a set of Microsoft 365 tenants through CIPP — MFA enrollment coverage, conditional
+    access policy presence, global-admin count and protection, and stale or disabled
+    accounts — ranks each tenant by risk, and publishes a per-tenant report to Slack
+    as a canvas with a one-line summary. There are no servers and no code to deploy:
+    the agent is a saved prompt plus a schedule plus two MCP connectors, running in
+    Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on a monthly cron. Each run it reads MFA
+    enrollment, conditional access policies, and user account data for each configured
+    tenant, applies a consistent risk-scoring model, ranks tenants from critical to
+    green, and notifies your team. The result is a point-in-time "who can get into
+    these tenants and how well protected are they" snapshot across your managed M365
+    estate — delivered as a Slack canvas with a one-line channel summary.
+  </p>
+  <p>
+    This guide is distinct from the
+    <a href={`${baseUrl}advanced-workflows/compliance-drift-reporter/`}>Compliance Drift Reporter</a>,
+    which tracks whether CIPP Standards-baseline assignments have changed and whether
+    Liongard has detected configuration drift over time. This auditor is a
+    point-in-time identity posture snapshot: it does not compare against a prior
+    state — it asks "right now, is identity well protected in each tenant?"
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>cipp_*</code> tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>CIPP enabled in the gateway</strong></td>
+        <td>The gateway's CIPP integration must be configured and able to <strong>read</strong> tenants, MFA user status, conditional access policies, and user accounts across your managed Microsoft 365 estate. Each tenant must have a valid GDAP / delegated-access relationship.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#sw-dev</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>Scope the sweep or it will time out.</strong> A large MSP may manage dozens
+      of tenants. <code>cipp_list_mfa_users</code> and <code>cipp_list_users</code> each
+      return per-user records — sweeping every tenant in a single routine run produces
+      a payload the run cannot hold before the 60-second tool timeout hits. Either bake
+      a fixed set of about six tenants into the routine prompt, or enumerate tenants first
+      with <code>cipp_list_tenants</code> and iterate through them in batches across
+      separate routine runs. With a modest tenant count (under ~10) a single portfolio
+      sweep is fine.
+    </li>
+    <li>
+      <strong>A read failure is not a failing grade.</strong> CIPP proxies Microsoft Graph
+      per tenant. A tenant with a broken GDAP relationship or an expired delegated-access
+      consent will return an error, not empty data. The routine is told to list those
+      tenants in a "could not read" section — recording them as an explicit gap — rather
+      than scoring them 0. A 0 % MFA figure and a read error are very different findings
+      and must not be conflated.
+    </li>
+    <li>
+      <strong>An admin without MFA is the single most important finding — surface it
+      first.</strong> An enabled admin account with no MFA registration is a critical
+      exposure regardless of the tenant's overall MFA coverage percentage. The routine
+      is explicitly told to put admin-without-MFA at the top of each tenant section, not
+      buried in a per-user table.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected.</strong> The routine scheduler
+      will not accept a cron more frequent than hourly. A monthly cron is well within
+      bounds — and the right cadence for identity posture anyway.
+    </li>
+    <li>
+      <strong>Cron is UTC — adjust for your timezone.</strong> The cron
+      <code>"0 13 1 * *"</code> fires at 13:00 UTC on the 1st, which is 09:00
+      America/New_York (EST). Adjust the UTC offset if your team is in a different
+      timezone or if EST/EDT matters for daylight saving.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>Slack <code>connector_uuid</code> and <code>url</code> discovery.</strong>
+      If the Slack connector does not appear in the <code>/schedule</code> connector
+      list when creating the routine, read its <code>connector_uuid</code> and
+      <code>url</code> from an existing routine that already uses Slack: list routines
+      via RemoteTrigger, get the one that sends to Slack, and inspect its
+      <code>mcp_connections</code> array.
+    </li>
+    <li>
+      <strong>Prefer list payloads over per-record gets.</strong> The
+      <code>cipp_list_mfa_users</code> list already carries the registration fields
+      needed to determine enrollment. Do not call a per-user get for each record — that
+      risks hitting the 60-second tool timeout across a large tenant.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    creates the routine, and verifies it end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your own tenant filters and destination channel.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A monthly cadence, by design</h3>
+  <p>
+    Identity posture changes slowly — new admins are promoted, MFA is enrolled or
+    falls out of date, conditional access policies are added or disabled over weeks.
+    A monthly run on the 1st catches the previous month's changes and gives the team
+    a consistent baseline to track improvement. Running it more frequently would add
+    noise without adding signal. A once-a-month sweep is also kind to CIPP: one pass
+    per month, not one per hour.
+  </p>
+  <h3>Identity posture snapshot vs compliance drift</h3>
+  <p>
+    The
+    <a href={`${baseUrl}advanced-workflows/compliance-drift-reporter/`}>Compliance Drift Reporter</a>
+    answers "has something changed from the baseline we assigned?" — it detects
+    drift in CIPP Standards assignments and Liongard configuration data over time.
+    This auditor answers a different question: "right now, at this moment, how well
+    protected is identity in each tenant?" It does not compare against a prior
+    run. Two tenants that have been in exactly the same state for six months will both
+    appear in this report, scored by their current posture, not by whether anything
+    moved. The two guides complement each other: drift detection catches change events;
+    posture snapshotting catches steady-state exposure.
+  </p>
+  <h3>Admin without MFA is the headline risk</h3>
+  <p>
+    An enabled admin account with no MFA registration is a critical exposure — an
+    adversary who compromises that account's password has full administrative access
+    with no second factor to block them. The routine is told to surface this finding
+    at the top of every tenant section, ahead of the MFA percentage, the CA policy
+    table, or anything else. A tenant can have 95 % overall MFA enrollment and still
+    be critical if a single global admin is unprotected. The risk level for such a
+    tenant is always CRITICAL, regardless of other scores.
+  </p>
+  <h3>Read failure vs real finding</h3>
+  <p>
+    CIPP proxies Microsoft Graph per tenant. If a tenant's GDAP relationship has
+    expired, its delegated-admin consent has been revoked, or a transient Graph API
+    error occurs, <code>cipp_list_mfa_users</code> returns an error — not an empty
+    user list. An empty or erroring payload is not the same as zero MFA enrollment.
+    The routine is told to put any tenant that could not be read into an explicit
+    "could not read" section, so the report always distinguishes between "we checked
+    and found a problem" and "we could not check." A tenant in the could-not-read
+    section is its own action item: restore the delegated-access relationship.
+  </p>
+  <h3>Canvas plus summary delivery</h3>
+  <p>
+    The full per-tenant report — MFA enrollment, CA policy table, admin list,
+    disabled account counts, risk level — can be long across six tenants. The routine
+    publishes it as a Slack canvas, a durable document teammates can scroll and
+    reference month over month, and posts only a one-line summary to the channel
+    ("N CRITICAL, N RED, N AMBER, N GREEN across N tenants") linking the canvas. The
+    channel stays readable; the detail lives in the canvas. See
+    <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The natural next step is to feed each tenant's identity risk level into a
+    multi-vendor security posture scorer — a portfolio agent that combines the
+    identity risk score from this auditor with endpoint protection coverage,
+    patch drift, and backup health into a single vCISO-style score per client.
+    The per-tenant risk level (CRITICAL / RED / AMBER / GREEN) the routine already
+    produces is the right input for that kind of roll-up.
+  </p>
+  <p>
+    If CIPP is not in use for some tenants, the same logic can run directly against
+    Microsoft Graph via the gateway's <code>microsoft-graph</code> connector.
+    Replace <code>cipp_list_mfa_users</code> with
+    <code>microsoft_graph_get</code> against
+    <code>/reports/authenticationMethods/userRegistrationDetails</code>,
+    <code>cipp_list_conditional_access_policies</code> with
+    <code>/identity/conditionalAccess/policies</code>, and
+    <code>cipp_list_users</code> with <code>/users</code>. The routine prompt's
+    scoring logic is identical; only the tool names and field names change.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

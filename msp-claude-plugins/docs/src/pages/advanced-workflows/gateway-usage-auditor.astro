@@ -1,0 +1,342 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled Gateway Usage & Anomaly Auditor agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway admin tools are reachable: call get_admin_metrics
+   and get_usage_summary and verify both return data. These tools require an
+   ADMIN or OWNER role on the gateway — if you get an authorization error, the
+   gateway connection attached to this session is not an admin account. Stop and
+   ask the user to switch to their admin gateway connection before continuing.
+2. Call list_connections to enumerate every vendor connection currently
+   configured and note their names, IDs, and status. Call get_credit_balance to
+   read the current credit balance and recent consumption rate.
+3. Confirm a Slack connector is connected. Note the destination channel name and
+   ID (e.g. #gateway-ops). If Slack does not show in the /schedule connector
+   list, read its connector_uuid and url from an existing routine that already
+   uses Slack (RemoteTrigger list -> get -> mcp_connections).
+4. Create a Claude-managed scheduled routine named "Gateway Usage & Anomaly Auditor":
+   - Schedule: weekly, cron "0 12 * * 1" (Monday 08:00 America/New_York =
+     12:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: get_admin_metrics, get_usage_summary,
+         list_connections, get_credit_balance
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, pull the weekly usage summary and admin metrics,
+     list connections with activity and health, compute week-over-week usage
+     trend, flag idle or unused connections and any anomalous usage patterns,
+     check credit consumption vs balance, build the digest, publish it as a
+     Slack canvas titled "Gateway Ops — <date>", and post a one-line summary to
+     the destination channel. Use the exact routine prompt below.
+5. Trigger a manual run and verify: a canvas titled "Gateway Ops — <date>" was
+   created, a one-line summary landed in the destination channel, and the
+   reported connection list matches what you saw in step 2.`;
+
+const routinePrompt = `You are the Gateway Usage & Anomaly Auditor. You run weekly. Keep it lean.
+
+Use ONLY: get_admin_metrics, get_usage_summary, list_connections,
+get_credit_balance, slack_create_canvas, slack_send_message.
+This routine is READ-ONLY — the only write is the Slack delivery.
+
+--- DATA COLLECTION ---
+
+1. Call get_usage_summary for the past 7 days to obtain per-user and
+   per-connection tool-call counts and breakdown by tool category.
+2. Call get_admin_metrics to obtain gateway-level operational health:
+   total calls, error rates, latency percentiles, and any alert flags.
+3. Call list_connections to enumerate every vendor connection: name, ID,
+   status (active / inactive), and last-used timestamp if available.
+4. Call get_credit_balance to read current balance and the consumption rate
+   or usage figure returned by the API.
+
+--- ANALYSIS ---
+
+5. Week-over-week trend: compare this week's total call count from
+   get_usage_summary against the prior-period figure if the API returns it.
+   Express as a percentage change (e.g. "+12 %" or "-5 %"). If no prior-period
+   figure is available, note that explicitly rather than omitting the section.
+
+6. Anomaly heuristics — flag any of the following:
+   a. USAGE SPIKE: any single user or connection whose call count this week
+      is more than 3x their share of the trailing average or their portion
+      of the prior period. If no prior data is available, flag any single
+      user or connection responsible for more than 50 % of total calls.
+   b. AFTER-HOURS ACTIVITY: tool calls that occurred outside 06:00–20:00
+      in the user's local time (or UTC if timezone is unknown). List the
+      user, connection, tool, and approximate time.
+   c. SENSITIVE CATEGORY ACCESS: calls to tool categories that carry
+      elevated risk — any tool whose name includes "delete", "update",
+      "create", "reset", "revoke", "disable", or "offboard". List each
+      occurrence: user, tool name, timestamp if available.
+
+7. Idle / unused connections: a connection is IDLE if list_connections shows
+   it has not been called in the past 30 days (or if it shows no recent
+   activity at all). Flag each idle connection by name and ID with a note
+   that this is advisory — a connection used only at quarter-end will appear
+   idle on a weekly check. Recommend human review before disconnecting.
+
+8. Credit runway: divide the current balance by the 7-day consumption figure
+   to estimate how many weeks of runway remain at the current burn rate. If
+   the API does not return a consumption figure, skip the runway calculation
+   and note that.
+
+--- DELIVERY ---
+
+9. Build the digest with these sections:
+   - Summary line: total calls this week, week-over-week trend, credit balance
+   - Per-connection activity table: name, calls this week, status, idle flag
+   - Anomaly flags (spikes, after-hours, sensitive-category access)
+   - Idle connection advisory list
+   - Credit consumption and runway estimate
+   - "Could not read" section: any tool call that failed or returned no data
+
+10. Call slack_create_canvas titled "Gateway Ops — <today's date YYYY-MM-DD>"
+    with the full digest in Markdown.
+11. Call slack_send_message to #gateway-ops with a one-line summary
+    ("Gateway ops: N calls this week (<trend>), <M> anomalies flagged,
+    <K> idle connections — see canvas") and a link to the canvas.
+
+Note: this routine's own calls appear in next week's usage data — a small
+amount of self-attribution is expected and normal.`;
+---
+<DocsLayout title="Gateway Usage & Anomaly Auditor" description="Build a Claude-managed scheduled agent that audits the WYRE MCP Gateway itself every week — usage trends, connection health, anomaly detection, and credit runway — and posts a gateway-ops digest to Slack as a canvas. No servers, no code.">
+  <h1>Gateway Usage &amp; Anomaly Auditor</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, reads the WYRE MCP Gateway's own
+    operational data, surfaces usage trends and anomalies, flags idle vendor connections
+    that may represent wasted licenses or stale access, estimates credit runway, and
+    publishes a gateway-ops digest to Slack as a canvas with a one-line summary. Unlike
+    every other workflow in this collection — which reports on a vendor system — this one
+    reports on the <strong>gateway itself</strong>. It is strictly
+    <strong>read-only</strong>. There are no servers and no code to deploy: the agent is
+    a saved prompt plus a schedule plus two MCP connectors, running in Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on a weekly cron. Each run it pulls the
+    gateway's usage summary and admin metrics for the past seven days, lists every
+    vendor connection with its activity and health status, computes a week-over-week
+    usage trend, applies a set of explicit anomaly heuristics (usage spikes, after-hours
+    activity, sensitive-category tool access), estimates how many weeks of credit runway
+    remain at the current burn rate, and delivers the complete digest to Slack as a
+    canvas. The gateway-ops channel gets a single one-line summary linking the canvas;
+    the full detail is always one click away.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector — admin account</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). The gateway connection used to build and run this routine must belong to a gateway <strong>admin or owner</strong> — the <code>get_admin_metrics</code> and <code>get_usage_summary</code> tools return authorization errors for standard users. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>Gateway admin tools enabled</strong></td>
+        <td><code>get_admin_metrics</code>, <code>get_usage_summary</code>, <code>list_connections</code>, and <code>get_credit_balance</code> must be accessible from your gateway connection. These are gateway-level tools, not vendor connector tools.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#gateway-ops</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>The gateway admin tools require an ADMIN or OWNER role — a standard
+      user gets authorization errors.</strong> The <code>get_admin_metrics</code> and
+      <code>get_usage_summary</code> tools are gated behind the admin role on the
+      gateway. If the gateway connection attached to your Claude session belongs to a
+      standard user, every call to those tools fails silently or returns an auth error.
+      Build this routine while connected as a gateway admin, and ensure the routine's
+      gateway connector is the admin's connection.
+    </li>
+    <li>
+      <strong>This routine audits the same gateway it runs through — that is expected,
+      but its own calls show up in next week's data.</strong> The routine reaches the
+      gateway admin tools <em>through</em> the WYRE MCP Gateway connector, which means
+      the four tool calls it makes each week are themselves logged as gateway usage. A
+      small cluster of calls attributed to this routine's user will appear in every
+      weekly report. That is the meta-loop in action, not a bug; note it when reviewing
+      the data so it is not mistaken for anomalous activity.
+    </li>
+    <li>
+      <strong>Idle-connection flags are advisory — a connection used only at
+      quarter-end looks idle on a weekly check.</strong> A vendor connection with no
+      calls in the past 30 days is flagged as idle, but "idle" does not mean "safe to
+      remove." Connections for quarterly billing runs, annual audits, or on-call
+      integrations will always appear idle between their bursts of activity. Treat idle
+      flags as a prompt for human review, not as an automatic removal recommendation.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>Cron schedules are UTC — account for your timezone.</strong> The cron
+      <code>0 12 * * 1</code> fires at 12:00 UTC, which is 08:00 America/New_York in
+      standard time and 08:00 during daylight saving time (UTC-4). Adjust the cron
+      expression if you need a different local time, and remember the scheduler
+      rejects cadences faster than once per hour.
+    </li>
+    <li>
+      <strong>Prefer summary tools over per-record gets; the 60-second tool timeout
+      applies.</strong> <code>get_usage_summary</code> and <code>get_admin_metrics</code>
+      return aggregated data in a single call — use them instead of looping over
+      individual records. If a call exceeds 60 seconds the tool times out and the run
+      records a failure for that step.
+    </li>
+    <li>
+      <strong>If Slack does not appear in the <code>/schedule</code> connector list,
+      copy its <code>connector_uuid</code> and <code>url</code> from an existing
+      routine.</strong> Use RemoteTrigger list → get → mcp_connections on a routine
+      that already uses Slack to retrieve the values.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms admin access,
+    inspects the live connection list, creates the routine, and verifies it end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your own destination channel name and ID.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Gateway usage is a slow-moving operational signal — unusual patterns, creeping credit
+    burn, and stale connections accumulate over days and weeks, not minutes. The routine
+    runs every Monday morning so the digest is ready before the week's work starts. A
+    weekly cron is also self-consistent: the usage summary covers a clean seven-day
+    window, the week-over-week comparison is always apples-to-apples, and the idle
+    threshold (30 days) stays stable relative to the check interval.
+  </p>
+  <h3>The meta-routine: auditing the gateway through itself</h3>
+  <p>
+    Every other workflow in this collection reads a vendor system — Datto RMM, QuickBooks,
+    HaloPSA — through the gateway. This one reads <em>the gateway itself</em> through the
+    same gateway connector. That means the routine's own four tool calls appear in the
+    next week's usage data, attributed to the admin user who owns the connector. That
+    self-attribution is expected and documented in the routine prompt so it is never
+    mistaken for anomalous activity. The practical implication: if you see a small,
+    perfectly regular cluster of four calls per week from one user, that is this routine.
+  </p>
+  <h3>Usage trend and anomaly heuristics</h3>
+  <p>
+    The routine applies three explicit anomaly tests to the usage data. A
+    <strong>usage spike</strong> is any single user or connection whose call count is
+    more than 3× their share of the prior period — or, when no prior-period data is
+    available, any user or connection responsible for more than half of all calls that
+    week. <strong>After-hours activity</strong> is any tool call outside 06:00–20:00
+    local time (falling back to UTC), surfaced with the user, connection, tool, and
+    approximate time. <strong>Sensitive-category access</strong> covers any call to a
+    tool whose name includes terms like <code>delete</code>, <code>update</code>,
+    <code>create</code>, <code>reset</code>, <code>revoke</code>, <code>disable</code>,
+    or <code>offboard</code> — the categories where a misconfigured or compromised
+    session could cause real harm. All three are logged for human review, not acted on.
+  </p>
+  <h3>Idle connections and the license-waste signal</h3>
+  <p>
+    A vendor connection that has not been called in 30 days is flagged as idle. For an
+    MSP running a dozen vendor integrations, idle connections are worth reviewing: they
+    may represent API credentials that are no longer needed (a clean-up opportunity), or
+    they may represent quarterly workflows that only fire a few times a year (a false
+    positive). The routine surfaces them with an explicit advisory note — idle flags are
+    recommendations for a human to investigate, never automatic removals. The 30-day
+    threshold is baked into the routine prompt and easy to adjust.
+  </p>
+  <h3>Credit runway and the consumption estimate</h3>
+  <p>
+    <code>get_credit_balance</code> returns the current balance and, where the API
+    provides it, a consumption figure. The routine divides balance by seven-day
+    consumption to estimate weeks of runway at the current burn rate. If the API does
+    not return a consumption figure the calculation is skipped and noted explicitly in
+    the digest — the routine never fabricates a number. The runway estimate is a
+    planning signal, not a billing forecast; actual consumption varies with workload.
+  </p>
+  <h3>Canvas and summary delivery</h3>
+  <p>
+    The full digest — connection table, anomaly flags, idle advisory, credit runway — can
+    run long, so the routine publishes it as a Slack canvas and posts only a one-line
+    summary to the gateway-ops channel. The summary states total calls, week-over-week
+    trend, anomaly count, and idle connection count; the canvas holds the detail. See
+    <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The natural next step is to pair this routine with a multi-vendor
+    <code>gateway-ops</code> portfolio agent for deeper security-anomaly analysis:
+    cross-correlate access patterns across vendor connections — for example, a user who
+    queries Huntress threat data and then creates a CIPP user in the same session — to
+    surface access-pattern combinations that no single tool-category check would catch.
+    That kind of correlation requires more context than a weekly summary can hold, which
+    is where a longer-running agent with the full audit log is the right tool.
+  </p>
+  <p>
+    A simpler extension is to make credit-runway alerts time-sensitive rather than
+    weekly: add a second, more frequent routine that calls only <code>get_credit_balance</code>
+    and <code>slack_send_message</code>, and fires only when the runway drops below a
+    threshold — say, four weeks. That routine runs cheaply (two tool calls) and
+    supplements the weekly digest with an urgent notification when the balance actually
+    needs attention.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

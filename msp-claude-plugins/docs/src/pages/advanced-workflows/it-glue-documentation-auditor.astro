@@ -1,0 +1,339 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled IT Glue Documentation Auditor agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and IT Glue is reachable: call
+   search_organizations with no filters and verify it returns a list of
+   organizations. Note the total count.
+2. Assess scale. If the tenant has more than ~30 organizations, you will need to
+   scope the routine to a fixed set of key orgs rather than sweeping every one.
+   Large tenants produce too much per-run payload to complete inside the tool
+   timeout. Pick a representative set of about 15-20 organizations that covers
+   the full client base (enterprise, mid-market, SMB) and record their IT Glue
+   organization IDs. These IDs get baked into the routine prompt. For smaller
+   tenants, the routine can enumerate all orgs dynamically.
+3. Call list_flexible_asset_types to see the full set of asset types configured
+   in this IT Glue tenant. Note the type names and IDs — the routine uses these
+   to grade asset coverage per org rather than expecting an absolute count.
+4. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #documentation or #sw-dev). If Slack does not show in the
+   /schedule connector list, read its connector_uuid and url from an existing
+   routine that already uses Slack (RemoteTrigger list -> get -> mcp_connections).
+5. Create a Claude-managed scheduled routine named "IT Glue Documentation Auditor":
+   - Schedule: monthly, cron "0 12 1 * *" (1st of each month 08:00
+     America/New_York = 12:00 UTC). Faster-than-hourly cadences are rejected.
+     Cron is always expressed in UTC.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: search_organizations, search_documents,
+         search_configurations, search_flexible_assets, list_flexible_asset_types
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, enumerate the scoped organizations, pull
+     documents/configurations/flexible-assets for each, score completeness and
+     freshness on two independent axes, rank orgs by documentation debt, publish
+     a canvas titled "Documentation Audit — <month YYYY-MM>", and post a one-line
+     summary to the channel. Use the exact routine prompt below, substituting the
+     baked-in org IDs and channel ID.
+6. Trigger a manual run and verify: a canvas titled "Documentation Audit —
+   <current month>" was created with a per-org ranked debt list, a one-line
+   summary landed in the destination channel, and the org count in the report
+   matches the scoped set (spot-check one org's document count against IT Glue).`;
+
+const routinePrompt = `You are the IT Glue Documentation Auditor. You run monthly on the 1st. Keep it lean.
+
+Use ONLY: search_organizations, search_documents, search_configurations,
+search_flexible_assets, list_flexible_asset_types,
+slack_create_canvas, slack_send_message.
+
+ORGANIZATIONS TO AUDIT:
+<If scoped to a fixed set, list org IDs and names here, e.g.:>
+- <org-id-1> - <Client Name 1>
+- <org-id-2> - <Client Name 2>
+- ... ~15-20 orgs ...
+<If the tenant is small enough to enumerate dynamically, call
+search_organizations with no filter and use the returned list.>
+
+STALENESS THRESHOLD: Any document or password record not updated in the last
+12 months is considered STALE.
+
+PHASE 1 - Enumerate expected asset types.
+Call list_flexible_asset_types once. Record all active flexible asset type
+names and IDs. This is the reference set used in Phase 2 step 4.
+
+PHASE 2 - Per-organization audit.
+For each organization in the scoped list, run these steps. If a call fails,
+record the org as "could not read" and continue.
+
+  Step 1 — Documents (completeness + freshness).
+  Call search_documents with the organization_id. For each document, read:
+  name, updated_at. Count total documents. Flag any document where updated_at
+  is more than 12 months ago as STALE.
+
+  Step 2 — Configurations (coverage).
+  Call search_configurations with the organization_id. Count total
+  configuration items. A configuration item with no linked documents is an
+  UNDOCUMENTED CONFIG. Read only: id, name, organization_id.
+
+  Step 3 — Flexible assets (coverage by type).
+  Call search_flexible_assets with the organization_id. Count how many of the
+  expected asset types (from Phase 1) are represented in this org's flexible
+  assets. A missing type is a COVERAGE GAP — but only flag it as a gap if the
+  org is a managed client where that type is expected. Small / basic orgs
+  legitimately have fewer asset types; do not penalize them for types that do
+  not apply.
+
+  Step 4 — Score the org.
+  Assign two scores, each 0–100:
+  - COMPLETENESS score: based on (a) whether documents exist at all,
+    (b) ratio of documented configs to total configs, and (c) fraction of
+    expected flexible asset types present.
+  - FRESHNESS score: based on the percentage of documents and flexible assets
+    updated within the last 12 months. An org with no stale records scores 100.
+    An org with all stale records scores 0.
+  Compute a DEBT score = 100 - ((completeness + freshness) / 2). Higher debt = worse.
+
+PHASE 3 - Rank and build the report.
+Sort organizations by DEBT score descending (highest debt first).
+Compose a markdown report:
+- SUMMARY at the top: total orgs audited, number with completeness < 50,
+  number with freshness < 50, number of "could not read" orgs.
+- RANKED ORG LIST: one section per org, ordered by debt, showing:
+    org name | completeness score | freshness score | debt score
+    - Documents: total, stale count
+    - Configs: total, undocumented count
+    - Flexible assets: types present / types expected, list any gaps
+- COULD NOT READ: list any orgs that could not be read this run.
+
+PHASE 4 - Deliver.
+Call slack_create_canvas titled "Documentation Audit — <YYYY-MM for current month>"
+with the full ranked report as markdown.
+Then call slack_send_message to #<your-channel> (channel ID <your-channel-id>):
+a one-line summary, e.g.:
+"Documentation audit: <N> orgs, avg debt <X>. Top offender: <org name>
+(debt <score>). See canvas: <link>"
+
+If every org scored completeness >= 80 AND freshness >= 80, send only:
+"Documentation audit: all <N> orgs in good shape this month (completeness >=80,
+freshness >=80)." and skip the canvas.`;
+---
+<DocsLayout title="IT Glue Documentation Auditor" description="Build a Claude-managed scheduled agent that sweeps IT Glue organizations monthly, scores documentation completeness and freshness, ranks clients by documentation debt, and posts a ranked report to Slack as a canvas — no servers, no code.">
+  <h1>IT Glue Documentation Auditor</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a month, sweeps your IT Glue organizations,
+    scores each one on two independent axes — documentation completeness and record
+    freshness — ranks clients by their documentation debt, and publishes a ranked report
+    to Slack as a canvas with a one-line summary. There are no servers and no code to
+    deploy: the agent is a saved prompt plus a monthly schedule plus two MCP connectors,
+    running in Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on the 1st of each month. Each run it
+    enumerates its scoped set of organizations, pulls documents, configurations, and
+    flexible assets for each, and produces two scores: a completeness score (are the
+    records there?) and a freshness score (have they been touched in the last year?).
+    Those two axes combine into a per-org debt score. The run ranks orgs by debt and
+    delivers a canvas report that turns silent documentation rot into a prioritized
+    backlog your team can act on before it bites during an outage.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>itglue_*</code> / IT Glue tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>IT Glue enabled in the gateway</strong></td>
+        <td>The gateway's IT Glue API key must be able to <strong>read</strong> organizations, documents, configurations, and flexible assets.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#documentation</code> or <code>#sw-dev</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>A large IT Glue tenant has many organizations — scope the routine to a
+      fixed set for large tenants.</strong> Like the Datto fleet sweep, enumerating every
+      org in a large tenant and then making three tool calls per org (documents,
+      configurations, flexible assets) adds up fast. For tenants with more than ~30
+      organizations, bake a fixed set of ~15–20 representative client IDs into the
+      routine prompt. For smaller tenants, the routine can call
+      <code>search_organizations</code> dynamically each run. Widening scope is a
+      routine prompt change — no code to deploy.
+    </li>
+    <li>
+      <strong>Use list and search payloads — do not get records one at a time.</strong>
+      <code>search_documents</code>, <code>search_configurations</code>, and
+      <code>search_flexible_assets</code> all accept an <code>organization_id</code> and
+      return a full list in one call. Calling a per-record get for every document or
+      configuration item across every org risks the 60-second tool timeout and multiplies
+      API calls needlessly. One search call per org per data type is all this routine
+      needs.
+    </li>
+    <li>
+      <strong>Grade coverage against expected asset types, not an absolute count.</strong>
+      A small client legitimately has fewer flexible asset types than an enterprise. The
+      routine calls <code>list_flexible_asset_types</code> once to get the full type
+      catalogue, then judges each org against the types relevant to it — not against the
+      total type count. Without this, every SMB client will look under-documented compared
+      to a large org, and the debt ranking becomes meaningless.
+    </li>
+    <li>
+      <strong>Freshness is a proxy for currency, not a guarantee of accuracy.</strong>
+      IT Glue has no "is this information correct?" field. The routine uses
+      <code>updated_at</code> timestamps on documents and flexible assets as a staleness
+      signal: records not touched in 12 months are flagged. A record updated yesterday
+      might still be wrong; a record updated 18 months ago might still be accurate. The
+      score surfaces forgotten records, not errors — treat it as a prompt to review, not
+      a verdict.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs for each connector.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cron is rejected, and cron is always UTC.</strong>
+      This routine runs monthly — <code>0 12 1 * *</code> fires at 12:00 UTC, which is
+      08:00 America/New_York. If you adjust the schedule, convert your local time to UTC
+      before setting it.
+    </li>
+    <li>
+      <strong>If Slack is not in the <code>/schedule</code> connector list, read its
+      details from an existing Slack routine.</strong> Open an existing routine that
+      already uses Slack (via RemoteTrigger list → get → mcp_connections) and copy the
+      <code>connector_uuid</code> and <code>url</code> from there.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    assesses your IT Glue tenant's scale, creates the routine, and verifies it end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your own scoped org IDs (or remove the fixed list for small tenants),
+    your staleness threshold if different from 12 months, and your destination channel.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A monthly cadence, by design</h3>
+  <p>
+    Documentation debt accumulates slowly — runbooks go stale over months, not minutes,
+    and missing records stay missing until an engineer notices during an incident. A
+    monthly audit is frequent enough to catch drift before it causes harm, and infrequent
+    enough to keep the signal meaningful: a team seeing the same report every week tends
+    to tune it out. Running on the 1st of each month gives the report a natural rhythm
+    that ties into monthly reviews and client QBRs.
+  </p>
+  <h3>Completeness and freshness as two distinct axes</h3>
+  <p>
+    The routine scores each organization on two independent dimensions. <em>Completeness</em>
+    asks whether the records exist: are there documents at all, what fraction of
+    configuration items have linked documentation, and how many of the expected flexible
+    asset types are represented? <em>Freshness</em> asks whether the records have been
+    touched recently: what percentage of documents and flexible assets were updated within
+    the last 12 months? The two scores combine into a debt score, but they are reported
+    separately so the fix is obvious — an org with high completeness and low freshness
+    needs a review pass, while an org with low completeness and high freshness needs new
+    records created, not just updated.
+  </p>
+  <h3>Grading against expected asset types, not absolute counts</h3>
+  <p>
+    IT Glue's flexible asset catalogue can contain dozens of types — network diagrams,
+    backup configs, security baselines, vendor contacts, and more. A small client with
+    five employees legitimately has only a handful of types configured; grading them
+    against the full enterprise type catalogue would make every SMB look critically
+    under-documented. The routine calls <code>list_flexible_asset_types</code> once per
+    run to retrieve the full type catalogue, then grades each org against the subset of
+    types relevant to its size and service tier. That relative grading is what keeps the
+    ranked debt list actionable: an org near the top has genuinely missing documentation
+    for its own context, not just fewer types than a larger client.
+  </p>
+  <h3>Canvas and summary delivery</h3>
+  <p>
+    The per-org ranked report can be long — one section per client with three data points
+    each — so the routine publishes it as a Slack canvas, a durable document teammates
+    can scroll and reference month to month, and posts only a one-line summary to the
+    channel with the top offender and a link to the canvas. When every org scores well
+    (completeness and freshness both ≥ 80), it posts a single clean line and skips the
+    canvas entirely. See <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The natural pairing is Hudu: if you run Hudu alongside IT Glue, a
+    <code>runbook-freshness-auditor</code> routine built on Hudu's API surfaces
+    runbook-specific currency — the same freshness signal applied specifically to
+    runbooks and SOPs rather than all documentation. The two routines make a
+    complementary pair: one covers the full IT Glue documentation estate, the other
+    focuses on the procedural layer that is most critical during an incident.
+  </p>
+  <p>
+    A second extension connects the audit to the onboarding flow: documentation gaps
+    found during client onboarding — asset types not yet populated, configs not yet
+    linked — can be fed into an onboarding-completeness-checker portfolio agent as a
+    baseline, so the monthly audit measures progress against a known starting state
+    rather than an arbitrary threshold.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>
