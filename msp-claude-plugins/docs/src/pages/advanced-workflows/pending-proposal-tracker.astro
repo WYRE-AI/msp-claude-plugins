@@ -148,15 +148,20 @@ Today's date in ISO format: <today-YYYY-MM-DD>
   </p>
 
   <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
-    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending</p>
+    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending the OAuth connect flow</p>
     <p class="text-amber-900 dark:text-amber-200 text-sm">
-      The PandaDoc connector does not yet expose tools through the WYRE MCP Gateway.
-      This guide documents the intended workflow and uses provisional tool names.
-      Confirm the exact tool names against the gateway tool catalog
-      (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>
-      with query <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">"pandadoc"</code>)
-      once the PandaDoc connector surfaces its tools before building the routine. Until
-      that point, the build prompt below cannot be executed end to end.
+      PandaDoc <strong>does</strong> run a hosted MCP server, at
+      <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">https://mcp.pandadoc.com/v1/mcp</code>,
+      and it is <strong>OAuth-protected (BYOC)</strong> — auth-code + PKCE, with Dynamic
+      Client Registration. The gateway's vendor entry was previously pointed at the docs
+      host with API-key auth and never reached a real server; that is corrected in
+      <a class="underline" href="https://github.com/wyre-technology/mcp-gateway/pull/188" target="_blank" rel="noopener noreferrer">mcp-gateway#188</a>.
+      Two things remain before this routine can run end to end: (1) an OAuth client must be
+      provisioned for the gateway (PandaDoc uses DCR, which the gateway doesn't yet perform
+      outbound — see the PR), and (2) the exact MCP tool names must be confirmed against the
+      catalog (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>,
+      query <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">"pandadoc"</code>)
+      once you connect — the names below are provisional.
     </p>
   </div>
 
@@ -338,15 +343,19 @@ Today's date in ISO format: <today-YYYY-MM-DD>
   </p>
   <h3>Why it is pending and what unblocks it</h3>
   <p>
-    The PandaDoc connector is not yet connected to the WYRE MCP Gateway. Until
-    <code>gateway__search_tools</code> returns PandaDoc tool results, neither the build
-    prompt nor the routine can execute. The workflow design — the status filter, the
-    age-in-stage bucketing, the expiry logic, the value aggregation, and the delivery
-    pattern — is fully specified here so that the routine can be built immediately once
-    the connector surfaces its tools. The main unknowns to resolve at that point are the
-    confirmed tool names and the exact field names the PandaDoc API returns for sent date,
-    value, and expiry, both of which will be clear from the first live
-    <code>pandadoc_list_documents</code> response.
+    PandaDoc runs a real hosted MCP server at <code>https://mcp.pandadoc.com/v1/mcp</code>,
+    OAuth-protected (auth-code + PKCE, with Dynamic Client Registration). The gateway's
+    vendor entry had pointed at PandaDoc's <em>docs</em> host with static API-key auth and
+    never reached it; that is fixed in
+    <a href="https://github.com/wyre-technology/mcp-gateway/pull/188" target="_blank" rel="noopener noreferrer">mcp-gateway#188</a>,
+    which switches it to the correct endpoint and OAuth config. Two things still gate a live
+    run: (1) an OAuth client for the gateway — PandaDoc issues clients by Dynamic Client
+    Registration, which the gateway does not yet perform outbound, so a client is provisioned
+    once and stored as gateway secrets (see the PR); and (2) the confirmed MCP tool names and
+    field names for sent date, value, and expiry, which become clear from the first live
+    <code>pandadoc_list_documents</code> response. The workflow design — status filter,
+    age-in-stage bucketing, expiry logic, value aggregation, delivery — is fully specified
+    here so the routine can be built the moment the connect flow lands.
   </p>
 
   <hr class="my-8" />
