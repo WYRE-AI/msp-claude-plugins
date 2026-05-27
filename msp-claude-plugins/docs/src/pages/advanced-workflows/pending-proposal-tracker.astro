@@ -1,0 +1,375 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `NOTE: The PandaDoc connector is currently pending — it does not yet expose tools
+through the WYRE MCP Gateway. Before attempting to build this routine, first
+confirm that PandaDoc tools are now visible in the gateway catalog:
+
+  gateway__search_tools with query "pandadoc"
+
+If that returns no results, the connector has not yet surfaced its tools and
+the rest of this build cannot proceed. Return to this guide once PandaDoc
+tools appear in the catalog.
+
+Once the PandaDoc tool surface is confirmed, verify the exact tool names
+against what the catalog returns — the names used in this guide
+(pandadoc_list_documents, pandadoc_get_document) are PROVISIONAL and may
+differ from the actual names the connector exposes.
+
+Build me a scheduled Pending-Proposal Tracker agent. Do all of this
+end to end:
+
+1. Confirm the WYRE MCP Gateway works and PandaDoc is reachable: call
+   pandadoc_list_documents with a minimal filter (status: sent or viewed,
+   limit: 5) and check it returns document records without erroring. Verify
+   the exact tool names against the gateway catalog before proceeding.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #sales). If Slack does not show in the /schedule connector
+   list, read its connector_uuid and url from an existing routine that already
+   uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Create a Claude-managed scheduled routine named "Pending-Proposal Tracker":
+   - Schedule: weekly, cron "0 13 * * 1" (Monday 09:00 America/New_York =
+     13:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: pandadoc_list_documents, pandadoc_get_document
+         (provisional names — use actual names from catalog)
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, list documents in sent/viewed (open, not yet
+     completed or declined) status, bucket them by age in stage
+     (<7 days / 7-14 days / >14 days going stale), sum the outstanding
+     proposal value, flag documents nearing or past their expiry date, build
+     the digest, publish it as a Slack canvas titled "Outstanding Proposals —
+     <date>", and post a one-line summary to the channel. Use the exact
+     routine prompt below.
+4. Trigger a manual run and verify: a canvas titled "Outstanding Proposals —
+   <date>" was created, a one-line summary landed in the destination channel,
+   and the proposal list and value totals look plausible against your
+   PandaDoc data (spot-check one sent proposal).`;
+
+const routinePrompt = `You are the Pending-Proposal Tracker. You run weekly. Keep it lean.
+
+IMPORTANT: The tool names below are PROVISIONAL. If they are not available,
+log a "connector not yet available" message to Slack and stop — do not
+attempt to proceed without working tools.
+
+Use ONLY: pandadoc_list_documents, pandadoc_get_document,
+          slack_create_canvas, slack_send_message.
+
+Today's date in ISO format: <today-YYYY-MM-DD>
+
+--- OUTSTANDING PROPOSALS ---
+
+1. Call pandadoc_list_documents filtered to open statuses only:
+     status: sent, viewed
+   Do NOT include completed, declined, or draft documents — filtering to
+   open statuses prevents sweeping completed history and hitting the
+   60-second tool timeout.
+
+   If no documents are returned, post a one-line Slack message:
+   "Outstanding Proposals - <today>: no open proposals awaiting signature."
+   and stop.
+
+2. For each document record, read: document name, recipient name(s),
+   total value/amount, the date it was sent (created or date_sent field),
+   and the expiry date (if present).
+
+3. Bucket each document by age in stage — days since it was sent:
+     Bucket A: sent < 7 days ago    (recently out, normal follow-up)
+     Bucket B: sent 7-14 days ago   (follow-up warranted)
+     Bucket C: sent > 14 days ago   (going stale — needs attention)
+   "Stale" threshold: any proposal with no signature after 14 days in the
+   sent/viewed stage.
+
+4. Flag expiring and expired proposals:
+   - EXPIRING SOON: expiry date is within 7 days from today (or already
+     past). If the document has no expiry date set, do not flag it under
+     this heading — note "no expiry set" in the record instead.
+   - List expiring/expired proposals separately, regardless of their bucket.
+
+5. Sum the outstanding proposal value:
+   - Total value across all open documents (Buckets A + B + C combined).
+   - Subtotal per bucket.
+   - If a document's value field is null or zero, include it in the count
+     but label its value as "value not set" rather than treating it as $0.
+
+6. If detail on a flagged document is needed (e.g. to confirm expiry date
+   or recipient), call pandadoc_get_document for that specific record only.
+   Do not call pandadoc_get_document for every document in the list —
+   prefer the fields available in the list payload.
+
+--- REPORT ---
+
+7. Build the canvas body:
+     Heading: "Outstanding Proposals — <today>"
+     Sub-heading: "Total outstanding value: $<total> across <N> proposals"
+
+     SECTION A — Expiring / Expired
+       List each flagged proposal: name, recipient, value, expiry date,
+       days until expiry (or "expired <N> days ago").
+       Omit this section if no proposals are expiring within 7 days.
+
+     SECTION B — By Age in Stage
+       One sub-section per bucket (< 7 days / 7-14 days / > 14 days):
+         Proposal name | Recipient | Value | Sent date | Days in stage
+       End each sub-section with a subtotal (count and combined value).
+       Omit a bucket sub-section if it has no documents.
+
+8. slack_create_canvas with that content, titled "Outstanding Proposals — <today>".
+   Then slack_send_message to the destination channel:
+   "Proposals <today>: <N> open (~$<total> outstanding), <X> expiring soon —
+   see canvas"
+   Include the canvas URL in the message if available.
+
+9. If pandadoc_list_documents fails or returns an error, post a Slack
+   message: "Pending-Proposal Tracker could not read documents — check
+   gateway/PandaDoc connectivity." and stop. Do not retry in a loop.
+
+10. If the PandaDoc tools are not available at all, call slack_send_message
+    to report: "Pending-Proposal Tracker: PandaDoc connector tools not
+    available — routine cannot run. Verify connector status in the gateway."`;
+---
+<DocsLayout title="Pending-Proposal Tracker" description="Planned workflow (pending PandaDoc connector tool surface): a Claude-managed scheduled agent that will track outstanding sales proposals weekly — grouping sent-but-unsigned documents by age in stage, summing outstanding value, and flagging expiring proposals — posting a digest to Slack as a canvas with a one-line summary. No servers, no code.">
+  <h1>Pending-Proposal Tracker</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A planned <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, would surface outstanding
+    sales proposals — documents sent for signature but not yet completed — grouped
+    by how long they have been sitting in that stage, with their total outstanding
+    value and a flag on those nearing or past expiry. It posts a digest to Slack
+    as a canvas with a one-line summary. There are no servers and no code to deploy.
+    This guide documents the intended workflow and is <strong>pending the PandaDoc
+    connector surfacing its tools through the WYRE MCP Gateway</strong>.
+  </p>
+
+  <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
+    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending</p>
+    <p class="text-amber-900 dark:text-amber-200 text-sm">
+      The PandaDoc connector does not yet expose tools through the WYRE MCP Gateway.
+      This guide documents the intended workflow and uses provisional tool names.
+      Confirm the exact tool names against the gateway tool catalog
+      (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>
+      with query <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">"pandadoc"</code>)
+      once the PandaDoc connector surfaces its tools before building the routine. Until
+      that point, the build prompt below cannot be executed end to end.
+    </p>
+  </div>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow would run unattended every Monday morning. Proposals quietly
+    go stale and revenue slips when nobody is watching the "sent, awaiting signature"
+    pile — a weekly nudge surfaces the ones that need a follow-up before they expire.
+    Each run, the routine lists all open PandaDoc documents (status: sent or viewed),
+    buckets them by age in stage (under 7 days, 7–14 days, over 14 days and going
+    stale), sums the total outstanding proposal value, and separately flags any
+    documents whose expiry date is within 7 days or already past. It publishes the
+    digest as a Slack canvas and posts a one-line summary to your sales channel.
+    The routine is entirely read-only on PandaDoc; the only write is delivering the
+    report via the Slack connector.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the gateway tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>PandaDoc tools in the gateway</strong> <em>(pending — connector not yet connected)</em></td>
+        <td>The PandaDoc connector must surface its tools through the gateway before this routine can be built. Verify with <code>gateway__search_tools</code> (query: <code>"pandadoc"</code>). The provisional tool names used in this guide are <code>pandadoc_list_documents</code> and <code>pandadoc_get_document</code> — confirm exact names once the connector is live.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#sales</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>The PandaDoc tool names are provisional — re-verify once the connector is live.</strong> The
+      tool names in this guide (<code>pandadoc_list_documents</code>,
+      <code>pandadoc_get_document</code>) follow the gateway's
+      <code>&lt;vendor&gt;_&lt;action&gt;_&lt;entity&gt;</code> naming convention and are
+      the most likely names — but they have not been confirmed against a live connector.
+      Before creating the routine, call <code>gateway__search_tools</code> with query
+      <code>"pandadoc"</code> and use whatever names the catalog actually returns.
+      Setting wrong tool names in <code>permitted_tools</code> means the routine runs
+      with no effective tools.
+    </li>
+    <li>
+      <strong>PandaDoc document status vocabulary is specific — read it from the API, do not assume.</strong>
+      PandaDoc documents move through states including <code>draft</code>, <code>sent</code>,
+      <code>viewed</code>, <code>completed</code>, <code>declined</code>, and
+      <code>expired</code>. The routine filters to <code>sent</code> and <code>viewed</code>
+      (open, awaiting signature). The exact status strings the API accepts as filter values
+      must be confirmed from the live connector — do not hardcode assumed values before
+      verifying against the actual payload.
+    </li>
+    <li>
+      <strong>Filter to open statuses — do not sweep the full document history.</strong>
+      Without a status filter, PandaDoc may return every document ever created (completed,
+      declined, archived, draft). Sweeping the full history risks exceeding the routine's
+      payload capacity and hitting the 60-second tool timeout. Filter to <code>sent</code>
+      and <code>viewed</code> from the start.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs, using the confirmed names from the gateway
+      catalog, not the provisional ones in this guide.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
+      blocks arbitrary network egress, so notifications must go through the Slack
+      connector's tools, not an outbound webhook. Attach every connector the workflow
+      touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected; cron is in UTC.</strong> This
+      routine uses <code>0 13 * * 1</code> — Monday 09:00 America/New_York is 13:00 UTC
+      (EST). During EDT (summer), America/New_York is UTC-4, so 09:00 EDT =
+      <code>0 13 * * 1</code> still holds. Confirm your preferred UTC offset.
+    </li>
+    <li>
+      <strong>If Slack does not appear in the <code>/schedule</code> connector list,</strong> read
+      its <code>connector_uuid</code> and <code>url</code> from an existing routine that
+      already uses Slack (RemoteTrigger list → get → mcp_connections).
+    </li>
+    <li>
+      <strong>Prefer the list payload over per-document gets.</strong> The fields needed
+      for bucketing, value totalling, and expiry flagging (sent date, value, expiry, status)
+      should all be available in <code>pandadoc_list_documents</code> without a per-record
+      fetch. Call <code>pandadoc_get_document</code> only on specific flagged documents
+      where the list payload is missing a needed field. Per-record calls across a full
+      proposal list risk the 60-second tool timeout.
+    </li>
+    <li>
+      <strong>Connector coverage — not just archetype — decides whether a workflow can be
+      built.</strong> See the <a href={`${baseUrl}advanced-workflows/agent-routine-catalog/`}>Agent → Routine Catalog</a>
+      for the full note on how connector availability gates which workflows are currently
+      executable.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    Once the PandaDoc connector surfaces its tools, paste this to Claude. It confirms
+    the gateway and PandaDoc reachability, creates the routine with both connectors and
+    populated <code>permitted_tools</code>, and verifies it end to end.
+    <strong>Do not run this prompt until <code>gateway__search_tools</code> confirms
+    PandaDoc tools are available</strong> — the build will stall at step 1 otherwise.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Tool names are <strong>provisional</strong> — substitute the confirmed names from the
+    gateway catalog once the connector is live. Substitute your own destination channel ID.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Proposals do not need minute-by-minute monitoring — they need a weekly human nudge
+    before they go cold. Running every Monday morning means the sales team starts each
+    week with a clear view of what is still in flight and which proposals are overdue for
+    a follow-up call. A weekly cron is also efficient: one PandaDoc list call per week
+    rather than per day, with no meaningful loss of signal for a document-signing workflow
+    that operates on a human timescale.
+  </p>
+  <h3>Age-in-stage bucketing and expiry flagging</h3>
+  <p>
+    Rather than dumping a flat list of all open proposals, the routine groups them by how
+    long each has been sitting in the sent or viewed stage: under 7 days (recently sent,
+    normal follow-up cycle), 7–14 days (follow-up warranted), and over 14 days (going
+    stale — needs attention this week). This triage means the sales team can immediately
+    see which proposals need a call today versus which can wait until later in the week.
+    Separately, documents whose expiry date is within 7 days (or already past) are
+    surfaced in their own section at the top of the canvas, regardless of their age bucket
+    — an expired proposal that nobody noticed is a deal already lost.
+  </p>
+  <h3>Outstanding value as the headline number</h3>
+  <p>
+    The canvas header leads with the total outstanding proposal value across all open
+    documents, mirroring the MRR-at-risk framing used in the
+    <a href={`${baseUrl}advanced-workflows/contract-renewal-tracker/`}>Contract Renewal Tracker</a>.
+    That single number tells a sales leader whether to treat this week's pending list as
+    a minor housekeeping task or a priority revenue recovery. Each age bucket also carries
+    its own subtotal so the distribution of value across urgency tiers is immediately
+    visible. The routine is read-only on PandaDoc; the only write is posting to Slack.
+  </p>
+  <h3>Why it is pending and what unblocks it</h3>
+  <p>
+    The PandaDoc connector is not yet connected to the WYRE MCP Gateway. Until
+    <code>gateway__search_tools</code> returns PandaDoc tool results, neither the build
+    prompt nor the routine can execute. The workflow design — the status filter, the
+    age-in-stage bucketing, the expiry logic, the value aggregation, and the delivery
+    pattern — is fully specified here so that the routine can be built immediately once
+    the connector surfaces its tools. The main unknowns to resolve at that point are the
+    confirmed tool names and the exact field names the PandaDoc API returns for sent date,
+    value, and expiry, both of which will be clear from the first live
+    <code>pandadoc_list_documents</code> response.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    Once live, the natural first extension is pairing this tracker with the
+    <a href={`${baseUrl}advanced-workflows/contract-renewal-tracker/`}>Contract Renewal Tracker</a>
+    for a full commercial picture: proposals in flight on one side, existing contracts
+    approaching renewal on the other. Together they cover the two ends of the revenue
+    calendar — new deals waiting to close and current deals at risk of lapsing.
+  </p>
+  <p>
+    A second extension is a handoff trigger: when a proposal moves to
+    <code>completed</code> status (signed), a downstream routine (or a manual
+    follow-up prompt) could create the corresponding onboarding ticket in Autotask or
+    HaloPSA, pre-populated with the client name, proposal value, and any products listed
+    in the document. The PandaDoc connector's document detail tool would provide the
+    payload for that handoff.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

@@ -106,6 +106,23 @@ const baseUrl = import.meta.env.BASE_URL;
       that would surface upcoming Pax8 renewals and over-provisioned subscriptions with the
       reclaimable spend, and post a digest to Slack.
     </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/client-profitability-reporter/`}>Client Profitability Reporter</a>
+      &mdash; a monthly, strictly read-only scheduled agent that ranks clients by revenue from
+      QuickBooks Online and reports company net margin, posting a profitability digest to Slack
+      as a canvas.
+    </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/sales-pipeline-pulse/`}>Sales Pipeline Pulse</a>
+      &mdash; <em>pending the HubSpot connector</em>: a planned weekly agent that summarises
+      open pipeline value by stage, flags stalled deals, and posts a sales digest to Slack.
+    </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/pending-proposal-tracker/`}>Pending-Proposal Tracker</a>
+      &mdash; <em>pending the PandaDoc connector</em>: a planned weekly agent that tracks
+      sent-but-unsigned proposals by age and value, flags those nearing expiry, and posts a
+      digest to Slack.
+    </li>
   </ul>
   <p class="text-sm text-[var(--muted)]">
     More workflows will be added here. Have one you'd like documented?

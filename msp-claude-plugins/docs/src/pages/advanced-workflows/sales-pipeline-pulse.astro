@@ -1,0 +1,370 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `NOTE: The HubSpot connector is currently pending — it does not yet expose tools
+through the WYRE MCP Gateway. Before attempting to build this routine, first
+confirm that HubSpot tools are now visible in the gateway catalog:
+
+  gateway__search_tools with query "hubspot"
+
+If that returns no results, the connector has not yet surfaced its tools and
+the rest of this build cannot proceed. Return to this guide once HubSpot tools
+appear in the catalog.
+
+Once the HubSpot tool surface is confirmed, verify the exact tool names against
+what the catalog returns — the names used in this guide (hubspot_list_deals,
+hubspot_list_pipelines, hubspot_list_companies) are provisional and may differ.
+
+Build me a scheduled Sales Pipeline Pulse agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and HubSpot is reachable: call
+   hubspot_list_pipelines and check it returns your pipeline definitions.
+   Verify the exact tool names against the gateway catalog first.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #sw-dev). If Slack does not show in the /schedule connector
+   list, read its connector_uuid and url from an existing routine that already
+   uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Assess payload size. Call hubspot_list_deals filtered to open deals to gauge
+   how many records are active. If your pipeline has a large number of open
+   deals, the routine prompt already filters to open deals — but confirm the
+   filter parameter name from the actual tool signature rather than assuming it
+   matches this guide's description.
+4. Create a Claude-managed scheduled routine named "Sales Pipeline Pulse":
+   - Schedule: weekly, cron "0 12 * * 1" (Monday 08:00 America/New_York =
+     12:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: hubspot_list_deals, hubspot_list_pipelines,
+         hubspot_list_companies  (provisional names — use actual names from
+         catalog)
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, list pipeline and stage definitions, list open
+     deals grouped by stage with total value, flag stalled deals (no activity
+     in 14 days), list deals closing this period, summarize forecast vs target,
+     publish a Slack canvas, and post a one-line summary linking the canvas.
+     Use the exact routine prompt below.
+5. Trigger a manual run and verify: a canvas titled "Sales Pipeline — <date>"
+   was created, a one-line summary landed in the destination channel, and the
+   report content matches live HubSpot data (spot-check one pipeline stage).`;
+
+const routinePrompt = `You are the Sales Pipeline Pulse reporter. You run weekly. Keep it lean.
+
+IMPORTANT: The tool names below are provisional. If they are not available,
+log a "connector not yet available" message to Slack and stop — do not
+attempt to proceed without working tools.
+
+Use ONLY: hubspot_list_deals, hubspot_list_pipelines, hubspot_list_companies,
+slack_create_canvas, slack_send_message.
+
+Today's date: use the current date at runtime to calculate close-date windows
+and stale-activity thresholds.
+
+--- PIPELINE DEFINITIONS ---
+
+1. Call hubspot_list_pipelines to get all pipeline and stage definitions.
+   Read each stage's label and display order. Do NOT hardcode stage names —
+   use what the pipeline definition returns. This ensures the report stays
+   accurate if stages are renamed in HubSpot.
+
+--- OPEN DEALS BY STAGE ---
+
+2. Call hubspot_list_deals filtered to open (non-closed-won, non-closed-lost)
+   deals. For each deal read: deal name, pipeline stage, amount, close date,
+   and last-activity date (or last-modified date if last-activity is not
+   available).
+
+3. Group open deals by pipeline stage (use the stage labels from step 1).
+   For each stage report:
+   - Number of deals in stage
+   - Total pipeline value (sum of deal amounts in that stage)
+   - List each deal: name, amount, close date
+
+   If a deal has no amount set, count it as $0 and note it as "no amount set".
+
+--- STALLED DEALS ---
+
+4. A deal is STALLED if its last-activity date (or last-modified date) is more
+   than 14 days before today's date. List each stalled deal: name, stage,
+   amount, and days since last activity. Group stalled deals by stage.
+
+--- CLOSING THIS PERIOD ---
+
+5. List deals whose close date falls within the next 30 days from today.
+   For each: name, stage, amount, and exact close date. Sum the total expected
+   value closing this period.
+
+--- FORECAST vs TARGET ---
+
+6. Report the following summary figures:
+   - Total open pipeline value (all open deals, all stages)
+   - Total value closing this period (next 30 days, from step 5)
+   - Count and value of stalled deals
+   If a pipeline target or quota figure is not available from HubSpot tools,
+   omit the "vs target" comparison and note: "Pipeline target not available
+   from CRM data — set a target in HubSpot or add it to this routine prompt."
+
+--- REPORT ---
+
+7. slack_create_canvas titled "Sales Pipeline — <today's date>" with the full
+   report structured as:
+     SECTION A — Pipeline by Stage (stage name, deal count, total value,
+       individual deals)
+     SECTION B — Stalled Deals (deals with no activity in 14+ days)
+     SECTION C — Closing This Period (deals closing within 30 days)
+     SECTION D — Summary (total open pipeline, closing-period value, stalled
+       count/value, forecast note)
+   Then slack_send_message to #sw-dev: a one-line summary ("Pipeline: $X open
+   across N deals, $Y closing in 30 days, N stalled — see canvas") linking
+   the canvas.
+
+8. If a deal's associated company name cannot be resolved via
+   hubspot_list_companies, use the company ID as a fallback rather than
+   failing the run.
+
+9. If the HubSpot tools are not available at all, call slack_send_message to
+   report: "Sales Pipeline Pulse: HubSpot connector tools not available —
+   routine cannot run. Verify connector status in the gateway."
+
+10. If any deals cannot be read, list them in a "could not read" section
+    instead of skipping them silently.`;
+---
+<DocsLayout title="Sales Pipeline Pulse" description="Planned workflow (pending HubSpot connector tool surface): a Claude-managed scheduled agent that will summarize pipeline health weekly — open value by stage, stalled deals, and deals closing this period — posting a canvas to Slack. No servers, no code.">
+  <h1>Sales Pipeline Pulse</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A planned <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, would read the HubSpot CRM to
+    summarize sales pipeline health for the MSP — total open pipeline value grouped by
+    stage, deals that have gone stalled, deals closing this period, and a forecast
+    summary — then post the report to Slack as a canvas with a one-line digest. There
+    are no servers and no code to deploy. This guide documents the intended workflow
+    and is <strong>pending the HubSpot connector surfacing its tools through the WYRE
+    MCP Gateway</strong>.
+  </p>
+
+  <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
+    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending</p>
+    <p class="text-amber-900 dark:text-amber-200 text-sm">
+      The HubSpot connector does not yet expose tools through the WYRE MCP Gateway. This guide
+      documents the intended workflow and uses provisional tool names. Confirm the exact tool
+      names against the gateway tool catalog (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>)
+      once the HubSpot connector surfaces its tools before building the routine. Until that
+      point, the build prompt below cannot be executed end to end.
+    </p>
+  </div>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow would run unattended on a weekly Monday morning cron. Each run it
+    reads pipeline and stage definitions from HubSpot, lists all open deals grouped by stage
+    with their total value, flags deals that have had no recorded activity in 14 or more days,
+    surfaces deals whose close date falls in the next 30 days, and produces a forecast summary.
+    The combined report is published to Slack as a canvas with a one-line summary — turning
+    pipeline data that lives buried in the CRM into a standing Monday morning leadership
+    question that gets answered automatically. The routine is entirely read-only on HubSpot;
+    the only write is delivering the report via the Slack connector.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the gateway tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>HubSpot tools in the gateway</strong> <em>(pending — connector not yet connected)</em></td>
+        <td>The HubSpot connector must be connected to the gateway and surface its tools before this routine can be built. Verify with <code>gateway__search_tools</code> (query: "hubspot"). The provisional tool names used in this guide are <code>hubspot_list_deals</code>, <code>hubspot_list_pipelines</code>, and <code>hubspot_list_companies</code> — confirm exact names once the connector is live.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#sw-dev</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>The HubSpot tool names are provisional — re-verify before building.</strong> The
+      tool names in this guide (<code>hubspot_list_deals</code>,
+      <code>hubspot_list_pipelines</code>, <code>hubspot_list_companies</code>) follow the
+      gateway's <code>&lt;vendor&gt;_&lt;action&gt;_&lt;entity&gt;</code> naming convention
+      and are the most likely names — but they have not been confirmed against a live
+      connector. Before creating the routine, call <code>gateway__search_tools</code> with
+      query <code>"hubspot"</code> and use whatever names the catalog actually returns.
+      Setting wrong tool names in <code>permitted_tools</code> means the routine runs with
+      no effective tools.
+    </li>
+    <li>
+      <strong>Read pipeline stage labels from <code>hubspot_list_pipelines</code> — do not
+      hardcode stage names.</strong> HubSpot pipeline stage names vary by org configuration
+      and can be renamed at any time. The routine prompt instructs the agent to call
+      <code>hubspot_list_pipelines</code> first and use the returned labels rather than
+      assuming stage names. Hardcoding stage names in the routine prompt will produce an
+      incorrect report the moment a stage is renamed in HubSpot.
+    </li>
+    <li>
+      <strong>Large CRMs need open-deal filtering to stay under the timeout.</strong> A CRM
+      with many historical deals (closed-won, closed-lost, archived) can produce a payload
+      too large to process in a single routine run. The routine prompt instructs the agent
+      to filter <code>hubspot_list_deals</code> to open deals only. Confirm the correct
+      filter parameter name from the actual tool signature once the connector is live —
+      do not assume the parameter name matches what this guide describes.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs, using the confirmed names from the gateway
+      catalog, not the provisional ones in this guide.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
+      blocks arbitrary network egress, so notifications must go through the Slack
+      connector's tools, not an outbound webhook. Attach every connector the workflow
+      touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected.</strong> The routine scheduler will
+      not accept a cron more frequent than hourly. A weekly cron is well within bounds.
+      Cron expressions are interpreted as UTC: Monday 08:00 America/New_York =
+      <code>0 12 * * 1</code> in UTC (or <code>0 13 * * 1</code> during EDT offset months —
+      confirm your preferred offset).
+    </li>
+    <li>
+      <strong>If Slack does not appear in the <code>/schedule</code> connector list,</strong> read
+      its <code>connector_uuid</code> and <code>url</code> from an existing routine that already
+      uses Slack (RemoteTrigger list → get → mcp_connections).
+    </li>
+    <li>
+      <strong>Prefer list payloads over per-record gets.</strong> Deal data needed for the
+      pipeline summary, stalled-deal detection, and close-date filtering should all be
+      available from <code>hubspot_list_deals</code> without a per-deal fetch call.
+      Per-record calls across a large open pipeline risk the 60-second tool timeout.
+    </li>
+    <li>
+      <strong>Connector coverage — not just archetype — decides whether a workflow can be
+      built.</strong> See the <a href={`${baseUrl}advanced-workflows/agent-routine-catalog/`}>Agent → Routine Catalog</a>
+      for the full note on how connector availability gates which workflows are currently
+      executable.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    Once the HubSpot connector surfaces its tools, paste this to Claude. It confirms the
+    gateway and HubSpot reachability, assesses payload size, creates the routine with both
+    connectors and populated <code>permitted_tools</code>, and verifies it end to end.
+    <strong>Do not run this prompt until <code>gateway__search_tools</code> confirms HubSpot
+    tools are available</strong> — the build will stall at step 1 otherwise.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Tool names are provisional — substitute the confirmed names from the gateway catalog.
+    Substitute your own destination channel. Adjust the stalled-deal threshold (default:
+    14 days) to match your team's sales cadence.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Pipeline health is a standing weekly leadership question: what moved, what stalled,
+    what is closing this period. A Monday morning run means the report is waiting before
+    the first revenue-team standup of the week. Running weekly also keeps API load light
+    — one HubSpot sweep per week, not one per hour — which matters for a CRM where a
+    single deals list can return a large payload.
+  </p>
+  <h3>Stage-grouped pipeline value and stalled-deal detection</h3>
+  <p>
+    The routine groups open deals by pipeline stage rather than listing them flat,
+    because the question a sales leader asks is not "how many deals do we have" but
+    "where are they and what are they worth." Each stage section shows deal count and
+    total value so the reader can scan the pipeline shape at a glance. The stalled-deal
+    section surfaces deals whose last recorded activity predates a configurable threshold
+    (default 14 days) — a signal that a deal may need a nudge before it slips the
+    quarter. Both signals come from the same <code>hubspot_list_deals</code> payload;
+    no additional fetches are needed.
+  </p>
+  <h3>Forecast vs target</h3>
+  <p>
+    The summary section reports total open pipeline and the value closing within 30 days
+    as a lightweight forecast view. If a pipeline target or quota figure is not
+    surfaced by the HubSpot tools, the routine notes that explicitly rather than
+    inventing a comparison — the report stays accurate even when forecast targets live
+    outside what the API exposes. Teams that do track targets in HubSpot can extend the
+    routine prompt to read that field once the connector confirms it is available.
+  </p>
+  <h3>Why this workflow is pending and what unblocks it</h3>
+  <p>
+    The HubSpot connector is not yet connected to the WYRE MCP Gateway. Until
+    <code>gateway__search_tools</code> returns HubSpot tool results, neither the build
+    prompt nor the routine can execute. The workflow design — the pipeline grouping logic,
+    stalled-deal threshold, close-date window, delivery pattern — is fully specified here
+    so that the routine can be built immediately once the connector goes live. The only
+    unknowns are the confirmed tool names, the exact filter parameter for open deals, and
+    the shape of the deals payload — all of which will be resolved at connector launch.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    Once live, the natural first pairing is with the <code>client-relationship-manager</code>
+    account-health routine: the pipeline pulse tells you what is in the funnel; the
+    account-health routine tells you whether existing clients are engaged. Together they
+    give a combined commercial picture — new revenue in progress and retention health —
+    in two Monday morning Slack canvases.
+  </p>
+  <p>
+    A second extension is feeding at-risk deals or stalled renewals into the broader
+    renewal portfolio: if a stalled deal is also a renewal opportunity, linking it to the
+    renewal-risk-analyzer workflow (once that connector is live) lets the team see renewal
+    risk and pipeline stall as a single signal rather than two separate reports.
+  </p>
+  <p>
+    For delivery variations — posting to a different channel, using a DM to the account
+    owner rather than a shared channel, or adding a thread reply with deal-owner mentions
+    — see the <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    guide.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

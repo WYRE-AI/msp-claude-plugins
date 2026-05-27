@@ -1,0 +1,329 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled Client Profitability Reporter agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and QuickBooks Online is reachable: call
+   qbo_reports_customer_sales and check it returns data for the current period.
+   QuickBooks here is a single company file — there is no per-tenant loop.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #finance, C0931CKJ75X). If Slack does not show in the /schedule
+   connector list, read its connector_uuid and url from an existing routine that
+   already uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Create a Claude-managed scheduled routine named "Client Profitability Reporter":
+   - Schedule: monthly, cron "0 12 1 * *" (1st of month 08:00 America/New_York =
+     12:00 UTC). Faster-than-hourly cadences are rejected. Monthly aligns with
+     the accounting close cycle so each run covers a clean, closed period.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: qbo_reports_customer_sales, qbo_reports_profit_and_loss,
+         qbo_customers_list — READ tools only.
+         Do NOT list any qbo_*_create or qbo_*_update tool.
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, pull the customer-sales report for the prior month,
+     rank clients by revenue (top and bottom), pull the company P&L for net margin
+     context, build a digest noting that this is revenue-ranked (not cost-allocated
+     margin), publish a canvas "Client Profitability — <month>" and post a one-line
+     summary to Slack. Use the exact routine prompt below.
+4. Confirm the API response echoes both connectors with the correct
+   permitted_tools (verify NO write tools are present) and the routine prompt
+   verbatim. Record the trig_... ID.`;
+
+const routinePrompt = `You are the Client Profitability Reporter. You run monthly, READ-ONLY against QuickBooks Online (a single company file). You must NEVER create or modify any QuickBooks record — only read.
+
+Use ONLY: qbo_reports_customer_sales, qbo_reports_profit_and_loss, qbo_customers_list,
+          slack_create_canvas, slack_send_message.
+
+IMPORTANT — what this report measures: QuickBooks Online tracks revenue by customer
+cleanly, but it does NOT track cost-to-serve (technician labor, tooling, licenses)
+per customer. This report produces a REVENUE-RANKED view of clients, not
+cost-allocated margin. The company P&L provides net-margin context at the company
+level only. Acknowledge this limitation explicitly in the output.
+
+Steps:
+1. Determine the reporting period: the full prior calendar month (e.g. if today is
+   2026-06-01, the period is 2026-05-01 to 2026-05-31). State the exact period in
+   the report — this makes month-over-month comparison unambiguous.
+2. Call qbo_reports_customer_sales with start_date and end_date set to the prior
+   month boundaries to get revenue by customer for the period.
+3. Rank clients by total revenue for the period (descending). Identify:
+   - TOP 5 clients by revenue (name, revenue, % of total revenue)
+   - BOTTOM 5 clients by revenue, excluding $0 rows if there are more than 10
+     active clients (to avoid polluting the bottom-5 with inactive accounts)
+4. Call qbo_reports_profit_and_loss with the same period to get company-level
+   figures: total revenue, gross profit, and net income. Calculate net margin
+   (net income ÷ total revenue × 100) for the period.
+5. Call qbo_customers_list only if you need to resolve a customer name not
+   already present in the customer-sales report.
+
+Build a report with four sections:
+- REPORTING PERIOD: state the month and the note that this is revenue-ranked, not
+  cost-allocated margin. Explain that QuickBooks has no per-customer cost dimension
+  unless classes or projects are used, and direct readers to the
+  service-profitability-auditor portfolio agent for full cost-allocated analysis.
+- TOP 5 CLIENTS BY REVENUE: name, revenue, % of total, sorted descending.
+- BOTTOM 5 CLIENTS BY REVENUE: name, revenue, % of total, sorted ascending
+  (lowest first).
+- COMPANY P&L CONTEXT: total revenue, gross profit, net income, and net margin %
+  for the period. Note that margin is company-wide, not per-client.
+
+Include a one-line executive summary: "Top client <name> $X; bottom active client
+<name> $Y; company net margin Z% — <month>. Revenue-ranked view; cost-allocated
+margin requires PSA labor data."
+
+Could not read section: if any report cannot be fetched, include a "could not read"
+section naming the report and the error. Do not skip silently or fabricate figures.
+
+Deliver:
+- Call slack_create_canvas titled "Client Profitability — <month YYYY-MM>" with the
+  full report in Markdown.
+- Call slack_send_message to the destination channel with the one-line executive
+  summary and a link to the canvas.
+
+This routine is strictly read-only: never call any qbo write or update tool.`;
+---
+<DocsLayout title="Client Profitability Reporter" description="Build a Claude-managed scheduled agent that ranks clients by QuickBooks Online revenue each month, adds company net-margin context from the P&L, and posts a digest to Slack as a canvas — strictly read-only, no servers, no code. Includes an honest accounting of what QBO can and cannot tell you about per-client profitability.">
+  <h1>Client Profitability Reporter</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a month, reads QuickBooks Online revenue
+    data, ranks clients by revenue for the period, pulls the company P&amp;L for net-margin
+    context, and publishes a digest to Slack as a canvas with a one-line summary. It is
+    strictly <strong>read-only</strong> and never writes to QuickBooks. There are no servers
+    and no code to deploy: the agent is a saved prompt plus a schedule plus two MCP
+    connectors, running in Claude's cloud.
+  </p>
+  <p class="text-[var(--muted)] mb-8">
+    <strong>One thing to understand before building:</strong> QuickBooks Online tracks
+    revenue by customer cleanly, but it has <em>no per-customer cost dimension</em> — it
+    does not know how many technician hours, licenses, or tools you spent serving each
+    client. This routine therefore produces a <strong>revenue-ranked</strong> view of your
+    client book, not true cost-allocated margin. Company-level net margin comes from the
+    P&amp;L. For full per-client margin (revenue minus labor plus license plus tooling cost),
+    the <strong>service-profitability-auditor</strong> portfolio agent composes PSA labor
+    data, accounting revenue, and marketplace costs — that is the deep version; this
+    routine is the fast monthly revenue pulse.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on a monthly cron, aligned to the accounting
+    close. Each run it pulls the customer-sales report for the prior month, ranks clients
+    by revenue, pulls the company P&amp;L for net-margin context, and notifies your team —
+    turning a buried QBO report into a monthly revenue digest with a Slack trail. The
+    report is explicit about what it is (revenue-ranked) and what it is not
+    (cost-allocated margin), so readers do not mistake a revenue ranking for a
+    profitability ranking.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>qbo_*</code> tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>QuickBooks Online enabled in the gateway</strong></td>
+        <td>The gateway's QuickBooks Online connection must be able to <strong>read</strong> reports and customers. The routine uses only read tools — no write scope is required.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#finance</code> or <code>#leadership</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>This is a revenue ranking, not a profitability ranking — be explicit.</strong>
+      The single biggest misread of a "client profitability" report built purely from QBO
+      is treating revenue rank as margin rank. Your highest-revenue client could be your
+      least profitable if the engagement is labor-intensive. The routine explicitly flags
+      this in its output and directs readers to the
+      <code>service-profitability-auditor</code> portfolio agent for full cost-allocated
+      analysis. Do not remove that language.
+    </li>
+    <li>
+      <strong>Pin the reporting period in the prompt.</strong> The QBO report tools return
+      period-scoped data, and the default period shifts depending on when you call them.
+      If the routine does not pin explicit <code>start_date</code> and <code>end_date</code>
+      values, consecutive monthly runs may cover different windows and the numbers will not
+      be comparable. The routine prompt pins the period to the prior full calendar month so
+      each run covers the same clean, closed window.
+    </li>
+    <li>
+      <strong>One QBO company file per connector — one routine per entity.</strong> The
+      gateway connects to a single QuickBooks company file. If your MSP manages multiple
+      legal entities in separate QBO files, run one routine per QBO connection rather than
+      trying to sweep all entities in a single run. The company context is set at the
+      connector level, not per tool call.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
+      blocks arbitrary network egress, so notifications must go through the Slack
+      connector's tools, not an outbound webhook. Attach every connector the workflow
+      touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected.</strong> The scheduler will not
+      accept a cron more frequent than once an hour. The monthly cron
+      (<code>0 12 1 * *</code>) is well within that limit. Note that cron expressions are
+      interpreted as UTC — the 1st of the month at 08:00 America/New_York is
+      <code>0 12 1 * *</code> in UTC (12:00 UTC during Eastern Daylight Time; adjust to
+      <code>0 13 1 * *</code> when Eastern Standard Time is in effect).
+    </li>
+    <li>
+      <strong>If Slack is not in the <code>/schedule</code> connector list,</strong> read
+      its <code>connector_uuid</code> and <code>url</code> from an existing routine that
+      already uses Slack: list routines via RemoteTrigger, get one that uses Slack, and
+      copy the <code>mcp_connections</code> entry. The build prompt handles this
+      automatically.
+    </li>
+    <li>
+      <strong>Prefer report tools over per-record gets.</strong>
+      <code>qbo_reports_customer_sales</code> and <code>qbo_reports_profit_and_loss</code>
+      return aggregated summaries in a single call. Use <code>qbo_customers_list</code>
+      only to resolve a customer name not already present in the report payload — do not
+      call it in a per-customer loop, which risks the 60-second tool timeout across a
+      large customer book.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    creates the routine, and confirms its configuration from the API response.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your own destination channel if it is not the default. Do not remove
+    the revenue-vs-margin disclaimer language — it is load-bearing for reader trust.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>Monthly cadence, aligned to the accounting close</h3>
+  <p>
+    Revenue-by-client is a monthly signal, not a daily one — it follows the billing and
+    close cycle. The routine runs on the 1st of each month so it covers the prior full
+    calendar month: a clean, closed period where all invoices have been raised and the
+    books are stable. Running mid-month would produce a partial-period ranking that
+    changes every day and is misleading for any comparison. Monthly is also kind to the
+    API: one read sweep per month.
+  </p>
+  <h3>Revenue-ranked, not cost-allocated margin</h3>
+  <p>
+    This is the most important thing to understand about a QBO-only profitability report.
+    QuickBooks Online records what you <em>invoiced</em> to each customer, not what it
+    <em>cost</em> to serve them. Technician labor hours, tooling subscriptions, license
+    costs, and travel time do not live in QBO at the per-customer level — they live in
+    your PSA (Autotask, HaloPSA, etc.) and in your vendor bills, which are not split by
+    customer unless you use QBO Classes or Projects.
+  </p>
+  <p>
+    The result is that this routine produces a <strong>revenue ranking</strong>: who paid
+    you the most last month. The company P&amp;L adds the company-wide net margin as
+    context — "we earned $X in revenue and kept Y% of it" — but that margin number is
+    not allocated down to individual clients. A client who appears in your top five by
+    revenue may be your least profitable engagement once labor is factored in. The
+    routine's output states this limitation explicitly and directs readers to the
+    <code>service-profitability-auditor</code> portfolio agent for the cost-allocated
+    version.
+  </p>
+  <h3>Company P&amp;L as the margin-context number</h3>
+  <p>
+    Alongside the client revenue ranking, the routine pulls
+    <code>qbo_reports_profit_and_loss</code> for the same period to surface the
+    company-level picture: total revenue, gross profit, net income, and net margin
+    percentage. This gives the reader a single sentence of financial context — "we made
+    X% net margin this month" — without implying that margin is distributed evenly
+    across clients. It is a sanity check on the overall business health for the period,
+    not per-client analysis.
+  </p>
+  <h3>Canvas and summary delivery</h3>
+  <p>
+    The full ranked client list and P&amp;L context can be long, so the routine publishes
+    it as a Slack canvas — a durable document teammates can scroll, share, and compare
+    month to month — and posts only a one-line executive summary to the channel linking
+    it. The channel stays readable; the detail lives in the canvas. See
+    <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    For true cost-allocated per-client margin, the
+    <strong>service-profitability-auditor</strong> portfolio agent (in the wyre-gateway
+    plugin) composes PSA labor data from Autotask or HaloPSA, QBO revenue, and
+    marketplace cost data to produce a margin figure per client. That agent is the deep
+    version; this routine is the fast revenue pulse. Use this routine to identify which
+    clients are driving revenue, then run the portfolio agent to understand which of
+    those clients are actually profitable.
+  </p>
+  <p>
+    If your PSA carries cost data at the client level, you can approximate per-client
+    margin without the full portfolio agent by adding the HaloPSA connector and its
+    <code>CF_Top_5_Most_Profitable_Customers</code> and
+    <code>CF_Top_5_Least_Profitable_Customers</code> custom-field reports to a separate
+    routine. HaloPSA's built-in profitability reports factor in labour cost if your
+    technician charge rates and cost rates are configured — attach the HaloPSA connector
+    alongside the QBO connector and cross-reference the two views in a single canvas.
+  </p>
+  <p>
+    The workflow is also accounting-platform-agnostic. Once the Xero connector is live
+    on the gateway, swapping to it is a connector change: replace
+    <code>qbo_reports_customer_sales</code>, <code>qbo_reports_profit_and_loss</code>,
+    and <code>qbo_customers_list</code> in <code>permitted_tools</code> with the Xero
+    connector's equivalents. The report-building logic and Slack delivery body are
+    identical — the connector and tool names are the only things that change.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>
