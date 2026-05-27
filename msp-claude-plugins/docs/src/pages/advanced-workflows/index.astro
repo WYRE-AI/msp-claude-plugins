@@ -82,6 +82,30 @@ const baseUrl = import.meta.env.BASE_URL;
       one designated client by composing data from four systems, writes it to IT Glue, and
       posts a summary to Slack.
     </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/contract-renewal-tracker/`}>Contract Renewal Tracker</a>
+      &mdash; a weekly scheduled agent that finds Autotask contracts approaching their end
+      date in the next 90 days, buckets them by renewal window with the recurring revenue at
+      risk, and posts a renewal-pipeline report to Slack as a canvas.
+    </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/service-desk-sla-triage/`}>Service Desk SLA Triage</a>
+      &mdash; an hourly triage agent that surfaces HaloPSA tickets breaching or at risk of
+      breaching SLA, using a one-time triage note as an idempotency guard so reruns only flag
+      newly at-risk tickets, and posts a prioritized digest to Slack.
+    </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/cash-flow-analyzer/`}>Cash Flow Analyzer</a>
+      &mdash; a weekly, strictly read-only scheduled agent that pulls the QuickBooks Online
+      cash-flow and aged-receivables reports, summarises the near-term cash position and the
+      overdue receivables behind it, and posts a digest to Slack as a canvas.
+    </li>
+    <li>
+      <a href={`${baseUrl}advanced-workflows/pax8-renewal-optimizer/`}>Pax8 Renewal &amp; License Optimizer</a>
+      &mdash; <em>pending the Pax8 tool surface on the gateway</em>: a planned weekly agent
+      that would surface upcoming Pax8 renewals and over-provisioned subscriptions with the
+      reclaimable spend, and post a digest to Slack.
+    </li>
   </ul>
   <p class="text-sm text-[var(--muted)]">
     More workflows will be added here. Have one you'd like documented?

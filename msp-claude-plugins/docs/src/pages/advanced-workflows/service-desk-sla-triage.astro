@@ -1,0 +1,306 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled Service Desk SLA Triage agent using HaloPSA. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and HaloPSA is reachable: call
+   search_tickets (halopsa-official connector) and verify it returns open
+   tickets. Note: there are two HaloPSA gateway connectors in this ecosystem
+   (halopsa and halopsa-official). This routine uses halopsa-official — the
+   first-party MCP — so attach that one, not the other.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #support-sla). If Slack does not show in the /schedule
+   connector list, read its connector_uuid and url from an existing routine
+   that already uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Create a Claude-managed scheduled routine named "Service Desk SLA Triage":
+   - Schedule: hourly (cron "0 * * * *"). Faster-than-hourly cadences are
+     rejected. Cron runs in UTC — if your team works America/New_York,
+     "0 13 * * *" is 09:00 ET, for example.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway (halopsa-official): search_tickets, get_one_ticket,
+         add_note_to_ticket
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine logic (see the routine prompt below): every run, find open tickets
+     that are breaching SLA or within the risk threshold; skip any ticket that
+     already has this cycle's triage note (the idempotency guard); rank the
+     rest by urgency; add the triage-note guard to each newly surfaced ticket;
+     build a prioritised digest; post a Slack canvas with the full triage list
+     and a one-line summary linking it. Do NOT change ticket status or
+     assignment — writes are bounded to the triage note and Slack only.
+4. Trigger a manual run and verify: a canvas was created, the triage note was
+   added to each flagged ticket, a one-line summary landed in the destination
+   channel, and triggering a second run immediately does NOT re-flag the same
+   tickets (the note guard prevents it).
+
+Alternative discovery: if search_tickets does not surface SLA-breaching tickets
+directly, the halopsa-official connector also exposes CF_Portal_SLA_Breached
+and CF_Portal_Unassigned_Tickets as report-style tools — use those as a
+supplementary discovery path if needed.`;
+
+const routinePrompt = `You are the Service Desk SLA Triage agent. You run once per hour. Keep it lean.
+
+Use ONLY: search_tickets, get_one_ticket, add_note_to_ticket,
+slack_create_canvas, slack_send_message.
+
+Definitions:
+- BREACHED: ticket's SLA response or resolution deadline has already passed.
+- AT RISK: ticket is within 60 minutes of its SLA deadline (or unassigned and
+  open for more than 2 hours — these are at risk by default).
+- CYCLE MARKER: a triage note whose text starts with "[sla-triage YYYY-MM-DD-HH]"
+  where YYYY-MM-DD-HH is the current UTC date and hour (e.g. [sla-triage 2026-05-27-14]).
+  A ticket that already carries this exact marker was surfaced in this cycle;
+  skip it — do not re-flag, do not post it again.
+
+Steps:
+1. search_tickets: retrieve all open tickets. Request enough fields to determine
+   SLA status and whether a cycle marker note already exists for this hour.
+2. For each open ticket:
+   a. Classify as BREACHED, AT RISK, or neither. Tickets that are neither — skip.
+   b. Check for a cycle marker note matching today's UTC date-hour. If present — skip.
+   c. For tickets still in scope, call get_one_ticket only if you need additional
+      detail not present in the search payload (minimise per-record calls).
+3. For each newly surfaced ticket (not skipped):
+   a. add_note_to_ticket: post a private triage note. The note MUST begin with
+      the cycle marker, e.g.:
+        [sla-triage 2026-05-27-14] SLA triage: ticket flagged as BREACHED/AT RISK.
+        No action required — this note is an automated idempotency marker.
+   b. Record the ticket for the digest.
+4. Sort the digest: BREACHED tickets first (oldest deadline first), then AT RISK
+   (soonest deadline first), then unassigned aging tickets.
+5. slack_create_canvas titled "SLA Triage - <today's date> <current UTC hour>:00 UTC"
+   with the full ranked list: ticket number, subject, status, SLA deadline,
+   classification (BREACHED / AT RISK / UNASSIGNED), and time remaining or
+   overdue by.
+6. slack_send_message to #support-sla: a one-line summary
+   ("SLA triage: N breached, M at risk — see canvas") linking the canvas.
+7. If no tickets are in scope after filtering, post nothing (do not send an
+   empty canvas).
+8. If a ticket cannot be read or the triage note cannot be written, list it in
+   a "could not check" section of the canvas instead of skipping it silently.
+
+Bounded writes: add triage notes and post to Slack only. Do NOT change ticket
+status, priority, assignment, or any other ticket field.`;
+---
+<DocsLayout title="Service Desk SLA Triage" description="Build a Claude-managed hourly scheduled agent that finds HaloPSA tickets breaching or at risk of breaching SLA, guards against re-flagging with a per-ticket triage note, and posts a prioritised digest to Slack — no servers, no code.">
+  <h1>Service Desk SLA Triage</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, every hour, finds HaloPSA tickets that are
+    breaching or at risk of breaching SLA (plus unassigned aging tickets), skips anything
+    it already flagged this cycle, ranks the rest by urgency, and posts a prioritised
+    triage digest to Slack so the service desk sees what needs attention before SLAs
+    breach. There are no servers and no code to deploy: the agent is a saved prompt plus
+    a schedule plus two MCP connectors, running in Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on an hourly cron. Each run it queries open
+    HaloPSA tickets, classifies them as breached, at risk, or fine, skips any ticket it
+    has already surfaced this cycle (using a per-ticket triage note as the guard), ranks
+    the remainder by urgency, and delivers a canvas-backed digest to Slack — turning a
+    reactive inbox into a proactive SLA watch. Writes are bounded: the agent adds a
+    private triage note and posts to Slack; it never reassigns, closes, or changes a
+    ticket's status.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>halopsa-official</code> tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>HaloPSA enabled in the gateway (<code>halopsa-official</code>)</strong></td>
+        <td>The gateway's HaloPSA API user must be able to <strong>read</strong> tickets and <strong>write</strong> ticket notes. This guide uses the <code>halopsa-official</code> connector (the first-party MCP) — not the separate <code>halopsa</code> connector.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#support-sla</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>The idempotency guard is not optional for any hourly triage routine.</strong>
+      Without a per-ticket marker, every hourly run re-flags the same breaching tickets
+      and spams the channel with duplicates. The triage note (the cycle marker
+      <code>[sla-triage YYYY-MM-DD-HH]</code>) is the guard: a rerun reads existing notes
+      and skips any ticket already marked this cycle. This is the same archetype-B move
+      as the <a href={`${baseUrl}advanced-workflows/autotask-ticket-triage/`}>Autotask Ticket Triage</a>
+      agent — the triage note here plays the same role that advancing a ticket to
+      <em>In Progress</em> plays there.
+    </li>
+    <li>
+      <strong>Bounded writes — the routine should never make an irreversible service-desk change.</strong>
+      This agent writes a private triage note and posts to Slack; it does not reassign
+      tickets, change status, or alter priority. Keep unattended routines bounded: a human
+      reviews the digest and acts. Authorising status or assignment changes in
+      <code>permitted_tools</code> would let an hourly routine silently modify the queue
+      without oversight.
+    </li>
+    <li>
+      <strong>Two HaloPSA connectors exist in this ecosystem — attach the right one.</strong>
+      The gateway exposes both a <code>halopsa</code> connector and a
+      <code>halopsa-official</code> (first-party MCP) connector. This guide uses
+      <code>halopsa-official</code> and its tools (<code>search_tickets</code>,
+      <code>get_one_ticket</code>, <code>add_note_to_ticket</code>). Attaching
+      <code>halopsa</code> instead will give you a different tool set and the routine
+      will not work as written.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>One-hour minimum cadence.</strong> Claude-managed routines reject any cron
+      faster than hourly — <code>*/15 * * * *</code> fails outright. Cron runs in UTC:
+      to fire at 09:00 America/New_York (UTC−4 in summer), use <code>0 13 * * *</code>.
+    </li>
+    <li>
+      <strong>If Slack doesn't appear in the <code>/schedule</code> connector list, read
+      its details from an existing routine.</strong> Don't conclude Slack is unsupported.
+      Read its <code>connector_uuid</code> and <code>url</code> from an existing routine
+      that already uses Slack (<code>RemoteTrigger</code> list → get →
+      <code>mcp_connections</code>).
+    </li>
+    <li>
+      <strong>Prefer <code>search_tickets</code> over per-record gets.</strong> The
+      60-second tool timeout makes a loop of <code>get_one_ticket</code> calls across a
+      large queue risky. Pull as much as possible from the <code>search_tickets</code>
+      payload and call <code>get_one_ticket</code> only when necessary detail is missing.
+      If SLA fields are not surfaced by <code>search_tickets</code>, use
+      <code>CF_Portal_SLA_Breached</code> or <code>CF_Portal_Unassigned_Tickets</code>
+      as supplementary discovery tools.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    creates the routine, and verifies the idempotency guard end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your destination Slack channel name and ID.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>Hourly cadence and why</h3>
+  <p>
+    SLA deadlines are typically measured in hours, not days — a two-hour response
+    target can breach between a weekly or even daily run. Hourly is the fastest cadence
+    Claude-managed routines support, which makes it the natural fit for SLA watch. The
+    idempotency guard (below) ensures that running hourly doesn't flood the channel: a
+    ticket is surfaced at most once per UTC hour, regardless of how many runs execute.
+  </p>
+  <h3>At-risk vs. breached classification</h3>
+  <p>
+    The routine draws a line between two states. A ticket is <em>breached</em> when its
+    SLA deadline has already passed; it is <em>at risk</em> when the deadline is within
+    60 minutes, or when it is unassigned and has been open for more than two hours.
+    Everything else is skipped. The two-tier classification lets the digest lead with the
+    most urgent items (breached, oldest first) and trail with the approaching ones (at
+    risk, soonest deadline first), giving the service desk a clear action order at a
+    glance.
+  </p>
+  <h3>The triage-note idempotency guard — the archetype-B move</h3>
+  <p>
+    Before posting any ticket to Slack, the agent writes a private triage note whose
+    text begins with a stable, greppable marker: <code>[sla-triage YYYY-MM-DD-HH]</code>.
+    At the start of every run the agent reads existing notes on each candidate ticket
+    and skips any that already carry this hour's marker. The marker is the "already
+    handled" signal — no database, no timestamp window, no separate state store. This is
+    the same structural move the
+    <a href={`${baseUrl}advanced-workflows/autotask-ticket-triage/`}>Autotask Ticket Triage</a>
+    agent makes by advancing a ticket to <em>In Progress</em>: both routines embed the
+    idempotency guard into the primary data source so reruns are self-correcting.
+  </p>
+  <h3>Bounded writes — the human stays in control</h3>
+  <p>
+    The only writes this routine makes are a private triage note (the guard) and a Slack
+    message. It never changes a ticket's status, priority, or assignment. That constraint
+    is deliberate: an unattended hourly routine that can silently reassign or close
+    tickets is a liability. The digest gives the service desk the full picture;
+    remediation stays human. If a ticket cannot be read or the note cannot be written,
+    the routine lists it in a "could not check" section of the canvas rather than
+    skipping it silently.
+  </p>
+  <h3>Canvas plus summary delivery</h3>
+  <p>
+    The triage digest can span many tickets, so the routine publishes it as a Slack
+    canvas — a durable, scrollable document — and posts only a one-line count summary to
+    the channel linking it. The channel stays readable across multiple hourly runs; the
+    detail lives in each canvas. See <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The routine is PSA-agnostic in structure. To run the same SLA triage against
+    Autotask, swap the <code>halopsa-official</code> tools (<code>search_tickets</code>,
+    <code>get_one_ticket</code>, <code>add_note_to_ticket</code>) for the gateway's
+    <code>autotask_search_tickets</code>, <code>autotask_get_ticket_details</code>, and
+    <code>autotask_create_ticket_note</code> equivalents — the idempotency pattern, the
+    at-risk classification, and the Slack delivery are identical. See the
+    <a href={`${baseUrl}advanced-workflows/autotask-ticket-triage/`}>Autotask Ticket Triage</a>
+    guide for that connector's setup. Alternatively, to escalate a breached ticket
+    beyond a Slack digest — for example, opening a PagerDuty incident or an internal
+    escalation ticket — add a third connector to the routine and extend the bounded-write
+    step; the core classification and guard logic does not change.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

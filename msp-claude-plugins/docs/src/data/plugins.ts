@@ -134,6 +134,45 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'auvik',
+    name: 'Auvik',
+    vendor: 'Auvik',
+    description: 'Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants',
+    category: 'network',
+    maturity: 'production',
+    features: [
+      'Alert Handling',
+      'Device Management',
+      'Networks'
+    ],
+    skills: [
+      { name: 'alerts', description: 'Use this skill when working with Auvik alerts - severity tiers, status lifecycle, dismissal semantics, and the common alertName patterns that show up in MSP NOC queues.' },
+      { name: 'devices', description: 'Use this skill when working with Auvik device records - identifying device types, interpreting manageStatus, reading lifecycle and warranty fields, and choosing between the v1 list endpoint and the detailed device endpoints.' },
+      { name: 'networks', description: 'Use this skill when working with Auvik network and interface entities - the network entity model, IP-range scoping, interface-to-device relationships, and admin vs oper status.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Auvik MCP tools - JSON:API envelope shape, basic-auth credential model, region routing, cursor-based pagination, rate-limit handling, and the v1 vs v2 device API distinction.' }
+    ],
+    agents: [
+      { name: 'alert-responder', description: 'Use this agent for Auvik alert-related questions - what\'s open, what matters, what to dismiss, what to escalate.' },
+      { name: 'capacity-planner', description: 'Use this agent for Auvik utilization, saturation, and headroom questions - "is this link maxed out?", "what links need an upgrade?", "where is the bottleneck?".' },
+      { name: 'network-analyst', description: 'Use this agent when the user is asking what\'s wrong with a tenant\'s network, investigating broad performance complaints, mapping topology, or doing multi-signal triage across devices, interfaces, alerts, and statistics in Auvik.' }
+    ],
+    commands: [
+      { name: '/alert-triage', description: 'Triage open Auvik alerts, rank by severity, and recommend dismissals for known noise' },
+      { name: '/capacity-check', description: 'Scan Auvik interface statistics for saturated links and recurring congestion' },
+      { name: '/device-inventory', description: 'Inventory devices for an Auvik tenant with type, manage status, and lifecycle breakdown' },
+      { name: '/network-audit', description: 'Audit a tenant\'s networks, interfaces, and saved configurations; flag drift and missing backups' },
+      { name: '/tenant-overview', description: 'Single-tenant Auvik snapshot - devices, alerts, networks, billing usage' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'auvik/auvik',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'autotask',
     name: 'Autotask PSA',
     vendor: 'Kaseya',
@@ -1989,15 +2028,26 @@ export const plugins: Plugin[] = [
     features: [],
     skills: [],
     agents: [
+      { name: 'asset-reconciliation-auditor', description: 'Use this agent when an MSP needs to reconcile its asset estate across managed, secured, billed, and documented systems to surface security coverage gaps, revenue leakage, ghost assets, and shadow IT.' },
+      { name: 'book-of-business-pulse', description: 'Use this agent when an MSP owner, service-delivery manager, or ops lead needs a single operational, commercial, and security heartbeat across the entire client portfolio.' },
+      { name: 'change-drift-sentinel', description: 'Use this agent when an MSP needs to detect unauthorized, undocumented, or security-weakening configuration changes across the client estate and correlate each change against change-control tickets and documentation currency.' },
       { name: 'client-360-briefer', description: 'Use this agent when an MSP technician, account manager, or vCIO needs a complete, synthesized briefing on a client before a call, meeting, or QBR.' },
       { name: 'compliance-evidence-packager', description: 'Use this agent when a client needs compliance evidence gathered for a formal audit or assessment against a recognized framework.' },
+      { name: 'dr-readiness-auditor', description: 'Use this agent when an MSP needs to assess the true disaster-recovery readiness of a client — going beyond backup dashboard green lights to evaluate coverage, test-restore history, runbook maturity, and RTO/RPO achievability.' },
       { name: 'gateway-ops', description: 'Use this agent when an MSP administrator needs to review gateway activity, audit tool usage across the team, investigate suspicious access patterns, check permission configurations, or monitor for anomalies in how MSP tools are being accessed through the WYRE MCP Gateway.' },
       { name: 'incident-war-room-coordinator', description: 'Use this agent when a major incident (P1 or Critical severity) has been declared or is suspected, and the team needs immediate situational awareness across all affected systems and stakeholders.' },
+      { name: 'license-true-up-reconciler', description: 'Use this agent when an MSP operations manager, account manager, or billing team needs to reconcile subscription license seats across the full provisioning-to-billing chain and quantify waste, leakage, and over-collection.' },
+      { name: 'offboarding-orchestrator', description: 'Use this agent when an MSP is ending a client relationship — whether through churn, client acquisition, mutual termination, or non-renewal — and needs to orchestrate a complete, auditable teardown across every connected tool, reclaim all licensed spend, and fulfill contractual data-handover obligations.' },
       { name: 'onboarding-completeness-checker', description: 'Use this agent when an MSP needs to validate that a newly onboarded client has been fully set up across all MSP tools and systems before transitioning to steady-state support.' },
+      { name: 'portfolio-threat-sweep', description: 'Use this agent when an indicator set — file hashes, domains, IPs, sender addresses, URLs, a CVE, or a MITRE ATT&CK technique — needs to be hunted across every client tenant simultaneously to map blast radius and identify exposure before a campaign spreads.' },
       { name: 'qbr-prep-agent', description: 'Use this agent when an MSP account manager or vCIO needs to prepare a complete Quarterly Business Review data package for a client.' },
       { name: 'renewal-risk-analyzer', description: 'Use this agent when an MSP account manager, sales leader, or operations manager wants to identify clients at risk of not renewing before the renewal conversation happens.' },
       { name: 'security-posture-scorer', description: 'Use this agent when an MSP needs a comprehensive, scored security health assessment for a specific client — acting as a vCISO-style health check by aggregating data across all connected security tools.' },
-      { name: 'technician-performance-coach', description: 'Use this agent when a service delivery manager or operations lead wants to understand technician performance trends and get actionable coaching recommendations grounded in data.' }
+      { name: 'service-profitability-auditor', description: 'Use this agent when an MSP owner, operations leader, or finance lead needs to identify which clients and contracts are losing money or eroding margin across the portfolio.' },
+      { name: 'technician-performance-coach', description: 'Use this agent when a service delivery manager or operations lead wants to understand technician performance trends and get actionable coaching recommendations grounded in data.' },
+      { name: 'ticket-deflection-analyzer', description: 'Use this agent when an MSP operations lead or service delivery manager wants to identify recurring ticket patterns that can be eliminated or deflected through automation, self-service, or root-cause remediation — and quantify the labor being silently consumed.' },
+      { name: 'user-lifecycle-orchestrator', description: 'Use this agent when an MSP needs to provision, modify, or deprovision an individual employee\'s access, identity, licensing, and security posture across all connected systems for a client.' },
+      { name: 'vulnerability-remediation-prioritizer', description: 'Use this agent when an MSP needs a risk-ranked, actionable remediation workplan from raw vulnerability and missing-patch data — going beyond compliance status to tell technicians exactly what to fix first and why.' }
     ],
     commands: [],
     apiInfo: {

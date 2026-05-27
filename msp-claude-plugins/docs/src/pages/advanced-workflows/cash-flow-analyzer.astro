@@ -1,0 +1,287 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled Cash Flow Analyzer agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and QuickBooks Online is reachable: call
+   qbo_reports_cash_flow and check it returns a report for the current period.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #finance, C0931CKJ75X). If Slack does not show in the /schedule
+   connector list, read its connector_uuid and url from an existing routine that
+   already uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Create a Claude-managed scheduled routine named "Cash Flow Analyzer":
+   - Schedule: weekly, cron "0 12 * * 1" (Monday 08:00 America/New_York =
+     12:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: qbo_reports_cash_flow, qbo_reports_aged_receivables,
+         qbo_invoices_list — READ tools only.
+         Do NOT list any qbo_*_create or qbo_*_update tool.
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, pull the cash-flow report and the
+     aged-receivables report for the current week, summarize net cash position
+     and inflows/outflows, identify the largest overdue receivables dragging on
+     that position, build a report, publish it as a Slack canvas titled
+     "Cash Flow — <date>", and post a one-line summary to the channel. Use the
+     exact routine prompt below.
+4. Trigger a manual run and verify: a canvas titled "Cash Flow — <date>" was
+   created, a one-line summary landed in the destination channel, and the net
+   cash position figure matches what you can see in QuickBooks Online.`;
+
+const routinePrompt = `You are the Cash Flow Analyzer. You run weekly, READ-ONLY against QuickBooks Online (a single company file). You must NEVER create or modify any QuickBooks record — only read.
+
+Use ONLY: qbo_reports_cash_flow, qbo_reports_aged_receivables, qbo_invoices_list,
+          slack_create_canvas, slack_send_message.
+
+Steps:
+1. Call qbo_reports_cash_flow with a reporting period of the current month-to-date
+   (use start_date = first day of this month, end_date = today). State the exact
+   reporting period in the report so each week's number is directly comparable
+   to the next.
+2. From the cash-flow report, extract: total cash inflows (operating + investing
+   + financing receipts), total cash outflows, and net cash position for the
+   period. Note any line items that are unusually large relative to the rest.
+3. Call qbo_reports_aged_receivables to get the aging summary: current,
+   1-30 days, 31-60 days, 61-90 days, and 90+ days overdue buckets and their
+   totals.
+4. Identify the largest overdue receivables dragging on the cash position.
+   Call qbo_invoices_list with status "Unpaid" and maxResults 20 to name the
+   specific open invoices. Sort by Balance descending. Record customer name,
+   invoice number (DocNumber), amount (Balance), DueDate, and days overdue
+   (today minus DueDate) for invoices where DueDate is before today.
+
+Build a report with three sections:
+- CASH POSITION: net cash for the stated period, total inflows, total outflows,
+  and any notably large line items.
+- RECEIVABLES DRAG: aged-receivables totals by bucket, grand total outstanding.
+- TOP OVERDUE INVOICES: the largest overdue invoices by Balance, sorted
+  descending, with customer, invoice #, amount, and days overdue.
+
+Include a one-line executive summary: "Net cash position $X this period; $Y in
+overdue receivables (top overdue: $Z from <customer>)."
+
+Deliver:
+- Call slack_create_canvas titled "Cash Flow — <today's date YYYY-MM-DD>" with
+  the full report in Markdown.
+- Call slack_send_message to the destination channel with the one-line executive
+  summary and a link to the canvas.
+
+This routine is strictly read-only: never call any qbo write or update tool.
+If a report cannot be read, include a "could not read" section naming it and
+noting the error — do not skip it silently or fabricate numbers.`;
+---
+<DocsLayout title="Cash Flow Analyzer" description="Build a Claude-managed scheduled agent that pulls QuickBooks Online cash-flow and aged-receivables data every week, surfaces the net cash position and the largest overdue receivables dragging on it, and posts a digest to Slack as a canvas — strictly read-only, no servers, no code.">
+  <h1>Cash Flow Analyzer</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, reads the QuickBooks Online
+    cash-flow report and aged-receivables data, summarizes the net cash position and the
+    overdue invoices dragging on it, and publishes a digest to Slack as a canvas with a
+    one-line summary. Cash position is the number that actually keeps an MSP owner up at
+    night, and it lives buried in QBO; this workflow surfaces it every Monday without
+    anyone opening the accounting package. It is strictly <strong>read-only</strong> and
+    never writes to QuickBooks. There are no servers and no code to deploy: the agent is
+    a saved prompt plus a schedule plus two MCP connectors, running in Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended on a weekly cron. Each run it pulls the
+    cash-flow statement and the aged-receivables aging report, reasons about inflows,
+    outflows, and the receivables that have not converted to cash yet, and notifies your
+    team — turning a buried accounting report into a two-number weekly digest (net
+    position, receivables drag) with a Slack trail.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>qbo_*</code> tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>QuickBooks Online enabled in the gateway</strong></td>
+        <td>The gateway's QuickBooks Online connection must be able to <strong>read</strong> reports and invoices. The routine uses only read tools — no write scope is required.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#finance</code> or <code>#sw-dev</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>State the reporting period explicitly in the prompt.</strong> The QBO
+      report tools return period-scoped data, and the default period can shift
+      week to week depending on when you call them. If the routine does not pin a
+      specific <code>start_date</code> and <code>end_date</code>, consecutive weekly
+      runs may cover different windows and the numbers will not be comparable. The
+      routine prompt pins the period to month-to-date so every Monday's number
+      covers the same accumulating window.
+    </li>
+    <li>
+      <strong>This workflow is deliberately read-only — keep it that way.</strong> The
+      gateway's QuickBooks connector exposes <code>qbo_*_create</code> and
+      <code>qbo_*_update</code> tools, but the routine's <code>permitted_tools</code>
+      lists <em>none</em> of them — only <code>qbo_reports_cash_flow</code>,
+      <code>qbo_reports_aged_receivables</code>, and <code>qbo_invoices_list</code>.
+      An unattended routine must never touch the books. The safety guarantee lives in
+      the connector configuration, not in the prompt.
+    </li>
+    <li>
+      <strong>One routine per QBO connection for multi-entity MSPs.</strong> The
+      gateway connects to a single QuickBooks company file. If your MSP manages
+      multiple legal entities in separate QBO files, run one routine per QBO
+      connection rather than trying to sweep all entities in a single run. The
+      company context is set at the connector level, not per tool call.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected.</strong> The scheduler will not
+      accept a cron more frequent than once an hour. The weekly cron
+      (<code>0 12 * * 1</code>) is well within that limit. Note that cron expressions
+      are interpreted as UTC — Monday 08:00 America/New_York is <code>0 12 * * 1</code>
+      in UTC (12:00 UTC during Eastern Daylight Time; adjust to <code>0 13 * * 1</code>
+      when Eastern Standard Time is in effect).
+    </li>
+    <li>
+      <strong>If Slack is not in the <code>/schedule</code> connector list,</strong> read
+      its <code>connector_uuid</code> and <code>url</code> from an existing routine that
+      already uses Slack: list routines via RemoteTrigger, get one that uses Slack, and
+      copy the <code>mcp_connections</code> entry. The build prompt handles this
+      automatically.
+    </li>
+    <li>
+      <strong>Prefer report tools over per-record gets.</strong>
+      <code>qbo_reports_cash_flow</code> and <code>qbo_reports_aged_receivables</code>
+      return aggregated summaries in a single call. Use <code>qbo_invoices_list</code>
+      with a bounded <code>maxResults</code> to name the specific large overdue invoices
+      — do not call <code>qbo_invoices_get</code> in a per-invoice loop, which risks
+      the 60-second tool timeout across a large receivables book.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    creates the routine, and verifies it end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your own destination channel if it is not the default.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Cash position changes meaningfully over days and weeks, not minutes. The routine
+    runs every Monday morning so the digest is waiting before the week's collections and
+    AP work starts. Monday also gives the prior week's transactions time to clear and
+    reconcile in QBO before the report runs. A weekly cron is kind to the API: one read
+    sweep per week, not one per hour.
+  </p>
+  <h3>Read-only as a finance-routine guardrail</h3>
+  <p>
+    The routine's QuickBooks connector is attached with a <code>permitted_tools</code>
+    list containing only read tools. The <code>qbo_*_create</code> and
+    <code>qbo_*_update</code> tools are not reachable from inside the routine, so there
+    is no path by which an unattended run could alter the books. This is a deliberate
+    design choice for any finance routine: the safety guarantee lives in the connector
+    configuration, not in the prompt. When you extend this routine, never add a write
+    tool.
+  </p>
+  <h3>Cash position and receivables drag as the two-number story</h3>
+  <p>
+    The routine is built around two numbers: net cash position for the period (what the
+    cash-flow statement says is in the business right now) and total outstanding
+    receivables (money owed but not yet collected). The aged-receivables report adds
+    texture — how much of that outstanding balance is current versus 30, 60, or 90+
+    days overdue. The <code>qbo_invoices_list</code> call names the specific large
+    overdue invoices behind those totals, so the digest answers not just "what is the
+    position" but "what is holding it back."
+  </p>
+  <h3>Delivery is a Slack canvas plus a summary</h3>
+  <p>
+    The full cash-position and receivables report can be long, so the routine publishes
+    it as a Slack canvas — a durable document teammates can scroll, reference, and
+    compare week to week — and posts only a one-line executive summary to the channel
+    linking it. The channel stays readable; the detail lives in the canvas. See
+    <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The natural next step is a fuller weekly financial digest: add
+    <code>qbo_reports_profit_and_loss</code> to the gateway connector's
+    <code>permitted_tools</code> and instruct the routine to include a P&amp;L summary
+    alongside the cash-flow and receivables sections — revenue, gross margin, and net
+    income for the same period — in a single Monday morning canvas.
+  </p>
+  <p>
+    The workflow is also accounting-platform-agnostic. Once the Xero connector is live
+    on the gateway, swapping to it is a one-line connector change: replace the
+    <code>qbo_reports_cash_flow</code>, <code>qbo_reports_aged_receivables</code>, and
+    <code>qbo_invoices_list</code> tool names in <code>permitted_tools</code> with the
+    Xero connector's equivalents, and point the routine at the Xero connector instead of
+    the WYRE MCP Gateway's QBO connector. The report-building logic and the Slack
+    delivery body of the routine are identical — the connector and tool names are the
+    only things that change.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

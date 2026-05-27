@@ -1,0 +1,289 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `Build me a scheduled Contract Renewal Tracker agent. Do all of this end to end:
+
+1. Confirm the WYRE MCP Gateway works and Autotask is reachable: call
+   autotask_search_contracts with a minimal filter (e.g. status=1, limit=5) and
+   check that it returns results without hanging. If the call hangs rather than
+   returning a 403, the gateway's Autotask API user IP likely isn't allowlisted
+   in Autotask — resolve that before continuing.
+2. Confirm a Slack connector is connected. Note the destination channel name and
+   ID (e.g. #account-management). If Slack does not show in the /schedule
+   connector list, read its connector_uuid and url from an existing routine that
+   already uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Create a Claude-managed scheduled routine named "Contract Renewal Tracker":
+   - Schedule: weekly, cron "0 12 * * 1" (Monday 08:00 America/New_York =
+     12:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: autotask_search_contracts, autotask_search_companies
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, find In-Effect contracts (status=1) whose end
+     date falls within the next 90 days, bucket them into 0-30 / 31-60 / 61-90
+     day renewal windows, resolve company names, sum recurring value per bucket
+     and overall, then publish a renewal-pipeline canvas and post a one-line
+     summary to the channel. Use the exact routine prompt below.
+4. Trigger a manual run and verify: a canvas titled "Contract Renewals - <date>"
+   was created, a one-line summary landed in the destination channel, and the
+   bucket counts and total MRR-at-risk figures look plausible against your
+   Autotask data.`;
+
+const routinePrompt = `You are the Contract Renewal Tracker. You run weekly. Keep it lean.
+
+Use ONLY: autotask_search_contracts, autotask_search_companies,
+          slack_create_canvas, slack_send_message.
+
+Today's date in ISO format: <today-YYYY-MM-DD>
+Horizon end date (today + 90 days): <horizon-YYYY-MM-DD>
+Slack channel: #account-management (channel ID: <channel-id>)
+
+1. Call autotask_search_contracts with:
+     status = 1 (In Effect only)
+     endDate >= <today-YYYY-MM-DD>
+     endDate <= <horizon-YYYY-MM-DD>
+   If no contracts are returned, post a one-line Slack message:
+   "Contract Renewals - <today>: no contracts due in the next 90 days." and stop.
+
+2. Bucket contracts by days until end date:
+     Window A: 0-30 days
+     Window B: 31-60 days
+     Window C: 61-90 days
+
+3. Collect all unique companyIDs from the results. Resolve them to company names
+   in as few calls as possible: prefer one autotask_search_companies call with
+   an id-in filter over a separate get per contract. If a company cannot be
+   resolved, use "Unknown (ID: <id>)" rather than skipping the contract.
+
+4. For each bucket, list: client name, contract name, end date, and contract
+   recurring value (monthly). Sum the recurring value per bucket and across all
+   three buckets (total MRR at risk).
+
+5. Build the canvas body:
+     Heading: "Contract Renewals — <today>"
+     Sub-heading: "Total MRR at risk: $<total> across <N> contracts"
+     One section per window (A / B / C), each with a table:
+       Client | Contract | End Date | Monthly Value
+     Omit a window section entirely if it has no contracts.
+
+6. slack_create_canvas with that content, titled "Contract Renewals — <today>".
+7. slack_send_message to the channel:
+   "Contract Renewals <today>: <N> contracts, $<total>/mo at risk in 90 days — see canvas"
+   Include the canvas URL in the message if available.
+
+8. If autotask_search_contracts fails or times out, post a Slack message:
+   "Contract Renewal Tracker could not read contracts — check gateway/Autotask
+   connectivity." and stop. Do not retry in a loop.`;
+---
+<DocsLayout title="Contract Renewal Tracker" description="Build a Claude-managed scheduled agent that runs every Monday, finds Autotask contracts expiring in the next 90 days, buckets them into renewal windows, and posts an MRR-at-risk pipeline report to Slack as a canvas — no servers, no code.">
+  <h1>Contract Renewal Tracker</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, finds Autotask contracts
+    approaching their end date, buckets them into 30/60/90-day renewal windows,
+    computes the recurring revenue at risk in each window, and posts a forward-looking
+    renewal-pipeline report to Slack as a canvas with a one-line summary. There are no
+    servers and no code to deploy: the agent is a saved prompt plus a schedule plus two
+    MCP connectors, running in Claude's cloud.
+  </p>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow runs unattended every Monday morning. Each run it searches
+    In-Effect contracts with an end date inside the next 90 days, resolves each
+    contract's company name, groups the results into three renewal windows, sums the
+    monthly recurring value per window and in total, and notifies your account team —
+    turning expiring-contract data into a renewal pipeline the team sees before the
+    window closes, not after.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the <code>autotask_*</code> tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>Autotask enabled in the gateway</strong></td>
+        <td>The gateway's Autotask API user must be able to <strong>read</strong> contracts and companies. The API user's IP must be allowlisted in Autotask — without this, contract searches hang silently rather than returning a 403.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#account-management</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs: <code>autotask_search_contracts</code> and
+      <code>autotask_search_companies</code> for the gateway connector;
+      <code>slack_create_canvas</code> and <code>slack_send_message</code> for Slack.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine
+      sandbox blocks arbitrary network egress, so notifications must go through the
+      Slack connector's tools, not an outbound webhook. Attach every connector the
+      workflow touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cron cadences are rejected; cron is in UTC.</strong>
+      This routine uses <code>0 12 * * 1</code> — Monday 08:00 America/New_York is
+      12:00 UTC. Adjust the UTC offset for your preferred delivery time.
+    </li>
+    <li>
+      <strong>If Slack doesn't appear in the <code>/schedule</code> connector list,
+      pull its details from an existing routine.</strong> Use RemoteTrigger to list
+      routines, get one that already uses Slack, and read the
+      <code>connector_uuid</code> and <code>url</code> from its
+      <code>mcp_connections</code> block.
+    </li>
+    <li>
+      <strong>Filter to <code>status=1</code> (In Effect) — not 0 (Inactive) or
+      expired.</strong> Autotask contracts that have already lapsed have
+      <code>status=0</code>. Without this filter, the bucket totals include contracts
+      that are already gone and the MRR-at-risk figure is meaningless.
+    </li>
+    <li>
+      <strong>Autotask date fields are ISO strings (<code>YYYY-MM-DD</code>).</strong>
+      Pass the horizon window as exact ISO dates, not relative expressions. The routine
+      prompt should compute today's date and today-plus-90-days at run time and
+      substitute them into the filter.
+    </li>
+    <li>
+      <strong>Resolve company names in as few calls as possible.</strong> Fetching one
+      company per contract risks hitting the 60-second tool timeout on a large result
+      set. Prefer a single <code>autotask_search_companies</code> call with an ID-in
+      filter to batch-resolve all companies at once. If a company cannot be resolved,
+      fall back to <code>"Unknown (ID: &lt;id&gt;)"</code> rather than skipping the
+      contract.
+    </li>
+    <li>
+      <strong>If contract searches hang (not a 403), check IP allowlisting.</strong>
+      Autotask silently times out requests from un-allowlisted IPs instead of
+      returning an error. Confirm the gateway's egress IP is in the Autotask API
+      user's allowlist before debugging anything else.
+    </li>
+    <li>
+      <strong>Prefer list/search payloads over per-record <code>get</code> calls.</strong>
+      <code>autotask_search_contracts</code> returns the fields the routine needs.
+      Calling a separate get per contract to re-fetch those same fields doubles the
+      tool calls and the timeout risk for no gain.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    With the connectors above in place, paste this to Claude. It confirms the gateway,
+    creates the routine, and verifies it end to end.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Substitute your destination channel ID; the dates are computed at run time.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Contract renewals are a slow-moving calendar problem — the risk accumulates over
+    weeks, not minutes. Running every Monday gives the account team a fresh pipeline
+    view at the start of each week, before meetings and client calls. A weekly cron is
+    also efficient: one Autotask search per week rather than one per hour, with no
+    meaningful loss of signal.
+  </p>
+  <h3>The 30/60/90 renewal-window bucketing</h3>
+  <p>
+    Rather than dumping a flat list of expiring contracts, the routine groups them into
+    three urgency windows: contracts expiring within 30 days (act now), 31–60 days
+    (schedule the conversation), and 61–90 days (plan ahead). Account managers get an
+    at-a-glance triage of where to spend their attention this week versus next month.
+    The 90-day horizon is a balance: wide enough to catch renewals before the client
+    starts evaluating alternatives, narrow enough that the report stays actionable
+    rather than becoming a noise scroll.
+  </p>
+  <h3>MRR at risk as the headline number</h3>
+  <p>
+    Each bucket and the report header lead with the sum of monthly recurring value
+    across its contracts. That single number — total MRR at risk — is the signal a
+    sales or account leader needs to triage the report in a glance. Contracts with a
+    high recurring value that are expiring soon surface immediately; a long list of
+    low-value renewals in the 61–90 window doesn't create false urgency. The routine
+    is read-only on Autotask; the only write is delivering the canvas and summary
+    to Slack.
+  </p>
+  <h3>Canvas plus summary delivery</h3>
+  <p>
+    The full renewal pipeline, grouped by window with a table per bucket, can be a
+    substantial document. The routine publishes it as a Slack canvas — a durable
+    artifact teammates can link, share, and reference throughout the week — and posts
+    only a one-line summary to the channel: contract count, total MRR at risk, and a
+    link to the canvas. The channel stays readable; the detail lives in the canvas.
+    See <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
+    for other ways to surface a routine's output.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    The same shape works against any PSA that exposes contract end-date and recurring-
+    value fields. To run it against HaloPSA instead of Autotask, swap the
+    <code>autotask_*</code> tools for the <code>halopsa-official</code> contract
+    reports — the <code>CF_Accounts_Report_Customer_Contract_Summary_Overview</code>
+    custom-field report returns contract summary data in a similar structure; update
+    the <code>permitted_tools</code> list and the filter logic in the routine prompt
+    accordingly. The bucketing, MRR-at-risk calculation, and Slack delivery body of
+    the routine are identical.
+  </p>
+  <p>
+    You can also feed the at-risk renewals from this routine into a renewal-risk-analyzer
+    portfolio agent — one that cross-references contract value against support-ticket
+    volume, open incidents, or NPS data to surface which renewals are most at risk of
+    churn, not just which are expiring soonest.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>

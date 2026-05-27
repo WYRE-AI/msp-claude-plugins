@@ -1,0 +1,364 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+
+// Prompts kept as consts so literal braces / angle brackets render verbatim
+// (.astro treats { } as expressions — a const string sidesteps all escaping).
+const buildPrompt = `NOTE: The Pax8 connector is currently pending — it does not yet expose tools
+through the WYRE MCP Gateway. Before attempting to build this routine, first
+confirm that Pax8 tools are now visible in the gateway catalog:
+
+  gateway__search_tools with query "pax8"
+
+If that returns no results, the connector has not yet surfaced its tools and
+the rest of this build cannot proceed. Return to this guide once Pax8 tools
+appear in the catalog.
+
+Once the Pax8 tool surface is confirmed, verify the exact tool names against
+what the catalog returns — the names used in this guide (pax8_list_companies,
+pax8_list_subscriptions, pax8_list_products) are provisional and may differ.
+
+Build me a scheduled Pax8 Renewal & License Optimizer agent. Do all of this
+end to end:
+
+1. Confirm the WYRE MCP Gateway works and Pax8 is reachable: call
+   pax8_list_companies and check it returns your managed companies. Verify
+   the exact tool names against the gateway catalog first.
+2. Confirm a Slack connector is connected. Note the destination channel name
+   and ID (e.g. #sw-dev). If Slack does not show in the /schedule connector
+   list, read its connector_uuid and url from an existing routine that already
+   uses Slack (RemoteTrigger list -> get -> mcp_connections).
+3. Assess payload size. Call pax8_list_subscriptions for one or two companies
+   to gauge how large the per-company subscription payload is. If your Pax8
+   estate is large (many companies with many subscriptions each), choose a
+   fixed set of priority companies and bake their IDs into the routine prompt
+   rather than sweeping the whole estate in one run.
+4. Create a Claude-managed scheduled routine named "Pax8 Renewal & License
+   Optimizer":
+   - Schedule: weekly, cron "0 13 * * 1" (Monday 09:00 America/New_York =
+     13:00 UTC). Faster-than-hourly cadences are rejected.
+   - Attach TWO connectors, each with permitted_tools populated:
+       * WYRE MCP Gateway: pax8_list_companies, pax8_list_subscriptions,
+         pax8_list_products  (provisional names — use actual names from catalog)
+       * Slack: slack_create_canvas, slack_send_message
+     An empty permitted_tools list = the routine runs with no tools.
+   - Routine prompt: every run, list managed companies, list each company's
+     subscriptions, bucket renewals by 30/60/90-day window with committed
+     monthly value, flag over-provisioned subscriptions and estimate
+     reclaimable monthly spend, build the combined renewal + optimization
+     report, publish it as a Slack canvas, and post a one-line summary
+     linking the canvas. Use the exact routine prompt below.
+5. Trigger a manual run and verify: a canvas titled "Pax8 Renewals &
+   Optimization - <date>" was created, a one-line summary landed in the
+   destination channel, and the report content matches live Pax8 data
+   (spot-check one company's subscriptions).`;
+
+const routinePrompt = `You are the Pax8 Renewal & License Optimizer. You run weekly. Keep it lean.
+
+IMPORTANT: The tool names below are provisional. If they are not available,
+log a "connector not yet available" message to Slack and stop — do not
+attempt to proceed without working tools.
+
+Use ONLY: pax8_list_companies, pax8_list_subscriptions, pax8_list_products,
+slack_create_canvas, slack_send_message.
+
+Today's date: use the current date at runtime to calculate renewal windows.
+
+--- RENEWAL CALENDAR ---
+
+1. Call pax8_list_companies to get the list of managed companies.
+   If a fixed company list is baked in below, use that instead:
+   - <company-id-1> - <company name 1>
+   - <company-id-2> - <company name 2>
+   - ... (bake in IDs if your estate is large) ...
+
+2. For each company, call pax8_list_subscriptions. For each subscription
+   record, read: company name, product/SKU name, quantity (provisioned seats),
+   commitment term, renewal date (or end date), and unit price.
+
+3. Bucket each subscription by days until renewal from today:
+   - 30-day window:  renews within 0-30 days
+   - 60-day window:  renews within 31-60 days
+   - 90-day window:  renews within 61-90 days
+   Skip subscriptions renewing beyond 90 days.
+
+4. For each bucketed subscription record the committed monthly value:
+   quantity x unit price x billing frequency factor (monthly = 1,
+   annual = divide annual total by 12). Label the value as estimated
+   if the billing period or unit price is unclear from the payload.
+
+--- OPTIMIZATION OPPORTUNITIES ---
+
+5. For each subscription, assess whether the provisioned seat count looks
+   over-allocated:
+   - If a usage figure is available in the payload (active seats, consumed
+     licenses, etc.), flag any subscription where provisioned quantity
+     materially exceeds active usage (e.g. more than 20% unallocated).
+     Estimate reclaimable monthly spend: (provisioned - active) x unit price.
+   - If no usage signal is available in the payload, flag the subscription
+     as a "candidate for human review" — do NOT assert reclaimable spend
+     without a usage figure.
+   Include the line: "Usage data availability varies by product; candidates
+   marked for review require manual verification in the Pax8 portal."
+
+--- REPORT ---
+
+6. Build a combined report:
+   SECTION A — Renewal Calendar
+     For each 30/60/90-day bucket: list company, product/SKU, quantity,
+     renewal date, and estimated committed monthly value.
+     End with a bucket summary (count and total committed monthly value per
+     window).
+
+   SECTION B — Optimization Opportunities
+     List each flagged subscription: company, product/SKU, provisioned
+     quantity, active usage (if available), estimated reclaimable monthly
+     spend (if calculable), or "candidate for human review".
+     End with total estimated reclaimable monthly spend (where calculable).
+
+7. slack_create_canvas titled "Pax8 Renewals & Optimization - <today's date>"
+   with the full combined report. Then slack_send_message to #sw-dev: a
+   one-line summary ("Pax8: N renewals in 90 days (~$X committed/mo),
+   N optimization candidates - see canvas") linking the canvas.
+
+8. If a company's subscriptions cannot be read, list it in a "could not read"
+   section instead of skipping it silently.
+
+9. If the Pax8 tools are not available at all, call slack_send_message to
+   report: "Pax8 Renewal & License Optimizer: Pax8 connector tools not
+   available — routine cannot run. Verify connector status in the gateway."`;
+---
+<DocsLayout title="Pax8 Renewal & License Optimizer" description="Planned workflow (pending Pax8 connector tool surface): a Claude-managed scheduled agent that will sweep Pax8 subscriptions weekly to surface upcoming renewals and license-optimization opportunities, posting a combined digest to Slack as a canvas — no servers, no code.">
+  <h1>Pax8 Renewal &amp; License Optimizer</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    A planned <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, would sweep Pax8 subscriptions
+    across managed companies to surface upcoming renewals in the next 30, 60, and 90 days
+    (with committed monthly value) and flag over-provisioned subscriptions as optimization
+    candidates. It posts a combined renewal and optimization digest to Slack as a canvas
+    with a one-line summary. There are no servers and no code to deploy. This guide documents
+    the intended workflow and is <strong>pending the Pax8 connector surfacing its tools
+    through the WYRE MCP Gateway</strong>.
+  </p>
+
+  <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
+    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending</p>
+    <p class="text-amber-900 dark:text-amber-200 text-sm">
+      The Pax8 connector does not yet expose tools through the WYRE MCP Gateway. This guide
+      documents the intended workflow and uses provisional tool names. Confirm the exact tool
+      names against the gateway tool catalog (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>)
+      once the Pax8 connector surfaces its tools before building the routine. Until that
+      point, the build prompt below cannot be executed end to end.
+    </p>
+  </div>
+
+  <h2 id="what-it-builds">What it builds</h2>
+  <p>
+    The finished workflow would run unattended on a weekly Monday cron. Each run it lists
+    subscriptions for every managed company in Pax8, buckets upcoming renewals into 30, 60,
+    and 90-day windows with their committed monthly value, flags subscriptions whose
+    provisioned seat counts look over-allocated relative to usage, and notifies your team —
+    turning scattered subscription data into a single renewal calendar and spend-optimization
+    digest with a Slack trail. The routine is entirely read-only on Pax8; the only write is
+    delivering the report via the Slack connector.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="prerequisites">Prerequisites</h2>
+  <p>Before building, your Claude account needs all of the following:</p>
+  <table>
+    <thead>
+      <tr><th>Requirement</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>WYRE MCP Gateway connector</strong></td>
+        <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the gateway tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>Pax8 tools in the gateway</strong> <em>(pending — not yet available)</em></td>
+        <td>The Pax8 connector must surface its tools through the gateway before this routine can be built. Verify with <code>gateway__search_tools</code> (query: "pax8"). The provisional tool names used in this guide are <code>pax8_list_companies</code>, <code>pax8_list_subscriptions</code>, and <code>pax8_list_products</code> — confirm exact names once the connector is live.</td>
+      </tr>
+      <tr>
+        <td><strong>Slack connector</strong></td>
+        <td>The first-party Slack connector connected in claude.ai (<code>https://mcp.slack.com/mcp</code>). Provides <code>slack_create_canvas</code> and <code>slack_send_message</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduled routines access</strong></td>
+        <td>Created via the <code>/schedule</code> capability; managed at <a href="https://claude.ai/code/routines" target="_blank" rel="noopener noreferrer">claude.ai/code/routines</a>.</td>
+      </tr>
+      <tr>
+        <td><strong>A destination Slack channel</strong></td>
+        <td>e.g. <code>#sw-dev</code>, plus its channel ID. The Slack connector must have access to it.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <hr class="my-8" />
+
+  <h2 id="gotchas">Known gotchas</h2>
+  <p>
+    These are the things that cost real time the first time through. Account for them
+    up front and the build genuinely takes minutes.
+  </p>
+  <ul>
+    <li>
+      <strong>The Pax8 tool names are provisional — re-verify before building.</strong> The
+      tool names in this guide (<code>pax8_list_companies</code>,
+      <code>pax8_list_subscriptions</code>, <code>pax8_list_products</code>) follow the
+      gateway's <code>&lt;vendor&gt;_&lt;action&gt;_&lt;entity&gt;</code> naming convention
+      and are the most likely names — but they have not been confirmed against a live connector.
+      Before creating the routine, call <code>gateway__search_tools</code> with query
+      <code>"pax8"</code> and use whatever names the catalog actually returns. Setting
+      wrong tool names in <code>permitted_tools</code> means the routine runs with no
+      effective tools.
+    </li>
+    <li>
+      <strong>A large Pax8 estate may need scoping — list companies first, then iterate.</strong>
+      Like the <a href={`${baseUrl}advanced-workflows/patch-drift-reporter/`}>Datto fleet sweep</a>,
+      sweeping every company's subscriptions in a single routine run risks overflowing the
+      run's payload before it can finish. Call <code>pax8_list_companies</code> first to see
+      how many companies you manage, then sample a few subscription payloads to gauge size.
+      If the combined payload is heavy, bake a fixed set of priority company IDs into the
+      routine prompt rather than iterating the whole estate.
+    </li>
+    <li>
+      <strong>License-usage signals may not be available from Pax8 alone.</strong> Pax8
+      subscription records expose provisioned quantities and pricing; whether they include
+      active-usage figures (consumed seats, active licenses) depends on the product and what
+      the Pax8 API surfaces. Where no usage signal is available, the optimization section
+      flags candidates for human review rather than asserting reclaimable spend. Do not tune
+      the routine prompt to invent usage figures.
+    </li>
+    <li>
+      <strong><code>permitted_tools</code> must be populated per connector.</strong> A
+      routine with a connector attached but an empty <code>permitted_tools</code> list
+      runs with <em>no tools</em> and silently does nothing — no error, no output. List
+      the exact tool names the routine needs, using the confirmed names from the gateway
+      catalog, not the provisional ones in this guide.
+    </li>
+    <li>
+      <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
+      blocks arbitrary network egress, so notifications must go through the Slack
+      connector's tools, not an outbound webhook. Attach every connector the workflow
+      touches.
+    </li>
+    <li>
+      <strong>Faster-than-hourly cadences are rejected.</strong> The routine scheduler will
+      not accept a cron more frequent than hourly. A weekly cron is well within bounds.
+      Cron expressions are interpreted as UTC: Monday 09:00 America/New_York =
+      <code>0 13 * * 1</code> in UTC (or <code>0 14 * * 1</code> during EDT offset months —
+      confirm your preferred offset).
+    </li>
+    <li>
+      <strong>If Slack does not appear in the <code>/schedule</code> connector list,</strong> read
+      its <code>connector_uuid</code> and <code>url</code> from an existing routine that already
+      uses Slack (RemoteTrigger list → get → mcp_connections).
+    </li>
+    <li>
+      <strong>Prefer list payloads over per-record gets.</strong> Subscription data needed
+      for both the renewal calendar and the optimization heuristic should be available from
+      <code>pax8_list_subscriptions</code> without a per-record fetch. Per-record calls
+      across a large subscription estate risk the 60-second tool timeout.
+    </li>
+    <li>
+      <strong>Connector coverage — not just archetype — decides whether a workflow can be
+      built.</strong> See the <a href={`${baseUrl}advanced-workflows/agent-routine-catalog/`}>Agent → Routine Catalog</a>
+      for the full note on how connector availability gates which workflows are currently
+      executable.
+    </li>
+  </ul>
+
+  <hr class="my-8" />
+
+  <h2 id="build-prompt">The one-shot build prompt</h2>
+  <p>
+    Once the Pax8 connector surfaces its tools, paste this to Claude. It confirms the
+    gateway and Pax8 reachability, assesses payload size, creates the routine with both
+    connectors and populated <code>permitted_tools</code>, and verifies it end to end.
+    <strong>Do not run this prompt until <code>gateway__search_tools</code> confirms Pax8
+    tools are available</strong> — the build will stall at step 1 otherwise.
+  </p>
+  <pre class="not-prose"><code>{buildPrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="routine-prompt">The resulting routine prompt</h2>
+  <p>
+    This is the lean prompt the build process installs into the scheduled routine itself.
+    Tool names are provisional — substitute the confirmed names from the gateway catalog.
+    Substitute your own destination channel and bake in specific company IDs if your
+    estate needs scoping.
+  </p>
+  <pre class="not-prose"><code>{routinePrompt}</code></pre>
+
+  <hr class="my-8" />
+
+  <h2 id="how-it-works">How it works</h2>
+  <h3>A weekly cadence, by design</h3>
+  <p>
+    Subscription renewals have a predictable calendar horizon — the 30/60/90-day windows
+    give account managers and procurement time to act before auto-renewal locks in the
+    next term. Running weekly on Monday morning means the team starts each week with a
+    fresh renewal view. A weekly sweep is also light on API calls compared to daily.
+  </p>
+  <h3>The renewal calendar: 30/60/90-day buckets with committed value</h3>
+  <p>
+    For each subscription the routine reads the renewal or commitment date and calculates
+    days until renewal from the run date. Subscriptions are bucketed into three windows:
+    within 30 days (act soon), 31–60 days (plan), 61–90 days (pipeline). Each entry in the
+    calendar carries the subscription's committed monthly value — quantity times unit price,
+    normalized to a monthly figure so annual and monthly subscriptions are directly
+    comparable. The section ends with a per-bucket total so the reader can see at a glance
+    how much committed spend is rolling over in each window.
+  </p>
+  <h3>The optimization heuristic and why it stays advisory</h3>
+  <p>
+    Where the Pax8 payload includes an active-usage figure (consumed seats, active
+    licenses), the routine flags subscriptions whose provisioned quantity materially exceeds
+    that usage and estimates reclaimable monthly spend. Where no usage figure is in the
+    payload — which may be the case for many product types — the routine marks those
+    subscriptions as candidates for human review and explicitly does not invent a
+    reclaimable spend number. This is intentional: asserting recoverability without a usage
+    signal would make the report unreliable. The optimization section is a triage list, not
+    an invoice. A cross-check against M365 assigned licenses (see <em>Extending it</em>
+    below) can sharpen this signal for Microsoft-seat products.
+  </p>
+  <h3>Why this workflow is pending and what unblocks it</h3>
+  <p>
+    The Pax8 connector is connected to the WYRE MCP Gateway but does not yet expose any
+    tools through it. Until <code>gateway__search_tools</code> returns Pax8 tool results,
+    neither the build prompt nor the routine can execute. The workflow design — the data
+    model, the bucketing logic, the optimization heuristic, the delivery pattern — is fully
+    specified here so that the routine can be built immediately once the connector surfaces
+    its tools. The only unknowns are the confirmed tool names and the exact shape of the
+    subscription payload, both of which will be resolved when the connector goes live.
+  </p>
+
+  <hr class="my-8" />
+
+  <h2 id="extending">Extending it</h2>
+  <p>
+    Once live, the natural first extension is a true provisioned-vs-assigned reconciliation
+    for Microsoft-seat products: cross-check Pax8 provisioned quantities against M365
+    assigned licenses via the CIPP or Microsoft 365 connectors (see the
+    <a href={`${baseUrl}advanced-workflows/m365-license-auditor/`}>M365 License Auditor</a>
+    guide). Pax8 tells you how many seats you are paying for; CIPP tells you how many are
+    actually assigned to users. The gap between the two is the reclaim opportunity — a
+    signal that neither system alone can surface.
+  </p>
+  <p>
+    A second extension is feeding the renewal calendar into a broader renewal workflow: if
+    your team tracks renewals in Autotask or HaloPSA, a second connector on the same
+    routine (or a downstream routine triggered by the canvas) could create or update renewal
+    opportunity records automatically when subscriptions enter the 30-day bucket.
+  </p>
+  <p class="text-sm text-[var(--muted)]">
+    Questions or a workflow you'd like documented?
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/issues" target="_blank" rel="noopener noreferrer">Open an issue</a>
+    in the <code>msp-claude-plugins</code> repository.
+  </p>
+</DocsLayout>
