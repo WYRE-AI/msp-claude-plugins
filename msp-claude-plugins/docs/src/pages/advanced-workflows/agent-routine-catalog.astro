@@ -199,6 +199,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>psa-integration-specialist</td><td>timezest</td><td>❌</td><td>timezest</td><td>n/a</td><td>Builds/repairs PSA association payloads; consequential config work.</td></tr>
       <tr><td>scheduling-dispatcher</td><td>timezest</td><td>❌</td><td>timezest</td><td>n/a</td><td>Books technicians against tickets; consequential, request-driven.</td></tr>
       <tr><td>compliance-evidence-packager</td><td>wyre-gateway</td><td>⚠️</td><td>wyre-gateway (multi)</td><td>on-demand</td><td>Largely read+assemble, but runs per formal audit — event-triggered, not crewed.</td></tr>
+      <tr><td>client-discovery-agent</td><td>wyre-gateway</td><td>❌</td><td>wyre-gateway (multi)</td><td>on-demand</td><td>Cross-system onboarding discovery sweep; deliberately a subagent, not a routine — event-triggered per new client, deep, human-in-the-loop.</td></tr>
     </tbody>
   </table>
 
