@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "owner": {
     "name": "Aaron Sachs"
   },
@@ -326,6 +326,20 @@
         "documents",
         "proposals",
         "esign",
+        "msp"
+      ]
+    },
+    {
+      "name": "warmly",
+      "source": "./msp-claude-plugins/warmly/warmly",
+      "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
+      "version": "0.1.0",
+      "category": "sales",
+      "tags": [
+        "warmly",
+        "sales",
+        "visitor-intelligence",
+        "prospecting",
         "msp"
       ]
     },

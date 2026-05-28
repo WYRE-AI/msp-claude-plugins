@@ -1038,6 +1038,31 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'warmly',
+    name: 'Warmly',
+    vendor: 'Warmly',
+    description: 'Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance',
+    category: 'sales',
+    maturity: 'alpha',
+    features: [
+      'Visitor Intelligence'
+    ],
+    skills: [
+      { name: 'visitor-intelligence', description: 'Use this skill when triaging or acting on identified website visitors and account-level engagement from Warmly - prioritizing warm accounts for outreach, filtering visitors by ICP fit, scoring engagement depth, matching visitors to CRM records, or watching identification credit burn.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Warmly MCP tools - available tools, WorkOS AuthKit OAuth 2.0 + PKCE authentication, organization scoping, Streamable HTTP transport, credit usage, error handling, and best practices.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'warmly/warmly',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'pax8',
     name: 'Pax8',
     vendor: 'Pax8',

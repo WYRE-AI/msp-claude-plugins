@@ -1,0 +1,11 @@
+{
+  "name": "warmly",
+  "version": "0.1.0",
+  "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
