@@ -5,28 +5,14 @@ const baseUrl = import.meta.env.BASE_URL;
 
 // Prompts kept as consts so literal braces / angle brackets render verbatim
 // (.astro treats { } as expressions — a const string sidesteps all escaping).
-const buildPrompt = `NOTE: The PandaDoc connector is currently pending — it does not yet expose tools
-through the WYRE MCP Gateway. Before attempting to build this routine, first
-confirm that PandaDoc tools are now visible in the gateway catalog:
-
-  gateway__search_tools with query "pandadoc"
-
-If that returns no results, the connector has not yet surfaced its tools and
-the rest of this build cannot proceed. Return to this guide once PandaDoc
-tools appear in the catalog.
-
-Once the PandaDoc tool surface is confirmed, verify the exact tool names
-against what the catalog returns — the names used in this guide
-(pandadoc_list_documents, pandadoc_get_document) are PROVISIONAL and may
-differ from the actual names the connector exposes.
-
-Build me a scheduled Pending-Proposal Tracker agent. Do all of this
+const buildPrompt = `Build me a scheduled Pending-Proposal Tracker agent. Do all of this
 end to end:
 
 1. Confirm the WYRE MCP Gateway works and PandaDoc is reachable: call
-   pandadoc_list_documents with a minimal filter (status: sent or viewed,
-   limit: 5) and check it returns document records without erroring. Verify
-   the exact tool names against the gateway catalog before proceeding.
+   gateway__search_tools with query "pandadoc" to confirm the tool names, then
+   call pandadoc_list_documents with a minimal filter (status: sent or viewed,
+   limit: 5) and check it returns document records without erroring. Note the
+   exact tool names the catalog returns — use those names everywhere below.
 2. Confirm a Slack connector is connected. Note the destination channel name
    and ID (e.g. #sales). If Slack does not show in the /schedule connector
    list, read its connector_uuid and url from an existing routine that already
@@ -36,7 +22,7 @@ end to end:
      13:00 UTC). Faster-than-hourly cadences are rejected.
    - Attach TWO connectors, each with permitted_tools populated:
        * WYRE MCP Gateway: pandadoc_list_documents, pandadoc_get_document
-         (provisional names — use actual names from catalog)
+         (use the exact names confirmed from the catalog above)
        * Slack: slack_create_canvas, slack_send_message
      An empty permitted_tools list = the routine runs with no tools.
    - Routine prompt: every run, list documents in sent/viewed (open, not yet
@@ -53,12 +39,10 @@ end to end:
 
 const routinePrompt = `You are the Pending-Proposal Tracker. You run weekly. Keep it lean.
 
-IMPORTANT: The tool names below are PROVISIONAL. If they are not available,
-log a "connector not yet available" message to Slack and stop — do not
-attempt to proceed without working tools.
-
 Use ONLY: pandadoc_list_documents, pandadoc_get_document,
           slack_create_canvas, slack_send_message.
+(Confirm these tool names against the gateway catalog via gateway__search_tools
+before the first run — use whatever names the catalog returns.)
 
 Today's date in ISO format: <today-YYYY-MM-DD>
 
@@ -127,47 +111,25 @@ Today's date in ISO format: <today-YYYY-MM-DD>
 
 9. If pandadoc_list_documents fails or returns an error, post a Slack
    message: "Pending-Proposal Tracker could not read documents — check
-   gateway/PandaDoc connectivity." and stop. Do not retry in a loop.
-
-10. If the PandaDoc tools are not available at all, call slack_send_message
-    to report: "Pending-Proposal Tracker: PandaDoc connector tools not
-    available — routine cannot run. Verify connector status in the gateway."`;
+   gateway/PandaDoc connectivity." and stop. Do not retry in a loop.`;
 ---
-<DocsLayout title="Pending-Proposal Tracker" description="Planned workflow (pending PandaDoc connector tool surface): a Claude-managed scheduled agent that will track outstanding sales proposals weekly — grouping sent-but-unsigned documents by age in stage, summing outstanding value, and flagging expiring proposals — posting a digest to Slack as a canvas with a one-line summary. No servers, no code.">
+<DocsLayout title="Pending-Proposal Tracker" description="A Claude-managed scheduled agent that tracks outstanding sales proposals weekly — grouping sent-but-unsigned documents by age in stage, summing outstanding value, and flagging expiring proposals — posting a digest to Slack as a canvas with a one-line summary. No servers, no code.">
   <h1>Pending-Proposal Tracker</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
-    A planned <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
-    a Claude-managed scheduled agent that, once a week, would surface outstanding
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, surfaces outstanding
     sales proposals — documents sent for signature but not yet completed — grouped
     by how long they have been sitting in that stage, with their total outstanding
     value and a flag on those nearing or past expiry. It posts a digest to Slack
-    as a canvas with a one-line summary. There are no servers and no code to deploy.
-    This guide documents the intended workflow and is <strong>pending the PandaDoc
-    connector surfacing its tools through the WYRE MCP Gateway</strong>.
+    as a canvas with a one-line summary. There are no servers and no code to deploy:
+    the agent is a saved prompt plus a schedule plus two MCP connectors, running in
+    Claude's cloud.
   </p>
-
-  <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
-    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending the OAuth connect flow</p>
-    <p class="text-amber-900 dark:text-amber-200 text-sm">
-      PandaDoc <strong>does</strong> run a hosted MCP server, at
-      <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">https://mcp.pandadoc.com/v1/mcp</code>,
-      and it is <strong>OAuth-protected (BYOC)</strong> — auth-code + PKCE, with Dynamic
-      Client Registration. The gateway's vendor entry was previously pointed at the docs
-      host with API-key auth and never reached a real server; that is corrected in
-      <a class="underline" href="https://github.com/wyre-technology/mcp-gateway/pull/188" target="_blank" rel="noopener noreferrer">mcp-gateway#188</a>.
-      Two things remain before this routine can run end to end: (1) an OAuth client must be
-      provisioned for the gateway (PandaDoc uses DCR, which the gateway doesn't yet perform
-      outbound — see the PR), and (2) the exact MCP tool names must be confirmed against the
-      catalog (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>,
-      query <code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">"pandadoc"</code>)
-      once you connect — the names below are provisional.
-    </p>
-  </div>
 
   <h2 id="what-it-builds">What it builds</h2>
   <p>
-    The finished workflow would run unattended every Monday morning. Proposals quietly
+    The finished workflow runs unattended every Monday morning. Proposals quietly
     go stale and revenue slips when nobody is watching the "sent, awaiting signature"
     pile — a weekly nudge surfaces the ones that need a follow-up before they expire.
     Each run, the routine lists all open PandaDoc documents (status: sent or viewed),
@@ -193,8 +155,8 @@ Today's date in ISO format: <today-YYYY-MM-DD>
         <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the gateway tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
       </tr>
       <tr>
-        <td><strong>PandaDoc tools in the gateway</strong> <em>(pending — connector not yet connected)</em></td>
-        <td>The PandaDoc connector must surface its tools through the gateway before this routine can be built. Verify with <code>gateway__search_tools</code> (query: <code>"pandadoc"</code>). The provisional tool names used in this guide are <code>pandadoc_list_documents</code> and <code>pandadoc_get_document</code> — confirm exact names once the connector is live.</td>
+        <td><strong>PandaDoc connector in the gateway</strong></td>
+        <td>The PandaDoc connector surfaces its tools through the gateway. Verify with <code>gateway__search_tools</code> (query: <code>"pandadoc"</code>) and use the exact tool names the catalog returns — the names used in this guide (<code>pandadoc_list_documents</code>, <code>pandadoc_get_document</code>) follow the gateway's naming convention but should be confirmed before creating the routine.</td>
       </tr>
       <tr>
         <td><strong>Slack connector</strong></td>
@@ -220,12 +182,11 @@ Today's date in ISO format: <today-YYYY-MM-DD>
   </p>
   <ul>
     <li>
-      <strong>The PandaDoc tool names are provisional — re-verify once the connector is live.</strong> The
+      <strong>Confirm the PandaDoc tool names from the gateway catalog before building.</strong> The
       tool names in this guide (<code>pandadoc_list_documents</code>,
       <code>pandadoc_get_document</code>) follow the gateway's
       <code>&lt;vendor&gt;_&lt;action&gt;_&lt;entity&gt;</code> naming convention and are
-      the most likely names — but they have not been confirmed against a live connector.
-      Before creating the routine, call <code>gateway__search_tools</code> with query
+      the most likely names — verify by calling <code>gateway__search_tools</code> with query
       <code>"pandadoc"</code> and use whatever names the catalog actually returns.
       Setting wrong tool names in <code>permitted_tools</code> means the routine runs
       with no effective tools.
@@ -236,7 +197,7 @@ Today's date in ISO format: <today-YYYY-MM-DD>
       <code>viewed</code>, <code>completed</code>, <code>declined</code>, and
       <code>expired</code>. The routine filters to <code>sent</code> and <code>viewed</code>
       (open, awaiting signature). The exact status strings the API accepts as filter values
-      must be confirmed from the live connector — do not hardcode assumed values before
+      should be confirmed from the live connector — do not hardcode assumed values before
       verifying against the actual payload.
     </li>
     <li>
@@ -251,7 +212,7 @@ Today's date in ISO format: <today-YYYY-MM-DD>
       routine with a connector attached but an empty <code>permitted_tools</code> list
       runs with <em>no tools</em> and silently does nothing — no error, no output. List
       the exact tool names the routine needs, using the confirmed names from the gateway
-      catalog, not the provisional ones in this guide.
+      catalog.
     </li>
     <li>
       <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
@@ -278,23 +239,15 @@ Today's date in ISO format: <today-YYYY-MM-DD>
       where the list payload is missing a needed field. Per-record calls across a full
       proposal list risk the 60-second tool timeout.
     </li>
-    <li>
-      <strong>Connector coverage — not just archetype — decides whether a workflow can be
-      built.</strong> See the <a href={`${baseUrl}advanced-workflows/agent-routine-catalog/`}>Agent → Routine Catalog</a>
-      for the full note on how connector availability gates which workflows are currently
-      executable.
-    </li>
   </ul>
 
   <hr class="my-8" />
 
   <h2 id="build-prompt">The one-shot build prompt</h2>
   <p>
-    Once the PandaDoc connector surfaces its tools, paste this to Claude. It confirms
-    the gateway and PandaDoc reachability, creates the routine with both connectors and
+    With the connectors above in place, paste this to Claude. It confirms the gateway
+    and PandaDoc reachability, creates the routine with both connectors and
     populated <code>permitted_tools</code>, and verifies it end to end.
-    <strong>Do not run this prompt until <code>gateway__search_tools</code> confirms
-    PandaDoc tools are available</strong> — the build will stall at step 1 otherwise.
   </p>
   <pre class="not-prose"><code>{buildPrompt}</code></pre>
 
@@ -303,8 +256,7 @@ Today's date in ISO format: <today-YYYY-MM-DD>
   <h2 id="routine-prompt">The resulting routine prompt</h2>
   <p>
     This is the lean prompt the build process installs into the scheduled routine itself.
-    Tool names are <strong>provisional</strong> — substitute the confirmed names from the
-    gateway catalog once the connector is live. Substitute your own destination channel ID.
+    Substitute your own destination channel ID.
   </p>
   <pre class="not-prose"><code>{routinePrompt}</code></pre>
 
@@ -336,33 +288,17 @@ Today's date in ISO format: <today-YYYY-MM-DD>
     The canvas header leads with the total outstanding proposal value across all open
     documents, mirroring the MRR-at-risk framing used in the
     <a href={`${baseUrl}advanced-workflows/contract-renewal-tracker/`}>Contract Renewal Tracker</a>.
-    That single number tells a sales leader whether to treat this week's pending list as
+    That single number tells a sales leader whether to treat this week's open list as
     a minor housekeeping task or a priority revenue recovery. Each age bucket also carries
     its own subtotal so the distribution of value across urgency tiers is immediately
     visible. The routine is read-only on PandaDoc; the only write is posting to Slack.
-  </p>
-  <h3>Why it is pending and what unblocks it</h3>
-  <p>
-    PandaDoc runs a real hosted MCP server at <code>https://mcp.pandadoc.com/v1/mcp</code>,
-    OAuth-protected (auth-code + PKCE, with Dynamic Client Registration). The gateway's
-    vendor entry had pointed at PandaDoc's <em>docs</em> host with static API-key auth and
-    never reached it; that is fixed in
-    <a href="https://github.com/wyre-technology/mcp-gateway/pull/188" target="_blank" rel="noopener noreferrer">mcp-gateway#188</a>,
-    which switches it to the correct endpoint and OAuth config. Two things still gate a live
-    run: (1) an OAuth client for the gateway — PandaDoc issues clients by Dynamic Client
-    Registration, which the gateway does not yet perform outbound, so a client is provisioned
-    once and stored as gateway secrets (see the PR); and (2) the confirmed MCP tool names and
-    field names for sent date, value, and expiry, which become clear from the first live
-    <code>pandadoc_list_documents</code> response. The workflow design — status filter,
-    age-in-stage bucketing, expiry logic, value aggregation, delivery — is fully specified
-    here so the routine can be built the moment the connect flow lands.
   </p>
 
   <hr class="my-8" />
 
   <h2 id="extending">Extending it</h2>
   <p>
-    Once live, the natural first extension is pairing this tracker with the
+    The natural first extension is pairing this tracker with the
     <a href={`${baseUrl}advanced-workflows/contract-renewal-tracker/`}>Contract Renewal Tracker</a>
     for a full commercial picture: proposals in flight on one side, existing contracts
     approaching renewal on the other. Together they cover the two ends of the revenue
@@ -373,7 +309,7 @@ Today's date in ISO format: <today-YYYY-MM-DD>
     <code>completed</code> status (signed), a downstream routine (or a manual
     follow-up prompt) could create the corresponding onboarding ticket in Autotask or
     HaloPSA, pre-populated with the client name, proposal value, and any products listed
-    in the document. The PandaDoc connector's document detail tool would provide the
+    in the document. The PandaDoc connector's document detail tool provides the
     payload for that handoff.
   </p>
   <p class="text-sm text-[var(--muted)]">

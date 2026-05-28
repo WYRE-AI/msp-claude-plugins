@@ -314,8 +314,8 @@ This routine is strictly read-only: never call any qbo write or update tool.`;
     alongside the QBO connector and cross-reference the two views in a single canvas.
   </p>
   <p>
-    The workflow is also accounting-platform-agnostic. Once the Xero connector is live
-    on the gateway, swapping to it is a connector change: replace
+    The workflow is also accounting-platform-agnostic. Swapping to the Xero connector is
+    a connector change: replace
     <code>qbo_reports_customer_sales</code>, <code>qbo_reports_profit_and_loss</code>,
     and <code>qbo_customers_list</code> in <code>permitted_tools</code> with the Xero
     connector's equivalents. The report-building logic and Slack delivery body are

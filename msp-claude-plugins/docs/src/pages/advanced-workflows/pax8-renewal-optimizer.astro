@@ -5,26 +5,13 @@ const baseUrl = import.meta.env.BASE_URL;
 
 // Prompts kept as consts so literal braces / angle brackets render verbatim
 // (.astro treats { } as expressions — a const string sidesteps all escaping).
-const buildPrompt = `NOTE: The Pax8 connector is currently pending — it does not yet expose tools
-through the WYRE MCP Gateway. Before attempting to build this routine, first
-confirm that Pax8 tools are now visible in the gateway catalog:
-
-  gateway__search_tools with query "pax8"
-
-If that returns no results, the connector has not yet surfaced its tools and
-the rest of this build cannot proceed. Return to this guide once Pax8 tools
-appear in the catalog.
-
-Once the Pax8 tool surface is confirmed, verify the exact tool names against
-what the catalog returns — the names used in this guide (pax8_list_companies,
-pax8_list_subscriptions, pax8_list_products) are provisional and may differ.
-
-Build me a scheduled Pax8 Renewal & License Optimizer agent. Do all of this
+const buildPrompt = `Build me a scheduled Pax8 Renewal & License Optimizer agent. Do all of this
 end to end:
 
 1. Confirm the WYRE MCP Gateway works and Pax8 is reachable: call
-   pax8_list_companies and check it returns your managed companies. Verify
-   the exact tool names against the gateway catalog first.
+   gateway__search_tools with query "pax8" to get the exact tool names, then
+   call pax8_list_companies (or the catalog-confirmed equivalent) and check it
+   returns your managed companies.
 2. Confirm a Slack connector is connected. Note the destination channel name
    and ID (e.g. #sw-dev). If Slack does not show in the /schedule connector
    list, read its connector_uuid and url from an existing routine that already
@@ -40,7 +27,7 @@ end to end:
      13:00 UTC). Faster-than-hourly cadences are rejected.
    - Attach TWO connectors, each with permitted_tools populated:
        * WYRE MCP Gateway: pax8_list_companies, pax8_list_subscriptions,
-         pax8_list_products  (provisional names — use actual names from catalog)
+         pax8_list_products  (use the exact names from the gateway catalog)
        * Slack: slack_create_canvas, slack_send_message
      An empty permitted_tools list = the routine runs with no tools.
    - Routine prompt: every run, list managed companies, list each company's
@@ -56,12 +43,10 @@ end to end:
 
 const routinePrompt = `You are the Pax8 Renewal & License Optimizer. You run weekly. Keep it lean.
 
-IMPORTANT: The tool names below are provisional. If they are not available,
-log a "connector not yet available" message to Slack and stop — do not
-attempt to proceed without working tools.
-
 Use ONLY: pax8_list_companies, pax8_list_subscriptions, pax8_list_products,
 slack_create_canvas, slack_send_message.
+Confirm exact tool names against the gateway catalog (gateway__search_tools)
+before the first run and update permitted_tools if any names differ.
 
 Today's date: use the current date at runtime to calculate renewal windows.
 
@@ -123,40 +108,24 @@ Today's date: use the current date at runtime to calculate renewal windows.
    N optimization candidates - see canvas") linking the canvas.
 
 8. If a company's subscriptions cannot be read, list it in a "could not read"
-   section instead of skipping it silently.
-
-9. If the Pax8 tools are not available at all, call slack_send_message to
-   report: "Pax8 Renewal & License Optimizer: Pax8 connector tools not
-   available — routine cannot run. Verify connector status in the gateway."`;
+   section instead of skipping it silently.`;
 ---
-<DocsLayout title="Pax8 Renewal & License Optimizer" description="Planned workflow (pending Pax8 connector tool surface): a Claude-managed scheduled agent that will sweep Pax8 subscriptions weekly to surface upcoming renewals and license-optimization opportunities, posting a combined digest to Slack as a canvas — no servers, no code.">
+<DocsLayout title="Pax8 Renewal & License Optimizer" description="A Claude-managed scheduled agent that sweeps Pax8 subscriptions weekly to surface upcoming renewals and license-optimization opportunities, posting a combined digest to Slack as a canvas with a one-line summary. No servers, no code.">
   <h1>Pax8 Renewal &amp; License Optimizer</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
-    A planned <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
-    a Claude-managed scheduled agent that, once a week, would sweep Pax8 subscriptions
+    A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
+    a Claude-managed scheduled agent that, once a week, sweeps Pax8 subscriptions
     across managed companies to surface upcoming renewals in the next 30, 60, and 90 days
-    (with committed monthly value) and flag over-provisioned subscriptions as optimization
+    (with committed monthly value) and flags over-provisioned subscriptions as optimization
     candidates. It posts a combined renewal and optimization digest to Slack as a canvas
-    with a one-line summary. There are no servers and no code to deploy. This guide documents
-    the intended workflow and is <strong>pending the Pax8 connector surfacing its tools
-    through the WYRE MCP Gateway</strong>.
+    with a one-line summary. There are no servers and no code to deploy: the agent is a
+    saved prompt plus a schedule plus two MCP connectors, running in Claude's cloud.
   </p>
-
-  <div class="not-prose my-6 rounded-lg border border-amber-400 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-600 p-5">
-    <p class="font-semibold text-amber-800 dark:text-amber-300 mb-2">Status: pending</p>
-    <p class="text-amber-900 dark:text-amber-200 text-sm">
-      The Pax8 connector does not yet expose tools through the WYRE MCP Gateway. This guide
-      documents the intended workflow and uses provisional tool names. Confirm the exact tool
-      names against the gateway tool catalog (<code class="bg-amber-100 dark:bg-amber-900/50 px-1 rounded">gateway__search_tools</code>)
-      once the Pax8 connector surfaces its tools before building the routine. Until that
-      point, the build prompt below cannot be executed end to end.
-    </p>
-  </div>
 
   <h2 id="what-it-builds">What it builds</h2>
   <p>
-    The finished workflow would run unattended on a weekly Monday cron. Each run it lists
+    The finished workflow runs unattended on a weekly Monday cron. Each run it lists
     subscriptions for every managed company in Pax8, buckets upcoming renewals into 30, 60,
     and 90-day windows with their committed monthly value, flags subscriptions whose
     provisioned seat counts look over-allocated relative to usage, and notifies your team —
@@ -179,8 +148,8 @@ Today's date: use the current date at runtime to calculate renewal windows.
         <td>Connected in claude.ai (<code>https://mcp.wyre.ai/v1/mcp</code>). Provides the gateway tools. See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a>.</td>
       </tr>
       <tr>
-        <td><strong>Pax8 tools in the gateway</strong> <em>(pending — not yet available)</em></td>
-        <td>The Pax8 connector must surface its tools through the gateway before this routine can be built. Verify with <code>gateway__search_tools</code> (query: "pax8"). The provisional tool names used in this guide are <code>pax8_list_companies</code>, <code>pax8_list_subscriptions</code>, and <code>pax8_list_products</code> — confirm exact names once the connector is live.</td>
+        <td><strong>Pax8 tools in the gateway</strong></td>
+        <td>The Pax8 connector must be enabled in the gateway. Verify with <code>gateway__search_tools</code> (query: "pax8") and use the exact tool names the catalog returns. The tool names used in this guide (<code>pax8_list_companies</code>, <code>pax8_list_subscriptions</code>, <code>pax8_list_products</code>) follow the gateway naming convention — confirm against the catalog before building.</td>
       </tr>
       <tr>
         <td><strong>Slack connector</strong></td>
@@ -206,14 +175,13 @@ Today's date: use the current date at runtime to calculate renewal windows.
   </p>
   <ul>
     <li>
-      <strong>The Pax8 tool names are provisional — re-verify before building.</strong> The
+      <strong>Confirm Pax8 tool names against the gateway catalog before building.</strong> The
       tool names in this guide (<code>pax8_list_companies</code>,
       <code>pax8_list_subscriptions</code>, <code>pax8_list_products</code>) follow the
       gateway's <code>&lt;vendor&gt;_&lt;action&gt;_&lt;entity&gt;</code> naming convention
-      and are the most likely names — but they have not been confirmed against a live connector.
-      Before creating the routine, call <code>gateway__search_tools</code> with query
-      <code>"pax8"</code> and use whatever names the catalog actually returns. Setting
-      wrong tool names in <code>permitted_tools</code> means the routine runs with no
+      and are the most likely names — but always run <code>gateway__search_tools</code> with
+      query <code>"pax8"</code> first and use whatever names the catalog actually returns.
+      Setting wrong tool names in <code>permitted_tools</code> means the routine runs with no
       effective tools.
     </li>
     <li>
@@ -238,7 +206,7 @@ Today's date: use the current date at runtime to calculate renewal windows.
       routine with a connector attached but an empty <code>permitted_tools</code> list
       runs with <em>no tools</em> and silently does nothing — no error, no output. List
       the exact tool names the routine needs, using the confirmed names from the gateway
-      catalog, not the provisional ones in this guide.
+      catalog.
     </li>
     <li>
       <strong>A routine reaches only its attached connectors.</strong> The routine sandbox
@@ -264,23 +232,15 @@ Today's date: use the current date at runtime to calculate renewal windows.
       <code>pax8_list_subscriptions</code> without a per-record fetch. Per-record calls
       across a large subscription estate risk the 60-second tool timeout.
     </li>
-    <li>
-      <strong>Connector coverage — not just archetype — decides whether a workflow can be
-      built.</strong> See the <a href={`${baseUrl}advanced-workflows/agent-routine-catalog/`}>Agent → Routine Catalog</a>
-      for the full note on how connector availability gates which workflows are currently
-      executable.
-    </li>
   </ul>
 
   <hr class="my-8" />
 
   <h2 id="build-prompt">The one-shot build prompt</h2>
   <p>
-    Once the Pax8 connector surfaces its tools, paste this to Claude. It confirms the
-    gateway and Pax8 reachability, assesses payload size, creates the routine with both
+    With the connectors above in place, paste this to Claude. It confirms the gateway
+    and Pax8 reachability, assesses payload size, creates the routine with both
     connectors and populated <code>permitted_tools</code>, and verifies it end to end.
-    <strong>Do not run this prompt until <code>gateway__search_tools</code> confirms Pax8
-    tools are available</strong> — the build will stall at step 1 otherwise.
   </p>
   <pre class="not-prose"><code>{buildPrompt}</code></pre>
 
@@ -289,7 +249,6 @@ Today's date: use the current date at runtime to calculate renewal windows.
   <h2 id="routine-prompt">The resulting routine prompt</h2>
   <p>
     This is the lean prompt the build process installs into the scheduled routine itself.
-    Tool names are provisional — substitute the confirmed names from the gateway catalog.
     Substitute your own destination channel and bake in specific company IDs if your
     estate needs scoping.
   </p>
@@ -327,22 +286,12 @@ Today's date: use the current date at runtime to calculate renewal windows.
     an invoice. A cross-check against M365 assigned licenses (see <em>Extending it</em>
     below) can sharpen this signal for Microsoft-seat products.
   </p>
-  <h3>Why this workflow is pending and what unblocks it</h3>
-  <p>
-    The Pax8 connector is connected to the WYRE MCP Gateway but does not yet expose any
-    tools through it. Until <code>gateway__search_tools</code> returns Pax8 tool results,
-    neither the build prompt nor the routine can execute. The workflow design — the data
-    model, the bucketing logic, the optimization heuristic, the delivery pattern — is fully
-    specified here so that the routine can be built immediately once the connector surfaces
-    its tools. The only unknowns are the confirmed tool names and the exact shape of the
-    subscription payload, both of which will be resolved when the connector goes live.
-  </p>
 
   <hr class="my-8" />
 
   <h2 id="extending">Extending it</h2>
   <p>
-    Once live, the natural first extension is a true provisioned-vs-assigned reconciliation
+    The natural first extension is a true provisioned-vs-assigned reconciliation
     for Microsoft-seat products: cross-check Pax8 provisioned quantities against M365
     assigned licenses via the CIPP or Microsoft 365 connectors (see the
     <a href={`${baseUrl}advanced-workflows/m365-license-auditor/`}>M365 License Auditor</a>

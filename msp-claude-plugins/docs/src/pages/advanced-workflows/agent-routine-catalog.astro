@@ -76,7 +76,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>vap-reporter</td><td>proofpoint</td><td>✅</td><td>proofpoint</td><td>monthly</td><td>Very-Attacked-Persons report; reporter.</td></tr>
       <tr><td>sla-performance-reporter</td><td>halopsa</td><td>✅</td><td>halopsa</td><td>monthly</td><td>Retrospective SLA compliance reporting.</td></tr>
       <tr><td>client-relationship-manager</td><td>hubspot</td><td>✅</td><td>hubspot</td><td>weekly</td><td>Account-health portfolio review; reporter.</td></tr>
-      <tr><td>pipeline-health-reporter</td><td>hubspot</td><td>✅</td><td>hubspot</td><td>weekly</td><td>🚧 batch 2 (Sales Pipeline Pulse) — documented but pending: the HubSpot connector is not yet connected to the gateway.</td></tr>
+      <tr><td>pipeline-health-reporter</td><td>hubspot</td><td>✅</td><td>hubspot</td><td>weekly</td><td>✅ built — batch 2 (Sales Pipeline Pulse).</td></tr>
       <tr><td>documentation-auditor</td><td>hudu</td><td>✅</td><td>hudu</td><td>monthly</td><td>Documentation-debt audit; auditor.</td></tr>
       <tr><td>runbook-freshness-auditor</td><td>hudu</td><td>✅</td><td>hudu</td><td>monthly</td><td>Runbook currency/coverage audit.</td></tr>
       <tr><td>compliance-auditor</td><td>immybot</td><td>✅</td><td>immybot</td><td>monthly</td><td>Software-compliance scorecards; auditor.</td></tr>
@@ -92,9 +92,9 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>device-health-auditor</td><td>ninjaone-rmm</td><td>✅</td><td>ninjaone-rmm</td><td>daily</td><td>NinjaOne fleet health audit; auditor.</td></tr>
       <tr><td>patch-compliance-reporter</td><td>ninjaone-rmm</td><td>✅</td><td>ninjaone-rmm</td><td>weekly</td><td>✅ built — batch 1 (Patch Drift Reporter).</td></tr>
       <tr><td>on-call-scheduler</td><td>pagerduty</td><td>⚠️</td><td>pagerduty</td><td>weekly</td><td>Schedule-health audit fits; rota edits would need scoping out.</td></tr>
-      <tr><td>contract-tracker</td><td>pandadoc</td><td>✅</td><td>pandadoc</td><td>weekly</td><td>🚧 batch 2 (Pending-Proposal Tracker) — documented but pending: the PandaDoc connector is not yet connected to the gateway.</td></tr>
-      <tr><td>license-optimizer</td><td>pax8</td><td>⚠️</td><td>pax8</td><td>monthly</td><td>🚧 batch 2 (Pax8 Renewal &amp; License Optimizer) — documented but pending: the Pax8 connector surfaces no tools through the gateway yet.</td></tr>
-      <tr><td>renewal-calendar</td><td>pax8</td><td>⚠️</td><td>pax8</td><td>weekly</td><td>🚧 batch 2 (Pax8 Renewal &amp; License Optimizer) — documented but pending the Pax8 tool surface; combined with license-optimizer into one guide.</td></tr>
+      <tr><td>contract-tracker</td><td>pandadoc</td><td>✅</td><td>pandadoc</td><td>weekly</td><td>✅ built — batch 2 (Pending-Proposal Tracker).</td></tr>
+      <tr><td>license-optimizer</td><td>pax8</td><td>✅</td><td>pax8</td><td>monthly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with renewal-calendar into one guide.</td></tr>
+      <tr><td>renewal-calendar</td><td>pax8</td><td>✅</td><td>pax8</td><td>weekly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with license-optimizer into one guide.</td></tr>
       <tr><td>billing-reconciler</td><td>quickbooks</td><td>✅</td><td>quickbooks</td><td>weekly</td><td>✅ built — batch 1 (Billing Reconciler).</td></tr>
       <tr><td>profitability-reporter</td><td>quickbooks</td><td>✅</td><td>quickbooks</td><td>monthly</td><td>✅ built — batch 2 (Client Profitability Reporter); revenue-ranked from QBO (true cost-allocated margin lives in the service-profitability-auditor portfolio agent).</td></tr>
       <tr><td>margin-analyzer</td><td>salesbuildr</td><td>✅</td><td>salesbuildr</td><td>weekly</td><td>Quote-margin health analysis; reporter.</td></tr>
@@ -113,7 +113,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>onboarding-completeness-checker</td><td>wyre-gateway</td><td>⚠️</td><td>wyre-gateway (multi)</td><td>on-demand</td><td>Onboarding checklist; routine-shaped but naturally event-triggered per new client.</td></tr>
       <tr><td>gateway-ops</td><td>wyre-gateway</td><td>✅</td><td>wyre-gateway (admin)</td><td>weekly</td><td>✅ built — batch 3 (Gateway Usage &amp; Anomaly Auditor); the meta-routine that audits the gateway itself.</td></tr>
       <tr><td>billing-reconciler</td><td>xero</td><td>✅</td><td>xero</td><td>weekly</td><td>Xero billing reconciliation; reporter.</td></tr>
-      <tr><td>cash-flow-analyzer</td><td>xero</td><td>✅</td><td>xero</td><td>weekly</td><td>✅ built — batch 2 (Cash Flow Analyzer), built on the live QuickBooks Online connector; Xero is a connector swap once that connector is live.</td></tr>
+      <tr><td>cash-flow-analyzer</td><td>xero</td><td>✅</td><td>xero</td><td>weekly</td><td>✅ built — batch 2 (Cash Flow Analyzer); built on the live QuickBooks Online connector, Xero is a one-line connector swap.</td></tr>
     </tbody>
   </table>
 

@@ -102,9 +102,10 @@ const baseUrl = import.meta.env.BASE_URL;
     </li>
     <li>
       <a href={`${baseUrl}advanced-workflows/pax8-renewal-optimizer/`}>Pax8 Renewal &amp; License Optimizer</a>
-      &mdash; <em>pending the Pax8 tool surface on the gateway</em>: a planned weekly agent
-      that would surface upcoming Pax8 renewals and over-provisioned subscriptions with the
-      reclaimable spend, and post a digest to Slack.
+      &mdash; a weekly scheduled agent that sweeps Pax8 subscriptions, buckets upcoming
+      renewals by 30/60/90-day window with committed value, flags over-provisioned
+      subscriptions with the reclaimable monthly spend, and posts a combined digest to Slack
+      as a canvas.
     </li>
     <li>
       <a href={`${baseUrl}advanced-workflows/client-profitability-reporter/`}>Client Profitability Reporter</a>
@@ -114,14 +115,15 @@ const baseUrl = import.meta.env.BASE_URL;
     </li>
     <li>
       <a href={`${baseUrl}advanced-workflows/sales-pipeline-pulse/`}>Sales Pipeline Pulse</a>
-      &mdash; <em>pending the HubSpot connector</em>: a planned weekly agent that summarises
-      open pipeline value by stage, flags stalled deals, and posts a sales digest to Slack.
+      &mdash; a weekly scheduled agent that summarises open HubSpot pipeline value by stage,
+      flags stalled deals, surfaces deals closing this period, and posts a sales digest to
+      Slack as a canvas.
     </li>
     <li>
       <a href={`${baseUrl}advanced-workflows/pending-proposal-tracker/`}>Pending-Proposal Tracker</a>
-      &mdash; <em>pending the PandaDoc connector</em>: a planned weekly agent that tracks
-      sent-but-unsigned proposals by age and value, flags those nearing expiry, and posts a
-      digest to Slack.
+      &mdash; a weekly scheduled agent that tracks PandaDoc proposals sent but unsigned,
+      buckets them by age in stage with their outstanding value, flags those nearing expiry,
+      and posts a digest to Slack as a canvas.
     </li>
     <li>
       <a href={`${baseUrl}advanced-workflows/it-glue-documentation-auditor/`}>IT Glue Documentation Auditor</a>
