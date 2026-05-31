@@ -1,5 +1,7 @@
 ---
 import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
 ---
 <DocsLayout title="Security Architecture" description="How the WYRE MCP Gateway protects your credentials, isolates your data, and defends against prompt injection.">
   <h1>Security Architecture</h1>
@@ -113,6 +115,7 @@ Your AI ──▶ WYRE MCP Gateway ──▶ Vendor API (Autotask, Datto, etc.)
 
   <ul>
     <li><strong>Role-based access</strong> — organizations support owner, admin, and member roles with scoped permissions.</li>
+    <li><strong>Per-team tool allowlists</strong> — admins can narrow which vendor tools each team can call, beneath the org-level allowlist; changes are timestamped with the admin who last edited. See <a href={`${baseUrl}getting-started/tool-access/`}>Per-Team Tool Access</a>.</li>
     <li><strong>Credential lifecycle logging</strong> — store, retrieve, and delete events are logged with scope and actor information.</li>
     <li><strong>OAuth event logging</strong> — login, token exchange, refresh, and session events are captured.</li>
     <li><strong>Rate limiting</strong> — request throttling and registration limits prevent brute-force and abuse scenarios.</li>

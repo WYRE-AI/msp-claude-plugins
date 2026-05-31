@@ -256,6 +256,7 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
     <li><strong>AES-256-GCM encryption</strong> — credentials encrypted at rest with per-user key derivation (PBKDF2, 100k iterations, SHA-512)</li>
     <li><strong>Refresh token rotation</strong> — old tokens revoked on every use</li>
     <li><strong>No credential exposure</strong> — vendor API keys never leave the gateway; injected as HTTP headers on the internal network</li>
+    <li><strong>Per-team tool scoping</strong> — narrow which vendor tools a team can call beneath the org-level allowlist; see <a href={`${baseUrl}getting-started/tool-access/`}>Per-Team Tool Access</a></li>
   </ul>
 
   <h2>If something goes wrong</h2>

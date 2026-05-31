@@ -228,9 +228,16 @@ const baseUrl = import.meta.env.BASE_URL;
     a team lead with elevated API permissions).
   </p>
 
+  <p class="text-sm text-[var(--muted)] mt-2">
+    <strong>Credential resolution is separate from tool scoping.</strong> The order above
+    decides <em>which credentials</em> are used to authenticate to a vendor; <a href={`${baseUrl}getting-started/tool-access/`}>Per-Team Tool Access</a> decides
+    <em>which tools</em> the team can call once authenticated.
+  </p>
+
   <h2>Next Steps</h2>
 
   <ul>
+    <li><a href={`${baseUrl}getting-started/tool-access/`}>Per-Team Tool Access</a> &mdash; restrict which vendor tools each team can call</li>
     <li><a href={`${baseUrl}getting-started/gateway/`}>Gateway setup guide</a> &mdash; full configuration details and supported vendors</li>
     <li><a href={`${baseUrl}mcp-servers/`}>MCP Servers</a> &mdash; explore what each vendor server can do</li>
     <li><a href={`${baseUrl}plugins/`}>Plugins</a> &mdash; use Claude Code plugins for local, self-hosted access</li>

@@ -1,0 +1,246 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<DocsLayout title="Per-Team Tool Access" description="Control which vendor tools each team can use through the WYRE MCP Gateway. Restrict a team to a focused set of tools, or let them inherit your organization's defaults.">
+  <h1>Per-Team Tool Access</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Some teams shouldn&apos;t see every tool a vendor exposes. The gateway lets you
+    set a per-team allowlist for each connected vendor &mdash; a Tier 1 helpdesk team
+    can be scoped to a small set of safe read-and-update tools, while your engineering
+    team keeps full access to the same vendor.
+  </p>
+
+  <h2>Overview</h2>
+
+  <p>
+    Every organization can already restrict which vendor tools are callable through
+    an <strong>organization-level allowlist</strong> (Settings &rarr; Tool Access).
+    Per-team tool access layers on top of that: each team can further narrow which
+    tools <em>its members</em> can call, on a vendor-by-vendor basis.
+  </p>
+
+  <p>
+    The two scopes combine as an <strong>intersection</strong>: a team member can call
+    a tool only if both the org allowlist <em>and</em> the team allowlist permit it.
+    The org-level allowlist sets the ceiling; the team-level allowlist is a focused
+    cut beneath it.
+  </p>
+
+  <table>
+    <thead><tr><th>Org allowlist</th><th>Team allowlist</th><th>Member can call?</th></tr></thead>
+    <tbody>
+      <tr><td>All tools (default)</td><td>No team allowlist</td><td>All vendor tools</td></tr>
+      <tr><td>All tools (default)</td><td>Restricted to {`{A, B, C}`}</td><td>Only A, B, C</td></tr>
+      <tr><td>Restricted to {`{A, B, C, D}`}</td><td>No team allowlist</td><td>A, B, C, D (inherits org)</td></tr>
+      <tr><td>Restricted to {`{A, B, C, D}`}</td><td>Restricted to {`{A, B, E}`}</td><td>Only A, B (intersection)</td></tr>
+    </tbody>
+  </table>
+
+  <p class="text-sm text-[var(--muted)] mt-2">
+    <strong>Note:</strong> a team allowlist <em>narrows</em> access &mdash; it never grants
+    a tool the org allowlist already blocks. Least-privilege by design.
+  </p>
+
+  <h2>When you&apos;d use this</h2>
+
+  <ul>
+    <li>
+      <strong>Tier 1 helpdesk scope.</strong> Allow your support team to triage tickets
+      in Autotask or HaloPSA but not to delete contracts or modify billing data.
+    </li>
+    <li>
+      <strong>Read-only auditors.</strong> Restrict a finance or audit team to the
+      reporting / search tools of a vendor without exposing write operations.
+    </li>
+    <li>
+      <strong>Onboarding sandbox.</strong> Give new technicians a focused tool set for
+      their first weeks &mdash; expand it as they ramp.
+    </li>
+    <li>
+      <strong>Compliance-sensitive vendors.</strong> Some vendors (e.g., security or
+      identity tools) have tools you only want senior engineers calling. Scope the
+      bulk of users away from the sensitive tools without disconnecting the vendor.
+    </li>
+  </ul>
+
+  <h2>Prerequisites</h2>
+
+  <ul>
+    <li>You&apos;re an <strong>org admin</strong> &mdash; tool access is an admin-managed setting.</li>
+    <li>Your organization has at least one team created (Settings &rarr; Teams).</li>
+    <li>The team has at least one vendor connection granted via <strong>Team Connections</strong>.</li>
+  </ul>
+
+  <h2>Step 1: Open a Team&apos;s Tool Access</h2>
+
+  <p>
+    From the Settings dashboard, go to <strong>Teams</strong>. Each team card shows
+    its name, members, server-access checkboxes, and a row of action buttons. Click
+    <strong>Tool Access</strong> on the team you want to scope.
+  </p>
+
+  <img src={`${baseUrl}images/gateway/team-card-with-tool-access.png`} alt="A team card showing the Delete, Connections, and Tool Access action buttons on the right side of the team-name input" style="border-radius:8px;border:1px solid #2a2a2a;margin:24px 0;" />
+
+  <p class="text-sm text-[var(--muted)] mt-2">
+    Don&apos;t see the Tool Access button? Confirm the team has at least one vendor
+    connection (Team Connections page) &mdash; the Tool Access editor only lists vendors
+    the team can already reach.
+  </p>
+
+  <h2>Step 2: Pick a Vendor</h2>
+
+  <p>
+    The Tool Access editor lists every vendor this team has access to. Each vendor
+    is a collapsible row &mdash; click the row to expand it and load the vendor&apos;s
+    discovered tools.
+  </p>
+
+  <img src={`${baseUrl}images/gateway/team-tool-access-vendor-list.png`} alt="The Tool Access editor showing a list of connected vendors with collapsible rows, one expanded to show tool checkboxes" style="border-radius:8px;border:1px solid #2a2a2a;margin:24px 0;" />
+
+  <p>
+    When you expand a vendor for the first time, the gateway discovers its tools live
+    from the vendor API &mdash; so the list always reflects what&apos;s currently available,
+    not a stale snapshot.
+  </p>
+
+  <h2>Step 3: Choose an Allowlist Shape</h2>
+
+  <p>
+    Each vendor panel shows one of two states:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Inherits org defaults (all N tools)</strong> &mdash; no team-level allowlist
+      exists yet. Every box is checked. The team can call whatever the org allowlist
+      permits for this vendor.
+    </li>
+    <li>
+      <strong>Allowed tools (X of Y)</strong> &mdash; a team allowlist is in effect.
+      Only the checked tools are callable by this team&apos;s members for this vendor.
+    </li>
+  </ul>
+
+  <p>
+    To <em>restrict</em> a team, uncheck the tools you don&apos;t want them to call and
+    click <strong>Save</strong>. To <em>return</em> a team to inheriting the org defaults,
+    click <strong>Reset to inherit</strong> &mdash; the team allowlist is cleared and the
+    panel returns to the inherit state.
+  </p>
+
+  <img src={`${baseUrl}images/gateway/team-tool-access-allowlist-edit.png`} alt="An expanded vendor panel showing the Allowed tools (5 of 32) label, individual tool checkboxes in a grid, and Save plus Reset to inherit buttons" style="border-radius:8px;border:1px solid #2a2a2a;margin:24px 0;" />
+
+  <p class="text-sm text-[var(--muted)] mt-2">
+    <strong>Tip:</strong> ticking <em>every</em> checkbox and saving is the same as
+    clearing the allowlist &mdash; the team will inherit the org defaults again.
+    Use <strong>Reset to inherit</strong> for clarity.
+  </p>
+
+  <h2>Step 4: Review the Audit Row</h2>
+
+  <p>
+    Once a team has a restriction in place, the panel shows a one-line audit row:
+    <strong>&ldquo;Last changed by {`{name}`} on {`{date}`}&rdquo;</strong>. The name is the
+    admin who most recently saved an allowlist for this team/vendor pair, and the
+    date is when that save happened.
+  </p>
+
+  <img src={`${baseUrl}images/gateway/team-tool-access-audit-row.png`} alt="The audit row reading Last changed by Aaron Sachs on May 31, 2026 at 1:14 PM directly below the Save and Reset buttons" style="border-radius:8px;border:1px solid #2a2a2a;margin:24px 0;" />
+
+  <p>
+    Use the audit row to answer the obvious question after a tool stops working for
+    a team member: <em>who last changed this, and when?</em>
+  </p>
+
+  <h2 id="how-precedence-works">How precedence works</h2>
+
+  <p>
+    Per-team tool access composes with the existing scopes the gateway already
+    maintains:
+  </p>
+
+  <ol>
+    <li>
+      <strong>Org allowlist</strong> &mdash; the outermost ceiling. Anything the org
+      allowlist blocks is blocked everywhere, regardless of team settings.
+    </li>
+    <li>
+      <strong>Team allowlist</strong> &mdash; a narrowing cut beneath the org ceiling.
+      A team member can call a tool only if their team&apos;s allowlist (or its inherited
+      org defaults) permits it.
+    </li>
+    <li>
+      <strong>Personal connections</strong> &mdash; if a member uses their own personal
+      credentials for a vendor, the request is scoped against the org allowlist directly
+      (no team narrowing). Team allowlists only apply when the request is using
+      <em>team-shared</em> credentials.
+    </li>
+  </ol>
+
+  <p>
+    In short: the team allowlist filters what team-shared vendor traffic can do; it
+    never blocks a member from using their own personal credentials at full org-scope.
+  </p>
+
+  <h2>Common questions</h2>
+
+  <h3>My team member says they can&apos;t see tool X &mdash; what changed?</h3>
+
+  <p>
+    Three things to check, in order:
+  </p>
+
+  <ol>
+    <li>
+      Open the team&apos;s Tool Access editor and confirm tool X is <em>checked</em> in
+      the vendor&apos;s panel. If it&apos;s unchecked, the team is restricted and won&apos;t
+      see X.
+    </li>
+    <li>
+      Confirm the <strong>org-level</strong> Tool Access (Settings &rarr; Tool Access)
+      also allows tool X. An org-level block overrides any team setting.
+    </li>
+    <li>
+      Confirm the team member is calling tools using <strong>team credentials</strong>
+      (the default when no personal credentials are connected for that vendor).
+      Personal credentials route through the org allowlist directly, not the team
+      allowlist.
+    </li>
+  </ol>
+
+  <h3>Can a member be on more than one team?</h3>
+
+  <p>
+    Not in v1. Each member belongs to one team at a time, which keeps the scope
+    rules unambiguous &mdash; a tool call is always evaluated against exactly one team
+    allowlist plus the org allowlist. Multi-team membership is on the roadmap.
+  </p>
+
+  <h3>What happens to existing teams when I first set up per-team tool access?</h3>
+
+  <p>
+    Nothing changes by default. Every team starts in the <strong>Inherits org defaults</strong>
+    state for every vendor &mdash; same behavior as before the feature shipped. The feature
+    only takes effect when an admin explicitly creates a restriction.
+  </p>
+
+  <h3>Does this work for personal connections?</h3>
+
+  <p>
+    No &mdash; personal-credential traffic isn&apos;t team-scoped (see <a href="#how-precedence-works">How precedence works</a>).
+    If you need to restrict an individual rather than a team, ask that user to switch
+    to team-shared credentials so the team allowlist applies.
+  </p>
+
+  <h2>Next Steps</h2>
+
+  <ul>
+    <li><a href={`${baseUrl}getting-started/teams/`}>Teams &amp; Organizations</a> &mdash; create teams, invite members, and manage team credentials</li>
+    <li><a href={`${baseUrl}getting-started/gateway/`}>Gateway setup guide</a> &mdash; configure Claude to use the gateway and the connected vendors</li>
+    <li><a href={`${baseUrl}getting-started/security/`}>Security</a> &mdash; how credentials, authentication, and access controls fit together</li>
+  </ul>
+</DocsLayout>
