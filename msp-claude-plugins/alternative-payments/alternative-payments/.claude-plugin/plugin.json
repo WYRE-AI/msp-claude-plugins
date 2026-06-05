@@ -1,0 +1,11 @@
+{
+  "name": "alternative-payments",
+  "version": "1.0.0",
+  "description": "Claude plugins for Alternative Payments - customers, invoices, payment requests, transactions, payouts, and webhooks",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

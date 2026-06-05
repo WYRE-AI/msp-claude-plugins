@@ -1977,6 +1977,40 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'alternative-payments',
+    name: 'Alternative Payments',
+    vendor: 'Alternative-payments',
+    description: 'Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)',
+    category: 'accounting',
+    maturity: 'beta',
+    features: [
+      'Customer Operations',
+      'Invoicing',
+      'Payment Tracking'
+    ],
+    skills: [
+      { name: 'customers', description: 'Use this skill when working with Alternative Payments customers and their users - listing, retrieving, and creating customers, adding users to a customer, and archiving customers.' },
+      { name: 'invoicing', description: 'Use this skill when working with Alternative Payments invoices and hosted payment requests - listing, retrieving, and creating invoices with line items, fetching a hosted payment link or PDF link, archiving an invoice, and creating or retrieving hosted payment requests.' },
+      { name: 'payments', description: 'Use this skill when reading Alternative Payments transactions and payouts - listing and filtering transactions by type, status, customer, invoice, and payment method; retrieving a single transaction; and listing or retrieving payouts and the transactions that compose them for reconciliation.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Alternative Payments API - OAuth2 client-credentials authentication, REST structure, cursor pagination, rate limiting (5 req/sec), error handling, and the read + safe-write capability posture.' }
+    ],
+    agents: [
+      { name: 'payment-reconciler', description: 'Use this agent when an MSP needs to reconcile Alternative Payments activity — matching transactions to invoices, surfacing unpaid and overdue invoices, summarizing payouts and the transactions that compose them, flagging failed or declined transactions, and tracking outstanding receivables via hosted payment requests.' }
+    ],
+    commands: [
+      { name: '/list-overdue-invoices', description: 'List open and overdue Alternative Payments invoices and optionally generate hosted payment links for them' },
+      { name: '/reconcile-payout', description: 'Reconcile an Alternative Payments payout by listing its transactions and matching them against invoices and customers' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'alternative-payments/alternative-payments',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'ironscales',
     name: 'Ironscales',
     vendor: 'Ironscales',
