@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- `cipp` plugin docs pointed `CIPP_BASE_URL` at the Static Web App / custom-domain UI URL (`https://cipp.yourdomain.com`). The SWA redirects bearer-token requests to its interactive login page, so API calls fail. The README setup steps and `.env.example` now use the CIPP-API Azure Function App URL (`https://<function-app-name>.azurewebsites.net`) and explain the distinction
 - Gateway URL drift: flipped `blackpoint`, `crewhu`, `immybot`, `timezest`, `threatlocker` plugin READMEs and `.mcp.json` files from `mcp.wyretechnology.com` to canonical `mcp.wyre.ai` (closes #73)
 
 ### Added
