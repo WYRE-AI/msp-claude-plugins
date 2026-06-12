@@ -5,18 +5,22 @@ import { mcpServers, getMcpServersByCategory } from '@/data/mcp-servers';
 
 const psaServers = getMcpServersByCategory('psa');
 const rmmServers = getMcpServersByCategory('rmm');
+const securityServers = getMcpServersByCategory('security');
 const docServers = getMcpServersByCategory('documentation');
+const accountingServers = getMcpServersByCategory('accounting');
+const networkServers = getMcpServersByCategory('network');
+const salesServers = getMcpServersByCategory('sales');
 ---
 
 <DocsLayout title="MCP Servers">
-  <h1>MCP Servers</h1>
+  <h1 id="mcp-servers">MCP Servers</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
     Browse all {mcpServers.length} MCP servers for MSP platforms. Each server gives Claude
     direct API access to your tools via the Model Context Protocol.
   </p>
 
-  <h2>PSA Platforms ({psaServers.length})</h2>
+  <h2 id="psa">PSA Platforms ({psaServers.length})</h2>
 
   <p>Professional Services Automation servers for ticket management, CRM, and billing.</p>
 
@@ -26,7 +30,7 @@ const docServers = getMcpServersByCategory('documentation');
     ))}
   </div>
 
-  <h2>RMM Platforms ({rmmServers.length})</h2>
+  <h2 id="rmm">RMM Platforms ({rmmServers.length})</h2>
 
   <p>Remote Monitoring and Management servers for device management and automation.</p>
 
@@ -36,7 +40,17 @@ const docServers = getMcpServersByCategory('documentation');
     ))}
   </div>
 
-  <h2>Documentation Platforms ({docServers.length})</h2>
+  <h2 id="security">Security Platforms ({securityServers.length})</h2>
+
+  <p>Email security, EDR, threat intelligence, incident management, and phishing-defense servers for protecting customer environments.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {securityServers.map(server => (
+      <McpServerCard server={server} />
+    ))}
+  </div>
+
+  <h2 id="documentation">Documentation Platforms ({docServers.length})</h2>
 
   <p>Documentation and knowledge base servers for asset tracking and password management.</p>
 
@@ -46,7 +60,37 @@ const docServers = getMcpServersByCategory('documentation');
     ))}
   </div>
 
-  <h2>All MCP Servers at a Glance</h2>
+  <h2 id="accounting">Accounting Platforms ({accountingServers.length})</h2>
+
+  <p>Accounting and financial-operations servers for invoicing, reporting, and revenue reconciliation.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {accountingServers.map(server => (
+      <McpServerCard server={server} />
+    ))}
+  </div>
+
+  <h2 id="network">Network Platforms ({networkServers.length})</h2>
+
+  <p>Network monitoring and management servers for device visibility, topology, and uptime.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {networkServers.map(server => (
+      <McpServerCard server={server} />
+    ))}
+  </div>
+
+  <h2 id="sales">Sales Platforms ({salesServers.length})</h2>
+
+  <p>Sales pipeline, quoting, and partner-management servers for revenue operations.</p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+    {salesServers.map(server => (
+      <McpServerCard server={server} />
+    ))}
+  </div>
+
+  <h2 id="all-servers-at-a-glance">All MCP Servers at a Glance</h2>
 
   <table>
     <thead>

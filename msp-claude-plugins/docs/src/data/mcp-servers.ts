@@ -1349,35 +1349,6 @@ export const mcpServers: McpServer[] = [
     mcpbAvailable: true,
   },
   {
-    id: 'afkbot',
-    name: 'AFKBot MCP',
-    npmPackage: '@wyre-technology/afkbot-mcp',
-    description: 'MCP server for AFKBot PTO management — file time-off requests and query PTO history from any MCP client.',
-    category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/afkbot-mcp',
-    envVars: [
-      { name: 'AZURE_TENANT_ID', required: true, description: 'Azure AD tenant ID for AFKBot Easy Auth' },
-      { name: 'AZURE_CLIENT_ID', required: true, description: 'MCP server app registration client ID' },
-      { name: 'AZURE_CLIENT_SECRET', required: true, description: 'MCP server app registration client secret' },
-      { name: 'AFKBOT_API_URL', required: false, description: 'AFKBot API URL (defaults to production)' },
-      { name: 'AFKBOT_APP_CLIENT_ID', required: false, description: 'AFKBot Easy Auth client ID (defaults to production)' }
-    ],
-    domains: [
-      {
-        name: 'PTO Requests',
-        description: 'File and query time-off requests.',
-        tools: [
-          { name: 'create_pto_request', description: 'File a new PTO request (full-day or partial-day) for an employee' },
-          { name: 'list_pto_requests', description: 'List PTO requests with optional status / employee / limit filters' }
-        ]
-      }
-    ],
-    architecture: 'Single TypeScript MCP server using Azure AD client-credentials flow to authenticate against AFKBot Easy Auth.',
-    installCommand: 'npx @wyre-technology/afkbot-mcp',
-    dockerAvailable: true,
-    mcpbAvailable: true,
-  },
-  {
     id: 'avanan',
     name: 'Avanan MCP',
     npmPackage: '@wyre-technology/avanan-mcp',
