@@ -2182,6 +2182,72 @@ export const plugins: Plugin[] = [
     },
     path: 'azure-mcp/azure-mcp',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'stripe',
+    name: 'Stripe',
+    vendor: 'Stripe',
+    description: 'Stripe - payments, subscriptions, invoices, customer management via Stripe\'s first-party hosted MCP (mcp.stripe.com)',
+    category: 'accounting',
+    maturity: 'beta',
+    features: [
+      'Disputes',
+      'Payment Tracking',
+      'Subscription Lifecycle'
+    ],
+    skills: [
+      { name: 'disputes', description: 'Use this skill for Stripe disputes (chargebacks): listing open disputes and their deadlines, reading the dispute reason and what evidence Stripe needs, assembling and submitting evidence, and tracking dispute outcomes.' },
+      { name: 'payments', description: 'Use this skill for Stripe payment operations: looking up payment intents and charges, tracing a customer\'s payment history, issuing and tracking refunds, and reading account balance and payout status.' },
+      { name: 'subscriptions', description: 'Use this skill for Stripe recurring-billing operations: inspecting products and prices, auditing a customer\'s subscriptions (plan, status, renewal, trial), changing or canceling subscriptions, and walking the invoice lifecycle (draft → open → paid → void/uncollectible) including line items and failed-payment dunning.' }
+    ],
+    agents: [
+      { name: 'stripe-billing-support', description: 'Use this agent for Stripe billing-support and revenue-operations work: investigating a customer\'s payments and subscription state, issuing and tracking refunds, triaging chargebacks/disputes against their deadlines, and reconciling balance/payouts.' }
+    ],
+    commands: [
+      { name: '/dispute-triage', description: 'Triage open Stripe disputes by evidence deadline (soonest first)' },
+      { name: '/subscription-audit', description: 'Audit a customer\'s Stripe subscription + billing health (plan, status, renewal, dunning)' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'stripe/stripe',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'slack',
+    name: 'Slack',
+    vendor: 'Slack',
+    description: 'Slack - messages, channels, canvases, files, reactions via Slack\'s first-party hosted MCP (mcp.slack.com)',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Channels Users',
+      'Messaging',
+      'Threads Reactions'
+    ],
+    skills: [
+      { name: 'channels-users', description: 'Use this skill to resolve and inspect Slack channels and users: listing channels, resolving a #channel name to its id, reading channel membership/topic/purpose, and looking up users by id or email to get their name, handle, and profile.' },
+      { name: 'messaging', description: 'Use this skill to read and write Slack messages: posting a message to a channel or thread, reading recent channel history, and searching across the workspace for messages by keyword, user, channel, or date.' },
+      { name: 'threads-reactions', description: 'Use this skill for Slack thread and reaction operations: reading a full thread by its parent message, replying in-thread, and adding/reading emoji reactions (acknowledgements, status signals, lightweight workflow state).' }
+    ],
+    agents: [
+      { name: 'slack-workspace-assistant', description: 'Use this agent for Slack workspace operations: searching and summarizing discussions, posting updates and announcements to the right channel/thread, resolving people and channels by name/email, reading thread context, and using reactions as acknowledgements.' }
+    ],
+    commands: [
+      { name: '/channel-digest', description: 'Summarize a Slack channel\'s recent activity into decisions, action items, and open questions' },
+      { name: '/find-discussions', description: 'Find Slack discussions about a topic using search operators, with context and permalinks' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'slack/slack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 

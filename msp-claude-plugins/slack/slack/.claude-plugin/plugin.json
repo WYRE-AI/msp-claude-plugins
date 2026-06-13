@@ -1,6 +1,6 @@
 {
   "name": "slack",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Claude plugins for Slack — messages, channels, canvases, files, reactions via Slack's first-party hosted MCP server (mcp.slack.com)",
   "author": {
     "name": "MSP Claude Plugins Community"
