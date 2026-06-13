@@ -7,6 +7,13 @@ export interface McpServer {
   repoUrl: string;
   companionPluginId?: string;
   envVars: EnvVar[];
+  /**
+   * Step-by-step instructions for acquiring the API credentials this MCP server needs.
+   * Surfaced on the per-vendor page between Authentication (the env-var table) and Architecture.
+   * Optional during rollout — vendors without populated content render the existing template unchanged.
+   * Vendors flagged pendingVerification: true display a "Portal verification pending — contact support if blocked" note.
+   */
+  credentialAcquisition?: CredentialAcquisition;
   domains: Domain[];
   architecture: string;
   installCommand: string;
@@ -19,6 +26,33 @@ export interface EnvVar {
   name: string;
   required: boolean;
   description: string;
+}
+
+export interface CredentialAcquisition {
+  /** Optional direct URL to the vendor portal where credentials are created. */
+  portalUrl?: string;
+  /** Prerequisites — what level of vendor-portal access is required before completing the steps. */
+  prerequisites?: string[];
+  /** Step-by-step navigation in the vendor portal to create the credentials. */
+  steps?: CredentialStep[];
+  /** Required scopes/permissions to set during credential creation, if applicable. */
+  requiredScopes?: string[];
+  /** Notes on credential format expectations (length, prefix, expiration). */
+  formatNotes?: string;
+  /** Optional notes on credential rotation/expiry behavior. */
+  rotationNotes?: string;
+  /**
+   * When true, the rendered page shows a "Portal verification pending — contact support if blocked" note
+   * above the steps. Use for vendors where steps couldn't be confidently authored without portal-access testing.
+   */
+  pendingVerification?: boolean;
+}
+
+export interface CredentialStep {
+  /** Action verb-first description of the step. */
+  action: string;
+  /** Optional sub-bullets for clarifying detail. */
+  notes?: string[];
 }
 
 export interface Domain {
@@ -48,6 +82,7 @@ export const mcpServers: McpServer[] = [
       { name: 'CW_AUTOMATE_PASSWORD', required: true, description: 'Integrator password or user password' },
       { name: 'CW_AUTOMATE_2FA_CODE', required: false, description: 'Two-factor authentication code (if required)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://docs.connectwise.com/ConnectWise_Automate_Documentation', pendingVerification: true, prerequisites: ['ConnectWise Automate server access (cloud or self-hosted)', 'Integrator Client ID from the ConnectWise Developer Network'], steps: [{ action: 'Obtain CW_AUTOMATE_CLIENT_ID by registering an integration at developer.connectwise.com/ClientID.' }, { action: 'Set CW_AUTOMATE_SERVER_URL to your ConnectWise Automate server URL.' }, { action: 'Create or obtain an integrator user account and set CW_AUTOMATE_USERNAME and CW_AUTOMATE_PASSWORD.' }, { action: 'If 2FA is required, set CW_AUTOMATE_2FA_CODE.' }] },
     domains: [
       {
         name: 'Computers',
@@ -108,6 +143,30 @@ export const mcpServers: McpServer[] = [
       { name: 'NINJAONE_CLIENT_SECRET', required: true, description: 'OAuth 2.0 Client Secret' },
       { name: 'NINJAONE_REGION', required: false, description: 'Region: us (default), eu, or oc' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.ninjaone.com/',
+      prerequisites: [
+        'NinjaOne account with Administrator role',
+        'Knowledge of your NinjaOne deployment region (us | eu | oc — visible in your NinjaOne portal URL)',
+        'Awareness that NinjaOne uses OAuth 2.0; you create an "API Application" record to issue tokens'
+      ],
+      steps: [
+        { action: 'Sign in to your NinjaOne console as an Administrator.' },
+        { action: 'Navigate to Administration → Apps → API.' },
+        { action: 'Click "Add" to create a new API Application.' },
+        { action: 'Fill in:', notes: ['Application Name: "WYRE Gateway"', 'Application Platform: API Services (machine-to-machine, NOT user-facing)', 'Redirect URI: not required for client_credentials grant', 'Scope: select scopes per least-privilege for the entities you need (monitoring, management, control)'] },
+        { action: 'Save the application. NinjaOne generates NINJAONE_CLIENT_ID and NINJAONE_CLIENT_SECRET.', notes: ['Save NINJAONE_CLIENT_SECRET before leaving — NinjaOne only shows it once.'] },
+        { action: 'Set NINJAONE_REGION to your deployment region (us is default; eu / oc if applicable).' }
+      ],
+      requiredScopes: [
+        'monitoring (read endpoints, alerts)',
+        'management (modify endpoints — devices, organizations)',
+        'control (run actions on endpoints — reboots, scripts)',
+        'Adjust per the tools you intend to use; least-privilege is recommended (start with monitoring only, add as needed)'
+      ],
+      formatNotes: 'Client ID is a UUID. Client Secret is a long random string. NINJAONE_REGION enum: us | eu | oc.',
+      rotationNotes: 'Regenerate the client_secret from the same API Application page. Old secret remains valid until explicitly revoked; supports zero-downtime rotation.'
+    },
     domains: [
       {
         name: 'Devices',
@@ -175,6 +234,30 @@ export const mcpServers: McpServer[] = [
       { name: 'HALOPSA_TENANT', required: true, description: 'Tenant name (e.g., yourcompany)' },
       { name: 'HALOPSA_BASE_URL', required: false, description: 'Explicit base URL (alternative to tenant)' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://halopsa.com/',
+      prerequisites: [
+        'HaloPSA tenant with Administrator role',
+        'Knowledge of your tenant subdomain (e.g., yourcompany.halopsa.com)'
+      ],
+      steps: [
+        { action: 'Sign in to your HaloPSA tenant as an Administrator.' },
+        { action: 'Navigate to Configuration → Integrations → Custom OAuth Apps.' },
+        { action: 'Click "Add" to create a new OAuth app.' },
+        { action: 'Fill in:', notes: ['Name: "WYRE Gateway"', 'Authentication Method: Client ID and Secret (Services)', 'Login Type: System (not Agent)'] },
+        { action: 'Save the app. HaloPSA generates HALOPSA_CLIENT_ID and HALOPSA_CLIENT_SECRET.', notes: ['Save HALOPSA_CLIENT_SECRET before leaving — HaloPSA only shows it once.'] },
+        { action: 'On the same OAuth app page, assign Permissions for the entities you need (Tickets, Clients, Assets, etc.). Least-privilege per your gateway scope.' },
+        { action: 'Set HALOPSA_TENANT to your subdomain (the prefix before .halopsa.com). If using a custom domain, set HALOPSA_BASE_URL to the full URL instead.' }
+      ],
+      requiredScopes: [
+        'Tickets (read/write as needed)',
+        'Clients (read/write as needed)',
+        'Assets (read/write as needed)',
+        'Adjust per the tools you intend to use'
+      ],
+      formatNotes: 'Client ID is a GUID. Client Secret is a long random string. Tenant is the subdomain prefix (e.g., "acme" for acme.halopsa.com).',
+      rotationNotes: 'OAuth apps can be regenerated from the same Configuration page. Rotation does not require gateway downtime if you have a brief window of overlap.'
+    },
     domains: [
       {
         name: 'Tickets',
@@ -243,6 +326,23 @@ export const mcpServers: McpServer[] = [
       { name: 'ITGLUE_API_KEY', required: true, description: 'Your IT Glue API key (format: ITG.xxx)' },
       { name: 'ITGLUE_REGION', required: false, description: 'API region: us (default), eu, or au' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.itglue.com/',
+      prerequisites: [
+        'IT Glue account with Administrator role',
+        'IT Glue tier that includes API access (verify your plan includes API)'
+      ],
+      steps: [
+        { action: 'Sign in to your IT Glue instance as an Administrator.' },
+        { action: 'Navigate to Account → Settings → API Keys.' },
+        { action: 'Click "Generate API Key".' },
+        { action: 'Set a descriptive name (e.g., "WYRE Gateway"). Select permissions per least-privilege.' },
+        { action: 'Copy the generated key (shown once) to ITGLUE_API_KEY.' },
+        { action: 'Set ITGLUE_REGION to your regional deployment if non-US: eu or au.' }
+      ],
+      formatNotes: 'API key starts with "ITG." prefix (e.g., "ITG.xxx"). Region must be us (default), eu, or au.',
+      rotationNotes: 'Generate new key via Account → Settings → API Keys; old key revokable from the same page.'
+    },
     domains: [
       {
         name: 'Organizations',
@@ -302,6 +402,7 @@ export const mcpServers: McpServer[] = [
       { name: 'SUPEROPS_SUBDOMAIN', required: true, description: 'Your SuperOps subdomain' },
       { name: 'SUPEROPS_REGION', required: false, description: 'Region: us (default) or eu' }
     ],
+    credentialAcquisition: { portalUrl: 'https://superops.ai/', pendingVerification: true, prerequisites: ['SuperOps.ai account with Administrator access'], steps: [{ action: 'Sign in to your SuperOps.ai portal as an Administrator.' }, { action: 'Navigate to Settings → API tokens.' }, { action: 'Generate a new API token.' }, { action: 'Save to SUPEROPS_API_TOKEN.' }, { action: 'Set SUPEROPS_SUBDOMAIN to your tenant subdomain and SUPEROPS_REGION (us default, eu if applicable).' }] },
     domains: [
       {
         name: 'Clients',
@@ -369,6 +470,20 @@ export const mcpServers: McpServer[] = [
     envVars: [
       { name: 'ATERA_API_KEY', required: true, description: 'Your Atera API key from Admin > API' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://app.atera.com/',
+      prerequisites: [
+        'Atera account with Administrator role'
+      ],
+      steps: [
+        { action: 'Sign in to your Atera portal as an Administrator.' },
+        { action: 'Navigate to Admin → API.' },
+        { action: 'Click to generate a new API key.' },
+        { action: 'Copy the key to ATERA_API_KEY.' }
+      ],
+      formatNotes: 'Atera API key is a long random string. Atera does not currently support multiple concurrent API keys — rotating issues a new key and invalidates the old one.',
+      rotationNotes: 'Rotation requires brief gateway downtime since old key is invalidated when new one is generated.'
+    },
     domains: [
       {
         name: 'Customers',
@@ -436,6 +551,22 @@ export const mcpServers: McpServer[] = [
       { name: 'SYNCRO_API_KEY', required: true, description: 'Your Syncro API key' },
       { name: 'SYNCRO_SUBDOMAIN', required: false, description: 'Your Syncro subdomain (if applicable)' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://syncromsp.com/',
+      prerequisites: [
+        'Syncro account with Administrator role'
+      ],
+      steps: [
+        { action: 'Sign in to your Syncro portal as an Administrator.' },
+        { action: 'Navigate to Admin → API → API Tokens.' },
+        { action: 'Click "New Token".' },
+        { action: 'Set a descriptive name and select permissions per least-privilege for the entities you need.' },
+        { action: 'Save and copy the generated token to SYNCRO_API_KEY.' },
+        { action: 'If your Syncro instance uses a custom subdomain, set SYNCRO_SUBDOMAIN (typically not needed).' }
+      ],
+      formatNotes: 'API token is a long random string.',
+      rotationNotes: 'Generate new token via Admin → API; revoke old token from the same page.'
+    },
     domains: [
       {
         name: 'Customers',
@@ -506,6 +637,22 @@ export const mcpServers: McpServer[] = [
       { name: 'DATTO_API_SECRET', required: true, description: 'Datto RMM API secret' },
       { name: 'DATTO_PLATFORM', required: true, description: 'Platform: pinotage, concord, or merlot' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.datto.com/products/rmm/',
+      prerequisites: [
+        'Datto RMM account with Administrator role',
+        'Knowledge of your Datto RMM platform region (pinotage = US, concord = US-east, merlot = EU; check your Datto URL to determine)'
+      ],
+      steps: [
+        { action: 'Sign in to your Datto RMM instance as an Administrator.' },
+        { action: 'Navigate to Setup → Users → Create API user (or convert an existing user to API access).' },
+        { action: 'Generate the API key + secret pair. Save both before leaving — Datto only shows the secret once.' },
+        { action: 'Assign the API user to the security level that grants access to the entities/sites you need.' },
+        { action: 'Set DATTO_API_KEY, DATTO_API_SECRET, and DATTO_PLATFORM to the correct region (pinotage / concord / merlot).' }
+      ],
+      formatNotes: 'API key + secret are long random strings. DATTO_PLATFORM must be one of: pinotage, concord, merlot. Check the URL of your Datto RMM portal to determine which.',
+      rotationNotes: 'Rotate via the Setup → Users page. Old credentials remain valid until you regenerate.'
+    },
     domains: [
       { name: 'Devices', description: 'Manage and monitor endpoints.', tools: [
         { name: 'List devices', description: 'List devices with filters' },
@@ -545,6 +692,31 @@ export const mcpServers: McpServer[] = [
       { name: 'AUTOTASK_SECRET', required: true, description: 'Autotask API secret key' },
       { name: 'AUTOTASK_INTEGRATION_CODE', required: true, description: 'Autotask integration code' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://ww1.autotask.net/',
+      prerequisites: [
+        'Autotask account with Administrator-level role (required to create API users)',
+        'A decision on API user name + ownership — API users count against Autotask resource limits'
+      ],
+      steps: [
+        { action: 'Sign in to your Autotask instance as an Administrator.' },
+        { action: 'Navigate to Admin → Resources/Users → New → "API User (system) (API-only)".' },
+        { action: 'Fill in the API user details. Use a clear name (e.g., "WYRE Gateway API") so it is identifiable in audit logs.' },
+        { action: 'Generate the API tracking identifier (this becomes AUTOTASK_INTEGRATION_CODE).', notes: ['Save it before leaving the page — Autotask only shows it once.'] },
+        { action: 'Set the username (becomes AUTOTASK_USERNAME — this is the email-format Autotask username, NOT a real email).' },
+        { action: 'Generate or set the secret (becomes AUTOTASK_SECRET).' },
+        { action: 'Assign the API user to a Security Level that grants access to the entities you need (Companies, Tickets, Time Entries, etc.). Least-privilege per your gateway scope.' },
+        { action: 'Save the API user. Use the three values in your environment.' }
+      ],
+      requiredScopes: [
+        'Companies (read/write as needed)',
+        'Tickets (read/write as needed)',
+        'Time Entries (read/write as needed)',
+        'Adjust per the tools you intend to use from the gateway'
+      ],
+      formatNotes: 'Username is in email format. Integration code is a 32-character GUID. Secret is a long random string. All three are required.',
+      rotationNotes: 'Autotask API users do not expire automatically. Rotate secrets manually if compromised (regenerate via the same API user page).'
+    },
     domains: [
       { name: 'Tickets', description: 'Service ticket management.', tools: [
         { name: 'List tickets', description: 'List/search tickets with filters' },
@@ -593,6 +765,7 @@ export const mcpServers: McpServer[] = [
       { name: 'LIONGARD_INSTANCE', required: true, description: 'Your Liongard instance subdomain (e.g., yourcompany)' },
       { name: 'LIONGARD_API_KEY', required: true, description: 'Your Liongard API key (X-ROAR-API-KEY)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://app.liongard.com/', pendingVerification: true, steps: [{ action: 'Sign in to your Liongard instance.' }, { action: 'Navigate to Settings → API Keys.' }, { action: 'Generate a new API key.' }, { action: 'Save to LIONGARD_API_KEY (used as X-ROAR-API-KEY header).' }, { action: 'Set LIONGARD_INSTANCE to your subdomain.' }] },
     domains: [
       {
         name: 'Environments',
@@ -690,6 +863,32 @@ export const mcpServers: McpServer[] = [
       { name: 'CW_MANAGE_PRIVATE_KEY', required: true, description: 'API member private key' },
       { name: 'CW_MANAGE_CLIENT_ID', required: true, description: 'ConnectWise client ID' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://developer.connectwise.com/ClientID',
+      prerequisites: [
+        'ConnectWise Manage account with Administrator role',
+        'Knowledge of your ConnectWise company identifier (the prefix in your ConnectWise URL)',
+        'An "Integrator" user role configured for API access (NOT a regular member role — see Member Maintenance docs)',
+        'ConnectWise Developer Network account (free) to obtain CW_MANAGE_CLIENT_ID at developer.connectwise.com/ClientID'
+      ],
+      steps: [
+        { action: 'Visit https://developer.connectwise.com/ClientID and sign in (or register a free ConnectWise Developer Network account).' },
+        { action: 'Request a Client ID for your integration. Fill in: integration name (e.g., "WYRE Gateway"), description, ConnectWise product (Manage), and integration owner contact details.' },
+        { action: 'Save the issued Client ID to CW_MANAGE_CLIENT_ID. This identifies your integration globally to ConnectWise.' },
+        { action: 'Sign in to your ConnectWise Manage instance as an Administrator.' },
+        { action: 'Navigate to System → Members → API Members.' },
+        { action: 'Click "+" to create a new API Member, or edit an existing one.' },
+        { action: 'Set the API Member name (descriptive, e.g., "WYRE Gateway").' },
+        { action: 'Set the role to one with appropriate permissions for the entities you need.' },
+        { action: 'In the API Keys tab on the API Member, generate a new key pair.', notes: ['Save BOTH the public key (becomes CW_MANAGE_PUBLIC_KEY) and the private key (becomes CW_MANAGE_PRIVATE_KEY)', 'ConnectWise only shows the private key once.'] },
+        { action: 'Set CW_MANAGE_COMPANY_ID to your ConnectWise company identifier (the prefix in your portal URL).' }
+      ],
+      requiredScopes: [
+        'Configure the API Member\'s role to grant access to the entities you need (Tickets, Companies, Time Entries, etc.). Least-privilege per your gateway scope.'
+      ],
+      formatNotes: 'Public/private keys are long random strings. Company ID is the URL prefix. Client ID is a UUID issued by ConnectWise Developer Network.',
+      rotationNotes: 'Regenerate from the same API Member → API Keys tab. Old key pair invalidated when new pair is generated.'
+    },
     domains: [
       { name: 'Tickets', description: 'Service ticket management.', tools: [
         { name: 'List tickets', description: 'List tickets with filters' },
@@ -728,6 +927,23 @@ export const mcpServers: McpServer[] = [
       { name: 'HUDU_BASE_URL', required: true, description: 'Your Hudu instance URL (e.g., https://acme.huducloud.com)' },
       { name: 'HUDU_API_KEY', required: true, description: 'Hudu API key from Admin > API Keys' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.hudu.com/',
+      prerequisites: [
+        'Hudu account with Administrator role',
+        'Knowledge of your Hudu instance URL (e.g., https://acme.huducloud.com)'
+      ],
+      steps: [
+        { action: 'Sign in to your Hudu instance as an Administrator.' },
+        { action: 'Navigate to Admin → API Keys.' },
+        { action: 'Click "New API Key".' },
+        { action: 'Set a descriptive name (e.g., "WYRE Gateway") and set permission scopes per least-privilege for the entities you need.' },
+        { action: 'Save the key. Hudu shows it once — copy to HUDU_API_KEY immediately.' },
+        { action: 'Set HUDU_BASE_URL to your Hudu instance URL including the protocol.' }
+      ],
+      formatNotes: 'API key is a long random string. HUDU_BASE_URL must include https:// and the full hostname (e.g., https://acme.huducloud.com).',
+      rotationNotes: 'Generate a new key via Admin → API Keys → New API Key. Revoke the old key once the new one is verified working.'
+    },
     domains: [
       {
         name: 'Companies',
@@ -823,6 +1039,21 @@ export const mcpServers: McpServer[] = [
       { name: 'ROCKETCYBER_API_KEY', required: true, description: 'RocketCyber API key from Provider Settings > API tab' },
       { name: 'ROCKETCYBER_REGION', required: false, description: 'Region: us (default) or eu' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.rocketcyber.com/',
+      prerequisites: [
+        'RocketCyber provider-level account access (NOT customer-level — credentials live in Provider Settings)'
+      ],
+      steps: [
+        { action: 'Sign in to your RocketCyber Provider portal.' },
+        { action: 'Navigate to Provider Settings → API tab.' },
+        { action: 'Generate a new API key.' },
+        { action: 'Copy the key to ROCKETCYBER_API_KEY.' },
+        { action: 'If your RocketCyber deployment is EU-hosted, set ROCKETCYBER_REGION=eu. Default is us.' }
+      ],
+      formatNotes: 'API key is a long random string. Region must be us (default) or eu.',
+      rotationNotes: 'Provider Settings → API tab supports key rotation. Old key remains valid until explicitly revoked.'
+    },
     domains: [
       {
         name: 'Account',
@@ -887,6 +1118,7 @@ export const mcpServers: McpServer[] = [
     envVars: [
       { name: 'BLUMIRA_JWT_TOKEN', required: true, description: 'JWT authentication token from your Blumira account' },
     ],
+    credentialAcquisition: { portalUrl: 'https://app.blumira.com/', pendingVerification: true, steps: [{ action: 'Sign in to your Blumira account.' }, { action: 'Navigate to account settings → API Tokens.' }, { action: 'Generate a JWT token.' }, { action: 'Save to BLUMIRA_JWT_TOKEN.' }] },
     domains: [
       {
         name: 'Findings',
@@ -936,6 +1168,7 @@ export const mcpServers: McpServer[] = [
       { name: 'DOMOTZ_API_KEY', required: true, description: 'Your Domotz API key' },
       { name: 'DOMOTZ_REGION', required: false, description: 'API region endpoint (default: us-east-1)' },
     ],
+    credentialAcquisition: { portalUrl: 'https://app.domotz.com/', pendingVerification: true, steps: [{ action: 'Sign in to your Domotz account.' }, { action: 'Navigate to Account Settings → API.' }, { action: 'Generate an API key and copy to DOMOTZ_API_KEY.' }, { action: 'Set DOMOTZ_REGION if non-default (default: us-east-1).' }] },
     domains: [
       {
         name: 'Agents',
@@ -993,6 +1226,21 @@ export const mcpServers: McpServer[] = [
       { name: 'HUNTRESS_API_KEY', required: true, description: 'Your Huntress API public key' },
       { name: 'HUNTRESS_API_SECRET', required: true, description: 'Your Huntress API secret key' },
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.huntress.com/',
+      prerequisites: [
+        'Huntress account with Administrator-level access (required to create API keys)'
+      ],
+      steps: [
+        { action: 'Sign in to your Huntress portal as an Administrator.' },
+        { action: 'Navigate to your account-settings area (typically: profile icon → Account Settings → API Keys, or per your account-level navigation).' },
+        { action: 'Click to create a new API key pair.' },
+        { action: 'Save both the API key (becomes HUNTRESS_API_KEY) and the secret (becomes HUNTRESS_API_SECRET).' },
+        { action: 'Huntress only shows the secret once — copy it immediately.' }
+      ],
+      formatNotes: 'Both API key and secret are long random strings. Used together for Basic Auth-style requests.',
+      rotationNotes: 'Generate new key/secret pair; revoke old pair when the new pair is verified working.'
+    },
     domains: [
       {
         name: 'Agents',
@@ -1061,6 +1309,29 @@ export const mcpServers: McpServer[] = [
       { name: 'QBO_ACCESS_TOKEN', required: true, description: 'OAuth 2.0 access token for QuickBooks Online' },
       { name: 'QBO_REALM_ID', required: true, description: 'Your QuickBooks Online company ID (realm ID)' },
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://developer.intuit.com/',
+      prerequisites: [
+        'QuickBooks Online subscription (any tier)',
+        'Intuit Developer account at https://developer.intuit.com/',
+        'Awareness that QBO uses OAuth 2.0; you create a developer app to issue tokens'
+      ],
+      steps: [
+        { action: 'Sign in to your Intuit Developer account at https://developer.intuit.com/.' },
+        { action: 'Navigate to Dashboard → Apps → Create an app.' },
+        { action: 'Select "QuickBooks Online and Payments" as the scope.' },
+        { action: 'Configure the app: name, target environment (Sandbox for testing, Production for live), and OAuth 2.0 redirect URI per your deployment.' },
+        { action: 'In the app\'s "Keys & OAuth" section, note the Client ID and Client Secret.' },
+        { action: 'Walk through the OAuth 2.0 authorization flow to obtain an access_token + refresh_token.', notes: ['QBO access tokens expire after 1 hour; the refresh_token (valid ~100 days) is used to issue new access tokens.', 'See https://developer.intuit.com/app/developer/qbo/docs/develop/authentication-and-authorization/oauth-2.0 for the canonical flow.'] },
+        { action: 'Set QBO_ACCESS_TOKEN and QBO_REALM_ID (the QuickBooks Online company ID — visible during OAuth callback as "realmId").' }
+      ],
+      requiredScopes: [
+        'com.intuit.quickbooks.accounting (for accounting entities — Items, Customers, Invoices, etc.)',
+        'com.intuit.quickbooks.payments (only if using payment endpoints)'
+      ],
+      formatNotes: 'Access token is a JWT-like string (long, base64-ish). Realm ID is a numeric company ID (e.g., "1234567890").',
+      rotationNotes: 'Access token refreshes every hour via the refresh_token. Refresh_token rotates every ~100 days — store the latest refresh_token to maintain access. Gateway should implement automatic token refresh.'
+    },
     domains: [
       {
         name: 'Customers',
@@ -1129,6 +1400,7 @@ export const mcpServers: McpServer[] = [
       { name: 'SALESBUILDR_API_KEY', required: true, description: 'Your SalesBuildr API key' },
       { name: 'SALESBUILDR_BASE_URL', required: false, description: 'Tenant-specific base URL (e.g. https://mytenant.salesbuildr.com)' },
     ],
+    credentialAcquisition: { portalUrl: 'https://salesbuildr.com/', pendingVerification: true, steps: [{ action: 'Sign in to your SalesBuildr tenant.' }, { action: 'Navigate to API settings to generate an API key.' }, { action: 'Save the key to SALESBUILDR_API_KEY.' }, { action: 'Optionally set SALESBUILDR_BASE_URL to your tenant-specific URL (e.g., https://mytenant.salesbuildr.com).' }] },
     domains: [
       {
         name: 'Companies',
@@ -1196,6 +1468,7 @@ export const mcpServers: McpServer[] = [
       { name: 'SPAMTITAN_API_KEY', required: true, description: 'Your SpamTitan API key' },
       { name: 'SPAMTITAN_BASE_URL', required: false, description: 'SpamTitan API base URL (default: https://api-spamtitan.titanhq.com)' },
     ],
+    credentialAcquisition: { portalUrl: 'https://www.titanhq.com/spamtitan/', pendingVerification: true, steps: [{ action: 'Sign in to your SpamTitan admin portal.' }, { action: 'Navigate to API settings to generate an API key.' }, { action: 'Save the key to SPAMTITAN_API_KEY.' }, { action: 'Optionally set SPAMTITAN_BASE_URL if using a non-default endpoint (default: https://api-spamtitan.titanhq.com).' }] },
     domains: [
       {
         name: 'Quarantine',
@@ -1238,6 +1511,31 @@ export const mcpServers: McpServer[] = [
       { name: 'XERO_ACCESS_TOKEN', required: true, description: 'OAuth 2.0 access token for Xero' },
       { name: 'XERO_TENANT_ID', required: true, description: 'Your Xero organisation/tenant ID' },
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://developer.xero.com/',
+      prerequisites: [
+        'Xero account (any tier with API access)',
+        'Xero Developer account at https://developer.xero.com/',
+        'Awareness that Xero uses OAuth 2.0; you create a Xero app to issue tokens'
+      ],
+      steps: [
+        { action: 'Sign in to your Xero Developer portal at https://developer.xero.com/.' },
+        { action: 'Navigate to My Apps → New App.' },
+        { action: 'Select "Web app" (or "Custom connection" for server-to-server).' },
+        { action: 'Configure the app: name, company URL, OAuth 2.0 redirect URI per your deployment.' },
+        { action: 'Note the Client ID and Client Secret from the app\'s configuration page.' },
+        { action: 'Walk through the OAuth 2.0 authorization flow to obtain an access_token + refresh_token.', notes: ['Xero access tokens expire after 30 minutes; refresh_token expires after 60 days of inactivity.', 'See https://developer.xero.com/documentation/guides/oauth2/auth-flow for the canonical flow.'] },
+        { action: 'Set XERO_ACCESS_TOKEN and XERO_TENANT_ID (the Xero organisation/tenant ID — call the /connections endpoint after OAuth to retrieve it).' }
+      ],
+      requiredScopes: [
+        'accounting.transactions (for invoicing, payments)',
+        'accounting.contacts (for contact lookups)',
+        'accounting.settings (for organisation/account list)',
+        'Adjust per the tools you intend to use'
+      ],
+      formatNotes: 'Access token is a JWT (long, base64). Tenant ID is a GUID.',
+      rotationNotes: 'Access token refreshes every 30 min via refresh_token. Refresh_token rotates after 60 days of inactivity — keep gateway active or implement scheduled token refresh.'
+    },
     domains: [
       {
         name: 'Contacts',
@@ -1303,6 +1601,7 @@ export const mcpServers: McpServer[] = [
     envVars: [
       { name: 'ABNORMAL_API_TOKEN', required: true, description: 'Abnormal Security API token (generate in the Abnormal portal under Settings → API)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://abnormalsecurity.com/', pendingVerification: true, steps: [{ action: 'Sign in to the Abnormal Security portal as an Administrator.' }, { action: 'Navigate to Settings → API to generate an API token.' }, { action: 'Save the token to ABNORMAL_API_TOKEN.' }] },
     domains: [
       {
         name: 'Threats',
@@ -1361,6 +1660,7 @@ export const mcpServers: McpServer[] = [
       { name: 'CHECKPOINT_CLIENT_SECRET', required: true, description: 'Check Point Infinity Portal API secret' },
       { name: 'CHECKPOINT_REGION', required: true, description: 'Check Point region (e.g., us, eu, ap)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://portal.checkpoint.com/', pendingVerification: true, prerequisites: ['Check Point Infinity Portal account with API access enabled'], steps: [{ action: 'Sign in to the Check Point Infinity Portal.' }, { action: 'Navigate to Global Settings → API Keys.' }, { action: 'Generate a new API key (Client ID + Secret).' }, { action: 'Set CHECKPOINT_CLIENT_ID, CHECKPOINT_CLIENT_SECRET, and CHECKPOINT_REGION (us, eu, ap).' }] },
     domains: [
       {
         name: 'Events',
@@ -1411,6 +1711,7 @@ export const mcpServers: McpServer[] = [
       { name: 'IRONSCALES_API_KEY', required: true, description: 'Ironscales API key (generate in the Ironscales partner portal)' },
       { name: 'IRONSCALES_COMPANY_ID', required: true, description: 'Ironscales company / tenant identifier' }
     ],
+    credentialAcquisition: { portalUrl: 'https://portal.ironscales.com/', pendingVerification: true, prerequisites: ['Ironscales partner portal access'], steps: [{ action: 'Sign in to the Ironscales partner portal.' }, { action: 'Navigate to API settings to generate an API key.' }, { action: 'Save the key to IRONSCALES_API_KEY.' }, { action: 'Set IRONSCALES_COMPANY_ID to your tenant identifier.' }] },
     domains: [
       {
         name: 'Incidents',
@@ -1470,6 +1771,26 @@ export const mcpServers: McpServer[] = [
       { name: 'KNOWBE4_REGION', required: false, description: 'KnowBe4 region: us | eu | ca | uk | de (defaults to us)' },
       { name: 'KNOWBE4_BASE_URL', required: false, description: 'Explicit base URL override (alternative to region)' }
     ],
+    credentialAcquisition: {
+      portalUrl: 'https://www.knowbe4.com/',
+      prerequisites: [
+        'KnowBe4 account with Administrator role (required to access Account Settings)',
+        'Knowledge of your KnowBe4 deployment region (us | eu | ca | uk | de — visible in your KB4 portal URL)'
+      ],
+      steps: [
+        { action: 'Sign in to your KnowBe4 console as an Administrator.' },
+        { action: 'Click the user icon (top-right) → Account Settings.' },
+        { action: 'Navigate to Account Integrations → API.' },
+        { action: 'Click "Generate Token" to create a new Reporting API token.', notes: ['KnowBe4 reads-only by default; the token is for reporting/analytics, not write-access to training assignments.'] },
+        { action: 'Copy the generated token (shown once) to KNOWBE4_API_KEY.' },
+        { action: 'Set KNOWBE4_REGION to your deployment region (us is default; eu / ca / uk / de if applicable).' }
+      ],
+      requiredScopes: [
+        'KnowBe4 Reporting API tokens are scoped at the account level — no per-endpoint scope selection is available.'
+      ],
+      formatNotes: 'API token is a long random string. KNOWBE4_REGION enum: us | eu | ca | uk | de.',
+      rotationNotes: 'Generate a new token via Account Settings → API; the old token remains valid in parallel until you explicitly revoke it.'
+    },
     domains: [
       {
         name: 'Account',
@@ -1536,6 +1857,7 @@ export const mcpServers: McpServer[] = [
       { name: 'MIMECAST_CLIENT_SECRET', required: true, description: 'Mimecast API 2.0 client secret' },
       { name: 'MIMECAST_REGION', required: true, description: 'Mimecast region: us | eu | de | za | au | jer | offshore' }
     ],
+    credentialAcquisition: { portalUrl: 'https://www.mimecast.com/', pendingVerification: true, prerequisites: ['Mimecast administration portal access', 'Mimecast API 2.0 enabled on your account'], steps: [{ action: 'Sign in to your Mimecast Administration Console.' }, { action: 'Navigate to Services → API Integrations.' }, { action: 'Create a new API 2.0 integration; save Client ID and Client Secret.' }, { action: 'Set MIMECAST_CLIENT_ID, MIMECAST_CLIENT_SECRET, and MIMECAST_REGION (us, eu, de, za, au, jer, or offshore per your deployment).' }] },
     domains: [
       {
         name: 'Messages',
@@ -1581,6 +1903,7 @@ export const mcpServers: McpServer[] = [
       { name: 'PROOFPOINT_SERVICE_SECRET', required: true, description: 'Proofpoint TAP service secret' },
       { name: 'PROOFPOINT_BASE_URL', required: false, description: 'Explicit base URL override (defaults to TAP production endpoint)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://www.proofpoint.com/', pendingVerification: true, prerequisites: ['Proofpoint TAP (Targeted Attack Protection) license + admin access'], steps: [{ action: 'Sign in to the Proofpoint TAP admin portal.' }, { action: 'Navigate to Settings → Connected Applications or similar to create a service principal.' }, { action: 'Generate a service principal + secret pair.' }, { action: 'Set PROOFPOINT_SERVICE_PRINCIPAL and PROOFPOINT_SERVICE_SECRET.' }, { action: 'Optionally set PROOFPOINT_BASE_URL if using a non-default endpoint.' }] },
     domains: [
       {
         name: 'TAP (Targeted Attack Protection)',
@@ -1678,6 +2001,7 @@ export const mcpServers: McpServer[] = [
     envVars: [
       { name: 'ROOTLY_API_KEY', required: true, description: 'Rootly API key (generate in Rootly under Settings → API Keys)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://app.rootly.com/', pendingVerification: true, steps: [{ action: 'Sign in to your Rootly account.' }, { action: 'Navigate to Settings → API Keys.' }, { action: 'Generate a new API key.' }, { action: 'Save to ROOTLY_API_KEY.' }] },
     domains: [
       {
         name: 'Incidents',
@@ -1737,6 +2061,7 @@ export const mcpServers: McpServer[] = [
       { name: 'SHERWEB_CLIENT_SECRET', required: true, description: 'Sherweb Partner API client secret' },
       { name: 'SHERWEB_SUBSCRIPTION_KEY', required: true, description: 'Sherweb subscription key (per Partner API tenant)' }
     ],
+    credentialAcquisition: { portalUrl: 'https://www.sherweb.com/partners/', pendingVerification: true, prerequisites: ['Sherweb Partner account with Partner API access'], steps: [{ action: 'Sign in to your Sherweb Partner portal.' }, { action: 'Navigate to API access to generate Client ID + Client Secret pair.' }, { action: 'Obtain a per-tenant Subscription Key for the Partner API tier.' }, { action: 'Set SHERWEB_CLIENT_ID, SHERWEB_CLIENT_SECRET, and SHERWEB_SUBSCRIPTION_KEY.' }] },
     domains: [
       {
         name: 'Customers',

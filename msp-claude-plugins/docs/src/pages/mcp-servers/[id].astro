@@ -161,6 +161,82 @@ const totalTools = server.domains.reduce((sum, d) => sum + d.tools.length, 0);
     </tbody>
   </table>
 
+  {server.credentialAcquisition && (
+    <>
+      <h2 id="getting-credentials">Getting Credentials</h2>
+
+      {server.credentialAcquisition.pendingVerification && (
+        <div class="not-prose my-4 p-4 rounded-lg border border-yellow-500/30 bg-yellow-50/50 dark:bg-yellow-900/10 text-sm">
+          <p class="font-medium mb-1">⚠️ Portal verification pending</p>
+          <p class="text-[var(--muted)]">
+            The instructions below are our best understanding of the vendor's credential-acquisition flow but have
+            not been verified hands-on against the current portal. If you hit a step that doesn't match what you see,
+            please <a href="mailto:support@wyre.ai">let us know</a> — we'll update the docs.
+          </p>
+        </div>
+      )}
+
+      {server.credentialAcquisition.portalUrl && (
+        <p>
+          <strong>Vendor portal:</strong>{' '}
+          <a href={server.credentialAcquisition.portalUrl} target="_blank" rel="noopener noreferrer">
+            {server.credentialAcquisition.portalUrl}
+          </a>
+        </p>
+      )}
+
+      {server.credentialAcquisition.prerequisites && server.credentialAcquisition.prerequisites.length > 0 && (
+        <>
+          <h3>Prerequisites</h3>
+          <ul>
+            {server.credentialAcquisition.prerequisites.map(p => <li>{p}</li>)}
+          </ul>
+        </>
+      )}
+
+      {server.credentialAcquisition.steps && server.credentialAcquisition.steps.length > 0 && (
+        <>
+          <h3>Steps</h3>
+          <ol>
+            {server.credentialAcquisition.steps.map(step => (
+              <li>
+                {step.action}
+                {step.notes && step.notes.length > 0 && (
+                  <ul>
+                    {step.notes.map(n => <li>{n}</li>)}
+                  </ul>
+                )}
+              </li>
+            ))}
+          </ol>
+        </>
+      )}
+
+      {server.credentialAcquisition.requiredScopes && server.credentialAcquisition.requiredScopes.length > 0 && (
+        <>
+          <h3>Required Scopes / Permissions</h3>
+          <ul>
+            {server.credentialAcquisition.requiredScopes.map(s => <li><code>{s}</code></li>)}
+          </ul>
+        </>
+      )}
+
+      {server.credentialAcquisition.formatNotes && (
+        <>
+          <h3>Credential Format</h3>
+          <p>{server.credentialAcquisition.formatNotes}</p>
+        </>
+      )}
+
+      {server.credentialAcquisition.rotationNotes && (
+        <>
+          <h3>Rotation</h3>
+          <p>{server.credentialAcquisition.rotationNotes}</p>
+        </>
+      )}
+    </>
+  )}
+
   <h2>Architecture</h2>
 
   <p>{server.architecture}</p>
