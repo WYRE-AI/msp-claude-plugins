@@ -31,9 +31,29 @@ Slack does NOT support RFC 7591 Dynamic Client Registration. Each operator must 
 
 Each tenant authorizes their own Slack workspace through the gateway's OAuth flow using the operator-provisioned app.
 
-## Status
+## What this plugin provides
 
-**Scaffold-only.** Marketplace registration + connection wiring; WYRE-authored skill/agent/command content deliberately empty for follow-up.
+WYRE-authored skill / agent / command content (strong first pass, 2026-06-13):
+
+**Skills**
+- `messaging` — read channel history, search the workspace with operators, post messages + thread replies.
+- `channels-users` — resolve `#name`→id and email/id→user; read membership + metadata (the lookup layer).
+- `threads-reactions` — read/reply within threads; reactions as acknowledgement / status signals.
+
+**Agent**
+- `slack-workspace-assistant` — workspace-ops persona: resolve-then-act, posting restraint, threaded by default.
+
+**Commands**
+- `/channel-digest <channel>` — summarize a channel into decisions / action items / open questions.
+- `/find-discussions <query>` — locate where a topic was discussed, with context + permalinks.
+
+The hosted Slack MCP server serves the actual tools through the connection; this content is a guidance/enhancement layer, not a prerequisite for tool access. Tool names referenced are the gateway-prefixed `slack__*` form — confirm exact names against a live `tools/list` once connected. A tool failing with a scope error means that user-token scope wasn't enabled on the operator's Slack app.
+
+**Deferred (follow-up):** a canvases skill + a files skill (the scaffold README lists both surfaces), more commands (e.g. `/post-update`, `/user-lookup`), and exact tool-name verification against the live hosted server (authored without live credentials).
+
+## Conduit relevance
+
+**YES (data layer).** This new plugin content regenerates `docs/src/data/plugins.ts`, and conduit's white-label docs `public/` is built from this Astro source at CI time (per `conduit/docs/white-label.md`). So these plugin pages propagate to conduit's white-label docs — flagged for the conduit digest. (Determined read-only, 2026-06-13.)
 
 ## See also
 

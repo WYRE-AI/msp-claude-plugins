@@ -22,11 +22,29 @@ Stripe's hosted MCP uses **OAuth 2.1 + PKCE with a public client** (`token_endpo
 
 Each tenant authorizes their own Stripe account through the gateway's OAuth flow — no shared credentials.
 
-## Status
+## What this plugin provides
 
-**Scaffold-only.** This plugin currently provides the marketplace registration + connection wiring; WYRE-authored skill/agent/command content is deliberately empty and will be filled in via follow-up PRs (likely with security/policy review for sensitive payment operations).
+WYRE-authored skill / agent / command content (strong first pass, 2026-06-13):
 
-The hosted Stripe MCP server serves its own tools through the connection; this plugin's local skill content is an enhancement layer, not a prerequisite for tool access.
+**Skills**
+- `payments` — payment intents, charges, refunds, balance & payouts; reading *why* a payment failed.
+- `subscriptions` — products/prices, subscription audit + changes, the invoice lifecycle + dunning.
+- `disputes` — chargeback triage by deadline, evidence assembly + submission (draft → review → submit), outcomes.
+
+**Agent**
+- `stripe-billing-support` — billing/revenue-ops persona with confirm-before-write money discipline.
+
+**Commands**
+- `/dispute-triage` — open disputes as a deadline-ordered work queue.
+- `/subscription-audit <customer>` — a customer's plan / status / renewal / dunning health snapshot.
+
+The hosted Stripe MCP server serves the actual tools through the connection; this content is a guidance/enhancement layer (workflows, safety, domain framing), not a prerequisite for tool access. Tool names referenced are the gateway-prefixed `stripe__*` form — confirm exact names against a live `tools/list` once connected.
+
+**Deferred (follow-up):** a dedicated payout-reconciliation skill, more commands (e.g. `/refund-lookup`, `/payout-reconcile`), and exact tool-name verification against the live hosted server (this pass was authored without live credentials, per the overnight scope).
+
+## Conduit relevance
+
+**YES (data layer).** This new plugin content regenerates `docs/src/data/plugins.ts`, and conduit's white-label docs `public/` is built from this Astro source at CI time (per `conduit/docs/white-label.md`). So these plugin pages propagate to conduit's white-label docs — flagged for the conduit digest. (Determined read-only, 2026-06-13.)
 
 ## See also
 

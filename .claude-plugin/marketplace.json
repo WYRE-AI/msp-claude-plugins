@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "owner": {
     "name": "Aaron Sachs"
   },
@@ -800,7 +800,7 @@
       "name": "stripe",
       "source": "./msp-claude-plugins/stripe/stripe",
       "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "accounting",
       "tags": [
         "stripe",
@@ -814,7 +814,7 @@
       "name": "slack",
       "source": "./msp-claude-plugins/slack/slack",
       "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "productivity",
       "tags": [
         "slack",
