@@ -1,0 +1,11 @@
+{
+  "name": "stripe",
+  "version": "0.1.0",
+  "description": "Claude plugins for Stripe — payments, subscriptions, invoices, customers via Stripe's first-party hosted MCP server (mcp.stripe.com)",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

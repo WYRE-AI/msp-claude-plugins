@@ -1,0 +1,11 @@
+{
+  "name": "slack",
+  "version": "0.1.0",
+  "description": "Claude plugins for Slack — messages, channels, canvases, files, reactions via Slack's first-party hosted MCP server (mcp.slack.com)",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

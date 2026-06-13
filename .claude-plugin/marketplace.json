@@ -795,6 +795,34 @@
         "cost",
         "msp"
       ]
+    },
+    {
+      "name": "stripe",
+      "source": "./msp-claude-plugins/stripe/stripe",
+      "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
+      "version": "0.1.0",
+      "category": "accounting",
+      "tags": [
+        "stripe",
+        "payments",
+        "subscriptions",
+        "invoices",
+        "msp"
+      ]
+    },
+    {
+      "name": "slack",
+      "source": "./msp-claude-plugins/slack/slack",
+      "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
+      "version": "0.1.0",
+      "category": "productivity",
+      "tags": [
+        "slack",
+        "messaging",
+        "collaboration",
+        "channels",
+        "msp"
+      ]
     }
   ]
 }
