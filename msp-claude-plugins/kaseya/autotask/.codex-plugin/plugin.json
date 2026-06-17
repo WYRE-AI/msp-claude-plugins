@@ -1,0 +1,28 @@
+{
+  "name": "kaseya-autotask",
+  "version": "0.4.1",
+  "description": "Kaseya Autotask PSA skills and commands for tickets, CRM, projects, contracts, expenses, quotes, and billing.",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0",
+  "keywords": ["autotask", "kaseya", "psa", "tickets", "msp", "agent-plugin"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Kaseya Autotask",
+    "shortDescription": "Autotask PSA workflows for MSPs.",
+    "longDescription": "Autotask PSA skills and commands for ticket triage, time entries, service calls, CRM, projects, contracts, billing, expenses, quotes, and product catalog workflows.",
+    "developerName": "MSP Claude Plugins Community",
+    "category": "Business",
+    "capabilities": ["Analyze", "Write", "Operations"],
+    "websiteURL": "https://github.com/wyre-technology/msp-claude-plugins",
+    "defaultPrompt": [
+      "Create a high-priority ticket.",
+      "Summarize today's open tickets.",
+      "Draft a time entry for this work."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
