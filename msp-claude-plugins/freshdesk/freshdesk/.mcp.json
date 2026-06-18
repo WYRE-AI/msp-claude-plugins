@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "freshdesk": {
+      "type": "http",
+      "url": "https://mcp.wyre.ai/v1/freshdesk/mcp",
+      "headers": {
+        "X-Freshdesk-Domain": "${FRESHDESK_DOMAIN}",
+        "X-Freshdesk-Api-Key": "${FRESHDESK_API_KEY}"
+      }
+    }
+  }
+}

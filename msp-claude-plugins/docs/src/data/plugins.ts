@@ -446,6 +446,82 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'freshdesk',
+    name: 'Freshdesk',
+    vendor: 'Freshdesk',
+    description: 'Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours',
+    category: 'psa',
+    maturity: 'beta',
+    features: [
+      'Contacts Companies',
+      'Knowledge Base',
+      'Sla Business Hours',
+      'Ticketing'
+    ],
+    skills: [
+      { name: 'contacts-companies', description: 'Use this skill when working with Freshdesk contacts and companies — contact CRUD, merge, make_agent, and search; company CRUD and search; and the common MSP workflow of resolving a ticket requester to a contact and then to its parent company through the Freshdesk REST API v2.' },
+      { name: 'knowledge-base', description: 'Use this skill when working with the Freshdesk solutions knowledge base — the nested three-level hierarchy of categories -> folders -> articles.' },
+      { name: 'sla-business-hours', description: 'Use this skill when working with Freshdesk SLA policies and business hours — listing the policies and calendars, understanding how SLA targets combined with business hours compute a ticket\'s due_by and fr_due_by deadlines, and detecting breached or at-risk tickets through the Freshdesk REST API v2.' },
+      { name: 'ticketing', description: 'Use this skill when working with Freshdesk tickets — creating, updating, searching, replying, and adding notes, plus pulling full conversation threads.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Freshdesk MCP tools — header-based authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the MCP server translates into upstream HTTP Basic `apikey:X` auth), the `/api/v2` base URL, `page`/`per_page` pagination, per-minute rate limits, and the Freshdesk search query language with its status/priority encodings.' }
+    ],
+    agents: [
+      { name: 'freshdesk-triage', description: 'Use this agent when an MSP dispatcher, service coordinator, or help-desk lead needs to sweep the Freshdesk open ticket queue, summarize what is waiting, and recommend routing and priority.' }
+    ],
+    commands: [
+      { name: '/search-tickets', description: 'Search Freshdesk tickets with the Freshdesk query language — filter by status, priority, agent, group, type, tag, and date — and return a ranked, readable result list' },
+      { name: '/ticket-summary', description: 'Summarize a single Freshdesk ticket and its full conversation thread — the request, what has happened, current SLA state, and the recommended next action' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'freshdesk/freshdesk',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'inforcer',
+    name: 'Inforcer',
+    vendor: 'Inforcer',
+    description: 'Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)',
+    category: 'security',
+    maturity: 'production',
+    features: [
+      'Assessments',
+      'Audit Events',
+      'Baseline Alignment',
+      'Compliance Reporting',
+      'Identity Governance',
+      'Tenant Management'
+    ],
+    skills: [
+      { name: 'assessments', description: 'Use this skill when listing Inforcer assessments or triggering an assessment run.' },
+      { name: 'audit-events', description: 'Use this skill when searching Inforcer audit events and listing the available event types — the read-only history of changes and activity Inforcer has recorded.' },
+      { name: 'baseline-alignment', description: 'Use this skill when working with Inforcer baselines and alignment — listing baseline templates, reading alignment scores, and pulling alignment details (the per-policy drift breakdown of a tenant against its assigned baseline).' },
+      { name: 'compliance-reporting', description: 'Use this skill when building Inforcer compliance and posture reports — reading per-tenant Microsoft 365 secure scores, combining them with alignment scores, and applying the alignedThreshold / semiAlignedThreshold settings that classify each tenant or policy as aligned, semi-aligned, or drifted.' },
+      { name: 'identity-governance', description: 'Use this skill when reading a tenant\'s identity inventory through Inforcer — listing users, groups, and role assignments for a scoped managed Microsoft 365 tenant.' },
+      { name: 'tenant-management', description: 'Use this skill when working with Inforcer tenants — listing managed Microsoft 365 tenants, resolving a friendly name, DNS domain, or Azure AD GUID to the integer Client Tenant ID, and scoping every other Inforcer operation to the right tenant.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Inforcer MCP tools — the gateway X-Inforcer-Region / X-Inforcer-Api-Key headers, the region-based base URL and upstream Inf-Api-Key header, the /beta/ route prefix, the {success,message,errors,data} response envelope, continuationToken pagination, and the integer Client Tenant ID vs Azure AD GUID gotcha.' }
+    ],
+    agents: [
+      { name: 'inforcer-drift-reporter', description: 'Use this agent when an MSP security lead, vCISO, or service manager needs to sweep the managed Microsoft 365 portfolio for baseline drift and posture using Inforcer — pulling alignment scores, per-policy drift detail, and secure scores across tenants and summarizing them into a prioritized picture.' }
+    ],
+    commands: [
+      { name: '/drift-report', description: 'Portfolio-wide Inforcer baseline drift report — every managed tenant\'s alignment vs its assigned baseline, classified aligned / semi-aligned / drifted and sorted drifted-first, with secure score' },
+      { name: '/tenant-posture', description: 'Single-tenant Microsoft 365 posture snapshot from Inforcer — secure score plus alignment score, band, and the per-policy drift detail against the tenant\'s assigned baseline' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'inforcer/inforcer',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'connectwise-automate',
     name: 'ConnectWise Automate',
     vendor: 'ConnectWise',
@@ -2181,6 +2257,46 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'azure-mcp/azure-mcp',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'stripe',
+    name: 'Stripe',
+    vendor: 'Stripe',
+    description: 'Stripe - payments, subscriptions, invoices, customer management via Stripe\'s first-party hosted MCP (mcp.stripe.com)',
+    category: 'accounting',
+    maturity: 'alpha',
+    features: [],
+    skills: [],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'stripe/stripe',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'slack',
+    name: 'Slack',
+    vendor: 'Slack',
+    description: 'Slack - messages, channels, canvases, files, reactions via Slack\'s first-party hosted MCP (mcp.slack.com)',
+    category: 'productivity',
+    maturity: 'alpha',
+    features: [],
+    skills: [],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'slack/slack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];

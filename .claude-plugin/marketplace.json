@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "owner": {
     "name": "Aaron Sachs"
   },
@@ -131,6 +131,36 @@
         "m365",
         "microsoft-365",
         "multi-tenant",
+        "security",
+        "msp"
+      ]
+    },
+    {
+      "name": "freshdesk",
+      "source": "./msp-claude-plugins/freshdesk/freshdesk",
+      "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
+      "version": "1.0.0",
+      "category": "psa",
+      "mcpRepo": "https://github.com/wyre-technology/freshdesk-mcp",
+      "tags": [
+        "freshdesk",
+        "helpdesk",
+        "ticketing",
+        "psa",
+        "msp"
+      ]
+    },
+    {
+      "name": "inforcer",
+      "source": "./msp-claude-plugins/inforcer/inforcer",
+      "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
+      "version": "1.0.0",
+      "category": "security",
+      "mcpRepo": "https://github.com/wyre-technology/inforcer-mcp",
+      "tags": [
+        "inforcer",
+        "m365",
+        "governance",
         "security",
         "msp"
       ]
