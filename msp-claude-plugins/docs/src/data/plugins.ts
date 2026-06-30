@@ -1571,6 +1571,33 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'saas-alerts',
+    name: 'Saas Alerts',
+    vendor: 'SaaS Alerts',
+    description: 'SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response',
+    category: 'security',
+    maturity: 'alpha',
+    features: [
+      'Triage'
+    ],
+    skills: [
+      { name: 'triage', description: 'Use this skill to triage SaaS Alerts security alerts across managed M365 / Google Workspace tenants — ranking by severity and tenant impact, separating true positives from noise, and producing a shift-ready response plan.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the SaaS Alerts MCP tools — API-key authentication via the gateway header, the MSP/customer/account hierarchy, navigation tools, and paging through events, recommended actions, devices, and billing.' }
+    ],
+    agents: [
+      { name: 'saas-alerts-analyst', description: 'Use this agent when investigating and triaging SaaS Alerts security alerts across managed M365 / Google Workspace tenants — reconstructing what fired, attributing it to a user/tenant, judging severity, and recommending response.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'saas-alerts/saas-alerts',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'crewhu',
     name: 'Crewhu',
     vendor: 'Crewhu',

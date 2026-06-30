@@ -2,7 +2,7 @@
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.10.0",
+  "version": "1.11.0",
   "owner": {
     "name": "Aaron Sachs"
   },
@@ -521,6 +521,20 @@
         "compassone",
         "security",
         "mdr",
+        "msp"
+      ]
+    },
+    {
+      "name": "saas-alerts",
+      "source": "./msp-claude-plugins/saas-alerts/saas-alerts",
+      "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
+      "version": "1.0.0",
+      "category": "security",
+      "tags": [
+        "saas-alerts",
+        "security",
+        "saas-security",
+        "m365",
         "msp"
       ]
     },
