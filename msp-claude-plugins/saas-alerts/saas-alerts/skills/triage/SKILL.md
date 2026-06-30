@@ -14,6 +14,8 @@ triggers:
 
 # SaaS Alerts Triage
 
+## Overview
+
 Triage means sweeping the alert queue across all managed customers,
 ranking by severity and customer impact, separating true positives from
 noise, and handing the on-shift analyst a prioritized, actionable plan.
