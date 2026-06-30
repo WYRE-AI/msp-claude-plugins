@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "saas-alerts": {
+      "type": "http",
+      "url": "https://mcp.wyre.ai/v1/saas-alerts/mcp",
+      "headers": {
+        "X-SaaS-Alerts-API-Key": "${SAAS_ALERTS_API_KEY}"
+      }
+    }
+  }
+}
