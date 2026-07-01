@@ -555,6 +555,20 @@
       ]
     },
     {
+      "name": "saas-alerts",
+      "source": "./msp-claude-plugins/saas-alerts/saas-alerts",
+      "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
+      "version": "1.0.0",
+      "category": "security",
+      "tags": [
+        "saas-alerts",
+        "security",
+        "saas-security",
+        "m365",
+        "msp"
+      ]
+    },
+    {
       "name": "crewhu",
       "source": "./msp-claude-plugins/crewhu/crewhu",
       "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",

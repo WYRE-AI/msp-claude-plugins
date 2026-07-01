@@ -71,6 +71,7 @@ function deriveVendor(sourcePath: string): string {
     spamtitan: 'SpamTitan',
     sherweb: 'Sherweb',
     'email-security': 'Email Security',
+    'saas-alerts': 'SaaS Alerts',
   };
 
   return vendorMap[topLevel] ?? capitalize(topLevel);
