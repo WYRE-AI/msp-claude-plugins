@@ -7,6 +7,7 @@ import InstallCommand from '@/components/InstallCommand.astro';
 import FAQSchema from '@/components/schema/FAQSchema.astro';
 import OrganizationSchema from '@/components/schema/OrganizationSchema.astro';
 import PricingCard from '@/components/PricingCard.astro';
+import Icon from '@/components/Icon.astro';
 import { plugins } from '@/data/plugins';
 import { prompts } from '@/data/prompts';
 
@@ -66,24 +67,26 @@ const faqs = [
   }
 ];
 
+// Features icons are referenced by name and rendered via <Icon name="..." /> below.
+// See docs/src/components/Icon.astro for the icon registry.
 const features = [
   {
-    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>',
+    iconName: 'bolt' as const,
     title: 'One-Command Install',
     description: 'Install all MSP plugins with a single marketplace command. No configuration required.'
   },
   {
-    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>',
+    iconName: 'shield-check' as const,
     title: 'Actively Developed',
     description: 'Plugins built with proper error handling, rate limiting, and security best practices. Autotask PSA has the deepest coverage — other plugins are in active development.'
   },
   {
-    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>',
+    iconName: 'book-open' as const,
     title: 'Deep Domain Knowledge',
     description: 'Each plugin includes comprehensive skills that teach Claude MSP terminology and workflows.'
   },
   {
-    icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>',
+    iconName: 'users' as const,
     title: 'Community Driven',
     description: 'Open source plugins built by MSPs, for MSPs. Contributions welcome!'
   }
@@ -157,7 +160,9 @@ const features = [
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {features.map(feature => (
           <div class="text-center">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent mb-4" set:html={feature.icon} />
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 text-accent mb-4">
+              <Icon name={feature.iconName} />
+            </div>
             <h3 class="font-semibold text-lg mb-2">{feature.title}</h3>
             <p class="text-[var(--muted)] text-sm">{feature.description}</p>
           </div>
@@ -393,10 +398,24 @@ const features = [
 </BaseLayout>
 
 <script define:vars={{ typingExamples }}>
+// ── Reduced-motion check (a11y, WCAG 2.1 SC 2.3.3) ───────────────────
+// Users who've enabled "reduce motion" (OS-level setting) see static values
+// instead of count-up + cycling typewriter animations. Both still convey the
+// same information — just without animating.
+const prefersReducedMotion =
+  window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // ── Count-up animation ──────────────────────────────────────────────
 function animateCounter(el) {
   const target = parseInt(el.dataset.target, 10);
   const suffix = el.dataset.suffix ?? '';
+
+  if (prefersReducedMotion) {
+    // Render the final value immediately; no count-up.
+    el.textContent = target + suffix;
+    return;
+  }
+
   const duration = 1200;
   const start = performance.now();
 
@@ -426,43 +445,52 @@ counters.forEach(el => observer.observe(el));
 // ── Typewriter animation ────────────────────────────────────────────
 const typewriterEl = document.getElementById('typewriter');
 const examples = typingExamples;
-let exampleIndex = 0;
-let charIndex = 0;
-let isDeleting = false;
-let isPaused = false;
 
-function type() {
-  const current = examples[exampleIndex];
+if (prefersReducedMotion) {
+  // Show a single static example; no typewriter cycling.
+  typewriterEl.textContent = examples[0];
+  // Also stop the cursor pulse for users who prefer reduced motion.
+  const cursorEl = document.getElementById('typewriter-cursor');
+  if (cursorEl) cursorEl.classList.remove('animate-pulse');
+} else {
+  let exampleIndex = 0;
+  let charIndex = 0;
+  let isDeleting = false;
+  let isPaused = false;
 
-  if (isPaused) {
-    isPaused = false;
-    isDeleting = true;
-    setTimeout(type, 1800);
-    return;
-  }
+  function type() {
+    const current = examples[exampleIndex];
 
-  if (!isDeleting) {
-    typewriterEl.textContent = current.slice(0, charIndex + 1);
-    charIndex++;
-    if (charIndex === current.length) {
-      isPaused = true;
-      setTimeout(type, 50);
+    if (isPaused) {
+      isPaused = false;
+      isDeleting = true;
+      setTimeout(type, 1800);
       return;
     }
-    setTimeout(type, 38);
-  } else {
-    typewriterEl.textContent = current.slice(0, charIndex - 1);
-    charIndex--;
-    if (charIndex === 0) {
-      isDeleting = false;
-      exampleIndex = (exampleIndex + 1) % examples.length;
-      setTimeout(type, 400);
-      return;
+
+    if (!isDeleting) {
+      typewriterEl.textContent = current.slice(0, charIndex + 1);
+      charIndex++;
+      if (charIndex === current.length) {
+        isPaused = true;
+        setTimeout(type, 50);
+        return;
+      }
+      setTimeout(type, 38);
+    } else {
+      typewriterEl.textContent = current.slice(0, charIndex - 1);
+      charIndex--;
+      if (charIndex === 0) {
+        isDeleting = false;
+        exampleIndex = (exampleIndex + 1) % examples.length;
+        setTimeout(type, 400);
+        return;
+      }
+      setTimeout(type, 18);
     }
-    setTimeout(type, 18);
   }
+
+  // Small delay before starting so the page has settled
+  setTimeout(type, 800);
 }
-
-// Small delay before starting so the page has settled
-setTimeout(type, 800);
 </script>

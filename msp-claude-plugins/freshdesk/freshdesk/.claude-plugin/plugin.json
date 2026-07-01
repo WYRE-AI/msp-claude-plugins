@@ -1,0 +1,11 @@
+{
+  "name": "freshdesk",
+  "version": "1.0.0",
+  "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

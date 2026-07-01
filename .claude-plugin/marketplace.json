@@ -136,6 +136,36 @@
       ]
     },
     {
+      "name": "freshdesk",
+      "source": "./msp-claude-plugins/freshdesk/freshdesk",
+      "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
+      "version": "1.0.0",
+      "category": "psa",
+      "mcpRepo": "https://github.com/wyre-technology/freshdesk-mcp",
+      "tags": [
+        "freshdesk",
+        "helpdesk",
+        "ticketing",
+        "psa",
+        "msp"
+      ]
+    },
+    {
+      "name": "inforcer",
+      "source": "./msp-claude-plugins/inforcer/inforcer",
+      "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
+      "version": "1.0.0",
+      "category": "security",
+      "mcpRepo": "https://github.com/wyre-technology/inforcer-mcp",
+      "tags": [
+        "inforcer",
+        "m365",
+        "governance",
+        "security",
+        "msp"
+      ]
+    },
+    {
       "name": "connectwise-automate",
       "source": "./msp-claude-plugins/connectwise/automate",
       "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
@@ -807,6 +837,34 @@
         "cloud",
         "observability",
         "cost",
+        "msp"
+      ]
+    },
+    {
+      "name": "stripe",
+      "source": "./msp-claude-plugins/stripe/stripe",
+      "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
+      "version": "0.1.0",
+      "category": "accounting",
+      "tags": [
+        "stripe",
+        "payments",
+        "subscriptions",
+        "invoices",
+        "msp"
+      ]
+    },
+    {
+      "name": "slack",
+      "source": "./msp-claude-plugins/slack/slack",
+      "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
+      "version": "0.1.0",
+      "category": "productivity",
+      "tags": [
+        "slack",
+        "messaging",
+        "collaboration",
+        "channels",
         "msp"
       ]
     }

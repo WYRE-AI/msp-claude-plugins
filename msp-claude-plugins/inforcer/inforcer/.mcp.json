@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "inforcer": {
+      "type": "http",
+      "url": "https://mcp.wyre.ai/v1/inforcer/mcp",
+      "headers": {
+        "X-Inforcer-Region": "${INFORCER_REGION}",
+        "X-Inforcer-Api-Key": "${INFORCER_API_KEY}"
+      }
+    }
+  }
+}
