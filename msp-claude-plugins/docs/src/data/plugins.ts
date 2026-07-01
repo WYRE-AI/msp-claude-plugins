@@ -2325,6 +2325,41 @@ export const plugins: Plugin[] = [
     },
     path: 'slack/slack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'meraki',
+    name: 'Meraki',
+    vendor: 'Meraki',
+    description: 'Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless',
+    category: 'network',
+    maturity: 'beta',
+    features: [
+      'Device Management',
+      'Security Appliance',
+      'Troubleshooting'
+    ],
+    skills: [
+      { name: 'devices', description: 'Use this skill when working with Cisco Meraki device inventory and lifecycle -- listing devices in a network, getting a device by serial, rebooting, removing, and checking device/uplink status via meraki_raw_request across MX, MS, MR, MV, MG, and MT hardware.' },
+      { name: 'security-appliance', description: 'Use this skill when working with the Cisco Meraki MX security appliance -- reviewing and updating L3 outbound firewall rules (meraki_appliance_firewall_l3_get/update) and checking site-to-site VPN status (meraki_appliance_vpn_status_get).' },
+      { name: 'troubleshooting', description: 'Use this skill for hands-on Cisco Meraki troubleshooting -- running live tools (ping, cable test, throughput, wake-on-LAN) via meraki_raw_request, rebooting devices, and checking uplink/connectivity status.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Cisco Meraki MCP tools -- the full tool catalog, gateway header authentication, Dashboard API v1 structure, Link-header cursor pagination, per-org rate limiting, the read-only / confirm_destructive_action safety model, the meraki_raw_request escape hatch, error handling, and best practices.' }
+    ],
+    agents: [
+      { name: 'meraki-network-auditor', description: 'Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki organization — sweeping networks, devices, and appliances to surface offline or alerting hardware, appliances with site-to-site VPN peers down, overly-permissive firewall rules, and SSIDs configured with weak or open authentication.' }
+    ],
+    commands: [
+      { name: '/meraki-find-device', description: 'Locate a Meraki device by serial, name, or MAC across an organization\'s networks' },
+      { name: '/meraki-firewall-review', description: 'Pull and summarize a Meraki network\'s L3 firewall rules and flag overly-permissive (any/any allow) rules' },
+      { name: '/meraki-network-health', description: 'Sweep an organization\'s networks, devices, and appliance VPN status for a site-health overview' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'meraki/meraki',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
