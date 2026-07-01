@@ -1,9 +1,9 @@
 {
   "name": "immybot",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, and script execution for MSPs (Entra ID OAuth)",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
   "repository": "https://github.com/wyre-technology/msp-claude-plugins",

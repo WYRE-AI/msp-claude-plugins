@@ -2,7 +2,7 @@
 
 > Connect your MSP tools to Claude AI via the Model Context Protocol (MCP). 24 plugins covering Autotask, ConnectWise, Datto RMM, NinjaOne, IT Glue, and more.
 
-MSP Claude Plugins is a free, open-source collection of integrations that connect Managed Service Provider (MSP) platforms to Claude via the Model Context Protocol (MCP). It is built and maintained by WYRE Technology.
+MSP Claude Plugins is a free, open-source collection of integrations that connect Managed Service Provider (MSP) platforms to Claude via the Model Context Protocol (MCP). It is built and maintained by WYRE AI.
 
 ## What it does
 

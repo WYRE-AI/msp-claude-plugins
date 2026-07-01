@@ -209,7 +209,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for our tiered contribution guide.
 
 ## Community
 
-This project is maintained by [WYRE Technology](https://wyretechnology.com), a Chattanooga-based
+This project is maintained by [WYRE AI](https://wyretechnology.com), a Chattanooga-based
 MSP focused on AI enablement.
 
 - **Questions or feedback?** Open a [Discussion](https://github.com/wyre-technology/msp-claude-plugins/discussions)

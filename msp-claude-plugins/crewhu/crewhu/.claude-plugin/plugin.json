@@ -1,9 +1,9 @@
 {
   "name": "crewhu",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, and prize/redemption gamification for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
   "repository": "https://github.com/wyre-technology/msp-claude-plugins",
