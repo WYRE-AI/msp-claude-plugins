@@ -2,11 +2,7 @@
   "mcpServers": {
     "ncentral": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/ncentral/mcp",
-      "headers": {
-        "X-NCentral-Server-URL": "${NCENTRAL_SERVER_URL}",
-        "X-NCentral-JWT": "${NCENTRAL_JWT}"
-      }
+      "url": "https://conduit.wyre.ai/v1/ncentral/mcp"
     }
   }
 }

@@ -19,7 +19,7 @@ after any scheduled task or direct support task run.
 
 ## Prerequisites
 
-- N-central MCP server connected with valid `NCENTRAL_SERVER_URL` and `NCENTRAL_JWT`
+- N-central connected in Conduit (Connections → N-able N-central) with a valid Server URL and User-API Token
 - Tools: `ncentral_list_device_tasks`, `ncentral_get_task`, `ncentral_get_task_status`, `ncentral_get_task_status_details`
 
 ## Steps

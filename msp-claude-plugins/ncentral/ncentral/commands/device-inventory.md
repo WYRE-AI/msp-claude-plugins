@@ -24,7 +24,7 @@ before a QBR, a renewal, or a hardware-refresh conversation.
 
 ## Prerequisites
 
-- N-central MCP server connected with valid `NCENTRAL_SERVER_URL` and `NCENTRAL_JWT`
+- N-central connected in Conduit (Connections → N-able N-central) with a valid Server URL and User-API Token
 - Tools: `ncentral_list_customers`, `ncentral_list_sites`, `ncentral_list_device_filters`, `ncentral_list_devices`, `ncentral_list_devices_by_org_unit`, `ncentral_get_device_lifecycle`, `ncentral_get_device_assets`
 
 ## Steps

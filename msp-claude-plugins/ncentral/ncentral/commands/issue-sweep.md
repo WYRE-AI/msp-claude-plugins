@@ -20,7 +20,7 @@ morning-check workflow for N-central shops.
 
 ## Prerequisites
 
-- N-central MCP server connected with valid `NCENTRAL_SERVER_URL` and `NCENTRAL_JWT`
+- N-central connected in Conduit (Connections → N-able N-central) with a valid Server URL and User-API Token
 - Tools: `ncentral_list_customers`, `ncentral_list_active_issues`, `ncentral_list_job_statuses`, `ncentral_list_maintenance_windows`, `ncentral_get_device_service_status`
 
 ## Steps

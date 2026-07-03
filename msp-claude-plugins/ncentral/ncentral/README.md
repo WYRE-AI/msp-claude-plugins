@@ -4,7 +4,7 @@ Claude Code plugin for the N-able N-central RMM platform.
 
 ## Overview
 
-This plugin gives Claude working knowledge of N-central so MSP technicians can inventory devices, triage active issues, inspect scheduled-task results, and manage custom properties without leaving the chat. It talks to N-central through the [WYRE MCP Gateway](https://mcp.wyre.ai), so no local SDK or proxy is required.
+This plugin gives Claude working knowledge of N-central so MSP technicians can inventory devices, triage active issues, inspect scheduled-task results, and manage custom properties without leaving the chat. It talks to N-central through [Conduit](https://conduit.wyre.ai), so no local SDK, proxy, or credentials on your machine are required.
 
 ## What Is N-central
 
@@ -27,29 +27,29 @@ Install via the [MSP Claude Plugins marketplace](https://github.com/wyre-technol
 /plugin install ncentral
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/ncentral/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/ncentral/mcp`. Your MCP client authenticates to Conduit with OAuth (it will prompt you to sign in on first use) — there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-Set the following environment variables (or paste credentials into the gateway UI):
+Connect N-central once in the Conduit web UI (**Connections → N-able N-central**). Conduit stores the credentials and injects them per-request; they never live on your machine:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `NCENTRAL_SERVER_URL` | Yes | Base URL of **your** N-central server, e.g. `https://ncentral.yourcompany.com`. Every MSP has its own server FQDN — there is no shared cloud endpoint. |
-| `NCENTRAL_JWT` | Yes | User-API Token (JWT) for a dedicated API user |
+| Field | Required | Description |
+|-------|----------|-------------|
+| Server URL | Yes | Base URL of **your** N-central server, e.g. `https://ncentral.yourcompany.com`. Every MSP has its own server FQDN — there is no shared cloud endpoint. |
+| User-API Token (JWT) | Yes | Token for a dedicated API user |
 
 ### Generating the JWT
 
 1. In the N-central UI, go to **Administration → User Management → Users** and open (or create) the API user.
 2. The user must have **MFA disabled** — N-central rejects API token authentication for MFA-enabled users. Use a dedicated least-privilege API user, not a shared admin.
-3. Under **API Access**, click **Generate JSON Web Token** and copy the token — that is your `NCENTRAL_JWT`.
+3. Under **API Access**, click **Generate JSON Web Token** and copy the token — paste it into Conduit's **User-API Token** field.
 
 The JWT is the *permanent* User-API Token. The MCP server exchanges it for short-lived access (~1 h) and refresh (~25 h) tokens automatically; you never handle those.
 
 ### On-prem notes
 
-- **Per-server FQDN** — credentials are only valid on the server that issued them; point `NCENTRAL_SERVER_URL` at your exact server.
-- **Gateway reachability** — the WYRE gateway must be able to reach the server over HTTPS/443. LAN-only servers need an inbound path.
+- **Per-server FQDN** — credentials are only valid on the server that issued them; point the **Server URL** field at your exact server.
+- **Conduit reachability** — Conduit must be able to reach the server over HTTPS/443. LAN-only servers need an inbound path.
 - **Private CA certificates** — servers with internal-CA certificates need the CA bundle supplied to the MCP sidecar via `NODE_EXTRA_CA_CERTS`. Never disable TLS verification as a workaround.
 - **Version drift** — several endpoints are N-able "preview" stage and vary by release. Check `https://<your-server>/api-explorer` (Swagger UI) for what your server actually ships.
 
@@ -70,14 +70,14 @@ The JWT is the *permanent* User-API Token. The MCP server exchanges it for short
 
 ## Skills Bundled
 
-- `api-patterns` — JWT auth model, gateway headers, pagination envelope, rate limits, preview endpoints, on-prem specifics
+- `api-patterns` — JWT auth model, Conduit connection, pagination envelope, rate limits, preview endpoints, on-prem specifics
 - `devices` — Device filters, asset/warranty lookups, lifecycle updates, service-monitor triage
 - `organizations` — SO/customer/site hierarchy, registration tokens, org- and device-level custom properties
 - `monitoring-tasks` — Active-issue triage, job statuses, task drill-down, direct-task safety
 
 ## Available Tools
 
-Provided by the N-central MCP server through the WYRE MCP Gateway. Tools sit behind decision-tree navigation: use `ncentral_navigate` to enter a domain, `ncentral_back` to go up, and `ncentral_status` to see where you are.
+Provided by the N-central MCP server through Conduit. Tools sit behind decision-tree navigation: use `ncentral_navigate` to enter a domain, `ncentral_back` to go up, and `ncentral_status` to see where you are.
 
 | Domain | Tools |
 |--------|-------|
@@ -120,7 +120,7 @@ Aggregate outcome first, then per-device return codes and output for the failure
 
 - **401 on every call** — the JWT is invalid/expired or the API user has MFA enabled. Regenerate the token and verify MFA is off. `ncentral_validate_token` confirms which user the token authenticates as.
 - **404 on specific tools** — the endpoint is preview-stage and your N-central release doesn't ship it. Check `https://<server>/api-explorer` and `ncentral_server_info`.
-- **TLS errors from the gateway** — on-prem server with a private-CA certificate; supply the CA bundle via `NODE_EXTRA_CA_CERTS` on the sidecar. Do not disable verification.
+- **TLS errors from Conduit** — on-prem server with a private-CA certificate; supply the CA bundle via `NODE_EXTRA_CA_CERTS` on the sidecar. Do not disable verification.
 - **429 throttling** — the sidecar retries automatically; if sweeps stay slow, use saved device filters (`filterId`) and org-unit scoping instead of full-fleet pulls.
 - **Direct tasks** — `ncentral_create_direct_task` executes immediately on a live device with no dry run and no cancel. Confirm the device, script, and parameters explicitly every time.
 

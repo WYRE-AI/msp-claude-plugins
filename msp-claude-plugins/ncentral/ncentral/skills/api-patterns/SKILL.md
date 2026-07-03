@@ -1,9 +1,9 @@
 ---
 name: "N-central API Patterns"
-when_to_use: "When working with N-central authentication, gateway headers, pagination, rate limits, or preview-endpoint availability for the N-central MCP server"
+when_to_use: "When working with N-central authentication, the Conduit connection, pagination, rate limits, or preview-endpoint availability for the N-central MCP server"
 description: >
   Use this skill when working with the N-central MCP tools — User-API Token
-  (JWT) authentication via the `X-NCentral-*` gateway headers, 1-based
+  (JWT) authentication through Conduit, 1-based
   pagination with the totalItems/totalPages envelope, rate-limit behavior,
   preview-endpoint caveats, and on-prem server specifics.
 triggers:
@@ -30,23 +30,20 @@ per-tenant server FQDN.
 
 ## Connection & Authentication
 
-N-central uses a permanent **User-API Token** (a JWT) plus your server URL,
-passed via headers:
+The plugin talks to N-central through **Conduit** (`conduit.wyre.ai`). The
+MCP client authenticates to Conduit with OAuth — no client-side environment
+variables or headers. N-central credentials (a permanent **User-API Token**
+JWT plus your server URL) are entered once in Conduit's connect UI; Conduit
+stores them and injects them per-request as sidecar headers:
 
-| Header | Value |
+| Header (Conduit → sidecar, server-side) | Value |
 |--------|-------|
 | `X-NCentral-Server-URL` | Base URL of your N-central server (e.g. `https://ncentral.yourcompany.com`) |
 | `X-NCentral-JWT` | The User-API Token JWT |
 
-The gateway maps the environment variables `NCENTRAL_SERVER_URL` and
-`NCENTRAL_JWT` onto these headers automatically. The MCP server handles
-upstream auth translation — do **not** send `Authorization: Bearer` to the
-gateway.
-
-```bash
-export NCENTRAL_SERVER_URL="https://ncentral.yourcompany.com"
-export NCENTRAL_JWT="eyJhbGciOi..."
-```
+The MCP server handles upstream auth translation from those headers. If a
+tool call fails with an authentication error, fix the credentials in
+Conduit's connect page — not in the MCP client.
 
 ### How the token flow actually works
 
@@ -124,9 +121,9 @@ exact version.
 
 - **Per-server FQDN** — there is no shared cloud endpoint. Each MSP's
   N-central server has its own URL, and credentials are only valid there.
-- **Gateway reachability** — the WYRE gateway must be able to reach the
+- **Conduit reachability** — Conduit must be able to reach the
   server. Firewalled or LAN-only on-prem servers need an inbound path
-  (HTTPS/443) from the gateway.
+  (HTTPS/443) from Conduit.
 - **Private CA certificates** — if the server presents a certificate from
   an internal CA, the MCP sidecar needs the CA bundle via
   `NODE_EXTRA_CA_CERTS`. Never disable TLS verification as a workaround.
