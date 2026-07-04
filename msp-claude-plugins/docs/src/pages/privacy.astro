@@ -1,104 +1,24 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import Header from '@/components/Header.astro';
-import Footer from '@/components/Footer.astro';
+// Redirect stub — do not add legal copy back here.
+//
+// The canonical Privacy Policy is the app-served document at /privacy
+// (wyre-technology/mcp-gateway src/web/legal.ts). This static build
+// previously carried its own full copy at /privacy/, so the same domain
+// served two divergent policies depending on trailing slash. The app
+// route takes precedence for the exact path; this stub catches the
+// static /privacy/ (directory-index) variant and forwards it.
 ---
 
-<BaseLayout
-  title="Privacy Policy - WYRE Technology"
-  description="Privacy Policy for the WYRE MCP Gateway and MSP Claude Plugins."
->
-  <Header />
-
-  <main class="flex-1 py-16">
-    <div class="container max-w-3xl">
-      <h1 class="text-3xl font-bold mb-2">Privacy Policy</h1>
-      <p class="text-[var(--muted)] mb-10">Last updated: March 18, 2026</p>
-
-      <div class="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-[var(--text)]">
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">1. What We Collect</h2>
-          <p class="text-[var(--muted)] leading-relaxed mb-3">We collect the following information:</p>
-          <ul class="text-[var(--muted)] leading-relaxed space-y-2 list-disc pl-5">
-            <li><strong class="text-[var(--text)]">Account information:</strong> Your name and email address, provided when you sign in via Auth0.</li>
-            <li><strong class="text-[var(--text)]">API credentials:</strong> Third-party platform credentials (API keys, tokens) you submit to connect your MSP tools. These are encrypted at rest and never stored in plaintext.</li>
-            <li><strong class="text-[var(--text)]">Usage data:</strong> Audit logs of MCP tool calls made through the Service, including timestamps, vendor, and tool name. These logs are associated with your account and are accessible to you.</li>
-            <li><strong class="text-[var(--text)]">Waitlist data:</strong> If you signed up for the waitlist, we stored your email address and optionally your name.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">2. How We Use Your Data</h2>
-          <ul class="text-[var(--muted)] leading-relaxed space-y-2 list-disc pl-5">
-            <li>To authenticate you and operate your account.</li>
-            <li>To proxy your requests to connected MSP platforms using your stored credentials.</li>
-            <li>To provide audit logs for your own compliance and security monitoring.</li>
-            <li>To send transactional emails (account setup, service notices). We do not send marketing email without your consent.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">3. How We Protect Your Data</h2>
-          <ul class="text-[var(--muted)] leading-relaxed space-y-2 list-disc pl-5">
-            <li>All API credentials are encrypted at rest using AES-256 encryption with per-user key isolation.</li>
-            <li>All data is transmitted over TLS.</li>
-            <li>Credentials are only decrypted in memory, for the duration of a proxied request.</li>
-            <li>Our infrastructure runs on Microsoft Azure with access restricted to WYRE Technology staff.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">4. Data Sharing</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            We do not sell your data. We do not share your credentials or personal information with third parties except:
-          </p>
-          <ul class="text-[var(--muted)] leading-relaxed space-y-2 list-disc pl-5 mt-2">
-            <li>The third-party MSP platforms you explicitly connect (your credentials are passed to their APIs on your behalf).</li>
-            <li>Auth0, our identity provider, which processes your authentication.</li>
-            <li>Stripe, our payment processor, if you subscribe to a paid plan.</li>
-            <li>As required by law.</li>
-          </ul>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">5. Data Retention</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            Your credentials and account data are retained while your account is active. Audit logs are retained for 90 days. You may request deletion of your data at any time by contacting us — we will process deletion within 30 days.
-          </p>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">6. Your Rights</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            You have the right to access, correct, or delete your personal data at any time. You can remove connected credentials directly within the Service. For account deletion or data export requests, contact us via Discord or email.
-          </p>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">7. Cookies</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            The Service uses a session cookie to maintain your authenticated session. No third-party tracking or advertising cookies are used.
-          </p>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">8. Changes to This Policy</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            We may update this Privacy Policy from time to time. We will notify you of material changes via email. Continued use of the Service after changes constitutes acceptance.
-          </p>
-        </section>
-
-        <section>
-          <h2 class="text-xl font-semibold mb-3">9. Contact</h2>
-          <p class="text-[var(--muted)] leading-relaxed">
-            Questions or requests regarding your data? Find us on <a href="https://discord.gg/cCPtPaFw8e" class="text-accent underline">Discord</a> or reply to any email from us.
-          </p>
-        </section>
-
-      </div>
-    </div>
-  </main>
-
-  <Footer />
-</BaseLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Privacy Policy — WYRE MCP Gateway</title>
+    <meta http-equiv="refresh" content="0; url=/privacy" />
+    <link rel="canonical" href="https://mcp.wyre.ai/privacy" />
+    <meta name="robots" content="noindex" />
+  </head>
+  <body>
+    <p>The Privacy Policy lives at <a href="/privacy">/privacy</a>. You are being redirected.</p>
+  </body>
+</html>
