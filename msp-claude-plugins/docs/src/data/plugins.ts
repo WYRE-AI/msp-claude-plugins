@@ -2360,6 +2360,42 @@ export const plugins: Plugin[] = [
     },
     path: 'meraki/meraki',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'ncentral',
+    name: 'Ncentral',
+    vendor: 'Ncentral',
+    description: 'N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers',
+    category: 'rmm',
+    maturity: 'beta',
+    features: [
+      'Device Management',
+      'Monitoring Tasks',
+      'Organization Management'
+    ],
+    skills: [
+      { name: 'devices', description: 'Use this skill when working with N-central device records — listing with saved device filters (filterId), asset and warranty lookups, lifecycle reads and updates, and service-monitor status triage on a single device.' },
+      { name: 'monitoring-tasks', description: 'Use this skill when working with N-central monitoring and automation — active-issue triage per customer or site, job statuses, the scheduled task → status → per-device details drill-down, and the safety rules for direct-support task execution.' },
+      { name: 'organizations', description: 'Use this skill when working with N-central org units — the service organization → customer → site hierarchy, the org-unit vs customer distinction, agent registration tokens (credential-sensitive), and custom properties at both org and device level.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the N-central MCP tools — User-API Token (JWT) authentication through Conduit, 1-based pagination with the totalItems/totalPages envelope, rate-limit behavior, preview-endpoint caveats, and on-prem server specifics.' }
+    ],
+    agents: [
+      { name: 'device-auditor', description: 'Use this agent when the user wants a device audit across N-central customers - inventory sweeps, missing asset data, expired or expiring warranties, untracked lifecycle records, or failed service monitors.' },
+      { name: 'issue-triager', description: 'Use this agent when the user wants active issues triaged across N-central customers - morning sweeps, severity ranking, root-cause grouping, or deciding what to remediate first.' }
+    ],
+    commands: [
+      { name: '/device-inventory', description: 'Inventory devices for an N-central customer or site with class, warranty, and monitor-health breakdown' },
+      { name: '/issue-sweep', description: 'Sweep active issues across N-central customers, grouped by severity and probable root cause' },
+      { name: '/task-status', description: 'Drill into an N-central scheduled task\'s outcome - aggregate status down to per-device results and output' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'ncentral/ncentral',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
