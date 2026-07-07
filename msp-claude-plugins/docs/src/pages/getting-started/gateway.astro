@@ -68,37 +68,21 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
     <li>All vendors are available through the single connection — tool names are prefixed with the vendor (e.g., <code>autotask__list_tickets</code>)</li>
   </ol>
 
-  <h2 id="supported-vendors">Supported Vendors</h2>
+  <h2 id="supported-vendors">Supported Connections</h2>
   <p>
-    All vendors below are available through the unified endpoint at
+    Every connection is available through the unified endpoint at
     <code>https://mcp.wyre.ai/v1/mcp</code>. You only need to connect the vendors
-    you use — the gateway automatically discovers which vendors you have credentials for.
+    you use — the gateway automatically discovers which ones you have credentials for.
   </p>
-  <table>
-    <thead><tr><th>Vendor</th><th>Tool Prefix</th></tr></thead>
-    <tbody>
-      <tr><td>Autotask PSA</td><td><code>autotask__</code></td></tr>
-      <tr><td>Datto RMM</td><td><code>datto-rmm__</code></td></tr>
-      <tr><td>IT Glue</td><td><code>itglue__</code></td></tr>
-      <tr><td>Syncro MSP</td><td><code>syncro__</code></td></tr>
-      <tr><td>Atera</td><td><code>atera__</code></td></tr>
-      <tr><td>SuperOps.ai</td><td><code>superops__</code></td></tr>
-      <tr><td>HaloPSA</td><td><code>halopsa__</code></td></tr>
-      <tr><td>ConnectWise PSA</td><td><code>connectwise-psa__</code></td></tr>
-      <tr><td>ConnectWise Automate</td><td><code>connectwise-automate__</code></td></tr>
-      <tr><td>NinjaOne</td><td><code>ninjaone__</code></td></tr>
-      <tr><td>Liongard</td><td><code>liongard__</code></td></tr>
-      <tr><td>SalesBuildr</td><td><code>salesbuildr__</code></td></tr>
-      <tr><td>Pax8</td><td><code>pax8__</code></td></tr>
-      <tr><td>SentinelOne</td><td><code>sentinelone__</code></td></tr>
-      <tr><td>Huntress</td><td><code>huntress__</code></td></tr>
-
-      <tr><td>RocketCyber</td><td><code>rocketcyber__</code></td></tr>
-      <tr><td>Blumira</td><td><code>blumira__</code></td></tr>
-      <tr><td>ThreatLocker</td><td><code>threatlocker__</code></td></tr>
-      <tr><td>Microsoft 365</td><td><code>m365__</code></td></tr>
-    </tbody>
-  </table>
+  <p>
+    Each vendor's tools are namespaced with a <code>&lt;vendor&gt;__</code> prefix — for
+    example <code>autotask__list_tickets</code>, <code>datto-rmm__list_devices</code>, or
+    <code>m365__list_users</code>.
+  </p>
+  <p>
+    <a href={`${baseUrl}plugins/`}>See the full connections catalog →</a> for the complete,
+    always-current list of supported vendors and the tools each one provides.
+  </p>
 
   <h2>Claude Code (CLI)</h2>
   <p>
