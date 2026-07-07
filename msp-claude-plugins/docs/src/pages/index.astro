@@ -180,11 +180,12 @@ const features = [
           Comprehensive support for the most popular MSP platforms. Each plugin includes skills,
           commands, and deep API knowledge.
         </p>
-        <p class="text-sm text-[var(--muted)] max-w-xl mx-auto">
+        <p class="text-sm text-[var(--muted)] max-w-xl mx-auto mb-6">
           Covering {plugins.map((p, i) => (
             <span>{p.name}{i < plugins.length - 1 ? ', ' : '.'}</span>
           ))}
         </p>
+        <a href={`${baseUrl}plugins/`} class="btn btn-primary">Browse all connections →</a>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -237,6 +238,7 @@ const features = [
           <div class="flex flex-wrap gap-3">
             <a href={`${gatewayUrl}/auth/choose`} class="btn btn-primary text-sm">Get Started</a>
             <a href={`${baseUrl}getting-started/gateway/`} class="btn btn-secondary text-sm">Learn more about the gateway</a>
+            <a href={`${baseUrl}getting-started/security/`} class="btn btn-secondary text-sm">Read our security model</a>
           </div>
         </div>
 
