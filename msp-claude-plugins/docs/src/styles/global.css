@@ -145,6 +145,20 @@
   .prose blockquote {
     @apply border-l-4 border-accent pl-4 italic text-[var(--muted)];
   }
+
+  .prose :is(h1, h2, h3, h4) {
+    scroll-margin-top: 5rem; /* clear the sticky h-16 header when jumping to an anchor */
+  }
+
+  .heading-anchor {
+    @apply ml-2 text-[var(--muted)] no-underline opacity-0 transition-opacity duration-150;
+    cursor: pointer;
+  }
+
+  .prose :is(h2, h3, h4):hover .heading-anchor,
+  .heading-anchor:focus {
+    @apply opacity-100;
+  }
 }
 
 /* Copy button for code blocks */

@@ -27,3 +27,64 @@ const pagePath = Astro.url.pathname;
   </div>
   <Footer />
 </BaseLayout>
+
+<script>
+  // Auto-generate stable, copyable anchors for docs headings.
+  // Pages are .astro (raw HTML headings), so Astro's Markdown auto-slug never
+  // runs — assign ids client-side. Existing hand-authored ids are preserved.
+  function slugify(text: string): string {
+    return text
+      .trim()
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '') // drop punctuation
+      .replace(/\s+/g, '-')     // spaces -> hyphens
+      .replace(/-+/g, '-')      // collapse repeats
+      .replace(/^-|-$/g, '');   // trim leading/trailing hyphens
+  }
+
+  const article = document.querySelector('article.prose');
+  if (article) {
+    const used = new Set<string>();
+    // Seed with ids that already exist so generated ones never collide.
+    article.querySelectorAll('[id]').forEach((el) => used.add(el.id));
+
+    const headings = article.querySelectorAll<HTMLElement>('h2, h3, h4');
+    headings.forEach((heading) => {
+      // Compute the slug from heading text BEFORE appending the '#' link, so
+      // the affordance can never pollute the id.
+      let id = heading.id;
+      if (!id) {
+        const base = slugify(heading.textContent || '');
+        if (!base) return; // skip empty / icon-only headings
+        id = base;
+        let n = 1;
+        while (used.has(id)) id = `${base}-${n++}`;
+        heading.id = id;
+      }
+      used.add(id);
+
+      if (heading.querySelector('.heading-anchor')) return; // don't double-inject
+
+      const label = heading.textContent?.trim() ?? '';
+      const anchor = document.createElement('a');
+      anchor.className = 'heading-anchor';
+      anchor.href = `#${id}`;
+      anchor.setAttribute('aria-label', `Link to this section: ${label}`);
+      anchor.textContent = '#';
+      anchor.addEventListener('click', () => {
+        // Let the browser update the hash + scroll natively (graceful default);
+        // additionally copy the full deep link when the clipboard is available.
+        const url = `${location.origin}${location.pathname}#${id}`;
+        navigator.clipboard?.writeText(url).catch(() => {});
+      });
+      heading.appendChild(anchor);
+    });
+
+    // The browser tried to resolve location.hash before these ids existed —
+    // re-scroll now that they do.
+    if (location.hash.length > 1) {
+      const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      target?.scrollIntoView();
+    }
+  }
+</script>
