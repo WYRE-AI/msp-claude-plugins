@@ -1,0 +1,57 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Marketplace + plugin validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so the bump gate can diff against the PR merge base.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Claude Code CLI
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate marketplace manifest (root)
+        run: claude plugin validate .
+
+      - name: Drift check + version bump gate
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            node scripts/check-marketplace-drift.mjs --base "origin/$BASE_REF"
+          else
+            node scripts/check-marketplace-drift.mjs
+          fi
+
+      # Per-plugin validation checks skill/agent/command frontmatter, which
+      # root validation does not. Advisory until the repo-wide frontmatter
+      # cleanup lands (45/63 plugins currently fail on pre-existing agent
+      # frontmatter YAML). TODO: drop continue-on-error once that cleanup
+      # merges, then add --strict once warnings hit zero.
+      - name: Validate each plugin (advisory)
+        continue-on-error: true
+        run: |
+          fail=0
+          for dir in $(node -e "require('./.claude-plugin/marketplace.json').plugins.forEach(p=>console.log(p.source.replace('./','')))"); do
+            echo "::group::${dir}"
+            if ! claude plugin validate "$dir"; then
+              echo "::warning title=Plugin validation failed::${dir}"
+              fail=$((fail+1))
+            fi
+            echo "::endgroup::"
+          done
+          echo "${fail} plugin(s) failed per-plugin validation"
+          [ "$fail" -eq 0 ]
