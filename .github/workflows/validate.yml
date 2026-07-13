@@ -37,12 +37,10 @@ jobs:
           fi
 
       # Per-plugin validation checks skill/agent/command frontmatter, which
-      # root validation does not. Advisory until the repo-wide frontmatter
-      # cleanup lands (45/63 plugins currently fail on pre-existing agent
-      # frontmatter YAML). TODO: drop continue-on-error once that cleanup
-      # merges, then add --strict once warnings hit zero.
-      - name: Validate each plugin (advisory)
-        continue-on-error: true
+      # root validation does not. Hard-failing since #137 landed the repo-wide
+      # frontmatter cleanup (63/63 plugins pass). TODO: add --strict once
+      # warnings hit zero.
+      - name: Validate each plugin
         run: |
           fail=0
           for dir in $(node -e "require('./.claude-plugin/marketplace.json').plugins.forEach(p=>console.log(p.source.replace('./','')))"); do
