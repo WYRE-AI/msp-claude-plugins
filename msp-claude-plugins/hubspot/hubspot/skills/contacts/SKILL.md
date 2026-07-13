@@ -5,18 +5,11 @@ description: >
   updating, and managing contact records in HubSpot CRM. Covers contact
   fields, lifecycle stages, lead status, search patterns, and associating
   contacts with companies and deals.
-when_to_use: "When searching, creating, updating, and managing contact records in HubSpot CRM"
-triggers:
-  - hubspot contact
-  - hubspot lead
-  - hubspot person
-  - hubspot email lookup
-  - contact search hubspot
-  - contact management hubspot
-  - hubspot prospect
-  - client contact hubspot
-  - hubspot lifecycle
-  - lead management hubspot
+when_to_use: >-
+  When searching, creating, updating, and managing contact records in HubSpot CRM. Use when:
+  hubspot contact, hubspot lead, hubspot person, hubspot email lookup, contact search hubspot,
+  contact management hubspot, hubspot prospect, client contact hubspot, hubspot lifecycle, or lead
+  management hubspot.
 ---
 
 # HubSpot Contact Management

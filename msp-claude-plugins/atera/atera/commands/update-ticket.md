@@ -1,25 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing Atera ticket
-arguments:
-  - name: ticket_id
-    description: The Atera ticket ID to update
-    required: true
-  - name: status
-    description: New status (Open, Pending, Resolved, Closed)
-    required: false
-  - name: priority
-    description: Priority level (Low, Medium, High, Critical)
-    required: false
-  - name: technician_email
-    description: Technician email to assign
-    required: false
-  - name: ticket_type
-    description: Ticket type (Problem, Request, Incident, Change)
-    required: false
-  - name: impact
-    description: Impact level (Minor, Major, Crisis, No Impact)
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [technician_email] [ticket_type] [impact]"
+arguments: [ticket_id, status, priority, technician_email, ticket_type, impact]
 ---
 
 # Update Atera Ticket

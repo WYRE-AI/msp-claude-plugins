@@ -5,17 +5,10 @@ description: >
   REST structure, filtering, pagination, rate limiting, error handling,
   and best practices. Covers x-api-key authentication, base URL patterns,
   API naming differences (UI vs API), and API key permission levels.
-when_to_use: "When working with authentication, REST structure, filtering, pagination, rate limiting, error handling, and best practices in the Hudu API"
-triggers:
-  - hudu api
-  - hudu query
-  - hudu filter
-  - hudu pagination
-  - hudu rate limit
-  - hudu authentication
-  - hudu rest
-  - hudu endpoint
-  - hudu request
+when_to_use: >-
+  When working with authentication, REST structure, filtering, pagination, rate limiting, error
+  handling, and best practices in the Hudu API. Use when: hudu api, hudu query, hudu filter, hudu
+  pagination, hudu rate limit, hudu authentication, hudu rest, hudu endpoint, or hudu request.
 ---
 
 # Hudu API Patterns

@@ -5,20 +5,12 @@ description: >
   OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP transport,
   rate limiting, error handling, and best practices. Covers the official
   remote MCP server connection and all HubSpot CRM MCP tools.
-when_to_use: "When working with available tools, OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP transport, rate limiting, error handling, and best practices in the HubSpot MCP tools"
-triggers:
-  - hubspot api
-  - hubspot query
-  - hubspot filter
-  - hubspot rate limit
-  - hubspot authentication
-  - hubspot mcp
-  - hubspot oauth
-  - hubspot request
-  - hubspot scope
-  - hubspot tools
-  - hubspot connection
-  - hubspot search api
+when_to_use: >-
+  When working with available tools, OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP
+  transport, rate limiting, error handling, and best practices in the HubSpot MCP tools. Use when:
+  hubspot api, hubspot query, hubspot filter, hubspot rate limit, hubspot authentication, hubspot
+  mcp, hubspot oauth, hubspot request, hubspot scope, hubspot tools, hubspot connection, or
+  hubspot search api.
 ---
 
 # HubSpot MCP Tools & API Patterns

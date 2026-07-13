@@ -6,18 +6,10 @@ description: >
   Covers line items, service items, recurring invoices, payment terms,
   email delivery, invoice numbering, and MSP billing patterns like
   monthly managed services and project-based billing.
-when_to_use: "When creating, sending, voiding, and managing invoices for MSP clients"
-triggers:
-  - quickbooks invoice
-  - qbo invoice
-  - quickbooks billing
-  - qbo billing
-  - create invoice
-  - send invoice
-  - invoice management
-  - managed services invoice
-  - monthly billing
-  - recurring invoice
+when_to_use: >-
+  When creating, sending, voiding, and managing invoices for MSP clients. Use when: quickbooks
+  invoice, qbo invoice, quickbooks billing, qbo billing, create invoice, send invoice, invoice
+  management, managed services invoice, monthly billing, or recurring invoice.
 ---
 
 # QuickBooks Online Invoice Management

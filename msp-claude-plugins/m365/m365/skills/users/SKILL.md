@@ -5,19 +5,10 @@ description: >
   creating, disabling, or checking user properties. Covers account status,
   MFA enrollment, license assignment, group membership, and manager hierarchy.
   Essential for MSP technicians handling M365 user administration.
-when_to_use: "When listing, searching, creating, disabling, or checking user properties"
-triggers:
-  - m365 user
-  - microsoft 365 user
-  - entra user
-  - azure ad user
-  - create user m365
-  - disable user m365
-  - user license m365
-  - mfa status
-  - m365 account
-  - user provisioning
-  - user deprovisioning
+when_to_use: >-
+  When listing, searching, creating, disabling, or checking user properties. Use when: m365 user,
+  microsoft 365 user, entra user, azure ad user, create user m365, disable user m365, user license
+  m365, mfa status, m365 account, user provisioning, or user deprovisioning.
 ---
 
 # Microsoft 365 User Management

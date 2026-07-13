@@ -5,16 +5,11 @@ description: >
   model — enumerating child organizations, retrieving per-org auth
   keys, and identifying valid move targets when relocating computers
   between tenants.
-when_to_use: "When fanning out reports across child orgs, retrieving an org's auth key, or moving computers between organizations"
-triggers:
-  - threatlocker organization
-  - threatlocker tenant
-  - threatlocker child orgs
-  - threatlocker partner
-  - threatlocker auth key
-  - move computer threatlocker
-  - threatlocker multi-tenant
-  - threatlocker mssp
+when_to_use: >-
+  When fanning out reports across child orgs, retrieving an org's auth key, or moving computers
+  between organizations. Use when: threatlocker organization, threatlocker tenant, threatlocker
+  child orgs, threatlocker partner, threatlocker auth key, move computer threatlocker,
+  threatlocker multi-tenant, or threatlocker mssp.
 ---
 
 # ThreatLocker Organizations

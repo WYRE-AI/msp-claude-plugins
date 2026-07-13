@@ -1,27 +1,7 @@
 ---
-name: add-action
 description: Add an action (note, update, or response) to an existing HaloPSA ticket
-arguments:
-  - name: ticket_id
-    description: The HaloPSA ticket ID
-    required: true
-  - name: note
-    description: The action/note content
-    required: true
-  - name: action_type
-    description: Type of action (note, update, email_response, phone)
-    required: false
-    default: note
-  - name: outcome
-    description: Outcome code for the action
-    required: false
-  - name: hidden
-    description: Hide from client portal (true/false)
-    required: false
-    default: false
-  - name: time_taken
-    description: Time taken in minutes
-    required: false
+argument-hint: "<ticket_id> <note> [action_type] [outcome] [hidden] [time_taken]"
+arguments: [ticket_id, note, action_type, outcome, hidden, time_taken]
 ---
 
 # Add Action to HaloPSA Ticket

@@ -5,19 +5,12 @@ description: >
   API key authentication, the hosted MCP server connection, documentation
   search, code generation assistance, rate limiting, error handling,
   and best practices for the PandaDoc API.
-when_to_use: "When working with available tools, API key authentication, the hosted MCP server connection, documentation search, code generation assistance, rate limiting, error handling"
-triggers:
-  - pandadoc api
-  - pandadoc query
-  - pandadoc authentication
-  - pandadoc mcp
-  - pandadoc rate limit
-  - pandadoc request
-  - pandadoc api key
-  - pandadoc tools
-  - pandadoc connection
-  - pandadoc endpoint
-  - pandadoc auth
+when_to_use: >-
+  When working with available tools, API key authentication, the hosted MCP server connection,
+  documentation search, code generation assistance, rate limiting, error handling. Use when:
+  pandadoc api, pandadoc query, pandadoc authentication, pandadoc mcp, pandadoc rate limit,
+  pandadoc request, pandadoc api key, pandadoc tools, pandadoc connection, pandadoc endpoint, or
+  pandadoc auth.
 ---
 
 # PandaDoc MCP Tools & API Patterns

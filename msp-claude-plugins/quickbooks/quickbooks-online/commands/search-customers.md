@@ -1,18 +1,7 @@
 ---
-name: search-customers
 description: Find a customer in QuickBooks Online by name or other criteria
-arguments:
-  - name: name
-    description: Customer name to search (partial match supported)
-    required: true
-  - name: status
-    description: Filter by active status (active, inactive, all)
-    required: false
-    default: active
-  - name: with_balance
-    description: Only show customers with outstanding balance (true/false)
-    required: false
-    default: "false"
+argument-hint: "<name> [status] [with_balance]"
+arguments: [name, status, with_balance]
 ---
 
 # Search QuickBooks Online Customers

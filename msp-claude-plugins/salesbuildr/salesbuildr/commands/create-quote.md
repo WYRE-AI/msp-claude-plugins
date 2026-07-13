@@ -1,25 +1,18 @@
 ---
-name: create-quote
 description: Create a new quote with line items in Salesbuildr
-arguments:
-  - name: name
-    description: Quote title
-    required: true
-  - name: company
-    description: Company name or ID
-    required: true
-  - name: contact
-    description: Contact name or ID
-    required: false
-  - name: opportunity
-    description: Opportunity name or ID to link
-    required: false
-  - name: products
-    description: Comma-separated product names or IDs with quantities (e.g., "FortiGate 60F:2, SonicWall TZ270:1")
-    required: false
+argument-hint: "<name> <company> [contact] [opportunity] [products]"
+arguments: [name, company, contact, opportunity, products]
 ---
 
 # Create Salesbuildr Quote
+
+## Arguments
+
+- `name` (required) — Quote title
+- `company` (required) — Company name or ID
+- `contact` (optional) — Contact name or ID
+- `opportunity` (optional) — Opportunity name or ID to link
+- `products` (optional) — Comma-separated product names or IDs with quantities (e.g., "FortiGate 60F:2, SonicWall TZ270:1")
 
 ## Prerequisites
 - Salesbuildr API key configured

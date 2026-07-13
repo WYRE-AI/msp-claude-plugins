@@ -6,21 +6,12 @@ description: >
   calculating phish-prone percentages, and analyzing phishing simulation results.
   Covers campaign lifecycle, template selection, landing pages, and click tracking.
   Essential for MSP security teams running phishing awareness programs.
-when_to_use: "When creating campaigns, managing security tests, tracking recipient interactions (sent, opened, clicked, reported), calculating phish-prone percentages"
-triggers:
-  - knowbe4 phishing
-  - phishing campaign
-  - phishing simulation
-  - phish-prone percentage
-  - security test knowbe4
-  - phishing template
-  - click tracking
-  - phishing results
-  - simulated phishing
-  - phishing report
-  - recipient tracking
-  - phishing landing page
-  - phishing test
+when_to_use: >-
+  When creating campaigns, managing security tests, tracking recipient interactions (sent, opened,
+  clicked, reported), calculating phish-prone percentages. Use when: knowbe4 phishing, phishing
+  campaign, phishing simulation, phish-prone percentage, security test knowbe4, phishing template,
+  click tracking, phishing results, simulated phishing, phishing report, recipient tracking,
+  phishing landing page, or phishing test.
 ---
 
 # KnowBe4 Phishing Simulation Management

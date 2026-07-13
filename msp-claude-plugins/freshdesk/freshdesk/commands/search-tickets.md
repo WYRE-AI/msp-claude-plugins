@@ -1,27 +1,20 @@
 ---
-name: search-tickets
 description: Search Freshdesk tickets with the Freshdesk query language — filter by status, priority, agent, group, type, tag, and date — and return a ranked, readable result list
-arguments:
-  - name: query
-    description: A Freshdesk search expression (e.g. "status:2 AND priority:4") OR a plain-language description that gets translated into one
-    required: false
-  - name: status
-    description: open (2), pending (3), resolved (4), closed (5), or unresolved (open+pending, the default when no query/status is given)
-    required: false
-  - name: priority
-    description: low (1), medium (2), high (3), urgent (4)
-    required: false
-  - name: group
-    description: Group id to scope to (routing/skillset queue)
-    required: false
-  - name: agent
-    description: Agent id to scope to (responder)
-    required: false
+argument-hint: "[query] [status] [priority] [group] [agent]"
+arguments: [query, status, priority, group, agent]
 ---
 
 # Freshdesk Search Tickets
 
 Search the Freshdesk ticket queue using `freshdesk_tickets_search`, which wraps `GET /api/v2/search/tickets` and the Freshdesk query language. Use it to pull a focused slice of the queue — an agent's backlog, a group's urgent tickets, this week's new requests — without paging the entire ticket list.
+
+## Arguments
+
+- `query` (optional) — A Freshdesk search expression (e.g. "status:2 AND priority:4") OR a plain-language description that gets translated into one
+- `status` (optional) — open (2), pending (3), resolved (4), closed (5), or unresolved (open+pending, the default when no query/status is given)
+- `priority` (optional) — low (1), medium (2), high (3), urgent (4)
+- `group` (optional) — Group id to scope to (routing/skillset queue)
+- `agent` (optional) — Agent id to scope to (responder)
 
 ## How it builds the query
 

@@ -1,20 +1,11 @@
 ---
 name: "huntress-incidents"
 description: "Use this skill when working with Huntress incidents - querying incidents by organization and status, reviewing SOC-recommended remediation details, approving or rejecting remediations individually or in bulk, checking remediation execution status, and resolving incidents after all remediations are processed."
-when_to_use: "When listing, triaging, investigating, resolving incidents, and managing remediations including bulk approve and reject workflows"
-triggers:
-  - huntress incident
-  - huntress alert
-  - incident triage
-  - incident investigation
-  - incident resolution
-  - incident management
-  - remediation
-  - approve remediation
-  - reject remediation
-  - threat response
-  - security incident
-  - soc recommendation
+when_to_use: >-
+  When listing, triaging, investigating, resolving incidents, and managing remediations including
+  bulk approve and reject workflows. Use when: huntress incident, huntress alert, incident triage,
+  incident investigation, incident resolution, incident management, remediation, approve
+  remediation, reject remediation, threat response, security incident, or soc recommendation.
 ---
 
 # Huntress Incidents

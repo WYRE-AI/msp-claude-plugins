@@ -4,18 +4,11 @@ description: >
   Use this skill when working with the SpamTitan MCP tools —
   available tools, authentication via API key header, API structure,
   pagination, rate limiting, error handling, and best practices.
-when_to_use: "When working with available tools, authentication via API key header, API structure, pagination, rate limiting, error handling, and best practices in the SpamTitan MCP tools"
-triggers:
-  - spamtitan
-  - spamtitan api
-  - spam filter
-  - titanhq
-  - SpamTitan API
-  - SpamTitan tools
-  - spamtitan authentication
-  - spamtitan mcp
-  - spamtitan rate limit
-  - spamtitan error
+when_to_use: >-
+  When working with available tools, authentication via API key header, API structure, pagination,
+  rate limiting, error handling, and best practices in the SpamTitan MCP tools. Use when:
+  spamtitan, spamtitan api, spam filter, titanhq, SpamTitan API, SpamTitan tools, spamtitan
+  authentication, spamtitan mcp, spamtitan rate limit, or spamtitan error.
 ---
 
 # SpamTitan MCP Tools & API Patterns

@@ -1,15 +1,16 @@
 ---
-name: search-detections
 description: List recent Blackpoint Cyber detections for a tenant
-arguments:
-  - name: tenant
-    description: Tenant name or ID to scope the search
-    required: false
+argument-hint: "[tenant]"
+arguments: [tenant]
 ---
 
 # Blackpoint Detection Search
 
 List recent CompassOne detections, then enrich each with its affected asset for an investigation-ready view.
+
+## Arguments
+
+- `tenant` (optional) — Tenant name or ID to scope the search
 
 ## Prerequisites
 

@@ -1,19 +1,7 @@
 ---
-name: reassign-ticket
 description: Reassign a ticket to a different resource or queue
-arguments:
-  - name: ticket_id
-    description: The ticket ID to reassign
-    required: true
-  - name: resource
-    description: Resource email or name to assign ticket to
-    required: false
-  - name: queue
-    description: Queue name to assign ticket to
-    required: false
-  - name: note
-    description: Note explaining the reassignment reason
-    required: false
+argument-hint: "<ticket_id> [resource] [queue] [note]"
+arguments: [ticket_id, resource, queue, note]
 ---
 
 # Reassign Autotask Ticket

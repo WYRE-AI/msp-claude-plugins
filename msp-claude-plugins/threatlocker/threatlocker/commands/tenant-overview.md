@@ -1,11 +1,7 @@
 ---
-name: tenant-overview
 description: Multi-tenant ThreatLocker overview across child organizations
-arguments:
-  - name: limit
-    description: Maximum number of child orgs to enumerate
-    required: false
-    default: "200"
+argument-hint: "[limit]"
+arguments: [limit]
 ---
 
 # ThreatLocker Tenant Overview

@@ -5,18 +5,11 @@ description: >
   methods, token management, pagination, filtering with OData syntax, rate limiting,
   and error handling. Covers both integrator and user authentication, request patterns,
   and best practices for API integration.
-when_to_use: "When working with authentication methods, token management, pagination, filtering with OData syntax, rate limiting, and error handling in the ConnectWise Automate REST API"
-triggers:
-  - automate api
-  - automate authentication
-  - automate token
-  - automate query
-  - automate pagination
-  - automate filter
-  - automate odata
-  - api rate limit
-  - labtech api
-  - cwa api
+when_to_use: >-
+  When working with authentication methods, token management, pagination, filtering with OData
+  syntax, rate limiting, and error handling in the ConnectWise Automate REST API. Use when:
+  automate api, automate authentication, automate token, automate query, automate pagination,
+  automate filter, automate odata, api rate limit, labtech api, or cwa api.
 ---
 
 # ConnectWise Automate API Patterns

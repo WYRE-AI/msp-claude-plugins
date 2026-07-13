@@ -1,10 +1,7 @@
 ---
-name: partner-overview
 description: Portfolio-level Blackpoint Cyber / CompassOne rollup of detections and exposure across all tenants
-arguments:
-  - name: hours
-    description: Detection look-back window in hours (default 24)
-    required: false
+argument-hint: "[hours]"
+arguments: [hours]
 ---
 
 # Blackpoint Partner Overview

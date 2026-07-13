@@ -1,6 +1,16 @@
 ---
 name: offboarding-orchestrator
-description: Use this agent when an MSP is ending a client relationship — whether through churn, client acquisition, mutual termination, or non-renewal — and needs to orchestrate a complete, auditable teardown across every connected tool, reclaim all licensed spend, and fulfill contractual data-handover obligations. Trigger for: client offboarding, client departure, end client relationship, offboard client, client churn teardown, client termination, remove client from all systems, close client account, client leaving, cancel client services, decommission client, client exit, offboarding runbook. Examples: "Run the offboarding process for Meridian Logistics — they're leaving at end of month", "Generate the complete offboarding checklist for Acme Corp whose contract ends June 30", "Meridian Group has been acquired and we need to fully offboard them — what's still live and what's still costing us money?"
+description: >-
+  Use this agent when an MSP is ending a client relationship — whether through churn, client
+  acquisition, mutual termination, or non-renewal — and needs to orchestrate a complete, auditable
+  teardown across every connected tool, reclaim all licensed spend, and fulfill contractual
+  data-handover obligations. Trigger for: client offboarding, client departure, end client
+  relationship, offboard client, client churn teardown, client termination, remove client from all
+  systems, close client account, client leaving, cancel client services, decommission client,
+  client exit, offboarding runbook. Examples: "Run the offboarding process for Meridian Logistics
+  — they're leaving at end of month", "Generate the complete offboarding checklist for Acme Corp
+  whose contract ends June 30", "Meridian Group has been acquired and we need to fully offboard
+  them — what's still live and what's still costing us money?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

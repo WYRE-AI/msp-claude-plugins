@@ -1,21 +1,7 @@
 ---
-name: kb-search
 description: Search the HaloPSA knowledge base for articles and solutions
-arguments:
-  - name: query
-    description: Search terms for knowledge base
-    required: true
-  - name: category
-    description: Filter by KB category
-    required: false
-  - name: visibility
-    description: Filter by visibility (internal, public, all)
-    required: false
-    default: all
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 10
+argument-hint: "<query> [category] [visibility] [limit]"
+arguments: [query, category, visibility, limit]
 ---
 
 # Search HaloPSA Knowledge Base

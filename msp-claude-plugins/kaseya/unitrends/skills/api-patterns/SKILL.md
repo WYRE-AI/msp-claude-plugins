@@ -1,16 +1,13 @@
 ---
 name: "Unitrends API Patterns"
-when_to_use: "When working with the Unitrends Backup REST API — login flow, appliance & asset hierarchy, job status, recovery points"
+when_to_use: >-
+  When working with the Unitrends Backup REST API — login flow, appliance & asset hierarchy, job
+  status, recovery points. Use when: unitrends, unitrends api, unitrends backup, unitrends job, or
+  unitrends recovery.
 description: >
   Use this skill when integrating with the Unitrends Backup REST API. Covers login token
   exchange, appliance vs asset hierarchy, backup job status queries, recovery point
   listing, replication state, and Unitrends-specific gotchas.
-triggers:
-  - unitrends
-  - unitrends api
-  - unitrends backup
-  - unitrends job
-  - unitrends recovery
 ---
 
 # Unitrends API Patterns

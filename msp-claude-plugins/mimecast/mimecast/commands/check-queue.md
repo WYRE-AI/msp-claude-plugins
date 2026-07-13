@@ -1,14 +1,7 @@
 ---
-name: check-queue
 description: Check Mimecast email delivery queue status and identify stuck or deferred messages
-arguments:
-  - name: direction
-    description: Queue direction to check (inbound, outbound, or both)
-    required: false
-    default: "both"
-  - name: status
-    description: Filter by message status (queued, retrying, deferred, held)
-    required: false
+argument-hint: "[direction] [status]"
+arguments: [direction, status]
 ---
 
 # Mimecast Queue Check

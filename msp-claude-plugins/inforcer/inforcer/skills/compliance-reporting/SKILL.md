@@ -1,6 +1,11 @@
 ---
 name: "Inforcer Compliance Reporting"
-when_to_use: "When producing Inforcer security posture and compliance reports — pulling secure scores, combining them with alignment, and classifying tenants as aligned / semi-aligned / drifted using the alignedThreshold and semiAlignedThreshold settings"
+when_to_use: >-
+  When producing Inforcer security posture and compliance reports — pulling secure scores,
+  combining them with alignment, and classifying tenants as aligned / semi-aligned / drifted using
+  the alignedThreshold and semiAlignedThreshold settings. Use when: inforcer secure score,
+  compliance report, posture report, aligned threshold, semi-aligned, drifted classification,
+  portfolio posture, or secure score per tenant.
 description: >
   Use this skill when building Inforcer compliance and posture reports —
   reading per-tenant Microsoft 365 secure scores, combining them with
@@ -8,15 +13,6 @@ description: >
   semiAlignedThreshold settings that classify each tenant or policy as
   aligned, semi-aligned, or drifted. Covers portfolio posture roll-ups
   across the MSP's managed tenants.
-triggers:
-  - inforcer secure score
-  - compliance report
-  - posture report
-  - aligned threshold
-  - semi-aligned
-  - drifted classification
-  - portfolio posture
-  - secure score per tenant
 ---
 
 # Inforcer Compliance Reporting

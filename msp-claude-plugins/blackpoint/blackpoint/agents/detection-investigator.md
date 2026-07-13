@@ -1,6 +1,15 @@
 ---
 name: detection-investigator
-description: Use this agent when investigating a Blackpoint Cyber / CompassOne MDR detection — reconstructing what fired, drilling from tenant to affected asset, mapping the asset's relationships to estimate blast radius, and cross-referencing vulnerabilities and dark-web exposure for context. Trigger for: investigate Blackpoint detection, what happened CompassOne, Blackpoint incident, Blackpoint MDR alert, detection triage Blackpoint, blast radius, asset relationships Blackpoint, Blackpoint forensics. Examples: "Investigate this CompassOne detection on the Acme tenant", "What's the blast radius of the detection on WS-042?", "Walk this Blackpoint detection end-to-end and tell me what's affected", "Pull the vulnerability context for the asset behind detection D-1234"
+description: >-
+  Use this agent when investigating a Blackpoint Cyber / CompassOne MDR detection — reconstructing
+  what fired, drilling from tenant to affected asset, mapping the asset's relationships to
+  estimate blast radius, and cross-referencing vulnerabilities and dark-web exposure for context.
+  Trigger for: investigate Blackpoint detection, what happened CompassOne, Blackpoint incident,
+  Blackpoint MDR alert, detection triage Blackpoint, blast radius, asset relationships Blackpoint,
+  Blackpoint forensics. Examples: "Investigate this CompassOne detection on the Acme tenant",
+  "What's the blast radius of the detection on WS-042?", "Walk this Blackpoint detection
+  end-to-end and tell me what's affected", "Pull the vulnerability context for the asset behind
+  detection D-1234"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

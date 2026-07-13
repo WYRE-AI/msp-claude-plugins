@@ -5,18 +5,11 @@ description: >
   updating, and auditing company records in HubSpot CRM. Covers company
   fields, industry classification, lifecycle stages, domain matching,
   and cross-referencing with contacts, deals, and tickets.
-when_to_use: "When searching, creating, updating, and auditing company records in HubSpot CRM"
-triggers:
-  - hubspot company
-  - hubspot organization
-  - hubspot client
-  - hubspot account
-  - company search hubspot
-  - company management hubspot
-  - hubspot domain
-  - hubspot industry
-  - client management hubspot
-  - company audit hubspot
+when_to_use: >-
+  When searching, creating, updating, and auditing company records in HubSpot CRM. Use when:
+  hubspot company, hubspot organization, hubspot client, hubspot account, company search hubspot,
+  company management hubspot, hubspot domain, hubspot industry, client management hubspot, or
+  company audit hubspot.
 ---
 
 # HubSpot Company Management

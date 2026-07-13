@@ -1,10 +1,7 @@
 ---
-name: hunt-threat
 description: Threat hunting via Purple AI and PowerQuery execution
-arguments:
-  - name: description
-    description: Natural language description of the threat to hunt for
-    required: true
+argument-hint: "<description>"
+arguments: [description]
 ---
 
 # Hunt Threat via Purple AI + PowerQuery

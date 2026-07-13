@@ -1,20 +1,15 @@
 ---
 name: "Freshdesk Contacts & Companies"
-when_to_use: "When working with Freshdesk contacts and companies — looking up, creating, updating, merging, or converting them, and resolving a ticket requester to a contact and company"
+when_to_use: >-
+  When working with Freshdesk contacts and companies — looking up, creating, updating, merging, or
+  converting them, and resolving a ticket requester to a contact and company. Use when: freshdesk
+  contact, freshdesk company, freshdesk requester, merge contact freshdesk, make agent freshdesk,
+  search contacts freshdesk, resolve requester freshdesk, or freshdesk customer.
 description: >
   Use this skill when working with Freshdesk contacts and companies — contact
   CRUD, merge, make_agent, and search; company CRUD and search; and the common
   MSP workflow of resolving a ticket requester to a contact and then to its
   parent company through the Freshdesk REST API v2.
-triggers:
-  - freshdesk contact
-  - freshdesk company
-  - freshdesk requester
-  - merge contact freshdesk
-  - make agent freshdesk
-  - search contacts freshdesk
-  - resolve requester freshdesk
-  - freshdesk customer
 ---
 
 # Freshdesk Contacts & Companies

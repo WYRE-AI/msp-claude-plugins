@@ -1,22 +1,7 @@
 ---
-name: run-powershell
 description: Execute a PowerShell script on an Atera agent
-arguments:
-  - name: agent_id
-    description: The agent ID to execute on
-    required: true
-  - name: script
-    description: Inline PowerShell script to execute
-    required: false
-  - name: script_id
-    description: Saved script ID from Atera library
-    required: false
-  - name: run_as
-    description: Execution context (System, LoggedOnUser)
-    required: false
-  - name: timeout
-    description: Timeout in seconds (default 300)
-    required: false
+argument-hint: "<agent_id> [script] [script_id] [run_as] [timeout]"
+arguments: [agent_id, script, script_id, run_as, timeout]
 ---
 
 # Run PowerShell on Atera Agent

@@ -5,17 +5,10 @@ description: >
   reading, updating, and deleting client organizations. Covers client identifiers,
   locations, client-level settings, groups, extra data fields (EDFs), and
   client hierarchy management.
-when_to_use: "When creating, reading, updating, and deleting client organizations"
-triggers:
-  - automate client
-  - automate customer
-  - automate location
-  - client management
-  - client settings
-  - client groups
-  - client edf
-  - labtech client
-  - automate organization
+when_to_use: >-
+  When creating, reading, updating, and deleting client organizations. Use when: automate client,
+  automate customer, automate location, client management, client settings, client groups, client
+  edf, labtech client, or automate organization.
 ---
 
 # ConnectWise Automate Client Management

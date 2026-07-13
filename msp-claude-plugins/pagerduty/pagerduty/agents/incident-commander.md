@@ -1,6 +1,12 @@
 ---
 name: incident-commander
-description: Use this agent when an MSP engineer, SRE, or incident manager needs to command an active incident or review the state of open PagerDuty incidents. Trigger for: pagerduty incident, active outage, pagerduty response, incident command, on-call pagerduty, pagerduty escalation, incident review pagerduty, postmortem pagerduty. Examples: "What incidents are currently triggered?", "Walk me through the active P1 incident", "Who is currently on-call?", "We just resolved the incident — help me write the postmortem summary", "Merge these duplicate incidents"
+description: >-
+  Use this agent when an MSP engineer, SRE, or incident manager needs to command an active
+  incident or review the state of open PagerDuty incidents. Trigger for: pagerduty incident,
+  active outage, pagerduty response, incident command, on-call pagerduty, pagerduty escalation,
+  incident review pagerduty, postmortem pagerduty. Examples: "What incidents are currently
+  triggered?", "Walk me through the active P1 incident", "Who is currently on-call?", "We just
+  resolved the incident — help me write the postmortem summary", "Merge these duplicate incidents"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

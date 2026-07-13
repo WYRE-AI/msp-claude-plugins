@@ -1,6 +1,12 @@
 ---
 name: threat-hunter
-description: Use this agent when an MSP needs to autonomously hunt for threats across client endpoints using SentinelOne. Trigger for: IOC sweep, threat hunt, indicator sweep, PowerQuery hunt, lateral movement investigation, ransomware indicators, C2 beaconing, MITRE ATT&CK TTP analysis, incident investigation, endpoint forensics, malware triage, suspicious activity deep-dive. Examples: "Hunt for signs of lateral movement across all clients", "Sweep for this file hash across our endpoints", "Investigate the suspicious PowerShell alert on ACME-WS-042"
+description: >-
+  Use this agent when an MSP needs to autonomously hunt for threats across client endpoints using
+  SentinelOne. Trigger for: IOC sweep, threat hunt, indicator sweep, PowerQuery hunt, lateral
+  movement investigation, ransomware indicators, C2 beaconing, MITRE ATT&CK TTP analysis, incident
+  investigation, endpoint forensics, malware triage, suspicious activity deep-dive. Examples:
+  "Hunt for signs of lateral movement across all clients", "Sweep for this file hash across our
+  endpoints", "Investigate the suspicious PowerShell alert on ACME-WS-042"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

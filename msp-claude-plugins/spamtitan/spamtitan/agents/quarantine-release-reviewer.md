@@ -1,6 +1,14 @@
 ---
 name: quarantine-release-reviewer
-description: Use this agent when an MSP technician or client needs to systematically review the SpamTitan quarantine queue for false positives, release legitimate messages, identify patterns of legitimate mail being blocked, or generate a quarantine digest for client review. Trigger for: quarantine review SpamTitan, release quarantined email, false positive SpamTitan, quarantine digest, legitimate mail blocked SpamTitan, SpamTitan false positive pattern, client quarantine report. Examples: "review the quarantine queue for Acme Corp and release any false positives", "generate a quarantine digest for the client to review", "find patterns of legitimate mail being blocked for Contoso"
+description: >-
+  Use this agent when an MSP technician or client needs to systematically review the SpamTitan
+  quarantine queue for false positives, release legitimate messages, identify patterns of
+  legitimate mail being blocked, or generate a quarantine digest for client review. Trigger for:
+  quarantine review SpamTitan, release quarantined email, false positive SpamTitan, quarantine
+  digest, legitimate mail blocked SpamTitan, SpamTitan false positive pattern, client quarantine
+  report. Examples: "review the quarantine queue for Acme Corp and release any false positives",
+  "generate a quarantine digest for the client to review", "find patterns of legitimate mail being
+  blocked for Contoso"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

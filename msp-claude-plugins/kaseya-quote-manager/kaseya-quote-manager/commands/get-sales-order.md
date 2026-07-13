@@ -1,13 +1,14 @@
 ---
-name: get-sales-order
 description: Get a Kaseya Quote Manager sales order with its lines and payments
-arguments:
-  - name: id
-    description: Sales order ID
-    required: true
+argument-hint: "<id>"
+arguments: [id]
 ---
 
 # Get Kaseya Quote Manager Sales Order
+
+## Arguments
+
+- `id` (required) — Sales order ID
 
 ## Prerequisites
 - Kaseya Quote Manager API key configured (read-only)

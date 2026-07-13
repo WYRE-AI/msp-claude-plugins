@@ -1,6 +1,12 @@
 ---
 name: license-auditor
-description: Use this agent when an MSP needs to audit Microsoft 365 license costs and find savings opportunities across a client tenant. Trigger for: M365 license cost, unused M365 licenses, license rightsizing, disabled account licenses, duplicate M365 licensing, E3 add-on overlap, M365 spend optimization, license waste M365. Examples: "find unused M365 licenses for Contoso", "which users have E3 plus standalone add-ons that are already included", "show me all licenses assigned to disabled accounts"
+description: >-
+  Use this agent when an MSP needs to audit Microsoft 365 license costs and find savings
+  opportunities across a client tenant. Trigger for: M365 license cost, unused M365 licenses,
+  license rightsizing, disabled account licenses, duplicate M365 licensing, E3 add-on overlap,
+  M365 spend optimization, license waste M365. Examples: "find unused M365 licenses for Contoso",
+  "which users have E3 plus standalone add-ons that are already included", "show me all licenses
+  assigned to disabled accounts"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

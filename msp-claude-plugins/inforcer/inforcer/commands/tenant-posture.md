@@ -1,16 +1,7 @@
 ---
-name: tenant-posture
 description: Single-tenant Microsoft 365 posture snapshot from Inforcer — secure score plus alignment score, band, and the per-policy drift detail against the tenant's assigned baseline
-arguments:
-  - name: tenant
-    description: The tenant to scope to — a friendly name, domain, GUID, or the integer Client Tenant ID (the MCP resolves the first three to the integer id)
-    required: true
-  - name: aligned_threshold
-    description: Alignment value at/above which a tenant is "aligned" (used to classify the band)
-    required: false
-  - name: semi_aligned_threshold
-    description: Alignment value at/above which a tenant is "semi-aligned" (below this is "drifted")
-    required: false
+argument-hint: "<tenant> [aligned_threshold] [semi_aligned_threshold]"
+arguments: [tenant, aligned_threshold, semi_aligned_threshold]
 ---
 
 # Inforcer Tenant Posture
@@ -19,6 +10,12 @@ A single-tenant posture snapshot: how aligned the tenant is to its assigned
 baseline, where it has drifted, and what Microsoft thinks of its overall
 posture (secure score). Built for onboarding validation, post-change review,
 and QBR prep on one client.
+
+## Arguments
+
+- `tenant` (required) — The tenant to scope to — a friendly name, domain, GUID, or the integer Client Tenant ID (the MCP resolves the first three to the integer id)
+- `aligned_threshold` (optional) — Alignment value at/above which a tenant is "aligned" (used to classify the band)
+- `semi_aligned_threshold` (optional) — Alignment value at/above which a tenant is "semi-aligned" (below this is "drifted")
 
 ## How it works
 

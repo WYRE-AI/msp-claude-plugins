@@ -1,13 +1,7 @@
 ---
-name: acknowledge-alert
 description: Acknowledge an RMM alert to indicate investigation is underway
-arguments:
-  - name: alert_id
-    description: The alert ID to acknowledge
-    required: true
-  - name: note
-    description: Note explaining acknowledgment
-    required: false
+argument-hint: "<alert_id> [note]"
+arguments: [alert_id, note]
 ---
 
 # Acknowledge SuperOps.ai Alert

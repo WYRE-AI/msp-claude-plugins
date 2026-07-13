@@ -5,17 +5,10 @@ description: >
   platform selection, pagination, rate limiting, and error handling. Covers all 6 platforms
   (Pinotage, Merlot, Concord, Vidal, Zinfandel, Syrah), token lifecycle, timestamp handling,
   and best practices for API integration.
-when_to_use: "When working with authentication, OAuth 2.0 flow, platform selection, pagination, rate limiting, and error handling in the Datto RMM API"
-triggers:
-  - datto api
-  - rmm api
-  - datto authentication
-  - rmm query
-  - datto pagination
-  - api rate limit
-  - datto platform
-  - datto oauth
-  - rmm token
+when_to_use: >-
+  When working with authentication, OAuth 2.0 flow, platform selection, pagination, rate limiting,
+  and error handling in the Datto RMM API. Use when: datto api, rmm api, datto authentication, rmm
+  query, datto pagination, api rate limit, datto platform, datto oauth, or rmm token.
 ---
 
 # Datto RMM API Patterns

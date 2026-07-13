@@ -1,22 +1,7 @@
 ---
-name: triage-incidents
 description: Triage open Ironscales phishing incidents — list by status, classify, and remediate
-arguments:
-  - name: status
-    description: Incident status to triage (open, in_progress, or all)
-    required: false
-    default: "open"
-  - name: source
-    description: Filter by incident source (USER_REPORT, AI_DETECTION, or all)
-    required: false
-  - name: auto_classify
-    description: Automatically classify high-confidence AI detections (true/false)
-    required: false
-    default: "false"
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "50"
+argument-hint: "[status] [source] [auto_classify] [limit]"
+arguments: [status, source, auto_classify, limit]
 ---
 
 # Ironscales Incident Triage

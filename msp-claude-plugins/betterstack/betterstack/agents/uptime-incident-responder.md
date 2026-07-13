@@ -1,6 +1,13 @@
 ---
 name: uptime-incident-responder
-description: Use this agent when an MSP needs to respond to a BetterStack uptime incident, investigate monitor failures, coordinate on-call response, or produce an incident report. Trigger for: monitor down, uptime incident, BetterStack alert, service outage, heartbeat missed, on-call response, status page update, incident investigation, SLA breach, maintenance window coordination. Examples: "A BetterStack monitor just fired, what's the situation?", "Investigate why the client web monitor is down and post a status page update", "Who is on-call right now and what incidents are active?"
+description: >-
+  Use this agent when an MSP needs to respond to a BetterStack uptime incident, investigate
+  monitor failures, coordinate on-call response, or produce an incident report. Trigger for:
+  monitor down, uptime incident, BetterStack alert, service outage, heartbeat missed, on-call
+  response, status page update, incident investigation, SLA breach, maintenance window
+  coordination. Examples: "A BetterStack monitor just fired, what's the situation?", "Investigate
+  why the client web monitor is down and post a status page update", "Who is on-call right now and
+  what incidents are active?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

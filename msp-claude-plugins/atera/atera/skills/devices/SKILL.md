@@ -5,18 +5,10 @@ description: >
   monitors for network devices, services, and applications. Covers monitor types,
   configuration, thresholds, and monitoring best practices.
   Essential for MSP network monitoring through Atera.
-when_to_use: "When working with HTTP, SNMP, and TCP monitors for network devices, services, and applications in Atera device monitors"
-triggers:
-  - atera device
-  - atera monitor
-  - http monitor
-  - snmp monitor
-  - tcp monitor
-  - network monitor
-  - device monitoring
-  - snmp polling
-  - uptime monitoring
-  - port monitor
+when_to_use: >-
+  When working with HTTP, SNMP, and TCP monitors for network devices, services, and applications
+  in Atera device monitors. Use when: atera device, atera monitor, http monitor, snmp monitor, tcp
+  monitor, network monitor, device monitoring, snmp polling, uptime monitoring, or port monitor.
 ---
 
 # Atera Device Monitoring

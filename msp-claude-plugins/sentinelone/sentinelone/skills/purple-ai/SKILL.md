@@ -6,20 +6,12 @@ description: >
   MITRE ATT&CK TTP mapping, and PowerQuery generation. Covers the purple_ai
   tool, best practices for prompting, common investigation queries, and
   integration with PowerQuery execution.
-when_to_use: "When working with natural language cybersecurity investigation, threat hunting, behavioral anomaly analysis, MITRE ATT&CK TTP mapping"
-triggers:
-  - sentinelone purple ai
-  - purple ai
-  - threat investigation
-  - threat hunting sentinelone
-  - sentinelone investigate
-  - sentinelone natural language
-  - sentinelone mitre
-  - sentinelone ttp
-  - powerquery generation
-  - sentinelone behavioral
-  - sentinelone anomaly
-  - purple ai query
+when_to_use: >-
+  When working with natural language cybersecurity investigation, threat hunting, behavioral
+  anomaly analysis, MITRE ATT&CK TTP mapping. Use when: sentinelone purple ai, purple ai, threat
+  investigation, threat hunting sentinelone, sentinelone investigate, sentinelone natural
+  language, sentinelone mitre, sentinelone ttp, powerquery generation, sentinelone behavioral,
+  sentinelone anomaly, or purple ai query.
 ---
 
 # SentinelOne Purple AI

@@ -1,6 +1,6 @@
 {
   "name": "superops",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Claude Code plugin for SuperOps.ai PSA/RMM - tickets, assets, clients, alerts",
   "author": {
     "name": "MSP Claude Plugins Community"

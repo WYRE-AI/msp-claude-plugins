@@ -1,31 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing ConnectWise PSA ticket
-arguments:
-  - name: ticket_id
-    description: The ConnectWise ticket ID to update
-    required: true
-  - name: status
-    description: New status name (e.g., "In Progress", "Waiting on Customer")
-    required: false
-  - name: priority
-    description: Priority name (e.g., "Priority 1 - Critical") or number 1-4
-    required: false
-  - name: board
-    description: Service board name to move ticket to
-    required: false
-  - name: type
-    description: Ticket type (e.g., "Service Request", "Incident")
-    required: false
-  - name: subtype
-    description: Ticket subtype
-    required: false
-  - name: owner
-    description: Member identifier to assign ticket
-    required: false
-  - name: summary
-    description: Update ticket summary/title
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [board] [type] [subtype] [owner] [summary]"
+arguments: [ticket_id, status, priority, board, type, subtype, owner, summary]
 ---
 
 # Update ConnectWise PSA Ticket

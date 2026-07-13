@@ -1,15 +1,16 @@
 ---
-name: search-software
 description: Search the ImmyBot software catalog (per-tenant + global)
-arguments:
-  - name: query
-    description: Software name or keyword
-    required: true
+argument-hint: "<query>"
+arguments: [query]
 ---
 
 # ImmyBot Software Search
 
 Search the ImmyBot software catalog before configuring a deployment, to confirm a publisher / version exists and is the canonical entry to target.
+
+## Arguments
+
+- `query` (required) — Software name or keyword
 
 ## Prerequisites
 

@@ -1,28 +1,7 @@
 ---
-name: create-invoice
 description: Create a sales invoice for a managed services client in Xero
-arguments:
-  - name: contact_name
-    description: Client/company name to invoice (must match existing Xero contact)
-    required: true
-  - name: description
-    description: Invoice line item description (e.g., "Monthly Managed Services - March 2026")
-    required: true
-  - name: amount
-    description: Invoice amount (decimal, e.g., 2500.00)
-    required: true
-  - name: account_code
-    description: GL account code for the line item (default "200" for Managed Services Revenue)
-    required: false
-  - name: due_days
-    description: Number of days until payment is due (default 30)
-    required: false
-  - name: reference
-    description: Invoice reference text (e.g., PO number or billing period)
-    required: false
-  - name: status
-    description: Invoice status - DRAFT or AUTHORISED (default DRAFT)
-    required: false
+argument-hint: "<contact_name> <description> <amount> [account_code] [due_days] [reference] [status]"
+arguments: [contact_name, description, amount, account_code, due_days, reference, status]
 ---
 
 # Create Xero Invoice

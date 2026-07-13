@@ -1,17 +1,7 @@
 ---
-name: search-contacts
 description: Search HubSpot contacts by name, email, or company
-arguments:
-  - name: query
-    description: Name, email address, or company name to search for
-    required: true
-  - name: field
-    description: Field to search (name, email, company). Defaults to searching all.
-    required: false
-    default: all
-  - name: lifecycle_stage
-    description: Filter by lifecycle stage (subscriber, lead, customer, etc.)
-    required: false
+argument-hint: "<query> [field] [lifecycle_stage]"
+arguments: [query, field, lifecycle_stage]
 ---
 
 # Search HubSpot Contacts

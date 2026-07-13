@@ -6,20 +6,11 @@ description: >
   submitter, tracking reimbursable vs billable expenses, and managing expense
   approval workflows. Covers expense categories, payment types, receipt tracking,
   and company billing for MSP operational expenses.
-when_to_use: "When creating expense reports, adding line items, searching reports by status or submitter, tracking reimbursable vs billable expenses, and managing expense approval workflows"
-triggers:
-  - autotask expense
-  - expense report
-  - expense item
-  - reimbursement
-  - mileage
-  - travel expense
-  - receipt
-  - expense approval
-  - billable expense
-  - expense category
-  - create expense
-  - submit expense
+when_to_use: >-
+  When creating expense reports, adding line items, searching reports by status or submitter,
+  tracking reimbursable vs billable expenses, and managing expense approval workflows. Use when:
+  autotask expense, expense report, expense item, reimbursement, mileage, travel expense, receipt,
+  expense approval, billable expense, expense category, create expense, or submit expense.
 ---
 
 # Autotask Expense Report Management

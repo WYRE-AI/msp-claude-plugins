@@ -1,6 +1,14 @@
 ---
 name: change-drift-sentinel
-description: Use this agent when an MSP needs to detect unauthorized, undocumented, or security-weakening configuration changes across the client estate and correlate each change against change-control tickets and documentation currency. Trigger for: change drift, unauthorized changes, undocumented changes, configuration drift, security drift, change correlation, change audit, drift detection, suspicious configuration change, stale documentation, change management audit, change review. Examples: "detect any unauthorized or undocumented changes across the estate this week", "find configuration drift for Riverdale Healthcare in the last 30 days", "show me any security-weakening changes that weren't tied to a change ticket"
+description: >-
+  Use this agent when an MSP needs to detect unauthorized, undocumented, or security-weakening
+  configuration changes across the client estate and correlate each change against change-control
+  tickets and documentation currency. Trigger for: change drift, unauthorized changes,
+  undocumented changes, configuration drift, security drift, change correlation, change audit,
+  drift detection, suspicious configuration change, stale documentation, change management audit,
+  change review. Examples: "detect any unauthorized or undocumented changes across the estate this
+  week", "find configuration drift for Riverdale Healthcare in the last 30 days", "show me any
+  security-weakening changes that weren't tied to a change ticket"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

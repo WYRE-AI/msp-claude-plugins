@@ -4,16 +4,11 @@ description: >
   Use this skill when working with PagerDuty alerts -- alert management,
   alert grouping, suppression, event routing, and the Events API v2
   for sending trigger, acknowledge, and resolve events.
-when_to_use: "When working with alert management, alert grouping, suppression, event routing, and the Events API v2 for sending trigger, acknowledge, and resolve events in PagerDuty alerts"
-triggers:
-  - pagerduty alert
-  - alert grouping
-  - alert suppression
-  - event routing
-  - events api
-  - pagerduty event
-  - alert deduplication
-  - alert noise
+when_to_use: >-
+  When working with alert management, alert grouping, suppression, event routing, and the Events
+  API v2 for sending trigger, acknowledge, and resolve events in PagerDuty alerts. Use when:
+  pagerduty alert, alert grouping, alert suppression, event routing, events api, pagerduty event,
+  alert deduplication, or alert noise.
 ---
 
 # PagerDuty Alerts

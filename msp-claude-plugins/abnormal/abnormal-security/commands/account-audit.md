@@ -1,29 +1,7 @@
 ---
-name: account-audit
 description: Audit for account takeover indicators and suspicious sign-ins in Abnormal Security
-arguments:
-  - name: user
-    description: Email address of the user to audit
-    required: false
-  - name: status
-    description: Filter ATO cases by status (open, investigating, remediated, closed, all)
-    required: false
-    default: open
-  - name: severity
-    description: Filter by severity (critical, high, medium, low)
-    required: false
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 7 days ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[user] [status] [severity] [start-date] [end-date] [limit]"
+arguments: [user, status, severity, start-date, end-date, limit]
 ---
 
 # Account Audit

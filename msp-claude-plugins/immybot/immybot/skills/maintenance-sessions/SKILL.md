@@ -1,20 +1,16 @@
 ---
 name: "ImmyBot Maintenance Sessions"
-when_to_use: "When starting, monitoring, pausing, resuming, or cancelling ImmyBot maintenance sessions, or investigating session logs and results to diagnose a failed reconciliation"
+when_to_use: >-
+  When starting, monitoring, pausing, resuming, or cancelling ImmyBot maintenance sessions, or
+  investigating session logs and results to diagnose a failed reconciliation. Use when: immybot
+  maintenance session, immybot reconcile, immybot session logs, immybot session status, immybot
+  run maintenance, cancel maintenance immybot, or immybot session failed.
 description: >
   Use this skill when working with ImmyBot maintenance sessions — the
   reconciliation engine that brings endpoints into their desired
   state. Covers starting and controlling sessions, polling running
   sessions, and reading session logs and results to diagnose a
   failed deployment or remediation.
-triggers:
-  - immybot maintenance session
-  - immybot reconcile
-  - immybot session logs
-  - immybot session status
-  - immybot run maintenance
-  - cancel maintenance immybot
-  - immybot session failed
 ---
 
 # ImmyBot Maintenance Sessions

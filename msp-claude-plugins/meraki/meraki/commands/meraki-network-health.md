@@ -1,13 +1,7 @@
 ---
-name: meraki-network-health
 description: Sweep an organization's networks, devices, and appliance VPN status for a site-health overview
-arguments:
-  - name: org_id
-    description: Organization ID to sweep (falls back to MERAKI_ORG_ID if omitted)
-    required: false
-  - name: network_id
-    description: Limit the sweep to a single network
-    required: false
+argument-hint: "[org_id] [network_id]"
+arguments: [org_id, network_id]
 ---
 
 # Meraki Network Health

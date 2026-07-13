@@ -1,6 +1,14 @@
 ---
 name: meraki-network-auditor
-description: Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki organization — sweeping networks, devices, and appliances to surface offline or alerting hardware, appliances with site-to-site VPN peers down, overly-permissive firewall rules, and SSIDs configured with weak or open authentication. Trigger for: Meraki network audit, Meraki health check, offline devices Meraki, VPN down Meraki, firewall review Meraki, open SSID audit, Meraki security posture, org-wide Meraki sweep. Examples: "audit our Meraki org for offline devices and firewall issues", "check every site's VPN and flag any tunnels that are down", "which SSIDs across our Meraki networks are open or using WEP/WPA-Personal"
+description: >-
+  Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki
+  organization — sweeping networks, devices, and appliances to surface offline or alerting
+  hardware, appliances with site-to-site VPN peers down, overly-permissive firewall rules, and
+  SSIDs configured with weak or open authentication. Trigger for: Meraki network audit, Meraki
+  health check, offline devices Meraki, VPN down Meraki, firewall review Meraki, open SSID audit,
+  Meraki security posture, org-wide Meraki sweep. Examples: "audit our Meraki org for offline
+  devices and firewall issues", "check every site's VPN and flag any tunnels that are down",
+  "which SSIDs across our Meraki networks are open or using WEP/WPA-Personal"
 tools: ["mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_navigate", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_status", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_organizations_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_organizations_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_organizations_inventory_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_networks_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_networks_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_devices_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_devices_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_clients_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_clients_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_clients_get_policy", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_wireless_ssids_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_wireless_rf_profiles_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_switch_ports_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_switch_port_statuses_list", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_appliance_firewall_l3_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_appliance_vpn_status_get", "mcp__claude_ai_WYRE_MCP_Gateway__meraki__meraki_raw_request", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

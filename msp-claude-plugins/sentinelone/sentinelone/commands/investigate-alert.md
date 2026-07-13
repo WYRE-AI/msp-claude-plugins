@@ -1,10 +1,7 @@
 ---
-name: investigate-alert
 description: Deep investigation of a specific SentinelOne alert with timeline and context
-arguments:
-  - name: alert_id
-    description: The alert ID to investigate
-    required: true
+argument-hint: "<alert_id>"
+arguments: [alert_id]
 ---
 
 # Investigate SentinelOne Alert

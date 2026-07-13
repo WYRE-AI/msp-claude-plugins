@@ -1,22 +1,7 @@
 ---
-name: search-deals
 description: Search HubSpot deals by name, stage, or company
-arguments:
-  - name: query
-    description: Deal name or keyword to search for
-    required: false
-  - name: stage
-    description: Filter by deal stage (e.g., appointmentscheduled, proposalpending, closedwon)
-    required: false
-  - name: company
-    description: Filter by company name
-    required: false
-  - name: min_amount
-    description: Minimum deal amount
-    required: false
-  - name: max_amount
-    description: Maximum deal amount
-    required: false
+argument-hint: "[query] [stage] [company] [min_amount] [max_amount]"
+arguments: [query, stage, company, min_amount, max_amount]
 ---
 
 # Search HubSpot Deals

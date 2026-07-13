@@ -1,28 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in ConnectWise PSA
-arguments:
-  - name: company
-    description: Company name, identifier, or ID
-    required: true
-  - name: summary
-    description: Ticket summary/title (max 100 characters)
-    required: true
-  - name: description
-    description: Detailed description of the issue
-    required: false
-  - name: board
-    description: Service board name or ID (defaults to first available)
-    required: false
-  - name: priority
-    description: Priority level 1-4 (1=Critical, 4=Low, default 3)
-    required: false
-  - name: contact
-    description: Contact name or email at the company
-    required: false
-  - name: status
-    description: Initial status name or ID (default "New")
-    required: false
+argument-hint: "<company> <summary> [description] [board] [priority] [contact] [status]"
+arguments: [company, summary, description, board, priority, contact, status]
 ---
 
 # Create ConnectWise PSA Ticket

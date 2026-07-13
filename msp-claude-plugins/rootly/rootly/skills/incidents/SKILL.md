@@ -6,22 +6,11 @@ description: >
   severity levels, status transitions, AI-powered analysis tools
   (find_related_incidents, suggest_solutions), action items, alert attachment,
   and cross-vendor PSA ticket correlation workflows.
-when_to_use: "When creating, searching, triaging, updating, and resolving incidents"
-triggers:
-  - rootly incident
-  - rootly outage
-  - rootly alert
-  - rootly triage
-  - rootly severity
-  - rootly resolve
-  - rootly status
-  - rootly action item
-  - incident management rootly
-  - rootly postmortem
-  - rootly on-call
-  - create incident rootly
-  - rootly similar incidents
-  - rootly ai suggest
+when_to_use: >-
+  When creating, searching, triaging, updating, and resolving incidents. Use when: rootly
+  incident, rootly outage, rootly alert, rootly triage, rootly severity, rootly resolve, rootly
+  status, rootly action item, incident management rootly, rootly postmortem, rootly on-call,
+  create incident rootly, rootly similar incidents, or rootly ai suggest.
 ---
 
 # Rootly Incident Management

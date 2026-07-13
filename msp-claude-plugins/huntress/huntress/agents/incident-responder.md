@@ -1,6 +1,14 @@
 ---
 name: incident-responder
-description: Use this agent when triaging Huntress incidents, reviewing SOC escalations, approving or rejecting endpoint remediations, investigating security signals, or managing the Huntress agent fleet across MSP client organizations. Trigger for: Huntress incident, Huntress remediation, SOC escalation Huntress, approve remediation, reject remediation, Huntress triage, endpoint threat Huntress, Huntress organization, agent health Huntress, Huntress signals. Examples: "Show me all open Huntress incidents", "Review and approve remediations for this critical incident", "The SOC has escalated an active ransomware event — what do I need to do?", "Check agent coverage across all client organizations"
+description: >-
+  Use this agent when triaging Huntress incidents, reviewing SOC escalations, approving or
+  rejecting endpoint remediations, investigating security signals, or managing the Huntress agent
+  fleet across MSP client organizations. Trigger for: Huntress incident, Huntress remediation, SOC
+  escalation Huntress, approve remediation, reject remediation, Huntress triage, endpoint threat
+  Huntress, Huntress organization, agent health Huntress, Huntress signals. Examples: "Show me all
+  open Huntress incidents", "Review and approve remediations for this critical incident", "The SOC
+  has escalated an active ransomware event — what do I need to do?", "Check agent coverage across
+  all client organizations"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

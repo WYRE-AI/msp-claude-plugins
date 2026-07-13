@@ -1,6 +1,15 @@
 ---
 name: endpoint-hardening-auditor
-description: Use this agent when an MSP needs to audit and harden SentinelOne endpoint configuration across client sites — not to investigate active threats, but to proactively identify gaps before attackers can exploit them. Trigger for: endpoint hardening, policy compliance, SentinelOne policy audit, agent health review, exclusion audit, protection mode check, unprotected agents, coverage gaps, vulnerability exposure, misconfiguration audit, posture hardening, SentinelOne configuration review. Examples: "Audit our SentinelOne configuration for all clients and find any hardening gaps", "Which endpoints are running in Detect-only mode instead of Protect?", "Find endpoints with outdated agents across the fleet", "Generate a hardening report for the quarterly review"
+description: >-
+  Use this agent when an MSP needs to audit and harden SentinelOne endpoint configuration across
+  client sites — not to investigate active threats, but to proactively identify gaps before
+  attackers can exploit them. Trigger for: endpoint hardening, policy compliance, SentinelOne
+  policy audit, agent health review, exclusion audit, protection mode check, unprotected agents,
+  coverage gaps, vulnerability exposure, misconfiguration audit, posture hardening, SentinelOne
+  configuration review. Examples: "Audit our SentinelOne configuration for all clients and find
+  any hardening gaps", "Which endpoints are running in Detect-only mode instead of Protect?",
+  "Find endpoints with outdated agents across the fleet", "Generate a hardening report for the
+  quarterly review"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

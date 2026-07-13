@@ -1,15 +1,7 @@
 ---
-name: issue-sweep
 description: Sweep active issues across N-central customers, grouped by severity and probable root cause
 argument-hint: "[org_unit_id] [min_severity]"
-arguments:
-  - name: org_unit_id
-    description: Customer or site org unit ID to scope the sweep to. Omit to sweep all customers.
-    required: false
-  - name: min_severity
-    description: Lowest severity to include (e.g. warning, failed)
-    required: false
-    default: "warning"
+arguments: [org_unit_id, min_severity]
 ---
 
 # N-central Issue Sweep

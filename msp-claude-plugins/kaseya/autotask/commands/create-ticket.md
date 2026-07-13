@@ -1,25 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in Autotask PSA
-arguments:
-  - name: company
-    description: Company name or ID
-    required: true
-  - name: title
-    description: Ticket title/summary (max 255 characters)
-    required: true
-  - name: description
-    description: Detailed description of the issue
-    required: false
-  - name: queue
-    description: Queue name or ID (defaults to Service Desk)
-    required: false
-  - name: priority
-    description: Priority level 1-4 (4=Critical, 3=High, 2=Medium, 1=Low; default 2=Medium). Note - lower numbers = lower urgency in Autotask.
-    required: false
-  - name: contact
-    description: Contact name or email
-    required: false
+argument-hint: "<company> <title> [description] [queue] [priority] [contact]"
+arguments: [company, title, description, queue, priority, contact]
 ---
 
 # Create Autotask Ticket

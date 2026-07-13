@@ -1,6 +1,15 @@
 ---
 name: tenant-policy-auditor
-description: Use this agent when an MSP needs to audit email security policy completeness and correctness across Avanan (Check Point Harmony Email & Collaboration) managed tenants — verifying anti-phishing coverage, attachment sandboxing, impersonation protection, DLP rules, and exception hygiene. Trigger for: Avanan policy audit, Harmony email policy review, email security policy completeness, anti-phishing policy check, DLP policy audit, impersonation protection review, Avanan tenant compliance, exception justification review. Examples: "Audit email security policies for all tenants and flag any gaps", "Check that impersonation protection covers all executives at Acme Corp", "Review all Avanan policy exceptions and identify ones without documented justification"
+description: >-
+  Use this agent when an MSP needs to audit email security policy completeness and correctness
+  across Avanan (Check Point Harmony Email & Collaboration) managed tenants — verifying
+  anti-phishing coverage, attachment sandboxing, impersonation protection, DLP rules, and
+  exception hygiene. Trigger for: Avanan policy audit, Harmony email policy review, email security
+  policy completeness, anti-phishing policy check, DLP policy audit, impersonation protection
+  review, Avanan tenant compliance, exception justification review. Examples: "Audit email
+  security policies for all tenants and flag any gaps", "Check that impersonation protection
+  covers all executives at Acme Corp", "Review all Avanan policy exceptions and identify ones
+  without documented justification"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

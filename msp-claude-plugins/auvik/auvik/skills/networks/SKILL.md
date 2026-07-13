@@ -4,14 +4,10 @@ description: >
   Use this skill when working with Auvik network and interface entities -
   the network entity model, IP-range scoping, interface-to-device
   relationships, and admin vs oper status.
-when_to_use: "When listing or inspecting Auvik networks and interfaces, or correlating interfaces back to their devices"
-triggers:
-  - auvik network
-  - auvik interface
-  - auvik vlan
-  - auvik subnet
-  - auvik link
-  - auvik topology
+when_to_use: >-
+  When listing or inspecting Auvik networks and interfaces, or correlating interfaces back to
+  their devices. Use when: auvik network, auvik interface, auvik vlan, auvik subnet, auvik link,
+  or auvik topology.
 ---
 
 # Auvik Networks and Interfaces

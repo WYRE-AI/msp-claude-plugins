@@ -5,16 +5,10 @@ description: >
   searching, retrieving, and managing client records in the
   Pax8 marketplace. Covers company fields, contact management, billing
   settings, and cross-referencing with subscriptions and orders.
-when_to_use: "When searching, retrieving, and managing client records in the Pax8 marketplace"
-triggers:
-  - pax8 company
-  - pax8 client
-  - pax8 organization
-  - pax8 customer
-  - company lookup pax8
-  - company management pax8
-  - pax8 contact
-  - client management pax8
+when_to_use: >-
+  When searching, retrieving, and managing client records in the Pax8 marketplace. Use when: pax8
+  company, pax8 client, pax8 organization, pax8 customer, company lookup pax8, company management
+  pax8, pax8 contact, or client management pax8.
 ---
 
 # Pax8 Companies Management

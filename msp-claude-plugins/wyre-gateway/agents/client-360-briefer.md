@@ -1,6 +1,12 @@
 ---
 name: client-360-briefer
-description: Use this agent when an MSP technician, account manager, or vCIO needs a complete, synthesized briefing on a client before a call, meeting, or QBR. Trigger for: pre-call brief, client briefing, meeting prep, account overview, what's going on with a client, client summary, before I call, prep me for my meeting. Examples: "Give me a briefing on Acme Corp before my 10am call", "Prep me for my meeting with Lakeside Medical", "What's the current state of Greenfield Industries?"
+description: >-
+  Use this agent when an MSP technician, account manager, or vCIO needs a complete, synthesized
+  briefing on a client before a call, meeting, or QBR. Trigger for: pre-call brief, client
+  briefing, meeting prep, account overview, what's going on with a client, client summary, before
+  I call, prep me for my meeting. Examples: "Give me a briefing on Acme Corp before my 10am call",
+  "Prep me for my meeting with Lakeside Medical", "What's the current state of Greenfield
+  Industries?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

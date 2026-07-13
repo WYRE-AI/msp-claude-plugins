@@ -1,16 +1,7 @@
 ---
-name: device-inventory
 description: List all devices at a Domotz-monitored site
-arguments:
-  - name: agent_id
-    description: The agent/site to list devices for
-    required: true
-  - name: status
-    description: Filter by device status (ONLINE, OFFLINE)
-    required: false
-  - name: type
-    description: Filter by device type (server, workstation, network, printer, etc.)
-    required: false
+argument-hint: "<agent_id> [status] [type]"
+arguments: [agent_id, status, type]
 ---
 
 # Device Inventory

@@ -5,17 +5,12 @@ description: >
   (the API name is "audit") — building incident timelines, tracing a file's
   history across endpoints, identifying repeated denials, and correlating
   policy bypasses or audit-only matches with user/computer context.
-when_to_use: "When investigating a security event timeline, tracing a file path or hash across endpoints, looking up repeated denials, or correlating policy bypasses to specific actions"
-triggers:
-  - threatlocker audit log
-  - threatlocker action log
-  - threatlocker investigate
-  - threatlocker file history
-  - threatlocker timeline
-  - threatlocker denied execution
-  - what happened on
-  - threatlocker policy bypass
-  - threatlocker forensics
+when_to_use: >-
+  When investigating a security event timeline, tracing a file path or hash across endpoints,
+  looking up repeated denials, or correlating policy bypasses to specific actions. Use when:
+  threatlocker audit log, threatlocker action log, threatlocker investigate, threatlocker file
+  history, threatlocker timeline, threatlocker denied execution, what happened on, threatlocker
+  policy bypass, or threatlocker forensics.
 ---
 
 # ThreatLocker Audit Log

@@ -1,18 +1,7 @@
 ---
-name: list-customers
 description: List all customers under the Sherweb service provider account
-arguments:
-  - name: search
-    description: Search term to filter customers by name
-    required: false
-  - name: status
-    description: Filter by customer status (Active, Suspended, Inactive, all)
-    required: false
-    default: all
-  - name: show_ar
-    description: Include accounts receivable summary for each customer
-    required: false
-    default: "false"
+argument-hint: "[search] [status] [show_ar]"
+arguments: [search, status, show_ar]
 ---
 
 # List Sherweb Customers

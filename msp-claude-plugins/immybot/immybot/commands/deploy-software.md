@@ -1,19 +1,18 @@
 ---
-name: deploy-software
 description: Stage and reconcile an ImmyBot desired-state software deployment to a tenant or computer
-arguments:
-  - name: software
-    description: Software name or keyword to deploy
-    required: true
-  - name: scope
-    description: Target tenant name or computer name/hostname
-    required: true
+argument-hint: "<software> <scope>"
+arguments: [software, scope]
 ---
 
 # ImmyBot Deploy Software
 
 Stage a desired-state deployment of "$ARGUMENTS.software" to
 "$ARGUMENTS.scope" and reconcile it through a maintenance session.
+
+## Arguments
+
+- `software` (required) — Software name or keyword to deploy
+- `scope` (required) — Target tenant name or computer name/hostname
 
 ## Prerequisites
 

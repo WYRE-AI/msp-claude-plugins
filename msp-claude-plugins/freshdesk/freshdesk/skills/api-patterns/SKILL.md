@@ -1,20 +1,16 @@
 ---
 name: "Freshdesk API Patterns"
-when_to_use: "When working with Freshdesk authentication headers, base URL, pagination, rate limits, or the search query language for the Freshdesk MCP server"
+when_to_use: >-
+  When working with Freshdesk authentication headers, base URL, pagination, rate limits, or the
+  search query language for the Freshdesk MCP server. Use when: freshdesk api, freshdesk
+  authentication, freshdesk pagination, freshdesk mcp, freshdesk search query, freshdesk rate
+  limit, or freshdesk query language.
 description: >
   Use this skill when working with the Freshdesk MCP tools — header-based
   authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the
   MCP server translates into upstream HTTP Basic `apikey:X` auth), the
   `/api/v2` base URL, `page`/`per_page` pagination, per-minute rate limits, and
   the Freshdesk search query language with its status/priority encodings.
-triggers:
-  - freshdesk api
-  - freshdesk authentication
-  - freshdesk pagination
-  - freshdesk mcp
-  - freshdesk search query
-  - freshdesk rate limit
-  - freshdesk query language
 ---
 
 # Freshdesk MCP Tools & API Patterns

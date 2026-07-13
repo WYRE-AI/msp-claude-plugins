@@ -1,17 +1,7 @@
 ---
-name: incident-triage
 description: Triage open Huntress incidents by severity
-arguments:
-  - name: severity
-    description: Filter by severity level (critical, high, low)
-    required: false
-  - name: organization_id
-    description: Filter by organization ID
-    required: false
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "50"
+argument-hint: "[severity] [organization_id] [limit]"
+arguments: [severity, organization_id, limit]
 ---
 
 # Huntress Incident Triage

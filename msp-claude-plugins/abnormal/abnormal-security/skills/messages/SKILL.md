@@ -7,20 +7,11 @@ description: >
   Covers message retrieval, header inspection, and contextual analysis
   for incident investigation. Essential for MSP security analysts
   performing deep message analysis in Abnormal Security.
-when_to_use: "When working with email headers, attachments, sender reputation, delivery context, authentication results (SPF/DKIM/DMARC)"
-triggers:
-  - abnormal message
-  - message analysis
-  - email headers
-  - email attachments
-  - sender reputation
-  - spf dkim dmarc
-  - email authentication
-  - message metadata
-  - email delivery
-  - abnormal email analysis
-  - message inspection
-  - email forensics
+when_to_use: >-
+  When working with email headers, attachments, sender reputation, delivery context,
+  authentication results (SPF/DKIM/DMARC). Use when: abnormal message, message analysis, email
+  headers, email attachments, sender reputation, spf dkim dmarc, email authentication, message
+  metadata, email delivery, abnormal email analysis, message inspection, or email forensics.
 ---
 
 # Abnormal Security Message Analysis

@@ -1,14 +1,7 @@
 ---
-name: offline-agents
 description: Find ThreatLocker agents that have not checked in recently
-arguments:
-  - name: organization_id
-    description: Optional organization (tenant) UUID
-    required: false
-  - name: limit
-    description: Maximum number of computers to inspect
-    required: false
-    default: "500"
+argument-hint: "[organization_id] [limit]"
+arguments: [organization_id, limit]
 ---
 
 # ThreatLocker Offline Agents

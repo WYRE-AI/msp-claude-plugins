@@ -1,14 +1,7 @@
 ---
-name: finding-triage
 description: Triage open Blumira findings by severity, presenting a prioritized list for review
-arguments:
-  - name: severity
-    description: Filter to a specific severity level (e.g., CRITICAL, HIGH, MEDIUM, LOW)
-    required: false
-  - name: limit
-    description: Maximum number of findings to display
-    required: false
-    default: "25"
+argument-hint: "[severity] [limit]"
+arguments: [severity, limit]
 ---
 
 # Finding Triage

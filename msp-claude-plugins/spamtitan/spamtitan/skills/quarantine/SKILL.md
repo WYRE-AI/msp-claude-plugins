@@ -4,18 +4,11 @@ description: >
   Use this skill when managing the SpamTitan quarantine queue — listing held
   messages, releasing legitimate emails, deleting spam, reviewing email flow
   statistics, and performing bulk quarantine operations.
-when_to_use: "When managing the SpamTitan quarantine queue — listing held messages, releasing legitimate emails, deleting spam, reviewing email flow statistics"
-triggers:
-  - quarantine
-  - held email
-  - spam quarantine
-  - release email
-  - delete spam
-  - spamtitan quarantine
-  - review quarantine
-  - quarantined message
-  - spamtitan queue
-  - email held
+when_to_use: >-
+  When managing the SpamTitan quarantine queue — listing held messages, releasing legitimate
+  emails, deleting spam, reviewing email flow statistics. Use when: quarantine, held email, spam
+  quarantine, release email, delete spam, spamtitan quarantine, review quarantine, quarantined
+  message, spamtitan queue, or email held.
 ---
 
 # SpamTitan Quarantine Management

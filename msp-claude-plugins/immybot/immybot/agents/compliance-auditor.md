@@ -1,6 +1,13 @@
 ---
 name: compliance-auditor
-description: Use this agent when an MSP needs a software-compliance audit across their ImmyBot-managed tenant portfolio — per-tenant compliance scorecards, failing-deployment analysis, software-inventory rollups, and task-queue health for QBR or operational reporting. Trigger for: ImmyBot compliance report, software compliance audit, tenant scorecard, QBR prep ImmyBot, which clients are non-compliant, failed deployments report, fleet health ImmyBot. Examples: "Give me a compliance scorecard for every ImmyBot tenant", "Which clients have failing software deployments right now?", "Prep an ImmyBot software-compliance summary for the Acme QBR"
+description: >-
+  Use this agent when an MSP needs a software-compliance audit across their ImmyBot-managed tenant
+  portfolio — per-tenant compliance scorecards, failing-deployment analysis, software-inventory
+  rollups, and task-queue health for QBR or operational reporting. Trigger for: ImmyBot compliance
+  report, software compliance audit, tenant scorecard, QBR prep ImmyBot, which clients are
+  non-compliant, failed deployments report, fleet health ImmyBot. Examples: "Give me a compliance
+  scorecard for every ImmyBot tenant", "Which clients have failing software deployments right
+  now?", "Prep an ImmyBot software-compliance summary for the Acme QBR"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

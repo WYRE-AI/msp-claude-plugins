@@ -1,6 +1,14 @@
 ---
 name: service-profitability-auditor
-description: Use this agent when an MSP owner, operations leader, or finance lead needs to identify which clients and contracts are losing money or eroding margin across the portfolio. Trigger for: service profitability, margin analysis, unprofitable clients, contract margin, cost to serve, which clients make us money, over-servicing, flat-fee analysis, labor cost analysis, realized rate, margin by client, profitability audit, scope creep, non-billable bleed. Examples: "Which of our clients are actually unprofitable right now?", "Run a margin analysis across the portfolio and show me where we're losing money", "Find all the flat-fee clients where our labor cost is eating the contract value"
+description: >-
+  Use this agent when an MSP owner, operations leader, or finance lead needs to identify which
+  clients and contracts are losing money or eroding margin across the portfolio. Trigger for:
+  service profitability, margin analysis, unprofitable clients, contract margin, cost to serve,
+  which clients make us money, over-servicing, flat-fee analysis, labor cost analysis, realized
+  rate, margin by client, profitability audit, scope creep, non-billable bleed. Examples: "Which
+  of our clients are actually unprofitable right now?", "Run a margin analysis across the
+  portfolio and show me where we're losing money", "Find all the flat-fee clients where our labor
+  cost is eating the contract value"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

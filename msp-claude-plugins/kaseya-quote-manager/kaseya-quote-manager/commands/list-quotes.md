@@ -1,16 +1,15 @@
 ---
-name: list-quotes
 description: List Kaseya Quote Manager quotes, optionally scoped to a recent window
-arguments:
-  - name: modifiedAfter
-    description: ISO timestamp - only return quotes changed after this time
-    required: false
-  - name: pageSize
-    description: Results per page (max 100)
-    required: false
+argument-hint: "[modifiedAfter] [pageSize]"
+arguments: [modifiedAfter, pageSize]
 ---
 
 # List Kaseya Quote Manager Quotes
+
+## Arguments
+
+- `modifiedAfter` (optional) — ISO timestamp - only return quotes changed after this time
+- `pageSize` (optional) — Results per page (max 100)
 
 ## Prerequisites
 - Kaseya Quote Manager API key configured (read-only)

@@ -1,6 +1,13 @@
 ---
 name: device-auditor
-description: Use this agent when the user wants a device audit across N-central customers - inventory sweeps, missing asset data, expired or expiring warranties, untracked lifecycle records, or failed service monitors. Trigger for: audit devices, device audit, warranty audit, which devices are out of warranty, missing asset data, hardware refresh candidates, fleet health check, service monitor failures across customers, N-central inventory report. Examples: "Audit ACME's devices before the QBR", "Which servers across all customers are out of warranty?", "Find devices with failed service monitors", "Give me hardware refresh candidates for next quarter"
+description: >-
+  Use this agent when the user wants a device audit across N-central customers - inventory sweeps,
+  missing asset data, expired or expiring warranties, untracked lifecycle records, or failed
+  service monitors. Trigger for: audit devices, device audit, warranty audit, which devices are
+  out of warranty, missing asset data, hardware refresh candidates, fleet health check, service
+  monitor failures across customers, N-central inventory report. Examples: "Audit ACME's devices
+  before the QBR", "Which servers across all customers are out of warranty?", "Find devices with
+  failed service monitors", "Give me hardware refresh candidates for next quarter"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

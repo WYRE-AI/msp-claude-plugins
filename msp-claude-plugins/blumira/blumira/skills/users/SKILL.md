@@ -3,12 +3,9 @@ name: "Blumira Users"
 description: >
   Use this skill when listing or looking up Blumira users, finding user IDs
   for finding assignment, or auditing user access.
-when_to_use: "When listing or looking up Blumira users, finding user IDs for finding assignment, or auditing user access"
-triggers:
-  - blumira user
-  - user list
-  - assign user
-  - user management
+when_to_use: >-
+  When listing or looking up Blumira users, finding user IDs for finding assignment, or auditing
+  user access. Use when: blumira user, user list, assign user, or user management.
 ---
 
 # Blumira Users

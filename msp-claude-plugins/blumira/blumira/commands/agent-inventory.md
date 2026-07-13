@@ -1,13 +1,7 @@
 ---
-name: agent-inventory
 description: List all devices and agents across the organization with status and health information
-arguments:
-  - name: os
-    description: Filter devices by operating system (e.g., Windows, Linux, macOS)
-    required: false
-  - name: status
-    description: Filter by agent status
-    required: false
+argument-hint: "[os] [status]"
+arguments: [os, status]
 ---
 
 # Agent Inventory

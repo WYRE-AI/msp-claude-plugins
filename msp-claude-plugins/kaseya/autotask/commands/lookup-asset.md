@@ -1,24 +1,7 @@
 ---
-name: lookup-asset
 description: Search for Autotask configuration items/assets by name, serial number, or company
-arguments:
-  - name: query
-    description: Asset name, serial number, or reference to search for
-    required: true
-  - name: company_id
-    description: Filter by company ID
-    required: false
-  - name: type
-    description: Filter by asset type (e.g., "Workstation", "Server", "Network Device")
-    required: false
-  - name: active
-    description: Filter active assets only (default true)
-    required: false
-    default: true
-  - name: limit
-    description: Maximum results to return (default 10)
-    required: false
-    default: 10
+argument-hint: "<query> [company_id] [type] [active] [limit]"
+arguments: [query, company_id, type, active, limit]
 ---
 
 # Lookup Autotask Asset

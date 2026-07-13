@@ -5,16 +5,10 @@ description: >
   categorization, routing, and initial response. Vendor-agnostic best
   practices for efficient ticket handling applicable to Autotask,
   ConnectWise, HaloPSA, and other platforms.
-when_to_use: "When triaging tickets in any PSA - determining priority, categorization, routing, and initial response"
-triggers:
-  - ticket triage
-  - prioritize ticket
-  - categorize ticket
-  - ticket routing
-  - ticket assessment
-  - initial ticket response
-  - ticket classification
-  - service desk triage
+when_to_use: >-
+  When triaging tickets in any PSA - determining priority, categorization, routing, and initial
+  response. Use when: ticket triage, prioritize ticket, categorize ticket, ticket routing, ticket
+  assessment, initial ticket response, ticket classification, or service desk triage.
 ---
 
 # Ticket Triage Best Practices

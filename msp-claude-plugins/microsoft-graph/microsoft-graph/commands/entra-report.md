@@ -1,13 +1,7 @@
 ---
-name: entra-report
 description: Conversational Microsoft Entra directory reporting via the Graph Enterprise MCP — license usage, user and group counts, application inventory, and directory composition, formatted for client check-ins and QBRs
-arguments:
-  - name: topic
-    description: What to report on — overview (default), licenses, users, groups, or apps
-    required: false
-  - name: audience
-    description: technical (default) or executive — controls framing and whether raw detail is shown
-    required: false
+argument-hint: "[topic] [audience]"
+arguments: [topic, audience]
 ---
 
 # Entra Directory Report
@@ -15,6 +9,11 @@ arguments:
 Produces a conversational, **read-only** snapshot of a client's Microsoft Entra directory through the Microsoft Graph MCP Server for Enterprise. Built for client check-ins, Quarterly Business Reviews, onboarding handoffs, and "give me the state of this tenant" requests.
 
 Unlike `/microsoft-graph:entra-audit` (which hunts for problems), this command describes what's *there* — composition and consumption, not findings. All data is gathered through the RAG loop: `microsoft_graph_suggest_queries` → pick the candidate → `microsoft_graph_get`. Never invent Graph endpoints.
+
+## Arguments
+
+- `topic` (optional) — What to report on — overview (default), licenses, users, groups, or apps
+- `audience` (optional) — technical (default) or executive — controls framing and whether raw detail is shown
 
 ## What it reports
 

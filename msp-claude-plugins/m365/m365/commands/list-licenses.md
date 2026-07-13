@@ -1,18 +1,17 @@
 ---
-name: list-licenses
 description: Show Microsoft 365 license inventory - available SKUs, consumed seats, and optimization opportunities
-arguments:
-  - name: view
-    description: "What to show: 'summary' (default), 'users' (per-user breakdown), 'unused' (reclaim candidates)"
-    required: false
-  - name: sku
-    description: Filter to a specific SKU name or partial match (e.g. "Business Premium")
-    required: false
+argument-hint: "[view] [sku]"
+arguments: [view, sku]
 ---
 
 # List M365 Licenses
 
 Show the current Microsoft 365 license inventory for the tenant, including seat utilization and optimization opportunities.
+
+## Arguments
+
+- `view` (optional) — What to show: 'summary' (default), 'users' (per-user breakdown), 'unused' (reclaim candidates)
+- `sku` (optional) — Filter to a specific SKU name or partial match (e.g. "Business Premium")
 
 ## Prerequisites
 

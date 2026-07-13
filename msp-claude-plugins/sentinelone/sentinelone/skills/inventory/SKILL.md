@@ -6,21 +6,12 @@ description: >
   Covers inventory tools, surface types, REST API with offset-based
   pagination, filter types, asset fields, and inventory audit workflows
   for MSP client environments.
-when_to_use: "When working with endpoints, cloud resources, identities, and network-discovered devices in SentinelOne unified asset inventory"
-triggers:
-  - sentinelone inventory
-  - sentinelone asset
-  - sentinelone endpoint
-  - sentinelone agent
-  - sentinelone device
-  - sentinelone workstation
-  - sentinelone server
-  - asset inventory
-  - endpoint health
-  - sentinelone cloud resource
-  - sentinelone identity
-  - sentinelone ranger
-  - network discovery
+when_to_use: >-
+  When working with endpoints, cloud resources, identities, and network-discovered devices in
+  SentinelOne unified asset inventory. Use when: sentinelone inventory, sentinelone asset,
+  sentinelone endpoint, sentinelone agent, sentinelone device, sentinelone workstation,
+  sentinelone server, asset inventory, endpoint health, sentinelone cloud resource, sentinelone
+  identity, sentinelone ranger, or network discovery.
 ---
 
 # SentinelOne Unified Asset Inventory

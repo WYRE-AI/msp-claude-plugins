@@ -1,15 +1,16 @@
 ---
-name: ticket-summary
 description: Summarize a single Freshdesk ticket and its full conversation thread — the request, what has happened, current SLA state, and the recommended next action
-arguments:
-  - name: ticket_id
-    description: The Freshdesk ticket id to summarize (required)
-    required: true
+argument-hint: "<ticket_id>"
+arguments: [ticket_id]
 ---
 
 # Freshdesk Ticket Summary
 
 Produce a concise, handoff-ready summary of one Freshdesk ticket and its conversation history. Built for shift handovers, escalation context, and "catch me up on ticket 12345" moments where reading the whole thread yourself is slow.
+
+## Arguments
+
+- `ticket_id` (required) — The Freshdesk ticket id to summarize (required)
 
 ## How it works
 

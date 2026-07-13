@@ -1,25 +1,7 @@
 ---
-name: search-clients
 description: Search for HaloPSA clients by name, domain, or other attributes
-arguments:
-  - name: query
-    description: Client name, domain, or partial match
-    required: true
-  - name: client_type
-    description: Filter by type (Customer, Prospect, Vendor)
-    required: false
-  - name: active
-    description: Filter active clients only (true/false)
-    required: false
-    default: true
-  - name: include_sites
-    description: Include site information (true/false)
-    required: false
-    default: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 10
+argument-hint: "<query> [client_type] [active] [include_sites] [limit]"
+arguments: [query, client_type, active, include_sites, limit]
 ---
 
 # Search HaloPSA Clients

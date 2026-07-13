@@ -1,38 +1,7 @@
 ---
-name: search-quarantine
 description: Search quarantined emails in Checkpoint Harmony Email by various criteria
-arguments:
-  - name: query
-    description: Search term (searches sender, recipient, subject)
-    required: false
-  - name: sender
-    description: Filter by sender email address
-    required: false
-  - name: recipient
-    description: Filter by recipient email address
-    required: false
-  - name: reason
-    description: Filter by quarantine reason (phishing, malware, spam, dlp, bec, anomaly, policy, bulk)
-    required: false
-  - name: severity
-    description: Filter by severity (critical, high, medium, low)
-    required: false
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 24 hours ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: status
-    description: Filter by status (quarantined, released, deleted, all)
-    required: false
-    default: quarantined
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [sender] [recipient] [reason] [severity] [start-date] [end-date] [status] [limit]"
+arguments: [query, sender, recipient, reason, severity, start-date, end-date, status, limit]
 ---
 
 # Search Quarantined Emails

@@ -1,6 +1,14 @@
 ---
 name: approval-triage-analyst
-description: Use this agent when reviewing the ThreatLocker pending approval queue, classifying application requests as high-confidence vs needs-review, recommending approve/deny decisions with documented reasoning, and escalating suspicious patterns. Trigger for: review approvals, pending approvals, ThreatLocker triage, approve application, deny application, ThreatLocker queue, application request review, allowlist request, permit application. Examples: "Review the ThreatLocker approval queue and tell me what's safe to approve", "How many pending approvals do we have across all clients?", "Triage today's ThreatLocker requests and flag anything suspicious", "What's blocking on hash 8a3f...? — should we approve it?"
+description: >-
+  Use this agent when reviewing the ThreatLocker pending approval queue, classifying application
+  requests as high-confidence vs needs-review, recommending approve/deny decisions with documented
+  reasoning, and escalating suspicious patterns. Trigger for: review approvals, pending approvals,
+  ThreatLocker triage, approve application, deny application, ThreatLocker queue, application
+  request review, allowlist request, permit application. Examples: "Review the ThreatLocker
+  approval queue and tell me what's safe to approve", "How many pending approvals do we have
+  across all clients?", "Triage today's ThreatLocker requests and flag anything suspicious",
+  "What's blocking on hash 8a3f...? — should we approve it?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

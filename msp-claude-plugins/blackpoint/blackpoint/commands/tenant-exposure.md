@@ -1,10 +1,7 @@
 ---
-name: tenant-exposure
 description: Build a prioritized exposure report for a Blackpoint Cyber / CompassOne tenant
-arguments:
-  - name: tenant
-    description: Tenant name or ID to report on
-    required: true
+argument-hint: "<tenant>"
+arguments: [tenant]
 ---
 
 # Blackpoint Tenant Exposure Report

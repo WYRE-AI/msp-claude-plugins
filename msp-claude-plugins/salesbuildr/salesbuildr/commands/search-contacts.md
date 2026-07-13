@@ -1,16 +1,15 @@
 ---
-name: search-contacts
 description: Search for contacts in Salesbuildr, optionally filtered by company
-arguments:
-  - name: search
-    description: Search term for contact name or email
-    required: false
-  - name: company
-    description: Company name or ID to filter contacts
-    required: false
+argument-hint: "[search] [company]"
+arguments: [search, company]
 ---
 
 # Search Salesbuildr Contacts
+
+## Arguments
+
+- `search` (optional) — Search term for contact name or email
+- `company` (optional) — Company name or ID to filter contacts
 
 ## Prerequisites
 - Salesbuildr API key configured

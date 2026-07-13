@@ -1,23 +1,7 @@
 ---
-name: investigate-threat
 description: Deep-dive threat investigation with forensics, campaign context, and remediation options
-arguments:
-  - name: threat-id
-    description: Proofpoint threat ID to investigate
-    required: false
-  - name: campaign-id
-    description: Campaign ID to investigate
-    required: false
-  - name: message-guid
-    description: Message GUID to investigate
-    required: false
-  - name: url
-    description: Suspicious URL to investigate
-    required: false
-  - name: include-forensics
-    description: Include sandbox forensic data
-    required: false
-    default: true
+argument-hint: "[threat-id] [campaign-id] [message-guid] [url] [include-forensics]"
+arguments: [threat-id, campaign-id, message-guid, url, include-forensics]
 ---
 
 # Investigate Threat

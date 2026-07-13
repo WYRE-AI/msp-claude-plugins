@@ -1,6 +1,17 @@
 ---
 name: crowdsourced-intel-harvester
-description: Use this agent when harvesting and analyzing crowdsourced threat intelligence from IRONSCALES' global network — identifying trending attack types, surfacing indicators seeing increased reports, comparing client threat profiles to industry peers, and generating intelligence briefings from the collective signal. Trigger for: Ironscales threat intelligence, crowdsourced intel, attack trends Ironscales, Ironscales global intel, trending attacks email, industry threat comparison, Ironscales peer benchmark, attack type trends, threat indicators crowdsourced, email threat landscape Ironscales, Ironscales statistics analysis, threat intelligence briefing. Examples: "What attack types are trending in IRONSCALES this month?", "How does our client's threat profile compare to industry peers?", "Generate an email threat intelligence briefing from IRONSCALES data", "Which attack types are surging across the IRONSCALES network?"
+description: >-
+  Use this agent when harvesting and analyzing crowdsourced threat intelligence from IRONSCALES'
+  global network — identifying trending attack types, surfacing indicators seeing increased
+  reports, comparing client threat profiles to industry peers, and generating intelligence
+  briefings from the collective signal. Trigger for: Ironscales threat intelligence, crowdsourced
+  intel, attack trends Ironscales, Ironscales global intel, trending attacks email, industry
+  threat comparison, Ironscales peer benchmark, attack type trends, threat indicators
+  crowdsourced, email threat landscape Ironscales, Ironscales statistics analysis, threat
+  intelligence briefing. Examples: "What attack types are trending in IRONSCALES this month?",
+  "How does our client's threat profile compare to industry peers?", "Generate an email threat
+  intelligence briefing from IRONSCALES data", "Which attack types are surging across the
+  IRONSCALES network?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

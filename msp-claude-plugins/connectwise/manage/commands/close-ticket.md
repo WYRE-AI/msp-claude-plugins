@@ -1,26 +1,7 @@
 ---
-name: close-ticket
 description: Close a ConnectWise PSA ticket with resolution notes
-arguments:
-  - name: ticket_id
-    description: The ConnectWise ticket ID to close
-    required: true
-  - name: resolution
-    description: Resolution notes describing how the issue was resolved
-    required: true
-  - name: status
-    description: Closed status name (defaults to board's default closed status)
-    required: false
-  - name: time_minutes
-    description: Log final time entry in minutes
-    required: false
-  - name: time_notes
-    description: Notes for the time entry (if time_minutes provided)
-    required: false
-  - name: billable
-    description: Mark time as billable (default true)
-    required: false
-    default: true
+argument-hint: "<ticket_id> <resolution> [status] [time_minutes] [time_notes] [billable]"
+arguments: [ticket_id, resolution, status, time_minutes, time_notes, billable]
 ---
 
 # Close ConnectWise PSA Ticket

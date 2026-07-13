@@ -1,22 +1,7 @@
 ---
-name: list-alerts
 description: List active RMM alerts across all clients or filtered by criteria
-arguments:
-  - name: client_id
-    description: Filter by client ID
-    required: false
-  - name: severity
-    description: Filter by severity (Low, Medium, High, Critical)
-    required: false
-  - name: status
-    description: Filter by status - active (default), acknowledged, resolved
-    required: false
-  - name: asset_id
-    description: Filter by specific asset
-    required: false
-  - name: limit
-    description: Maximum results (default 25, max 100)
-    required: false
+argument-hint: "[client_id] [severity] [status] [asset_id] [limit]"
+arguments: [client_id, severity, status, asset_id, limit]
 ---
 
 # List SuperOps.ai RMM Alerts

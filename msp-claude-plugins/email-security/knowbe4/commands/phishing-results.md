@@ -1,19 +1,7 @@
 ---
-name: phishing-results
 description: View phishing campaign results and click rates from KnowBe4
-arguments:
-  - name: campaign
-    description: Campaign name or ID
-    required: false
-  - name: period
-    description: Time period (e.g., "last 30 days", "Q1 2024", "2024-01-01 to 2024-03-31")
-    required: false
-  - name: group
-    description: Filter by group name or ID
-    required: false
-  - name: detail
-    description: Level of detail - summary, detailed, or recipients
-    required: false
+argument-hint: "[campaign] [period] [group] [detail]"
+arguments: [campaign, period, group, detail]
 ---
 
 # View Phishing Campaign Results

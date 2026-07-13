@@ -1,30 +1,21 @@
 ---
-name: offboard-user
 description: Run the complete CIPP M365 offboarding workflow for a departing user — capture audit state, revoke access, handle mailbox, reclaim licenses
-arguments:
-  - name: user
-    description: UPN or display name of the user being offboarded
-    required: true
-  - name: tenant
-    description: Tenant default domain or display name (skip if user is unique across all tenants)
-    required: false
-  - name: posture
-    description: standard, termination, or contractor — controls action ordering and defaults (defaults to standard)
-    required: false
-  - name: mailbox-action
-    description: shared, forward, archive, or hold — what to do with the mailbox (defaults to shared)
-    required: false
-  - name: forward-to
-    description: UPN to forward mail to (defaults to user's manager if set in M365)
-    required: false
-  - name: dry-run
-    description: Show every action that would be taken without executing (true/false)
-    required: false
+argument-hint: "<user> [tenant] [posture] [mailbox-action] [forward-to] [dry-run]"
+arguments: [user, tenant, posture, mailbox-action, forward-to, dry-run]
 ---
 
 # Offboard CIPP User
 
 Delegate to the **`user-offboarding-runner`** agent. The agent handles the full sequence: tenant + user resolution, audit-state capture, account lock, mailbox handling, license reclaim, and structured offboarding record output.
+
+## Arguments
+
+- `user` (required) — UPN or display name of the user being offboarded
+- `tenant` (optional) — Tenant default domain or display name (skip if user is unique across all tenants)
+- `posture` (optional) — standard, termination, or contractor — controls action ordering and defaults (defaults to standard)
+- `mailbox-action` (optional) — shared, forward, archive, or hold — what to do with the mailbox (defaults to shared)
+- `forward-to` (optional) — UPN to forward mail to (defaults to user's manager if set in M365)
+- `dry-run` (optional) — Show every action that would be taken without executing (true/false)
 
 ## Posture defaults
 

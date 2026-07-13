@@ -1,26 +1,7 @@
 ---
-name: search-incidents
 description: Search RocketCyber security incidents by account, status, severity, verdict, and date range
-arguments:
-  - name: account
-    description: Account name or ID to filter incidents
-    required: false
-  - name: status
-    description: "Incident status filter: open, resolved, false-positive, or all"
-    required: false
-    default: open
-  - name: severity
-    description: "Severity filter: critical, high, medium, low, or all"
-    required: false
-    default: all
-  - name: verdict
-    description: "Verdict filter: malicious, suspicious, benign, or all"
-    required: false
-    default: all
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "25"
+argument-hint: "[account] [status] [severity] [verdict] [limit]"
+arguments: [account, status, severity, verdict, limit]
 ---
 
 # Search RocketCyber Incidents

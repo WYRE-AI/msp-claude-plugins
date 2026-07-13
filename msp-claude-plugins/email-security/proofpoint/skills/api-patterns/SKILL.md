@@ -5,19 +5,12 @@ description: >
   Basic Auth with service principal and secret, base URLs, rate limits, pagination,
   error codes, and common integration patterns. Covers TAP SIEM API, quarantine API,
   people API, and URL Defense API authentication and usage patterns.
-when_to_use: "When working with authentication using HTTP Basic Auth with service principal and secret, base URLs, rate limits, pagination, error codes"
-triggers:
-  - proofpoint api
-  - proofpoint authentication
-  - proofpoint auth
-  - proofpoint rate limit
-  - proofpoint pagination
-  - proofpoint error
-  - proofpoint base url
-  - proofpoint service principal
-  - proofpoint api key
-  - proofpoint rest api
-  - proofpoint credentials
+when_to_use: >-
+  When working with authentication using HTTP Basic Auth with service principal and secret, base
+  URLs, rate limits, pagination, error codes. Use when: proofpoint api, proofpoint authentication,
+  proofpoint auth, proofpoint rate limit, proofpoint pagination, proofpoint error, proofpoint base
+  url, proofpoint service principal, proofpoint api key, proofpoint rest api, or proofpoint
+  credentials.
 ---
 
 # Proofpoint API Patterns

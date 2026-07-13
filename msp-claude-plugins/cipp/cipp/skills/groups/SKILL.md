@@ -1,14 +1,9 @@
 ---
 name: "cipp-groups"
 description: "Use this skill when listing or creating M365 groups in CIPP — security groups, distribution lists, M365 groups, mail-enabled security groups. Covers tenant-scoped group enumeration and creation as part of user onboarding or access-management workflows."
-when_to_use: "When enumerating or creating Entra ID / M365 groups across managed tenants"
-triggers:
-  - cipp group
-  - create group
-  - m365 group
-  - distribution list
-  - security group
-  - group membership
+when_to_use: >-
+  When enumerating or creating Entra ID / M365 groups across managed tenants. Use when: cipp
+  group, create group, m365 group, distribution list, security group, or group membership.
 ---
 
 # CIPP Groups

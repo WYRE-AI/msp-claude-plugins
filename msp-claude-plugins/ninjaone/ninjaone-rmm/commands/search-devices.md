@@ -1,13 +1,14 @@
 ---
-name: ninjaone-search-devices
 description: Search for devices across NinjaOne organizations
-arguments:
-  - name: query
-    description: Search query (hostname, IP, or organization name)
-    required: true
+argument-hint: "<query>"
+arguments: [query]
 ---
 
 Search for devices in NinjaOne matching the query "$ARGUMENTS.query".
+
+## Arguments
+
+- `query` (required) — Search query (hostname, IP, or organization name)
 
 ## Instructions
 

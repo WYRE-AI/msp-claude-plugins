@@ -7,22 +7,12 @@ description: >
   escalation, and closure workflows for email security events.
   Essential for MSP security analysts managing incident response across
   customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
-when_to_use: "When working with incident lifecycle, status transitions, investigation workflows, notes and evidence collection"
-triggers:
-  - checkpoint incident
-  - avanan incident
-  - email security incident
-  - incident investigation
-  - incident response
-  - incident triage
-  - incident status
-  - incident escalation
-  - incident notes
-  - incident evidence
-  - incident remediation
-  - security incident email
-  - incident closure
-  - incident timeline
+when_to_use: >-
+  When working with incident lifecycle, status transitions, investigation workflows, notes and
+  evidence collection. Use when: checkpoint incident, avanan incident, email security incident,
+  incident investigation, incident response, incident triage, incident status, incident
+  escalation, incident notes, incident evidence, incident remediation, security incident email,
+  incident closure, or incident timeline.
 ---
 
 # Checkpoint Harmony Email Incident Investigation

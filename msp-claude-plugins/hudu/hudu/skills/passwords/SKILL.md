@@ -6,18 +6,11 @@ description: >
   Covers security best practices, audit logging, password retrieval,
   and proper handling of sensitive credentials. The API endpoint is
   /api/v1/asset_passwords despite the UI calling them "Passwords."
-when_to_use: "When working with secure credential storage, retrieval, folders, and access patterns in Hudu passwords (asset passwords)"
-triggers:
-  - hudu password
-  - hudu credential
-  - credential lookup
-  - password management
-  - secure credentials
-  - hudu credentials
-  - password storage
-  - credential documentation
-  - password access
-  - asset password
+when_to_use: >-
+  When working with secure credential storage, retrieval, folders, and access patterns in Hudu
+  passwords (asset passwords). Use when: hudu password, hudu credential, credential lookup,
+  password management, secure credentials, hudu credentials, password storage, credential
+  documentation, password access, or asset password.
 ---
 
 # Hudu Passwords Management

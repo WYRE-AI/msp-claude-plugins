@@ -1,18 +1,17 @@
 ---
-name: tenant-health
 description: Quick health snapshot for a single tenant — BPA failures, conditional access enforcement, MFA gaps, domain authentication, standards compliance
-arguments:
-  - name: tenant
-    description: Tenant default domain, display name, or GUID
-    required: true
-  - name: detail
-    description: summary (default), full, or executive — controls report depth
-    required: false
+argument-hint: "<tenant> [detail]"
+arguments: [tenant, detail]
 ---
 
 # CIPP Tenant Health Snapshot
 
 Pulls a focused health picture for one tenant. Suitable for client check-ins, post-onboarding validation, pre-QBR prep, or "is something off with [tenant]?" investigations.
+
+## Arguments
+
+- `tenant` (required) — Tenant default domain, display name, or GUID
+- `detail` (optional) — summary (default), full, or executive — controls report depth
 
 ## What it checks
 

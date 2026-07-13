@@ -1,6 +1,14 @@
 ---
 name: fleet-health-auditor
-description: Use this agent when producing ThreatLocker fleet inventory and hygiene reports — computer inventory by OS or group, offline-agent identification with check-in age tiering, computer-group hygiene analysis (orphans, oversized groups, OS-mismatched assignments), and multi-tenant pivots across child organizations. Trigger for: fleet report, offline agents, computer inventory, ThreatLocker hygiene, ThreatLocker coverage, agent count by org, stale endpoints, group audit, ThreatLocker fleet health. Examples: "Generate a ThreatLocker fleet health report", "Which agents haven't checked in for over 7 days?", "Show me the computer inventory broken down by OS and organization", "Audit our computer groups for orphans and oversized groups"
+description: >-
+  Use this agent when producing ThreatLocker fleet inventory and hygiene reports — computer
+  inventory by OS or group, offline-agent identification with check-in age tiering, computer-group
+  hygiene analysis (orphans, oversized groups, OS-mismatched assignments), and multi-tenant pivots
+  across child organizations. Trigger for: fleet report, offline agents, computer inventory,
+  ThreatLocker hygiene, ThreatLocker coverage, agent count by org, stale endpoints, group audit,
+  ThreatLocker fleet health. Examples: "Generate a ThreatLocker fleet health report", "Which
+  agents haven't checked in for over 7 days?", "Show me the computer inventory broken down by OS
+  and organization", "Audit our computer groups for orphans and oversized groups"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

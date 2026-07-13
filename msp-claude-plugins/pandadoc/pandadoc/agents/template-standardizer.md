@@ -1,6 +1,13 @@
 ---
 name: template-standardizer
-description: Use this agent when an MSP needs to audit and standardize their PandaDoc proposal and contract templates — checking for outdated pricing, missing legal clauses, inconsistent formatting, and stale service descriptions. Trigger for: PandaDoc template audit, outdated proposal template, missing contract clause, template standardization PandaDoc, stale pricing template, proposal template review, template quality PandaDoc. Examples: "audit our PandaDoc templates for outdated pricing", "which templates are missing our standard legal clauses", "show me which templates are most used vs which ones are stale"
+description: >-
+  Use this agent when an MSP needs to audit and standardize their PandaDoc proposal and contract
+  templates — checking for outdated pricing, missing legal clauses, inconsistent formatting, and
+  stale service descriptions. Trigger for: PandaDoc template audit, outdated proposal template,
+  missing contract clause, template standardization PandaDoc, stale pricing template, proposal
+  template review, template quality PandaDoc. Examples: "audit our PandaDoc templates for outdated
+  pricing", "which templates are missing our standard legal clauses", "show me which templates are
+  most used vs which ones are stale"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

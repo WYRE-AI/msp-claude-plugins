@@ -1,19 +1,7 @@
 ---
-name: group-report
 description: Get security awareness metrics for a KnowBe4 group
-arguments:
-  - name: group
-    description: Group name or ID
-    required: true
-  - name: period
-    description: Time period for metrics (e.g., "last 6 months", "Q1 2024")
-    required: false
-  - name: compare
-    description: Compare to another group or organization average
-    required: false
-  - name: detail
-    description: Level of detail - summary, members, or trend
-    required: false
+argument-hint: "<group> [period] [compare] [detail]"
+arguments: [group, period, compare, detail]
 ---
 
 # Group Security Awareness Report

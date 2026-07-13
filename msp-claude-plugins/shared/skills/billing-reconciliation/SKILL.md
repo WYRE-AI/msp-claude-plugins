@@ -4,24 +4,12 @@ description: >
   Reconcile cloud marketplace subscriptions (Pax8) against accounting invoices
   (Xero, QuickBooks Online) to identify billing gaps, unbilled subscriptions,
   and margin discrepancies
-when_to_use: "When reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero, QuickBooks Online) to identify billing gaps, unbilled subscriptions"
-version: 1.0.0
-triggers:
-  - billing reconciliation
-  - reconcile subscriptions
-  - unbilled subscriptions
-  - billing gap analysis
-  - margin analysis
-  - subscription vs invoice comparison
-  - pax8 xero reconciliation
-  - pax8 quickbooks reconciliation
-dependencies:
-  - pax8/subscriptions
-  - pax8/invoices
-  - xero/invoices (optional)
-  - xero/contacts (optional)
-  - quickbooks-online/invoices (optional)
-  - quickbooks-online/customers (optional)
+when_to_use: >-
+  When reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero,
+  QuickBooks Online) to identify billing gaps, unbilled subscriptions. Use when: billing
+  reconciliation, reconcile subscriptions, unbilled subscriptions, billing gap analysis, margin
+  analysis, subscription vs invoice comparison, pax8 xero reconciliation, or pax8 quickbooks
+  reconciliation.
 ---
 
 # Cross-Vendor Billing Reconciliation

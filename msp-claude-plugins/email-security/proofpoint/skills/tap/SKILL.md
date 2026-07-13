@@ -6,23 +6,12 @@ description: >
   SIEM integration feeds, and threat type analysis. Covers URL threats, attachment
   threats, message-level threats, permitted and blocked clicks, and campaign
   correlation. Essential for MSP security analysts monitoring email threat activity.
-when_to_use: "When retrieving threat events, click tracking, message delivery and blocking data, SIEM integration feeds, and threat type analysis"
-triggers:
-  - proofpoint tap
-  - targeted attack protection
-  - proofpoint threats
-  - email threats
-  - tap events
-  - proofpoint clicks
-  - click tracking
-  - proofpoint messages
-  - message blocked
-  - message delivered
-  - proofpoint siem
-  - tap api
-  - threat events
-  - proofpoint malware
-  - proofpoint phishing
+when_to_use: >-
+  When retrieving threat events, click tracking, message delivery and blocking data, SIEM
+  integration feeds, and threat type analysis. Use when: proofpoint tap, targeted attack
+  protection, proofpoint threats, email threats, tap events, proofpoint clicks, click tracking,
+  proofpoint messages, message blocked, message delivered, proofpoint siem, tap api, threat
+  events, proofpoint malware, or proofpoint phishing.
 ---
 
 # Proofpoint Targeted Attack Protection (TAP)

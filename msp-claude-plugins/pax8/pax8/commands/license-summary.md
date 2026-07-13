@@ -1,17 +1,7 @@
 ---
-name: license-summary
 description: Aggregate license counts and costs across all Pax8 client companies
-arguments:
-  - name: vendor
-    description: Filter by vendor name (e.g., Microsoft, SentinelOne)
-    required: false
-  - name: company
-    description: Filter to a specific company name
-    required: false
-  - name: show_optimization
-    description: Include license optimization recommendations
-    required: false
-    default: true
+argument-hint: "[vendor] [company] [show_optimization]"
+arguments: [vendor, company, show_optimization]
 ---
 
 # Pax8 License Summary

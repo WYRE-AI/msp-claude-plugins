@@ -1,6 +1,13 @@
 ---
 name: soc-alert-investigator
-description: Use this agent when an MSP needs to investigate and triage RocketCyber SOC alerts and security incidents across their client portfolio. Trigger for: SOC alert review, incident investigation, malicious incident, suspicious activity, security triage, threat correlation, incident escalation, RocketCyber incident queue, daily security review. Examples: "Review all open RocketCyber incidents and tell me what needs immediate attention", "Investigate incident 98765 and give me a remediation plan", "Which clients have the most open security incidents this week?"
+description: >-
+  Use this agent when an MSP needs to investigate and triage RocketCyber SOC alerts and security
+  incidents across their client portfolio. Trigger for: SOC alert review, incident investigation,
+  malicious incident, suspicious activity, security triage, threat correlation, incident
+  escalation, RocketCyber incident queue, daily security review. Examples: "Review all open
+  RocketCyber incidents and tell me what needs immediate attention", "Investigate incident 98765
+  and give me a remediation plan", "Which clients have the most open security incidents this
+  week?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

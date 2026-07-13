@@ -1,25 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing Autotask ticket (status, priority, queue, due date)
-arguments:
-  - name: ticket_id
-    description: The Autotask ticket ID to update
-    required: true
-  - name: status
-    description: New status (e.g., "In Progress", "Waiting Customer", "Complete")
-    required: false
-  - name: priority
-    description: Priority level 1-4 (4=Critical, 3=High, 2=Medium, 1=Low). Note - lower numbers = lower urgency in Autotask.
-    required: false
-  - name: queue
-    description: Queue name to move ticket to
-    required: false
-  - name: due_date
-    description: New due date (YYYY-MM-DD or ISO 8601 format)
-    required: false
-  - name: assigned_resource
-    description: Resource email or name to assign
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [queue] [due_date] [assigned_resource]"
+arguments: [ticket_id, status, priority, queue, due_date, assigned_resource]
 ---
 
 # Update Autotask Ticket

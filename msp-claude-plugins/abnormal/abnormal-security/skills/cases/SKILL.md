@@ -7,20 +7,12 @@ description: >
   bulk actions, and MSP workflows for managing user-reported suspicious emails.
   Essential for MSP security analysts triaging abuse mailbox submissions
   in Abnormal Security.
-when_to_use: "When working with user-reported emails, case triage, remediation actions, case lifecycle, and phishing simulation management in Abnormal Security abuse mailbox cases"
-triggers:
-  - abnormal case
-  - abuse mailbox
-  - user reported email
-  - reported phishing
-  - case triage
-  - case review
-  - abnormal cases
-  - abuse case management
-  - phishing report
-  - user submission
-  - case remediation
-  - case judgment
+when_to_use: >-
+  When working with user-reported emails, case triage, remediation actions, case lifecycle, and
+  phishing simulation management in Abnormal Security abuse mailbox cases. Use when: abnormal
+  case, abuse mailbox, user reported email, reported phishing, case triage, case review, abnormal
+  cases, abuse case management, phishing report, user submission, case remediation, or case
+  judgment.
 ---
 
 # Abnormal Security Abuse Mailbox Cases

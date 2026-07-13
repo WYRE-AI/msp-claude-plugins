@@ -5,18 +5,11 @@ description: >
   assigning or removing licenses, auditing license usage, finding unused licenses,
   or planning license optimization for a customer tenant. Covers SKUs, service
   plans, and license cost efficiency for MSP account management.
-when_to_use: "When managing Microsoft 365 licenses - checking available seats, assigning or removing licenses, auditing license usage, finding unused licenses"
-triggers:
-  - m365 license
-  - microsoft 365 license
-  - m365 seats
-  - m365 sku
-  - license audit
-  - license usage m365
-  - unused license m365
-  - license assignment m365
-  - m365 subscription
-  - license optimization
+when_to_use: >-
+  When managing Microsoft 365 licenses - checking available seats, assigning or removing licenses,
+  auditing license usage, finding unused licenses. Use when: m365 license, microsoft 365 license,
+  m365 seats, m365 sku, license audit, license usage m365, unused license m365, license assignment
+  m365, m365 subscription, or license optimization.
 ---
 
 # Microsoft 365 Licensing

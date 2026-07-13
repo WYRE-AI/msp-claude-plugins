@@ -5,16 +5,10 @@ description: >
   terminology, capabilities, authentication patterns, or API structure.
   Covers environments, agents, inspectors, launchpoints, systems, detections,
   and common MSP workflows for automated IT documentation.
-when_to_use: "When claude needs context about the Liongard platform, terminology, capabilities, authentication patterns, or API structure"
-triggers:
-  - liongard
-  - liongard overview
-  - liongard platform
-  - liongard api
-  - roar api
-  - liongard terminology
-  - liongard authentication
-  - liongard capabilities
+when_to_use: >-
+  When claude needs context about the Liongard platform, terminology, capabilities, authentication
+  patterns, or API structure. Use when: liongard, liongard overview, liongard platform, liongard
+  api, roar api, liongard terminology, liongard authentication, or liongard capabilities.
 ---
 
 # Liongard Platform Overview

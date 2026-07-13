@@ -1,34 +1,7 @@
 ---
-name: schedule-entry
 description: Create a schedule entry/appointment in ConnectWise PSA
-arguments:
-  - name: name
-    description: Schedule entry name/subject
-    required: true
-  - name: start_date
-    description: Start date and time (YYYY-MM-DD HH:MM)
-    required: true
-  - name: end_date
-    description: End date and time (YYYY-MM-DD HH:MM)
-    required: true
-  - name: member
-    description: Member identifier (defaults to current user)
-    required: false
-  - name: ticket_id
-    description: Associated ticket ID
-    required: false
-  - name: type
-    description: Schedule type (e.g., "Service", "Sales", "Meeting")
-    required: false
-  - name: location
-    description: Location/address
-    required: false
-  - name: reminder_minutes
-    description: Reminder time in minutes before start
-    required: false
-  - name: status
-    description: Schedule status (e.g., "Firm", "Tentative")
-    required: false
+argument-hint: "<name> <start_date> <end_date> [member] [ticket_id] [type] [location] [reminder_minutes] [status]"
+arguments: [name, start_date, end_date, member, ticket_id, type, location, reminder_minutes, status]
 ---
 
 # Create ConnectWise PSA Schedule Entry

@@ -1,6 +1,14 @@
 ---
 name: patch-compliance-reporter
-description: Use this agent when an MSP needs dedicated patch compliance reporting across their NinjaOne-managed portfolio — not a general health check, but a focused analysis of OS patch levels, third-party application versions, missing critical patches, devices pending reboot, and patch policy exceptions. Trigger for: patch compliance report, patch status NinjaOne, missing patches NinjaOne, Windows update compliance, third-party patch report, QBR patch data, patch exceptions NinjaOne, patch policy review. Examples: "Generate a patch compliance report for all our clients for the QBR", "Which organizations have devices missing critical security patches?", "Show me all devices pending reboot after patching across every client"
+description: >-
+  Use this agent when an MSP needs dedicated patch compliance reporting across their
+  NinjaOne-managed portfolio — not a general health check, but a focused analysis of OS patch
+  levels, third-party application versions, missing critical patches, devices pending reboot, and
+  patch policy exceptions. Trigger for: patch compliance report, patch status NinjaOne, missing
+  patches NinjaOne, Windows update compliance, third-party patch report, QBR patch data, patch
+  exceptions NinjaOne, patch policy review. Examples: "Generate a patch compliance report for all
+  our clients for the QBR", "Which organizations have devices missing critical security patches?",
+  "Show me all devices pending reboot after patching across every client"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

@@ -1,19 +1,7 @@
 ---
-name: get-kb-articles
 description: Search the Atera knowledge base for articles
-arguments:
-  - name: query
-    description: Search terms for knowledge base
-    required: true
-  - name: folder
-    description: Filter by KB folder name
-    required: false
-  - name: visibility
-    description: Filter by visibility (Internal, CustomerPortal, All)
-    required: false
-  - name: limit
-    description: Maximum results (default 10)
-    required: false
+argument-hint: "<query> [folder] [visibility] [limit]"
+arguments: [query, folder, visibility, limit]
 ---
 
 # Get Atera Knowledge Base Articles

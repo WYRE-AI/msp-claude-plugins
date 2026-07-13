@@ -1,21 +1,7 @@
 ---
-name: add-ticket-comment
 description: Add a comment to an existing Syncro ticket
-arguments:
-  - name: ticket_id
-    description: The Syncro ticket ID
-    required: true
-  - name: comment
-    description: The comment content
-    required: true
-  - name: hidden
-    description: Hide from customer portal (default false)
-    required: false
-    default: false
-  - name: do_not_email
-    description: Prevent email notification (default false)
-    required: false
-    default: false
+argument-hint: "<ticket_id> <comment> [hidden] [do_not_email]"
+arguments: [ticket_id, comment, hidden, do_not_email]
 ---
 
 # Add Syncro Ticket Comment

@@ -1,26 +1,7 @@
 ---
-name: log-time
 description: Log a time entry against a Syncro ticket
-arguments:
-  - name: ticket_id
-    description: The ticket ID to log time against
-    required: true
-  - name: duration
-    description: Duration in minutes or HH:MM format
-    required: true
-  - name: notes
-    description: Work description/notes
-    required: false
-  - name: billable
-    description: Mark as billable (default true)
-    required: false
-    default: true
-  - name: timer_started_at
-    description: Start time (defaults to now minus duration)
-    required: false
-  - name: product_id
-    description: Product/service ID for billing
-    required: false
+argument-hint: "<ticket_id> <duration> [notes] [billable] [timer_started_at] [product_id]"
+arguments: [ticket_id, duration, notes, billable, timer_started_at, product_id]
 ---
 
 # Log Time to Syncro Ticket

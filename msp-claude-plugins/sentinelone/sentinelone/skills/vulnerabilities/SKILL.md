@@ -7,20 +7,12 @@ description: >
   vulnerability reports across MSP client environments. Covers all
   vulnerability tools, status values, severity levels, and remediation
   workflows.
-when_to_use: "When tracking CVEs, reviewing EPSS scores, assessing exploit maturity, managing vulnerability status, prioritizing patches"
-triggers:
-  - sentinelone vulnerability
-  - sentinelone cve
-  - sentinelone patch
-  - sentinelone epss
-  - vulnerability management
-  - vulnerability report
-  - sentinelone xspm
-  - sentinelone exploit
-  - vulnerability scan
-  - patch management
-  - sentinelone remediation
-  - vulnerability assessment
+when_to_use: >-
+  When tracking CVEs, reviewing EPSS scores, assessing exploit maturity, managing vulnerability
+  status, prioritizing patches. Use when: sentinelone vulnerability, sentinelone cve, sentinelone
+  patch, sentinelone epss, vulnerability management, vulnerability report, sentinelone xspm,
+  sentinelone exploit, vulnerability scan, patch management, sentinelone remediation, or
+  vulnerability assessment.
 ---
 
 # SentinelOne XSPM Vulnerability Management

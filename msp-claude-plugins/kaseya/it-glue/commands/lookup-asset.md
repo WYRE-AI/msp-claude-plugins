@@ -1,16 +1,7 @@
 ---
-name: lookup-asset
 description: Find a configuration item (asset) in IT Glue by name, hostname, serial number, or IP address
-arguments:
-  - name: query
-    description: Asset name, hostname, serial number, or IP address to search for
-    required: true
-  - name: organization
-    description: Filter by organization name
-    required: false
-  - name: type
-    description: Filter by configuration type (server, workstation, network, etc.)
-    required: false
+argument-hint: "<query> [organization] [type]"
+arguments: [query, organization, type]
 ---
 
 # Lookup IT Glue Asset

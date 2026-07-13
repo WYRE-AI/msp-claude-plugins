@@ -1,6 +1,15 @@
 ---
 name: psa-integration-specialist
-description: Use this agent when working with the link between TimeZest and a PSA — building correct associatedEntities payloads for ConnectWise / Autotask / Halo, auditing scheduling requests for missing or wrong PSA associations, reconciling TimeZest bookings against PSA tickets, and choosing pod vs generate_url trigger modes. Trigger for: PSA association, link to ticket, ConnectWise integration, Autotask integration, Halo integration, associated entities, pod workflow, reconcile bookings, orphan scheduling request. Examples: "This booking didn't show up on the ConnectWise ticket — what went wrong?", "Audit our recent TimeZest requests for ones missing a PSA link", "Should this request use pod or generate_url?", "Reconcile last week's TimeZest bookings against their Autotask tickets"
+description: >-
+  Use this agent when working with the link between TimeZest and a PSA — building correct
+  associatedEntities payloads for ConnectWise / Autotask / Halo, auditing scheduling requests for
+  missing or wrong PSA associations, reconciling TimeZest bookings against PSA tickets, and
+  choosing pod vs generate_url trigger modes. Trigger for: PSA association, link to ticket,
+  ConnectWise integration, Autotask integration, Halo integration, associated entities, pod
+  workflow, reconcile bookings, orphan scheduling request. Examples: "This booking didn't show up
+  on the ConnectWise ticket — what went wrong?", "Audit our recent TimeZest requests for ones
+  missing a PSA link", "Should this request use pod or generate_url?", "Reconcile last week's
+  TimeZest bookings against their Autotask tickets"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

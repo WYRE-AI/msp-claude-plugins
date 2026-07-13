@@ -1,22 +1,7 @@
 ---
-name: list-alerts
 description: List active RMM alerts from Atera
-arguments:
-  - name: customer_id
-    description: Filter alerts by customer ID
-    required: false
-  - name: severity
-    description: Filter by severity (Information, Warning, Critical)
-    required: false
-  - name: alert_category
-    description: Filter by category (Hardware, Disk, Availability, Performance, General)
-    required: false
-  - name: since
-    description: Show alerts since date (default last 24 hours)
-    required: false
-  - name: limit
-    description: Maximum results to return (default 50, max 500)
-    required: false
+argument-hint: "[customer_id] [severity] [alert_category] [since] [limit]"
+arguments: [customer_id, severity, alert_category, since, limit]
 ---
 
 # List Atera Alerts

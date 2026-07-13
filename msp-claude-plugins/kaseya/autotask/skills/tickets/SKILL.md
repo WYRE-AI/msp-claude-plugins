@@ -6,28 +6,12 @@ description: >
   queues, statuses, priorities, SLAs, escalation rules, and workflow automations.
   Includes business logic for validation, SLA calculations, and metrics.
   Essential for MSP technicians handling service delivery through Autotask PSA.
-when_to_use: "When creating, updating, searching, or managing service desk operations"
-triggers:
-  - autotask ticket
-  - service ticket
-  - create ticket autotask
-  - ticket queue
-  - ticket status
-  - ticket priority
-  - autotask service desk
-  - ticket triage
-  - escalate ticket
-  - resolve ticket
-  - ticket notes
-  - time entry ticket
-  - sla calculation
-  - ticket metrics
-  - ticket kpi
-  - ticket history
-  - ticket audit trail
-  - status transition
-  - who changed
-  - when did ticket
+when_to_use: >-
+  When creating, updating, searching, or managing service desk operations. Use when: autotask
+  ticket, service ticket, create ticket autotask, ticket queue, ticket status, ticket priority,
+  autotask service desk, ticket triage, escalate ticket, resolve ticket, ticket notes, time entry
+  ticket, sla calculation, ticket metrics, ticket kpi, ticket history, ticket audit trail, status
+  transition, who changed, or when did ticket.
 ---
 
 # Autotask Ticket Management

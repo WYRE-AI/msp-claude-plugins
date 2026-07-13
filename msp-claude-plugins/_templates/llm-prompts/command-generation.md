@@ -34,18 +34,16 @@ Generate a complete command markdown file that:
 
 ```markdown
 ---
-name: command-name
 description: Brief description
-arguments:
-  - name: arg1
-    description: Argument description
-    required: true
-  - name: arg2
-    description: Optional argument
-    required: false
+argument-hint: "<arg1> [arg2]"
+arguments: [arg1, arg2]
 ---
 
 # [Command Title]
+
+## Arguments
+- `arg1` (required) — Argument description
+- `arg2` (optional) — Optional argument description
 
 ## Prerequisites
 - Required setup...
@@ -55,11 +53,6 @@ arguments:
 2. Make API call
 3. Process response
 4. Return result
-
-## Parameters
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| arg1 | string | Yes | Description |
 
 ## Examples
 ### Basic Usage

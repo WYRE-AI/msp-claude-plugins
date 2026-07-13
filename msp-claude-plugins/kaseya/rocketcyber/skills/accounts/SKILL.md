@@ -5,16 +5,11 @@ description: >
   hierarchy, account management, sub-account navigation, account settings,
   and security policy configuration. Covers account CRUD operations and
   multi-tenant MSP patterns.
-when_to_use: "When working with provider/customer hierarchy, account management, sub-account navigation, account settings, and security policy configuration in RocketCyber accounts"
-triggers:
-  - rocketcyber account
-  - rocketcyber customer
-  - rocketcyber provider
-  - rocketcyber tenant
-  - rocketcyber organization
-  - account hierarchy rocketcyber
-  - rocketcyber sub-account
-  - rocketcyber client
+when_to_use: >-
+  When working with provider/customer hierarchy, account management, sub-account navigation,
+  account settings, and security policy configuration in RocketCyber accounts. Use when:
+  rocketcyber account, rocketcyber customer, rocketcyber provider, rocketcyber tenant, rocketcyber
+  organization, account hierarchy rocketcyber, rocketcyber sub-account, or rocketcyber client.
 ---
 
 # RocketCyber Account Management

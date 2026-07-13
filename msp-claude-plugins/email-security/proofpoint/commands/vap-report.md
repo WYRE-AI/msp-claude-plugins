@@ -1,21 +1,7 @@
 ---
-name: vap-report
 description: Get the Very Attacked People (VAP) report showing the most targeted users
-arguments:
-  - name: window
-    description: Time window for the report (14, 30, or 90 days)
-    required: false
-    default: 30
-  - name: size
-    description: Number of top users to return
-    required: false
-    default: 20
-  - name: user
-    description: Get risk profile for a specific user email
-    required: false
-  - name: department
-    description: Filter by department
-    required: false
+argument-hint: "[window] [size] [user] [department]"
+arguments: [window, size, user, department]
 ---
 
 # Very Attacked People (VAP) Report

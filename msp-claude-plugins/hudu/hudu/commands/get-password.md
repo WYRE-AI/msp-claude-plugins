@@ -1,20 +1,7 @@
 ---
-name: get-password
 description: Retrieve a password from Hudu (with security logging)
-arguments:
-  - name: name
-    description: Password name or partial match
-    required: true
-  - name: company
-    description: Company name (required for security)
-    required: true
-  - name: type
-    description: Filter by password type
-    required: false
-  - name: show
-    description: Show the actual password value (logged for audit)
-    required: false
-    default: false
+argument-hint: "<name> <company> [type] [show]"
+arguments: [name, company, type, show]
 ---
 
 # Get Hudu Password

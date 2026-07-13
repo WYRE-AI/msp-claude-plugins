@@ -1,25 +1,7 @@
 ---
-name: expense-summary
 description: Summarize expenses by client, vendor, or date range in QuickBooks Online
-arguments:
-  - name: from
-    description: Start date (YYYY-MM-DD)
-    required: false
-    default: first of current month
-  - name: to
-    description: End date (YYYY-MM-DD)
-    required: false
-    default: today
-  - name: customer
-    description: Filter expenses allocated to a specific customer
-    required: false
-  - name: vendor
-    description: Filter expenses from a specific vendor
-    required: false
-  - name: group_by
-    description: Group results by customer, vendor, or category
-    required: false
-    default: customer
+argument-hint: "[from] [to] [customer] [vendor] [group_by]"
+arguments: [from, to, customer, vendor, group_by]
 ---
 
 # QuickBooks Online Expense Summary

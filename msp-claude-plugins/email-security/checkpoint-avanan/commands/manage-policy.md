@@ -1,19 +1,7 @@
 ---
-name: manage-policy
 description: View or toggle email security policies in Checkpoint Harmony Email
-arguments:
-  - name: action
-    description: Action to perform (list, show, enable, disable)
-    required: true
-  - name: policy-id
-    description: Policy ID (required for show, enable, disable)
-    required: false
-  - name: type
-    description: Filter by policy type when listing (anti-phishing, anti-malware, anti-bec, anti-spam, dlp, url-rewrite, ato, custom)
-    required: false
-  - name: reason
-    description: Reason for enabling/disabling (required for disable)
-    required: false
+argument-hint: "<action> [policy-id] [type] [reason]"
+arguments: [action, policy-id, type, reason]
 ---
 
 # Manage Email Security Policies

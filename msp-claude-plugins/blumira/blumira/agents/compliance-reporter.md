@@ -1,6 +1,15 @@
 ---
 name: compliance-reporter
-description: Use this agent when generating compliance-oriented security reports from Blumira SIEM data — not for live incident investigation, but for producing evidence packages, coverage gap assessments, and log source health summaries for frameworks like SOC 2, HIPAA, and CIS. Trigger for: Blumira compliance report, SOC 2 evidence, HIPAA security report, CIS controls Blumira, SIEM compliance, detection coverage report, log source health, Blumira audit report, compliance evidence Blumira, security posture report Blumira, framework evidence, Blumira QBR. Examples: "Generate a SOC 2 compliance evidence report from Blumira for Acme Corp", "Show me the detection coverage gaps for our HIPAA client", "Produce a log source health summary for the quarterly review", "What Blumira findings map to CIS Controls for this client?"
+description: >-
+  Use this agent when generating compliance-oriented security reports from Blumira SIEM data — not
+  for live incident investigation, but for producing evidence packages, coverage gap assessments,
+  and log source health summaries for frameworks like SOC 2, HIPAA, and CIS. Trigger for: Blumira
+  compliance report, SOC 2 evidence, HIPAA security report, CIS controls Blumira, SIEM compliance,
+  detection coverage report, log source health, Blumira audit report, compliance evidence Blumira,
+  security posture report Blumira, framework evidence, Blumira QBR. Examples: "Generate a SOC 2
+  compliance evidence report from Blumira for Acme Corp", "Show me the detection coverage gaps for
+  our HIPAA client", "Produce a log source health summary for the quarterly review", "What Blumira
+  findings map to CIS Controls for this client?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

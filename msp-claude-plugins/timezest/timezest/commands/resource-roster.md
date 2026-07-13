@@ -1,10 +1,7 @@
 ---
-name: resource-roster
 description: List TimeZest bookable resources — agents, teams, and appointment types
-arguments:
-  - name: type
-    description: Filter to a resource type (agent / team)
-    required: false
+argument-hint: "[type]"
+arguments: [type]
 ---
 
 # TimeZest Resource Roster

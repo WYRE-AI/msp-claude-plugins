@@ -1,10 +1,7 @@
 ---
-name: msp-overview
 description: MSP dashboard showing all managed accounts with open finding counts and severity breakdown
-arguments:
-  - name: severity
-    description: Filter findings to a specific severity level
-    required: false
+argument-hint: "[severity]"
+arguments: [severity]
 ---
 
 # MSP Overview

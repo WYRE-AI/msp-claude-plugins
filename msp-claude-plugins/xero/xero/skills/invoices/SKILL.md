@@ -5,18 +5,10 @@ description: >
   updating, voiding, and managing sales invoices (ACCREC) and supplier
   bills (ACCPAY). Covers invoice lifecycle, line items, tax handling,
   recurring managed services billing, and MSP invoice workflows.
-when_to_use: "When creating, searching, updating, voiding, and managing sales invoices (ACCREC) and supplier bills (ACCPAY)"
-triggers:
-  - xero invoice
-  - xero bill
-  - xero billing
-  - xero accrec
-  - xero accpay
-  - create invoice
-  - sales invoice
-  - managed services invoice
-  - monthly billing
-  - invoice management
+when_to_use: >-
+  When creating, searching, updating, voiding, and managing sales invoices (ACCREC) and supplier
+  bills (ACCPAY). Use when: xero invoice, xero bill, xero billing, xero accrec, xero accpay,
+  create invoice, sales invoice, managed services invoice, monthly billing, or invoice management.
 ---
 
 # Xero Invoices Management

@@ -1,6 +1,12 @@
 ---
 name: device-health-auditor
-description: Use this agent when an MSP needs a comprehensive device health audit across their NinjaOne-managed organization portfolio. Trigger for: device health check, fleet audit, offline device report, patch gap analysis, alert triage, backup status, organization health report, NinjaOne review, managed device sweep. Examples: "Give me a health report for all our NinjaOne-managed clients", "Which organizations have critical alerts right now?", "Show me all offline servers and devices with disk space issues"
+description: >-
+  Use this agent when an MSP needs a comprehensive device health audit across their
+  NinjaOne-managed organization portfolio. Trigger for: device health check, fleet audit, offline
+  device report, patch gap analysis, alert triage, backup status, organization health report,
+  NinjaOne review, managed device sweep. Examples: "Give me a health report for all our
+  NinjaOne-managed clients", "Which organizations have critical alerts right now?", "Show me all
+  offline servers and devices with disk space issues"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

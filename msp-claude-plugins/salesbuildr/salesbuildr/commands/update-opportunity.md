@@ -1,22 +1,17 @@
 ---
-name: update-opportunity
 description: Update an opportunity's status, value, or other details
-arguments:
-  - name: id
-    description: Opportunity ID
-    required: true
-  - name: stage
-    description: New pipeline stage
-    required: false
-  - name: value
-    description: Updated deal value
-    required: false
-  - name: close-date
-    description: Updated expected close date (YYYY-MM-DD)
-    required: false
+argument-hint: "<id> [stage] [value] [close-date]"
+arguments: [id, stage, value, close-date]
 ---
 
 # Update Salesbuildr Opportunity
+
+## Arguments
+
+- `id` (required) — Opportunity ID
+- `stage` (optional) — New pipeline stage
+- `value` (optional) — Updated deal value
+- `close-date` (optional) — Updated expected close date (YYYY-MM-DD)
 
 ## Prerequisites
 - Salesbuildr API key configured

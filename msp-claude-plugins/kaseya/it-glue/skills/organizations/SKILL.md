@@ -5,16 +5,10 @@ description: >
   creating, searching, updating, and managing client documentation. Covers
   organization types, statuses, parent/child relationships, PSA sync, quick
   notes, and related resources like configurations, contacts, and passwords.
-when_to_use: "When creating, searching, updating, and managing client documentation"
-triggers:
-  - it glue organization
-  - it glue company
-  - client documentation
-  - organization lookup
-  - it glue client
-  - organization management
-  - it glue org
-  - company documentation
+when_to_use: >-
+  When creating, searching, updating, and managing client documentation. Use when: it glue
+  organization, it glue company, client documentation, organization lookup, it glue client,
+  organization management, it glue org, or company documentation.
 ---
 
 # IT Glue Organizations Management

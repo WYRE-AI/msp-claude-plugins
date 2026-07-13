@@ -1,6 +1,16 @@
 ---
 name: threat-correlation-analyst
-description: Use this agent when an MSP needs to correlate RocketCyber SOC detections with broader security context from across the Kaseya ecosystem — cross-referencing incidents with Datto RMM device data, IT Glue documentation, and Autotask ticket history to build richer threat narratives and identify whether incidents are isolated or part of a broader pattern. Trigger for: threat correlation, cross-platform security analysis, incident context enrichment, RocketCyber pattern analysis, multi-source threat investigation, Kaseya security correlation, incident trend analysis, threat narrative. Examples: "Correlate this week's RocketCyber incidents with Autotask ticket history to see if there were warning signs", "Is the suspicious activity at Acme Corp isolated or are other clients showing the same pattern?", "Enrich this RocketCyber incident with device context from Datto RMM and documentation from IT Glue"
+description: >-
+  Use this agent when an MSP needs to correlate RocketCyber SOC detections with broader security
+  context from across the Kaseya ecosystem — cross-referencing incidents with Datto RMM device
+  data, IT Glue documentation, and Autotask ticket history to build richer threat narratives and
+  identify whether incidents are isolated or part of a broader pattern. Trigger for: threat
+  correlation, cross-platform security analysis, incident context enrichment, RocketCyber pattern
+  analysis, multi-source threat investigation, Kaseya security correlation, incident trend
+  analysis, threat narrative. Examples: "Correlate this week's RocketCyber incidents with Autotask
+  ticket history to see if there were warning signs", "Is the suspicious activity at Acme Corp
+  isolated or are other clients showing the same pattern?", "Enrich this RocketCyber incident with
+  device context from Datto RMM and documentation from IT Glue"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

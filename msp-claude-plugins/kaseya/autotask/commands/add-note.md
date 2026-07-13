@@ -1,21 +1,7 @@
 ---
-name: add-note
 description: Add a note or comment to an existing Autotask ticket
-arguments:
-  - name: ticket_id
-    description: The Autotask ticket ID
-    required: true
-  - name: note
-    description: The note content (supports multi-line text)
-    required: true
-  - name: type
-    description: Note type - "internal" (default) or "public"
-    required: false
-    default: internal
-  - name: publish
-    description: Publish destination - "none" (default), "portal", or "email"
-    required: false
-    default: none
+argument-hint: "<ticket_id> <note> [type] [publish]"
+arguments: [ticket_id, note, type, publish]
 ---
 
 # Add Note to Autotask Ticket

@@ -1,16 +1,7 @@
 ---
-name: classify-email
 description: Classify a specific Ironscales incident email as phishing, spam, or legitimate
-arguments:
-  - name: incident_id
-    description: The Ironscales incident ID to classify
-    required: true
-  - name: classification
-    description: Classification to apply (phishing, spam, legitimate)
-    required: false
-  - name: comment
-    description: Optional comment explaining the classification decision
-    required: false
+argument-hint: "<incident_id> [classification] [comment]"
+arguments: [incident_id, classification, comment]
 ---
 
 # Ironscales Email Classification

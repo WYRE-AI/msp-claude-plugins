@@ -1,16 +1,17 @@
 ---
-name: compliance-report
 description: Generate an ImmyBot software-compliance scorecard for a tenant or the whole fleet
-arguments:
-  - name: scope
-    description: Tenant name to report on (optional; omit for a fleet-wide scorecard)
-    required: false
+argument-hint: "[scope]"
+arguments: [scope]
 ---
 
 # ImmyBot Compliance Report
 
 Produce an ImmyBot software-compliance report for "$ARGUMENTS.scope"
 when a tenant is given, or a fleet-wide scorecard otherwise.
+
+## Arguments
+
+- `scope` (optional) — Tenant name to report on (optional; omit for a fleet-wide scorecard)
 
 ## Prerequisites
 

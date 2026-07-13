@@ -1,16 +1,15 @@
 ---
-name: ninjaone-list-alerts
 description: List active alerts across NinjaOne devices
-arguments:
-  - name: priority
-    description: Filter by priority (critical, high, medium, low)
-    required: false
-  - name: organization
-    description: Filter by organization name or ID
-    required: false
+argument-hint: "[priority] [organization]"
+arguments: [priority, organization]
 ---
 
 List active alerts in NinjaOne.
+
+## Arguments
+
+- `priority` (optional) — Filter by priority (critical, high, medium, low)
+- `organization` (optional) — Filter by organization name or ID
 
 ## Filters
 - Priority: $ARGUMENTS.priority (if specified)

@@ -6,19 +6,10 @@ description: >
   Covers the Purchase entity (checks, credit cards, cash), Bill entity for
   accounts payable, per-client cost tracking, vendor management, and MSP
   expense categorization for profitability analysis.
-when_to_use: "When creating, searching, and managing expense records, bills, and vendor payments"
-triggers:
-  - quickbooks expense
-  - qbo expense
-  - quickbooks purchase
-  - qbo purchase
-  - quickbooks bill
-  - qbo bill
-  - quickbooks vendor
-  - expense tracking
-  - cost tracking
-  - per-client cost
-  - vendor payment
+when_to_use: >-
+  When creating, searching, and managing expense records, bills, and vendor payments. Use when:
+  quickbooks expense, qbo expense, quickbooks purchase, qbo purchase, quickbooks bill, qbo bill,
+  quickbooks vendor, expense tracking, cost tracking, per-client cost, or vendor payment.
 ---
 
 # QuickBooks Online Expense Management

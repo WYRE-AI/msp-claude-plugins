@@ -1,6 +1,6 @@
 {
   "name": "syncro",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Claude Code plugin for Syncro MSP - tickets, customers, assets, invoices",
   "author": {
     "name": "MSP Claude Plugins Community"

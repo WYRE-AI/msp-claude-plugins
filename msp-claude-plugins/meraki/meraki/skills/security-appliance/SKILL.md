@@ -6,18 +6,10 @@ description: >
   (meraki_appliance_firewall_l3_get/update) and checking site-to-site
   VPN status (meraki_appliance_vpn_status_get). Firewall updates replace
   the entire ruleset and are high-impact.
-when_to_use: "When working with the Meraki MX appliance -- reviewing/updating L3 firewall rules and checking site-to-site VPN status"
-triggers:
-  - meraki firewall
-  - meraki mx
-  - l3 firewall
-  - firewall rules
-  - meraki vpn
-  - site-to-site vpn
-  - autovpn
-  - security appliance
-  - firewall review
-  - vpn status
+when_to_use: >-
+  When working with the Meraki MX appliance -- reviewing/updating L3 firewall rules and checking
+  site-to-site VPN status. Use when: meraki firewall, meraki mx, l3 firewall, firewall rules,
+  meraki vpn, site-to-site vpn, autovpn, security appliance, firewall review, or vpn status.
 ---
 
 # Meraki Security Appliance (MX)

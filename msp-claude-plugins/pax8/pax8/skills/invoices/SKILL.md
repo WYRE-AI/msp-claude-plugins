@@ -6,19 +6,11 @@ description: >
   reviewing usage summaries, and understanding the MSP billing cycle.
   Covers invoice retrieval, usage-based billing, and billing
   reconciliation workflows.
-when_to_use: "When retrieving invoices, analyzing billing data, reconciling costs with client charges, reviewing usage summaries, and understanding the MSP billing cycle"
-triggers:
-  - pax8 invoice
-  - pax8 billing
-  - pax8 cost
-  - pax8 charge
-  - pax8 usage
-  - billing reconciliation
-  - invoice items
-  - pax8 payment
-  - cost analysis
-  - billing report
-  - usage summary
+when_to_use: >-
+  When retrieving invoices, analyzing billing data, reconciling costs with client charges,
+  reviewing usage summaries, and understanding the MSP billing cycle. Use when: pax8 invoice, pax8
+  billing, pax8 cost, pax8 charge, pax8 usage, billing reconciliation, invoice items, pax8
+  payment, cost analysis, billing report, or usage summary.
 ---
 
 # Pax8 Invoices & Billing

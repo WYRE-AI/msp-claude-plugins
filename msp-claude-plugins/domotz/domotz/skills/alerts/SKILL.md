@@ -4,16 +4,10 @@ description: >
   Use this skill when working with Domotz alerts -- viewing active alerts,
   configuring alert profiles, managing alert triggers, and handling
   notifications for device and network events.
-when_to_use: "When viewing active alerts, configuring alert profiles, managing alert triggers, and handling notifications for device and network events"
-triggers:
-  - domotz alert
-  - alert profile
-  - alert status
-  - alert trigger
-  - alert notification
-  - device alert
-  - network alert
-  - monitoring alert
+when_to_use: >-
+  When viewing active alerts, configuring alert profiles, managing alert triggers, and handling
+  notifications for device and network events. Use when: domotz alert, alert profile, alert
+  status, alert trigger, alert notification, device alert, network alert, or monitoring alert.
 ---
 
 # Domotz Alerts

@@ -5,17 +5,11 @@ description: >
   authentication, tenant-aware URLs, query building, pagination, rate limiting, and
   error handling. Covers token acquisition, request patterns, retry strategies, and
   best practices for HaloPSA API integration.
-when_to_use: "When working with OAuth 2.0 Client Credentials authentication, tenant-aware URLs, query building, pagination, rate limiting, and error handling in the HaloPSA REST API"
-triggers:
-  - halopsa api
-  - halopsa authentication
-  - halopsa oauth
-  - halopsa token
-  - halopsa query
-  - halopsa pagination
-  - halopsa rate limit
-  - halopsa rest
-  - halo api
+when_to_use: >-
+  When working with OAuth 2.0 Client Credentials authentication, tenant-aware URLs, query
+  building, pagination, rate limiting, and error handling in the HaloPSA REST API. Use when:
+  halopsa api, halopsa authentication, halopsa oauth, halopsa token, halopsa query, halopsa
+  pagination, halopsa rate limit, halopsa rest, or halo api.
 ---
 
 # HaloPSA API Patterns

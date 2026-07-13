@@ -1,15 +1,16 @@
 ---
-name: get-user
 description: Look up a Microsoft 365 user by name or email, showing account status, licenses, MFA, and last sign-in
-arguments:
-  - name: query
-    description: User's email address (UPN), display name, or partial name
-    required: true
+argument-hint: "<query>"
+arguments: [query]
 ---
 
 # Get M365 User
 
 Look up a Microsoft 365 user and return a comprehensive summary of their account state.
+
+## Arguments
+
+- `query` (required) — User's email address (UPN), display name, or partial name
 
 ## Prerequisites
 

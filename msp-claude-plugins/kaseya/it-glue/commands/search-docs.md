@@ -1,20 +1,7 @@
 ---
-name: search-docs
 description: Search IT Glue documentation by keyword or phrase
-arguments:
-  - name: query
-    description: Search query (keywords or phrase)
-    required: true
-  - name: organization
-    description: Filter by organization name
-    required: false
-  - name: type
-    description: Filter by document type (document, flexible-asset)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 10
+argument-hint: "<query> [organization] [type] [limit]"
+arguments: [query, organization, type, limit]
 ---
 
 # Search IT Glue Documentation

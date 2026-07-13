@@ -1,24 +1,7 @@
 ---
-name: my-tickets
 description: List tickets currently assigned to you with optional filtering
-arguments:
-  - name: status
-    description: Filter by status (e.g., "Open", "In Progress", "Waiting Customer")
-    required: false
-  - name: priority
-    description: Filter by priority (4=Critical, 3=High, 2=Medium, 1=Low). Note - lower numbers = lower urgency in Autotask.
-    required: false
-  - name: queue
-    description: Filter by queue name
-    required: false
-  - name: limit
-    description: Maximum results to return (default 25, max 100)
-    required: false
-    default: 25
-  - name: sort
-    description: Sort by field - "due_date", "priority", or "created"
-    required: false
-    default: priority
+argument-hint: "[status] [priority] [queue] [limit] [sort]"
+arguments: [status, priority, queue, limit, sort]
 ---
 
 # My Autotask Tickets

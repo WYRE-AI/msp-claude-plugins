@@ -1,13 +1,14 @@
 ---
-name: get-quote
 description: Get a Kaseya Quote Manager quote with its sections and line items
-arguments:
-  - name: id
-    description: Quote ID
-    required: true
+argument-hint: "<id>"
+arguments: [id]
 ---
 
 # Get Kaseya Quote Manager Quote
+
+## Arguments
+
+- `id` (required) — Quote ID
 
 ## Prerequisites
 - Kaseya Quote Manager API key configured (read-only)

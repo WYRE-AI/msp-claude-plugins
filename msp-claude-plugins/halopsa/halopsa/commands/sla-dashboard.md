@@ -1,25 +1,7 @@
 ---
-name: sla-dashboard
 description: View SLA status across tickets, including approaching breaches and at-risk tickets
-arguments:
-  - name: client_id
-    description: Filter by specific client ID
-    required: false
-  - name: team
-    description: Filter by team name
-    required: false
-  - name: status
-    description: Filter by SLA status (breaching, at_risk, on_track, all)
-    required: false
-    default: all
-  - name: period
-    description: Time period (today, week, month)
-    required: false
-    default: today
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[client_id] [team] [status] [period] [limit]"
+arguments: [client_id, team, status, period, limit]
 ---
 
 # HaloPSA SLA Dashboard

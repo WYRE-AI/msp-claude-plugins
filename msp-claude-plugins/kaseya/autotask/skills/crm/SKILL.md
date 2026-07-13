@@ -4,17 +4,10 @@ description: >
   Use this skill when working with Autotask CRM - companies, contacts,
   sites/locations, and opportunities. Essential for MSP account management,
   client onboarding, and relationship tracking in Autotask PSA.
-when_to_use: "When working with companies, contacts, sites/locations, and opportunities in Autotask CRM"
-triggers:
-  - autotask company
-  - autotask contact
-  - autotask account
-  - autotask crm
-  - company management
-  - contact management
-  - client onboarding
-  - autotask site
-  - autotask location
+when_to_use: >-
+  When working with companies, contacts, sites/locations, and opportunities in Autotask CRM. Use
+  when: autotask company, autotask contact, autotask account, autotask crm, company management,
+  contact management, client onboarding, autotask site, or autotask location.
 ---
 
 # Autotask CRM Management

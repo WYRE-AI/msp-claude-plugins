@@ -1,22 +1,7 @@
 ---
-name: list-computers
 description: List computers in ConnectWise Automate with optional filters
-arguments:
-  - name: client
-    description: Filter by client name (partial match)
-    required: false
-  - name: location
-    description: Filter by location name (partial match)
-    required: false
-  - name: status
-    description: Filter by status (online, offline)
-    required: false
-  - name: os
-    description: Filter by OS type (windows, server, workstation, macos, linux)
-    required: false
-  - name: limit
-    description: Maximum number of results to return
-    required: false
+argument-hint: "[client] [location] [status] [os] [limit]"
+arguments: [client, location, status, os, limit]
 ---
 
 # List Computers

@@ -1,6 +1,16 @@
 ---
 name: automation-opportunity-finder
-description: Use this agent when an MSP operations lead, service manager, or technician wants to identify repetitive ticket patterns in SuperOps.ai that should be automated — not live operations management, but a retrospective analysis of ticket history to find recurring issues with the same client, same category, and same resolution, calculate the manual time cost, and recommend runbooks or automation scripts to eliminate the pattern. Trigger for: automation opportunities SuperOps, repetitive tickets, recurring ticket patterns, runbook recommendations, automation analysis, time savings SuperOps, ticket pattern analysis, eliminate repetitive work. Examples: "What tickets keep coming up that we could automate?", "Which recurring issues are costing us the most technician time?", "Find me the top 10 automation opportunities in our ticket history", "What runbooks should we build to reduce manual work?"
+description: >-
+  Use this agent when an MSP operations lead, service manager, or technician wants to identify
+  repetitive ticket patterns in SuperOps.ai that should be automated — not live operations
+  management, but a retrospective analysis of ticket history to find recurring issues with the
+  same client, same category, and same resolution, calculate the manual time cost, and recommend
+  runbooks or automation scripts to eliminate the pattern. Trigger for: automation opportunities
+  SuperOps, repetitive tickets, recurring ticket patterns, runbook recommendations, automation
+  analysis, time savings SuperOps, ticket pattern analysis, eliminate repetitive work. Examples:
+  "What tickets keep coming up that we could automate?", "Which recurring issues are costing us
+  the most technician time?", "Find me the top 10 automation opportunities in our ticket history",
+  "What runbooks should we build to reduce manual work?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

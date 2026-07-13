@@ -1,13 +1,7 @@
 ---
-name: list-templates
 description: List all available PandaDoc templates with details
-arguments:
-  - name: query
-    description: Search templates by name or keyword
-    required: false
-  - name: tag
-    description: Filter templates by tag (e.g., msp, managed-services, project)
-    required: false
+argument-hint: "[query] [tag]"
+arguments: [query, tag]
 ---
 
 # List PandaDoc Templates

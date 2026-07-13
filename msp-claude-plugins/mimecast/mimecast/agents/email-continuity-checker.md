@@ -1,6 +1,15 @@
 ---
 name: email-continuity-checker
-description: Use this agent when verifying Mimecast email continuity and archiving health — not for threat investigation, but for checking continuity mode status, verifying archiving is capturing expected mail volumes, auditing connector health, and confirming restore capability. Trigger for: Mimecast continuity, email continuity, Mimecast archiving, archive health, Mimecast backup, email restore, continuity mode, Mimecast archive verification, email service availability, Mimecast connector, archive completeness, Mimecast operational health. Examples: "Check our Mimecast continuity status for all clients", "Verify that email archiving is capturing the expected volume for Acme Corp", "Is Mimecast continuity mode active for any of our clients?", "Audit the archive health across the Mimecast fleet"
+description: >-
+  Use this agent when verifying Mimecast email continuity and archiving health — not for threat
+  investigation, but for checking continuity mode status, verifying archiving is capturing
+  expected mail volumes, auditing connector health, and confirming restore capability. Trigger
+  for: Mimecast continuity, email continuity, Mimecast archiving, archive health, Mimecast backup,
+  email restore, continuity mode, Mimecast archive verification, email service availability,
+  Mimecast connector, archive completeness, Mimecast operational health. Examples: "Check our
+  Mimecast continuity status for all clients", "Verify that email archiving is capturing the
+  expected volume for Acme Corp", "Is Mimecast continuity mode active for any of our clients?",
+  "Audit the archive health across the Mimecast fleet"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

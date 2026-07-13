@@ -1,22 +1,7 @@
 ---
-name: list-assets
 description: List and filter assets in SuperOps.ai
-arguments:
-  - name: client
-    description: Filter by client name or account ID
-    required: false
-  - name: status
-    description: Filter by asset status (online, offline, all)
-    required: false
-  - name: platform
-    description: Filter by platform (windows, macos, linux)
-    required: false
-  - name: limit
-    description: Maximum number of results (default 50)
-    required: false
-  - name: search
-    description: Search by asset name
-    required: false
+argument-hint: "[client] [status] [platform] [limit] [search]"
+arguments: [client, status, platform, limit, search]
 ---
 
 # List SuperOps.ai Assets

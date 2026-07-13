@@ -5,17 +5,10 @@ description: >
   creating, searching, updating, and managing documentation articles.
   Covers article folders, drafts, sharing, content format (HTML),
   versioning, and search patterns for comprehensive knowledge management.
-when_to_use: "When creating, searching, updating, and managing documentation articles"
-triggers:
-  - hudu article
-  - hudu knowledge base
-  - hudu kb
-  - hudu documentation
-  - hudu runbook
-  - hudu procedure
-  - knowledge base article
-  - article management
-  - hudu docs
+when_to_use: >-
+  When creating, searching, updating, and managing documentation articles. Use when: hudu article,
+  hudu knowledge base, hudu kb, hudu documentation, hudu runbook, hudu procedure, knowledge base
+  article, article management, or hudu docs.
 ---
 
 # Hudu Articles Management

@@ -5,16 +5,10 @@ description: >
   alerts, acknowledging alerts, viewing alert history, and creating tickets from
   alerts. Covers alert sources (monitors, scripts, events), alert severity levels,
   alert lifecycle management, and ticket integration.
-when_to_use: "When listing active alerts, acknowledging alerts, viewing alert history, and creating tickets from alerts"
-triggers:
-  - automate alert
-  - automate notification
-  - alert acknowledgment
-  - alert history
-  - alert ticket
-  - monitor alert
-  - labtech alert
-  - automate incident
+when_to_use: >-
+  When listing active alerts, acknowledging alerts, viewing alert history, and creating tickets
+  from alerts. Use when: automate alert, automate notification, alert acknowledgment, alert
+  history, alert ticket, monitor alert, labtech alert, or automate incident.
 ---
 
 # ConnectWise Automate Alert Management

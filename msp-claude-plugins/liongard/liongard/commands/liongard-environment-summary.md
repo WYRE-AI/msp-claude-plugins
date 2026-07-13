@@ -1,10 +1,7 @@
 ---
-name: liongard-environment-summary
 description: Generate a detailed summary of a Liongard environment
-arguments:
-  - name: environment
-    description: Environment ID or name to summarize
-    required: true
+argument-hint: "<environment>"
+arguments: [environment]
 ---
 
 # Liongard Environment Summary

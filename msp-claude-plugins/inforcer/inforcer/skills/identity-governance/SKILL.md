@@ -1,6 +1,10 @@
 ---
 name: "Inforcer Identity Governance"
-when_to_use: "When reading a tenant's identity inventory through Inforcer — listing users, groups, and roles for a managed Microsoft 365 tenant, all read-only"
+when_to_use: >-
+  When reading a tenant's identity inventory through Inforcer — listing users, groups, and roles
+  for a managed Microsoft 365 tenant, all read-only. Use when: inforcer users, inforcer groups,
+  inforcer roles, identity inventory, tenant users inforcer, role assignments inforcer, who has
+  access inforcer, or identity governance inforcer.
 description: >
   Use this skill when reading a tenant's identity inventory through
   Inforcer — listing users, groups, and role assignments for a scoped
@@ -8,15 +12,6 @@ description: >
   it answers "who and what exists" for governance and review, not user
   administration. Covers the tenant-scoping (integer Client Tenant ID)
   every identity call requires.
-triggers:
-  - inforcer users
-  - inforcer groups
-  - inforcer roles
-  - identity inventory
-  - tenant users inforcer
-  - role assignments inforcer
-  - who has access inforcer
-  - identity governance inforcer
 ---
 
 # Inforcer Identity Governance

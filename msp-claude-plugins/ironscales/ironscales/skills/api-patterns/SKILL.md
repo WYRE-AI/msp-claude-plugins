@@ -4,16 +4,11 @@ description: >
   Use this skill when working with Ironscales MCP tools — available tools,
   API key and company ID authentication, pagination, rate limiting, and
   error handling.
-when_to_use: "When working with available tools, API key and company ID authentication, pagination, rate limiting, and error handling in Ironscales MCP tools"
-triggers:
-  - ironscales
-  - ironscales api
-  - ironscales mcp
-  - ironscales tools
-  - ironscales authentication
-  - ironscales pagination
-  - ironscales error
-  - ironscales connection
+when_to_use: >-
+  When working with available tools, API key and company ID authentication, pagination, rate
+  limiting, and error handling in Ironscales MCP tools. Use when: ironscales, ironscales api,
+  ironscales mcp, ironscales tools, ironscales authentication, ironscales pagination, ironscales
+  error, or ironscales connection.
 ---
 
 # Ironscales MCP Tools & API Patterns

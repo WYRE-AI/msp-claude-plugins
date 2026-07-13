@@ -1,16 +1,7 @@
 ---
-name: drift-report
 description: Portfolio-wide Inforcer baseline drift report — every managed tenant's alignment vs its assigned baseline, classified aligned / semi-aligned / drifted and sorted drifted-first, with secure score
-arguments:
-  - name: aligned_threshold
-    description: Alignment value at/above which a tenant is "aligned" (used to classify each tenant's band)
-    required: false
-  - name: semi_aligned_threshold
-    description: Alignment value at/above which a tenant is "semi-aligned" (below this is "drifted")
-    required: false
-  - name: tenants
-    description: Comma-separated list of tenants to include (names/domains/GUIDs/integer ids; defaults to all managed tenants)
-    required: false
+argument-hint: "[aligned_threshold] [semi_aligned_threshold] [tenants]"
+arguments: [aligned_threshold, semi_aligned_threshold, tenants]
 ---
 
 # Inforcer Drift Report
@@ -20,6 +11,12 @@ tenants. Each tenant is measured against its assigned baseline, classified into
 a band, and sorted so the worst posture surfaces first. Designed for monthly
 internal reviews, QBRs, and as the source data for client-facing posture
 summaries.
+
+## Arguments
+
+- `aligned_threshold` (optional) — Alignment value at/above which a tenant is "aligned" (used to classify each tenant's band)
+- `semi_aligned_threshold` (optional) — Alignment value at/above which a tenant is "semi-aligned" (below this is "drifted")
+- `tenants` (optional) — Comma-separated list of tenants to include (names/domains/GUIDs/integer ids; defaults to all managed tenants)
 
 ## How it works
 

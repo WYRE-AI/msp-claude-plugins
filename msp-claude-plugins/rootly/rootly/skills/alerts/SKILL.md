@@ -4,17 +4,11 @@ description: >
   Use this skill when working with Rootly alerts -- alert routing, escalation
   policies, integration with monitoring tools (Datadog, PagerDuty, etc.),
   alert-to-incident creation, and managing alert rules.
-when_to_use: "When working with alert routing, escalation policies, integration with monitoring tools (Datadog, PagerDuty, etc.), alert-to-incident creation"
-triggers:
-  - rootly alert
-  - alert routing
-  - escalation policy
-  - monitoring integration
-  - alert rule
-  - pagerduty
-  - datadog alert
-  - alert escalation
-  - on-call
+when_to_use: >-
+  When working with alert routing, escalation policies, integration with monitoring tools
+  (Datadog, PagerDuty, etc.), alert-to-incident creation. Use when: rootly alert, alert routing,
+  escalation policy, monitoring integration, alert rule, pagerduty, datadog alert, alert
+  escalation, or on-call.
 ---
 
 # Rootly Alerts

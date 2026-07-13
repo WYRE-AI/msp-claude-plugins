@@ -1,31 +1,7 @@
 ---
-name: create-deal
 description: Create a new deal in HubSpot with company association
-arguments:
-  - name: company
-    description: Company name or ID to associate the deal with
-    required: true
-  - name: name
-    description: Deal name
-    required: true
-  - name: amount
-    description: Deal amount (monthly or total value)
-    required: true
-  - name: stage
-    description: Pipeline stage (e.g., appointmentscheduled, proposalpending)
-    required: false
-    default: appointmentscheduled
-  - name: close_date
-    description: Expected close date (YYYY-MM-DD)
-    required: false
-    default: 30 days from today
-  - name: pipeline
-    description: Pipeline name or ID
-    required: false
-    default: default
-  - name: contact
-    description: Contact name or ID to associate with the deal
-    required: false
+argument-hint: "<company> <name> <amount> [stage] [close_date] [pipeline] [contact]"
+arguments: [company, name, amount, stage, close_date, pipeline, contact]
 ---
 
 # Create HubSpot Deal

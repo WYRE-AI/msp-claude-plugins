@@ -1,13 +1,7 @@
 ---
-name: device-lookup
 description: Find a device in Datto RMM by hostname, IP address, or MAC address
-arguments:
-  - name: identifier
-    description: Hostname, IP address, or MAC address to search for
-    required: true
-  - name: site
-    description: Filter results to a specific site name
-    required: false
+argument-hint: "<identifier> [site]"
+arguments: [identifier, site]
 ---
 
 # Device Lookup

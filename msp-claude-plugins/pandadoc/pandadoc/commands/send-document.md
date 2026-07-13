@@ -1,23 +1,7 @@
 ---
-name: send-document
 description: Send a PandaDoc document for e-signature
-arguments:
-  - name: document_id
-    description: PandaDoc document ID
-    required: false
-  - name: document_name
-    description: Document name to search for (if ID not provided)
-    required: false
-  - name: message
-    description: Cover message included in the signature request email
-    required: false
-  - name: subject
-    description: Email subject line for the signature request
-    required: false
-  - name: silent
-    description: Create signing link without sending email notification
-    required: false
-    default: false
+argument-hint: "[document_id] [document_name] [message] [subject] [silent]"
+arguments: [document_id, document_name, message, subject, silent]
 ---
 
 # Send PandaDoc Document

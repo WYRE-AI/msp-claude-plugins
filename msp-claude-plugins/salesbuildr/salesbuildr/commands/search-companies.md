@@ -1,13 +1,14 @@
 ---
-name: search-companies
 description: Search for companies in Salesbuildr
-arguments:
-  - name: search
-    description: Search term for company name
-    required: false
+argument-hint: "[search]"
+arguments: [search]
 ---
 
 # Search Salesbuildr Companies
+
+## Arguments
+
+- `search` (optional) — Search term for company name
 
 ## Prerequisites
 - Salesbuildr API key configured

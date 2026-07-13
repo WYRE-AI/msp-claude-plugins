@@ -5,19 +5,11 @@ description: >
   updating, and managing deal records and pipelines in HubSpot CRM.
   Covers deal fields, pipeline stages, forecasting, revenue tracking,
   and associating deals with contacts and companies.
-when_to_use: "When searching, creating, updating, and managing deal records and pipelines in HubSpot CRM"
-triggers:
-  - hubspot deal
-  - hubspot pipeline
-  - hubspot opportunity
-  - hubspot sale
-  - hubspot revenue
-  - deal search hubspot
-  - deal management hubspot
-  - hubspot forecast
-  - hubspot deal stage
-  - sales pipeline hubspot
-  - hubspot close date
+when_to_use: >-
+  When searching, creating, updating, and managing deal records and pipelines in HubSpot CRM. Use
+  when: hubspot deal, hubspot pipeline, hubspot opportunity, hubspot sale, hubspot revenue, deal
+  search hubspot, deal management hubspot, hubspot forecast, hubspot deal stage, sales pipeline
+  hubspot, or hubspot close date.
 ---
 
 # HubSpot Deal & Pipeline Management

@@ -1,6 +1,12 @@
 ---
 name: change-detective
-description: Use this agent when an MSP needs to detect unauthorized or unexpected configuration changes, audit compliance drift, or surface undocumented systems across their client environments. Trigger for: change detection, unauthorized changes, configuration drift, compliance audit, undocumented systems, Liongard detections, inspection review. Examples: "what changed in Acme's environment this week", "show me all unauthorized firewall changes", "find environments with failed inspections"
+description: >-
+  Use this agent when an MSP needs to detect unauthorized or unexpected configuration changes,
+  audit compliance drift, or surface undocumented systems across their client environments.
+  Trigger for: change detection, unauthorized changes, configuration drift, compliance audit,
+  undocumented systems, Liongard detections, inspection review. Examples: "what changed in Acme's
+  environment this week", "show me all unauthorized firewall changes", "find environments with
+  failed inspections"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

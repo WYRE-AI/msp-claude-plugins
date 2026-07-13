@@ -1,16 +1,13 @@
 ---
 name: "Crewhu API Patterns"
-when_to_use: "When working with Crewhu authentication headers, pagination, or error handling for the Crewhu MCP server"
+when_to_use: >-
+  When working with Crewhu authentication headers, pagination, or error handling for the Crewhu
+  MCP server. Use when: crewhu api, crewhu authentication, crewhu pagination, crewhu mcp, or
+  crewhu token.
 description: >
   Use this skill when working with the Crewhu MCP tools — token-based
   authentication via the `X-Crewhu-Api-Token` header, read-heavy tool
   surface, pagination, and error handling.
-triggers:
-  - crewhu api
-  - crewhu authentication
-  - crewhu pagination
-  - crewhu mcp
-  - crewhu token
 ---
 
 # Crewhu MCP Tools & API Patterns

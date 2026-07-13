@@ -1,6 +1,12 @@
 ---
 name: qbr-prep-agent
-description: Use this agent when an MSP account manager or vCIO needs to prepare a complete Quarterly Business Review data package for a client. Trigger for: QBR prep, quarterly business review, QBR data, QBR package, quarterly review, prepare QBR, QBR presentation, account review, quarterly report. Examples: "Prep the QBR for Acme Corp for Q1 2026", "Build me the QBR data package for Riverside Medical covering January through March", "Get everything together for our quarterly review with Lakeside Industries next week"
+description: >-
+  Use this agent when an MSP account manager or vCIO needs to prepare a complete Quarterly
+  Business Review data package for a client. Trigger for: QBR prep, quarterly business review, QBR
+  data, QBR package, quarterly review, prepare QBR, QBR presentation, account review, quarterly
+  report. Examples: "Prep the QBR for Acme Corp for Q1 2026", "Build me the QBR data package for
+  Riverside Medical covering January through March", "Get everything together for our quarterly
+  review with Lakeside Industries next week"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

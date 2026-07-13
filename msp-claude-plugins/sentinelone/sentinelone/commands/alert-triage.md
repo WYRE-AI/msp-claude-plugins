@@ -1,18 +1,7 @@
 ---
-name: alert-triage
 description: Triage new and unresolved SentinelOne alerts by severity
-arguments:
-  - name: severity
-    description: Filter by severity level (CRITICAL, HIGH, MEDIUM, LOW, INFO)
-    required: false
-  - name: view_type
-    description: Filter by alert domain (ALL, CLOUD, KUBERNETES, IDENTITY)
-    required: false
-    default: ALL
-  - name: limit
-    description: Maximum number of alerts to return
-    required: false
-    default: 50
+argument-hint: "[severity] [view_type] [limit]"
+arguments: [severity, view_type, limit]
 ---
 
 # SentinelOne Alert Triage

@@ -5,16 +5,10 @@ description: >
   recurring services, block hours, time & materials, and contract billing.
   Essential for MSP account managers handling service agreements, renewals,
   and billing in Autotask PSA.
-when_to_use: "When recurring services, block hours, time & materials, and contract billing"
-triggers:
-  - autotask contract
-  - service agreement
-  - block hours
-  - recurring service
-  - contract renewal
-  - contract billing
-  - managed services agreement
-  - autotask billing
+when_to_use: >-
+  When recurring services, block hours, time & materials, and contract billing. Use when: autotask
+  contract, service agreement, block hours, recurring service, contract renewal, contract billing,
+  managed services agreement, or autotask billing.
 ---
 
 # Autotask Contracts Management

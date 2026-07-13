@@ -1,13 +1,7 @@
 ---
-name: investigate-detection
 description: Investigate a single Blackpoint Cyber / CompassOne detection end-to-end
-arguments:
-  - name: detection_id
-    description: The CompassOne detection ID to investigate
-    required: true
-  - name: tenant
-    description: Optional tenant name or ID to scope the lookup
-    required: false
+argument-hint: "<detection_id> [tenant]"
+arguments: [detection_id, tenant]
 ---
 
 # Investigate Blackpoint Detection

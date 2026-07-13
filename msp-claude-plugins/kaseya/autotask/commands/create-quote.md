@@ -1,16 +1,7 @@
 ---
-name: create-quote
 description: Create a new Autotask quote with line items for products, services, and service bundles
-arguments:
-  - name: company
-    description: Company name or ID to create the quote for
-    required: true
-  - name: name
-    description: Quote name/title
-    required: false
-  - name: items
-    description: "Description of items to include (e.g., '5x FortiGate 60F, 25 seats Managed Endpoint')"
-    required: false
+argument-hint: "<company> [name] [items]"
+arguments: [company, name, items]
 ---
 
 # Create Autotask Quote

@@ -1,6 +1,11 @@
 ---
 name: quote-builder
-description: Use this agent when an MSP sales team member needs to build, review, or standardize quotes in Salesbuildr. Trigger for: build a quote, create proposal, review quote pricing, validate line items, standardize pricing, find missing products, quote review, quote accuracy check. Examples: "build a quote for Acme Corp's server refresh", "review this quote for missing line items", "check if our pricing matches the approved price book for this proposal"
+description: >-
+  Use this agent when an MSP sales team member needs to build, review, or standardize quotes in
+  Salesbuildr. Trigger for: build a quote, create proposal, review quote pricing, validate line
+  items, standardize pricing, find missing products, quote review, quote accuracy check. Examples:
+  "build a quote for Acme Corp's server refresh", "review this quote for missing line items",
+  "check if our pricing matches the approved price book for this proposal"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

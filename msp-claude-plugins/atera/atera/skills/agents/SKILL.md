@@ -5,18 +5,10 @@ description: >
   monitoring, or executing commands on managed devices. Covers agent
   information, online/offline status, PowerShell execution, and agent lifecycle.
   Essential for MSP technicians managing endpoints through Atera RMM.
-when_to_use: "When listing, searching, monitoring, or executing commands on managed devices"
-triggers:
-  - atera agent
-  - rmm agent
-  - atera device
-  - agent status
-  - agent online
-  - agent offline
-  - powershell atera
-  - run script atera
-  - managed device
-  - endpoint atera
+when_to_use: >-
+  When listing, searching, monitoring, or executing commands on managed devices. Use when: atera
+  agent, rmm agent, atera device, agent status, agent online, agent offline, powershell atera, run
+  script atera, managed device, or endpoint atera.
 ---
 
 # Atera Agent Management

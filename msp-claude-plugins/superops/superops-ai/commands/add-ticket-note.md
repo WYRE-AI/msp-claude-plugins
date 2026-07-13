@@ -1,19 +1,7 @@
 ---
-name: add-ticket-note
 description: Add a note (internal or public) to an existing SuperOps.ai ticket
-arguments:
-  - name: ticket_id
-    description: The SuperOps ticket ID or ticket number
-    required: true
-  - name: note
-    description: The note content (supports multi-line)
-    required: true
-  - name: type
-    description: Note type - internal (default) or public
-    required: false
-  - name: notify_customer
-    description: Send notification to customer (default false)
-    required: false
+argument-hint: "<ticket_id> <note> [type] [notify_customer]"
+arguments: [ticket_id, note, type, notify_customer]
 ---
 
 # Add SuperOps.ai Ticket Note

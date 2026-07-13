@@ -1,6 +1,15 @@
 ---
 name: alert-response-coordinator
-description: Use this agent when triaging the Blackpoint Cyber / CompassOne detection queue across one or many tenants — ranking open detections by severity and tenant impact, deciding what needs immediate escalation to the Blackpoint SOC versus routine follow-up, and producing a prioritized response plan. Trigger for: triage Blackpoint detections, CompassOne queue, prioritize Blackpoint alerts, what should I work first Blackpoint, Blackpoint escalation, detection response plan, multi-tenant detection sweep. Examples: "Triage all open Blackpoint detections and tell me what to escalate", "What's the highest-priority detection across our CompassOne tenants?", "Build a response plan for today's Blackpoint queue", "Which tenants have new critical detections this morning?"
+description: >-
+  Use this agent when triaging the Blackpoint Cyber / CompassOne detection queue across one or
+  many tenants — ranking open detections by severity and tenant impact, deciding what needs
+  immediate escalation to the Blackpoint SOC versus routine follow-up, and producing a prioritized
+  response plan. Trigger for: triage Blackpoint detections, CompassOne queue, prioritize
+  Blackpoint alerts, what should I work first Blackpoint, Blackpoint escalation, detection
+  response plan, multi-tenant detection sweep. Examples: "Triage all open Blackpoint detections
+  and tell me what to escalate", "What's the highest-priority detection across our CompassOne
+  tenants?", "Build a response plan for today's Blackpoint queue", "Which tenants have new
+  critical detections this morning?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

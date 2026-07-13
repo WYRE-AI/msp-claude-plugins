@@ -5,17 +5,10 @@ description: >
   updating, searching, or managing customer records. Covers customer information,
   contact management, custom fields, and customer lifecycle operations.
   Essential for MSP account management through Atera.
-when_to_use: "When creating, updating, searching, or managing customer records"
-triggers:
-  - atera customer
-  - atera client
-  - customer management
-  - atera contact
-  - customer record
-  - create customer atera
-  - update customer atera
-  - customer lookup
-  - contact lookup atera
+when_to_use: >-
+  When creating, updating, searching, or managing customer records. Use when: atera customer,
+  atera client, customer management, atera contact, customer record, create customer atera, update
+  customer atera, customer lookup, or contact lookup atera.
 ---
 
 # Atera Customer Management

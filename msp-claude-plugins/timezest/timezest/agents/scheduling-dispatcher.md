@@ -1,6 +1,14 @@
 ---
 name: scheduling-dispatcher
-description: Use this agent when booking a technician against a PSA ticket through TimeZest — resolving the right agent or team, picking the correct appointment type, creating the scheduling request with the PSA association, and confirming the customer booking link was issued. Trigger for: book a tech, schedule a technician, send a TimeZest link, create scheduling request, book against ticket, TimeZest dispatch, schedule onsite, schedule remote session. Examples: "Book a remote session for the customer on ConnectWise ticket 88421", "Send a TimeZest link to the customer on Autotask ticket T20240199", "Schedule an onsite visit with Maria for Halo ticket 5567", "Get the customer on this ticket scheduled with whoever's available on the network team"
+description: >-
+  Use this agent when booking a technician against a PSA ticket through TimeZest — resolving the
+  right agent or team, picking the correct appointment type, creating the scheduling request with
+  the PSA association, and confirming the customer booking link was issued. Trigger for: book a
+  tech, schedule a technician, send a TimeZest link, create scheduling request, book against
+  ticket, TimeZest dispatch, schedule onsite, schedule remote session. Examples: "Book a remote
+  session for the customer on ConnectWise ticket 88421", "Send a TimeZest link to the customer on
+  Autotask ticket T20240199", "Schedule an onsite visit with Maria for Halo ticket 5567", "Get the
+  customer on this ticket scheduled with whoever's available on the network team"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

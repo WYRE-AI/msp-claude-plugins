@@ -4,19 +4,12 @@ description: >
   Use this skill when working with NinjaOne alerts - viewing active conditions,
   dismissing alerts, and understanding alert severity levels. Alerts indicate
   device issues that require technician attention.
-when_to_use: "When viewing active conditions, dismissing alerts, and understanding alert severity levels. Alerts indicate device issues that require technician attention"
-triggers:
-  - ninjaone alert
-  - ninjarmm alert
-  - ninja condition
-  - device alert ninja
-  - dismiss alert ninja
-  - clear alert ninja
-  - critical alert ninja
-  - bulk dismiss alerts ninja
-  - alert summary ninja
-  - ninjaone alert count
-  - alerts by severity ninja
+when_to_use: >-
+  When viewing active conditions, dismissing alerts, and understanding alert severity levels.
+  Alerts indicate device issues that require technician attention. Use when: ninjaone alert,
+  ninjarmm alert, ninja condition, device alert ninja, dismiss alert ninja, clear alert ninja,
+  critical alert ninja, bulk dismiss alerts ninja, alert summary ninja, ninjaone alert count, or
+  alerts by severity ninja.
 ---
 
 # NinjaOne Alert Management

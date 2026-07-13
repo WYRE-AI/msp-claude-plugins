@@ -1,30 +1,7 @@
 ---
-name: search-tickets
 description: Search for tickets in Autotask PSA by various criteria
-arguments:
-  - name: query
-    description: Search term (searches title, description, ticket number)
-    required: false
-  - name: company
-    description: Filter by company name or ID
-    required: false
-  - name: status
-    description: Filter by status (open, closed, all)
-    required: false
-    default: open
-  - name: priority
-    description: Filter by priority (critical, high, medium, low)
-    required: false
-  - name: queue
-    description: Filter by queue name or ID
-    required: false
-  - name: assignee
-    description: Filter by assigned resource name or ID
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [company] [status] [priority] [queue] [assignee] [limit]"
+arguments: [query, company, status, priority, queue, assignee, limit]
 ---
 
 # Search Autotask Tickets

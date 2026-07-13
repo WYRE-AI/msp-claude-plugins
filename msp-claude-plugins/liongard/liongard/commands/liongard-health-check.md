@@ -1,6 +1,6 @@
 ---
-name: liongard-health-check
 description: Check Liongard connectivity and return system health summary
+argument-hint: ""
 arguments: []
 ---
 

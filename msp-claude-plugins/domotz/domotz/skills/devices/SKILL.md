@@ -4,18 +4,11 @@ description: >
   Use this skill when working with Domotz device inventory --
   listing devices, searching by name/IP/MAC, checking device status,
   viewing device details, and understanding network topology.
-when_to_use: "When listing devices, searching by name/IP/MAC, checking device status, viewing device details, and understanding network topology"
-triggers:
-  - domotz device
-  - device inventory
-  - device discovery
-  - device status
-  - device search
-  - device lookup
-  - network device
-  - device list
-  - find device
-  - device details
+when_to_use: >-
+  When listing devices, searching by name/IP/MAC, checking device status, viewing device details,
+  and understanding network topology. Use when: domotz device, device inventory, device discovery,
+  device status, device search, device lookup, network device, device list, find device, or device
+  details.
 ---
 
 # Domotz Devices

@@ -5,17 +5,10 @@ description: >
   resolving, or managing alerts from monitored devices. Covers alert types,
   severity levels, alert sources, and alert-to-ticket conversion.
   Essential for MSP monitoring operations through Atera.
-when_to_use: "When viewing, acknowledging, resolving, or managing alerts from monitored devices"
-triggers:
-  - atera alert
-  - rmm alert
-  - monitoring alert
-  - alert severity
-  - alert acknowledge
-  - alert resolve
-  - device alert
-  - threshold alert
-  - atera monitoring
+when_to_use: >-
+  When viewing, acknowledging, resolving, or managing alerts from monitored devices. Use when:
+  atera alert, rmm alert, monitoring alert, alert severity, alert acknowledge, alert resolve,
+  device alert, threshold alert, or atera monitoring.
 ---
 
 # Atera Alert Management

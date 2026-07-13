@@ -1,6 +1,13 @@
 ---
 name: asset-reconciliation-auditor
-description: Use this agent when an MSP needs to reconcile its asset estate across managed, secured, billed, and documented systems to surface security coverage gaps, revenue leakage, ghost assets, and shadow IT. Trigger for: asset reconciliation, unbilled devices, security coverage gaps, managed but not protected, revenue leakage, ghost assets, stale assets, shadow IT, asset audit, billing true-up, endpoint coverage audit, asset discrepancy. Examples: "Reconcile all assets for Riverdale Healthcare — find anything we manage but don't bill for", "Show me which endpoints have no security agent across the portfolio", "Run an asset audit and find our revenue leakage"
+description: >-
+  Use this agent when an MSP needs to reconcile its asset estate across managed, secured, billed,
+  and documented systems to surface security coverage gaps, revenue leakage, ghost assets, and
+  shadow IT. Trigger for: asset reconciliation, unbilled devices, security coverage gaps, managed
+  but not protected, revenue leakage, ghost assets, stale assets, shadow IT, asset audit, billing
+  true-up, endpoint coverage audit, asset discrepancy. Examples: "Reconcile all assets for
+  Riverdale Healthcare — find anything we manage but don't bill for", "Show me which endpoints
+  have no security agent across the portfolio", "Run an asset audit and find our revenue leakage"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

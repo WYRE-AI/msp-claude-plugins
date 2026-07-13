@@ -6,21 +6,12 @@ description: >
   managing pricing and discounts, linking quotes to opportunities, and building
   proposals. Covers the full quote lifecycle including item types, discount
   structures, and quote-to-opportunity workflows.
-when_to_use: "When creating quotes for customers, adding products/services/bundles as line items, managing pricing and discounts, linking quotes to opportunities, and building proposals"
-triggers:
-  - autotask quote
-  - create quote
-  - quote item
-  - quote line item
-  - proposal
-  - pricing quote
-  - customer quote
-  - quote builder
-  - add to quote
-  - quote discount
-  - quote opportunity
-  - build quote
-  - sales quote
+when_to_use: >-
+  When creating quotes for customers, adding products/services/bundles as line items, managing
+  pricing and discounts, linking quotes to opportunities, and building proposals. Use when:
+  autotask quote, create quote, quote item, quote line item, proposal, pricing quote, customer
+  quote, quote builder, add to quote, quote discount, quote opportunity, build quote, or sales
+  quote.
 ---
 
 # Autotask Quote Management

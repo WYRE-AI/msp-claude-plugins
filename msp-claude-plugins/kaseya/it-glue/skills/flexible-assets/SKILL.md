@@ -5,16 +5,11 @@ description: >
   for structured documentation. Covers flexible asset types, field definitions,
   creating and managing instances, cross-linking with other resources, and
   building custom documentation schemas for MSP needs.
-when_to_use: "When working with custom asset types for structured documentation in IT Glue flexible assets"
-triggers:
-  - it glue flexible asset
-  - custom asset
-  - flexible asset type
-  - it glue custom documentation
-  - flexible asset field
-  - custom documentation
-  - structured asset
-  - it glue template
+when_to_use: >-
+  When working with custom asset types for structured documentation in IT Glue flexible assets.
+  Use when: it glue flexible asset, custom asset, flexible asset type, it glue custom
+  documentation, flexible asset field, custom documentation, structured asset, or it glue
+  template.
 ---
 
 # IT Glue Flexible Assets Management

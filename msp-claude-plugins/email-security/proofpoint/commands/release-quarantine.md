@@ -1,20 +1,7 @@
 ---
-name: release-quarantine
 description: Release one or more quarantined messages to their intended recipients
-arguments:
-  - name: id
-    description: Quarantine message ID to release
-    required: false
-  - name: ids
-    description: Comma-separated list of message IDs for bulk release
-    required: false
-  - name: sender
-    description: Release all quarantined messages from this sender
-    required: false
-  - name: confirm
-    description: Skip confirmation prompt
-    required: false
-    default: false
+argument-hint: "[id] [ids] [sender] [confirm]"
+arguments: [id, ids, sender, confirm]
 ---
 
 # Release Quarantined Messages

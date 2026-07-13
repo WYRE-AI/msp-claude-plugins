@@ -6,17 +6,12 @@ description: >
   connection where only meta-tools are available. Covers the progressive
   discovery pattern using list_categories, list_category_tools, and
   execute_tool, plus the intelligent router for natural language tool lookup.
-when_to_use: "When autotask MCP tools aren't loading, when you can't find the right Autotask tool to call, or when working with a lazy-loaded MCP connection where only meta-tools are available"
-triggers:
-  - autotask tools not loading
-  - can't find autotask tool
-  - autotask tool discovery
-  - which autotask tool
-  - autotask lazy loading
-  - autotask mcp not working
-  - discover autotask tools
-  - autotask meta tools
-  - autotask router
+when_to_use: >-
+  When autotask MCP tools aren't loading, when you can't find the right Autotask tool to call, or
+  when working with a lazy-loaded MCP connection where only meta-tools are available. Use when:
+  autotask tools not loading, can't find autotask tool, autotask tool discovery, which autotask
+  tool, autotask lazy loading, autotask mcp not working, discover autotask tools, autotask meta
+  tools, or autotask router.
 ---
 
 # Autotask Tool Discovery & Lazy Loading

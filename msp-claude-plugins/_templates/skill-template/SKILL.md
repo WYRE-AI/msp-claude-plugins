@@ -1,14 +1,14 @@
 ---
 name: "[Vendor] [Topic]"
-when_to_use: "When [specific action or scenario that should trigger this skill]"
+when_to_use: >-
+  When [specific action or scenario that should trigger this skill].
+  Use when: [keyword 1], [keyword 2], or [phrase that triggers this skill].
 description: >
   Use this skill when [describe the trigger conditions - what user requests
-  or contexts should activate this skill]. Include specific scenarios and
-  use cases.
-triggers:
-  - keyword 1
-  - keyword 2
-  - phrase that triggers this skill
+  or contexts should activate this skill]. Include specific scenarios, use
+  cases, and the keyword phrases users are likely to say. Do NOT add a
+  separate triggers: list - trigger phrases belong in this field or in
+  when_to_use as a "Use when: ..." sentence.
 ---
 
 # [Skill Title]

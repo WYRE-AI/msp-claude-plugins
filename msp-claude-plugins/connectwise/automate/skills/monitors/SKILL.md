@@ -5,18 +5,10 @@ description: >
   thresholds, creating templates, and assigning to computers. Covers monitor types
   (internal, remote, SNMP), alert thresholds, monitor templates, assignment methods,
   and monitor status evaluation.
-when_to_use: "When configuring thresholds, creating templates, and assigning to computers"
-triggers:
-  - automate monitor
-  - automate monitoring
-  - automate threshold
-  - monitor template
-  - monitor assignment
-  - monitor alert
-  - internal monitor
-  - remote monitor
-  - snmp monitor
-  - labtech monitor
+when_to_use: >-
+  When configuring thresholds, creating templates, and assigning to computers. Use when: automate
+  monitor, automate monitoring, automate threshold, monitor template, monitor assignment, monitor
+  alert, internal monitor, remote monitor, snmp monitor, or labtech monitor.
 ---
 
 # ConnectWise Automate Monitor Management

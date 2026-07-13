@@ -1,17 +1,7 @@
 ---
-name: incident-triage
 description: Triage current open PagerDuty incidents by urgency and priority
-arguments:
-  - name: urgency
-    description: Filter by urgency level (high, low)
-    required: false
-  - name: service_name
-    description: Filter by service name
-    required: false
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "50"
+argument-hint: "[urgency] [service_name] [limit]"
+arguments: [urgency, service_name, limit]
 ---
 
 # PagerDuty Incident Triage

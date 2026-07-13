@@ -1,10 +1,7 @@
 ---
-name: site-overview
 description: Overview of a RunZero site's assets, services, and health
-arguments:
-  - name: site_id
-    description: Site UUID to review
-    required: true
+argument-hint: "<site_id>"
+arguments: [site_id]
 ---
 
 # RunZero Site Overview

@@ -1,16 +1,7 @@
 ---
-name: list-overdue-invoices
 description: List open and overdue Alternative Payments invoices and optionally generate hosted payment links for them
-arguments:
-  - name: customer_id
-    description: Limit results to a single customer (optional)
-    required: false
-  - name: include_open
-    description: Include open (not-yet-overdue) invoices, not just overdue ones (default false)
-    required: false
-  - name: with_links
-    description: Generate a hosted payment link for each listed invoice (default false)
-    required: false
+argument-hint: "[customer_id] [include_open] [with_links]"
+arguments: [customer_id, include_open, with_links]
 ---
 
 # List Overdue Invoices

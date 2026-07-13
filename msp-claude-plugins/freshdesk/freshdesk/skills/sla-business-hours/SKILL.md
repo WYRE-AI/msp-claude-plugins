@@ -1,20 +1,15 @@
 ---
 name: "Freshdesk SLA & Business Hours"
-when_to_use: "When inspecting Freshdesk SLA policies and business-hours calendars, or reasoning about how they drive due_by / fr_due_by and breach detection on tickets"
+when_to_use: >-
+  When inspecting Freshdesk SLA policies and business-hours calendars, or reasoning about how they
+  drive due_by / fr_due_by and breach detection on tickets. Use when: freshdesk sla, freshdesk sla
+  policy, freshdesk business hours, freshdesk due_by, freshdesk first response, sla breach
+  freshdesk, escalation freshdesk, or freshdesk response time.
 description: >
   Use this skill when working with Freshdesk SLA policies and business hours —
   listing the policies and calendars, understanding how SLA targets combined
   with business hours compute a ticket's due_by and fr_due_by deadlines, and
   detecting breached or at-risk tickets through the Freshdesk REST API v2.
-triggers:
-  - freshdesk sla
-  - freshdesk sla policy
-  - freshdesk business hours
-  - freshdesk due_by
-  - freshdesk first response
-  - sla breach freshdesk
-  - escalation freshdesk
-  - freshdesk response time
 ---
 
 # Freshdesk SLA Policies & Business Hours

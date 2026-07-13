@@ -1,6 +1,14 @@
 ---
 name: backup-health-monitor
-description: Use this agent when an MSP needs to audit backup and BC/DR health across their Datto RMM managed client portfolio — not a general fleet health check, but a focused review of backup job success rates, last successful backups per device, retention policy compliance, offsite replication status, and restore test records. Trigger for: backup health check, backup compliance, backup failure report, BC/DR audit, offsite replication status, RPO compliance, backup job failures Datto, restore test audit, data protection review. Examples: "Which clients have backup failures I need to address?", "Show me every device where the last successful backup is more than 24 hours old", "Generate a backup health report across all sites for the weekly review"
+description: >-
+  Use this agent when an MSP needs to audit backup and BC/DR health across their Datto RMM managed
+  client portfolio — not a general fleet health check, but a focused review of backup job success
+  rates, last successful backups per device, retention policy compliance, offsite replication
+  status, and restore test records. Trigger for: backup health check, backup compliance, backup
+  failure report, BC/DR audit, offsite replication status, RPO compliance, backup job failures
+  Datto, restore test audit, data protection review. Examples: "Which clients have backup failures
+  I need to address?", "Show me every device where the last successful backup is more than 24
+  hours old", "Generate a backup health report across all sites for the weekly review"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

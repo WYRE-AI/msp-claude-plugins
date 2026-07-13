@@ -1,16 +1,7 @@
 ---
-name: resolve-alert
 description: Resolve an open alert in Datto RMM
-arguments:
-  - name: alert-id
-    description: Alert UID or device hostname to find alerts for
-    required: true
-  - name: note
-    description: Resolution note explaining what was done
-    required: false
-  - name: all
-    description: Resolve all open alerts for the specified device (use with hostname)
-    required: false
+argument-hint: "<alert-id> [note] [all]"
+arguments: [alert-id, note, all]
 ---
 
 # Resolve Alert

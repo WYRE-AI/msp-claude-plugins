@@ -1,30 +1,7 @@
 ---
-name: log-activity
 description: Log a note or create a task on a HubSpot contact, company, or deal
-arguments:
-  - name: type
-    description: Activity type - "note" or "task"
-    required: true
-  - name: content
-    description: Note body or task description
-    required: true
-  - name: contact
-    description: Contact name or ID to associate with
-    required: false
-  - name: company
-    description: Company name or ID to associate with
-    required: false
-  - name: deal
-    description: Deal name or ID to associate with
-    required: false
-  - name: priority
-    description: Task priority (LOW, MEDIUM, HIGH). Only for tasks.
-    required: false
-    default: MEDIUM
-  - name: due_date
-    description: Task due date (YYYY-MM-DD). Only for tasks.
-    required: false
-    default: tomorrow
+argument-hint: "<type> <content> [contact] [company] [deal] [priority] [due_date]"
+arguments: [type, content, contact, company, deal, priority, due_date]
 ---
 
 # Log Activity in HubSpot

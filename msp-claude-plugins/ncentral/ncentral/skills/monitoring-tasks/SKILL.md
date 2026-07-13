@@ -1,20 +1,15 @@
 ---
 name: "N-central Monitoring & Tasks"
-when_to_use: "When triaging N-central active issues, checking job statuses, drilling into scheduled-task results, or executing a direct support task on a device"
+when_to_use: >-
+  When triaging N-central active issues, checking job statuses, drilling into scheduled-task
+  results, or executing a direct support task on a device. Use when: ncentral active issues,
+  ncentral alerts, ncentral job status, ncentral scheduled task, ncentral task status, ncentral
+  direct task, ncentral run script, or ncentral automation.
 description: >
   Use this skill when working with N-central monitoring and automation —
   active-issue triage per customer or site, job statuses, the scheduled
   task → status → per-device details drill-down, and the safety rules for
   direct-support task execution.
-triggers:
-  - ncentral active issues
-  - ncentral alerts
-  - ncentral job status
-  - ncentral scheduled task
-  - ncentral task status
-  - ncentral direct task
-  - ncentral run script
-  - ncentral automation
 ---
 
 # N-central Monitoring & Tasks

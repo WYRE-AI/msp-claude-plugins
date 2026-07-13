@@ -1,23 +1,7 @@
 ---
-name: search-assets
 description: Search for customer assets in Syncro
-arguments:
-  - name: query
-    description: Search by asset name or serial number
-    required: false
-  - name: customer_id
-    description: Filter by customer ID
-    required: false
-  - name: asset_type
-    description: Filter by type (Desktop, Laptop, Server, Printer, etc.)
-    required: false
-  - name: status
-    description: Filter by status (Active, Inactive)
-    required: false
-  - name: limit
-    description: Maximum results (default 25)
-    required: false
-    default: 25
+argument-hint: "[query] [customer_id] [asset_type] [status] [limit]"
+arguments: [query, customer_id, asset_type, status, limit]
 ---
 
 # Search Syncro Assets

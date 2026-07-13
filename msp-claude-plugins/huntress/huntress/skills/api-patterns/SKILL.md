@@ -5,17 +5,11 @@ description: >
   available tools, authentication via HTTP Basic Auth, API structure,
   pagination with page tokens, rate limiting (60 req/min), error handling,
   and best practices.
-when_to_use: "When working with available tools, authentication via HTTP Basic Auth, API structure, pagination with page tokens, rate limiting (60 req/min), error handling"
-triggers:
-  - huntress api
-  - huntress authentication
-  - huntress pagination
-  - huntress rate limit
-  - huntress mcp
-  - huntress tools
-  - huntress request
-  - huntress error
-  - huntress connection
+when_to_use: >-
+  When working with available tools, authentication via HTTP Basic Auth, API structure, pagination
+  with page tokens, rate limiting (60 req/min), error handling. Use when: huntress api, huntress
+  authentication, huntress pagination, huntress rate limit, huntress mcp, huntress tools, huntress
+  request, huntress error, or huntress connection.
 ---
 
 # Huntress MCP Tools & API Patterns

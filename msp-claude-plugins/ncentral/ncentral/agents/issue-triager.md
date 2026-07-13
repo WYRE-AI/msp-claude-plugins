@@ -1,6 +1,12 @@
 ---
 name: issue-triager
-description: Use this agent when the user wants active issues triaged across N-central customers - morning sweeps, severity ranking, root-cause grouping, or deciding what to remediate first. Trigger for: triage issues, active issues sweep, what's broken, what's alerting, morning check, overnight issues, N-central alerts, which customers have problems, group alerts by cause. Examples: "What's broken across our clients this morning?", "Triage ACME's active issues", "Sweep all customers and tell me what to fix first", "Are last night's backup failures related?"
+description: >-
+  Use this agent when the user wants active issues triaged across N-central customers - morning
+  sweeps, severity ranking, root-cause grouping, or deciding what to remediate first. Trigger for:
+  triage issues, active issues sweep, what's broken, what's alerting, morning check, overnight
+  issues, N-central alerts, which customers have problems, group alerts by cause. Examples:
+  "What's broken across our clients this morning?", "Triage ACME's active issues", "Sweep all
+  customers and tell me what to fix first", "Are last night's backup failures related?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

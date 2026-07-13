@@ -6,22 +6,11 @@ description: >
   reasons, release workflows, bulk operations, and quarantine policies.
   Essential for MSP security analysts managing email quarantine across
   customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
-when_to_use: "When listing, searching, releasing, deleting quarantined emails"
-triggers:
-  - checkpoint quarantine
-  - avanan quarantine
-  - quarantined email
-  - release quarantine
-  - delete quarantine
-  - quarantine search
-  - email blocked
-  - email held
-  - quarantine review
-  - bulk release
-  - quarantine policy
-  - false positive email
-  - email restore
-  - quarantine management
+when_to_use: >-
+  When listing, searching, releasing, deleting quarantined emails. Use when: checkpoint
+  quarantine, avanan quarantine, quarantined email, release quarantine, delete quarantine,
+  quarantine search, email blocked, email held, quarantine review, bulk release, quarantine
+  policy, false positive email, email restore, or quarantine management.
 ---
 
 # Checkpoint Harmony Email Quarantine Management

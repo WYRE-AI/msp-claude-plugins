@@ -1,15 +1,7 @@
 ---
-name: alert-triage
 description: Triage open Auvik alerts, rank by severity, and recommend dismissals for known noise
 argument-hint: "[tenant_id] [severity]"
-arguments:
-  - name: tenant_id
-    description: Scope to a single tenant. Omit to triage across all visible tenants.
-    required: false
-  - name: severity
-    description: Minimum severity to include (info, warning, critical, emergency)
-    required: false
-    default: "warning"
+arguments: [tenant_id, severity]
 ---
 
 # Auvik Alert Triage

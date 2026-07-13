@@ -6,22 +6,11 @@ description: >
   lifecycle (triggered/acknowledged/resolved), urgency levels, alert grouping,
   incident notes, log entries, past incidents pattern matching, and
   cross-vendor PSA ticket correlation workflows for MSPs.
-when_to_use: "When listing, triaging, creating, updating, resolving, and investigating incidents"
-triggers:
-  - pagerduty incident
-  - pagerduty outage
-  - pagerduty triggered
-  - pagerduty acknowledged
-  - pagerduty resolved
-  - pagerduty alert
-  - pagerduty triage
-  - pagerduty urgency
-  - pagerduty severity
-  - pagerduty priority
-  - pagerduty create incident
-  - pagerduty merge
-  - pagerduty snooze
-  - pagerduty log entry
+when_to_use: >-
+  When listing, triaging, creating, updating, resolving, and investigating incidents. Use when:
+  pagerduty incident, pagerduty outage, pagerduty triggered, pagerduty acknowledged, pagerduty
+  resolved, pagerduty alert, pagerduty triage, pagerduty urgency, pagerduty severity, pagerduty
+  priority, pagerduty create incident, pagerduty merge, pagerduty snooze, or pagerduty log entry.
 ---
 
 # PagerDuty Incident Management

@@ -1,6 +1,16 @@
 ---
 name: billing-reconciler
-description: Use this agent when an MSP needs to reconcile Sherweb distributor billing — reviewing payable charges for a billing period, drilling into individual charge details, separating Setup/Recurring/Usage charge types, verifying that billed quantities match active subscriptions, and calculating MSP margin between Sherweb cost and customer price. Trigger for: Sherweb billing reconciliation, payable charges, charge details, billing period review, distributor invoice, margin calculation, billing anomaly, cost of goods, Sherweb invoice audit, usage charge review. Examples: "Reconcile this month's Sherweb payable charges against our active subscriptions", "Break down the Setup, Recurring, and Usage charges for the last billing period", "What is our margin on each Sherweb product line", "Find billing anomalies where the charged quantity doesn't match the subscription"
+description: >-
+  Use this agent when an MSP needs to reconcile Sherweb distributor billing — reviewing payable
+  charges for a billing period, drilling into individual charge details, separating
+  Setup/Recurring/Usage charge types, verifying that billed quantities match active subscriptions,
+  and calculating MSP margin between Sherweb cost and customer price. Trigger for: Sherweb billing
+  reconciliation, payable charges, charge details, billing period review, distributor invoice,
+  margin calculation, billing anomaly, cost of goods, Sherweb invoice audit, usage charge review.
+  Examples: "Reconcile this month's Sherweb payable charges against our active subscriptions",
+  "Break down the Setup, Recurring, and Usage charges for the last billing period", "What is our
+  margin on each Sherweb product line", "Find billing anomalies where the charged quantity doesn't
+  match the subscription"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

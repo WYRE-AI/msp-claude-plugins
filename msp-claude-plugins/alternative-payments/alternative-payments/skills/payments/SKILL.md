@@ -6,18 +6,12 @@ description: >
   payment method; retrieving a single transaction; and listing or retrieving
   payouts and the transactions that compose them for reconciliation. This is a
   read-only surface - there is no create-payment or direct-charge operation.
-when_to_use: "When listing or filtering transactions, retrieving a transaction, or listing and reconciling payouts and the transactions inside them"
-triggers:
-  - alternative payments transaction
-  - list transactions
-  - transaction status
-  - alternative payments payout
-  - list payouts
-  - payout transactions
-  - reconcile payout
-  - failed payment
-  - declined transaction
-  - alternativepayments payout
+when_to_use: >-
+  When listing or filtering transactions, retrieving a transaction, or listing and reconciling
+  payouts and the transactions inside them. Use when: alternative payments transaction, list
+  transactions, transaction status, alternative payments payout, list payouts, payout
+  transactions, reconcile payout, failed payment, declined transaction, or alternativepayments
+  payout.
 ---
 
 # Alternative Payments Payments & Payouts

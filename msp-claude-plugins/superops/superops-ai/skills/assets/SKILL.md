@@ -6,20 +6,11 @@ description: >
   client/site associations. Covers asset fields, statuses, software inventory,
   disk usage, and activity tracking through the RMM integration.
   Essential for MSP technicians managing endpoints through SuperOps.ai.
-when_to_use: "When querying inventory, viewing asset details, running scripts, monitoring patches, and managing client/site associations"
-triggers:
-  - superops asset
-  - asset inventory
-  - list assets superops
-  - asset status
-  - asset details
-  - run script asset
-  - patch status
-  - software inventory
-  - disk usage
-  - asset activity
-  - rmm superops
-  - endpoint management
+when_to_use: >-
+  When querying inventory, viewing asset details, running scripts, monitoring patches, and
+  managing client/site associations. Use when: superops asset, asset inventory, list assets
+  superops, asset status, asset details, run script asset, patch status, software inventory, disk
+  usage, asset activity, rmm superops, or endpoint management.
 ---
 
 # SuperOps.ai Asset Management

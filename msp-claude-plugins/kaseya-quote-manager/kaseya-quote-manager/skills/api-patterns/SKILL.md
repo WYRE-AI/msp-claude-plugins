@@ -1,17 +1,13 @@
 ---
 name: "Kaseya Quote Manager API Patterns"
-when_to_use: "When working with Kaseya Quote Manager authentication, pagination, rate limits, or error handling for the Kaseya Quote Manager MCP server"
+when_to_use: >-
+  When working with Kaseya Quote Manager authentication, pagination, rate limits, or error
+  handling for the Kaseya Quote Manager MCP server. Use when: kaseya quote manager api, kqm
+  authentication, kqm pagination, kqm rate limit, quote manager api, or datto commerce api.
 description: >
   Use this skill when working with the Kaseya Quote Manager (Datto Commerce)
   MCP tools — API-key authentication, the read-only tool surface, page/pageSize
   pagination with modifiedAfter, rate limits, and error handling.
-triggers:
-  - kaseya quote manager api
-  - kqm authentication
-  - kqm pagination
-  - kqm rate limit
-  - quote manager api
-  - datto commerce api
 ---
 
 # Kaseya Quote Manager MCP Tools & API Patterns

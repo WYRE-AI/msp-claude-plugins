@@ -1,14 +1,7 @@
 ---
-name: task-status
 description: Drill into an N-central scheduled task's outcome - aggregate status down to per-device results and output
 argument-hint: "[task_id] [device_id]"
-arguments:
-  - name: task_id
-    description: Task ID to inspect. Omit to list tasks on a device first.
-    required: false
-  - name: device_id
-    description: Device ID to list tasks for when task_id is unknown
-    required: false
+arguments: [task_id, device_id]
 ---
 
 # N-central Task Status

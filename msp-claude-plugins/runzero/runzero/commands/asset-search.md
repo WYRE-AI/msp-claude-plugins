@@ -1,17 +1,7 @@
 ---
-name: asset-search
 description: Search for assets in RunZero by criteria
-arguments:
-  - name: query
-    description: RunZero query string (e.g., "os:Windows", "type:server", "address:10.0.0.0/8")
-    required: false
-  - name: site_id
-    description: Filter by site UUID
-    required: false
-  - name: limit
-    description: Maximum number of assets to return
-    required: false
-    default: "50"
+argument-hint: "[query] [site_id] [limit]"
+arguments: [query, site_id, limit]
 ---
 
 # RunZero Asset Search

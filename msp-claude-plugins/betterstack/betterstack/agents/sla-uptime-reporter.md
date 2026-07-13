@@ -1,6 +1,13 @@
 ---
 name: sla-uptime-reporter
-description: Use this agent when an MSP needs to generate SLA-focused uptime reports for clients, calculate SLA achievement percentages, identify chronic underperforming monitors, or produce client-facing availability summaries. Trigger for: SLA uptime report, monthly uptime BetterStack, SLA achievement, availability report client, uptime percentage BetterStack, SLA compliance report, chronic monitor failures BetterStack. Examples: "generate last month's uptime report for all monitored services", "which clients are below SLA threshold this month", "produce a client-facing availability summary for Acme Corp"
+description: >-
+  Use this agent when an MSP needs to generate SLA-focused uptime reports for clients, calculate
+  SLA achievement percentages, identify chronic underperforming monitors, or produce client-facing
+  availability summaries. Trigger for: SLA uptime report, monthly uptime BetterStack, SLA
+  achievement, availability report client, uptime percentage BetterStack, SLA compliance report,
+  chronic monitor failures BetterStack. Examples: "generate last month's uptime report for all
+  monitored services", "which clients are below SLA threshold this month", "produce a
+  client-facing availability summary for Acme Corp"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

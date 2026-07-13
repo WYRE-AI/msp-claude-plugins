@@ -7,20 +7,11 @@ description: >
   takeover cases, investigation workflows, and remediation actions.
   Essential for MSP security analysts investigating compromised accounts
   detected by Abnormal Security.
-when_to_use: "When working with suspicious sign-ins, impossible travel, compromised accounts, mailbox rule changes"
-triggers:
-  - account takeover
-  - abnormal ato
-  - compromised account
-  - suspicious sign-in
-  - impossible travel
-  - mailbox rule change
-  - account compromise
-  - sign-in anomaly
-  - lateral movement
-  - abnormal account security
-  - unauthorized access
-  - suspicious login
+when_to_use: >-
+  When working with suspicious sign-ins, impossible travel, compromised accounts, mailbox rule
+  changes. Use when: account takeover, abnormal ato, compromised account, suspicious sign-in,
+  impossible travel, mailbox rule change, account compromise, sign-in anomaly, lateral movement,
+  abnormal account security, unauthorized access, or suspicious login.
 ---
 
 # Abnormal Security Account Takeover Detection

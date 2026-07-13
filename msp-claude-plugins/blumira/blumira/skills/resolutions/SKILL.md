@@ -4,14 +4,10 @@ description: >
   Use this skill when resolving Blumira findings, choosing the correct
   resolution type, or understanding resolution workflows and their impact
   on security metrics.
-when_to_use: "When resolving Blumira findings, choosing the correct resolution type, or understanding resolution workflows and their impact on security metrics"
-triggers:
-  - resolution type
-  - resolve finding
-  - false positive
-  - valid finding
-  - not applicable
-  - close finding
+when_to_use: >-
+  When resolving Blumira findings, choosing the correct resolution type, or understanding
+  resolution workflows and their impact on security metrics. Use when: resolution type, resolve
+  finding, false positive, valid finding, not applicable, or close finding.
 ---
 
 # Blumira Resolutions

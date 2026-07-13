@@ -5,16 +5,10 @@ description: >
   contact types, locations, and communication details. Covers contact creation,
   organization relationships, contact notes, PSA sync, and lookup patterns for
   effective client communication management.
-when_to_use: "When managing client contacts, contact types, locations, and communication details"
-triggers:
-  - it glue contact
-  - client contact
-  - technical contact
-  - contact lookup
-  - contact management
-  - it glue contacts
-  - organization contacts
-  - contact documentation
+when_to_use: >-
+  When managing client contacts, contact types, locations, and communication details. Use when: it
+  glue contact, client contact, technical contact, contact lookup, contact management, it glue
+  contacts, organization contacts, or contact documentation.
 ---
 
 # IT Glue Contacts Management

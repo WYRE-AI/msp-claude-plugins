@@ -1,6 +1,12 @@
 ---
 name: security-posture-scorer
-description: Use this agent when an MSP needs a comprehensive, scored security health assessment for a specific client — acting as a vCISO-style health check by aggregating data across all connected security tools. Trigger for: security posture, security score, security health check, vCISO report, security assessment, how secure is this client, security gaps, security audit, security report card. Examples: "Run a security posture assessment for Riverdale Healthcare", "What's the security score for Acme Corp?", "Give me a vCISO health check on Lakeside Medical"
+description: >-
+  Use this agent when an MSP needs a comprehensive, scored security health assessment for a
+  specific client — acting as a vCISO-style health check by aggregating data across all connected
+  security tools. Trigger for: security posture, security score, security health check, vCISO
+  report, security assessment, how secure is this client, security gaps, security audit, security
+  report card. Examples: "Run a security posture assessment for Riverdale Healthcare", "What's the
+  security score for Acme Corp?", "Give me a vCISO health check on Lakeside Medical"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

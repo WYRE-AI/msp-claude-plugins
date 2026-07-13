@@ -1,6 +1,14 @@
 ---
 name: spam-filter-analyst
-description: Use this agent when analyzing spam and phishing patterns in SpamTitan, managing the quarantine queue, tuning allowlist and blocklist rules, investigating held email, or generating email filtering statistics for MSP clients. Trigger for: SpamTitan quarantine, held email SpamTitan, spam filter review, SpamTitan allowlist, SpamTitan blocklist, phishing SpamTitan, SpamTitan statistics, release quarantine SpamTitan, block sender SpamTitan, email filter tuning. Examples: "Review the SpamTitan quarantine for Acme Corp today", "A client says their vendor's invoices aren't arriving — check SpamTitan", "Block this phishing domain in SpamTitan for all clients", "Pull the spam filtering stats for the monthly report"
+description: >-
+  Use this agent when analyzing spam and phishing patterns in SpamTitan, managing the quarantine
+  queue, tuning allowlist and blocklist rules, investigating held email, or generating email
+  filtering statistics for MSP clients. Trigger for: SpamTitan quarantine, held email SpamTitan,
+  spam filter review, SpamTitan allowlist, SpamTitan blocklist, phishing SpamTitan, SpamTitan
+  statistics, release quarantine SpamTitan, block sender SpamTitan, email filter tuning. Examples:
+  "Review the SpamTitan quarantine for Acme Corp today", "A client says their vendor's invoices
+  aren't arriving — check SpamTitan", "Block this phishing domain in SpamTitan for all clients",
+  "Pull the spam filtering stats for the monthly report"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

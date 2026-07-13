@@ -1,20 +1,7 @@
 ---
-name: scan-network
 description: Initiate a network discovery scan in RunZero
-arguments:
-  - name: site_id
-    description: Site UUID to scan
-    required: true
-  - name: targets
-    description: IP ranges to scan (CIDR notation, e.g., "192.168.1.0/24")
-    required: true
-  - name: scan_rate
-    description: Scan speed (slow, normal, fast, max)
-    required: false
-    default: "normal"
-  - name: name
-    description: Human-readable name for the scan task
-    required: false
+argument-hint: "<site_id> <targets> [scan_rate] [name]"
+arguments: [site_id, targets, scan_rate, name]
 ---
 
 # RunZero Network Scan

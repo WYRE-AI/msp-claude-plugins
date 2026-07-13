@@ -1,6 +1,14 @@
 ---
 name: email-threat-investigator
-description: Use this agent when investigating email-borne threats, tracing suspicious messages, analyzing TTP click and attachment logs, auditing Mimecast security posture, or managing held email queues for MSP clients on the Mimecast platform. Trigger for: Mimecast threat investigation, TTP URL click, Mimecast phishing, Mimecast message trace, held email Mimecast, Mimecast impersonation, attachment sandbox Mimecast, Mimecast audit log, email delivery issue Mimecast. Examples: "Investigate this phishing email reported by a Mimecast user", "Did any users click on URLs from this phishing campaign?", "Check the Mimecast TTP logs for malicious attachment blocks today", "Our client says email from their vendor isn't arriving — trace it"
+description: >-
+  Use this agent when investigating email-borne threats, tracing suspicious messages, analyzing
+  TTP click and attachment logs, auditing Mimecast security posture, or managing held email queues
+  for MSP clients on the Mimecast platform. Trigger for: Mimecast threat investigation, TTP URL
+  click, Mimecast phishing, Mimecast message trace, held email Mimecast, Mimecast impersonation,
+  attachment sandbox Mimecast, Mimecast audit log, email delivery issue Mimecast. Examples:
+  "Investigate this phishing email reported by a Mimecast user", "Did any users click on URLs from
+  this phishing campaign?", "Check the Mimecast TTP logs for malicious attachment blocks today",
+  "Our client says email from their vendor isn't arriving — trace it"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

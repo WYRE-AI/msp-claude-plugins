@@ -1,6 +1,15 @@
 ---
 name: email-security-auditor
-description: Use this agent when auditing email security posture across Proofpoint-protected organizations, investigating threats via TAP intelligence, tracing specific emails, analyzing Very Attacked Persons (VAPs), or generating per-org security reports for MSP clients. Trigger for: Proofpoint threat investigation, TAP threat data, SIEM click events, proofpoint phishing, email security audit Proofpoint, Very Attacked Persons, VAP analysis, proofpoint message trace, blocked email Proofpoint, campaign intelligence. Examples: "Pull today's Proofpoint TAP threat data for the fleet", "Which users clicked on permitted phishing URLs this week?", "An email isn't arriving for our Proofpoint client — trace it", "Generate the monthly email security report for all Proofpoint orgs"
+description: >-
+  Use this agent when auditing email security posture across Proofpoint-protected organizations,
+  investigating threats via TAP intelligence, tracing specific emails, analyzing Very Attacked
+  Persons (VAPs), or generating per-org security reports for MSP clients. Trigger for: Proofpoint
+  threat investigation, TAP threat data, SIEM click events, proofpoint phishing, email security
+  audit Proofpoint, Very Attacked Persons, VAP analysis, proofpoint message trace, blocked email
+  Proofpoint, campaign intelligence. Examples: "Pull today's Proofpoint TAP threat data for the
+  fleet", "Which users clicked on permitted phishing URLs this week?", "An email isn't arriving
+  for our Proofpoint client — trace it", "Generate the monthly email security report for all
+  Proofpoint orgs"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

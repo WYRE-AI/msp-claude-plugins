@@ -1,6 +1,15 @@
 ---
 name: customer-account-auditor
-description: Use this agent when an MSP needs a portfolio-wide health audit of its Sherweb customer accounts — enumerating all customers, checking accounts-receivable standing, correlating each customer's subscription footprint, and flagging accounts that are at financial or provisioning risk. Trigger for: Sherweb customer audit, accounts receivable review, customer health, portfolio audit, overdue balances, customer standing, AR aging, account risk review, Sherweb customer inventory, dormant accounts. Examples: "Audit all our Sherweb customers and flag any with outstanding receivables", "Which customers owe us money and how much", "Give me a portfolio health report across every Sherweb account", "Find customers with no active subscriptions or an unhealthy AR balance"
+description: >-
+  Use this agent when an MSP needs a portfolio-wide health audit of its Sherweb customer accounts
+  — enumerating all customers, checking accounts-receivable standing, correlating each customer's
+  subscription footprint, and flagging accounts that are at financial or provisioning risk.
+  Trigger for: Sherweb customer audit, accounts receivable review, customer health, portfolio
+  audit, overdue balances, customer standing, AR aging, account risk review, Sherweb customer
+  inventory, dormant accounts. Examples: "Audit all our Sherweb customers and flag any with
+  outstanding receivables", "Which customers owe us money and how much", "Give me a portfolio
+  health report across every Sherweb account", "Find customers with no active subscriptions or an
+  unhealthy AR balance"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

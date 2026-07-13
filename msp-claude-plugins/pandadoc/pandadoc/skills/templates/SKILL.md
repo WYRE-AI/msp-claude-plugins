@@ -6,18 +6,11 @@ description: >
   understanding template fields and tokens, and using templates to
   create new documents. Covers MSP-specific templates for MSAs, SOWs,
   proposals, quotes, and contracts.
-when_to_use: "When browsing the template library, finding the right template for a document type, understanding template fields and tokens, and using templates to create new documents"
-triggers:
-  - pandadoc template
-  - pandadoc blueprint
-  - pandadoc library
-  - document template
-  - template search
-  - template list
-  - msa template
-  - sow template
-  - proposal template
-  - quote template
+when_to_use: >-
+  When browsing the template library, finding the right template for a document type,
+  understanding template fields and tokens, and using templates to create new documents. Use when:
+  pandadoc template, pandadoc blueprint, pandadoc library, document template, template search,
+  template list, msa template, sow template, proposal template, or quote template.
 ---
 
 # PandaDoc Template Management

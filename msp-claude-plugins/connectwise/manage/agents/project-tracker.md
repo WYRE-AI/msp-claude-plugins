@@ -1,6 +1,14 @@
 ---
 name: project-tracker
-description: Use this agent when an MSP project manager, service manager, or operations lead needs a review of all open projects in ConnectWise Manage — checking milestone deadlines, budget vs. actuals, overdue phases, and projects at risk of scope creep or delivery failure. Trigger for: project health review, ConnectWise projects, project status report, overdue project phases, project budget review, scope creep ConnectWise, project manager review, open projects ConnectWise. Examples: "Show me all open projects and which ones are at risk", "Which projects are over budget?", "What project milestones are due this week?", "Give me a full PM review of our current project portfolio"
+description: >-
+  Use this agent when an MSP project manager, service manager, or operations lead needs a review
+  of all open projects in ConnectWise Manage — checking milestone deadlines, budget vs. actuals,
+  overdue phases, and projects at risk of scope creep or delivery failure. Trigger for: project
+  health review, ConnectWise projects, project status report, overdue project phases, project
+  budget review, scope creep ConnectWise, project manager review, open projects ConnectWise.
+  Examples: "Show me all open projects and which ones are at risk", "Which projects are over
+  budget?", "What project milestones are due this week?", "Give me a full PM review of our current
+  project portfolio"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

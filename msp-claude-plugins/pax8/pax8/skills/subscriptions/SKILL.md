@@ -6,20 +6,11 @@ description: >
   tracking subscription states, reviewing change history, and optimizing
   license usage across MSP clients. Covers the full subscription
   lifecycle including all subscription states and quantity management.
-when_to_use: "When checking license status, reviewing seat counts, filtering by company or product, tracking subscription states, reviewing change history"
-triggers:
-  - pax8 subscription
-  - pax8 license
-  - pax8 seat
-  - pax8 provision
-  - pax8 cancel
-  - subscription management
-  - license management
-  - seat count
-  - pax8 activate
-  - license optimization
-  - subscription lifecycle
-  - subscription status
+when_to_use: >-
+  When checking license status, reviewing seat counts, filtering by company or product, tracking
+  subscription states, reviewing change history. Use when: pax8 subscription, pax8 license, pax8
+  seat, pax8 provision, pax8 cancel, subscription management, license management, seat count, pax8
+  activate, license optimization, subscription lifecycle, or subscription status.
 ---
 
 # Pax8 Subscription Lifecycle Management

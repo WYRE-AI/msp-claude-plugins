@@ -5,17 +5,10 @@ description: >
   alerts, metrics, or timeline events. Covers automated change detection,
   anomaly alerts, alert rules, custom metrics, metric evaluation, and
   timeline audit trails for compliance and monitoring workflows.
-when_to_use: "When working with Liongard detections, change monitoring, alerts, metrics, or timeline events"
-triggers:
-  - liongard detection
-  - liongard change
-  - liongard alert
-  - liongard metric
-  - liongard timeline
-  - change monitoring liongard
-  - liongard anomaly
-  - liongard compliance
-  - liongard audit
+when_to_use: >-
+  When working with Liongard detections, change monitoring, alerts, metrics, or timeline events.
+  Use when: liongard detection, liongard change, liongard alert, liongard metric, liongard
+  timeline, change monitoring liongard, liongard anomaly, liongard compliance, or liongard audit.
 ---
 
 # Liongard Change Detection & Alerts

@@ -1,10 +1,7 @@
 ---
-name: site-overview
 description: Overview of a Domotz site's network health
-arguments:
-  - name: agent_id
-    description: The agent/site to check
-    required: true
+argument-hint: "<agent_id>"
+arguments: [agent_id]
 ---
 
 # Site Overview

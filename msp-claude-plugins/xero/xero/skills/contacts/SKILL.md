@@ -5,17 +5,10 @@ description: >
   creating, searching, updating, and managing client organizations.
   Covers contact fields, contact groups, MSP client management,
   billing address handling, and cross-referencing with PSA systems.
-when_to_use: "When creating, searching, updating, and managing client organizations"
-triggers:
-  - xero contact
-  - xero customer
-  - xero supplier
-  - xero client
-  - xero vendor
-  - contact lookup
-  - contact management
-  - customer management
-  - xero organization
+when_to_use: >-
+  When creating, searching, updating, and managing client organizations. Use when: xero contact,
+  xero customer, xero supplier, xero client, xero vendor, contact lookup, contact management,
+  customer management, or xero organization.
 ---
 
 # Xero Contacts Management

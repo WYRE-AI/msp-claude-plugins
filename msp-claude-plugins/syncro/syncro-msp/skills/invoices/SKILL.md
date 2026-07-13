@@ -5,17 +5,10 @@ description: >
   and tracking invoices and payments. Covers invoice fields, line items,
   payment processing, and billing workflows. Essential for MSP billing
   operations through Syncro.
-when_to_use: "When creating, managing, and tracking invoices and payments"
-triggers:
-  - syncro invoice
-  - syncro billing
-  - syncro payment
-  - invoice management syncro
-  - line item syncro
-  - syncro accounting
-  - customer billing syncro
-  - payment processing syncro
-  - invoice search syncro
+when_to_use: >-
+  When creating, managing, and tracking invoices and payments. Use when: syncro invoice, syncro
+  billing, syncro payment, invoice management syncro, line item syncro, syncro accounting,
+  customer billing syncro, payment processing syncro, or invoice search syncro.
 ---
 
 # Syncro MSP Invoice Management

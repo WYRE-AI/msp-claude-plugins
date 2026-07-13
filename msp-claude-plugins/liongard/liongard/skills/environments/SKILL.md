@@ -5,16 +5,10 @@ description: >
   environment groups, or related entities. Covers environment CRUD operations,
   counting, grouping, related entities, and common MSP workflows for managing
   customer organizations in Liongard.
-when_to_use: "When working with Liongard environments (customer organizations), environment groups, or related entities"
-triggers:
-  - liongard environment
-  - liongard customer
-  - environment group
-  - liongard site
-  - liongard org
-  - liongard environment management
-  - create environment liongard
-  - liongard client
+when_to_use: >-
+  When working with Liongard environments (customer organizations), environment groups, or related
+  entities. Use when: liongard environment, liongard customer, environment group, liongard site,
+  liongard org, liongard environment management, create environment liongard, or liongard client.
 ---
 
 # Liongard Environment Management

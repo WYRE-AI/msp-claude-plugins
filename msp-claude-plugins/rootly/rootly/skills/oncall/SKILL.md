@@ -6,20 +6,11 @@ description: >
   on-call health risk, and understanding schedule coverage. Covers the
   get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents,
   and check_oncall_health_risk MCP tools.
-when_to_use: "When working with call management - viewing shift metrics, generating handoff summaries, reviewing shift incidents, detecting on-call health risk"
-triggers:
-  - rootly oncall
-  - rootly on-call
-  - rootly handoff
-  - rootly shift
-  - rootly schedule
-  - rootly rotation
-  - rootly escalation
-  - on-call health
-  - oncall burnout
-  - shift metrics rootly
-  - rootly paging
-  - rootly responder
+when_to_use: >-
+  When working with call management - viewing shift metrics, generating handoff summaries,
+  reviewing shift incidents, detecting on-call health risk. Use when: rootly oncall, rootly
+  on-call, rootly handoff, rootly shift, rootly schedule, rootly rotation, rootly escalation,
+  on-call health, oncall burnout, shift metrics rootly, rootly paging, or rootly responder.
 ---
 
 # Rootly On-Call Management

@@ -5,20 +5,12 @@ description: >
   subscriptions, changing quantities, license management, subscription
   lifecycle, and quantity change workflows. Covers subscription states,
   seat adjustments, and provisioning status.
-when_to_use: "When viewing subscriptions, changing quantities, license management, subscription lifecycle, and quantity change workflows"
-triggers:
-  - sherweb subscription
-  - sherweb license
-  - sherweb seat
-  - sherweb quantity
-  - sherweb provision
-  - sherweb activate
-  - sherweb cancel subscription
-  - subscription management sherweb
-  - license management sherweb
-  - seat count sherweb
-  - change quantity sherweb
-  - subscription lifecycle sherweb
+when_to_use: >-
+  When viewing subscriptions, changing quantities, license management, subscription lifecycle, and
+  quantity change workflows. Use when: sherweb subscription, sherweb license, sherweb seat,
+  sherweb quantity, sherweb provision, sherweb activate, sherweb cancel subscription, subscription
+  management sherweb, license management sherweb, seat count sherweb, change quantity sherweb, or
+  subscription lifecycle sherweb.
 ---
 
 # Sherweb Subscription Management

@@ -1,6 +1,11 @@
 ---
 name: documentation-auditor
-description: Use this agent when an MSP technician or vCIO needs to find and fix documentation debt in Hudu. Trigger for: stale documentation, missing runbooks, undocumented assets, documentation audit, empty company profiles, password gaps, outdated articles. Examples: "audit our Hudu documentation for Acme Corp", "find all clients with missing runbooks", "show me stale articles across all companies"
+description: >-
+  Use this agent when an MSP technician or vCIO needs to find and fix documentation debt in Hudu.
+  Trigger for: stale documentation, missing runbooks, undocumented assets, documentation audit,
+  empty company profiles, password gaps, outdated articles. Examples: "audit our Hudu
+  documentation for Acme Corp", "find all clients with missing runbooks", "show me stale articles
+  across all companies"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

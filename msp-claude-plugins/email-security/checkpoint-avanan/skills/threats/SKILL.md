@@ -7,22 +7,11 @@ description: >
   engines, indicator analysis, and threat intelligence workflows.
   Essential for MSP security analysts investigating email-borne threats
   detected by Checkpoint Harmony Email & Collaboration (Avanan).
-when_to_use: "When phishing, malware, BEC, account takeover, IOC extraction, threat timelines, and severity assessment"
-triggers:
-  - checkpoint threat
-  - avanan threat
-  - email threat
-  - phishing detection
-  - malware email
-  - bec detection
-  - business email compromise
-  - account takeover
-  - threat analysis
-  - ioc extraction
-  - threat indicators
-  - email security threat
-  - threat timeline
-  - threat severity
+when_to_use: >-
+  When phishing, malware, BEC, account takeover, IOC extraction, threat timelines, and severity
+  assessment. Use when: checkpoint threat, avanan threat, email threat, phishing detection,
+  malware email, bec detection, business email compromise, account takeover, threat analysis, ioc
+  extraction, threat indicators, email security threat, threat timeline, or threat severity.
 ---
 
 # Checkpoint Harmony Email Threat Detection & Analysis

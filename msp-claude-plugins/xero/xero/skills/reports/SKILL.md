@@ -5,18 +5,11 @@ description: >
   Balance Sheet, Aged Receivables, Aged Payables, Trial Balance, and other
   management reports. Covers report parameters, date ranges, tracking
   categories, and interpreting results for MSP financial operations.
-when_to_use: "When working with profit and Loss, Balance Sheet, Aged Receivables, Aged Payables, Trial Balance, and other management reports in Xero financial reports"
-triggers:
-  - xero report
-  - xero profit and loss
-  - xero p&l
-  - xero balance sheet
-  - xero aged receivables
-  - xero aged payables
-  - xero trial balance
-  - xero financial report
-  - xero reporting
-  - msp financial report
+when_to_use: >-
+  When working with profit and Loss, Balance Sheet, Aged Receivables, Aged Payables, Trial
+  Balance, and other management reports in Xero financial reports. Use when: xero report, xero
+  profit and loss, xero p&l, xero balance sheet, xero aged receivables, xero aged payables, xero
+  trial balance, xero financial report, xero reporting, or msp financial report.
 ---
 
 # Xero Financial Reports

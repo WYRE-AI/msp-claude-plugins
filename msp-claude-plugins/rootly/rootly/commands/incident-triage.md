@@ -1,18 +1,7 @@
 ---
-name: incident-triage
 description: Triage active Rootly incidents by severity and status
-arguments:
-  - name: severity
-    description: Filter by severity level (critical, high, medium, low)
-    required: false
-  - name: status
-    description: Filter by status (detected, in_triage, mitigated)
-    required: false
-    default: "in_triage"
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "50"
+argument-hint: "[severity] [status] [limit]"
+arguments: [severity, status, limit]
 ---
 
 # Rootly Incident Triage

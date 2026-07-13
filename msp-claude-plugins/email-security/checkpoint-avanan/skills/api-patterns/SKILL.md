@@ -7,18 +7,12 @@ description: >
   management, request/response formats, and integration best practices.
   Essential for developers and MSP administrators integrating with the
   Checkpoint Harmony Email & Collaboration (Avanan) API.
-when_to_use: "When working with OAuth2 client credentials authentication, base URLs, rate limiting, pagination, error handling, and common API patterns in the Checkpoint Harmony Email API"
-triggers:
-  - checkpoint api
-  - avanan api
-  - checkpoint authentication
-  - checkpoint oauth
-  - avanan oauth
-  - checkpoint rate limit
-  - checkpoint pagination
-  - avanan api error
-  - checkpoint rest api
-  - infinity portal api
+when_to_use: >-
+  When working with OAuth2 client credentials authentication, base URLs, rate limiting,
+  pagination, error handling, and common API patterns in the Checkpoint Harmony Email API. Use
+  when: checkpoint api, avanan api, checkpoint authentication, checkpoint oauth, avanan oauth,
+  checkpoint rate limit, checkpoint pagination, avanan api error, checkpoint rest api, or infinity
+  portal api.
 ---
 
 # Checkpoint Harmony Email API Patterns

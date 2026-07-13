@@ -1,17 +1,7 @@
 ---
-name: subscription-status
 description: Check subscription status for a company in Pax8
-arguments:
-  - name: company
-    description: Company name or ID to check subscriptions for
-    required: true
-  - name: status
-    description: Filter by subscription status (Active, Cancelled, PendingManual, all)
-    required: false
-    default: Active
-  - name: product
-    description: Filter by product name (partial match)
-    required: false
+argument-hint: "<company> [status] [product]"
+arguments: [company, status, product]
 ---
 
 # Check Pax8 Subscription Status

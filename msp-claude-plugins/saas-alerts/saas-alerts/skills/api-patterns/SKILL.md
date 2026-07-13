@@ -1,16 +1,14 @@
 ---
 name: "SaaS Alerts API Patterns"
-when_to_use: "When working with SaaS Alerts authentication, the MSP/customer/account hierarchy, or paging through alerts and events"
+when_to_use: >-
+  When working with SaaS Alerts authentication, the MSP/customer/account hierarchy, or paging
+  through alerts and events. Use when: saas alerts api, saas alerts authentication, saas alerts
+  mcp, or m365 alert triage.
 description: >
   Use this skill when working with the SaaS Alerts MCP tools — API-key
   authentication via the gateway header, the MSP/customer/account hierarchy,
   navigation tools, and paging through events, recommended actions, devices,
   and billing.
-triggers:
-  - saas alerts api
-  - saas alerts authentication
-  - saas alerts mcp
-  - m365 alert triage
 ---
 
 # SaaS Alerts MCP Tools & API Patterns

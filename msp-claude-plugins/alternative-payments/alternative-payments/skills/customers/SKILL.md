@@ -6,18 +6,11 @@ description: >
   customer, and archiving customers. Covers customer fields, the customer/user
   relationship, MSP client onboarding, and the destructive archive operation
   that requires confirmation.
-when_to_use: "When listing, retrieving, creating, or archiving Alternative Payments customers, or managing the users attached to a customer"
-triggers:
-  - alternative payments customer
-  - create customer
-  - list customers
-  - archive customer
-  - customer users
-  - add customer user
-  - ap customer
-  - customer onboarding
-  - customer lookup
-  - alternativepayments customer
+when_to_use: >-
+  When listing, retrieving, creating, or archiving Alternative Payments customers, or managing the
+  users attached to a customer. Use when: alternative payments customer, create customer, list
+  customers, archive customer, customer users, add customer user, ap customer, customer
+  onboarding, customer lookup, or alternativepayments customer.
 ---
 
 # Alternative Payments Customers Management

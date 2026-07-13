@@ -6,19 +6,11 @@ description: >
   statuses, priorities, problem types, timer operations, and workflow automations.
   Includes business logic for validation, time tracking, and reporting.
   Essential for MSP technicians handling service delivery through Syncro.
-when_to_use: "When creating, updating, searching, or managing service desk operations"
-triggers:
-  - syncro ticket
-  - service ticket syncro
-  - create ticket syncro
-  - ticket status syncro
-  - ticket priority
-  - syncro service desk
-  - ticket timer
-  - resolve ticket syncro
-  - ticket comments
-  - time entry syncro
-  - ticket search syncro
+when_to_use: >-
+  When creating, updating, searching, or managing service desk operations. Use when: syncro
+  ticket, service ticket syncro, create ticket syncro, ticket status syncro, ticket priority,
+  syncro service desk, ticket timer, resolve ticket syncro, ticket comments, time entry syncro, or
+  ticket search syncro.
 ---
 
 # Syncro MSP Ticket Management

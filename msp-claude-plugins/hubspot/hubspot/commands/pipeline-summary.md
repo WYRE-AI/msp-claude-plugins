@@ -1,18 +1,7 @@
 ---
-name: pipeline-summary
 description: Summarize the HubSpot deal pipeline - deals per stage, total value, and expected close dates
-arguments:
-  - name: pipeline
-    description: Pipeline name or ID to summarize. Defaults to the default sales pipeline.
-    required: false
-    default: default
-  - name: owner
-    description: Filter by deal owner name
-    required: false
-  - name: period
-    description: Close date period filter (this_month, this_quarter, this_year, all)
-    required: false
-    default: all
+argument-hint: "[pipeline] [owner] [period]"
+arguments: [pipeline, owner, period]
 ---
 
 # HubSpot Pipeline Summary

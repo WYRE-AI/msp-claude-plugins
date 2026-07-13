@@ -1,20 +1,7 @@
 ---
-name: create-incident
 description: Create a new incident in Rootly with title, severity, and affected services
-arguments:
-  - name: title
-    description: Short description of the incident
-    required: true
-  - name: severity
-    description: Severity level (critical, high, medium, low)
-    required: false
-    default: "high"
-  - name: services
-    description: Comma-separated list of affected service names
-    required: false
-  - name: summary
-    description: Detailed description of the incident
-    required: false
+argument-hint: "<title> [severity] [services] [summary]"
+arguments: [title, severity, services, summary]
 ---
 
 # Create Rootly Incident

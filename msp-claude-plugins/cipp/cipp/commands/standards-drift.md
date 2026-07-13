@@ -1,18 +1,17 @@
 ---
-name: standards-drift
 description: Find tenants that have drifted from the MSP's configured CIPP standards baseline — missing standards, standards in Report-only mode, recent compliance failures
-arguments:
-  - name: scope
-    description: missing — tenants without baseline standards; report-only — tenants where critical standards aren't enforcing; failing — tenants with active compliance failures; all (default) — full drift report
-    required: false
-  - name: tenants
-    description: Comma-separated tenant list (defaults to all)
-    required: false
+argument-hint: "[scope] [tenants]"
+arguments: [scope, tenants]
 ---
 
 # CIPP Standards Drift
 
 Detects tenants out of compliance with the MSP's CIPP standards baseline. Standards drift is the leading indicator of "tenant looks managed but isn't" — every tenant with a missing or report-only baseline standard is silently receiving zero enforcement for that control.
+
+## Arguments
+
+- `scope` (optional) — missing — tenants without baseline standards; report-only — tenants where critical standards aren't enforcing; failing — tenants with active compliance failures; all (default) — full drift report
+- `tenants` (optional) — Comma-separated tenant list (defaults to all)
 
 ## Drift categories detected
 

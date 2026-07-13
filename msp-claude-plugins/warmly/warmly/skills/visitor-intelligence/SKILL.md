@@ -6,21 +6,12 @@ description: >
   outreach, filtering visitors by ICP fit, scoring engagement depth,
   matching visitors to CRM records, or watching identification credit burn.
   Covers list_warm_visitors, list_warm_accounts, and get_credits_remaining.
-when_to_use: "When triaging warm accounts, exporting visitor lists, scoring engagement, matching visitors to CRM records, or checking credit balance with Warmly"
-triggers:
-  - warmly visitors
-  - warmly accounts
-  - warmly warm leads
-  - warmly identified
-  - warmly site visitors
-  - warmly company visits
-  - warmly icp
-  - warmly outreach
-  - warmly engagement
-  - warmly prospecting
-  - warmly credits remaining
-  - who visited our site
-  - identified visitors
+when_to_use: >-
+  When triaging warm accounts, exporting visitor lists, scoring engagement, matching visitors to
+  CRM records, or checking credit balance with Warmly. Use when: warmly visitors, warmly accounts,
+  warmly warm leads, warmly identified, warmly site visitors, warmly company visits, warmly icp,
+  warmly outreach, warmly engagement, warmly prospecting, warmly credits remaining, who visited
+  our site, or identified visitors.
 ---
 
 # Warmly Visitor Intelligence

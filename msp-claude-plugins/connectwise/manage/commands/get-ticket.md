@@ -1,26 +1,7 @@
 ---
-name: get-ticket
 description: Retrieve detailed ticket information from ConnectWise PSA
-arguments:
-  - name: ticket_id
-    description: The ConnectWise ticket ID
-    required: true
-  - name: include_notes
-    description: Include ticket notes (default true)
-    required: false
-    default: true
-  - name: include_time
-    description: Include time entries (default false)
-    required: false
-    default: false
-  - name: include_configs
-    description: Include associated configuration items (default false)
-    required: false
-    default: false
-  - name: include_tasks
-    description: Include service ticket tasks (default false)
-    required: false
-    default: false
+argument-hint: "<ticket_id> [include_notes] [include_time] [include_configs] [include_tasks]"
+arguments: [ticket_id, include_notes, include_time, include_configs, include_tasks]
 ---
 
 # Get ConnectWise PSA Ticket

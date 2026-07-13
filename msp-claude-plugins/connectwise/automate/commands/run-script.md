@@ -1,19 +1,7 @@
 ---
-name: run-script
 description: Execute a script on an endpoint in ConnectWise Automate
-arguments:
-  - name: computer
-    description: Computer hostname or ID to run the script on
-    required: true
-  - name: script
-    description: Script name or ID to execute
-    required: true
-  - name: params
-    description: Script parameters as key=value pairs (comma-separated)
-    required: false
-  - name: wait
-    description: Wait for script completion and show results
-    required: false
+argument-hint: "<computer> <script> [params] [wait]"
+arguments: [computer, script, params, wait]
 ---
 
 # Run Script

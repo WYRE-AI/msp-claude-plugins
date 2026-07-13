@@ -1,14 +1,7 @@
 ---
-name: billing-report
 description: Generate a Huntress billing summary for a period
-arguments:
-  - name: report_id
-    description: Specific billing report ID to retrieve
-    required: false
-  - name: include_summary
-    description: Include security summary report alongside billing
-    required: false
-    default: "true"
+argument-hint: "[report_id] [include_summary]"
+arguments: [report_id, include_summary]
 ---
 
 # Billing Report

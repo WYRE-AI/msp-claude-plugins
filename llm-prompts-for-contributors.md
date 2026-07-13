@@ -139,17 +139,16 @@ Generate a complete SKILL.md file following this structure:
 
 ```markdown
 ---
+name: "[Vendor] [Topic]"
+when_to_use: >-
+  When [specific action or scenario]. Use when: [keyword phrase 1],
+  [keyword phrase 2], or [keyword phrase 3 - fold in 5-10 realistic
+  trigger phrases MSP techs would use].
 description: >
   [2-3 sentences describing when Claude should use this skill. Be specific 
-  about the product, feature, and types of tasks this enables.]
-triggers:
-  - [keyword phrase 1]
-  - [keyword phrase 2]
-  - [keyword phrase 3]
-  - [add 5-10 realistic trigger phrases MSP techs would use]
-vendor: [vendor name]
-product: [product name]
-api_version: [API version if applicable]
+  about the product, feature, and types of tasks this enables. Do NOT add
+  a separate triggers: list or vendor/product/api_version keys - only
+  name, description, and when_to_use are recognized.]
 ---
 
 # [Skill Title]
@@ -275,23 +274,9 @@ Generate a complete command markdown file:
 
 ```markdown
 ---
-name: [command-name]
 description: [One-line description of what this command does]
-vendor: [vendor]
-product: [product]
-arguments:
-  - name: [arg1]
-    description: [What this argument is]
-    required: true
-    type: string
-  - name: [arg2]
-    description: [What this argument is]
-    required: false
-    type: integer
-    default: [default value if any]
-examples:
-  - "/[vendor]:[command] [example args]"
-  - "/[vendor]:[command] [different example]"
+argument-hint: "<arg1> [arg2]"
+arguments: [arg1, arg2]
 ---
 
 # [Command Title]

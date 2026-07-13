@@ -5,18 +5,11 @@ description: >
   lifecycle -- listing devices in a network, getting a device by serial,
   rebooting, removing, and checking device/uplink status via
   meraki_raw_request across MX, MS, MR, MV, MG, and MT hardware.
-when_to_use: "When working with Meraki device inventory and lifecycle -- list, get by serial, reboot, remove, and check device or uplink status"
-triggers:
-  - meraki device
-  - meraki serial
-  - meraki inventory
-  - meraki reboot
-  - device status
-  - device offline
-  - meraki uplink
-  - device lifecycle
-  - claim device
-  - remove device
+when_to_use: >-
+  When working with Meraki device inventory and lifecycle -- list, get by serial, reboot, remove,
+  and check device or uplink status. Use when: meraki device, meraki serial, meraki inventory,
+  meraki reboot, device status, device offline, meraki uplink, device lifecycle, claim device, or
+  remove device.
 ---
 
 # Meraki Device Inventory & Lifecycle

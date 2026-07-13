@@ -1,6 +1,12 @@
 ---
 name: renewal-risk-analyzer
-description: Use this agent when an MSP account manager, sales leader, or operations manager wants to identify clients at risk of not renewing before the renewal conversation happens. Trigger for: renewal risk, churn risk, at-risk accounts, renewal forecast, which clients might not renew, renewal pipeline, churn analysis, account health, renewal readiness. Examples: "Which clients are most at risk of not renewing in the next 90 days?", "Give me a churn risk analysis across all our accounts", "Flag any accounts where we might have a renewal problem"
+description: >-
+  Use this agent when an MSP account manager, sales leader, or operations manager wants to
+  identify clients at risk of not renewing before the renewal conversation happens. Trigger for:
+  renewal risk, churn risk, at-risk accounts, renewal forecast, which clients might not renew,
+  renewal pipeline, churn analysis, account health, renewal readiness. Examples: "Which clients
+  are most at risk of not renewing in the next 90 days?", "Give me a churn risk analysis across
+  all our accounts", "Flag any accounts where we might have a renewal problem"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

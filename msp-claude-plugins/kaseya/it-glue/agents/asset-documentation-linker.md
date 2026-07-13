@@ -1,6 +1,13 @@
 ---
 name: asset-documentation-linker
-description: Use this agent when an MSP needs to find and fix broken or missing linkages between IT Glue objects — configurations without passwords, devices without runbooks, organizations without network diagrams, contacts unlinked from assets. Trigger for: IT Glue linkage gaps, unlinked passwords, configuration no runbook, missing network diagram IT Glue, orphaned IT Glue records, asset documentation linkage, IT Glue relationship gaps. Examples: "find all configurations with no linked password in IT Glue", "which organizations have no network diagram", "show me every server that has no associated runbook"
+description: >-
+  Use this agent when an MSP needs to find and fix broken or missing linkages between IT Glue
+  objects — configurations without passwords, devices without runbooks, organizations without
+  network diagrams, contacts unlinked from assets. Trigger for: IT Glue linkage gaps, unlinked
+  passwords, configuration no runbook, missing network diagram IT Glue, orphaned IT Glue records,
+  asset documentation linkage, IT Glue relationship gaps. Examples: "find all configurations with
+  no linked password in IT Glue", "which organizations have no network diagram", "show me every
+  server that has no associated runbook"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

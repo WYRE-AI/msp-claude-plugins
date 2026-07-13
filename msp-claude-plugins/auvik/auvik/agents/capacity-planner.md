@@ -1,6 +1,12 @@
 ---
 name: capacity-planner
-description: Use this agent for Auvik utilization, saturation, and headroom questions - "is this link maxed out?", "what links need an upgrade?", "where is the bottleneck?". Trigger for: capacity planning, link utilization, saturated link, bandwidth headroom, network upgrade Auvik, p95 utilization, hotspot interfaces, bottleneck Auvik, WAN saturation, uplink utilization. Examples: "Which links at ACME are running hot?", "Capacity plan for the next quarter at tenant 12345", "Is the WAN saturated?", "Find me every interface above 70% p95 in the last 7 days"
+description: >-
+  Use this agent for Auvik utilization, saturation, and headroom questions - "is this link maxed
+  out?", "what links need an upgrade?", "where is the bottleneck?". Trigger for: capacity
+  planning, link utilization, saturated link, bandwidth headroom, network upgrade Auvik, p95
+  utilization, hotspot interfaces, bottleneck Auvik, WAN saturation, uplink utilization. Examples:
+  "Which links at ACME are running hot?", "Capacity plan for the next quarter at tenant 12345",
+  "Is the WAN saturated?", "Find me every interface above 70% p95 in the last 7 days"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

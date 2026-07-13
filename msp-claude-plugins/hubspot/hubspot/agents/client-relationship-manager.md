@@ -1,6 +1,11 @@
 ---
 name: client-relationship-manager
-description: Use this agent when an MSP account manager or vCIO needs to review account health across the client portfolio in HubSpot. Trigger for: account health review, renewals at risk, stalled deals, inactive accounts, upsell opportunities, client portfolio review, QBR prep, churn risk. Examples: "which clients are at risk of churning", "show me all deals stalled for more than 30 days", "find upsell opportunities in our managed services portfolio"
+description: >-
+  Use this agent when an MSP account manager or vCIO needs to review account health across the
+  client portfolio in HubSpot. Trigger for: account health review, renewals at risk, stalled
+  deals, inactive accounts, upsell opportunities, client portfolio review, QBR prep, churn risk.
+  Examples: "which clients are at risk of churning", "show me all deals stalled for more than 30
+  days", "find upsell opportunities in our managed services portfolio"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

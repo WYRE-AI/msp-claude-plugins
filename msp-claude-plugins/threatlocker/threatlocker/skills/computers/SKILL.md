@@ -5,16 +5,11 @@ description: >
   fleet inventory, identifying offline agents, drilling into a single
   computer's check-in history, and correlating computers across
   organizations and groups.
-when_to_use: "When listing, inspecting, or auditing ThreatLocker computers across one or many organizations, including offline-agent triage and check-in history"
-triggers:
-  - threatlocker computer
-  - threatlocker endpoint
-  - threatlocker agent inventory
-  - threatlocker offline
-  - threatlocker last seen
-  - threatlocker checkin
-  - threatlocker fleet
-  - endpoint inventory threatlocker
+when_to_use: >-
+  When listing, inspecting, or auditing ThreatLocker computers across one or many organizations,
+  including offline-agent triage and check-in history. Use when: threatlocker computer,
+  threatlocker endpoint, threatlocker agent inventory, threatlocker offline, threatlocker last
+  seen, threatlocker checkin, threatlocker fleet, or endpoint inventory threatlocker.
 ---
 
 # ThreatLocker Computers

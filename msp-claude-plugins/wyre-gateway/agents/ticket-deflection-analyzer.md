@@ -1,6 +1,15 @@
 ---
 name: ticket-deflection-analyzer
-description: Use this agent when an MSP operations lead or service delivery manager wants to identify recurring ticket patterns that can be eliminated or deflected through automation, self-service, or root-cause remediation — and quantify the labor being silently consumed. Trigger for: ticket deflection, recurring tickets, automation opportunities, self-service gaps, KB gaps, alert noise, preventable tickets, recoverable labor, ticket patterns, service desk efficiency, repetitive tickets, password reset volume, alert-generated tickets. Examples: "What tickets are we seeing over and over that we could just automate away?", "Show me how many hours we're losing to tickets that shouldn't exist", "Find the biggest ticket deflection wins across our whole portfolio"
+description: >-
+  Use this agent when an MSP operations lead or service delivery manager wants to identify
+  recurring ticket patterns that can be eliminated or deflected through automation, self-service,
+  or root-cause remediation — and quantify the labor being silently consumed. Trigger for: ticket
+  deflection, recurring tickets, automation opportunities, self-service gaps, KB gaps, alert
+  noise, preventable tickets, recoverable labor, ticket patterns, service desk efficiency,
+  repetitive tickets, password reset volume, alert-generated tickets. Examples: "What tickets are
+  we seeing over and over that we could just automate away?", "Show me how many hours we're losing
+  to tickets that shouldn't exist", "Find the biggest ticket deflection wins across our whole
+  portfolio"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

@@ -1,13 +1,7 @@
 ---
-name: azure-diagnostics
 description: Resource health and diagnostics triage for an Azure resource or subscription — Resource Health status, AppLens deep diagnostics, and Azure Monitor alert state
-arguments:
-  - name: target
-    description: Azure resource ID, resource group, or subscription ID to triage
-    required: true
-  - name: window
-    description: Lookback window for alerts and metrics (e.g. 1h, 24h, 7d) — defaults to 24h
-    required: false
+argument-hint: "<target> [window]"
+arguments: [target, window]
 ---
 
 # Azure Diagnostics Triage
@@ -15,6 +9,11 @@ arguments:
 Runs a focused, read-only diagnostics pass over an Azure resource, resource group, or subscription. Use it for "is something wrong with [resource]?" investigations, incident triage, and post-incident review.
 
 This command is **read-only** — it diagnoses and reports; it never restarts, reconfigures, or remediates a resource.
+
+## Arguments
+
+- `target` (required) — Azure resource ID, resource group, or subscription ID to triage
+- `window` (optional) — Lookback window for alerts and metrics (e.g. 1h, 24h, 7d) — defaults to 24h
 
 ## What it checks
 

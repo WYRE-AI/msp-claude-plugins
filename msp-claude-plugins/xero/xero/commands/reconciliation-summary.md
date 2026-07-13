@@ -1,19 +1,7 @@
 ---
-name: reconciliation-summary
 description: Verify all MSP clients have been billed for the current period and summarize reconciliation status
-arguments:
-  - name: period
-    description: Billing period in YYYY-MM format (default current month)
-    required: false
-  - name: contact_group
-    description: Filter by Xero contact group name (e.g., "Managed Services")
-    required: false
-  - name: account_code
-    description: Filter by revenue account code (e.g., "200" for Managed Services)
-    required: false
-  - name: min_amount
-    description: Minimum expected invoice amount to flag missing invoices
-    required: false
+argument-hint: "[period] [contact_group] [account_code] [min_amount]"
+arguments: [period, contact_group, account_code, min_amount]
 ---
 
 # Reconciliation Summary

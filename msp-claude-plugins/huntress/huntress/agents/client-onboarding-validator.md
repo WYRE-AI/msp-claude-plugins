@@ -1,6 +1,15 @@
 ---
 name: client-onboarding-validator
-description: Use this agent when validating a newly onboarded client in Huntress — checking that agents are deployed and reporting, confirming SOC coverage is active, identifying any endpoints missing agents, and surfacing initial detections that fired during or after deployment. Trigger for: Huntress onboarding, new client Huntress, validate Huntress deployment, check agent coverage, Huntress org setup, verify Huntress coverage, Huntress new org, onboarding validation, agent deployment check, Huntress initial scan. Examples: "Validate the Huntress onboarding for Acme Corp", "Did all endpoints get a Huntress agent during the Globex rollout?", "Check if Huntress is fully active for our new client", "Show me any detections that fired for the new client in the first 48 hours"
+description: >-
+  Use this agent when validating a newly onboarded client in Huntress — checking that agents are
+  deployed and reporting, confirming SOC coverage is active, identifying any endpoints missing
+  agents, and surfacing initial detections that fired during or after deployment. Trigger for:
+  Huntress onboarding, new client Huntress, validate Huntress deployment, check agent coverage,
+  Huntress org setup, verify Huntress coverage, Huntress new org, onboarding validation, agent
+  deployment check, Huntress initial scan. Examples: "Validate the Huntress onboarding for Acme
+  Corp", "Did all endpoints get a Huntress agent during the Globex rollout?", "Check if Huntress
+  is fully active for our new client", "Show me any detections that fired for the new client in
+  the first 48 hours"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

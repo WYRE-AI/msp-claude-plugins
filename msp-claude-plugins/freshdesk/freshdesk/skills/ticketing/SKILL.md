@@ -1,22 +1,16 @@
 ---
 name: "Freshdesk Ticketing"
-when_to_use: "When listing, searching, creating, updating, replying to, or summarizing Freshdesk tickets and their conversations"
+when_to_use: >-
+  When listing, searching, creating, updating, replying to, or summarizing Freshdesk tickets and
+  their conversations. Use when: freshdesk ticket, freshdesk reply, freshdesk ticket note,
+  freshdesk conversation, create ticket freshdesk, search tickets freshdesk, ticket triage
+  freshdesk, resolve ticket freshdesk, or ticket status freshdesk.
 description: >
   Use this skill when working with Freshdesk tickets — creating, updating,
   searching, replying, and adding notes, plus pulling full conversation
   threads. Covers status/priority/source integer encodings, key ticket fields,
   the search query language, and common MSP triage workflows through the
   Freshdesk REST API v2.
-triggers:
-  - freshdesk ticket
-  - freshdesk reply
-  - freshdesk ticket note
-  - freshdesk conversation
-  - create ticket freshdesk
-  - search tickets freshdesk
-  - ticket triage freshdesk
-  - resolve ticket freshdesk
-  - ticket status freshdesk
 ---
 
 # Freshdesk Ticket Management

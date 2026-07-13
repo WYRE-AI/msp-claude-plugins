@@ -1,33 +1,7 @@
 ---
-name: search-tickets
 description: Search for tickets in Syncro MSP by various criteria
-arguments:
-  - name: query
-    description: Search term (searches subject, body, ticket number)
-    required: false
-  - name: customer
-    description: Filter by customer name or ID
-    required: false
-  - name: status
-    description: Filter by status (open, closed, all)
-    required: false
-    default: open
-  - name: priority
-    description: Filter by priority (Low, Medium, High, Urgent)
-    required: false
-  - name: assignee
-    description: Filter by assigned user (use "me" for current user)
-    required: false
-  - name: date_from
-    description: Filter tickets created after this date (YYYY-MM-DD)
-    required: false
-  - name: date_to
-    description: Filter tickets created before this date (YYYY-MM-DD)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [customer] [status] [priority] [assignee] [date_from] [date_to] [limit]"
+arguments: [query, customer, status, priority, assignee, date_from, date_to, limit]
 ---
 
 # Search Syncro Tickets

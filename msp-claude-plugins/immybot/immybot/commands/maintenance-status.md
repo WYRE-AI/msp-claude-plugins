@@ -1,10 +1,7 @@
 ---
-name: maintenance-status
 description: Show ImmyBot maintenance session status — active sessions, or detail and logs for a specific session
-arguments:
-  - name: session
-    description: Maintenance session ID (optional; omit to list all active sessions)
-    required: false
+argument-hint: "[session]"
+arguments: [session]
 ---
 
 # ImmyBot Maintenance Status
@@ -12,6 +9,10 @@ arguments:
 Report ImmyBot maintenance session status. With a session ID, show
 detail and logs for "$ARGUMENTS.session"; without one, list all
 active sessions.
+
+## Arguments
+
+- `session` (optional) — Maintenance session ID (optional; omit to list all active sessions)
 
 ## Prerequisites
 
