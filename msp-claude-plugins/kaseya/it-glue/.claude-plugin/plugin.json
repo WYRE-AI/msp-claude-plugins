@@ -1,6 +1,6 @@
 {
-  "name": "kaseya-it-glue",
-  "version": "1.1.1",
+  "name": "it-glue",
+  "version": "1.1.2",
   "description": "Claude plugins for IT Glue documentation platform - organizations, assets, passwords, documents",
   "author": {
     "name": "MSP Claude Plugins Community"
