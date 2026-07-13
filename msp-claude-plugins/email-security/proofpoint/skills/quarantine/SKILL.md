@@ -5,21 +5,11 @@ description: >
   releasing, and deleting quarantined messages. Covers quarantine reasons, sender and
   recipient filtering, bulk operations, quarantine folders, and message preview.
   Essential for MSP help desk teams managing quarantined email for clients.
-when_to_use: "When listing, searching, releasing, and deleting quarantined messages"
-triggers:
-  - proofpoint quarantine
-  - quarantined email
-  - release quarantine
-  - quarantine search
-  - email quarantine
-  - quarantine management
-  - blocked email
-  - quarantine release
-  - quarantine delete
-  - quarantine folder
-  - spam quarantine
-  - phishing quarantine
-  - bulk quarantine
+when_to_use: >-
+  When listing, searching, releasing, and deleting quarantined messages. Use when: proofpoint
+  quarantine, quarantined email, release quarantine, quarantine search, email quarantine,
+  quarantine management, blocked email, quarantine release, quarantine delete, quarantine folder,
+  spam quarantine, phishing quarantine, or bulk quarantine.
 ---
 
 # Proofpoint Quarantine Management

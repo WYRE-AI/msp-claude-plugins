@@ -4,13 +4,9 @@ description: >
   Use this skill when making API calls to Salesbuildr. Covers authentication
   via api-key header, pagination with offset-based from/size parameters,
   error handling patterns, and rate limiting (500 requests per 10 minutes).
-when_to_use: "When making API calls to Salesbuildr"
-triggers:
-  - salesbuildr api
-  - salesbuildr authentication
-  - salesbuildr pagination
-  - salesbuildr rate limit
-  - salesbuildr error
+when_to_use: >-
+  When making API calls to Salesbuildr. Use when: salesbuildr api, salesbuildr authentication,
+  salesbuildr pagination, salesbuildr rate limit, or salesbuildr error.
 ---
 
 # Salesbuildr API Patterns

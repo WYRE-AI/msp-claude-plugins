@@ -5,19 +5,11 @@ description: >
   searching, or managing customer relationships. Covers client fields,
   sites/locations, contacts, client types, and onboarding workflows.
   Essential for MSP account managers handling CRM in HaloPSA.
-when_to_use: "When creating, updating, searching, or managing customer relationships"
-triggers:
-  - halopsa client
-  - halo client
-  - halopsa customer
-  - halo customer
-  - client management halopsa
-  - create client halopsa
-  - halopsa site
-  - halopsa location
-  - halopsa contact
-  - client onboarding halo
-  - halopsa crm
+when_to_use: >-
+  When creating, updating, searching, or managing customer relationships. Use when: halopsa
+  client, halo client, halopsa customer, halo customer, client management halopsa, create client
+  halopsa, halopsa site, halopsa location, halopsa contact, client onboarding halo, or halopsa
+  crm.
 ---
 
 # HaloPSA Client Management

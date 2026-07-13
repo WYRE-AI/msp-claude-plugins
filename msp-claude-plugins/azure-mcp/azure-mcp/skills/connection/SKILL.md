@@ -1,17 +1,12 @@
 ---
 name: "azure-mcp-connection"
 description: "Use this skill when connecting the azure-mcp vendor through the WYRE MCP Gateway — registering an Azure service principal, supplying tenantId/clientId/clientSecret, and granting least-privilege Reader-tier RBAC. Covers the read-only deployment model and why broader write roles must not be granted."
-when_to_use: "When setting up or troubleshooting the azure-mcp connector — creating an Azure service principal, choosing RBAC roles, or explaining the read-only constraint to an MSP onboarding a tenant"
-triggers:
-  - connect azure mcp
-  - azure mcp setup
-  - azure service principal
-  - azure mcp credentials
-  - azure rbac for mcp
-  - azure connector
-  - azure mcp permissions
-  - register azure app
-  - least privilege azure
+when_to_use: >-
+  When setting up or troubleshooting the azure-mcp connector — creating an Azure service
+  principal, choosing RBAC roles, or explaining the read-only constraint to an MSP onboarding a
+  tenant. Use when: connect azure mcp, azure mcp setup, azure service principal, azure mcp
+  credentials, azure rbac for mcp, azure connector, azure mcp permissions, register azure app, or
+  least privilege azure.
 ---
 
 # Azure MCP Connection

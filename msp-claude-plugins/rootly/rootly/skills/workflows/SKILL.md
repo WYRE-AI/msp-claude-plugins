@@ -4,16 +4,11 @@ description: >
   Use this skill when working with Rootly workflows -- creating automated
   incident response workflows, configuring triggers, actions, conditions,
   and managing workflow lifecycle.
-when_to_use: "When creating automated incident response workflows, configuring triggers, actions, conditions, and managing workflow lifecycle"
-triggers:
-  - rootly workflow
-  - automated workflow
-  - workflow trigger
-  - workflow action
-  - incident automation
-  - response automation
-  - workflow condition
-  - runbook automation
+when_to_use: >-
+  When creating automated incident response workflows, configuring triggers, actions, conditions,
+  and managing workflow lifecycle. Use when: rootly workflow, automated workflow, workflow
+  trigger, workflow action, incident automation, response automation, workflow condition, or
+  runbook automation.
 ---
 
 # Rootly Workflows

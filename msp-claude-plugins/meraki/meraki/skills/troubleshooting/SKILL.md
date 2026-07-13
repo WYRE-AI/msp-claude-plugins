@@ -6,18 +6,11 @@ description: >
   meraki_raw_request, rebooting devices, and checking uplink/connectivity
   status. Explains that live tools ride the meraki_raw_request passthrough
   because they are not curated tools.
-when_to_use: "When troubleshooting Meraki connectivity -- running live tools like ping and cable test via raw_request, rebooting devices, and checking uplinks"
-triggers:
-  - meraki troubleshoot
-  - meraki ping
-  - cable test
-  - meraki live tools
-  - meraki throughput
-  - device unreachable
-  - meraki connectivity
-  - wan down
-  - packet loss
-  - port not working
+when_to_use: >-
+  When troubleshooting Meraki connectivity -- running live tools like ping and cable test via
+  raw_request, rebooting devices, and checking uplinks. Use when: meraki troubleshoot, meraki
+  ping, cable test, meraki live tools, meraki throughput, device unreachable, meraki connectivity,
+  wan down, packet loss, or port not working.
 ---
 
 # Meraki Troubleshooting & Live Tools

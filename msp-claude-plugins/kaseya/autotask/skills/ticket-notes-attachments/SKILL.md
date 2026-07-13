@@ -1,20 +1,11 @@
 ---
-description: >
-  Use this skill when working with Autotask ticket notes, ticket attachments,
-  and ticket charges — retrieving individual notes, downloading attachments,
-  managing labor charges on tickets. Supplements the core tickets skill with
-  the secondary entities attached to tickets.
-triggers:
-  - autotask ticket note
-  - autotask ticket attachment
-  - autotask ticket charge
-  - get ticket note autotask
-  - download ticket attachment
-  - ticket charges autotask
-  - autotask labor charge
-  - autotask ticket charges
-  - search ticket notes autotask
-  - search ticket attachments autotask
+description: >-
+  Use this skill when working with Autotask ticket notes, ticket attachments, and ticket charges —
+  retrieving individual notes, downloading attachments, managing labor charges on tickets.
+  Supplements the core tickets skill with the secondary entities attached to tickets. Use when:
+  autotask ticket note, autotask ticket attachment, autotask ticket charge, get ticket note
+  autotask, download ticket attachment, ticket charges autotask, autotask labor charge, autotask
+  ticket charges, search ticket notes autotask, or search ticket attachments autotask.
 ---
 
 # Autotask Ticket Notes, Attachments, and Charges

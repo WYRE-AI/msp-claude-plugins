@@ -5,20 +5,12 @@ description: >
   on-call calendars, escalation/notification policies, rotation management,
   understanding who is currently on-call, and responding to active incidents
   via the on-call flow.
-when_to_use: "When working with call schedules -- on-call calendars, escalation/notification policies, rotation management, understanding who is currently on-call"
-triggers:
-  - betterstack on-call
-  - betterstack oncall
-  - on-call schedule
-  - on-call calendar
-  - escalation policy
-  - notification policy
-  - alert routing
-  - on-call rotation
-  - betterstack schedule
-  - betterstack who is on call
-  - betterstack paging
-  - betterstack responder
+when_to_use: >-
+  When working with call schedules -- on-call calendars, escalation/notification policies,
+  rotation management, understanding who is currently on-call. Use when: betterstack on-call,
+  betterstack oncall, on-call schedule, on-call calendar, escalation policy, notification policy,
+  alert routing, on-call rotation, betterstack schedule, betterstack who is on call, betterstack
+  paging, or betterstack responder.
 ---
 
 # Better Stack On-Call Management

@@ -1,19 +1,15 @@
 ---
 name: "Blackpoint Incident Response"
-when_to_use: "When investigating a Blackpoint Cyber / CompassOne detection, building an incident timeline across assets, or correlating detections with known vulnerabilities"
+when_to_use: >-
+  When investigating a Blackpoint Cyber / CompassOne detection, building an incident timeline
+  across assets, or correlating detections with known vulnerabilities. Use when: blackpoint
+  detection, blackpoint investigation, blackpoint incident, compassone detection, blackpoint
+  vulnerability, blackpoint asset relationships, or blackpoint dark web.
 description: >
   Use this skill when investigating a Blackpoint Cyber detection —
   drilling from a tenant to its assets, walking the detection list,
   pulling vulnerability and dark-web context, and assembling an
   incident timeline.
-triggers:
-  - blackpoint detection
-  - blackpoint investigation
-  - blackpoint incident
-  - compassone detection
-  - blackpoint vulnerability
-  - blackpoint asset relationships
-  - blackpoint dark web
 ---
 
 # Blackpoint Incident Response

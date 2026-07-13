@@ -5,17 +5,10 @@ description: >
   creating, searching, updating, and managing MSP client records.
   Covers customer fields, sub-customers, billing addresses, payment terms,
   balance tracking, and cross-referencing with PSA platforms.
-when_to_use: "When creating, searching, updating, and managing MSP client records"
-triggers:
-  - quickbooks customer
-  - qbo customer
-  - quickbooks client
-  - qbo client
-  - customer lookup
-  - customer management
-  - quickbooks contact
-  - client billing
-  - customer balance
+when_to_use: >-
+  When creating, searching, updating, and managing MSP client records. Use when: quickbooks
+  customer, qbo customer, quickbooks client, qbo client, customer lookup, customer management,
+  quickbooks contact, client billing, or customer balance.
 ---
 
 # QuickBooks Online Customer Management

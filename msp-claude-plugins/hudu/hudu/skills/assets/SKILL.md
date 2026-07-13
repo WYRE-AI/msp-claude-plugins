@@ -5,18 +5,11 @@ description: >
   workstations, network devices, and other documented items. Covers asset
   CRUD, asset layout templates, custom fields, archiving, linking assets
   to companies, and search/filter patterns.
-when_to_use: "When working with servers, workstations, network devices, and other documented items in Hudu assets and asset layouts"
-triggers:
-  - hudu asset
-  - hudu configuration
-  - hudu server
-  - hudu workstation
-  - hudu device
-  - asset layout
-  - asset management
-  - device inventory
-  - hardware tracking
-  - hudu ci
+when_to_use: >-
+  When working with servers, workstations, network devices, and other documented items in Hudu
+  assets and asset layouts. Use when: hudu asset, hudu configuration, hudu server, hudu
+  workstation, hudu device, asset layout, asset management, device inventory, hardware tracking,
+  or hudu ci.
 ---
 
 # Hudu Assets Management

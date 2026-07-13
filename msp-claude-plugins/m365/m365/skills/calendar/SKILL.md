@@ -5,17 +5,11 @@ description: >
   finding free/busy times, creating meetings, managing room bookings, or
   checking a user's schedule. Covers Exchange calendar via Microsoft Graph
   for MSP support of customer scheduling needs.
-when_to_use: "When viewing events, finding free/busy times, creating meetings, managing room bookings, or checking a user's schedule"
-triggers:
-  - m365 calendar
-  - outlook calendar
-  - calendar events m365
-  - meeting schedule m365
-  - find availability m365
-  - room booking m365
-  - m365 free busy
-  - teams meeting create
-  - calendar permissions
+when_to_use: >-
+  When viewing events, finding free/busy times, creating meetings, managing room bookings, or
+  checking a user's schedule. Use when: m365 calendar, outlook calendar, calendar events m365,
+  meeting schedule m365, find availability m365, room booking m365, m365 free busy, teams meeting
+  create, or calendar permissions.
 ---
 
 # Microsoft 365 Calendar Management

@@ -7,22 +7,11 @@ description: >
   workflows, policy effects, and policy tuning best practices.
   Essential for MSP administrators managing email security policies across
   customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
-when_to_use: "When working with DLP policies, anti-phishing rules, anti-malware settings, quarantine policies, allow/block lists"
-triggers:
-  - checkpoint policy
-  - avanan policy
-  - email security policy
-  - dlp policy
-  - anti-phishing policy
-  - anti-malware policy
-  - quarantine policy
-  - allow list
-  - block list
-  - email policy management
-  - policy configuration
-  - policy enable
-  - policy disable
-  - email rules
+when_to_use: >-
+  When working with DLP policies, anti-phishing rules, anti-malware settings, quarantine policies,
+  allow/block lists. Use when: checkpoint policy, avanan policy, email security policy, dlp
+  policy, anti-phishing policy, anti-malware policy, quarantine policy, allow list, block list,
+  email policy management, policy configuration, policy enable, policy disable, or email rules.
 ---
 
 # Checkpoint Harmony Email Policy Management

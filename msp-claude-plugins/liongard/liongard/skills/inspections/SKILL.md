@@ -5,17 +5,11 @@ description: >
   inspection scheduling, or triggering inspections on demand. Covers
   inspector templates, launchpoint configuration, cron schedules,
   running inspections, and troubleshooting failed runs.
-when_to_use: "When working with Liongard inspectors, launchpoints, inspection scheduling, or triggering inspections on demand"
-triggers:
-  - liongard inspection
-  - liongard inspector
-  - launchpoint
-  - inspection schedule
-  - run inspection
-  - liongard launchpoint
-  - trigger inspection
-  - inspection template
-  - liongard cron
+when_to_use: >-
+  When working with Liongard inspectors, launchpoints, inspection scheduling, or triggering
+  inspections on demand. Use when: liongard inspection, liongard inspector, launchpoint,
+  inspection schedule, run inspection, liongard launchpoint, trigger inspection, inspection
+  template, or liongard cron.
 ---
 
 # Liongard Inspections & Launchpoints

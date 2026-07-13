@@ -6,19 +6,12 @@ description: >
   rate limits, error handling, and hosted MCP connection details. Covers all
   13 tool categories: incidents, on-call, schedules, escalation policies,
   services, event orchestrations, status pages, teams, users, and more.
-when_to_use: "When working with authentication setup, complete 66-tool reference, REST API pagination, token format (Token token=), rate limits, error handling"
-triggers:
-  - pagerduty api
-  - pagerduty mcp
-  - pagerduty token
-  - pagerduty authentication
-  - pagerduty pagination
-  - pagerduty tools
-  - pagerduty connection
-  - pagerduty request
-  - pagerduty credentials
-  - pagerduty rate limit
-  - pagerduty endpoint
+when_to_use: >-
+  When working with authentication setup, complete 66-tool reference, REST API pagination, token
+  format (Token token=), rate limits, error handling. Use when: pagerduty api, pagerduty mcp,
+  pagerduty token, pagerduty authentication, pagerduty pagination, pagerduty tools, pagerduty
+  connection, pagerduty request, pagerduty credentials, pagerduty rate limit, or pagerduty
+  endpoint.
 ---
 
 # PagerDuty MCP Tools & API Patterns

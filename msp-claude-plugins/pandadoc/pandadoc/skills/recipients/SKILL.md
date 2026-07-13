@@ -6,19 +6,11 @@ description: >
   has signed, managing multi-party agreements, and understanding
   recipient roles. Covers e-signature workflows, completion tracking,
   and multi-signer scenarios common in MSP contracts.
-when_to_use: "When adding recipients to documents, setting signing order, tracking who has signed, managing multi-party agreements, and understanding recipient roles"
-triggers:
-  - pandadoc recipient
-  - pandadoc signer
-  - pandadoc signing
-  - pandadoc signature
-  - signing order
-  - who signed
-  - signature status
-  - recipient role
-  - multi-signer
-  - e-sign
-  - esignature
+when_to_use: >-
+  When adding recipients to documents, setting signing order, tracking who has signed, managing
+  multi-party agreements, and understanding recipient roles. Use when: pandadoc recipient,
+  pandadoc signer, pandadoc signing, pandadoc signature, signing order, who signed, signature
+  status, recipient role, multi-signer, e-sign, or esignature.
 ---
 
 # PandaDoc Recipient & Signature Management

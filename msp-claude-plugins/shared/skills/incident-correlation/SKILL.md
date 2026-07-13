@@ -6,18 +6,11 @@ description: >
   platform assets, and configuration monitoring changes into a unified incident
   summary. Vendor-agnostic workflow applicable to Kaseya, ConnectWise, HaloPSA,
   Syncro, Atera, and other MSP stacks.
-when_to_use: "When correlating data across multiple vendor tools during incident investigation"
-triggers:
-  - incident correlation
-  - cross-vendor investigation
-  - correlate ticket
-  - unified incident summary
-  - incident context
-  - device investigation
-  - cross-platform lookup
-  - ticket device correlation
-  - incident timeline
-  - multi-vendor incident
+when_to_use: >-
+  When correlating data across multiple vendor tools during incident investigation. Use when:
+  incident correlation, cross-vendor investigation, correlate ticket, unified incident summary,
+  incident context, device investigation, cross-platform lookup, ticket device correlation,
+  incident timeline, or multi-vendor incident.
 ---
 
 # Cross-Vendor Incident Correlation

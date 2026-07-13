@@ -5,20 +5,12 @@ description: >
   decoding, real-time URL analysis, click-time protection, and URL investigation.
   Covers how Proofpoint rewrites URLs, how to decode rewritten URLs back to originals,
   and how click-time analysis works to protect users.
-when_to_use: "When working with URL rewriting, URL decoding, real-time URL analysis, click-time protection, and URL investigation in Proofpoint URL Defense"
-triggers:
-  - proofpoint url defense
-  - url rewrite
-  - proofpoint url
-  - decode proofpoint url
-  - url defense
-  - click-time protection
-  - proofpoint rewritten url
-  - urldefense.proofpoint.com
-  - url analysis
-  - proofpoint link
-  - rewritten link
-  - proofpoint decode
+when_to_use: >-
+  When working with URL rewriting, URL decoding, real-time URL analysis, click-time protection,
+  and URL investigation in Proofpoint URL Defense. Use when: proofpoint url defense, url rewrite,
+  proofpoint url, decode proofpoint url, url defense, click-time protection, proofpoint rewritten
+  url, urldefense.proofpoint.com, url analysis, proofpoint link, rewritten link, or proofpoint
+  decode.
 ---
 
 # Proofpoint URL Defense

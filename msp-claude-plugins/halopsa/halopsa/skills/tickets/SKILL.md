@@ -1,19 +1,11 @@
 ---
 name: "halopsa-tickets"
 description: "Use this skill when working with HaloPSA tickets - creating, updating, searching, or managing service desk operations. Covers ticket fields, statuses, priorities, ticket types, actions, attachments, SLAs, and workflows. Essential for MSP technicians handling service delivery through HaloPSA."
-when_to_use: "When creating, updating, searching, or managing service desk operations"
-triggers:
-  - halopsa ticket
-  - halo ticket
-  - service ticket halopsa
-  - create ticket halopsa
-  - ticket status halo
-  - ticket priority halo
-  - halopsa service desk
-  - halo helpdesk
-  - ticket actions
-  - ticket notes halopsa
-  - halopsa sla
+when_to_use: >-
+  When creating, updating, searching, or managing service desk operations. Use when: halopsa
+  ticket, halo ticket, service ticket halopsa, create ticket halopsa, ticket status halo, ticket
+  priority halo, halopsa service desk, halo helpdesk, ticket actions, ticket notes halopsa, or
+  halopsa sla.
 ---
 
 # HaloPSA Ticket Management

@@ -5,20 +5,11 @@ description: >
   triaging, investigating, and resolving incidents. Covers incident lifecycle,
   severity levels, verdicts (Malicious/Suspicious/Benign), status transitions,
   SOC analyst triage patterns, and cross-vendor PSA ticket correlation.
-when_to_use: "When searching, triaging, investigating, and resolving incidents"
-triggers:
-  - rocketcyber incident
-  - rocketcyber threat
-  - rocketcyber security
-  - rocketcyber soc
-  - rocketcyber malicious
-  - rocketcyber suspicious
-  - security incident
-  - incident triage
-  - threat detection rocketcyber
-  - incident investigation
-  - rocketcyber verdict
-  - rocketcyber resolved
+when_to_use: >-
+  When searching, triaging, investigating, and resolving incidents. Use when: rocketcyber
+  incident, rocketcyber threat, rocketcyber security, rocketcyber soc, rocketcyber malicious,
+  rocketcyber suspicious, security incident, incident triage, threat detection rocketcyber,
+  incident investigation, rocketcyber verdict, or rocketcyber resolved.
 ---
 
 # RocketCyber Incident Management

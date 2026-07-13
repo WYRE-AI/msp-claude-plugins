@@ -1,16 +1,10 @@
 ---
 name: "cipp-licenses"
 description: "Use this skill when working with M365 license assignments and CSP license inventory through CIPP — listing license usage per tenant, identifying unused licenses, surfacing license SKUs available for assignment, and reviewing CSP-level license commitments. Drives license-rightsizing reports for MSP billing reviews."
-when_to_use: "When auditing M365 license usage, finding unused/overprovisioned licenses, or reviewing CSP license inventory across the MSP portfolio"
-triggers:
-  - cipp license
-  - license usage
-  - license audit
-  - unused licenses
-  - csp licenses
-  - m365 sku
-  - license report
-  - rightsize licenses
+when_to_use: >-
+  When auditing M365 license usage, finding unused/overprovisioned licenses, or reviewing CSP
+  license inventory across the MSP portfolio. Use when: cipp license, license usage, license
+  audit, unused licenses, csp licenses, m365 sku, license report, or rightsize licenses.
 ---
 
 # CIPP Licenses

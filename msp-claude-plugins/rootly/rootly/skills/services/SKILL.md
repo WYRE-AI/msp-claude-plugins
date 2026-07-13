@@ -4,15 +4,10 @@ description: >
   Use this skill when working with the Rootly service catalog -- listing services,
   managing dependencies, ownership, service health, and understanding how services
   relate to incidents and alerts.
-when_to_use: "When listing services, managing dependencies, ownership, service health, and understanding how services relate to incidents and alerts"
-triggers:
-  - rootly service
-  - service catalog
-  - service dependency
-  - service ownership
-  - service health
-  - service status
-  - service tier
+when_to_use: >-
+  When listing services, managing dependencies, ownership, service health, and understanding how
+  services relate to incidents and alerts. Use when: rootly service, service catalog, service
+  dependency, service ownership, service health, service status, or service tier.
 ---
 
 # Rootly Services

@@ -1,20 +1,12 @@
 ---
 name: "sentinelone-alerts"
 description: "Use this skill when working with SentinelOne alerts - triaging new alerts, investigating specific alerts, searching by severity or status, reviewing alert timelines, and managing alert workflows across MSP client environments. Covers all alert tools, severity levels, status values, view types, GraphQL filter syntax, and cursor-based pagination."
-when_to_use: "When triaging new alerts, investigating specific alerts, searching by severity or status, reviewing alert timelines, and managing alert workflows across MSP client environments"
-triggers:
-  - sentinelone alert
-  - sentinelone threat
-  - sentinelone detection
-  - sentinelone incident
-  - alert triage
-  - alert investigation
-  - sentinelone severity
-  - sentinelone critical
-  - sentinelone high
-  - alert management
-  - sentinelone notification
-  - security alert
+when_to_use: >-
+  When triaging new alerts, investigating specific alerts, searching by severity or status,
+  reviewing alert timelines, and managing alert workflows across MSP client environments. Use
+  when: sentinelone alert, sentinelone threat, sentinelone detection, sentinelone incident, alert
+  triage, alert investigation, sentinelone severity, sentinelone critical, sentinelone high, alert
+  management, sentinelone notification, or security alert.
 ---
 
 # SentinelOne Unified Alert Management

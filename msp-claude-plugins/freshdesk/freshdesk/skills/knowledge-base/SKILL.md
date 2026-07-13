@@ -1,21 +1,16 @@
 ---
 name: "Freshdesk Knowledge Base"
-when_to_use: "When navigating the Freshdesk solutions knowledge base — categories, folders, and articles — or suggesting relevant KB articles for a ticket"
+when_to_use: >-
+  When navigating the Freshdesk solutions knowledge base — categories, folders, and articles — or
+  suggesting relevant KB articles for a ticket. Use when: freshdesk knowledge base, freshdesk
+  solutions, freshdesk article, freshdesk kb, solution category freshdesk, solution folder
+  freshdesk, suggest article freshdesk, or deflect ticket freshdesk.
 description: >
   Use this skill when working with the Freshdesk solutions knowledge base — the
   nested three-level hierarchy of categories -> folders -> articles. Covers
   listing the hierarchy, retrieving and searching articles, and the MSP
   workflow of suggesting relevant KB articles to deflect or resolve a ticket,
   through the Freshdesk REST API v2.
-triggers:
-  - freshdesk knowledge base
-  - freshdesk solutions
-  - freshdesk article
-  - freshdesk kb
-  - solution category freshdesk
-  - solution folder freshdesk
-  - suggest article freshdesk
-  - deflect ticket freshdesk
 ---
 
 # Freshdesk Knowledge Base (Solutions)

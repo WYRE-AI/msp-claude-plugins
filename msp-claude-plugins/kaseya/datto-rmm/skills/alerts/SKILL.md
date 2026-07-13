@@ -5,20 +5,10 @@ description: >
   and managing monitoring alerts. Covers all 25+ alert context types including
   antivirus_ctx, eventlog_ctx, perf_disk_usage_ctx, ransomware_ctx, and more.
   Includes alert priorities, resolution workflows, and context-specific handling.
-when_to_use: "When viewing, resolving, and managing monitoring alerts"
-triggers:
-  - datto alert
-  - rmm alert
-  - device alert
-  - alert resolution
-  - monitoring alert
-  - alert context
-  - resolve alert
-  - open alerts
-  - alert priority
-  - antivirus alert
-  - disk alert
-  - service alert
+when_to_use: >-
+  When viewing, resolving, and managing monitoring alerts. Use when: datto alert, rmm alert,
+  device alert, alert resolution, monitoring alert, alert context, resolve alert, open alerts,
+  alert priority, antivirus alert, disk alert, or service alert.
 ---
 
 # Datto RMM Alert Management

@@ -5,18 +5,11 @@ description: >
   available tools, authentication via API key, API structure,
   pagination, rate limiting, region selection, error handling,
   and best practices.
-when_to_use: "When working with available tools, authentication via API key, API structure, pagination, rate limiting, region selection, error handling"
-triggers:
-  - domotz api
-  - domotz authentication
-  - domotz pagination
-  - domotz rate limit
-  - domotz mcp
-  - domotz tools
-  - domotz request
-  - domotz error
-  - domotz connection
-  - domotz region
+when_to_use: >-
+  When working with available tools, authentication via API key, API structure, pagination, rate
+  limiting, region selection, error handling. Use when: domotz api, domotz authentication, domotz
+  pagination, domotz rate limit, domotz mcp, domotz tools, domotz request, domotz error, domotz
+  connection, or domotz region.
 ---
 
 # Domotz MCP Tools & API Patterns

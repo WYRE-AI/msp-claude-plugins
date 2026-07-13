@@ -7,21 +7,12 @@ description: >
   vectors, severity assessment, remediation actions, and investigation
   workflows. Essential for MSP security analysts investigating email-borne
   threats detected by Abnormal Security's AI-powered behavioral engine.
-when_to_use: "When working with BEC, phishing, malware, socially-engineered attacks, spam, graymail, and credential theft in Abnormal Security threat detection and analysis"
-triggers:
-  - abnormal threat
-  - abnormal security threat
-  - email threat
-  - bec detection
-  - business email compromise
-  - phishing detection
-  - credential phishing
-  - malware email
-  - socially engineered attack
-  - threat analysis abnormal
-  - email attack
-  - threat severity
-  - abnormal threat investigation
+when_to_use: >-
+  When working with BEC, phishing, malware, socially-engineered attacks, spam, graymail, and
+  credential theft in Abnormal Security threat detection and analysis. Use when: abnormal threat,
+  abnormal security threat, email threat, bec detection, business email compromise, phishing
+  detection, credential phishing, malware email, socially engineered attack, threat analysis
+  abnormal, email attack, threat severity, or abnormal threat investigation.
 ---
 
 # Abnormal Security Threat Detection & Analysis

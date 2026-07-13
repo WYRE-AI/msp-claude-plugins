@@ -4,13 +4,10 @@ description: >
   Use this skill when searching for products in the Salesbuildr catalog,
   looking up pricing, or browsing by category. Products are items that
   can be added to quotes as line items.
-when_to_use: "When searching for products in the Salesbuildr catalog, looking up pricing, or browsing by category"
-triggers:
-  - salesbuildr product
-  - salesbuildr products
-  - salesbuildr catalog
-  - salesbuildr pricing
-  - product search salesbuildr
+when_to_use: >-
+  When searching for products in the Salesbuildr catalog, looking up pricing, or browsing by
+  category. Use when: salesbuildr product, salesbuildr products, salesbuildr catalog, salesbuildr
+  pricing, or product search salesbuildr.
 ---
 
 # Salesbuildr Products

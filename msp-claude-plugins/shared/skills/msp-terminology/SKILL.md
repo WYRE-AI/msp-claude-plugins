@@ -4,16 +4,10 @@ description: >
   Use this skill when interpreting MSP-specific terminology, acronyms,
   and concepts. Essential for understanding MSP workflows, tool discussions,
   and industry-specific language across all vendor platforms.
-when_to_use: "When interpreting MSP-specific terminology, acronyms, and concepts"
-triggers:
-  - msp terminology
-  - msp acronyms
-  - what is psa
-  - what is rmm
-  - msp definitions
-  - managed services terms
-  - it service management
-  - msp vocabulary
+when_to_use: >-
+  When interpreting MSP-specific terminology, acronyms, and concepts. Use when: msp terminology,
+  msp acronyms, what is psa, what is rmm, msp definitions, managed services terms, it service
+  management, or msp vocabulary.
 ---
 
 # MSP Terminology & Concepts

@@ -1,6 +1,10 @@
 ---
 name: "Inforcer Tenant Management"
-when_to_use: "When listing managed M365 tenants with Inforcer, resolving a friendly name / domain / GUID to the integer Client Tenant ID, or scoping any operation to a specific tenant"
+when_to_use: >-
+  When listing managed M365 tenants with Inforcer, resolving a friendly name / domain / GUID to
+  the integer Client Tenant ID, or scoping any operation to a specific tenant. Use when: inforcer
+  tenant, list tenants, managed tenants, client tenant id, resolve tenant, which tenants, m365
+  tenant inforcer, or msp tenant portfolio.
 description: >
   Use this skill when working with Inforcer tenants — listing managed
   Microsoft 365 tenants, resolving a friendly name, DNS domain, or Azure
@@ -8,15 +12,6 @@ description: >
   Inforcer operation to the right tenant. The starting point for almost
   every Inforcer workflow, since alignment, secure score, identity, and
   audit calls are all tenant-scoped.
-triggers:
-  - inforcer tenant
-  - list tenants
-  - managed tenants
-  - client tenant id
-  - resolve tenant
-  - which tenants
-  - m365 tenant inforcer
-  - msp tenant portfolio
 ---
 
 # Inforcer Tenant Management

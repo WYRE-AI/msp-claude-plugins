@@ -1,18 +1,11 @@
 ---
 name: "azure-mcp-cost-and-capacity"
 description: "Use this skill for Azure cost, pricing, capacity, and inventory work through the azure-mcp connector — retail pricing lookups, subscription quota and usage-limit checks, and listing/inspecting subscriptions and resource groups. All read-only."
-when_to_use: "When estimating Azure cost, checking quota headroom before scaling a deployment, or taking inventory of subscriptions and resource groups"
-triggers:
-  - azure pricing
-  - azure cost estimate
-  - retail price azure
-  - azure quota
-  - azure usage limits
-  - quota check
-  - azure subscriptions
-  - resource groups
-  - azure inventory
-  - pre-deployment check
+when_to_use: >-
+  When estimating Azure cost, checking quota headroom before scaling a deployment, or taking
+  inventory of subscriptions and resource groups. Use when: azure pricing, azure cost estimate,
+  retail price azure, azure quota, azure usage limits, quota check, azure subscriptions, resource
+  groups, azure inventory, or pre-deployment check.
 ---
 
 # Azure Cost & Capacity

@@ -4,18 +4,11 @@ description: >
   Use this skill when working with the RunZero MCP tools —
   available tools, authentication via Bearer token, Export API,
   pagination, rate limiting, error handling, and best practices.
-when_to_use: "When working with available tools, authentication via Bearer token, Export API, pagination, rate limiting, error handling, and best practices in the RunZero MCP tools"
-triggers:
-  - runzero api
-  - runzero authentication
-  - runzero pagination
-  - runzero rate limit
-  - runzero mcp
-  - runzero tools
-  - runzero request
-  - runzero error
-  - runzero connection
-  - runzero export
+when_to_use: >-
+  When working with available tools, authentication via Bearer token, Export API, pagination, rate
+  limiting, error handling, and best practices in the RunZero MCP tools. Use when: runzero api,
+  runzero authentication, runzero pagination, runzero rate limit, runzero mcp, runzero tools,
+  runzero request, runzero error, runzero connection, or runzero export.
 ---
 
 # RunZero MCP Tools & API Patterns

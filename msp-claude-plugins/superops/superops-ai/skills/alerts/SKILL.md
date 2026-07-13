@@ -5,18 +5,10 @@ description: >
   acknowledging, and resolving alerts from monitored assets. Covers alert
   types, severity levels, status management, and automated alert workflows.
   Essential for MSP technicians handling RMM monitoring through SuperOps.ai.
-when_to_use: "When listing, filtering, acknowledging, and resolving alerts from monitored assets"
-triggers:
-  - superops alert
-  - alert management
-  - list alerts superops
-  - acknowledge alert
-  - resolve alert superops
-  - alert severity
-  - monitoring alert
-  - rmm alert
-  - asset alert
-  - alert status
+when_to_use: >-
+  When listing, filtering, acknowledging, and resolving alerts from monitored assets. Use when:
+  superops alert, alert management, list alerts superops, acknowledge alert, resolve alert
+  superops, alert severity, monitoring alert, rmm alert, asset alert, or alert status.
 ---
 
 # SuperOps.ai Alert Management

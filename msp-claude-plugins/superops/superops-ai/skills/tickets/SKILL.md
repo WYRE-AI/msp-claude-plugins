@@ -6,19 +6,11 @@ description: >
   statuses, priorities, assignments, notes, time entries, and workflow automations.
   Includes business logic for validation and common MSP workflows.
   Essential for MSP technicians handling service delivery through SuperOps.ai PSA.
-when_to_use: "When creating, updating, searching, or managing service desk operations"
-triggers:
-  - superops ticket
-  - service ticket superops
-  - create ticket superops
-  - ticket status superops
-  - ticket priority
-  - superops service desk
-  - ticket triage
-  - escalate ticket
-  - resolve ticket superops
-  - ticket notes superops
-  - time entry ticket
+when_to_use: >-
+  When creating, updating, searching, or managing service desk operations. Use when: superops
+  ticket, service ticket superops, create ticket superops, ticket status superops, ticket
+  priority, superops service desk, ticket triage, escalate ticket, resolve ticket superops, ticket
+  notes superops, or time entry ticket.
 ---
 
 # SuperOps.ai Ticket Management

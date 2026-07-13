@@ -5,16 +5,11 @@ description: >
   categorizing, and monitoring applications across managed endpoints. Covers
   application discovery, approved vs unapproved applications, app-level threat
   detection, and software compliance reporting.
-when_to_use: "When detecting, categorizing, and monitoring applications across managed endpoints"
-triggers:
-  - rocketcyber app
-  - rocketcyber application
-  - rocketcyber software
-  - rocketcyber inventory
-  - application detection rocketcyber
-  - software compliance rocketcyber
-  - rocketcyber installed software
-  - app monitoring rocketcyber
+when_to_use: >-
+  When detecting, categorizing, and monitoring applications across managed endpoints. Use when:
+  rocketcyber app, rocketcyber application, rocketcyber software, rocketcyber inventory,
+  application detection rocketcyber, software compliance rocketcyber, rocketcyber installed
+  software, or app monitoring rocketcyber.
 ---
 
 # RocketCyber Application Inventory

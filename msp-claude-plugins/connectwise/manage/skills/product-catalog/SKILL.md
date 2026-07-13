@@ -7,22 +7,12 @@ description: >
   tickets. Covers the full catalog item field reference, the common MSP workflows
   (hardware SKU, software license, managed service, agreement add-on), and the
   passthrough pattern for fields not surfaced on the MCP tool directly.
-when_to_use: "When searching, creating, or updating ConnectWise PSA product catalog items (SKUs), categories, subcategories, or manufacturers"
-triggers:
-  - connectwise product
-  - connectwise catalog
-  - connectwise sku
-  - product catalog connectwise
-  - catalog item connectwise
-  - cw manage product
-  - add product connectwise
-  - create sku
-  - product category connectwise
-  - manufacturer connectwise
-  - procurement catalog
-  - connectwise pricing
-  - bundle product
-  - managed service sku
+when_to_use: >-
+  When searching, creating, or updating ConnectWise PSA product catalog items (SKUs), categories,
+  subcategories, or manufacturers. Use when: connectwise product, connectwise catalog, connectwise
+  sku, product catalog connectwise, catalog item connectwise, cw manage product, add product
+  connectwise, create sku, product category connectwise, manufacturer connectwise, procurement
+  catalog, connectwise pricing, bundle product, or managed service sku.
 ---
 
 # ConnectWise PSA Product Catalog

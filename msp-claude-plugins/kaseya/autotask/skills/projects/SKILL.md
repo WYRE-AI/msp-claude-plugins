@@ -5,16 +5,10 @@ description: >
   managing tasks, phases, milestones, and resource assignments. Essential
   for MSP project managers handling client implementations, migrations,
   and scheduled work in Autotask PSA.
-when_to_use: "When creating projects, managing tasks, phases, milestones, and resource assignments"
-triggers:
-  - autotask project
-  - autotask task
-  - project management
-  - project phase
-  - project milestone
-  - resource assignment
-  - project billing
-  - project timeline
+when_to_use: >-
+  When creating projects, managing tasks, phases, milestones, and resource assignments. Use when:
+  autotask project, autotask task, project management, project phase, project milestone, resource
+  assignment, project billing, or project timeline.
 ---
 
 # Autotask Projects Management

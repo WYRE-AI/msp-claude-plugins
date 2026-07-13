@@ -5,18 +5,10 @@ description: >
   searching, and managing client accounts. Covers client fields, sites,
   contacts, custom fields, and client lifecycle management.
   Essential for MSP account management through SuperOps.ai PSA.
-when_to_use: "When creating, updating, searching, and managing client accounts"
-triggers:
-  - superops client
-  - client management
-  - create client superops
-  - update client
-  - client site
-  - client contact
-  - account management
-  - client custom fields
-  - delete client
-  - client lifecycle
+when_to_use: >-
+  When creating, updating, searching, and managing client accounts. Use when: superops client,
+  client management, create client superops, update client, client site, client contact, account
+  management, client custom fields, delete client, or client lifecycle.
 ---
 
 # SuperOps.ai Client Management

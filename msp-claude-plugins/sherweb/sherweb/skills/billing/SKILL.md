@@ -6,21 +6,12 @@ description: >
   fees, taxes, invoices, and MSP margin calculations. Covers Setup,
   Recurring, and Usage charge types, billing cycles (OneTime, Monthly,
   Yearly), and pricing fields (listPrice, netPrice, prorated, subTotal).
-when_to_use: "When working with payable charges, billing periods, charge types, pricing breakdown, deductions, fees, taxes, invoices, and MSP margin calculations in Sherweb distributor billing"
-triggers:
-  - sherweb billing
-  - sherweb invoice
-  - sherweb charges
-  - sherweb payable
-  - sherweb pricing
-  - sherweb deductions
-  - sherweb fees
-  - sherweb taxes
-  - sherweb margin
-  - sherweb cost
-  - sherweb billing period
-  - sherweb recurring
-  - sherweb prorated
+when_to_use: >-
+  When working with payable charges, billing periods, charge types, pricing breakdown, deductions,
+  fees, taxes, invoices, and MSP margin calculations in Sherweb distributor billing. Use when:
+  sherweb billing, sherweb invoice, sherweb charges, sherweb payable, sherweb pricing, sherweb
+  deductions, sherweb fees, sherweb taxes, sherweb margin, sherweb cost, sherweb billing period,
+  sherweb recurring, or sherweb prorated.
 ---
 
 # Sherweb Distributor Billing

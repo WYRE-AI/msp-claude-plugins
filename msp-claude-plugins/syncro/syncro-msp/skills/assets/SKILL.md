@@ -5,18 +5,10 @@ description: >
   software, and devices for customers. Covers asset fields, RMM integration,
   patch management, and asset-related operations. Essential for MSP inventory
   management and endpoint monitoring through Syncro.
-when_to_use: "When tracking hardware, software, and devices for customers"
-triggers:
-  - syncro asset
-  - syncro device
-  - syncro computer
-  - asset management syncro
-  - rmm syncro
-  - syncro inventory
-  - syncro endpoint
-  - patch management syncro
-  - asset search syncro
-  - syncro hardware
+when_to_use: >-
+  When tracking hardware, software, and devices for customers. Use when: syncro asset, syncro
+  device, syncro computer, asset management syncro, rmm syncro, syncro inventory, syncro endpoint,
+  patch management syncro, asset search syncro, or syncro hardware.
 ---
 
 # Syncro MSP Asset Management

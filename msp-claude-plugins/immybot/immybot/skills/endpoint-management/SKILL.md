@@ -1,20 +1,16 @@
 ---
 name: "ImmyBot Endpoint Management"
-when_to_use: "When listing, searching, inspecting, or onboarding ImmyBot-managed Windows computers, reviewing per-device inventory, or triggering agent check-ins"
+when_to_use: >-
+  When listing, searching, inspecting, or onboarding ImmyBot-managed Windows computers, reviewing
+  per-device inventory, or triggering agent check-ins. Use when: immybot computer, immybot
+  endpoint, immybot device list, immybot inventory, immybot check-in, immybot agent, or immybot
+  fleet.
 description: >
   Use this skill when working with ImmyBot computers/endpoints —
   listing and filtering the managed fleet, searching by name or
   serial, inspecting installed-software inventory, reviewing which
   deployments target a device, creating new computer records, and
   forcing an agent check-in.
-triggers:
-  - immybot computer
-  - immybot endpoint
-  - immybot device list
-  - immybot inventory
-  - immybot check-in
-  - immybot agent
-  - immybot fleet
 ---
 
 # ImmyBot Endpoint Management

@@ -5,20 +5,12 @@ description: >
   threat families, indicators of compromise (IOCs), forensic evidence, and threat
   landscape analysis. Covers campaign details, actor attribution, threat indicators,
   and how to investigate and track threat campaigns across the organization.
-when_to_use: "When working with campaign tracking, threat families, indicators of compromise (IOCs), forensic evidence, and threat landscape analysis in Proofpoint threat intelligence"
-triggers:
-  - proofpoint threat intelligence
-  - proofpoint campaign
-  - threat campaign
-  - proofpoint ioc
-  - indicators of compromise
-  - threat family
-  - proofpoint threat
-  - threat actor
-  - proofpoint intel
-  - campaign tracking
-  - threat indicator
-  - proofpoint malware family
+when_to_use: >-
+  When working with campaign tracking, threat families, indicators of compromise (IOCs), forensic
+  evidence, and threat landscape analysis in Proofpoint threat intelligence. Use when: proofpoint
+  threat intelligence, proofpoint campaign, threat campaign, proofpoint ioc, indicators of
+  compromise, threat family, proofpoint threat, threat actor, proofpoint intel, campaign tracking,
+  threat indicator, or proofpoint malware family.
 ---
 
 # Proofpoint Threat Intelligence

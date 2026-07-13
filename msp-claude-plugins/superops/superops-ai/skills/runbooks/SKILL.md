@@ -5,18 +5,10 @@ description: >
   executing, monitoring, and managing automated scripts on assets. Covers script
   types, execution parameters, scheduling, and result handling.
   Essential for MSP automation through SuperOps.ai RMM.
-when_to_use: "When listing, executing, monitoring, and managing automated scripts on assets"
-triggers:
-  - superops runbook
-  - superops script
-  - run script superops
-  - execute script
-  - automation superops
-  - script execution
-  - runbook execution
-  - script status
-  - bulk script
-  - scheduled script
+when_to_use: >-
+  When listing, executing, monitoring, and managing automated scripts on assets. Use when:
+  superops runbook, superops script, run script superops, execute script, automation superops,
+  script execution, runbook execution, script status, bulk script, or scheduled script.
 ---
 
 # SuperOps.ai Runbook & Script Management

@@ -1,19 +1,11 @@
 ---
-description: >
-  Use this skill when working with HaloPSA invoices — listing invoices by
-  client or date range, filtering by payment and send status, and retrieving
-  individual invoice details. Essential for MSP finance teams tracking billing,
-  chasing unpaid invoices, and reconciling client accounts.
-triggers:
-  - halopsa invoice
-  - halopsa billing invoice
-  - list invoices halopsa
-  - unpaid invoices halopsa
-  - halopsa invoice status
-  - invoice search halopsa
-  - halopsa finance
-  - halopsa invoice details
-  - paid invoices halopsa
+description: >-
+  Use this skill when working with HaloPSA invoices — listing invoices by client or date range,
+  filtering by payment and send status, and retrieving individual invoice details. Essential for
+  MSP finance teams tracking billing, chasing unpaid invoices, and reconciling client accounts.
+  Use when: halopsa invoice, halopsa billing invoice, list invoices halopsa, unpaid invoices
+  halopsa, halopsa invoice status, invoice search halopsa, halopsa finance, halopsa invoice
+  details, or paid invoices halopsa.
 ---
 
 # HaloPSA Invoices

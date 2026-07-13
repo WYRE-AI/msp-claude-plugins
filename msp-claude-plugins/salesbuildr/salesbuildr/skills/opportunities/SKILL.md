@@ -5,15 +5,11 @@ description: >
   searching the pipeline, creating new opportunities, updating stages,
   and tracking deal values. Opportunities link companies and contacts
   to potential revenue.
-when_to_use: "When managing sales opportunities in Salesbuildr - searching the pipeline, creating new opportunities, updating stages, and tracking deal values"
-triggers:
-  - salesbuildr opportunity
-  - salesbuildr opportunities
-  - salesbuildr pipeline
-  - salesbuildr deal
-  - sales pipeline
-  - create opportunity salesbuildr
-  - opportunity stage
+when_to_use: >-
+  When managing sales opportunities in Salesbuildr - searching the pipeline, creating new
+  opportunities, updating stages, and tracking deal values. Use when: salesbuildr opportunity,
+  salesbuildr opportunities, salesbuildr pipeline, salesbuildr deal, sales pipeline, create
+  opportunity salesbuildr, or opportunity stage.
 ---
 
 # Salesbuildr Opportunities

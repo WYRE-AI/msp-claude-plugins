@@ -5,17 +5,11 @@ description: >
   communication status, health monitoring, and troubleshooting. Covers agent
   installation, online/offline status, agent-to-account mapping, platform support,
   and connectivity diagnostics.
-when_to_use: "When working with deployment, communication status, health monitoring, and troubleshooting in RocketCyber agents (RocketAgent)"
-triggers:
-  - rocketcyber agent
-  - rocketagent
-  - rocketcyber endpoint
-  - rocketcyber deployment
-  - agent offline rocketcyber
-  - agent health rocketcyber
-  - rocketcyber online
-  - endpoint protection rocketcyber
-  - rocketcyber install agent
+when_to_use: >-
+  When working with deployment, communication status, health monitoring, and troubleshooting in
+  RocketCyber agents (RocketAgent). Use when: rocketcyber agent, rocketagent, rocketcyber
+  endpoint, rocketcyber deployment, agent offline rocketcyber, agent health rocketcyber,
+  rocketcyber online, endpoint protection rocketcyber, or rocketcyber install agent.
 ---
 
 # RocketCyber Agent Management

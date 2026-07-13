@@ -6,20 +6,11 @@ description: >
   hardware quotes, project proposals, and tracking the MSP sales pipeline.
   Covers content variables, pricing tables, proposal templates, and
   end-to-end proposal lifecycle for managed service providers.
-when_to_use: "When creating managed service agreements (MSAs), statements of work (SOWs), hardware quotes, project proposals, and tracking the MSP sales pipeline"
-triggers:
-  - pandadoc proposal
-  - msp proposal
-  - managed services agreement
-  - msa
-  - statement of work
-  - sow
-  - hardware quote
-  - project proposal
-  - proposal pipeline
-  - sales pipeline
-  - proposal tracking
-  - client proposal
+when_to_use: >-
+  When creating managed service agreements (MSAs), statements of work (SOWs), hardware quotes,
+  project proposals, and tracking the MSP sales pipeline. Use when: pandadoc proposal, msp
+  proposal, managed services agreement, msa, statement of work, sow, hardware quote, project
+  proposal, proposal pipeline, sales pipeline, proposal tracking, or client proposal.
 ---
 
 # PandaDoc MSP Proposal Workflows

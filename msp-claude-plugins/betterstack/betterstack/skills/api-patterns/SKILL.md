@@ -6,20 +6,12 @@ description: >
   cursor-based pagination, rate limiting, error handling,
   and best practices. Better Stack covers Uptime, Telemetry (Logtail),
   and Error Tracking products in a single MCP server.
-when_to_use: "When working with available tools, authentication via Bearer token, API structure, cursor-based pagination, rate limiting, error handling"
-triggers:
-  - betterstack api
-  - betterstack authentication
-  - betterstack pagination
-  - betterstack rate limit
-  - betterstack mcp
-  - betterstack tools
-  - betterstack request
-  - betterstack error
-  - betterstack connection
-  - betterstack token
-  - betterstack credentials
-  - better stack api
+when_to_use: >-
+  When working with available tools, authentication via Bearer token, API structure, cursor-based
+  pagination, rate limiting, error handling. Use when: betterstack api, betterstack
+  authentication, betterstack pagination, betterstack rate limit, betterstack mcp, betterstack
+  tools, betterstack request, betterstack error, betterstack connection, betterstack token,
+  betterstack credentials, or better stack api.
 ---
 
 # Better Stack MCP Tools & API Patterns

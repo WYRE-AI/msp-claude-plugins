@@ -6,20 +6,12 @@ description: >
   for signature, checking document status, downloading signed copies,
   and managing the full document lifecycle. Covers all document statuses,
   content tokens, pricing tables, and e-signature workflows.
-when_to_use: "When creating proposals, quotes, contracts, SOWs, and MSAs from templates, sending documents for signature, checking document status, downloading signed copies"
-triggers:
-  - pandadoc document
-  - pandadoc proposal
-  - pandadoc contract
-  - pandadoc quote
-  - pandadoc sign
-  - pandadoc signature
-  - pandadoc send
-  - pandadoc status
-  - pandadoc download
-  - pandadoc create document
-  - document lifecycle
-  - e-signature
+when_to_use: >-
+  When creating proposals, quotes, contracts, SOWs, and MSAs from templates, sending documents for
+  signature, checking document status, downloading signed copies. Use when: pandadoc document,
+  pandadoc proposal, pandadoc contract, pandadoc quote, pandadoc sign, pandadoc signature,
+  pandadoc send, pandadoc status, pandadoc download, pandadoc create document, document lifecycle,
+  or e-signature.
 ---
 
 # PandaDoc Document Management

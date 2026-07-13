@@ -5,18 +5,11 @@ description: >
   configuration items, hardware lifecycle, and asset relationships. Covers
   asset fields, types, statuses, links to clients/sites, and RMM integration.
   Essential for MSP asset management and CMDB operations.
-when_to_use: "When tracking devices, managing configuration items, hardware lifecycle, and asset relationships"
-triggers:
-  - halopsa asset
-  - halo asset
-  - configuration item halopsa
-  - ci halopsa
-  - device management halo
-  - hardware tracking halopsa
-  - halopsa cmdb
-  - asset lifecycle
-  - halo inventory
-  - halopsa device
+when_to_use: >-
+  When tracking devices, managing configuration items, hardware lifecycle, and asset
+  relationships. Use when: halopsa asset, halo asset, configuration item halopsa, ci halopsa,
+  device management halo, hardware tracking halopsa, halopsa cmdb, asset lifecycle, halo
+  inventory, or halopsa device.
 ---
 
 # HaloPSA Asset Management

@@ -1,19 +1,11 @@
 ---
-description: >
-  Use this skill when working with HaloPSA agents (technicians) and teams —
-  listing technicians, retrieving agent details, and listing team structures.
-  Essential for MSP service managers assigning tickets, understanding team
-  capacity, and looking up technician IDs for ticket assignment.
-triggers:
-  - halopsa agent
-  - halopsa technician
-  - halopsa team
-  - list agents halopsa
-  - halopsa tech list
-  - halopsa teams
-  - find technician halopsa
-  - agent details halopsa
-  - team list halopsa
+description: >-
+  Use this skill when working with HaloPSA agents (technicians) and teams — listing technicians,
+  retrieving agent details, and listing team structures. Essential for MSP service managers
+  assigning tickets, understanding team capacity, and looking up technician IDs for ticket
+  assignment. Use when: halopsa agent, halopsa technician, halopsa team, list agents halopsa,
+  halopsa tech list, halopsa teams, find technician halopsa, agent details halopsa, or team list
+  halopsa.
 ---
 
 # HaloPSA Agents and Teams

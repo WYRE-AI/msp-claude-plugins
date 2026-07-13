@@ -5,16 +5,10 @@ description: >
   creating, searching, updating, archiving, and managing client documentation.
   Covers company fields, PSA integration matching, parent/child relationships,
   and related resources like assets, passwords, and articles.
-when_to_use: "When creating, searching, updating, archiving, and managing client documentation"
-triggers:
-  - hudu company
-  - hudu client
-  - hudu organization
-  - company lookup
-  - company documentation
-  - company management
-  - hudu org
-  - client documentation
+when_to_use: >-
+  When creating, searching, updating, archiving, and managing client documentation. Use when: hudu
+  company, hudu client, hudu organization, company lookup, company documentation, company
+  management, hudu org, or client documentation.
 ---
 
 # Hudu Companies Management

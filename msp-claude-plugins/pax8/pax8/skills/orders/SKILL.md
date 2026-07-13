@@ -5,17 +5,10 @@ description: >
   tracking provisioning status, understanding order line items, and
   managing the order-to-subscription workflow. Covers order retrieval,
   status tracking, and provisioning timelines.
-when_to_use: "When viewing orders, tracking provisioning status, understanding order line items, and managing the order-to-subscription workflow"
-triggers:
-  - pax8 order
-  - pax8 purchase
-  - pax8 provision
-  - pax8 buy
-  - place order pax8
-  - order status
-  - order tracking
-  - new subscription order
-  - pax8 ordering
+when_to_use: >-
+  When viewing orders, tracking provisioning status, understanding order line items, and managing
+  the order-to-subscription workflow. Use when: pax8 order, pax8 purchase, pax8 provision, pax8
+  buy, place order pax8, order status, order tracking, new subscription order, or pax8 ordering.
 ---
 
 # Pax8 Order Management

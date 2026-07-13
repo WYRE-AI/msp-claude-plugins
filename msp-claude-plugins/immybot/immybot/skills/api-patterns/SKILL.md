@@ -1,20 +1,16 @@
 ---
 name: "ImmyBot API Patterns"
-when_to_use: "When working with ImmyBot authentication (Entra ID OAuth client credentials), the desired-state model, destructive write operations, or task / maintenance-session polling"
+when_to_use: >-
+  When working with ImmyBot authentication (Entra ID OAuth client credentials), the desired-state
+  model, destructive write operations, or task / maintenance-session polling. Use when: immybot
+  api, immybot authentication, immybot oauth, immybot entra, immybot mcp, immybot desired state,
+  or immybot maintenance session.
 description: >
   Use this skill when working with the ImmyBot MCP tools — Entra ID
   OAuth 2.0 client-credentials authentication (4 fields), the
   two-step desired-state deployment model, destructive operations
   that need explicit confirmation, and the task/session polling
   cadence.
-triggers:
-  - immybot api
-  - immybot authentication
-  - immybot oauth
-  - immybot entra
-  - immybot mcp
-  - immybot desired state
-  - immybot maintenance session
 ---
 
 # ImmyBot MCP Tools & API Patterns

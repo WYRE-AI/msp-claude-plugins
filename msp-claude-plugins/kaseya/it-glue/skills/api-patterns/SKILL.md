@@ -5,18 +5,11 @@ description: >
   JSON:API structure, filtering, sorting, pagination, rate limiting,
   sideloading with includes, and error handling. Covers regional endpoints,
   x-api-key authentication, and best practices for API integration.
-when_to_use: "When working with authentication, JSON:API structure, filtering, sorting, pagination, rate limiting, sideloading with includes, and error handling in the IT Glue API"
-triggers:
-  - it glue api
-  - it glue query
-  - json api
-  - it glue filter
-  - it glue pagination
-  - api rate limit
-  - it glue authentication
-  - it glue rest
-  - it glue sideload
-  - it glue include
+when_to_use: >-
+  When working with authentication, JSON:API structure, filtering, sorting, pagination, rate
+  limiting, sideloading with includes, and error handling in the IT Glue API. Use when: it glue
+  api, it glue query, json api, it glue filter, it glue pagination, api rate limit, it glue
+  authentication, it glue rest, it glue sideload, or it glue include.
 ---
 
 # IT Glue API Patterns

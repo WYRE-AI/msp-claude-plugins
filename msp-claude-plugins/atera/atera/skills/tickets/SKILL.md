@@ -5,18 +5,10 @@ description: >
   searching, or managing service desk operations. Covers ticket fields,
   statuses, priorities, comments, work hours, and billing duration.
   Essential for MSP technicians handling service delivery through Atera.
-when_to_use: "When creating, updating, searching, or managing service desk operations"
-triggers:
-  - atera ticket
-  - service ticket atera
-  - create ticket atera
-  - ticket status atera
-  - ticket priority atera
-  - atera service desk
-  - ticket comments
-  - work hours atera
-  - billable hours
-  - resolve ticket atera
+when_to_use: >-
+  When creating, updating, searching, or managing service desk operations. Use when: atera ticket,
+  service ticket atera, create ticket atera, ticket status atera, ticket priority atera, atera
+  service desk, ticket comments, work hours atera, billable hours, or resolve ticket atera.
 ---
 
 # Atera Ticket Management

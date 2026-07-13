@@ -1,18 +1,13 @@
 ---
 name: "Kaseya BMS API Patterns"
-when_to_use: "When working with the Kaseya BMS REST API v2 — auth, tenant subdomain handling, pagination, ticket/account workflows, error handling"
+when_to_use: >-
+  When working with the Kaseya BMS REST API v2 — auth, tenant subdomain handling, pagination,
+  ticket/account workflows, error handling. Use when: kaseya bms, bms api, bms tickets, bms
+  accounts, bms psa, vorex, or kaseya psa.
 description: >
   Use this skill when integrating with the Kaseya BMS PSA REST API v2. Covers tenant
   subdomain routing, API-token bearer auth, Kaseya One SSO bridging, ticket and account
   workflows, OData-style pagination, and BMS-specific gotchas.
-triggers:
-  - kaseya bms
-  - bms api
-  - bms tickets
-  - bms accounts
-  - bms psa
-  - vorex
-  - kaseya psa
 ---
 
 # Kaseya BMS API Patterns

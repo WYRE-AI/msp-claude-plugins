@@ -6,21 +6,11 @@ description: >
   validation. Covers time entry fields, billing rates, approval statuses,
   contract limits, and integration with tickets and projects.
   Essential for MSP technicians tracking billable and non-billable work.
-when_to_use: "When logging work hours, billing calculations, approval workflows, utilization tracking, and budget validation"
-triggers:
-  - autotask time entry
-  - log time
-  - time tracking
-  - billable hours
-  - time entry approval
-  - billing rate
-  - utilization rate
-  - time billing
-  - work log
-  - timesheet
-  - hours worked
-  - submit timesheet
-  - approve time
+when_to_use: >-
+  When logging work hours, billing calculations, approval workflows, utilization tracking, and
+  budget validation. Use when: autotask time entry, log time, time tracking, billable hours, time
+  entry approval, billing rate, utilization rate, time billing, work log, timesheet, hours worked,
+  submit timesheet, or approve time.
 ---
 
 # Autotask Time Entry Management

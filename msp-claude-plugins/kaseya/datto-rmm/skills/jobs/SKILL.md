@@ -5,17 +5,10 @@ description: >
   scheduling jobs, monitoring job status, and viewing results. Covers
   component scripts, job variables, execution status, stdout/stderr output,
   and job management workflows.
-when_to_use: "When running quick jobs, scheduling jobs, monitoring job status, and viewing results"
-triggers:
-  - datto job
-  - rmm job
-  - quick job
-  - run script
-  - component job
-  - job status
-  - job results
-  - scheduled job
-  - remote execution
+when_to_use: >-
+  When running quick jobs, scheduling jobs, monitoring job status, and viewing results. Use when:
+  datto job, rmm job, quick job, run script, component job, job status, job results, scheduled
+  job, or remote execution.
 ---
 
 # Datto RMM Job Management

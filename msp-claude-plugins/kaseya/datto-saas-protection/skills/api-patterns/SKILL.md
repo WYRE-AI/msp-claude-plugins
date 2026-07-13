@@ -1,17 +1,13 @@
 ---
 name: "Datto SaaS Protection API Patterns"
-when_to_use: "When working with the Datto SaaS Protection (Backupify) REST API — auth, seat queries, restore status, M365/Google tenant operations"
+when_to_use: >-
+  When working with the Datto SaaS Protection (Backupify) REST API — auth, seat queries, restore
+  status, M365/Google tenant operations. Use when: datto saas protection, backupify, saas backup,
+  m365 backup, google workspace backup, or saas protection api.
 description: >
   Use this skill when integrating with Datto SaaS Protection (formerly Backupify). Covers
   the REST API base URL, bearer-token auth, seat & tenant model, backup status queries,
   restore operations, and known gotchas.
-triggers:
-  - datto saas protection
-  - backupify
-  - saas backup
-  - m365 backup
-  - google workspace backup
-  - saas protection api
 ---
 
 # Datto SaaS Protection API Patterns

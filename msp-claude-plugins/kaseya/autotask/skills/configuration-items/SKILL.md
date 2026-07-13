@@ -6,21 +6,12 @@ description: >
   and relationship mapping. Covers CI types, categories, DNS records, SSL
   certificates, related items, notes, and contract billing associations.
   Essential for MSP asset documentation and infrastructure tracking.
-when_to_use: "When working with asset management, inventory tracking, warranty monitoring, lifecycle management, and relationship mapping in Autotask Configuration Items (CIs)"
-triggers:
-  - autotask configuration item
-  - autotask asset
-  - autotask ci
-  - configuration item
-  - asset management
-  - device inventory
-  - warranty tracking
-  - asset lifecycle
-  - network device
-  - server inventory
-  - workstation tracking
-  - ssl certificate tracking
-  - dns management
+when_to_use: >-
+  When working with asset management, inventory tracking, warranty monitoring, lifecycle
+  management, and relationship mapping in Autotask Configuration Items (CIs). Use when: autotask
+  configuration item, autotask asset, autotask ci, configuration item, asset management, device
+  inventory, warranty tracking, asset lifecycle, network device, server inventory, workstation
+  tracking, ssl certificate tracking, or dns management.
 ---
 
 # Autotask Configuration Items Management

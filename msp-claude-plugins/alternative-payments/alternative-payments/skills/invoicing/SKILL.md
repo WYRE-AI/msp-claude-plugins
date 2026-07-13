@@ -6,18 +6,11 @@ description: >
   fetching a hosted payment link or PDF link, archiving an invoice, and creating
   or retrieving hosted payment requests. Hosted links let the customer choose to
   pay; the integration never moves money on the customer's behalf.
-when_to_use: "When creating, listing, retrieving, or archiving Alternative Payments invoices, or generating hosted payment links and payment requests"
-triggers:
-  - alternative payments invoice
-  - create invoice
-  - list invoices
-  - archive invoice
-  - payment link
-  - payment request
-  - hosted payment link
-  - invoice pdf
-  - line items
-  - alternativepayments invoice
+when_to_use: >-
+  When creating, listing, retrieving, or archiving Alternative Payments invoices, or generating
+  hosted payment links and payment requests. Use when: alternative payments invoice, create
+  invoice, list invoices, archive invoice, payment link, payment request, hosted payment link,
+  invoice pdf, line items, or alternativepayments invoice.
 ---
 
 # Alternative Payments Invoicing

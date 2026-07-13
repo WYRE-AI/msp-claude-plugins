@@ -4,18 +4,12 @@ description: >
   Use this skill when working with Ironscales phishing incidents — listing and
   triaging incidents, classifying emails as phishing/spam/legitimate, taking
   remediation actions, managing sender allowlists, and viewing company statistics.
-when_to_use: "When listing and triaging incidents, classifying emails as phishing/spam/legitimate, taking remediation actions, managing sender allowlists, and viewing company statistics"
-triggers:
-  - ironscales incident
-  - phishing incident
-  - ironscales remediation
-  - classify email ironscales
-  - ironscales phishing
-  - ironscales allowlist
-  - ironscales triage
-  - ironscales spam
-  - ironscales legitimate
-  - ironscales dashboard
+when_to_use: >-
+  When listing and triaging incidents, classifying emails as phishing/spam/legitimate, taking
+  remediation actions, managing sender allowlists, and viewing company statistics. Use when:
+  ironscales incident, phishing incident, ironscales remediation, classify email ironscales,
+  ironscales phishing, ironscales allowlist, ironscales triage, ironscales spam, ironscales
+  legitimate, or ironscales dashboard.
 ---
 
 # Ironscales Phishing Incidents

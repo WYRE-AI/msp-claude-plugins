@@ -5,18 +5,10 @@ description: >
   managing, and monitoring endpoints. Covers device identifiers (UID, hostname, MAC),
   device types (workstation, server, ESXi, network), statuses, user-defined fields (UDF1-30),
   warranty information, and device operations.
-when_to_use: "When listing, searching, managing, and monitoring endpoints"
-triggers:
-  - datto device
-  - rmm device
-  - device status
-  - device lookup
-  - managed device
-  - device hostname
-  - device online
-  - device offline
-  - endpoint management
-  - device udf
+when_to_use: >-
+  When listing, searching, managing, and monitoring endpoints. Use when: datto device, rmm device,
+  device status, device lookup, managed device, device hostname, device online, device offline,
+  endpoint management, or device udf.
 ---
 
 # Datto RMM Device Management

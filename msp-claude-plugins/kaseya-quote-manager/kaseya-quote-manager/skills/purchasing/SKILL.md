@@ -1,17 +1,13 @@
 ---
 name: "Kaseya Quote Manager Purchasing"
-when_to_use: "When viewing or analyzing purchase orders, suppliers, or product-supplier pricing in Kaseya Quote Manager"
+when_to_use: >-
+  When viewing or analyzing purchase orders, suppliers, or product-supplier pricing in Kaseya
+  Quote Manager. Use when: kaseya quote manager purchasing, kqm purchase order, kqm supplier,
+  quote manager procurement, kqm product supplier, or kqm purchasing.
 description: >
   Use this skill when navigating Kaseya Quote Manager procurement data —
   purchase orders, their lines and costs, suppliers, and product-supplier
   relationships. The tool surface is read-only.
-triggers:
-  - kaseya quote manager purchasing
-  - kqm purchase order
-  - kqm supplier
-  - quote manager procurement
-  - kqm product supplier
-  - kqm purchasing
 ---
 
 # Kaseya Quote Manager — Purchasing

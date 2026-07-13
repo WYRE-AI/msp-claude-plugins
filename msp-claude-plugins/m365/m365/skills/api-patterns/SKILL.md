@@ -4,18 +4,11 @@ description: >
   Use this skill for Microsoft Graph API fundamentals - authentication patterns,
   OData query operators, pagination, throttling/retry, batch requests, and delta
   queries. Reference when constructing M365 API calls or debugging errors.
-when_to_use: "When working with Microsoft Graph API fundamentals - authentication patterns, OData query operators, pagination, throttling/retry, batch requests"
-triggers:
-  - microsoft graph api
-  - graph api patterns
-  - m365 api
-  - graph odata
-  - graph pagination
-  - graph throttling
-  - graph batch
-  - graph filter syntax
-  - m365 api error
-  - graph delta query
+when_to_use: >-
+  When working with Microsoft Graph API fundamentals - authentication patterns, OData query
+  operators, pagination, throttling/retry, batch requests. Use when: microsoft graph api, graph
+  api patterns, m365 api, graph odata, graph pagination, graph throttling, graph batch, graph
+  filter syntax, m365 api error, or graph delta query.
 ---
 
 # Microsoft Graph API Patterns

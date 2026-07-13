@@ -1,19 +1,15 @@
 ---
 name: "ImmyBot Software Deployment"
-when_to_use: "When deploying software to Windows endpoints via ImmyBot, configuring desired state, running maintenance sessions, or auditing per-computer compliance"
+when_to_use: >-
+  When deploying software to Windows endpoints via ImmyBot, configuring desired state, running
+  maintenance sessions, or auditing per-computer compliance. Use when: immybot deploy, immybot
+  install, immybot software, immybot maintenance, deploy software immybot, immybot compliance, or
+  desired state windows software.
 description: >
   Use this skill when configuring desired-state software deployments
   in ImmyBot — picking the software, scoping the deployment to a
   tenant or computer, kicking off a maintenance session to reconcile,
   and checking compliance afterwards.
-triggers:
-  - immybot deploy
-  - immybot install
-  - immybot software
-  - immybot maintenance
-  - deploy software immybot
-  - immybot compliance
-  - desired state windows software
 ---
 
 # ImmyBot Software Deployment

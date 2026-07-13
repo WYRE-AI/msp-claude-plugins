@@ -5,18 +5,11 @@ description: >
   tracking outstanding balances, payment allocation, overpayments,
   prepayments, and batch payment operations. Covers payment workflows
   for MSP client billing, vendor payments, and reconciliation.
-when_to_use: "When recording payments, tracking outstanding balances, payment allocation, overpayments, prepayments, and batch payment operations"
-triggers:
-  - xero payment
-  - xero pay
-  - payment tracking
-  - payment status
-  - outstanding balance
-  - overdue payment
-  - payment reconciliation
-  - record payment
-  - payment allocation
-  - accounts receivable
+when_to_use: >-
+  When recording payments, tracking outstanding balances, payment allocation, overpayments,
+  prepayments, and batch payment operations. Use when: xero payment, xero pay, payment tracking,
+  payment status, outstanding balance, overdue payment, payment reconciliation, record payment,
+  payment allocation, or accounts receivable.
 ---
 
 # Xero Payments Management

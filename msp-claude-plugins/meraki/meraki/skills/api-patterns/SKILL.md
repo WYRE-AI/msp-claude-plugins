@@ -6,18 +6,12 @@ description: >
   API v1 structure, Link-header cursor pagination, per-org rate
   limiting, the read-only / confirm_destructive_action safety model,
   the meraki_raw_request escape hatch, error handling, and best practices.
-when_to_use: "When working with available Meraki tools, gateway header authentication, Dashboard API v1 structure, Link-header pagination, rate limiting, the read-only safety model, raw request passthrough, and error handling"
-triggers:
-  - meraki api
-  - meraki authentication
-  - meraki pagination
-  - meraki rate limit
-  - meraki mcp
-  - meraki tools
-  - meraki raw request
-  - meraki error
-  - meraki read only
-  - dashboard api
+when_to_use: >-
+  When working with available Meraki tools, gateway header authentication, Dashboard API v1
+  structure, Link-header pagination, rate limiting, the read-only safety model, raw request
+  passthrough, and error handling. Use when: meraki api, meraki authentication, meraki pagination,
+  meraki rate limit, meraki mcp, meraki tools, meraki raw request, meraki error, meraki read only,
+  or dashboard api.
 ---
 
 # Meraki MCP Tools & API Patterns

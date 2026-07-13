@@ -5,18 +5,10 @@ description: >
   searching, or managing contact records. Covers contact types, communication items
   (email, phone), portal access, and relationships to companies. Essential for
   MSP customer relationship management in ConnectWise PSA.
-when_to_use: "When creating, updating, searching, or managing contact records"
-triggers:
-  - connectwise contact
-  - contact management
-  - create contact connectwise
-  - contact email
-  - contact phone
-  - customer portal
-  - portal access
-  - communication items
-  - contact type
-  - primary contact
+when_to_use: >-
+  When creating, updating, searching, or managing contact records. Use when: connectwise contact,
+  contact management, create contact connectwise, contact email, contact phone, customer portal,
+  portal access, communication items, contact type, or primary contact.
 ---
 
 # ConnectWise PSA Contact Management

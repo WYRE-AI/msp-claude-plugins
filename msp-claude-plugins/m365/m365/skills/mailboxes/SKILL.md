@@ -5,18 +5,11 @@ description: >
   searching messages, managing shared mailboxes, setting out-of-office replies,
   checking mailbox size, or diagnosing mail flow issues. Covers Exchange Online
   via Microsoft Graph for MSP technicians supporting customer email environments.
-when_to_use: "When reading email, searching messages, managing shared mailboxes, setting out-of-office replies, checking mailbox size, or diagnosing mail flow issues"
-triggers:
-  - m365 email
-  - m365 mailbox
-  - exchange online
-  - search email m365
-  - shared mailbox
-  - out of office m365
-  - mail flow issue
-  - email quota
-  - forward email m365
-  - inbox rules m365
+when_to_use: >-
+  When reading email, searching messages, managing shared mailboxes, setting out-of-office
+  replies, checking mailbox size, or diagnosing mail flow issues. Use when: m365 email, m365
+  mailbox, exchange online, search email m365, shared mailbox, out of office m365, mail flow
+  issue, email quota, forward email m365, or inbox rules m365.
 ---
 
 # Microsoft 365 Mailbox Management

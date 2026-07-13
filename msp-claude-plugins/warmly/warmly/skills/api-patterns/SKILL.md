@@ -6,20 +6,11 @@ description: >
   Streamable HTTP transport, credit usage, error handling, and best practices.
   Covers the official remote MCP server connection and all Warmly visitor
   intelligence tools.
-when_to_use: "When working with available tools, authentication, organization scoping, transport, credits, error handling, and best practices in the Warmly MCP tools"
-triggers:
-  - warmly api
-  - warmly mcp
-  - warmly oauth
-  - warmly authkit
-  - warmly authentication
-  - warmly request
-  - warmly tools
-  - warmly connection
-  - warmly organization
-  - warmly credits
-  - warmly rate limit
-  - warmly error
+when_to_use: >-
+  When working with available tools, authentication, organization scoping, transport, credits,
+  error handling, and best practices in the Warmly MCP tools. Use when: warmly api, warmly mcp,
+  warmly oauth, warmly authkit, warmly authentication, warmly request, warmly tools, warmly
+  connection, warmly organization, warmly credits, warmly rate limit, or warmly error.
 ---
 
 # Warmly MCP Tools & API Patterns

@@ -5,15 +5,10 @@ description: >
   site-level variables for storing configuration data. Covers variable
   CRUD operations, using variables in jobs/scripts, naming conventions,
   and variable management patterns.
-when_to_use: "When working with account-level and site-level variables for storing configuration data in Datto RMM variables"
-triggers:
-  - datto variable
-  - rmm variable
-  - account variable
-  - site variable
-  - script variable
-  - component variable
-  - configuration variable
+when_to_use: >-
+  When working with account-level and site-level variables for storing configuration data in Datto
+  RMM variables. Use when: datto variable, rmm variable, account variable, site variable, script
+  variable, component variable, or configuration variable.
 ---
 
 # Datto RMM Variables

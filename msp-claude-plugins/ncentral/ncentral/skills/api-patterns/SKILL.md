@@ -1,20 +1,15 @@
 ---
 name: "N-central API Patterns"
-when_to_use: "When working with N-central authentication, the Conduit connection, pagination, rate limits, or preview-endpoint availability for the N-central MCP server"
+when_to_use: >-
+  When working with N-central authentication, the Conduit connection, pagination, rate limits, or
+  preview-endpoint availability for the N-central MCP server. Use when: ncentral api, ncentral
+  authentication, ncentral jwt, ncentral pagination, ncentral mcp, ncentral token, n-able api, or
+  api-explorer.
 description: >
   Use this skill when working with the N-central MCP tools — User-API Token
   (JWT) authentication through Conduit, 1-based
   pagination with the totalItems/totalPages envelope, rate-limit behavior,
   preview-endpoint caveats, and on-prem server specifics.
-triggers:
-  - ncentral api
-  - ncentral authentication
-  - ncentral jwt
-  - ncentral pagination
-  - ncentral mcp
-  - ncentral token
-  - n-able api
-  - api-explorer
 ---
 
 # N-central MCP Tools & API Patterns

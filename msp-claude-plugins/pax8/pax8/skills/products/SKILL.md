@@ -6,19 +6,11 @@ description: >
   provisioning details, and finding the right SKU for a client need.
   Covers Microsoft 365, Azure, security tools, backup products, and
   the full Pax8 marketplace catalog.
-when_to_use: "When searching for cloud software, browsing vendors, checking pricing, reviewing provisioning details, and finding the right SKU for a client need"
-triggers:
-  - pax8 product
-  - pax8 catalog
-  - pax8 sku
-  - pax8 pricing
-  - pax8 vendor
-  - pax8 marketplace
-  - cloud product search
-  - microsoft 365 pax8
-  - azure pax8
-  - pax8 software
-  - license pricing
+when_to_use: >-
+  When searching for cloud software, browsing vendors, checking pricing, reviewing provisioning
+  details, and finding the right SKU for a client need. Use when: pax8 product, pax8 catalog, pax8
+  sku, pax8 pricing, pax8 vendor, pax8 marketplace, cloud product search, microsoft 365 pax8,
+  azure pax8, pax8 software, or license pricing.
 ---
 
 # Pax8 Product Catalog

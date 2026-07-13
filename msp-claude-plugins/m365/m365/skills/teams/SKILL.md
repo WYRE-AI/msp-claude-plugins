@@ -5,18 +5,11 @@ description: >
   managing team membership, finding meetings, checking Teams usage, or
   troubleshooting Teams access issues. Covers MSP support tasks for Teams-heavy
   customer environments.
-when_to_use: "When listing teams and channels, managing team membership, finding meetings, checking Teams usage, or troubleshooting Teams access issues"
-triggers:
-  - microsoft teams
-  - m365 teams
-  - teams channel
-  - teams membership
-  - teams meeting
-  - teams access
-  - teams troubleshoot
-  - list teams m365
-  - teams usage
-  - teams admin
+when_to_use: >-
+  When listing teams and channels, managing team membership, finding meetings, checking Teams
+  usage, or troubleshooting Teams access issues. Use when: microsoft teams, m365 teams, teams
+  channel, teams membership, teams meeting, teams access, teams troubleshoot, list teams m365,
+  teams usage, or teams admin.
 ---
 
 # Microsoft Teams Management

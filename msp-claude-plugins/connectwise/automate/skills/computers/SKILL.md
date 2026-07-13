@@ -5,21 +5,11 @@ description: >
   searching, managing, and monitoring devices. Covers computer identifiers (ComputerID,
   Name, MAC), computer statuses (online/offline), hardware/software inventory, patch
   status, antivirus status, and remote management operations.
-when_to_use: "When listing, searching, managing, and monitoring devices"
-triggers:
-  - automate computer
-  - automate endpoint
-  - automate device
-  - automate agent
-  - computer status
-  - computer lookup
-  - managed computer
-  - computer online
-  - computer offline
-  - computer inventory
-  - computer patches
-  - computer antivirus
-  - labtech computer
+when_to_use: >-
+  When listing, searching, managing, and monitoring devices. Use when: automate computer, automate
+  endpoint, automate device, automate agent, computer status, computer lookup, managed computer,
+  computer online, computer offline, computer inventory, computer patches, computer antivirus, or
+  labtech computer.
 ---
 
 # ConnectWise Automate Computer Management

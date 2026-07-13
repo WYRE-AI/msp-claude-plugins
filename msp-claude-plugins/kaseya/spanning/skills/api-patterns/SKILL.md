@@ -1,16 +1,13 @@
 ---
 name: "Spanning API Patterns"
-when_to_use: "When working with the Spanning Cloud Backup REST API — auth, user/license queries, backup status, restore operations, audit retrieval"
+when_to_use: >-
+  When working with the Spanning Cloud Backup REST API — auth, user/license queries, backup
+  status, restore operations, audit retrieval. Use when: spanning, spanning backup, spanning api,
+  saas backup spanning, or cloud backup.
 description: >
   Use this skill when integrating with Spanning Cloud Backup. Covers admin email + API
   token auth, the per-platform endpoint surface (M365, Google Workspace, Salesforce),
   user/license model, backup status queries, restore operations, and audit logs.
-triggers:
-  - spanning
-  - spanning backup
-  - spanning api
-  - saas backup spanning
-  - cloud backup
 ---
 
 # Spanning API Patterns

@@ -6,20 +6,11 @@ description: >
   status codes, linking tickets to service calls, and managing technician (resource)
   assignments on service call tickets.
   Essential for MSP technicians scheduling on-site visits and planned work.
-when_to_use: "When creating, scheduling, updating, or completing service calls linked to tickets"
-triggers:
-  - autotask service call
-  - service call
-  - schedule service call
-  - create service call
-  - complete service call
-  - close service call
-  - service call ticket
-  - service call resource
-  - assign technician service call
-  - schedule visit
-  - planned work autotask
-  - dispatch technician
+when_to_use: >-
+  When creating, scheduling, updating, or completing service calls linked to tickets. Use when:
+  autotask service call, service call, schedule service call, create service call, complete
+  service call, close service call, service call ticket, service call resource, assign technician
+  service call, schedule visit, planned work autotask, or dispatch technician.
 ---
 
 # Autotask Service Call Management

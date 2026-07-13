@@ -5,16 +5,10 @@ description: >
   and managing documentation. Covers document folders, embedded passwords,
   related items, version tracking, and documentation best practices for
   comprehensive client documentation management.
-when_to_use: "When creating, organizing, and managing documentation"
-triggers:
-  - it glue document
-  - documentation
-  - runbook
-  - procedure documentation
-  - it glue docs
-  - document management
-  - sop documentation
-  - knowledge base
+when_to_use: >-
+  When creating, organizing, and managing documentation. Use when: it glue document,
+  documentation, runbook, procedure documentation, it glue docs, document management, sop
+  documentation, or knowledge base.
 ---
 
 # IT Glue Documents Management

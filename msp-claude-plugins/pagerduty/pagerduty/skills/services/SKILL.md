@@ -4,15 +4,11 @@ description: >
   Use this skill when working with PagerDuty services -- service catalog,
   service configuration, integrations, dependencies, maintenance windows,
   and service health monitoring.
-when_to_use: "When working with service catalog, service configuration, integrations, dependencies, maintenance windows, and service health monitoring in PagerDuty services"
-triggers:
-  - pagerduty service
-  - service catalog
-  - service dependencies
-  - service integrations
-  - maintenance window
-  - service health
-  - service status
+when_to_use: >-
+  When working with service catalog, service configuration, integrations, dependencies,
+  maintenance windows, and service health monitoring in PagerDuty services. Use when: pagerduty
+  service, service catalog, service dependencies, service integrations, maintenance window,
+  service health, or service status.
 ---
 
 # PagerDuty Services

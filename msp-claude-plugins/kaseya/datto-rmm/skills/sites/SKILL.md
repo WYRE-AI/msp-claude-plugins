@@ -5,16 +5,9 @@ description: >
   and configuring client locations. Covers site structure, site settings,
   proxy configuration, site-level variables, device assignment, and
   site-scoped operations.
-when_to_use: "When listing, managing, and configuring client locations"
-triggers:
-  - datto site
-  - rmm site
-  - client site
-  - site management
-  - location management
-  - site settings
-  - site proxy
-  - site devices
+when_to_use: >-
+  When listing, managing, and configuring client locations. Use when: datto site, rmm site, client
+  site, site management, location management, site settings, site proxy, or site devices.
 ---
 
 # Datto RMM Site Management

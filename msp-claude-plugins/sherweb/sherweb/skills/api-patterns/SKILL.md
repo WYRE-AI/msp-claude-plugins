@@ -5,20 +5,12 @@ description: >
   OAuth 2.0 client credentials authentication, token management, API
   endpoints, subscription key header, rate limits, error codes, scopes,
   Accept-Language support, and best practices.
-when_to_use: "When working with OAuth 2.0 client credentials authentication, token management, API endpoints, subscription key header, rate limits, error codes, scopes, Accept-Language support"
-triggers:
-  - sherweb api
-  - sherweb authentication
-  - sherweb oauth
-  - sherweb token
-  - sherweb endpoint
-  - sherweb rate limit
-  - sherweb mcp
-  - sherweb request
-  - sherweb scope
-  - sherweb subscription key
-  - sherweb error
-  - sherweb connection
+when_to_use: >-
+  When working with OAuth 2.0 client credentials authentication, token management, API endpoints,
+  subscription key header, rate limits, error codes, scopes, Accept-Language support. Use when:
+  sherweb api, sherweb authentication, sherweb oauth, sherweb token, sherweb endpoint, sherweb
+  rate limit, sherweb mcp, sherweb request, sherweb scope, sherweb subscription key, sherweb
+  error, or sherweb connection.
 ---
 
 # Sherweb API Patterns & MCP Tools

@@ -7,17 +7,12 @@ description: >
   token management, request/response formats, and integration best practices.
   Essential for developers and MSP administrators integrating with the
   Abnormal Security API.
-when_to_use: "When working with bearer token authentication, base URLs, rate limiting, pagination, OData filtering, error handling, and common API patterns in the Abnormal Security REST API"
-triggers:
-  - abnormal api
-  - abnormal authentication
-  - abnormal rest api
-  - abnormal rate limit
-  - abnormal pagination
-  - abnormal api error
-  - abnormal api token
-  - abnormal odata filter
-  - abnormal security api
+when_to_use: >-
+  When working with bearer token authentication, base URLs, rate limiting, pagination, OData
+  filtering, error handling, and common API patterns in the Abnormal Security REST API. Use when:
+  abnormal api, abnormal authentication, abnormal rest api, abnormal rate limit, abnormal
+  pagination, abnormal api error, abnormal api token, abnormal odata filter, or abnormal security
+  api.
 ---
 
 # Abnormal Security REST API Patterns

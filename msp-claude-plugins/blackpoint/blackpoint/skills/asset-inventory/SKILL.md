@@ -1,19 +1,16 @@
 ---
 name: "Blackpoint Asset Inventory"
-when_to_use: "When enumerating, searching, or mapping assets for a Blackpoint Cyber / CompassOne tenant — endpoints, servers, network devices, cloud accounts, mobile, and IoT — and tracing relationships between them"
+when_to_use: >-
+  When enumerating, searching, or mapping assets for a Blackpoint Cyber / CompassOne tenant —
+  endpoints, servers, network devices, cloud accounts, mobile, and IoT — and tracing relationships
+  between them. Use when: blackpoint asset, blackpoint asset inventory, compassone asset,
+  blackpoint endpoints, blackpoint asset search, blackpoint asset relationships, or blackpoint
+  asset map.
 description: >
   Use this skill when working with Blackpoint Cyber (CompassOne)
   asset data — listing assets by class for a tenant, searching across
   classes, pulling asset detail, and walking parent/child/sibling
   relationships to build a blast-radius or topology view.
-triggers:
-  - blackpoint asset
-  - blackpoint asset inventory
-  - compassone asset
-  - blackpoint endpoints
-  - blackpoint asset search
-  - blackpoint asset relationships
-  - blackpoint asset map
 ---
 
 # Blackpoint Asset Inventory

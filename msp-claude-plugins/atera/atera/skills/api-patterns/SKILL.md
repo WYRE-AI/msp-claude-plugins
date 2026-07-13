@@ -5,16 +5,10 @@ description: >
   pagination, rate limiting, and error handling. Covers X-API-KEY header
   authentication, OData-style pagination, 700 requests/minute rate limits,
   and best practices for API integration.
-when_to_use: "When working with authentication, pagination, rate limiting, and error handling in the Atera REST API"
-triggers:
-  - atera api
-  - atera authentication
-  - api key atera
-  - atera pagination
-  - api rate limit
-  - atera rest api
-  - api error atera
-  - odata pagination
+when_to_use: >-
+  When working with authentication, pagination, rate limiting, and error handling in the Atera
+  REST API. Use when: atera api, atera authentication, api key atera, atera pagination, api rate
+  limit, atera rest api, api error atera, or odata pagination.
 ---
 
 # Atera API Patterns

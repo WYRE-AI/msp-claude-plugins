@@ -6,22 +6,13 @@ description: >
   token authentication, transport modes, dual API architecture (GraphQL
   and REST), rate limits, error handling, and best practices. Covers all
   23 Purple MCP tools organized by domain.
-when_to_use: "When working with available tools, connection setup, uvx-based installation, Service User token authentication, transport modes, dual API architecture (GraphQL and REST)"
-triggers:
-  - sentinelone api
-  - sentinelone query
-  - sentinelone filter
-  - sentinelone pagination
-  - sentinelone rate limit
-  - sentinelone authentication
-  - sentinelone mcp
-  - sentinelone endpoint
-  - sentinelone request
-  - sentinelone token
-  - sentinelone tools
-  - purple mcp
-  - sentinelone connection
-  - sentinelone service user
+when_to_use: >-
+  When working with available tools, connection setup, uvx-based installation, Service User token
+  authentication, transport modes, dual API architecture (GraphQL and REST). Use when: sentinelone
+  api, sentinelone query, sentinelone filter, sentinelone pagination, sentinelone rate limit,
+  sentinelone authentication, sentinelone mcp, sentinelone endpoint, sentinelone request,
+  sentinelone token, sentinelone tools, purple mcp, sentinelone connection, or sentinelone service
+  user.
 ---
 
 # SentinelOne Purple MCP Tools & API Patterns

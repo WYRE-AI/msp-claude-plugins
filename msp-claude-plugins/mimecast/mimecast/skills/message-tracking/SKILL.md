@@ -4,18 +4,12 @@ description: >
   Use this skill when tracking or tracing Mimecast email messages —
   searching by sender/recipient/subject, retrieving message metadata,
   placing messages on hold, or releasing held messages.
-when_to_use: "When tracking or tracing Mimecast email messages — searching by sender/recipient/subject, retrieving message metadata, placing messages on hold, or releasing held messages"
-triggers:
-  - mimecast message trace
-  - mimecast track email
-  - find message
-  - trace email mimecast
-  - mimecast hold
-  - mimecast release
-  - mimecast message search
-  - mimecast delivery
-  - mimecast rejected
-  - mimecast bounced
+when_to_use: >-
+  When tracking or tracing Mimecast email messages — searching by sender/recipient/subject,
+  retrieving message metadata, placing messages on hold, or releasing held messages. Use when:
+  mimecast message trace, mimecast track email, find message, trace email mimecast, mimecast hold,
+  mimecast release, mimecast message search, mimecast delivery, mimecast rejected, or mimecast
+  bounced.
 ---
 
 # Mimecast Message Tracking

@@ -4,15 +4,9 @@ description: >
   Use this skill when working with Auvik alerts - severity tiers,
   status lifecycle, dismissal semantics, and the common alertName
   patterns that show up in MSP NOC queues.
-when_to_use: "When listing, triaging, dismissing, or investigating Auvik alerts"
-triggers:
-  - auvik alert
-  - auvik triage
-  - auvik dismiss
-  - auvik severity
-  - auvik noc
-  - auvik down
-  - auvik flap
+when_to_use: >-
+  When listing, triaging, dismissing, or investigating Auvik alerts. Use when: auvik alert, auvik
+  triage, auvik dismiss, auvik severity, auvik noc, auvik down, or auvik flap.
 ---
 
 # Auvik Alerts

@@ -5,18 +5,11 @@ description: >
   account codes, creating accounts, understanding account types and classes,
   tax settings, and mapping MSP revenue and expense categories to the
   general ledger.
-when_to_use: "When navigating account codes, creating accounts, understanding account types and classes, tax settings, and mapping MSP revenue and expense categories to the general ledger"
-triggers:
-  - xero account
-  - xero chart of accounts
-  - xero gl
-  - xero general ledger
-  - account code
-  - xero coa
-  - xero account type
-  - xero bank account
-  - xero revenue account
-  - xero expense account
+when_to_use: >-
+  When navigating account codes, creating accounts, understanding account types and classes, tax
+  settings, and mapping MSP revenue and expense categories to the general ledger. Use when: xero
+  account, xero chart of accounts, xero gl, xero general ledger, account code, xero coa, xero
+  account type, xero bank account, xero revenue account, or xero expense account.
 ---
 
 # Xero Chart of Accounts

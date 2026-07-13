@@ -5,18 +5,10 @@ description: >
   executing, passing parameters, and retrieving results. Covers script types
   (PowerShell, batch, VBScript), script folders, script execution on computers,
   parameter handling, execution history, and result retrieval.
-when_to_use: "When listing, executing, passing parameters, and retrieving results"
-triggers:
-  - automate script
-  - automate powershell
-  - automate execute
-  - run script
-  - script execution
-  - script parameters
-  - script results
-  - script history
-  - labtech script
-  - automate automation
+when_to_use: >-
+  When listing, executing, passing parameters, and retrieving results. Use when: automate script,
+  automate powershell, automate execute, run script, script execution, script parameters, script
+  results, script history, labtech script, or automate automation.
 ---
 
 # ConnectWise Automate Script Management

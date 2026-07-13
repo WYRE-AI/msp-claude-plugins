@@ -7,21 +7,11 @@ description: >
   Covers report parameters, date ranges, column customization, and
   MSP-specific financial analysis patterns like client profitability
   and aged receivables for collections.
-when_to_use: "When generating Profit & Loss, Balance Sheet, Accounts Receivable Aging, Accounts Payable Aging, General Ledger, and other financial reports"
-triggers:
-  - quickbooks report
-  - qbo report
-  - profit and loss
-  - balance sheet
-  - accounts receivable aging
-  - accounts payable aging
-  - general ledger
-  - financial report
-  - p&l report
-  - ar aging
-  - ap aging
-  - aged receivables
-  - client profitability
+when_to_use: >-
+  When generating Profit & Loss, Balance Sheet, Accounts Receivable Aging, Accounts Payable Aging,
+  General Ledger, and other financial reports. Use when: quickbooks report, qbo report, profit and
+  loss, balance sheet, accounts receivable aging, accounts payable aging, general ledger,
+  financial report, p&l report, ar aging, ap aging, aged receivables, or client profitability.
 ---
 
 # QuickBooks Online Reports

@@ -6,18 +6,11 @@ description: >
   distributor > service provider > customer hierarchy. Covers customer
   lifecycle, customer fields, and cross-referencing with subscriptions
   and billing data.
-when_to_use: "When listing customers, retrieving customer details, accounts receivable, and understanding the distributor > service provider > customer hierarchy"
-triggers:
-  - sherweb customer
-  - sherweb client
-  - sherweb organization
-  - sherweb account
-  - sherweb customer list
-  - sherweb customer details
-  - sherweb accounts receivable
-  - sherweb hierarchy
-  - sherweb service provider
-  - sherweb distributor
+when_to_use: >-
+  When listing customers, retrieving customer details, accounts receivable, and understanding the
+  distributor > service provider > customer hierarchy. Use when: sherweb customer, sherweb client,
+  sherweb organization, sherweb account, sherweb customer list, sherweb customer details, sherweb
+  accounts receivable, sherweb hierarchy, sherweb service provider, or sherweb distributor.
 ---
 
 # Sherweb Customer Management

@@ -5,18 +5,11 @@ description: >
   SharePoint document libraries, file sharing permissions, storage quotas, or
   searching across a user's files. Covers OneDrive and SharePoint via Microsoft
   Graph for MSP technicians handling file access issues.
-when_to_use: "When working with oneDrive personal storage, SharePoint document libraries, file sharing permissions, storage quotas, or searching across a user's files in Microsoft 365 files"
-triggers:
-  - onedrive
-  - m365 files
-  - sharepoint files
-  - onedrive quota
-  - file sharing m365
-  - onedrive permissions
-  - m365 storage
-  - find file m365
-  - onedrive access
-  - sharepoint document library
+when_to_use: >-
+  When working with oneDrive personal storage, SharePoint document libraries, file sharing
+  permissions, storage quotas, or searching across a user's files in Microsoft 365 files. Use
+  when: onedrive, m365 files, sharepoint files, onedrive quota, file sharing m365, onedrive
+  permissions, m365 storage, find file m365, onedrive access, or sharepoint document library.
 ---
 
 # Microsoft 365 Files (OneDrive & SharePoint)

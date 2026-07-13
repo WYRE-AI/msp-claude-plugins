@@ -5,19 +5,11 @@ description: >
   logging notes, managing associations between CRM objects, and tracking
   engagement history. Covers task creation, note logging, association
   types, and linking contacts, companies, deals, and tickets together.
-when_to_use: "When creating tasks, logging notes, managing associations between CRM objects, and tracking engagement history"
-triggers:
-  - hubspot task
-  - hubspot note
-  - hubspot activity
-  - hubspot association
-  - hubspot engagement
-  - hubspot log
-  - hubspot follow-up
-  - hubspot link objects
-  - hubspot relationship
-  - activity management hubspot
-  - task creation hubspot
+when_to_use: >-
+  When creating tasks, logging notes, managing associations between CRM objects, and tracking
+  engagement history. Use when: hubspot task, hubspot note, hubspot activity, hubspot association,
+  hubspot engagement, hubspot log, hubspot follow-up, hubspot link objects, hubspot relationship,
+  activity management hubspot, or task creation hubspot.
 ---
 
 # HubSpot Activities & Associations

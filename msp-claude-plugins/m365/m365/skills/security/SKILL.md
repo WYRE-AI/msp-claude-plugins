@@ -5,19 +5,11 @@ description: >
   status, conditional access policies, risky sign-ins, suspicious inbox rules,
   compromised account indicators, and security audit tasks. Critical for MSPs
   performing security reviews or investigating suspected account compromises.
-when_to_use: "When working with Microsoft 365 security posture checks - MFA enrollment status, conditional access policies, risky sign-ins, suspicious inbox rules"
-triggers:
-  - m365 security
-  - m365 mfa
-  - mfa enrollment
-  - conditional access
-  - risky sign-in
-  - account compromise m365
-  - m365 security audit
-  - suspicious activity m365
-  - m365 security score
-  - entra security
-  - m365 sign-in logs
+when_to_use: >-
+  When working with Microsoft 365 security posture checks - MFA enrollment status, conditional
+  access policies, risky sign-ins, suspicious inbox rules. Use when: m365 security, m365 mfa, mfa
+  enrollment, conditional access, risky sign-in, account compromise m365, m365 security audit,
+  suspicious activity m365, m365 security score, entra security, or m365 sign-in logs.
 ---
 
 # Microsoft 365 Security Posture

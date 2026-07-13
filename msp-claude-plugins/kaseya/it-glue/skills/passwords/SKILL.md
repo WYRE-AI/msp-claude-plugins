@@ -5,16 +5,11 @@ description: >
   password categories, folders, embedded passwords, and access patterns. Covers
   security best practices, audit logging, password retrieval, and proper handling
   of sensitive credentials in documentation.
-when_to_use: "When working with secure credential storage, password categories, folders, embedded passwords, and access patterns in IT Glue passwords"
-triggers:
-  - it glue password
-  - credential lookup
-  - password management
-  - secure credentials
-  - it glue credentials
-  - password storage
-  - credential documentation
-  - password access
+when_to_use: >-
+  When working with secure credential storage, password categories, folders, embedded passwords,
+  and access patterns in IT Glue passwords. Use when: it glue password, credential lookup,
+  password management, secure credentials, it glue credentials, password storage, credential
+  documentation, or password access.
 ---
 
 # IT Glue Passwords Management

@@ -5,18 +5,11 @@ description: >
   recurring billing, prepaid hours, and contract renewals. Covers contract types,
   billing periods, recurring items, SLA associations, and financial workflows.
   Essential for MSP account managers handling service agreements in HaloPSA.
-when_to_use: "When managing service agreements, recurring billing, prepaid hours, and contract renewals"
-triggers:
-  - halopsa contract
-  - halo contract
-  - service agreement halopsa
-  - recurring billing halopsa
-  - prepaid hours halo
-  - contract renewal halopsa
-  - halopsa billing
-  - managed services agreement halo
-  - halopsa msa
-  - contract management halo
+when_to_use: >-
+  When managing service agreements, recurring billing, prepaid hours, and contract renewals. Use
+  when: halopsa contract, halo contract, service agreement halopsa, recurring billing halopsa,
+  prepaid hours halo, contract renewal halopsa, halopsa billing, managed services agreement halo,
+  halopsa msa, or contract management halo.
 ---
 
 # HaloPSA Contract Management

@@ -5,16 +5,11 @@ description: >
   base URL selection, pagination, rate limiting, error handling, and account hierarchy.
   Covers regional endpoints, query parameter patterns, and best practices for SOC
   API integration.
-when_to_use: "When working with authentication, Bearer token flow, base URL selection, pagination, rate limiting, error handling, and account hierarchy in the RocketCyber API"
-triggers:
-  - rocketcyber api
-  - rocketcyber authentication
-  - rocketcyber query
-  - rocketcyber pagination
-  - rocketcyber rate limit
-  - rocketcyber token
-  - rocketcyber base url
-  - soc api
+when_to_use: >-
+  When working with authentication, Bearer token flow, base URL selection, pagination, rate
+  limiting, error handling, and account hierarchy in the RocketCyber API. Use when: rocketcyber
+  api, rocketcyber authentication, rocketcyber query, rocketcyber pagination, rocketcyber rate
+  limit, rocketcyber token, rocketcyber base url, or soc api.
 ---
 
 # RocketCyber API Patterns

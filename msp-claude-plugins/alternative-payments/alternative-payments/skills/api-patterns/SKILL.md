@@ -6,17 +6,12 @@ description: >
   rate limiting (5 req/sec), error handling, and the read + safe-write
   capability posture. Covers token minting, bearer auth, idempotency, and
   the deliberate exclusion of direct payment creation.
-when_to_use: "When working with authentication, pagination, rate limiting, error handling, or endpoint structure in the Alternative Payments API"
-triggers:
-  - alternative payments api
-  - alternativepayments
-  - alternative payments auth
-  - alternative payments oauth
-  - alternative payments token
-  - alternative payments rate limit
-  - alternative payments pagination
-  - alternative payments webhook
-  - alternative payments endpoint
+when_to_use: >-
+  When working with authentication, pagination, rate limiting, error handling, or endpoint
+  structure in the Alternative Payments API. Use when: alternative payments api,
+  alternativepayments, alternative payments auth, alternative payments oauth, alternative payments
+  token, alternative payments rate limit, alternative payments pagination, alternative payments
+  webhook, or alternative payments endpoint.
 ---
 
 # Alternative Payments API Patterns

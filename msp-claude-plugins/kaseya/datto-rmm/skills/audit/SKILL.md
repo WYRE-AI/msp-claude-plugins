@@ -5,17 +5,11 @@ description: >
   software inventory, network interfaces, and system information. Covers
   device audit retrieval, ESXi host audits, printer audits, and audit
   data freshness tracking.
-when_to_use: "When working with hardware inventory, software inventory, network interfaces, and system information in Datto RMM audit data"
-triggers:
-  - datto audit
-  - device audit
-  - software inventory
-  - hardware inventory
-  - system audit
-  - device inventory
-  - installed software
-  - hardware specs
-  - network audit
+when_to_use: >-
+  When working with hardware inventory, software inventory, network interfaces, and system
+  information in Datto RMM audit data. Use when: datto audit, device audit, software inventory,
+  hardware inventory, system audit, device inventory, installed software, hardware specs, or
+  network audit.
 ---
 
 # Datto RMM Audit Data

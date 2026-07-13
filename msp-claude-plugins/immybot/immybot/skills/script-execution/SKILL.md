@@ -1,6 +1,9 @@
 ---
 name: "ImmyBot Script Execution"
-when_to_use: "When browsing, validating, or running ImmyBot PowerShell scripts on endpoints, or reviewing script execution history and results"
+when_to_use: >-
+  When browsing, validating, or running ImmyBot PowerShell scripts on endpoints, or reviewing
+  script execution history and results. Use when: immybot script, immybot powershell, run script
+  immybot, immybot script execution, immybot script history, or immybot remediation script.
 description: >
   Use this skill when working with ImmyBot's PowerShell script
   library — searching scripts by name or category, validating script
@@ -8,13 +11,6 @@ description: >
   and reviewing execution history and results. Script execution is a
   destructive, highly privileged operation that requires explicit
   confirmation.
-triggers:
-  - immybot script
-  - immybot powershell
-  - run script immybot
-  - immybot script execution
-  - immybot script history
-  - immybot remediation script
 ---
 
 # ImmyBot Script Execution

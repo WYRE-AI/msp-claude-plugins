@@ -7,20 +7,12 @@ description: >
   results. Covers the powerquery, get_timestamp_range, and
   iso_to_unix_timestamp tools, query syntax reference, common hunting
   scenarios, and integration with Purple AI for query generation.
-when_to_use: "When executing threat hunting queries, understanding PowerQuery pipeline syntax, managing time ranges, and analyzing query results"
-triggers:
-  - sentinelone powerquery
-  - sentinelone data lake
-  - sentinelone query
-  - sentinelone hunt
-  - threat hunting
-  - powerquery
-  - singularity data lake
-  - sentinelone forensic
-  - sentinelone telemetry
-  - sentinelone search
-  - sentinelone log
-  - scalyr query
+when_to_use: >-
+  When executing threat hunting queries, understanding PowerQuery pipeline syntax, managing time
+  ranges, and analyzing query results. Use when: sentinelone powerquery, sentinelone data lake,
+  sentinelone query, sentinelone hunt, threat hunting, powerquery, singularity data lake,
+  sentinelone forensic, sentinelone telemetry, sentinelone search, sentinelone log, or scalyr
+  query.
 ---
 
 # SentinelOne PowerQuery / Singularity Data Lake
