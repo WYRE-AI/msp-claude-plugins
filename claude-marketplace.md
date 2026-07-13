@@ -8,7 +8,7 @@ The marketplace manifest lives at `.claude-plugin/marketplace.json` in your repo
 
 ```json
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "my-marketplace",
   "description": "Custom tools for development teams",
   "version": "1.0.0",
@@ -186,7 +186,7 @@ Anthropic provides comprehensive documentation at **code.claude.com/docs**:
 - **Plugins Reference**: https://code.claude.com/docs/en/plugins-reference
 - **Discovery guide**: https://code.claude.com/docs/en/discover-plugins
 
-The official blog announcement from October 2025 (claude.com/blog/claude-code-plugins) introduced the system. A JSON schema URL is referenced in official manifests (`https://anthropic.com/claude-code/marketplace.schema.json`) but currently returns 404—it appears to be a placeholder for future validation tooling.
+The official blog announcement from October 2025 (claude.com/blog/claude-code-plugins) introduced the system. For editor validation, point `$schema` at the real SchemaStore entry: `https://www.schemastore.org/claude-code-marketplace.json` (SchemaStore also publishes a companion plugin.json schema). The older `https://anthropic.com/claude-code/marketplace.schema.json` URL seen in some manifests returns 404 and should not be used.
 
 ## Development and testing workflow
 

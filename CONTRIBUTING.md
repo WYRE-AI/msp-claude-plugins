@@ -166,13 +166,14 @@ vendor/product/skills/skill-name/SKILL.md
 
 ```markdown
 ---
+name: "[Vendor] [Topic]"
+when_to_use: >-
+  When [specific action or scenario]. Use when: trigger phrase 1,
+  trigger phrase 2, or trigger phrase 3.
 description: >
   Use this skill when [specific trigger conditions].
-  [Additional context about what this skill covers].
-triggers:
-  - trigger phrase 1
-  - trigger phrase 2
-  - trigger phrase 3
+  [Additional context about what this skill covers]. Fold trigger
+  phrases into this field or when_to_use - do NOT add a triggers: list.
 ---
 
 # Skill Title
@@ -213,7 +214,7 @@ Study the Autotask tickets skill as a reference:
 
 **Key elements to note:**
 
-1. **Frontmatter Triggers** - Multiple relevant keywords
+1. **Frontmatter trigger phrases** - Multiple relevant keywords folded into `when_to_use`/`description`
 2. **Status Code Tables** - Clear reference data
 3. **Business Logic Code** - Practical validation examples
 4. **API Examples** - Real request/response patterns
@@ -222,7 +223,7 @@ Study the Autotask tickets skill as a reference:
 
 Before submitting a skill, verify:
 
-- [ ] Frontmatter has accurate, comprehensive triggers
+- [ ] Frontmatter `when_to_use`/`description` carry accurate, comprehensive trigger phrases (no `triggers:` list)
 - [ ] Overview explains the domain clearly
 - [ ] All relevant fields are documented with types
 - [ ] Status codes/enums have complete tables
@@ -248,20 +249,19 @@ vendor/product/commands/command-name.md
 
 ```markdown
 ---
-name: command-name
 description: Brief description of what this command does
-arguments:
-  - name: required-arg
-    description: Description of this argument
-    required: true
-  - name: optional-arg
-    description: Description of optional argument
-    required: false
+argument-hint: "<required-arg> [optional-arg]"
+arguments: [required-arg, optional-arg]
 ---
 
 # Command Title
 
 Brief description of the command's purpose.
+
+## Arguments
+
+- `required-arg` (required) — Description of this argument
+- `optional-arg` (optional; default: `10`) — Description of optional argument
 
 ## Prerequisites
 - List of requirements before using this command
@@ -272,13 +272,6 @@ Brief description of the command's purpose.
 1. **Step title** - Description
    - Sub-step details
    - API calls made
-
-## Parameters
-
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| arg1 | string | Yes | - | Description |
-| arg2 | int | No | 10 | Description |
 
 ## Examples
 
@@ -466,7 +459,7 @@ If creating a new MCP server:
 
 | Test | Description | Required |
 |------|-------------|----------|
-| Skill Triggers | Verify triggers activate the skill | Yes |
+| Skill Activation | Verify the `when_to_use`/`description` phrasing activates the skill | Yes |
 | API Examples | Validate against actual API docs | Yes |
 | Command Arguments | Test all argument combinations | Yes |
 | Error Cases | Verify error messages are helpful | Yes |

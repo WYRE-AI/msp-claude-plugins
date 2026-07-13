@@ -30,11 +30,13 @@ Generate a complete SKILL.md file that:
 
 ```markdown
 ---
+name: "[Vendor] [Topic]"
+when_to_use: >-
+  When [specific action or scenario]. Use when: [keyword 1], [keyword 2],
+  or [keyword 3].
 description: >
-  Use this skill when [trigger conditions]
-triggers:
-  - keyword 1
-  - keyword 2
+  Use this skill when [trigger conditions]. Include the keyword phrases
+  users are likely to say - do NOT add a separate triggers: list.
 ---
 
 # [Skill Title]

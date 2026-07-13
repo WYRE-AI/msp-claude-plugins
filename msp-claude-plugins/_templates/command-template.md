@@ -1,14 +1,7 @@
 ---
-name: command-name
 description: Brief description of what this command does
-arguments:
-  - name: argument1
-    description: Description of the first argument
-    required: true
-  - name: argument2
-    description: Description of the second argument
-    required: false
-    default: "default value"
+argument-hint: "<argument1> [argument2]"
+arguments: [argument1, argument2]
 ---
 
 # [Command Title]
@@ -25,12 +18,14 @@ arguments:
 3. Third step
 4. Return result to user
 
-## Parameters
+## Arguments
 
-| Parameter | Type | Required | Description |
-|-----------|------|----------|-------------|
-| argument1 | string | Yes | Description |
-| argument2 | string | No | Description |
+- `argument1` (required) — Description of the first argument
+- `argument2` (optional; default: `default value`) — Description of the second argument
+
+Frontmatter note: declare arguments as a plain name list (`arguments: [argument1, argument2]`)
+plus an `argument-hint` string using `<name>` for required and `[name]` for optional
+arguments. Per-argument descriptions live here in the body, not in frontmatter.
 
 ## Examples
 
