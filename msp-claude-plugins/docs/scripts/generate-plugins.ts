@@ -138,8 +138,8 @@ function extractFrontmatterField(content: string, field: string): string {
   const fmMatch = content.match(/^---\s*\n([\s\S]*?)\n---/);
   const frontmatter = fmMatch ? fmMatch[1] : content;
 
-  // Multi-line block scalar (field: > or field: |) — check first
-  const blockRegex = new RegExp(`^${field}:\\s*[>|]\\s*\\n((?:[ \\t]+.+\\n?)+)`, 'm');
+  // Multi-line block scalar (field: >, >-, >+, |, |-, |+) — check first
+  const blockRegex = new RegExp(`^${field}:\\s*[>|][+-]?\\s*\\n((?:[ \\t]+.+\\n?)+)`, 'm');
   const blockMatch = frontmatter.match(blockRegex);
   if (blockMatch) {
     return blockMatch[1]
@@ -149,8 +149,8 @@ function extractFrontmatterField(content: string, field: string): string {
       .join(' ');
   }
 
-  // Single-line: "field: value" (but not "field: >" or "field: |")
-  const singleLineRegex = new RegExp(`^${field}:\\s*(?![>|]\\s*$)(.+)$`, 'm');
+  // Single-line: "field: value" (but not a block scalar header like ">", ">-", "|")
+  const singleLineRegex = new RegExp(`^${field}:\\s*(?![>|][+-]?\\s*$)(.+)$`, 'm');
   const singleMatch = frontmatter.match(singleLineRegex);
   if (singleMatch) {
     return singleMatch[1].trim().replace(/^['"]|['"]$/g, '');

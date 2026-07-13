@@ -1,6 +1,6 @@
 {
   "name": "inforcer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Inforcer - read-only Microsoft 365 security baseline governance for MSPs: tenants, baselines, alignment/drift, secure scores, identity inventory, audit events, and assessments",
   "author": {
     "name": "WYRE Technology"

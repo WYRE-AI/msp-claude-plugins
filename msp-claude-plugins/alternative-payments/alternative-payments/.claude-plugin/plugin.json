@@ -1,6 +1,6 @@
 {
   "name": "alternative-payments",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugins for Alternative Payments - customers, invoices, payment requests, transactions, payouts, and webhooks",
   "author": {
     "name": "WYRE Technology"

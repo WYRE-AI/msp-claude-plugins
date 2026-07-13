@@ -1,6 +1,6 @@
 {
   "name": "datto-saas-protection",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Claude plugins for Datto SaaS Protection (Backupify) - M365 / Google Workspace backup status, restore, seat management",
   "author": {
     "name": "MSP Claude Plugins Community"
