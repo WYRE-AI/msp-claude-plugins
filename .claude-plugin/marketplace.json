@@ -1,17 +1,17 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.13.0",
+  "version": "1.14.0",
   "owner": {
-    "name": "Aaron Sachs"
+    "name": "WYRE Technology",
+    "email": "aaron@sachshaus.net"
   },
   "plugins": [
     {
       "name": "abnormal-security",
       "source": "./msp-claude-plugins/abnormal/abnormal-security",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
-      "version": "0.2.1",
       "category": "email-security",
       "tags": [
         "abnormal",
@@ -24,7 +24,6 @@
       "name": "atera",
       "source": "./msp-claude-plugins/atera/atera",
       "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
-      "version": "0.2.1",
       "category": "psa-rmm",
       "tags": [
         "atera",
@@ -38,7 +37,6 @@
       "name": "auvik",
       "source": "./msp-claude-plugins/auvik/auvik",
       "description": "Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants",
-      "version": "0.1.0",
       "category": "network",
       "tags": [
         "auvik",
@@ -52,7 +50,6 @@
       "name": "autotask",
       "source": "./msp-claude-plugins/kaseya/autotask",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
-      "version": "0.4.1",
       "category": "psa",
       "tags": [
         "kaseya",
@@ -66,7 +63,6 @@
       "name": "kaseya-quote-manager",
       "source": "./msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager",
       "description": "Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org",
-      "version": "1.0.0",
       "category": "sales",
       "tags": [
         "kaseya",
@@ -81,7 +77,6 @@
       "name": "betterstack",
       "source": "./msp-claude-plugins/betterstack/betterstack",
       "description": "Better Stack - uptime monitoring, logging, incident management",
-      "version": "0.2.1",
       "category": "monitoring",
       "tags": [
         "betterstack",
@@ -95,7 +90,6 @@
       "name": "blumira",
       "source": "./msp-claude-plugins/blumira/blumira",
       "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
-      "version": "0.2.1",
       "category": "security",
       "tags": [
         "blumira",
@@ -109,7 +103,6 @@
       "name": "checkpoint-avanan",
       "source": "./msp-claude-plugins/email-security/checkpoint-avanan",
       "description": "Checkpoint Harmony Email & Collaboration (Avanan) - quarantine, threats, policies, incidents, Smart Banners",
-      "version": "0.2.1",
       "category": "email-security",
       "tags": [
         "checkpoint",
@@ -123,9 +116,8 @@
       "name": "cipp",
       "source": "./msp-claude-plugins/cipp/cipp",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
-      "version": "0.1.0",
       "category": "security",
-      "mcpRepo": "https://github.com/wyre-technology/cipp-mcp",
+      "repository": "https://github.com/wyre-technology/cipp-mcp",
       "tags": [
         "cipp",
         "m365",
@@ -139,9 +131,8 @@
       "name": "freshdesk",
       "source": "./msp-claude-plugins/freshdesk/freshdesk",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
-      "version": "1.0.0",
       "category": "psa",
-      "mcpRepo": "https://github.com/wyre-technology/freshdesk-mcp",
+      "repository": "https://github.com/wyre-technology/freshdesk-mcp",
       "tags": [
         "freshdesk",
         "helpdesk",
@@ -154,9 +145,8 @@
       "name": "inforcer",
       "source": "./msp-claude-plugins/inforcer/inforcer",
       "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
-      "version": "1.0.0",
       "category": "security",
-      "mcpRepo": "https://github.com/wyre-technology/inforcer-mcp",
+      "repository": "https://github.com/wyre-technology/inforcer-mcp",
       "tags": [
         "inforcer",
         "m365",
@@ -169,7 +159,6 @@
       "name": "connectwise-automate",
       "source": "./msp-claude-plugins/connectwise/automate",
       "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
-      "version": "1.1.1",
       "category": "rmm",
       "tags": [
         "connectwise",
@@ -182,7 +171,6 @@
       "name": "connectwise-psa",
       "source": "./msp-claude-plugins/connectwise/manage",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
-      "version": "0.2.1",
       "category": "psa",
       "tags": [
         "connectwise",
@@ -195,7 +183,6 @@
       "name": "datto-rmm",
       "source": "./msp-claude-plugins/kaseya/datto-rmm",
       "description": "Datto RMM - devices, alerts, jobs, patches, monitoring",
-      "version": "1.1.1",
       "category": "rmm",
       "tags": [
         "kaseya",
@@ -209,7 +196,6 @@
       "name": "domotz",
       "source": "./msp-claude-plugins/domotz/domotz",
       "description": "Domotz - network monitoring, SNMP discovery, device management",
-      "version": "0.2.1",
       "category": "network",
       "tags": [
         "domotz",
@@ -223,7 +209,6 @@
       "name": "halopsa",
       "source": "./msp-claude-plugins/halopsa/halopsa",
       "description": "HaloPSA - tickets, clients, assets, contracts (OAuth 2.0)",
-      "version": "0.2.1",
       "category": "psa",
       "tags": [
         "halopsa",
@@ -237,7 +222,6 @@
       "name": "hudu",
       "source": "./msp-claude-plugins/hudu/hudu",
       "description": "Hudu IT documentation - companies, assets, articles, passwords, websites",
-      "version": "0.2.1",
       "category": "documentation",
       "tags": [
         "hudu",
@@ -251,7 +235,6 @@
       "name": "huntress",
       "source": "./msp-claude-plugins/huntress/huntress",
       "description": "Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports",
-      "version": "0.2.1",
       "category": "security",
       "tags": [
         "huntress",
@@ -265,7 +248,6 @@
       "name": "it-glue",
       "source": "./msp-claude-plugins/kaseya/it-glue",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
-      "version": "1.1.1",
       "category": "documentation",
       "tags": [
         "kaseya",
@@ -279,7 +261,6 @@
       "name": "knowbe4",
       "source": "./msp-claude-plugins/email-security/knowbe4",
       "description": "KnowBe4 - phishing simulation, security awareness training, user risk management",
-      "version": "0.2.1",
       "category": "email-security",
       "tags": [
         "knowbe4",
@@ -293,7 +274,6 @@
       "name": "liongard",
       "source": "./msp-claude-plugins/liongard/liongard",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
-      "version": "0.2.1",
       "category": "rmm",
       "tags": [
         "liongard",
@@ -307,7 +287,6 @@
       "name": "m365",
       "source": "./msp-claude-plugins/m365/m365",
       "description": "Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
-      "version": "0.2.1",
       "category": "productivity",
       "tags": [
         "microsoft",
@@ -321,7 +300,6 @@
       "name": "ninjaone-rmm",
       "source": "./msp-claude-plugins/ninjaone/ninjaone-rmm",
       "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
-      "version": "0.2.1",
       "category": "rmm",
       "tags": [
         "ninjaone",
@@ -335,7 +313,6 @@
       "name": "pagerduty",
       "source": "./msp-claude-plugins/pagerduty/pagerduty",
       "description": "PagerDuty - incident management, on-call scheduling, alerting",
-      "version": "0.2.1",
       "category": "incident-management",
       "tags": [
         "pagerduty",
@@ -349,7 +326,6 @@
       "name": "pandadoc",
       "source": "./msp-claude-plugins/pandadoc/pandadoc",
       "description": "PandaDoc - documents, templates, e-signatures, and proposal management",
-      "version": "0.2.1",
       "category": "sales",
       "tags": [
         "pandadoc",
@@ -363,7 +339,6 @@
       "name": "warmly",
       "source": "./msp-claude-plugins/warmly/warmly",
       "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
-      "version": "0.1.0",
       "category": "sales",
       "tags": [
         "warmly",
@@ -377,7 +352,6 @@
       "name": "pax8",
       "source": "./msp-claude-plugins/pax8/pax8",
       "description": "Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
-      "version": "0.2.1",
       "category": "marketplace",
       "tags": [
         "pax8",
@@ -391,7 +365,6 @@
       "name": "proofpoint",
       "source": "./msp-claude-plugins/email-security/proofpoint",
       "description": "Proofpoint Email Protection - TAP, quarantine, threat intel, forensics, URL defense, VAP reports",
-      "version": "0.2.1",
       "category": "email-security",
       "tags": [
         "proofpoint",
@@ -405,7 +378,6 @@
       "name": "quickbooks-online",
       "source": "./msp-claude-plugins/quickbooks/quickbooks-online",
       "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
-      "version": "0.2.1",
       "category": "accounting",
       "tags": [
         "quickbooks",
@@ -419,7 +391,6 @@
       "name": "rocketcyber",
       "source": "./msp-claude-plugins/kaseya/rocketcyber",
       "description": "RocketCyber managed SOC - incidents, agents, events, threat detection",
-      "version": "0.2.1",
       "category": "security",
       "tags": [
         "kaseya",
@@ -433,7 +404,6 @@
       "name": "rootly",
       "source": "./msp-claude-plugins/rootly/rootly",
       "description": "Rootly - incident management, postmortems, SRE automation",
-      "version": "0.2.1",
       "category": "incident-management",
       "tags": [
         "rootly",
@@ -447,7 +417,6 @@
       "name": "runzero",
       "source": "./msp-claude-plugins/runzero/runzero",
       "description": "runZero - asset discovery, network scanning, inventory management",
-      "version": "0.2.1",
       "category": "security",
       "tags": [
         "runzero",
@@ -461,7 +430,6 @@
       "name": "salesbuildr",
       "source": "./msp-claude-plugins/salesbuildr/salesbuildr",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
-      "version": "1.1.1",
       "category": "crm",
       "tags": [
         "salesbuildr",
@@ -475,7 +443,6 @@
       "name": "sentinelone",
       "source": "./msp-claude-plugins/sentinelone/sentinelone",
       "description": "SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
-      "version": "0.2.1",
       "category": "security",
       "tags": [
         "sentinelone",
@@ -489,7 +456,6 @@
       "name": "shared-skills",
       "source": "./msp-claude-plugins/shared",
       "description": "Vendor-agnostic MSP skills - terminology and ticket triage",
-      "version": "1.1.1",
       "category": "knowledge",
       "tags": [
         "msp",
@@ -502,7 +468,6 @@
       "name": "sherweb",
       "source": "./msp-claude-plugins/sherweb/sherweb",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
-      "version": "0.2.1",
       "category": "marketplace",
       "tags": [
         "sherweb",
@@ -516,7 +481,6 @@
       "name": "superops",
       "source": "./msp-claude-plugins/superops/superops-ai",
       "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
-      "version": "0.2.1",
       "category": "psa-rmm",
       "tags": [
         "superops",
@@ -530,7 +494,6 @@
       "name": "syncro",
       "source": "./msp-claude-plugins/syncro/syncro-msp",
       "description": "Syncro MSP - tickets, customers, assets, invoicing",
-      "version": "0.2.1",
       "category": "psa-rmm",
       "tags": [
         "syncro",
@@ -544,7 +507,6 @@
       "name": "blackpoint",
       "source": "./msp-claude-plugins/blackpoint/blackpoint",
       "description": "Blackpoint Cyber / CompassOne MDR - tenants, assets, detections, vulnerabilities (dark web, external, scans)",
-      "version": "1.0.0",
       "category": "security",
       "tags": [
         "blackpoint",
@@ -558,7 +520,6 @@
       "name": "saas-alerts",
       "source": "./msp-claude-plugins/saas-alerts/saas-alerts",
       "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
-      "version": "1.0.0",
       "category": "security",
       "tags": [
         "saas-alerts",
@@ -572,7 +533,6 @@
       "name": "crewhu",
       "source": "./msp-claude-plugins/crewhu/crewhu",
       "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",
-      "version": "1.0.0",
       "category": "productivity",
       "tags": [
         "crewhu",
@@ -585,7 +545,6 @@
       "name": "immybot",
       "source": "./msp-claude-plugins/immybot/immybot",
       "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth)",
-      "version": "1.0.0",
       "category": "rmm",
       "tags": [
         "immybot",
@@ -599,7 +558,6 @@
       "name": "timezest",
       "source": "./msp-claude-plugins/timezest/timezest",
       "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
-      "version": "1.0.0",
       "category": "productivity",
       "tags": [
         "timezest",
@@ -612,7 +570,6 @@
       "name": "threatlocker",
       "source": "./msp-claude-plugins/threatlocker/threatlocker",
       "description": "ThreatLocker - zero-trust application allowlisting, approval triage, audit log investigation, computer inventory",
-      "version": "1.0.0",
       "category": "security",
       "tags": [
         "threatlocker",
@@ -626,7 +583,6 @@
       "name": "kaseya-vsa",
       "source": "./msp-claude-plugins/kaseya/kaseya-vsa",
       "description": "Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control (scaffolding)",
-      "version": "0.1.0",
       "category": "rmm",
       "tags": [
         "kaseya",
@@ -641,7 +597,6 @@
       "name": "datto-bcdr",
       "source": "./msp-claude-plugins/kaseya/datto-bcdr",
       "description": "Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, recovery points (scaffolding)",
-      "version": "0.1.0",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -658,7 +613,6 @@
       "name": "kaseya-bms",
       "source": "./msp-claude-plugins/kaseya/kaseya-bms",
       "description": "Kaseya BMS PSA - tickets, accounts, contracts, time entries, billing (scaffolding)",
-      "version": "0.1.0",
       "category": "psa",
       "tags": [
         "kaseya",
@@ -673,7 +627,6 @@
       "name": "datto-saas-protection",
       "source": "./msp-claude-plugins/kaseya/datto-saas-protection",
       "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
-      "version": "0.1.0",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -689,7 +642,6 @@
       "name": "unitrends",
       "source": "./msp-claude-plugins/kaseya/unitrends",
       "description": "Unitrends - appliances, backup jobs, recovery points, replication, alerts (scaffolding)",
-      "version": "0.1.0",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -704,7 +656,6 @@
       "name": "spanning",
       "source": "./msp-claude-plugins/kaseya/spanning",
       "description": "Spanning Cloud Backup - SaaS backup for M365 / Google Workspace / Salesforce (scaffolding)",
-      "version": "0.1.0",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -720,7 +671,6 @@
       "name": "hubspot",
       "source": "./msp-claude-plugins/hubspot/hubspot",
       "description": "HubSpot CRM - contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP server)",
-      "version": "0.2.1",
       "category": "crm",
       "tags": [
         "hubspot",
@@ -733,7 +683,6 @@
       "name": "spamtitan",
       "source": "./msp-claude-plugins/spamtitan/spamtitan",
       "description": "SpamTitan by TitanHQ - quarantine queue management, email flow stats, sender allowlist/blocklist for MSPs",
-      "version": "0.2.1",
       "category": "email-security",
       "tags": [
         "spamtitan",
@@ -747,7 +696,6 @@
       "name": "xero",
       "source": "./msp-claude-plugins/xero/xero",
       "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
-      "version": "0.2.1",
       "category": "accounting",
       "tags": [
         "xero",
@@ -760,7 +708,6 @@
       "name": "alternative-payments",
       "source": "./msp-claude-plugins/alternative-payments/alternative-payments",
       "description": "Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)",
-      "version": "1.0.0",
       "category": "accounting",
       "tags": [
         "alternative-payments",
@@ -774,7 +721,6 @@
       "name": "ironscales",
       "source": "./msp-claude-plugins/ironscales/ironscales",
       "description": "Claude plugins for IRONSCALES - AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence",
-      "version": "0.1.0",
       "category": "email-security",
       "tags": [
         "ironscales",
@@ -788,7 +734,6 @@
       "name": "mimecast",
       "source": "./msp-claude-plugins/mimecast/mimecast",
       "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
-      "version": "0.1.0",
       "category": "email-security",
       "tags": [
         "mimecast",
@@ -802,7 +747,6 @@
       "name": "wyre-gateway",
       "source": "./msp-claude-plugins/wyre-gateway",
       "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to mcp.wyre.ai.",
-      "version": "1.1.1",
       "category": "productivity",
       "tags": [
         "wyre",
@@ -816,7 +760,6 @@
       "name": "microsoft-graph",
       "source": "./msp-claude-plugins/microsoft-graph/microsoft-graph",
       "description": "Microsoft Graph Enterprise MCP - read-only natural-language queries over Microsoft Entra identity and directory data: users, groups, applications, devices, and admin reporting (public preview)",
-      "version": "1.0.0",
       "category": "productivity",
       "tags": [
         "microsoft-graph",
@@ -830,7 +773,6 @@
       "name": "azure-mcp",
       "source": "./msp-claude-plugins/azure-mcp/azure-mcp",
       "description": "Azure MCP Server - read-only Azure observability, cost, and resource-health analysis in natural language: monitoring, pricing, quota, advisor, resource health, diagnostics",
-      "version": "1.0.0",
       "category": "monitoring",
       "tags": [
         "azure",
@@ -844,7 +786,6 @@
       "name": "stripe",
       "source": "./msp-claude-plugins/stripe/stripe",
       "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
-      "version": "0.1.0",
       "category": "accounting",
       "tags": [
         "stripe",
@@ -858,7 +799,6 @@
       "name": "slack",
       "source": "./msp-claude-plugins/slack/slack",
       "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
-      "version": "0.1.0",
       "category": "productivity",
       "tags": [
         "slack",
@@ -872,7 +812,6 @@
       "name": "meraki",
       "source": "./msp-claude-plugins/meraki/meraki",
       "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
-      "version": "0.1.0",
       "category": "network",
       "tags": [
         "meraki",
@@ -885,7 +824,6 @@
       "name": "ncentral",
       "source": "./msp-claude-plugins/ncentral/ncentral",
       "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
-      "version": "1.0.0",
       "category": "rmm",
       "tags": [
         "ncentral",
