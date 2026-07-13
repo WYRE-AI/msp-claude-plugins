@@ -164,13 +164,14 @@ and benefit from familiarity with the vendor's API.
 
 ## Individual plugins
 
-Want just one vendor? Install individually:
+Want just one vendor? Add the marketplace once, then install plugins individually:
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins --plugin autotask
-/plugin marketplace add wyre-technology/msp-claude-plugins --plugin syncro
-/plugin marketplace add wyre-technology/msp-claude-plugins --plugin halopsa
-/plugin marketplace add wyre-technology/msp-claude-plugins --plugin liongard
+/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin install autotask@msp-claude-plugins
+/plugin install syncro@msp-claude-plugins
+/plugin install halopsa@msp-claude-plugins
+/plugin install liongard@msp-claude-plugins
 ```
 
 ---
