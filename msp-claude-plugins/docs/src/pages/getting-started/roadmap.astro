@@ -1,0 +1,151 @@
+---
+import DocsLayout from '@/layouts/DocsLayout.astro';
+
+const baseUrl = import.meta.env.BASE_URL;
+---
+<DocsLayout title="Roadmap" description="Where MSP Claude Plugins and the WYRE MCP Gateway are headed: one marketplace consumed by Claude Code and Conduit, industry workflow packs, and one-click enablement with governance.">
+  <h1>Roadmap</h1>
+
+  <p class="lead text-lg text-[var(--muted)] mb-8">
+    Where the platform is going, what just shipped, and what's next. The full
+    community-facing roadmap (including maintenance commitments and contribution
+    process) lives in the repository's
+    <a href="https://github.com/wyre-technology/msp-claude-plugins/blob/main/ROADMAP.md" target="_blank" rel="noopener noreferrer">ROADMAP.md</a>.
+  </p>
+
+  <h2>The commitment</h2>
+
+  <p>
+    The open-source marketplace — <strong>63 plugins</strong>, 300+ skills, 250+ slash
+    commands, 115+ subagents — is the canonical catalog, and it stays open and
+    maintained. Everything WYRE builds on top of it consumes that same catalog; there
+    is no separate "hosted edition" of the plugins. If you installed from GitHub two
+    releases ago, you're running the same content a Conduit-managed organization runs
+    today.
+  </p>
+
+  <p>
+    Every plugin in the catalog is covered by a published maintenance SLO: CI-enforced
+    installability on every commit, issue acknowledgment within two business days, and
+    a 90-day deprecation notice before anything is ever removed.
+  </p>
+
+  <h2>One marketplace, two ways to use it</h2>
+
+  <pre style="background: var(--code-bg, #1e1e2e); color: var(--code-text, #cdd6f4); padding: 1.5rem; border-radius: 0.5rem; overflow-x: auto; font-size: 0.9rem; line-height: 1.6;">
+              wyre-technology/msp-claude-plugins
+        one repo · one catalog · one set of plugins
+                            │
+        ┌───────────────────┴───────────────────┐
+        │                                       │
+Claude Code / Claude Desktop            Conduit (mcp.wyre.ai)
+────────────────────────────            ────────────────────────
+/plugin marketplace add …               curated skills catalog
+/plugin install &lt;name&gt;…                 synced from the marketplace,
+                                        pinned to an exact commit
+        │                                       │
+plugins run locally                     org grants · security
+                                        scanning · audit trails</pre>
+
+  <ul>
+    <li>
+      <strong>Claude Code / Claude Desktop</strong> — install straight from GitHub:
+      <code>/plugin marketplace add wyre-technology/msp-claude-plugins</code>, then
+      <code>/plugin install &lt;name&gt;@msp-claude-plugins</code>. Free, no account.
+      See <a href={`${baseUrl}getting-started/installation/`}>Installation</a>.
+    </li>
+    <li>
+      <strong>Conduit</strong> — the same catalog, delivered as a curated skills
+      library for your organization. Each sync is pinned to an exact commit of the
+      marketplace, every skill passes automated security scanning before it can be
+      enabled, admins grant packs to teams, and usage is auditable. See the
+      <a href={`${baseUrl}getting-started/gateway/`}>Gateway overview</a> and
+      <a href={`${baseUrl}getting-started/security/`}>Security Model</a>.
+    </li>
+  </ul>
+
+  <p>
+    The experience we're building toward is deliberately simple: <strong>one click (or
+    one command) to enable a plugin or a pack</strong> — with Conduit supplying the
+    compliance and governance layer MSP organizations need, rather than a different
+    install experience.
+  </p>
+
+  <h2>What just shipped</h2>
+
+  <ul>
+    <li>
+      <strong>Official plugin-format alignment.</strong> The marketplace now validates
+      clean against the official Claude Code plugin-marketplace spec, with CI that
+      guarantees any merged change actually reaches installed users (a version
+      bump-gate on every plugin change).
+    </li>
+    <li>
+      <strong>Conduit marketplace ingestion.</strong> Conduit loads its skills catalog
+      directly from this marketplace — single pinned commit per sync, pre-ingestion
+      security scanning, full provenance. One artifact, two consumers, now wired
+      end-to-end.
+    </li>
+    <li>
+      <strong>Advanced workflow guides.</strong> Twenty scheduled-routine guides built
+      and verified against live gateway connectors, from ticket triage to QBR prep —
+      see <a href={`${baseUrl}advanced-workflows/`}>Advanced Workflows</a>.
+    </li>
+  </ul>
+
+  <h2>Next: industry workflow packs</h2>
+
+  <p>
+    Today's plugins are vendor-shaped — one plugin per tool. The next wave is
+    <strong>job-shaped</strong>: workflow packs that bundle the skills, subagents, and
+    slash commands for how an MSP runs a whole function, across every vendor you have
+    connected to the gateway. Packs compose the vendor plugins; they don't duplicate
+    them. They release continually as new partner integrations come online.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pack</th>
+        <th>What it runs</th>
+        <th>Example contents</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>MSP Operations</strong></td>
+        <td>The daily service-desk engine: board health, dispatch, SLA pressure, shift handoffs</td>
+        <td><code>/ops-pack:morning-huddle</code>, <code>/ops-pack:sla-breaches</code>, a stale-ticket-chaser agent</td>
+      </tr>
+      <tr>
+        <td><strong>Security Operations</strong></td>
+        <td>Cross-vendor alert triage and incident response across your EDR/MDR/SIEM stack</td>
+        <td><code>/secops-pack:portfolio-sweep</code>, an overnight-alert-summarizer agent, containment playbooks</td>
+      </tr>
+      <tr>
+        <td><strong>Finance &amp; Billing</strong></td>
+        <td>Agreement and billing truth across PSA, accounting, and distribution</td>
+        <td><code>/finance-pack:month-end-recon</code>, <code>/finance-pack:true-up</code>, a billing-drift-detector agent</td>
+      </tr>
+      <tr>
+        <td><strong>Compliance</strong></td>
+        <td>Evidence collection and control drift against CIS, SOC 2, HIPAA, and insurance questionnaires</td>
+        <td><code>/compliance-pack:evidence-pack</code>, a control-drift-reporter agent, evidence-mapping skills</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Each pack is a normal plugin in the marketplace: installable in Claude Code with
+    one command, enable-able in Conduit with one click, individually versioned, and
+    covered by the same maintenance SLO as everything else in the catalog.
+  </p>
+
+  <h2>Follow along</h2>
+
+  <ul>
+    <li><a href="https://github.com/orgs/wyre-technology/projects/1" target="_blank" rel="noopener noreferrer">Live project board</a> — what's in flight right now</li>
+    <li><a href="https://github.com/wyre-technology/msp-claude-plugins/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">Changelog</a> — every user-visible change, every release</li>
+    <li><a href="https://github.com/wyre-technology/msp-claude-plugins/discussions" target="_blank" rel="noopener noreferrer">Discussions</a> and <a href="https://discord.gg/cCPtPaFw8e" target="_blank" rel="noopener noreferrer">Discord</a> — tell us what your MSP needs next; workflow-pack priorities are driven by what operators ask for</li>
+  </ul>
+</DocsLayout>
