@@ -1,6 +1,11 @@
 ---
 name: alert-responder
-description: Use this agent for Auvik alert-related questions - what's open, what matters, what to dismiss, what to escalate. Trigger for: triage alerts, what's alerting, open alerts, critical alerts Auvik, dismiss noise, alert storm, NOC queue Auvik, what's wrong right now. Examples: "Triage the overnight Auvik queue", "What's critical across all tenants right now?", "ACME has 40 open alerts - tell me which to actually look at", "Can I dismiss these flap alerts safely?"
+description: >-
+  Use this agent for Auvik alert-related questions - what's open, what matters, what to dismiss,
+  what to escalate. Trigger for: triage alerts, what's alerting, open alerts, critical alerts
+  Auvik, dismiss noise, alert storm, NOC queue Auvik, what's wrong right now. Examples: "Triage
+  the overnight Auvik queue", "What's critical across all tenants right now?", "ACME has 40 open
+  alerts - tell me which to actually look at", "Can I dismiss these flap alerts safely?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

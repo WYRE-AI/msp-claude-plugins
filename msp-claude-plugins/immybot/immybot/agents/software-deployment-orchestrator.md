@@ -1,6 +1,13 @@
 ---
 name: software-deployment-orchestrator
-description: Use this agent when an MSP needs to plan and execute a software rollout through ImmyBot — staging desired-state deployments, piloting, triggering maintenance sessions, and confirming compliance. Trigger for: deploy software to a tenant, push an app fleet-wide, update a package across clients, software rollout plan, ImmyBot deployment, install application on endpoints, desired-state configuration. Examples: "Roll out the new Adobe Reader version to all of Acme Corp's computers", "Deploy 7-Zip to every Windows endpoint we manage and confirm it landed", "Stage Chrome as desired state for the Contoso tenant but don't reconcile yet"
+description: >-
+  Use this agent when an MSP needs to plan and execute a software rollout through ImmyBot —
+  staging desired-state deployments, piloting, triggering maintenance sessions, and confirming
+  compliance. Trigger for: deploy software to a tenant, push an app fleet-wide, update a package
+  across clients, software rollout plan, ImmyBot deployment, install application on endpoints,
+  desired-state configuration. Examples: "Roll out the new Adobe Reader version to all of Acme
+  Corp's computers", "Deploy 7-Zip to every Windows endpoint we manage and confirm it landed",
+  "Stage Chrome as desired state for the Contoso tenant but don't reconcile yet"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

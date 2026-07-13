@@ -1,6 +1,13 @@
 ---
 name: dr-readiness-auditor
-description: Use this agent when an MSP needs to assess the true disaster-recovery readiness of a client — going beyond backup dashboard green lights to evaluate coverage, test-restore history, runbook maturity, and RTO/RPO achievability. Trigger for: DR readiness, disaster recovery assessment, backup coverage, restore testing, recovery runbook, RTO RPO review, DR audit, disaster recovery score, untested backups, DR gaps, backup coverage matrix. Examples: "Run a DR readiness audit for Meridian Logistics", "Are we actually able to recover Acme Corp in a ransomware event?", "What's the DR readiness score for all healthcare clients?"
+description: >-
+  Use this agent when an MSP needs to assess the true disaster-recovery readiness of a client —
+  going beyond backup dashboard green lights to evaluate coverage, test-restore history, runbook
+  maturity, and RTO/RPO achievability. Trigger for: DR readiness, disaster recovery assessment,
+  backup coverage, restore testing, recovery runbook, RTO RPO review, DR audit, disaster recovery
+  score, untested backups, DR gaps, backup coverage matrix. Examples: "Run a DR readiness audit
+  for Meridian Logistics", "Are we actually able to recover Acme Corp in a ransomware event?",
+  "What's the DR readiness score for all healthcare clients?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

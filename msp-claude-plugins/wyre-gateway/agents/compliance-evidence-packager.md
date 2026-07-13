@@ -1,6 +1,11 @@
 ---
 name: compliance-evidence-packager
-description: Use this agent when a client needs compliance evidence gathered for a formal audit or assessment against a recognized framework. Trigger for: compliance audit, SOC 2 evidence, HIPAA audit prep, CIS Controls assessment, NIST CSF review, PCI DSS audit, audit evidence package, compliance readiness, control evidence gathering. Examples: "Prepare a SOC 2 Type II evidence package for Meridian Health", "We need CIS Controls evidence for Apex Financial's annual audit"
+description: >-
+  Use this agent when a client needs compliance evidence gathered for a formal audit or assessment
+  against a recognized framework. Trigger for: compliance audit, SOC 2 evidence, HIPAA audit prep,
+  CIS Controls assessment, NIST CSF review, PCI DSS audit, audit evidence package, compliance
+  readiness, control evidence gathering. Examples: "Prepare a SOC 2 Type II evidence package for
+  Meridian Health", "We need CIS Controls evidence for Apex Financial's annual audit"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

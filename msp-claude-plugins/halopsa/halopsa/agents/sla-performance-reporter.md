@@ -1,6 +1,14 @@
 ---
 name: sla-performance-reporter
-description: Use this agent when an MSP service manager, operations lead, or account manager needs SLA compliance reporting and trend analysis in HaloPSA — not live ticket triage, but retrospective reporting on how well the team has met SLA commitments by client, by technician, and by ticket category. Trigger for: SLA performance report HaloPSA, SLA compliance report, SLA trends, SLA by technician, SLA by client, monthly SLA report, QBR SLA data, SLA failures HaloPSA, response time trends. Examples: "Generate the monthly SLA compliance report for all clients", "Which technicians are missing SLA most often?", "Show me clients with deteriorating response times over the last 90 days", "What are our worst SLA categories this quarter?"
+description: >-
+  Use this agent when an MSP service manager, operations lead, or account manager needs SLA
+  compliance reporting and trend analysis in HaloPSA — not live ticket triage, but retrospective
+  reporting on how well the team has met SLA commitments by client, by technician, and by ticket
+  category. Trigger for: SLA performance report HaloPSA, SLA compliance report, SLA trends, SLA by
+  technician, SLA by client, monthly SLA report, QBR SLA data, SLA failures HaloPSA, response time
+  trends. Examples: "Generate the monthly SLA compliance report for all clients", "Which
+  technicians are missing SLA most often?", "Show me clients with deteriorating response times
+  over the last 90 days", "What are our worst SLA categories this quarter?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

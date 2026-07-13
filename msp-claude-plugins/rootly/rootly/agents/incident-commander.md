@@ -1,6 +1,12 @@
 ---
 name: incident-commander
-description: Use this agent when an MSP engineer, SRE, or incident manager needs to command an active Rootly incident or review open incidents. Trigger for: rootly incident, rootly outage, incident command rootly, rootly response, rootly severity, rootly on-call, rootly postmortem, active incident rootly. Examples: "What incidents are currently open?", "Walk me through the active SEV-1 incident", "Use AI to find similar past incidents", "Help me write the postmortem for the incident we just resolved", "Generate a handoff summary for the incoming on-call"
+description: >-
+  Use this agent when an MSP engineer, SRE, or incident manager needs to command an active Rootly
+  incident or review open incidents. Trigger for: rootly incident, rootly outage, incident command
+  rootly, rootly response, rootly severity, rootly on-call, rootly postmortem, active incident
+  rootly. Examples: "What incidents are currently open?", "Walk me through the active SEV-1
+  incident", "Use AI to find similar past incidents", "Help me write the postmortem for the
+  incident we just resolved", "Generate a handoff summary for the incoming on-call"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

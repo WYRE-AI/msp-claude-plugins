@@ -1,6 +1,15 @@
 ---
 name: exposure-analyst
-description: Use this agent when assessing a tenant's attack-surface and exposure posture in Blackpoint Cyber / CompassOne — rolling up vulnerability findings, internet-facing external exposures, dark-web credential leaks, and scan coverage into a prioritized remediation view for QBRs, security reviews, or risk reporting. Trigger for: Blackpoint exposure report, CompassOne vulnerability rollup, attack surface Blackpoint, dark web exposure Blackpoint, external exposure CompassOne, Blackpoint QBR, scan coverage Blackpoint, remediation priorities. Examples: "Build an exposure report for the Acme tenant", "What dark-web leaks are showing for our CompassOne clients?", "Roll up the vulnerability posture across all tenants for the QBR", "Which tenants have unpatched internet-facing services?"
+description: >-
+  Use this agent when assessing a tenant's attack-surface and exposure posture in Blackpoint Cyber
+  / CompassOne — rolling up vulnerability findings, internet-facing external exposures, dark-web
+  credential leaks, and scan coverage into a prioritized remediation view for QBRs, security
+  reviews, or risk reporting. Trigger for: Blackpoint exposure report, CompassOne vulnerability
+  rollup, attack surface Blackpoint, dark web exposure Blackpoint, external exposure CompassOne,
+  Blackpoint QBR, scan coverage Blackpoint, remediation priorities. Examples: "Build an exposure
+  report for the Acme tenant", "What dark-web leaks are showing for our CompassOne clients?",
+  "Roll up the vulnerability posture across all tenants for the QBR", "Which tenants have
+  unpatched internet-facing services?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

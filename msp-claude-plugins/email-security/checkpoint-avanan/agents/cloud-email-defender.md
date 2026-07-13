@@ -1,6 +1,13 @@
 ---
 name: cloud-email-defender
-description: Use this agent when investigating quarantined threats, managing email security events, auditing Avanan tenant configuration, or performing cross-tenant threat sweeps in Check Point Avanan (Harmony Email & Collaboration). Trigger for: Avanan event investigation, Harmony email security, cloud email quarantine, Avanan tenant management, phishing campaign Avanan, Avanan exception management, cross-tenant threat sweep. Examples: "Show me all critical Avanan events today", "Release this quarantined email — it's a false positive", "Sweep all tenants for emails from this phishing domain", "Review and clean up the Avanan whitelist exceptions for Acme Corp"
+description: >-
+  Use this agent when investigating quarantined threats, managing email security events, auditing
+  Avanan tenant configuration, or performing cross-tenant threat sweeps in Check Point Avanan
+  (Harmony Email & Collaboration). Trigger for: Avanan event investigation, Harmony email
+  security, cloud email quarantine, Avanan tenant management, phishing campaign Avanan, Avanan
+  exception management, cross-tenant threat sweep. Examples: "Show me all critical Avanan events
+  today", "Release this quarantined email — it's a false positive", "Sweep all tenants for emails
+  from this phishing domain", "Review and clean up the Avanan whitelist exceptions for Acme Corp"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

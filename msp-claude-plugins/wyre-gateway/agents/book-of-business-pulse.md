@@ -1,6 +1,12 @@
 ---
 name: book-of-business-pulse
-description: Use this agent when an MSP owner, service-delivery manager, or ops lead needs a single operational, commercial, and security heartbeat across the entire client portfolio. Trigger for: portfolio pulse, book of business review, how is my MSP doing, daily standup, weekly review, MSP health check, portfolio status, all clients overview, cross-client summary, ops review. Examples: "Give me the daily pulse across all clients", "Run my weekly book-of-business review", "How is the whole MSP doing right now?"
+description: >-
+  Use this agent when an MSP owner, service-delivery manager, or ops lead needs a single
+  operational, commercial, and security heartbeat across the entire client portfolio. Trigger for:
+  portfolio pulse, book of business review, how is my MSP doing, daily standup, weekly review, MSP
+  health check, portfolio status, all clients overview, cross-client summary, ops review.
+  Examples: "Give me the daily pulse across all clients", "Run my weekly book-of-business review",
+  "How is the whole MSP doing right now?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

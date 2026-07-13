@@ -1,6 +1,12 @@
 ---
 name: license-optimizer
-description: Use this agent when an MSP needs to analyze license utilization across their Pax8 marketplace subscriptions, identify unused or over-provisioned seats, optimize costs, or plan renewals. Trigger for: license optimization, unused seats, Pax8 subscriptions, license cost review, renewal planning, over-provisioned licenses, cloud marketplace audit. Examples: "find all clients with unused Microsoft 365 seats", "show me subscriptions renewing in the next 30 days", "which clients are over-paying for cloud licenses"
+description: >-
+  Use this agent when an MSP needs to analyze license utilization across their Pax8 marketplace
+  subscriptions, identify unused or over-provisioned seats, optimize costs, or plan renewals.
+  Trigger for: license optimization, unused seats, Pax8 subscriptions, license cost review,
+  renewal planning, over-provisioned licenses, cloud marketplace audit. Examples: "find all
+  clients with unused Microsoft 365 seats", "show me subscriptions renewing in the next 30 days",
+  "which clients are over-paying for cloud licenses"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

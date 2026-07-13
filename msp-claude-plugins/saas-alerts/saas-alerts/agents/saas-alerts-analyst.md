@@ -1,6 +1,12 @@
 ---
 name: saas-alerts-analyst
-description: Use this agent when investigating and triaging SaaS Alerts security alerts across managed M365 / Google Workspace tenants — reconstructing what fired, attributing it to a user/tenant, judging severity, and recommending response. Trigger for: investigate SaaS Alerts alert, triage SaaS Alerts queue, what happened in M365, suspicious login alert, prioritize SaaS Alerts. Examples: "Triage today's SaaS Alerts queue and tell me what to escalate", "Investigate this impossible-travel alert on the Acme tenant".
+description: >-
+  Use this agent when investigating and triaging SaaS Alerts security alerts across managed M365 /
+  Google Workspace tenants — reconstructing what fired, attributing it to a user/tenant, judging
+  severity, and recommending response. Trigger for: investigate SaaS Alerts alert, triage SaaS
+  Alerts queue, what happened in M365, suspicious login alert, prioritize SaaS Alerts. Examples:
+  "Triage today's SaaS Alerts queue and tell me what to escalate", "Investigate this
+  impossible-travel alert on the Acme tenant".
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

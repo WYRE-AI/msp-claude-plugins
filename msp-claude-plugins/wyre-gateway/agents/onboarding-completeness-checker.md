@@ -1,6 +1,12 @@
 ---
 name: onboarding-completeness-checker
-description: Use this agent when an MSP needs to validate that a newly onboarded client has been fully set up across all MSP tools and systems before transitioning to steady-state support. Trigger for: onboarding checklist, onboarding completeness, new client setup, onboarding validation, is this client fully onboarded, onboarding gaps, setup checklist, new client readiness, ready for steady state. Examples: "Check if Acme Corp's onboarding is complete", "Run the onboarding checklist for Riverside Medical", "Is Greenfield Industries ready for steady-state support?"
+description: >-
+  Use this agent when an MSP needs to validate that a newly onboarded client has been fully set up
+  across all MSP tools and systems before transitioning to steady-state support. Trigger for:
+  onboarding checklist, onboarding completeness, new client setup, onboarding validation, is this
+  client fully onboarded, onboarding gaps, setup checklist, new client readiness, ready for steady
+  state. Examples: "Check if Acme Corp's onboarding is complete", "Run the onboarding checklist
+  for Riverside Medical", "Is Greenfield Industries ready for steady-state support?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

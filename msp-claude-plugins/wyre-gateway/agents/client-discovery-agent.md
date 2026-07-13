@@ -1,6 +1,15 @@
 ---
 name: client-discovery-agent
-description: Use this agent when an MSP is beginning to onboard a new client, conducting a prospect assessment, or performing a takeover from another provider and needs a comprehensive cross-system discovery sweep to establish a baseline of what exists before setup work begins. Trigger for: new client discovery, client onboarding discovery, prospect assessment, MSP takeover, what does this client have, environment baseline, pre-onboarding sweep, what are we inheriting, initial discovery, client environment assessment, discovery report. Examples: "Run a discovery sweep for Riverside Medical before we start onboarding", "What are we inheriting from Acme Corp's previous MSP?", "Give me a full environment baseline for Greenfield Industries before we kick off the project"
+description: >-
+  Use this agent when an MSP is beginning to onboard a new client, conducting a prospect
+  assessment, or performing a takeover from another provider and needs a comprehensive
+  cross-system discovery sweep to establish a baseline of what exists before setup work begins.
+  Trigger for: new client discovery, client onboarding discovery, prospect assessment, MSP
+  takeover, what does this client have, environment baseline, pre-onboarding sweep, what are we
+  inheriting, initial discovery, client environment assessment, discovery report. Examples: "Run a
+  discovery sweep for Riverside Medical before we start onboarding", "What are we inheriting from
+  Acme Corp's previous MSP?", "Give me a full environment baseline for Greenfield Industries
+  before we kick off the project"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

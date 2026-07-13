@@ -1,6 +1,13 @@
 ---
 name: renewal-calendar
-description: Use this agent when an MSP needs a proactive view of upcoming Pax8 subscription renewals across all clients, wants to flag month-to-month subscriptions that should move to annual, or needs to identify annual renewals that require a seat count review before they lock in. Trigger for: Pax8 renewals, upcoming renewal Pax8, subscription renewal calendar, month-to-month annual conversion Pax8, renewal seat review, Pax8 renewal planning, annual commitment Pax8. Examples: "what Pax8 subscriptions are renewing in the next 90 days", "find clients on month-to-month who would save money going annual", "which annual renewals need a seat count review before they auto-renew"
+description: >-
+  Use this agent when an MSP needs a proactive view of upcoming Pax8 subscription renewals across
+  all clients, wants to flag month-to-month subscriptions that should move to annual, or needs to
+  identify annual renewals that require a seat count review before they lock in. Trigger for: Pax8
+  renewals, upcoming renewal Pax8, subscription renewal calendar, month-to-month annual conversion
+  Pax8, renewal seat review, Pax8 renewal planning, annual commitment Pax8. Examples: "what Pax8
+  subscriptions are renewing in the next 90 days", "find clients on month-to-month who would save
+  money going annual", "which annual renewals need a seat count review before they auto-renew"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

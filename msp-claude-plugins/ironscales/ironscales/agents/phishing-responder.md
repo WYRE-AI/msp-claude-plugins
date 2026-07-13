@@ -1,6 +1,13 @@
 ---
 name: phishing-responder
-description: Use this agent when responding to user-reported phishing emails in IRONSCALES, triaging the incident queue, classifying emails, coordinating quarantine and remediation, or reviewing security statistics for MSP clients. Trigger for: Ironscales incident, phishing report, user reported suspicious email, Ironscales triage, classify email Ironscales, Ironscales remediation, phishing campaign block, Ironscales allowlist. Examples: "Triage all open Ironscales incidents", "A user reported a suspicious email — check if it's in Ironscales", "Block the domain used in today's phishing campaign", "Show me the top targeted users this month"
+description: >-
+  Use this agent when responding to user-reported phishing emails in IRONSCALES, triaging the
+  incident queue, classifying emails, coordinating quarantine and remediation, or reviewing
+  security statistics for MSP clients. Trigger for: Ironscales incident, phishing report, user
+  reported suspicious email, Ironscales triage, classify email Ironscales, Ironscales remediation,
+  phishing campaign block, Ironscales allowlist. Examples: "Triage all open Ironscales incidents",
+  "A user reported a suspicious email — check if it's in Ironscales", "Block the domain used in
+  today's phishing campaign", "Show me the top targeted users this month"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

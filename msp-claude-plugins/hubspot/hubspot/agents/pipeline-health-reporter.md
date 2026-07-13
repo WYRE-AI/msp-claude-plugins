@@ -1,6 +1,12 @@
 ---
 name: pipeline-health-reporter
-description: Use this agent when an MSP sales manager or leadership needs to analyze pipeline health, deal velocity, stage conversion rates, or forecast accuracy in HubSpot. Trigger for: pipeline health, deal velocity HubSpot, stalled deals, pipeline coverage, forecast HubSpot, conversion rate deals, no activity deals, pipeline hygiene, sales forecast MSP. Examples: "show me pipeline health and forecast coverage for this quarter", "which deals have had no activity in 14 days", "what is our stage conversion rate for managed services proposals"
+description: >-
+  Use this agent when an MSP sales manager or leadership needs to analyze pipeline health, deal
+  velocity, stage conversion rates, or forecast accuracy in HubSpot. Trigger for: pipeline health,
+  deal velocity HubSpot, stalled deals, pipeline coverage, forecast HubSpot, conversion rate
+  deals, no activity deals, pipeline hygiene, sales forecast MSP. Examples: "show me pipeline
+  health and forecast coverage for this quarter", "which deals have had no activity in 14 days",
+  "what is our stage conversion rate for managed services proposals"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

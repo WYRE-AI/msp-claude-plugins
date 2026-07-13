@@ -1,6 +1,14 @@
 ---
 name: payment-reconciler
-description: Use this agent when an MSP needs to reconcile Alternative Payments activity — matching transactions to invoices, surfacing unpaid and overdue invoices, summarizing payouts and the transactions that compose them, flagging failed or declined transactions, and tracking outstanding receivables via hosted payment requests. Trigger for: Alternative Payments reconciliation, payout reconciliation, unpaid invoices, overdue receivables, failed payment review, transaction-to-invoice matching, deposit reconciliation. Examples: "reconcile this Alternative Payments payout against our invoices", "which customers have overdue invoices in Alternative Payments", "show me failed card transactions this month and who to follow up with"
+description: >-
+  Use this agent when an MSP needs to reconcile Alternative Payments activity — matching
+  transactions to invoices, surfacing unpaid and overdue invoices, summarizing payouts and the
+  transactions that compose them, flagging failed or declined transactions, and tracking
+  outstanding receivables via hosted payment requests. Trigger for: Alternative Payments
+  reconciliation, payout reconciliation, unpaid invoices, overdue receivables, failed payment
+  review, transaction-to-invoice matching, deposit reconciliation. Examples: "reconcile this
+  Alternative Payments payout against our invoices", "which customers have overdue invoices in
+  Alternative Payments", "show me failed card transactions this month and who to follow up with"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

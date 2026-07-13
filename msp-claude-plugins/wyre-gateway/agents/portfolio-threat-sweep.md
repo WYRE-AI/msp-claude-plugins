@@ -1,6 +1,14 @@
 ---
 name: portfolio-threat-sweep
-description: Use this agent when an indicator set — file hashes, domains, IPs, sender addresses, URLs, a CVE, or a MITRE ATT&CK technique — needs to be hunted across every client tenant simultaneously to map blast radius and identify exposure before a campaign spreads. Trigger for: threat hunt, IOC sweep, indicator sweep, blast radius, cross-client hunt, portfolio hunt, spread of attack, same campaign, CVE sweep, CISA advisory, phishing campaign sweep, did this hit other clients, fan out IOCs. Examples: "Hunt this ransomware IOC set across all our clients", "Check if the campaign that hit Acme Corp has reached any of our other tenants", "Run a portfolio sweep for CVE-2024-1234 exposure"
+description: >-
+  Use this agent when an indicator set — file hashes, domains, IPs, sender addresses, URLs, a CVE,
+  or a MITRE ATT&CK technique — needs to be hunted across every client tenant simultaneously to
+  map blast radius and identify exposure before a campaign spreads. Trigger for: threat hunt, IOC
+  sweep, indicator sweep, blast radius, cross-client hunt, portfolio hunt, spread of attack, same
+  campaign, CVE sweep, CISA advisory, phishing campaign sweep, did this hit other clients, fan out
+  IOCs. Examples: "Hunt this ransomware IOC set across all our clients", "Check if the campaign
+  that hit Acme Corp has reached any of our other tenants", "Run a portfolio sweep for
+  CVE-2024-1234 exposure"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

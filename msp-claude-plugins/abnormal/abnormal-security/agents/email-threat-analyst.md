@@ -1,6 +1,12 @@
 ---
 name: email-threat-analyst
-description: Use this agent when investigating email threats detected by Abnormal Security, analyzing attack chains, assessing user exposure, or managing remediation across client tenants. Trigger for: abnormal threat investigation, BEC attack, business email compromise, account takeover, phishing case, abnormal remediation, user reported phishing abnormal, abuse report review. Examples: "Investigate this Abnormal threat ID", "Show me all open BEC cases for Acme Corp", "Have any account takeovers been detected this week?", "Review and remediate today's abuse reports"
+description: >-
+  Use this agent when investigating email threats detected by Abnormal Security, analyzing attack
+  chains, assessing user exposure, or managing remediation across client tenants. Trigger for:
+  abnormal threat investigation, BEC attack, business email compromise, account takeover, phishing
+  case, abnormal remediation, user reported phishing abnormal, abuse report review. Examples:
+  "Investigate this Abnormal threat ID", "Show me all open BEC cases for Acme Corp", "Have any
+  account takeovers been detected this week?", "Review and remediate today's abuse reports"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

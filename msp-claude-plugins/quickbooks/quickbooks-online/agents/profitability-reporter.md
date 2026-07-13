@@ -1,6 +1,15 @@
 ---
 name: profitability-reporter
-description: Use this agent when an MSP needs to analyze per-client or per-service-line profitability in QuickBooks Online — calculating gross margin by client, identifying the most and least profitable accounts, tracking profitability trends over time, or surfacing service lines where costs are eroding margin. Trigger for: profitability analysis, gross margin by client, service line margin, profitability trends, least profitable clients, labor cost analysis, tooling cost allocation, margin erosion, quarterly profitability review. Examples: "Which clients are least profitable after accounting for labor and tooling costs?", "Show me gross margin by service line for this quarter", "Has our profitability on managed services improved or declined over the last three quarters?"
+description: >-
+  Use this agent when an MSP needs to analyze per-client or per-service-line profitability in
+  QuickBooks Online — calculating gross margin by client, identifying the most and least
+  profitable accounts, tracking profitability trends over time, or surfacing service lines where
+  costs are eroding margin. Trigger for: profitability analysis, gross margin by client, service
+  line margin, profitability trends, least profitable clients, labor cost analysis, tooling cost
+  allocation, margin erosion, quarterly profitability review. Examples: "Which clients are least
+  profitable after accounting for labor and tooling costs?", "Show me gross margin by service line
+  for this quarter", "Has our profitability on managed services improved or declined over the last
+  three quarters?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

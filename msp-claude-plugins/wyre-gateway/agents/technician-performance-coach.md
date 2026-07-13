@@ -1,6 +1,12 @@
 ---
 name: technician-performance-coach
-description: Use this agent when a service delivery manager or operations lead wants to understand technician performance trends and get actionable coaching recommendations grounded in data. Trigger for: technician performance, tech coaching, service delivery review, team performance, tech metrics, SLA compliance by tech, ticket quality review, team capacity analysis, workforce development. Examples: "Give me a coaching summary for my team this quarter", "Who on the team needs support with SLA compliance?"
+description: >-
+  Use this agent when a service delivery manager or operations lead wants to understand technician
+  performance trends and get actionable coaching recommendations grounded in data. Trigger for:
+  technician performance, tech coaching, service delivery review, team performance, tech metrics,
+  SLA compliance by tech, ticket quality review, team capacity analysis, workforce development.
+  Examples: "Give me a coaching summary for my team this quarter", "Who on the team needs support
+  with SLA compliance?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

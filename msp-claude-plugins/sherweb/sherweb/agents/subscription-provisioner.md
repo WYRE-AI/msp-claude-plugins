@@ -1,6 +1,15 @@
 ---
 name: subscription-provisioner
-description: Use this agent when an MSP needs to provision, right-size, or audit Sherweb customer subscriptions — listing a customer's active subscriptions, looking up catalog products before ordering, planning seat-quantity changes, and walking quantity adjustments through Sherweb's confirmation flow. Trigger for: provision subscription, add seats, change quantity, right-size licenses, Sherweb subscription audit, seat count review, license provisioning, subscription inventory, catalog lookup, Sherweb order planning. Examples: "Add 5 Microsoft 365 seats for Acme Corp in Sherweb", "Show me every active subscription for this customer and flag the over-provisioned ones", "Which Sherweb catalog product should I order for a new Business Premium client", "Right-size all monthly subscriptions across the portfolio"
+description: >-
+  Use this agent when an MSP needs to provision, right-size, or audit Sherweb customer
+  subscriptions — listing a customer's active subscriptions, looking up catalog products before
+  ordering, planning seat-quantity changes, and walking quantity adjustments through Sherweb's
+  confirmation flow. Trigger for: provision subscription, add seats, change quantity, right-size
+  licenses, Sherweb subscription audit, seat count review, license provisioning, subscription
+  inventory, catalog lookup, Sherweb order planning. Examples: "Add 5 Microsoft 365 seats for Acme
+  Corp in Sherweb", "Show me every active subscription for this customer and flag the
+  over-provisioned ones", "Which Sherweb catalog product should I order for a new Business Premium
+  client", "Right-size all monthly subscriptions across the portfolio"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

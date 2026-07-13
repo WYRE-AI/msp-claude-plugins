@@ -1,6 +1,16 @@
 ---
 name: threat-report-generator
-description: Use this agent when generating periodic threat landscape reports from Abnormal Security data across the MSP client portfolio — not for live threat investigation, but for summarizing attack trends, most targeted organizations, most common attack types, BEC attempt volumes, and remediation effectiveness over time. Trigger for: Abnormal threat report, email threat trends, Abnormal portfolio report, BEC trend report, phishing trend Abnormal, monthly Abnormal report, threat landscape email, attack volume report, Abnormal QBR, portfolio threat summary, Abnormal security review. Examples: "Generate the monthly email threat landscape report across all our Abnormal clients", "Which clients are being targeted the most this quarter?", "Show me the BEC attempt trend for the last 90 days", "What are the most common attack types across our portfolio this month?"
+description: >-
+  Use this agent when generating periodic threat landscape reports from Abnormal Security data
+  across the MSP client portfolio — not for live threat investigation, but for summarizing attack
+  trends, most targeted organizations, most common attack types, BEC attempt volumes, and
+  remediation effectiveness over time. Trigger for: Abnormal threat report, email threat trends,
+  Abnormal portfolio report, BEC trend report, phishing trend Abnormal, monthly Abnormal report,
+  threat landscape email, attack volume report, Abnormal QBR, portfolio threat summary, Abnormal
+  security review. Examples: "Generate the monthly email threat landscape report across all our
+  Abnormal clients", "Which clients are being targeted the most this quarter?", "Show me the BEC
+  attempt trend for the last 90 days", "What are the most common attack types across our portfolio
+  this month?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

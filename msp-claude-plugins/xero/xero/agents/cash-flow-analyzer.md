@@ -1,6 +1,14 @@
 ---
 name: cash-flow-analyzer
-description: Use this agent when an MSP needs to analyze cash flow position in Xero — tracking accounts receivable aging trends, forecasting upcoming payables vs. expected inflows, identifying months where collections may fall short of committed expenses, or producing a 90-day cash flow projection. Trigger for: cash flow analysis, cash flow forecast, AR aging trends, payables forecast, cash position review, 90-day projection, collections shortfall, credit limit monitoring. Examples: "Project our cash flow for the next 90 days based on current AR and upcoming bills", "Which clients are approaching their credit limits in Xero?", "Show me months where our expected collections don't cover committed payables"
+description: >-
+  Use this agent when an MSP needs to analyze cash flow position in Xero — tracking accounts
+  receivable aging trends, forecasting upcoming payables vs. expected inflows, identifying months
+  where collections may fall short of committed expenses, or producing a 90-day cash flow
+  projection. Trigger for: cash flow analysis, cash flow forecast, AR aging trends, payables
+  forecast, cash position review, 90-day projection, collections shortfall, credit limit
+  monitoring. Examples: "Project our cash flow for the next 90 days based on current AR and
+  upcoming bills", "Which clients are approaching their credit limits in Xero?", "Show me months
+  where our expected collections don't cover committed payables"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

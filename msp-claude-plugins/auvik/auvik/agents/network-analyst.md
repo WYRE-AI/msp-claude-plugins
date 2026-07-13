@@ -1,6 +1,13 @@
 ---
 name: network-analyst
-description: Use this agent when the user is asking what's wrong with a tenant's network, investigating broad performance complaints, mapping topology, or doing multi-signal triage across devices, interfaces, alerts, and statistics in Auvik. Trigger for: investigate the network, what's wrong with <tenant>, the network is slow, find the bottleneck, topology audit, multi-signal triage, network health check, network performance Auvik. Examples: "Investigate ACME's network - they say it's slow", "Audit the topology for tenant 12345", "Something is off with the LA office network", "Pull a network health snapshot for ACME and tell me what to fix first"
+description: >-
+  Use this agent when the user is asking what's wrong with a tenant's network, investigating broad
+  performance complaints, mapping topology, or doing multi-signal triage across devices,
+  interfaces, alerts, and statistics in Auvik. Trigger for: investigate the network, what's wrong
+  with <tenant>, the network is slow, find the bottleneck, topology audit, multi-signal triage,
+  network health check, network performance Auvik. Examples: "Investigate ACME's network - they
+  say it's slow", "Audit the topology for tenant 12345", "Something is off with the LA office
+  network", "Pull a network health snapshot for ACME and tell me what to fix first"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

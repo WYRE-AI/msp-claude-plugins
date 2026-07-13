@@ -1,6 +1,16 @@
 ---
 name: training-enforcer
-description: Use this agent when tracking and enforcing security awareness training completion in KnowBe4 — identifying users who have missed deadlines, finding repeat phishing simulation clickers who represent high-risk users, drafting re-training campaigns, or generating compliance completion reports for clients. Trigger for: training overdue, training completion report, KnowBe4 compliance, training enforcement, overdue users, repeat clickers, high-risk users training, security awareness compliance, training deadline, remedial training, KnowBe4 re-enroll, phishing simulation repeat failures. Examples: "Who hasn't completed their mandatory security training for Acme Corp?", "Find all users who clicked on two or more phishing simulations this quarter", "Generate the training completion report for our HIPAA client", "Draft a re-training campaign for the repeat phishing clickers"
+description: >-
+  Use this agent when tracking and enforcing security awareness training completion in KnowBe4 —
+  identifying users who have missed deadlines, finding repeat phishing simulation clickers who
+  represent high-risk users, drafting re-training campaigns, or generating compliance completion
+  reports for clients. Trigger for: training overdue, training completion report, KnowBe4
+  compliance, training enforcement, overdue users, repeat clickers, high-risk users training,
+  security awareness compliance, training deadline, remedial training, KnowBe4 re-enroll, phishing
+  simulation repeat failures. Examples: "Who hasn't completed their mandatory security training
+  for Acme Corp?", "Find all users who clicked on two or more phishing simulations this quarter",
+  "Generate the training completion report for our HIPAA client", "Draft a re-training campaign
+  for the repeat phishing clickers"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

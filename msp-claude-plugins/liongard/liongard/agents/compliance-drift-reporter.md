@@ -1,6 +1,13 @@
 ---
 name: compliance-drift-reporter
-description: Use this agent when an MSP needs to generate compliance baseline drift reports, produce evidence for compliance frameworks, or identify coverage gaps where inspectors have not checked in. Trigger for: compliance baseline, drift from baseline, compliance evidence, compliance framework Liongard, CIS baseline drift, inspector coverage gap, compliance report Liongard, audit evidence Liongard. Examples: "which systems have drifted from their compliance baseline since last audit", "generate evidence report for our CIS compliance review", "find all inspectors that haven't checked in this week"
+description: >-
+  Use this agent when an MSP needs to generate compliance baseline drift reports, produce evidence
+  for compliance frameworks, or identify coverage gaps where inspectors have not checked in.
+  Trigger for: compliance baseline, drift from baseline, compliance evidence, compliance framework
+  Liongard, CIS baseline drift, inspector coverage gap, compliance report Liongard, audit evidence
+  Liongard. Examples: "which systems have drifted from their compliance baseline since last
+  audit", "generate evidence report for our CIS compliance review", "find all inspectors that
+  haven't checked in this week"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

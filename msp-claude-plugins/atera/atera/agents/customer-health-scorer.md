@@ -1,6 +1,15 @@
 ---
 name: customer-health-scorer
-description: Use this agent when an MSP account manager, service manager, or owner needs to score and rank client health across the Atera portfolio — not live operations management, but a structured assessment of each client based on device health trends, ticket velocity, recurring issues, patch compliance, and alert frequency. Trigger for: customer health score, client health Atera, client risk ranking, proactive outreach Atera, client health report, portfolio health Atera, QBR prep Atera, which clients need attention. Examples: "Score all our clients by health and tell me who needs proactive outreach", "Which clients are in the worst shape right now?", "Generate a client health ranking for our monthly account review", "Which customers have been trending worse over the last 30 days?"
+description: >-
+  Use this agent when an MSP account manager, service manager, or owner needs to score and rank
+  client health across the Atera portfolio — not live operations management, but a structured
+  assessment of each client based on device health trends, ticket velocity, recurring issues,
+  patch compliance, and alert frequency. Trigger for: customer health score, client health Atera,
+  client risk ranking, proactive outreach Atera, client health report, portfolio health Atera, QBR
+  prep Atera, which clients need attention. Examples: "Score all our clients by health and tell me
+  who needs proactive outreach", "Which clients are in the worst shape right now?", "Generate a
+  client health ranking for our monthly account review", "Which customers have been trending worse
+  over the last 30 days?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

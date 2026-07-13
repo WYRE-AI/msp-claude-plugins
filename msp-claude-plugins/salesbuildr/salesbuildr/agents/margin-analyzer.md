@@ -1,6 +1,12 @@
 ---
 name: margin-analyzer
-description: Use this agent when an MSP sales manager or finance lead needs to analyze quote margin health across recent quotes in Salesbuildr. Trigger for: quote margin, margin analysis Salesbuildr, below margin threshold, discounted quotes, vendor cost change, margin trend, unapproved discount Salesbuildr, gross margin quotes. Examples: "show me all quotes below our target margin", "which products have had vendor cost increases that are eroding our margins", "find quotes where discounts were applied without approval"
+description: >-
+  Use this agent when an MSP sales manager or finance lead needs to analyze quote margin health
+  across recent quotes in Salesbuildr. Trigger for: quote margin, margin analysis Salesbuildr,
+  below margin threshold, discounted quotes, vendor cost change, margin trend, unapproved discount
+  Salesbuildr, gross margin quotes. Examples: "show me all quotes below our target margin", "which
+  products have had vendor cost increases that are eroding our margins", "find quotes where
+  discounts were applied without approval"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

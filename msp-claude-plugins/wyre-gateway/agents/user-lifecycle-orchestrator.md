@@ -1,6 +1,15 @@
 ---
 name: user-lifecycle-orchestrator
-description: Use this agent when an MSP needs to provision, modify, or deprovision an individual employee's access, identity, licensing, and security posture across all connected systems for a client. Trigger for: joiner mover leaver, JML workflow, new employee setup, employee departure, user offboarding, user onboarding, role change access update, employee transfers, provision new user, deprovision user, disable account, license reclaim, employee termination, access revocation, least privilege review. Examples: "Onboard Sarah Chen as a Sales Manager at Acme Corp starting Monday", "David Park is moving from Engineering to DevOps Lead at Riverside Medical — update his access", "Terminate access for Marcus Webb at Greenfield Industries immediately — he resigned today"
+description: >-
+  Use this agent when an MSP needs to provision, modify, or deprovision an individual employee's
+  access, identity, licensing, and security posture across all connected systems for a client.
+  Trigger for: joiner mover leaver, JML workflow, new employee setup, employee departure, user
+  offboarding, user onboarding, role change access update, employee transfers, provision new user,
+  deprovision user, disable account, license reclaim, employee termination, access revocation,
+  least privilege review. Examples: "Onboard Sarah Chen as a Sales Manager at Acme Corp starting
+  Monday", "David Park is moving from Engineering to DevOps Lead at Riverside Medical — update his
+  access", "Terminate access for Marcus Webb at Greenfield Industries immediately — he resigned
+  today"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

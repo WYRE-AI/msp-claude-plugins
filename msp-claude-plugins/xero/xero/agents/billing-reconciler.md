@@ -1,6 +1,12 @@
 ---
 name: billing-reconciler
-description: Use this agent when an MSP needs to reconcile billing in Xero — matching invoices to contracts, tracking outstanding receivables, identifying billing discrepancies, or reviewing cash flow. Trigger for: Xero billing reconciliation, overdue invoices, outstanding receivables, billing audit, accounts receivable review, revenue reconciliation, monthly billing check. Examples: "which clients have overdue invoices in Xero", "reconcile this month's managed services billing", "show me our accounts receivable aging summary"
+description: >-
+  Use this agent when an MSP needs to reconcile billing in Xero — matching invoices to contracts,
+  tracking outstanding receivables, identifying billing discrepancies, or reviewing cash flow.
+  Trigger for: Xero billing reconciliation, overdue invoices, outstanding receivables, billing
+  audit, accounts receivable review, revenue reconciliation, monthly billing check. Examples:
+  "which clients have overdue invoices in Xero", "reconcile this month's managed services
+  billing", "show me our accounts receivable aging summary"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

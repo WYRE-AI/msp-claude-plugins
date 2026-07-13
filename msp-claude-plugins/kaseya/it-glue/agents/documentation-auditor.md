@@ -1,6 +1,11 @@
 ---
 name: documentation-auditor
-description: Use this agent when an MSP needs to audit documentation completeness and freshness across their IT Glue client portfolio. Trigger for: documentation audit, stale configurations, missing runbooks, undocumented passwords, incomplete organization profiles, flexible asset gaps. Examples: "audit IT Glue documentation for all clients", "find organizations with no runbooks in IT Glue", "which configurations are missing warranty info"
+description: >-
+  Use this agent when an MSP needs to audit documentation completeness and freshness across their
+  IT Glue client portfolio. Trigger for: documentation audit, stale configurations, missing
+  runbooks, undocumented passwords, incomplete organization profiles, flexible asset gaps.
+  Examples: "audit IT Glue documentation for all clients", "find organizations with no runbooks in
+  IT Glue", "which configurations are missing warranty info"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

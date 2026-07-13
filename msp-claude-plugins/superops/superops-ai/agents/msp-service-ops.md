@@ -1,6 +1,13 @@
 ---
 name: msp-service-ops
-description: Use this agent when an MSP technician, dispatcher, or manager needs a combined PSA and RMM operations review in SuperOps.ai. Trigger for: superops queue review, ticket triage superops, device health superops, alert triage superops, SLA check superops, superops service delivery, rmm and psa combined review. Examples: "What tickets and alerts need attention right now?", "Show me devices that are offline or have critical alerts", "Which clients have both open tickets and active RMM alerts?", "What's the overall health of my service desk and endpoints today?"
+description: >-
+  Use this agent when an MSP technician, dispatcher, or manager needs a combined PSA and RMM
+  operations review in SuperOps.ai. Trigger for: superops queue review, ticket triage superops,
+  device health superops, alert triage superops, SLA check superops, superops service delivery,
+  rmm and psa combined review. Examples: "What tickets and alerts need attention right now?",
+  "Show me devices that are offline or have critical alerts", "Which clients have both open
+  tickets and active RMM alerts?", "What's the overall health of my service desk and endpoints
+  today?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

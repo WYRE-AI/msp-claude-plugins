@@ -1,6 +1,12 @@
 ---
 name: msp-service-ops
-description: Use this agent when an MSP technician, dispatcher, or owner needs an integrated review of tickets, devices, and billing in Syncro. Trigger for: syncro queue review, syncro ticket triage, syncro device health, syncro billing reconciliation, syncro service desk, syncro operations. Examples: "What tickets need attention right now?", "Which devices are offline or have alerts?", "Are there any uninvoiced tickets from this month?", "Show me all high priority open tickets across my customers"
+description: >-
+  Use this agent when an MSP technician, dispatcher, or owner needs an integrated review of
+  tickets, devices, and billing in Syncro. Trigger for: syncro queue review, syncro ticket triage,
+  syncro device health, syncro billing reconciliation, syncro service desk, syncro operations.
+  Examples: "What tickets need attention right now?", "Which devices are offline or have alerts?",
+  "Are there any uninvoiced tickets from this month?", "Show me all high priority open tickets
+  across my customers"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

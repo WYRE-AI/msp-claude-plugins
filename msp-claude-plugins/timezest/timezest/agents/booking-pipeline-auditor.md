@@ -1,6 +1,14 @@
 ---
 name: booking-pipeline-auditor
-description: Use this agent when reporting on the TimeZest scheduling pipeline — grouping requests by lifecycle state, finding stale requests waiting on customers, measuring booking conversion, and producing a dispatch-queue view across agents and teams. Trigger for: scheduling pipeline, TimeZest report, stale requests, stuck bookings, scheduling queue, booking conversion, requests waiting on customer, TimeZest dashboard, scheduling backlog. Examples: "Show me the TimeZest scheduling pipeline for today", "Which scheduling links have been sent but not booked?", "What's our booking conversion rate this week?", "Audit stale TimeZest requests and tell dispatch who to chase"
+description: >-
+  Use this agent when reporting on the TimeZest scheduling pipeline — grouping requests by
+  lifecycle state, finding stale requests waiting on customers, measuring booking conversion, and
+  producing a dispatch-queue view across agents and teams. Trigger for: scheduling pipeline,
+  TimeZest report, stale requests, stuck bookings, scheduling queue, booking conversion, requests
+  waiting on customer, TimeZest dashboard, scheduling backlog. Examples: "Show me the TimeZest
+  scheduling pipeline for today", "Which scheduling links have been sent but not booked?", "What's
+  our booking conversion rate this week?", "Audit stale TimeZest requests and tell dispatch who to
+  chase"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

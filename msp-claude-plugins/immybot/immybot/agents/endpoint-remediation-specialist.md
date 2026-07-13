@@ -1,6 +1,14 @@
 ---
 name: endpoint-remediation-specialist
-description: Use this agent when an MSP needs to diagnose and remediate a problem on ImmyBot-managed endpoints — investigating failed maintenance sessions and tasks, running remediation scripts, and re-reconciling affected computers. Trigger for: ImmyBot endpoint not compliant, failed maintenance session, fix a broken install, remediation script, endpoint troubleshooting, ImmyBot task failed, repair computer. Examples: "Figure out why the maintenance session for WS-ACCT-04 failed and fix it", "These five computers aren't compliant for the antivirus deployment — investigate and remediate", "Run the disk-cleanup remediation script on the Contoso servers that are low on space"
+description: >-
+  Use this agent when an MSP needs to diagnose and remediate a problem on ImmyBot-managed
+  endpoints — investigating failed maintenance sessions and tasks, running remediation scripts,
+  and re-reconciling affected computers. Trigger for: ImmyBot endpoint not compliant, failed
+  maintenance session, fix a broken install, remediation script, endpoint troubleshooting, ImmyBot
+  task failed, repair computer. Examples: "Figure out why the maintenance session for WS-ACCT-04
+  failed and fix it", "These five computers aren't compliant for the antivirus deployment —
+  investigate and remediate", "Run the disk-cleanup remediation script on the Contoso servers that
+  are low on space"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

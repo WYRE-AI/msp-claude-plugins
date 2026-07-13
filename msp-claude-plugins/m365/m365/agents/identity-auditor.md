@@ -1,6 +1,11 @@
 ---
 name: identity-auditor
-description: Use this agent when an MSP needs to perform a comprehensive Microsoft 365 tenant security audit. Trigger for: M365 security audit, MFA gaps, risky users, license waste, over-privileged accounts, suspicious sign-ins, guest user review, conditional access review, mailbox audit. Examples: "audit our client's M365 tenant for security issues", "find all users without MFA in M365", "show me over-privileged accounts and license waste for Contoso"
+description: >-
+  Use this agent when an MSP needs to perform a comprehensive Microsoft 365 tenant security audit.
+  Trigger for: M365 security audit, MFA gaps, risky users, license waste, over-privileged
+  accounts, suspicious sign-ins, guest user review, conditional access review, mailbox audit.
+  Examples: "audit our client's M365 tenant for security issues", "find all users without MFA in
+  M365", "show me over-privileged accounts and license waste for Contoso"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

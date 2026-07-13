@@ -1,6 +1,11 @@
 ---
 name: rmm-health-auditor
-description: Use this agent when an MSP needs a comprehensive health audit of their Datto RMM managed device fleet. Trigger for: fleet health check, device audit, patch compliance report, offline device report, alert triage, site health overview, client health report, RMM review, device status sweep. Examples: "Give me a health report across all our Datto RMM clients", "Which sites have the most open alerts right now?", "Show me all offline servers and critical alerts"
+description: >-
+  Use this agent when an MSP needs a comprehensive health audit of their Datto RMM managed device
+  fleet. Trigger for: fleet health check, device audit, patch compliance report, offline device
+  report, alert triage, site health overview, client health report, RMM review, device status
+  sweep. Examples: "Give me a health report across all our Datto RMM clients", "Which sites have
+  the most open alerts right now?", "Show me all offline servers and critical alerts"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

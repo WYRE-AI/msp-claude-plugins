@@ -1,6 +1,15 @@
 ---
 name: threat-investigator
-description: Use this agent when investigating a ThreatLocker security event — reconstructing a timeline around a host/user/file, tracing a file's history across the fleet, identifying repeated denials, and surfacing policy bypasses or audit-only matches that warrant new policy rules. Trigger for: investigate, what happened on, audit logs around, ThreatLocker timeline, ThreatLocker forensics, ThreatLocker incident, suspicious activity, repeated denials, file history, policy bypass, IOC search ThreatLocker. Examples: "Investigate what happened on WS-042 around 2pm yesterday", "Trace the history of this file hash across the fleet", "We're seeing repeated blocks from user j.doe — what's going on?", "Show me everywhere this binary appeared in the action log"
+description: >-
+  Use this agent when investigating a ThreatLocker security event — reconstructing a timeline
+  around a host/user/file, tracing a file's history across the fleet, identifying repeated
+  denials, and surfacing policy bypasses or audit-only matches that warrant new policy rules.
+  Trigger for: investigate, what happened on, audit logs around, ThreatLocker timeline,
+  ThreatLocker forensics, ThreatLocker incident, suspicious activity, repeated denials, file
+  history, policy bypass, IOC search ThreatLocker. Examples: "Investigate what happened on WS-042
+  around 2pm yesterday", "Trace the history of this file hash across the fleet", "We're seeing
+  repeated blocks from user j.doe — what's going on?", "Show me everywhere this binary appeared in
+  the action log"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

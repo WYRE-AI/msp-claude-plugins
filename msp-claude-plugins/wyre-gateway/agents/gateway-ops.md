@@ -1,6 +1,13 @@
 ---
 name: gateway-ops
-description: Use this agent when an MSP administrator needs to review gateway activity, audit tool usage across the team, investigate suspicious access patterns, check permission configurations, or monitor for anomalies in how MSP tools are being accessed through the WYRE MCP Gateway. Trigger for: gateway audit, tool usage review, suspicious activity, permission review, access log analysis, gateway health check, team usage patterns. Examples: "show me who has been using the gateway this week", "check for any unusual tool access patterns", "audit which tools my team members are accessing most frequently"
+description: >-
+  Use this agent when an MSP administrator needs to review gateway activity, audit tool usage
+  across the team, investigate suspicious access patterns, check permission configurations, or
+  monitor for anomalies in how MSP tools are being accessed through the WYRE MCP Gateway. Trigger
+  for: gateway audit, tool usage review, suspicious activity, permission review, access log
+  analysis, gateway health check, team usage patterns. Examples: "show me who has been using the
+  gateway this week", "check for any unusual tool access patterns", "audit which tools my team
+  members are accessing most frequently"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

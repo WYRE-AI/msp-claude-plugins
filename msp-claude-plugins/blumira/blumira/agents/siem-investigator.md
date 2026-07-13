@@ -1,6 +1,14 @@
 ---
 name: siem-investigator
-description: Use this agent when investigating Blumira SIEM alerts and findings, tracing attack chains across data sources, resolving detections, auditing security posture across MSP client accounts, or producing threat investigation reports. Trigger for: Blumira finding, Blumira alert, SIEM investigation, Blumira detection, triage Blumira, resolve finding Blumira, Blumira MSP, cross-account findings, attack chain analysis, Blumira security posture. Examples: "Show me all critical and high Blumira findings open right now", "Investigate this Blumira finding and tell me what happened", "Resolve this finding as a false positive with notes", "Give me a security posture overview across all our Blumira clients"
+description: >-
+  Use this agent when investigating Blumira SIEM alerts and findings, tracing attack chains across
+  data sources, resolving detections, auditing security posture across MSP client accounts, or
+  producing threat investigation reports. Trigger for: Blumira finding, Blumira alert, SIEM
+  investigation, Blumira detection, triage Blumira, resolve finding Blumira, Blumira MSP,
+  cross-account findings, attack chain analysis, Blumira security posture. Examples: "Show me all
+  critical and high Blumira findings open right now", "Investigate this Blumira finding and tell
+  me what happened", "Resolve this finding as a false positive with notes", "Give me a security
+  posture overview across all our Blumira clients"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

@@ -1,6 +1,11 @@
 ---
 name: automation-health-checker
-description: Use this agent when an MSP technician or engineer needs to audit the health of their ConnectWise Automate RMM environment. Trigger for: patch compliance report, script failures, monitor health, offline agents, automate audit, RMM health check, labtech health. Examples: "How many endpoints have missing patches?", "Which scripts have been failing this week?", "Show me all critical alerts that haven't been acknowledged"
+description: >-
+  Use this agent when an MSP technician or engineer needs to audit the health of their ConnectWise
+  Automate RMM environment. Trigger for: patch compliance report, script failures, monitor health,
+  offline agents, automate audit, RMM health check, labtech health. Examples: "How many endpoints
+  have missing patches?", "Which scripts have been failing this week?", "Show me all critical
+  alerts that haven't been acknowledged"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

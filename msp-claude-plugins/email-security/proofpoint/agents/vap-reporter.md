@@ -1,6 +1,16 @@
 ---
 name: vap-reporter
-description: Use this agent when analyzing Very Attacked Persons (VAPs) in Proofpoint — tracking executives and high-value targets who receive the most sophisticated or highest-volume attacks, surfacing patterns over time, and recommending enhanced protections for the highest-risk users across the MSP client portfolio. Trigger for: VAP analysis, Very Attacked Person, Proofpoint VAP, high-value targets email, most targeted users, executive targeting, VIP email protection, Proofpoint targeted users, high-risk users Proofpoint, email attack concentration, VAP report, user threat exposure. Examples: "Who are our most attacked users across all Proofpoint clients this month?", "Generate a VAP report for the executive team at Acme Corp", "Which CFOs in our portfolio are receiving the most sophisticated attacks?", "Identify the highest-risk users in Proofpoint and recommend enhanced protections"
+description: >-
+  Use this agent when analyzing Very Attacked Persons (VAPs) in Proofpoint — tracking executives
+  and high-value targets who receive the most sophisticated or highest-volume attacks, surfacing
+  patterns over time, and recommending enhanced protections for the highest-risk users across the
+  MSP client portfolio. Trigger for: VAP analysis, Very Attacked Person, Proofpoint VAP,
+  high-value targets email, most targeted users, executive targeting, VIP email protection,
+  Proofpoint targeted users, high-risk users Proofpoint, email attack concentration, VAP report,
+  user threat exposure. Examples: "Who are our most attacked users across all Proofpoint clients
+  this month?", "Generate a VAP report for the executive team at Acme Corp", "Which CFOs in our
+  portfolio are receiving the most sophisticated attacks?", "Identify the highest-risk users in
+  Proofpoint and recommend enhanced protections"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

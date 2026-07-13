@@ -1,6 +1,14 @@
 ---
 name: security-awareness-analyst
-description: Use this agent when analyzing phishing simulation results, identifying high-risk users, tracking training completion, recommending targeted security awareness programs, or responding to user-reported phishing through KnowBe4 PhishER for MSP clients. Trigger for: KnowBe4 phishing simulation, security awareness training, phish-prone percentage, high-risk users, training completion, PhishER triage, KnowBe4 campaign results, user risk score, phishing test results, security awareness report. Examples: "What is our phish-prone percentage this quarter?", "Who are the highest-risk users for Acme Corp?", "Triage the PhishER queue and remediate confirmed phishing emails", "Generate the security awareness report for the quarterly business review"
+description: >-
+  Use this agent when analyzing phishing simulation results, identifying high-risk users, tracking
+  training completion, recommending targeted security awareness programs, or responding to
+  user-reported phishing through KnowBe4 PhishER for MSP clients. Trigger for: KnowBe4 phishing
+  simulation, security awareness training, phish-prone percentage, high-risk users, training
+  completion, PhishER triage, KnowBe4 campaign results, user risk score, phishing test results,
+  security awareness report. Examples: "What is our phish-prone percentage this quarter?", "Who
+  are the highest-risk users for Acme Corp?", "Triage the PhishER queue and remediate confirmed
+  phishing emails", "Generate the security awareness report for the quarterly business review"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

@@ -1,6 +1,12 @@
 ---
 name: incident-war-room-coordinator
-description: Use this agent when a major incident (P1 or Critical severity) has been declared or is suspected, and the team needs immediate situational awareness across all affected systems and stakeholders. Trigger for: major incident, P1 declared, critical outage, war room, incident bridge, all-hands on deck, service down, mass alert firing, sev1, sev2. Examples: "We have a P1 — half our clients are offline", "Stand up a war room for the network outage affecting Acme Corp"
+description: >-
+  Use this agent when a major incident (P1 or Critical severity) has been declared or is
+  suspected, and the team needs immediate situational awareness across all affected systems and
+  stakeholders. Trigger for: major incident, P1 declared, critical outage, war room, incident
+  bridge, all-hands on deck, service down, mass alert firing, sev1, sev2. Examples: "We have a P1
+  — half our clients are offline", "Stand up a war room for the network outage affecting Acme
+  Corp"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

@@ -1,6 +1,15 @@
 ---
 name: license-true-up-reconciler
-description: Use this agent when an MSP operations manager, account manager, or billing team needs to reconcile subscription license seats across the full provisioning-to-billing chain and quantify waste, leakage, and over-collection. Trigger for: license true-up, license reconciliation, seat reconciliation, license waste, unused licenses, unassigned licenses, license leakage, unbilled licenses, over-billed licenses, license sprawl, SKU mismatch, license audit, Microsoft 365 license cleanup, inactive users holding licenses, seat count reconciliation, license renewal alignment. Examples: "Find all the licenses we're paying for that aren't assigned to anyone", "Do a license true-up across all clients and tell me what we can reclaim or start billing", "Which clients are we paying for more seats than we've contracted or invoiced?"
+description: >-
+  Use this agent when an MSP operations manager, account manager, or billing team needs to
+  reconcile subscription license seats across the full provisioning-to-billing chain and quantify
+  waste, leakage, and over-collection. Trigger for: license true-up, license reconciliation, seat
+  reconciliation, license waste, unused licenses, unassigned licenses, license leakage, unbilled
+  licenses, over-billed licenses, license sprawl, SKU mismatch, license audit, Microsoft 365
+  license cleanup, inactive users holding licenses, seat count reconciliation, license renewal
+  alignment. Examples: "Find all the licenses we're paying for that aren't assigned to anyone",
+  "Do a license true-up across all clients and tell me what we can reclaim or start billing",
+  "Which clients are we paying for more seats than we've contracted or invoiced?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

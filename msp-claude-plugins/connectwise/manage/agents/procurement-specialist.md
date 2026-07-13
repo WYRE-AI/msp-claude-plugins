@@ -1,6 +1,16 @@
 ---
 name: procurement-specialist
-description: Use this agent when an MSP procurement lead, sales engineer, service manager, or owner needs to work against the ConnectWise Manage product catalog and the procurement/quoting workflows it feeds. Trigger for: vendor price list imports, catalog audits (missing fields, data hygiene, duplicates), SKU creation at volume, bundle and agreement line-item setup, margin and cost reviews, quote assembly from a requirements brief, client-onboarding agreement additions, and end-of-life / retirement passes. Examples: "Import this Dell price list and create/update the SKUs", "Find every catalog item missing a manufacturer or with cost $0", "Build a draft quote for a 25-user office move: firewall, switch, access points, M365 Business Premium, onboarding", "Retire all Meraki MR33 SKUs — they're EOL", "Show me margin by product class for the last quarter", "Prep agreement additions for the new Acme Corp 40-seat managed services contract".
+description: >-
+  Use this agent when an MSP procurement lead, sales engineer, service manager, or owner needs to
+  work against the ConnectWise Manage product catalog and the procurement/quoting workflows it
+  feeds. Trigger for: vendor price list imports, catalog audits (missing fields, data hygiene,
+  duplicates), SKU creation at volume, bundle and agreement line-item setup, margin and cost
+  reviews, quote assembly from a requirements brief, client-onboarding agreement additions, and
+  end-of-life / retirement passes. Examples: "Import this Dell price list and create/update the
+  SKUs", "Find every catalog item missing a manufacturer or with cost $0", "Build a draft quote
+  for a 25-user office move: firewall, switch, access points, M365 Business Premium, onboarding",
+  "Retire all Meraki MR33 SKUs — they're EOL", "Show me margin by product class for the last
+  quarter", "Prep agreement additions for the new Acme Corp 40-seat managed services contract".
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

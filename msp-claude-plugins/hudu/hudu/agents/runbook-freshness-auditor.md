@@ -1,6 +1,11 @@
 ---
 name: runbook-freshness-auditor
-description: Use this agent when an MSP needs to audit the currency and coverage of runbooks and SOPs in Hudu. Trigger for: runbook review, SOP audit, procedure currency, outdated runbooks, runbook coverage gaps, untested procedures, deprecated tool references in runbooks, critical runbook missing. Examples: "audit all runbooks for outdated content", "which clients are missing a backup recovery runbook", "find runbooks that reference tools we no longer use"
+description: >-
+  Use this agent when an MSP needs to audit the currency and coverage of runbooks and SOPs in
+  Hudu. Trigger for: runbook review, SOP audit, procedure currency, outdated runbooks, runbook
+  coverage gaps, untested procedures, deprecated tool references in runbooks, critical runbook
+  missing. Examples: "audit all runbooks for outdated content", "which clients are missing a
+  backup recovery runbook", "find runbooks that reference tools we no longer use"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---
