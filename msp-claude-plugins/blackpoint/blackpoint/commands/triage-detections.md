@@ -1,13 +1,7 @@
 ---
-name: triage-detections
 description: Sweep and prioritize the open Blackpoint Cyber / CompassOne detection queue across tenants
-arguments:
-  - name: tenant
-    description: Optional tenant name or ID to scope the sweep to one customer
-    required: false
-  - name: hours
-    description: Look-back window in hours (default 24)
-    required: false
+argument-hint: "[tenant] [hours]"
+arguments: [tenant, hours]
 ---
 
 # Triage Blackpoint Detections

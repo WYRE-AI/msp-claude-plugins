@@ -1,11 +1,7 @@
 ---
-name: stale-requests
 description: Find stale TimeZest scheduling requests still waiting on a customer to book
-arguments:
-  - name: min_age
-    description: Minimum age in days for a request to count as stale
-    required: false
-    default: "1"
+argument-hint: "[min_age]"
+arguments: [min_age]
 ---
 
 # TimeZest Stale Requests

@@ -1,17 +1,7 @@
 ---
-name: check-contract
 description: View contract status, entitlements, and remaining hours for a company or specific contract
-arguments:
-  - name: company_id
-    description: Company ID to check contracts for
-    required: false
-  - name: contract_id
-    description: Specific contract ID to check
-    required: false
-  - name: include_expired
-    description: Include expired contracts (default false)
-    required: false
-    default: false
+argument-hint: "[company_id] [contract_id] [include_expired]"
+arguments: [company_id, contract_id, include_expired]
 ---
 
 # Check Autotask Contract

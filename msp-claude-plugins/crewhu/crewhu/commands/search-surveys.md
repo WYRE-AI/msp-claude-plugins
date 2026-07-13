@@ -1,15 +1,16 @@
 ---
-name: search-surveys
 description: Search recent Crewhu surveys, surfacing detractors and promoters
-arguments:
-  - name: query
-    description: Optional keyword to filter survey responses
-    required: false
+argument-hint: "[query]"
+arguments: [query]
 ---
 
 # Crewhu Survey Search
 
 Search Crewhu CSAT/NPS responses, then break the result into detractors and promoters so a manager has actionable follow-ups.
+
+## Arguments
+
+- `query` (optional) — Optional keyword to filter survey responses
 
 ## Prerequisites
 

@@ -1,20 +1,7 @@
 ---
-name: service-inventory
 description: List discovered services across RunZero assets
-arguments:
-  - name: site_id
-    description: Filter by site UUID
-    required: false
-  - name: protocol
-    description: Filter by protocol (e.g., rdp, ssh, http, smb)
-    required: false
-  - name: port
-    description: Filter by port number
-    required: false
-  - name: limit
-    description: Maximum number of services to return
-    required: false
-    default: "100"
+argument-hint: "[site_id] [protocol] [port] [limit]"
+arguments: [site_id, protocol, port, limit]
 ---
 
 # RunZero Service Inventory

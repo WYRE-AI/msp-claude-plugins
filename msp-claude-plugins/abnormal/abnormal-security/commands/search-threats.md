@@ -1,35 +1,7 @@
 ---
-name: search-threats
 description: Search for specific threat patterns in Abnormal Security by sender, recipient, attack type, or keywords
-arguments:
-  - name: query
-    description: Search term (searches sender, recipient, subject)
-    required: false
-  - name: type
-    description: Filter by attack type (bec, phishing, malware, extortion, scam, spam, supply-chain)
-    required: false
-  - name: sender
-    description: Filter by sender email address or domain
-    required: false
-  - name: recipient
-    description: Filter by target recipient email address
-    required: false
-  - name: status
-    description: Filter by remediation status (remediated, not-remediated, post-remediated, all)
-    required: false
-    default: all
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 7 days ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [type] [sender] [recipient] [status] [start-date] [end-date] [limit]"
+arguments: [query, type, sender, recipient, status, start-date, end-date, limit]
 ---
 
 # Search Threats

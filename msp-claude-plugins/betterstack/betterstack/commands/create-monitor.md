@@ -1,25 +1,7 @@
 ---
-name: create-monitor
 description: Create a new Better Stack uptime monitor
-arguments:
-  - name: url
-    description: The URL or host to monitor
-    required: true
-  - name: check_type
-    description: "Monitor type: http, ping, tcp, udp, dns, smtp, pop, imap"
-    required: false
-    default: "http"
-  - name: name
-    description: Human-readable name for the monitor
-    required: false
-  - name: check_frequency
-    description: Check interval in seconds (30, 60, 180, 300)
-    required: false
-    default: "180"
-  - name: expected_status
-    description: Expected HTTP status code (for HTTP monitors)
-    required: false
-    default: "200"
+argument-hint: "<url> [check_type] [name] [check_frequency] [expected_status]"
+arguments: [url, check_type, name, check_frequency, expected_status]
 ---
 
 # Create Better Stack Monitor

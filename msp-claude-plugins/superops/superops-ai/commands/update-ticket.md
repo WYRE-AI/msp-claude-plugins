@@ -1,25 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing SuperOps.ai ticket
-arguments:
-  - name: ticket_id
-    description: The SuperOps ticket ID or ticket number to update
-    required: true
-  - name: status
-    description: New status (Open, In Progress, Pending, Resolved, Closed)
-    required: false
-  - name: priority
-    description: Priority level (Low, Medium, High, Critical)
-    required: false
-  - name: technician_id
-    description: Technician ID to assign the ticket to
-    required: false
-  - name: due_date
-    description: New due date for the ticket (ISO 8601 format)
-    required: false
-  - name: category
-    description: Ticket category
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [technician_id] [due_date] [category]"
+arguments: [ticket_id, status, priority, technician_id, due_date, category]
 ---
 
 # Update SuperOps.ai Ticket

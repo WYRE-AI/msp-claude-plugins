@@ -1,17 +1,7 @@
 ---
-name: search-articles
 description: Search Hudu knowledge base articles by keyword or phrase
-arguments:
-  - name: query
-    description: Search query (keywords or phrase)
-    required: true
-  - name: company
-    description: Filter by company name
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 10
+argument-hint: "<query> [company] [limit]"
+arguments: [query, company, limit]
 ---
 
 # Search Hudu Articles

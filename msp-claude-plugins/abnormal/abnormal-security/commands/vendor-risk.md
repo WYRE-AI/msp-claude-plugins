@@ -1,21 +1,7 @@
 ---
-name: vendor-risk
 description: Check vendor risk scores and compromised vendor activity in Abnormal Security VendorBase
-arguments:
-  - name: vendor
-    description: Vendor domain to check (e.g., example-vendor.com)
-    required: false
-  - name: risk-level
-    description: Filter vendors by risk level (critical, high, medium, low)
-    required: false
-  - name: compromised-only
-    description: Show only vendors flagged as compromised
-    required: false
-    default: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[vendor] [risk-level] [compromised-only] [limit]"
+arguments: [vendor, risk-level, compromised-only, limit]
 ---
 
 # Vendor Risk Check

@@ -1,13 +1,7 @@
 ---
-name: service-status
 description: Check service health and dependency status across the Rootly service catalog
-arguments:
-  - name: service
-    description: Filter to a specific service by name
-    required: false
-  - name: team
-    description: Filter services by owning team
-    required: false
+argument-hint: "[service] [team]"
+arguments: [service, team]
 ---
 
 # Check Service Health

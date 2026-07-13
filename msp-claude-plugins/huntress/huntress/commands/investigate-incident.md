@@ -1,10 +1,7 @@
 ---
-name: investigate-incident
 description: Deep dive investigation into a specific Huntress incident with remediations
-arguments:
-  - name: incident_id
-    description: The incident ID to investigate
-    required: true
+argument-hint: "<incident_id>"
+arguments: [incident_id]
 ---
 
 # Investigate Huntress Incident

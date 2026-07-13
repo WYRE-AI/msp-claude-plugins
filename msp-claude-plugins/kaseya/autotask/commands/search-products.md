@@ -1,21 +1,7 @@
 ---
-name: search-products
 description: Search the Autotask product catalog for products, services, or inventory items
-arguments:
-  - name: search
-    description: Search term for product name or SKU
-    required: false
-  - name: type
-    description: "Item type to search: products, services, or inventory (default: products)"
-    required: false
-    default: "products"
-  - name: active-only
-    description: "Only show active items (default: true)"
-    required: false
-    default: "true"
-  - name: category
-    description: Product category ID to filter by
-    required: false
+argument-hint: "[search] [type] [active-only] [category]"
+arguments: [search, type, active-only, category]
 ---
 
 # Search Autotask Product Catalog

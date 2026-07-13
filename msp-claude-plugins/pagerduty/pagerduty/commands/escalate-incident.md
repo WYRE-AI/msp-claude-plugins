@@ -1,13 +1,7 @@
 ---
-name: escalate-incident
 description: Escalate a PagerDuty incident to the next level in the escalation policy
-arguments:
-  - name: incident_id
-    description: The incident ID to escalate (e.g., P1234ABC)
-    required: true
-  - name: escalation_level
-    description: Specific escalation level to jump to (optional, defaults to next level)
-    required: false
+argument-hint: "<incident_id> [escalation_level]"
+arguments: [incident_id, escalation_level]
 ---
 
 # Escalate PagerDuty Incident

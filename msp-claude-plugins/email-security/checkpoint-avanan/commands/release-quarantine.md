@@ -1,21 +1,7 @@
 ---
-name: release-quarantine
 description: Release quarantined email(s) back to recipients in Checkpoint Harmony Email
-arguments:
-  - name: entity-id
-    description: Quarantine entity ID (or comma-separated list for bulk release)
-    required: true
-  - name: allow-list
-    description: Add sender to allow list after release
-    required: false
-    default: false
-  - name: reason
-    description: Reason for releasing the email
-    required: false
-  - name: notify
-    description: Notify recipient that the email was released
-    required: false
-    default: true
+argument-hint: "<entity-id> [allow-list] [reason] [notify]"
+arguments: [entity-id, allow-list, reason, notify]
 ---
 
 # Release Quarantined Email

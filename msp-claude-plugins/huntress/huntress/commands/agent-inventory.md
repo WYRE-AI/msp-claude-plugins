@@ -1,16 +1,7 @@
 ---
-name: agent-inventory
 description: List and filter Huntress agents across organizations
-arguments:
-  - name: organization_id
-    description: Filter agents by organization ID
-    required: false
-  - name: platform
-    description: Filter by platform (windows, macos, linux)
-    required: false
-  - name: status
-    description: Filter by agent status (online, offline)
-    required: false
+argument-hint: "[organization_id] [platform] [status]"
+arguments: [organization_id, platform, status]
 ---
 
 # Agent Inventory

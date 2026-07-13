@@ -1,21 +1,7 @@
 ---
-name: review-quarantine
 description: Review the SpamTitan quarantine queue, show email statistics summary, and list recent held messages with release and delete actions
-arguments:
-  - name: domain
-    description: Client domain to review (omit for all domains)
-    required: false
-  - name: quarantine_type
-    description: Filter by quarantine type (spam, probable_spam, phishing, virus, blocked)
-    required: false
-  - name: period
-    description: Statistics period (today, yesterday, 7d, 30d)
-    required: false
-    default: "today"
-  - name: limit
-    description: Maximum number of quarantine messages to list
-    required: false
-    default: "50"
+argument-hint: "[domain] [quarantine_type] [period] [limit]"
+arguments: [domain, quarantine_type, period, limit]
 ---
 
 # SpamTitan Quarantine Review

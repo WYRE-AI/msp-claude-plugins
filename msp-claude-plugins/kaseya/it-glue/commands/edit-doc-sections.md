@@ -1,23 +1,7 @@
 ---
-name: edit-doc-sections
 description: Read, edit, and restructure sections of an IT Glue document
-arguments:
-  - name: document_id
-    description: IT Glue document ID
-    required: true
-  - name: action
-    description: "Action to perform: list, create, update, delete, publish"
-    required: true
-  - name: section_id
-    description: Section ID (required for update and delete)
-    required: false
-  - name: content
-    description: HTML content for the section (required for create and update)
-    required: false
-  - name: section_type
-    description: "Section type: heading or text (default: text)"
-    required: false
-    default: text
+argument-hint: "<document_id> <action> [section_id] [content] [section_type]"
+arguments: [document_id, action, section_id, content, section_type]
 ---
 
 # Edit IT Glue Document Sections
@@ -25,6 +9,14 @@ arguments:
 Read and edit the sections that make up an IT Glue document's body content.
 
 > **Note:** Use this command to modify document content — `PATCH /documents/:id` with a `content` attribute does not work for multi-section documents.
+
+## Arguments
+
+- `document_id` (required) — IT Glue document ID
+- `action` (required) — Action to perform: list, create, update, delete, publish
+- `section_id` (optional) — Section ID (required for update and delete)
+- `content` (optional) — HTML content for the section (required for create and update)
+- `section_type` (optional; default: `text`) — Section type: heading or text (default: text)
 
 ## Prerequisites
 

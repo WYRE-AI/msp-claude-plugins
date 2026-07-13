@@ -1,25 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing Syncro ticket
-arguments:
-  - name: ticket_id
-    description: The Syncro ticket ID to update
-    required: true
-  - name: status
-    description: New status (New, In Progress, Resolved, Closed)
-    required: false
-  - name: priority
-    description: Priority level (Low, Medium, High, Urgent)
-    required: false
-  - name: problem_type
-    description: Problem type category
-    required: false
-  - name: user_id
-    description: Technician user ID to assign
-    required: false
-  - name: due_date
-    description: Due date for the ticket (YYYY-MM-DD or datetime)
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [problem_type] [user_id] [due_date]"
+arguments: [ticket_id, status, priority, problem_type, user_id, due_date]
 ---
 
 # Update Syncro Ticket

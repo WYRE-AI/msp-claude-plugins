@@ -1,36 +1,7 @@
 ---
-name: search-tickets
 description: Search for tickets in ConnectWise PSA by various criteria
-arguments:
-  - name: query
-    description: Search term (searches summary and ticket ID)
-    required: false
-  - name: company
-    description: Filter by company name, identifier, or ID
-    required: false
-  - name: status
-    description: Filter by status (open, closed, all, or specific status name)
-    required: false
-    default: open
-  - name: priority
-    description: Filter by priority (critical, high, medium, low, or 1-4)
-    required: false
-  - name: board
-    description: Filter by service board name or ID
-    required: false
-  - name: assignee
-    description: Filter by assigned member name or ID
-    required: false
-  - name: date-from
-    description: Filter tickets created on or after this date (YYYY-MM-DD)
-    required: false
-  - name: date-to
-    description: Filter tickets created before this date (YYYY-MM-DD)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [company] [status] [priority] [board] [assignee] [date-from] [date-to] [limit]"
+arguments: [query, company, status, priority, board, assignee, date-from, date-to, limit]
 ---
 
 # Search ConnectWise PSA Tickets

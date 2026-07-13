@@ -1,21 +1,7 @@
 ---
-name: contract-status
 description: Check contract status, service entitlements, and billing information for a client
-arguments:
-  - name: client_id
-    description: Client ID to check contracts
-    required: false
-  - name: contract_id
-    description: Specific contract ID to view
-    required: false
-  - name: include_services
-    description: Include service line details (true/false)
-    required: false
-    default: false
-  - name: include_usage
-    description: Include usage/hours consumed (true/false)
-    required: false
-    default: false
+argument-hint: "[client_id] [contract_id] [include_services] [include_usage]"
+arguments: [client_id, contract_id, include_services, include_usage]
 ---
 
 # Check HaloPSA Contract Status

@@ -1,21 +1,7 @@
 ---
-name: get-customer
 description: Get detailed customer information from Syncro
-arguments:
-  - name: customer_id
-    description: Customer ID to look up
-    required: false
-  - name: query
-    description: Search by customer name
-    required: false
-  - name: include_assets
-    description: Include asset list (default false)
-    required: false
-    default: false
-  - name: include_tickets
-    description: Include recent tickets (default false)
-    required: false
-    default: false
+argument-hint: "[customer_id] [query] [include_assets] [include_tickets]"
+arguments: [customer_id, query, include_assets, include_tickets]
 ---
 
 # Get Syncro Customer

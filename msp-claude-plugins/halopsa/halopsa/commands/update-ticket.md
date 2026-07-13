@@ -1,28 +1,7 @@
 ---
-name: update-ticket
 description: Update fields on an existing HaloPSA ticket including status, priority, and assignment
-arguments:
-  - name: ticket_id
-    description: The HaloPSA ticket ID to update
-    required: true
-  - name: status
-    description: New status name or ID
-    required: false
-  - name: priority
-    description: Priority name or ID (1=Critical, 2=High, 3=Medium, 4=Low)
-    required: false
-  - name: category
-    description: Category for classification
-    required: false
-  - name: team
-    description: Team to assign ticket to
-    required: false
-  - name: agent
-    description: Agent email or name to assign
-    required: false
-  - name: sla
-    description: SLA profile to apply
-    required: false
+argument-hint: "<ticket_id> [status] [priority] [category] [team] [agent] [sla]"
+arguments: [ticket_id, status, priority, category, team, agent, sla]
 ---
 
 # Update HaloPSA Ticket

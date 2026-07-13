@@ -1,23 +1,7 @@
 ---
-name: create-document
 description: Create a new PandaDoc document from a template with recipients and content
-arguments:
-  - name: template
-    description: Template name or ID to create the document from
-    required: true
-  - name: recipient_email
-    description: Primary recipient email address
-    required: true
-  - name: recipient_name
-    description: Primary recipient full name
-    required: true
-  - name: document_name
-    description: Name for the new document
-    required: false
-    default: auto-generated from template and recipient
-  - name: variables
-    description: Key-value pairs for template content tokens (e.g., Client.Company=Acme)
-    required: false
+argument-hint: "<template> <recipient_email> <recipient_name> [document_name] [variables]"
+arguments: [template, recipient_email, recipient_name, document_name, variables]
 ---
 
 # Create PandaDoc Document

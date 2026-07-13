@@ -1,30 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in Syncro MSP
-arguments:
-  - name: customer
-    description: Customer name or ID
-    required: true
-  - name: subject
-    description: Ticket subject/title
-    required: true
-  - name: problem_type
-    description: Problem type category
-    required: false
-  - name: status
-    description: Ticket status (New, In Progress, Resolved, etc.)
-    required: false
-    default: New
-  - name: priority
-    description: Priority level (Low, Medium, High, Urgent)
-    required: false
-    default: Medium
-  - name: contact
-    description: Contact name or ID
-    required: false
-  - name: description
-    description: Detailed description of the issue
-    required: false
+argument-hint: "<customer> <subject> [problem_type] [status] [priority] [contact] [description]"
+arguments: [customer, subject, problem_type, status, priority, contact, description]
 ---
 
 # Create Syncro Ticket

@@ -1,17 +1,7 @@
 ---
-name: action-items
 description: List outstanding action items from Rootly postmortems and incidents
-arguments:
-  - name: status
-    description: Filter by action item status (open, in_progress, completed)
-    required: false
-    default: "open"
-  - name: incident_id
-    description: Filter action items for a specific incident
-    required: false
-  - name: assignee
-    description: Filter by assignee name or email
-    required: false
+argument-hint: "[status] [incident_id] [assignee]"
+arguments: [status, incident_id, assignee]
 ---
 
 # List Outstanding Action Items

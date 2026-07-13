@@ -1,18 +1,17 @@
 ---
-name: secure-score-report
 description: Generate a portfolio-wide M365 security posture report — Secure Score equivalents, MFA enrollment, conditional access coverage, and domain authentication across all managed tenants
-arguments:
-  - name: format
-    description: scorecard (default) — tenant-by-tenant table sorted by risk; trend — compare to previous run; executive — client-deliverable summary
-    required: false
-  - name: tenants
-    description: Comma-separated list of tenants to include (defaults to all)
-    required: false
+argument-hint: "[format] [tenants]"
+arguments: [format, tenants]
 ---
 
 # CIPP Secure Score Report
 
 Portfolio-level security posture report across the MSP's managed tenants. Designed for monthly internal reviews, quarterly business reviews, and as the source data for client-facing security summaries.
+
+## Arguments
+
+- `format` (optional) — scorecard (default) — tenant-by-tenant table sorted by risk; trend — compare to previous run; executive — client-deliverable summary
+- `tenants` (optional) — Comma-separated list of tenants to include (defaults to all)
 
 ## What it produces
 

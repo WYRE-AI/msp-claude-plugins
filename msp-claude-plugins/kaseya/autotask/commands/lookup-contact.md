@@ -1,21 +1,7 @@
 ---
-name: lookup-contact
 description: Search for Autotask contacts by name, email, phone, or company
-arguments:
-  - name: query
-    description: Contact name, email address, or phone number to search
-    required: true
-  - name: company_id
-    description: Filter by company ID
-    required: false
-  - name: active
-    description: Filter active contacts only (default true)
-    required: false
-    default: true
-  - name: limit
-    description: Maximum results to return (default 10)
-    required: false
-    default: 10
+argument-hint: "<query> [company_id] [active] [limit]"
+arguments: [query, company_id, active, limit]
 ---
 
 # Lookup Autotask Contact

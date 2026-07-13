@@ -1,19 +1,7 @@
 ---
-name: site-devices
 description: List all devices at a site in Datto RMM
-arguments:
-  - name: site
-    description: Site name or UID
-    required: true
-  - name: status
-    description: Filter by device status (online, offline, all)
-    required: false
-  - name: type
-    description: Filter by device type (server, desktop, laptop, etc.)
-    required: false
-  - name: alerts
-    description: Show only devices with open alerts
-    required: false
+argument-hint: "<site> [status] [type] [alerts]"
+arguments: [site, status, type, alerts]
 ---
 
 # Site Devices

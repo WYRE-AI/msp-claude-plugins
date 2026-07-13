@@ -1,22 +1,7 @@
 ---
-name: lookup-company
 description: Find a HubSpot company by name or domain and show associated contacts and deals
-arguments:
-  - name: query
-    description: Company name or domain to search for
-    required: true
-  - name: show_contacts
-    description: Include associated contacts in results
-    required: false
-    default: true
-  - name: show_deals
-    description: Include associated deals in results
-    required: false
-    default: true
-  - name: show_tickets
-    description: Include associated open tickets in results
-    required: false
-    default: false
+argument-hint: "<query> [show_contacts] [show_deals] [show_tickets]"
+arguments: [query, show_contacts, show_deals, show_tickets]
 ---
 
 # Look Up HubSpot Company

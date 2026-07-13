@@ -1,11 +1,7 @@
 ---
-name: asset-inventory
 description: Asset inventory summary by surface type across managed environments
-arguments:
-  - name: surface
-    description: Surface type to inventory (ENDPOINT, CLOUD, IDENTITY, NETWORK_DISCOVERY)
-    required: false
-    default: ENDPOINT
+argument-hint: "[surface]"
+arguments: [surface]
 ---
 
 # SentinelOne Asset Inventory

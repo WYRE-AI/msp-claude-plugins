@@ -1,22 +1,7 @@
 ---
-name: check-threats
 description: View recent TAP threat events including blocked messages, delivered threats, and click activity
-arguments:
-  - name: window
-    description: Time window to check (e.g., 1h, 6h, 12h, 24h)
-    required: false
-    default: 1h
-  - name: type
-    description: Filter by threat type (url, attachment, message, all)
-    required: false
-    default: all
-  - name: classification
-    description: Filter by classification (malware, phish, impostor, spam)
-    required: false
-  - name: status
-    description: Filter by disposition (blocked, delivered, all)
-    required: false
-    default: all
+argument-hint: "[window] [type] [classification] [status]"
+arguments: [window, type, classification, status]
 ---
 
 # Check Recent Threats

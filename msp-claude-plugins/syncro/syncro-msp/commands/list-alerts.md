@@ -1,24 +1,7 @@
 ---
-name: list-alerts
 description: List active RMM alerts from Syncro
-arguments:
-  - name: customer_id
-    description: Filter by customer ID
-    required: false
-  - name: severity
-    description: Filter by severity (Low, Medium, High, Critical)
-    required: false
-  - name: status
-    description: Filter by status (active, resolved, all)
-    required: false
-    default: active
-  - name: asset_id
-    description: Filter by specific asset
-    required: false
-  - name: limit
-    description: Maximum results (default 25)
-    required: false
-    default: 25
+argument-hint: "[customer_id] [severity] [status] [asset_id] [limit]"
+arguments: [customer_id, severity, status, asset_id, limit]
 ---
 
 # List Syncro RMM Alerts

@@ -1,14 +1,7 @@
 ---
-name: approval-triage
 description: Triage pending ThreatLocker approval requests with approve/deny recommendations
-arguments:
-  - name: organization_id
-    description: Optional organization (tenant) UUID to scope to a single child org
-    required: false
-  - name: limit
-    description: Maximum number of approval requests to surface
-    required: false
-    default: "100"
+argument-hint: "[organization_id] [limit]"
+arguments: [organization_id, limit]
 ---
 
 # ThreatLocker Approval Triage

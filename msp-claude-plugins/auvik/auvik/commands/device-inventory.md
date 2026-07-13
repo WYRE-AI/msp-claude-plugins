@@ -1,15 +1,7 @@
 ---
-name: device-inventory
 description: Inventory devices for an Auvik tenant with type, manage status, and lifecycle breakdown
 argument-hint: "[tenant_id] [limit]"
-arguments:
-  - name: tenant_id
-    description: Tenant (client) ID to scope the inventory to. Omit to prompt for selection.
-    required: false
-  - name: limit
-    description: Maximum devices to fetch
-    required: false
-    default: "500"
+arguments: [tenant_id, limit]
 ---
 
 # Auvik Device Inventory

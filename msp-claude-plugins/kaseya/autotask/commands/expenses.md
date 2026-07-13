@@ -1,13 +1,7 @@
 ---
-name: expenses
 description: Use this skill when working with Autotask expense reports - creating reports, adding expense items, searching by status or submitter, and tracking reimbursable and billable expenses
-arguments:
-  - name: action
-    description: "Action to perform: create-report, add-item, search, or get"
-    required: true
-  - name: details
-    description: "Details for the action (submitter name, amounts, descriptions, etc.)"
-    required: false
+argument-hint: "<action> [details]"
+arguments: [action, details]
 ---
 
 # Autotask Expense Management

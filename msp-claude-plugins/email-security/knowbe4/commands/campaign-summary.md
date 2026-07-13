@@ -1,16 +1,7 @@
 ---
-name: campaign-summary
 description: Get summary of recent phishing and training campaigns from KnowBe4
-arguments:
-  - name: type
-    description: Campaign type - phishing, training, or all
-    required: false
-  - name: period
-    description: Time period (e.g., "last 30 days", "Q1 2024", "this year")
-    required: false
-  - name: status
-    description: Filter by status (active, completed, scheduled, all)
-    required: false
+argument-hint: "[type] [period] [status]"
+arguments: [type, period, status]
 ---
 
 # Campaign Summary

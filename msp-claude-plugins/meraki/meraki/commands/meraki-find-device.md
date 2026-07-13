@@ -1,13 +1,7 @@
 ---
-name: meraki-find-device
 description: Locate a Meraki device by serial, name, or MAC across an organization's networks
-arguments:
-  - name: query
-    description: Search term (serial, device name, or MAC address)
-    required: true
-  - name: org_id
-    description: Organization ID to search (falls back to MERAKI_ORG_ID if omitted)
-    required: false
+argument-hint: "<query> [org_id]"
+arguments: [query, org_id]
 ---
 
 # Meraki Find Device

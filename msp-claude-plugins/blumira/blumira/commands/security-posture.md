@@ -1,11 +1,7 @@
 ---
-name: security-posture
 description: Overall security posture review including open findings by severity, agent coverage, and trends
-arguments:
-  - name: days
-    description: Number of days to look back for trend analysis
-    required: false
-    default: "30"
+argument-hint: "[days]"
+arguments: [days]
 ---
 
 # Security Posture

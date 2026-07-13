@@ -1,16 +1,7 @@
 ---
-name: payment-status
 description: Check payment status and outstanding balances for a client in Xero
-arguments:
-  - name: contact_name
-    description: Client/company name to check (partial match supported)
-    required: true
-  - name: include_paid
-    description: Include paid invoices in the results (default false)
-    required: false
-  - name: days_back
-    description: Number of days of invoice history to include (default 90)
-    required: false
+argument-hint: "<contact_name> [include_paid] [days_back]"
+arguments: [contact_name, include_paid, days_back]
 ---
 
 # Check Payment Status

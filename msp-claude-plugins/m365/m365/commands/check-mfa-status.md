@@ -1,18 +1,17 @@
 ---
-name: check-mfa-status
 description: Audit MFA enrollment across all M365 users, highlighting accounts with no MFA
-arguments:
-  - name: filter
-    description: Filter results - "all", "enrolled", "not-enrolled", or "admin-only"
-    required: false
-  - name: export
-    description: Output format - "table" (default) or "csv"
-    required: false
+argument-hint: "[filter] [export]"
+arguments: [filter, export]
 ---
 
 # Check MFA Status (Tenant Audit)
 
 Audit Microsoft 365 MFA enrollment for all users, producing a prioritized list of accounts that need attention.
+
+## Arguments
+
+- `filter` (optional) — Filter results - "all", "enrolled", "not-enrolled", or "admin-only"
+- `export` (optional) — Output format - "table" (default) or "csv"
 
 ## Prerequisites
 

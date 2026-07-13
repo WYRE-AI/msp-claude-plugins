@@ -1,16 +1,17 @@
 ---
-name: list-computers
 description: List and filter ImmyBot-managed computers, optionally scoped to a tenant
-arguments:
-  - name: scope
-    description: Tenant name to scope to (optional; omit for the whole fleet)
-    required: false
+argument-hint: "[scope]"
+arguments: [scope]
 ---
 
 # ImmyBot List Computers
 
 List ImmyBot-managed Windows endpoints, scoped to "$ARGUMENTS.scope"
 when a tenant is given.
+
+## Arguments
+
+- `scope` (optional) — Tenant name to scope to (optional; omit for the whole fleet)
 
 ## Prerequisites
 

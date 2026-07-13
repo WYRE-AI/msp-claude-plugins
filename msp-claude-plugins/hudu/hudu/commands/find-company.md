@@ -1,14 +1,7 @@
 ---
-name: find-company
 description: Find a company in Hudu by name
-arguments:
-  - name: name
-    description: Company name (partial match supported)
-    required: true
-  - name: status
-    description: Filter by status (active, archived, all)
-    required: false
-    default: active
+argument-hint: "<name> [status]"
+arguments: [name, status]
 ---
 
 # Find Hudu Company

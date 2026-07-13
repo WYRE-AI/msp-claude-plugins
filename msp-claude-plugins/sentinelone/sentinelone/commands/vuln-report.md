@@ -1,18 +1,7 @@
 ---
-name: vuln-report
 description: Generate a vulnerability summary report with severity breakdown and top CVEs
-arguments:
-  - name: severity
-    description: Filter by severity level (CRITICAL, HIGH, MEDIUM, LOW)
-    required: false
-  - name: status
-    description: Filter by vulnerability status (NEW, IN_PROGRESS, TO_BE_PATCHED, RESOLVED)
-    required: false
-    default: NEW
-  - name: limit
-    description: Maximum number of vulnerabilities to return
-    required: false
-    default: 50
+argument-hint: "[severity] [status] [limit]"
+arguments: [severity, status, limit]
 ---
 
 # SentinelOne Vulnerability Report

@@ -1,24 +1,19 @@
 ---
-name: offboard-user
 description: Run the complete M365 offboarding workflow for a departing user - revoke access, handle mailbox, transfer data
-arguments:
-  - name: user
-    description: UPN or display name of the user being offboarded
-    required: true
-  - name: mailbox-action
-    description: What to do with the mailbox - "shared" (convert to shared), "forward" (auto-forward to manager), "archive" (export and close), or "ask" (default)
-    required: false
-  - name: transfer-to
-    description: UPN of person receiving OneDrive access and/or mail forwarding (defaults to user's manager)
-    required: false
-  - name: dry-run
-    description: Show what would happen without executing (true/false)
-    required: false
+argument-hint: "<user> [mailbox-action] [transfer-to] [dry-run]"
+arguments: [user, mailbox-action, transfer-to, dry-run]
 ---
 
 # Offboard M365 User
 
 Execute a structured, safe Microsoft 365 offboarding workflow for a departing employee. Each step is performed in order with confirmation where needed.
+
+## Arguments
+
+- `user` (required) — UPN or display name of the user being offboarded
+- `mailbox-action` (optional) — What to do with the mailbox - "shared" (convert to shared), "forward" (auto-forward to manager), "archive" (export and close), or "ask" (default)
+- `transfer-to` (optional) — UPN of person receiving OneDrive access and/or mail forwarding (defaults to user's manager)
+- `dry-run` (optional) — Show what would happen without executing (true/false)
 
 ## Prerequisites
 

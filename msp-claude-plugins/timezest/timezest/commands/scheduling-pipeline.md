@@ -1,11 +1,7 @@
 ---
-name: scheduling-pipeline
 description: Produce a TimeZest scheduling pipeline report grouped by lifecycle state and resource
-arguments:
-  - name: window
-    description: Time window to scope the report (e.g. "today", "7d")
-    required: false
-    default: "7d"
+argument-hint: "[window]"
+arguments: [window]
 ---
 
 # TimeZest Scheduling Pipeline

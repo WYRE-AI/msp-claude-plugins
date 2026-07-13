@@ -1,19 +1,7 @@
 ---
-name: run-job
 description: Run a quick job on a device in Datto RMM
-arguments:
-  - name: device
-    description: Device hostname or UID
-    required: true
-  - name: component
-    description: Component script name or UID
-    required: true
-  - name: variables
-    description: Job variables as key=value pairs (comma-separated)
-    required: false
-  - name: wait
-    description: Wait for job completion and show results
-    required: false
+argument-hint: "<device> <component> [variables] [wait]"
+arguments: [device, component, variables, wait]
 ---
 
 # Run Job

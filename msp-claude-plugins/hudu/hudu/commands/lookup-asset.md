@@ -1,16 +1,7 @@
 ---
-name: lookup-asset
 description: Find an asset in Hudu by name, hostname, serial number, or IP address
-arguments:
-  - name: query
-    description: Asset name, hostname, serial number, or IP address to search for
-    required: true
-  - name: company
-    description: Filter by company name
-    required: false
-  - name: layout
-    description: Filter by asset layout name (server, workstation, network, etc.)
-    required: false
+argument-hint: "<query> [company] [layout]"
+arguments: [query, company, layout]
 ---
 
 # Lookup Hudu Asset

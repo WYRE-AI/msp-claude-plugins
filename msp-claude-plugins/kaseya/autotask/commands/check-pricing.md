@@ -1,14 +1,7 @@
 ---
-name: check-pricing
 description: Check pricing details for an Autotask product or service from price lists
-arguments:
-  - name: product
-    description: Product name, SKU, or ID to check pricing for
-    required: true
-  - name: type
-    description: "Item type: product or service (default: product)"
-    required: false
-    default: "product"
+argument-hint: "<product> [type]"
+arguments: [product, type]
 ---
 
 # Check Autotask Pricing

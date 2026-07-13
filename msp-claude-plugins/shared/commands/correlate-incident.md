@@ -1,20 +1,7 @@
 ---
-name: correlate-incident
 description: Correlate data across PSA, RMM, documentation, and config monitoring for a unified incident summary
-arguments:
-  - name: ticket
-    description: Ticket ID or number to investigate (e.g., "T20240215.0042" or "12345")
-    required: true
-  - name: device
-    description: Override device hostname or identifier (skips auto-detection from ticket)
-    required: false
-  - name: company
-    description: Override company name (skips extraction from ticket)
-    required: false
-  - name: depth
-    description: Correlation depth - "quick" (PSA + RMM only) or "full" (all sources)
-    required: false
-    default: full
+argument-hint: "<ticket> [device] [company] [depth]"
+arguments: [ticket, device, company, depth]
 ---
 
 # Correlate Incident

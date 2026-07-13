@@ -1,13 +1,7 @@
 ---
-name: document-status
 description: Check the status of a PandaDoc document and its recipients
-arguments:
-  - name: document_id
-    description: PandaDoc document ID
-    required: false
-  - name: document_name
-    description: Document name to search for (if ID not provided)
-    required: false
+argument-hint: "[document_id] [document_name]"
+arguments: [document_id, document_name]
 ---
 
 # Check PandaDoc Document Status

@@ -1,17 +1,7 @@
 ---
-name: oncall-schedule
 description: Show who is currently on call across schedules and escalation policies
-arguments:
-  - name: schedule_name
-    description: Filter by schedule name
-    required: false
-  - name: escalation_policy_name
-    description: Filter by escalation policy name
-    required: false
-  - name: days_ahead
-    description: Number of days ahead to show upcoming on-call assignments
-    required: false
-    default: "7"
+argument-hint: "[schedule_name] [escalation_policy_name] [days_ahead]"
+arguments: [schedule_name, escalation_policy_name, days_ahead]
 ---
 
 # PagerDuty On-Call Schedule

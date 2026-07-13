@@ -1,23 +1,7 @@
 ---
-name: search-assets
 description: Search for configuration items/assets by name, serial number, type, or client
-arguments:
-  - name: query
-    description: Asset name, serial number, or identifier
-    required: false
-  - name: client_id
-    description: Filter by client ID
-    required: false
-  - name: asset_type
-    description: Filter by type (Workstation, Server, Network, etc.)
-    required: false
-  - name: status
-    description: Filter by status (Active, Inactive, Retired)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [client_id] [asset_type] [status] [limit]"
+arguments: [query, client_id, asset_type, status, limit]
 ---
 
 # Search HaloPSA Assets

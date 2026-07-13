@@ -1,13 +1,7 @@
 ---
-name: entra-audit
 description: Run a read-only Microsoft Entra identity hygiene audit via the Graph Enterprise MCP — inactive user accounts, admins without MFA registered, unassigned/wasted licenses, and a guest user inventory
-arguments:
-  - name: scope
-    description: Audit area to focus on — all (default), inactive, mfa, licenses, or guests
-    required: false
-  - name: detail
-    description: summary (default), full, or executive — controls report depth
-    required: false
+argument-hint: "[scope] [detail]"
+arguments: [scope, detail]
 ---
 
 # Entra Identity Hygiene Audit
@@ -15,6 +9,11 @@ arguments:
 Runs a focused, **read-only** audit of a client's Microsoft Entra directory through the Microsoft Graph MCP Server for Enterprise. Suitable for client check-ins, post-onboarding validation, pre-QBR prep, security reviews, and "is anything stale in this tenant?" investigations.
 
 Every check goes through the RAG query loop — `microsoft_graph_suggest_queries` to find the right candidate Graph call, then `microsoft_graph_get` to execute it. Never hand-write Graph endpoints; see the `microsoft-graph-querying` skill.
+
+## Arguments
+
+- `scope` (optional) — Audit area to focus on — all (default), inactive, mfa, licenses, or guests
+- `detail` (optional) — summary (default), full, or executive — controls report depth
 
 ## What it checks
 

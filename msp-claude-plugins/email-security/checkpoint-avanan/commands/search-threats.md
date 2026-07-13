@@ -1,38 +1,7 @@
 ---
-name: search-threats
 description: Search detected threats in Checkpoint Harmony Email by type, severity, and date range
-arguments:
-  - name: query
-    description: Search term (searches sender, recipient, subject, IOCs)
-    required: false
-  - name: type
-    description: Filter by threat type (phishing, malware, bec, ato, ransomware, spam, dlp, zero-day)
-    required: false
-  - name: severity
-    description: Filter by severity (critical, high, medium, low)
-    required: false
-  - name: status
-    description: Filter by status (detected, quarantined, remediated, false-positive, all)
-    required: false
-    default: detected
-  - name: sender
-    description: Filter by sender email address
-    required: false
-  - name: recipient
-    description: Filter by target recipient
-    required: false
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 7 days ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [type] [severity] [status] [sender] [recipient] [start-date] [end-date] [limit]"
+arguments: [query, type, severity, status, sender, recipient, start-date, end-date, limit]
 ---
 
 # Search Threats

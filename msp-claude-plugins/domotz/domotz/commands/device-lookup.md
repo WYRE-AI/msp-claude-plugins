@@ -1,13 +1,7 @@
 ---
-name: device-lookup
 description: Find a Domotz device by name, IP address, or MAC address
-arguments:
-  - name: query
-    description: Search term (device name, IP address, or MAC address)
-    required: true
-  - name: agent_id
-    description: Filter to a specific agent/site
-    required: false
+argument-hint: "<query> [agent_id]"
+arguments: [query, agent_id]
 ---
 
 # Device Lookup

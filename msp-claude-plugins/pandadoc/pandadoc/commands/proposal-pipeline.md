@@ -1,18 +1,7 @@
 ---
-name: proposal-pipeline
 description: Summarize the PandaDoc proposal pipeline by status, value, and age
-arguments:
-  - name: tag
-    description: Filter proposals by tag (e.g., client name, project type)
-    required: false
-  - name: days
-    description: Look back period in days for pipeline analysis
-    required: false
-    default: 90
-  - name: show_stale
-    description: Highlight stale proposals that need follow-up
-    required: false
-    default: true
+argument-hint: "[tag] [days] [show_stale]"
+arguments: [tag, days, show_stale]
 ---
 
 # PandaDoc Proposal Pipeline

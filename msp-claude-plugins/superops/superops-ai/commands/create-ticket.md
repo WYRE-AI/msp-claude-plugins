@@ -1,25 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in SuperOps.ai
-arguments:
-  - name: client
-    description: Client name or account ID
-    required: true
-  - name: subject
-    description: Ticket subject/title
-    required: true
-  - name: description
-    description: Detailed description of the issue
-    required: false
-  - name: priority
-    description: Priority level (low, medium, high, critical)
-    required: false
-  - name: requester
-    description: Requester name or email
-    required: false
-  - name: tech-group
-    description: Technician group to assign
-    required: false
+argument-hint: "<client> <subject> [description] [priority] [requester] [tech-group]"
+arguments: [client, subject, description, priority, requester, tech-group]
 ---
 
 # Create SuperOps.ai Ticket

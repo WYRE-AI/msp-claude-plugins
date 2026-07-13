@@ -1,14 +1,7 @@
 ---
-name: subscription-status
 description: Check subscription details and quantities for a Sherweb customer
-arguments:
-  - name: customer
-    description: Customer name or ID to check subscriptions for
-    required: true
-  - name: status
-    description: Filter by subscription status (Active, Suspended, Cancelled, all)
-    required: false
-    default: Active
+argument-hint: "<customer> [status]"
+arguments: [customer, status]
 ---
 
 # Check Sherweb Subscription Status

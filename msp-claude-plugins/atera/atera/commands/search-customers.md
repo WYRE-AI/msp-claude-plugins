@@ -1,19 +1,7 @@
 ---
-name: search-customers
 description: Search for Atera customers by name or criteria
-arguments:
-  - name: query
-    description: Customer name or partial match
-    required: true
-  - name: include_contacts
-    description: Include contact list (true/false)
-    required: false
-  - name: include_agents
-    description: Include agent count/summary (true/false)
-    required: false
-  - name: limit
-    description: Maximum results (default 25)
-    required: false
+argument-hint: "<query> [include_contacts] [include_agents] [limit]"
+arguments: [query, include_contacts, include_agents, limit]
 ---
 
 # Search Atera Customers

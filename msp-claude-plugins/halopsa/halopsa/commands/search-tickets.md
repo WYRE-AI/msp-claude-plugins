@@ -1,36 +1,7 @@
 ---
-name: search-tickets
 description: Search for tickets in HaloPSA by various criteria
-arguments:
-  - name: query
-    description: Search term (searches summary, details, ticket ID)
-    required: false
-  - name: client
-    description: Filter by client name or ID
-    required: false
-  - name: status
-    description: Filter by status (open, closed, all, or specific status name)
-    required: false
-    default: open
-  - name: priority
-    description: Filter by priority (critical, high, medium, low)
-    required: false
-  - name: tickettype
-    description: Filter by ticket type name or ID
-    required: false
-  - name: agent
-    description: Filter by assigned agent name or ID
-    required: false
-  - name: team
-    description: Filter by team name or ID
-    required: false
-  - name: daterange
-    description: Filter by date range (today, week, month, or custom range)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[query] [client] [status] [priority] [tickettype] [agent] [team] [daterange] [limit]"
+arguments: [query, client, status, priority, tickettype, agent, team, daterange, limit]
 ---
 
 # Search HaloPSA Tickets

@@ -1,28 +1,7 @@
 ---
-name: create-monitor
 description: Create a threshold-based monitor for an Atera agent
-arguments:
-  - name: agent_id
-    description: The agent ID to monitor
-    required: true
-  - name: monitor_type
-    description: Monitor type (HTTP, TCP, SNMP)
-    required: true
-  - name: name
-    description: Monitor display name
-    required: true
-  - name: target
-    description: URL, port, or OID to monitor
-    required: true
-  - name: interval
-    description: Check interval in minutes (default 5)
-    required: false
-  - name: threshold
-    description: Alert threshold value
-    required: false
-  - name: alert_severity
-    description: Severity (Information, Warning, Critical)
-    required: false
+argument-hint: "<agent_id> <monitor_type> <name> <target> [interval] [threshold] [alert_severity]"
+arguments: [agent_id, monitor_type, name, target, interval, threshold, alert_severity]
 ---
 
 # Create Atera Monitor

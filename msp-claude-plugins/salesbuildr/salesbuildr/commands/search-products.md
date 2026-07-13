@@ -1,16 +1,15 @@
 ---
-name: search-products
 description: Search the Salesbuildr product catalog
-arguments:
-  - name: search
-    description: Search term for product name
-    required: false
-  - name: category
-    description: Category ID to filter by
-    required: false
+argument-hint: "[search] [category]"
+arguments: [search, category]
 ---
 
 # Search Salesbuildr Products
+
+## Arguments
+
+- `search` (optional) — Search term for product name
+- `category` (optional) — Category ID to filter by
 
 ## Prerequisites
 - Salesbuildr API key configured

@@ -1,17 +1,7 @@
 ---
-name: monitor-status
 description: Check all Better Stack monitor statuses and identify downtime
-arguments:
-  - name: status
-    description: Filter by status (up, down, paused, pending, maintenance)
-    required: false
-  - name: monitor_group
-    description: Filter by monitor group name
-    required: false
-  - name: limit
-    description: Maximum number of monitors to return
-    required: false
-    default: "100"
+argument-hint: "[status] [monitor_group] [limit]"
+arguments: [status, monitor_group, limit]
 ---
 
 # Better Stack Monitor Status

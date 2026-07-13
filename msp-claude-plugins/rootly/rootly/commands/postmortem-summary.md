@@ -1,10 +1,7 @@
 ---
-name: postmortem-summary
 description: Generate a postmortem summary for a resolved Rootly incident
-arguments:
-  - name: incident_id
-    description: The incident ID or sequential ID (e.g., INC-342) to generate a postmortem for
-    required: true
+argument-hint: "<incident_id>"
+arguments: [incident_id]
 ---
 
 # Generate Postmortem Summary

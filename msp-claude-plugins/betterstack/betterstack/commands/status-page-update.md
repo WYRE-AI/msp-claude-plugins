@@ -1,17 +1,7 @@
 ---
-name: status-page-update
 description: Update a Better Stack status page with current status or maintenance
-arguments:
-  - name: status_page_id
-    description: Status page ID to update
-    required: false
-  - name: action
-    description: "Action: review, post-incident, post-maintenance"
-    required: false
-    default: "review"
-  - name: message
-    description: Status update message for incident or maintenance posts
-    required: false
+argument-hint: "[status_page_id] [action] [message]"
+arguments: [status_page_id, action, message]
 ---
 
 # Better Stack Status Page Update

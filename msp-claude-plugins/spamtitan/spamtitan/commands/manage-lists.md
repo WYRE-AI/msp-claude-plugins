@@ -1,19 +1,7 @@
 ---
-name: manage-lists
 description: Add or remove entries from SpamTitan sender allowlists and blocklists
-arguments:
-  - name: action
-    description: Action to perform (allow, block, remove-allow, remove-block, review)
-    required: true
-  - name: sender
-    description: Sender email address, domain (e.g. @example.com), or IP address to act on
-    required: false
-  - name: domain
-    description: Client domain scope for the list entry (omit for global)
-    required: false
-  - name: notes
-    description: Reason for adding or removing the entry (recommended)
-    required: false
+argument-hint: "<action> [sender] [domain] [notes]"
+arguments: [action, sender, domain, notes]
 ---
 
 # SpamTitan List Management

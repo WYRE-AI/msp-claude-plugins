@@ -1,21 +1,7 @@
 ---
-name: check-agreement
 description: View agreement status and entitlements for a company in ConnectWise PSA
-arguments:
-  - name: company_id
-    description: Company ID to check agreements for
-    required: false
-  - name: agreement_id
-    description: Specific agreement ID to check
-    required: false
-  - name: include_additions
-    description: Include agreement additions (default true)
-    required: false
-    default: true
-  - name: active_only
-    description: Only show active agreements (default true)
-    required: false
-    default: true
+argument-hint: "[company_id] [agreement_id] [include_additions] [active_only]"
+arguments: [company_id, agreement_id, include_additions, active_only]
 ---
 
 # Check ConnectWise PSA Agreement

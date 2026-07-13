@@ -1,11 +1,7 @@
 ---
-name: network-audit
 description: Audit a tenant's networks, interfaces, and saved configurations; flag drift and missing backups
 argument-hint: "<tenant_id>"
-arguments:
-  - name: tenant_id
-    description: Tenant (client) ID to audit
-    required: true
+arguments: [tenant_id]
 ---
 
 # Auvik Network Audit

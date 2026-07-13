@@ -1,22 +1,7 @@
 ---
-name: run-script
 description: Execute a script on a remote asset via SuperOps RMM
-arguments:
-  - name: asset_id
-    description: The asset ID to run the script on
-    required: true
-  - name: script_id
-    description: The script ID from script library
-    required: true
-  - name: parameters
-    description: JSON string of script parameters
-    required: false
-  - name: run_as
-    description: Execution context - system (default) or user
-    required: false
-  - name: timeout
-    description: Timeout in seconds (default 300)
-    required: false
+argument-hint: "<asset_id> <script_id> [parameters] [run_as] [timeout]"
+arguments: [asset_id, script_id, parameters, run_as, timeout]
 ---
 
 # Run Script on SuperOps.ai Asset

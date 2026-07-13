@@ -1,25 +1,18 @@
 ---
-name: create-contact
 description: Create a new contact in Salesbuildr
-arguments:
-  - name: first-name
-    description: Contact first name
-    required: true
-  - name: last-name
-    description: Contact last name
-    required: true
-  - name: email
-    description: Contact email address
-    required: false
-  - name: company
-    description: Company name or ID
-    required: true
-  - name: phone
-    description: Contact phone number
-    required: false
+argument-hint: "<first-name> <last-name> [email] <company> [phone]"
+arguments: [first-name, last-name, email, company, phone]
 ---
 
 # Create Salesbuildr Contact
+
+## Arguments
+
+- `first-name` (required) — Contact first name
+- `last-name` (required) — Contact last name
+- `email` (optional) — Contact email address
+- `company` (required) — Company name or ID
+- `phone` (optional) — Contact phone number
 
 ## Prerequisites
 - Salesbuildr API key configured

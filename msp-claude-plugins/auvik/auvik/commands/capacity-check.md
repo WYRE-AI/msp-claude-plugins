@@ -1,15 +1,7 @@
 ---
-name: capacity-check
 description: Scan Auvik interface statistics for saturated links and recurring congestion
 argument-hint: "<tenant_id> [window]"
-arguments:
-  - name: tenant_id
-    description: Tenant (client) ID to scan
-    required: true
-  - name: window
-    description: Time window for the statistics query (e.g. 24h, 7d, 30d)
-    required: false
-    default: "7d"
+arguments: [tenant_id, window]
 ---
 
 # Auvik Capacity Check

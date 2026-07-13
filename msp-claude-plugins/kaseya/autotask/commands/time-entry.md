@@ -1,31 +1,7 @@
 ---
-name: time-entry
 description: Log time against tickets or projects in Autotask PSA
-arguments:
-  - name: target
-    description: Ticket number (T20240215.0001) or project ID to log time against
-    required: true
-  - name: hours
-    description: Hours worked (will be rounded to nearest quarter hour)
-    required: true
-  - name: summary
-    description: Work summary for billing (visible to client)
-    required: true
-  - name: date
-    description: Date worked (YYYY-MM-DD format, defaults to today)
-    required: false
-  - name: billing-code
-    description: Billing code name or ID
-    required: false
-  - name: billable
-    description: Explicitly set billable status (true/false)
-    required: false
-  - name: internal-notes
-    description: Internal notes (not visible on invoice)
-    required: false
-  - name: submit
-    description: Submit for approval immediately (default false)
-    required: false
+argument-hint: "<target> <hours> <summary> [date] [billing-code] [billable] [internal-notes] [submit]"
+arguments: [target, hours, summary, date, billing-code, billable, internal-notes, submit]
 ---
 
 # Log Time Entry in Autotask

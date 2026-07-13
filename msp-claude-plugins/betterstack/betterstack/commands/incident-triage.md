@@ -1,21 +1,7 @@
 ---
-name: incident-triage
 description: Triage current Better Stack incidents
-arguments:
-  - name: status
-    description: Filter by incident status (started, acknowledged, resolved)
-    required: false
-    default: "started"
-  - name: from
-    description: Start date filter (ISO 8601, e.g. 2026-03-27)
-    required: false
-  - name: to
-    description: End date filter (ISO 8601)
-    required: false
-  - name: limit
-    description: Maximum number of incidents to return
-    required: false
-    default: "50"
+argument-hint: "[status] [from] [to] [limit]"
+arguments: [status, from, to, limit]
 ---
 
 # Better Stack Incident Triage

@@ -1,22 +1,7 @@
 ---
-name: check-threat
 description: Get detailed threat analysis including IOCs and timeline from Checkpoint Harmony Email
-arguments:
-  - name: threat-id
-    description: The threat ID to analyze (e.g., thr-abc123)
-    required: true
-  - name: include-iocs
-    description: Include detailed IOC extraction
-    required: false
-    default: true
-  - name: include-timeline
-    description: Include detection and remediation timeline
-    required: false
-    default: true
-  - name: include-related
-    description: Include related threats and quarantine entries
-    required: false
-    default: false
+argument-hint: "<threat-id> [include-iocs] [include-timeline] [include-related]"
+arguments: [threat-id, include-iocs, include-timeline, include-related]
 ---
 
 # Check Threat Details

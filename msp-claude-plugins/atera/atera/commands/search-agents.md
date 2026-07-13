@@ -1,16 +1,7 @@
 ---
-name: search-agents
 description: Search for RMM agents in Atera by customer or machine name
-arguments:
-  - name: query
-    description: Customer name, customer ID, or machine name to search
-    required: true
-  - name: type
-    description: Search type (customer, machine, all)
-    required: false
-  - name: online
-    description: Filter by online status (true, false, all)
-    required: false
+argument-hint: "<query> [type] [online]"
+arguments: [query, type, online]
 ---
 
 # Search Atera Agents

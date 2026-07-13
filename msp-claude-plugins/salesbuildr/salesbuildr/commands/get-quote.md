@@ -1,13 +1,14 @@
 ---
-name: get-quote
 description: Get detailed information for a specific Salesbuildr quote
-arguments:
-  - name: id
-    description: Quote ID
-    required: true
+argument-hint: "<id>"
+arguments: [id]
 ---
 
 # Get Salesbuildr Quote Details
+
+## Arguments
+
+- `id` (required) — Quote ID
 
 ## Prerequisites
 - Salesbuildr API key configured

@@ -1,26 +1,7 @@
 ---
-name: case-review
 description: Review and triage abuse mailbox cases in Abnormal Security
-arguments:
-  - name: status
-    description: Filter by case status (open, acknowledged, done, all)
-    required: false
-    default: open
-  - name: judgment
-    description: Filter by AI judgment (malicious, spam, safe, no-action-needed)
-    required: false
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 7 days ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[status] [judgment] [start-date] [end-date] [limit]"
+arguments: [status, judgment, start-date, end-date, limit]
 ---
 
 # Case Review

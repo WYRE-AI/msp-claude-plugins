@@ -1,16 +1,7 @@
 ---
-name: search-contacts
 description: Find a contact in Xero by name, email, or account number
-arguments:
-  - name: query
-    description: Search term - company name, email, or account number
-    required: true
-  - name: type
-    description: Filter by contact type (customer, supplier, all)
-    required: false
-  - name: status
-    description: Filter by status (active, archived, all)
-    required: false
+argument-hint: "<query> [type] [status]"
+arguments: [query, type, status]
 ---
 
 # Search Xero Contacts

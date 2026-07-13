@@ -1,23 +1,7 @@
 ---
-name: lookup-config
 description: Search for configuration items (assets) in ConnectWise PSA
-arguments:
-  - name: query
-    description: Search by name, serial number, or tag number
-    required: false
-  - name: company_id
-    description: Filter by company ID
-    required: false
-  - name: type
-    description: Configuration type name (e.g., "Workstation", "Server")
-    required: false
-  - name: status
-    description: Configuration status (e.g., "Active", "Inactive")
-    required: false
-  - name: limit
-    description: Maximum results (default 25, max 100)
-    required: false
-    default: 25
+argument-hint: "[query] [company_id] [type] [status] [limit]"
+arguments: [query, company_id, type, status, limit]
 ---
 
 # Look Up ConnectWise PSA Configuration Items

@@ -1,14 +1,7 @@
 ---
-name: service-health
 description: Check PagerDuty service health status and recent incident activity
-arguments:
-  - name: service_name
-    description: Name of the service to check (searches by name)
-    required: false
-  - name: days
-    description: Number of days of history to review
-    required: false
-    default: "7"
+argument-hint: "[service_name] [days]"
+arguments: [service_name, days]
 ---
 
 # PagerDuty Service Health

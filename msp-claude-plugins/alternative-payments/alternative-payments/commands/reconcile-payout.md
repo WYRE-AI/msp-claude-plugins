@@ -1,13 +1,7 @@
 ---
-name: reconcile-payout
 description: Reconcile an Alternative Payments payout by listing its transactions and matching them against invoices and customers
-arguments:
-  - name: payout_id
-    description: The payout id to reconcile
-    required: true
-  - name: show_transactions
-    description: Include the full line-by-line transaction list in the output (default true)
-    required: false
+argument-hint: "<payout_id> [show_transactions]"
+arguments: [payout_id, show_transactions]
 ---
 
 # Reconcile Payout

@@ -1,13 +1,14 @@
 ---
-name: ninjaone-device-info
 description: Get detailed information about a NinjaOne device
-arguments:
-  - name: device_id
-    description: The NinjaOne device ID
-    required: true
+argument-hint: "<device_id>"
+arguments: [device_id]
 ---
 
 Get detailed information for NinjaOne device ID "$ARGUMENTS.device_id".
+
+## Arguments
+
+- `device_id` (required) — The NinjaOne device ID
 
 ## Instructions
 

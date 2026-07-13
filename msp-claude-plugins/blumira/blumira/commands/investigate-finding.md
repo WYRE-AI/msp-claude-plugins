@@ -1,10 +1,7 @@
 ---
-name: investigate-finding
 description: Deep investigation of a specific Blumira finding with details, context, and comment history
-arguments:
-  - name: finding_id
-    description: The UUID of the finding to investigate
-    required: true
+argument-hint: "<finding_id>"
+arguments: [finding_id]
 ---
 
 # Investigate Finding

@@ -1,14 +1,7 @@
 ---
-name: vuln-report
 description: Generate a vulnerability summary report from RunZero data
-arguments:
-  - name: site_id
-    description: Filter by site UUID
-    required: false
-  - name: severity
-    description: Minimum severity to include (critical, high, medium, low)
-    required: false
-    default: "medium"
+argument-hint: "[site_id] [severity]"
+arguments: [site_id, severity]
 ---
 
 # RunZero Vulnerability Report

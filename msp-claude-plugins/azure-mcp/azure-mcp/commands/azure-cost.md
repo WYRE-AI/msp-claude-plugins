@@ -1,13 +1,7 @@
 ---
-name: azure-cost
 description: Azure cost and pricing analysis for a subscription — Advisor cost recommendations, retail pricing lookups, and quota-driven right-sizing signals, scoped to one subscription
-arguments:
-  - name: subscription
-    description: Azure subscription ID or display name to analyze
-    required: true
-  - name: detail
-    description: summary (default) — top findings and estimated savings; full — every recommendation and price; executive — client-facing cost summary
-    required: false
+argument-hint: "<subscription> [detail]"
+arguments: [subscription, detail]
 ---
 
 # Azure Cost Analysis
@@ -15,6 +9,11 @@ arguments:
 Produces a read-only cost picture for a single Azure subscription. Suitable for monthly cost reviews, pre-QBR prep, right-sizing investigations, and "why is this subscription expensive?" questions.
 
 This command is **read-only** — it analyzes and recommends; it never changes resources, SKUs, or reservations.
+
+## Arguments
+
+- `subscription` (required) — Azure subscription ID or display name to analyze
+- `detail` (optional) — summary (default) — top findings and estimated savings; full — every recommendation and price; executive — client-facing cost summary
 
 ## What it does
 

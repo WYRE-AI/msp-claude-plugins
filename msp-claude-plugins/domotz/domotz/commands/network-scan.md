@@ -1,10 +1,7 @@
 ---
-name: network-scan
 description: Scan a network for devices via a Domotz agent
-arguments:
-  - name: agent_id
-    description: The agent/site to run the scan from
-    required: true
+argument-hint: "<agent_id>"
+arguments: [agent_id]
 ---
 
 # Network Scan

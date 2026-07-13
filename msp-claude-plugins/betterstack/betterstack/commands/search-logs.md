@@ -1,23 +1,7 @@
 ---
-name: search-logs
 description: Search logs via Better Stack Logtail
-arguments:
-  - name: query
-    description: "Search query (e.g. level:error, \"connection refused\", service:api)"
-    required: true
-  - name: source
-    description: Log source name or ID to filter
-    required: false
-  - name: from
-    description: Start time (ISO 8601, e.g. 2026-03-27T00:00:00Z)
-    required: false
-  - name: to
-    description: End time (ISO 8601)
-    required: false
-  - name: limit
-    description: Maximum number of log entries to return
-    required: false
-    default: "100"
+argument-hint: "<query> [source] [from] [to] [limit]"
+arguments: [query, source, from, to, limit]
 ---
 
 # Better Stack Log Search

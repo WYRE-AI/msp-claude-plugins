@@ -1,11 +1,7 @@
 ---
-name: tenant-overview
 description: Single-tenant Auvik snapshot - devices, alerts, networks, billing usage
 argument-hint: "<tenant_id>"
-arguments:
-  - name: tenant_id
-    description: Tenant (client) ID to summarize
-    required: true
+arguments: [tenant_id]
 ---
 
 # Auvik Tenant Overview

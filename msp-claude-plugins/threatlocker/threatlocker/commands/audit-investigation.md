@@ -1,19 +1,7 @@
 ---
-name: audit-investigation
 description: Build a timeline of ThreatLocker audit events around a security incident
-arguments:
-  - name: target
-    description: Computer name, file path, or user to focus the investigation on
-    required: false
-  - name: start_time
-    description: ISO 8601 start of the time window (e.g. 2026-04-29T00:00:00Z)
-    required: false
-  - name: end_time
-    description: ISO 8601 end of the time window
-    required: false
-  - name: organization_id
-    description: Optional organization (tenant) UUID
-    required: false
+argument-hint: "[target] [start_time] [end_time] [organization_id]"
+arguments: [target, start_time, end_time, organization_id]
 ---
 
 # ThreatLocker Audit Investigation

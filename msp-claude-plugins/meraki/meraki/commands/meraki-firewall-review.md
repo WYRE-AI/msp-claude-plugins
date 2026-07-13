@@ -1,10 +1,7 @@
 ---
-name: meraki-firewall-review
 description: Pull and summarize a Meraki network's L3 firewall rules and flag overly-permissive (any/any allow) rules
-arguments:
-  - name: network_id
-    description: The MX network whose L3 firewall rules to review
-    required: true
+argument-hint: "<network_id>"
+arguments: [network_id]
 ---
 
 # Meraki Firewall Review

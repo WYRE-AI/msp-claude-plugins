@@ -1,17 +1,7 @@
 ---
-name: search-products
 description: Search the Pax8 product catalog by name or vendor
-arguments:
-  - name: query
-    description: Product name to search for (partial match supported)
-    required: true
-  - name: vendor
-    description: Filter by vendor name (e.g., Microsoft, SentinelOne, Acronis)
-    required: false
-  - name: show_pricing
-    description: Include pricing details in results
-    required: false
-    default: false
+argument-hint: "<query> [vendor] [show_pricing]"
+arguments: [query, vendor, show_pricing]
 ---
 
 # Search Pax8 Products

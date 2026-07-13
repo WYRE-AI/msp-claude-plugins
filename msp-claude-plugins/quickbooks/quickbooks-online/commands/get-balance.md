@@ -1,22 +1,7 @@
 ---
-name: get-balance
 description: View outstanding balances across all MSP clients in QuickBooks Online
-arguments:
-  - name: customer
-    description: Filter to a specific customer name or ID
-    required: false
-  - name: overdue_only
-    description: Only show overdue balances (true/false)
-    required: false
-    default: "false"
-  - name: sort
-    description: Sort order (balance, name, overdue)
-    required: false
-    default: balance
-  - name: limit
-    description: Maximum number of customers to display
-    required: false
-    default: "50"
+argument-hint: "[customer] [overdue_only] [sort] [limit]"
+arguments: [customer, overdue_only, sort, limit]
 ---
 
 # Get QuickBooks Online Balances

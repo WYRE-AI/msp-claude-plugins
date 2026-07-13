@@ -1,32 +1,7 @@
 ---
-name: log-time
 description: Log a time entry against a ConnectWise PSA ticket
-arguments:
-  - name: ticket_id
-    description: The ticket ID to log time against
-    required: true
-  - name: time_start
-    description: Start time of the work (YYYY-MM-DD HH:MM or "now")
-    required: true
-  - name: time_end
-    description: End time (required if actual_hours not provided)
-    required: false
-  - name: actual_hours
-    description: Hours worked (alternative to time_end)
-    required: false
-  - name: notes
-    description: Work description/notes
-    required: false
-  - name: billable
-    description: "Billable option: Billable, DoNotBill, NoCharge"
-    required: false
-    default: Billable
-  - name: work_type
-    description: Work type name (e.g., "Remote Support")
-    required: false
-  - name: work_role
-    description: Work role name (e.g., "Engineer")
-    required: false
+argument-hint: "<ticket_id> <time_start> [time_end] [actual_hours] [notes] [billable] [work_type] [work_role]"
+arguments: [ticket_id, time_start, time_end, actual_hours, notes, billable, work_type, work_role]
 ---
 
 # Log Time to ConnectWise PSA Ticket

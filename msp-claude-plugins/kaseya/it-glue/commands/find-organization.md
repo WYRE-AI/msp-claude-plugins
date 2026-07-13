@@ -1,17 +1,7 @@
 ---
-name: find-organization
 description: Find an organization in IT Glue by name
-arguments:
-  - name: name
-    description: Organization name (partial match supported)
-    required: true
-  - name: type
-    description: Filter by organization type (customer, vendor, partner, internal)
-    required: false
-  - name: status
-    description: Filter by status (active, inactive, archived)
-    required: false
-    default: active
+argument-hint: "<name> [type] [status]"
+arguments: [name, type, status]
 ---
 
 # Find IT Glue Organization

@@ -1,25 +1,7 @@
 ---
-name: log-time
 description: Log work hours on an Atera ticket
-arguments:
-  - name: ticket_id
-    description: The ticket ID to log time against
-    required: true
-  - name: hours
-    description: Hours worked (e.g., 0.5, 1.25, 2)
-    required: true
-  - name: notes
-    description: Work description
-    required: false
-  - name: date
-    description: Date of work (default today)
-    required: false
-  - name: billable
-    description: Mark as billable (true/false, default true)
-    required: false
-  - name: hourly_rate
-    description: Override hourly rate
-    required: false
+argument-hint: "<ticket_id> <hours> [notes] [date] [billable] [hourly_rate]"
+arguments: [ticket_id, hours, notes, date, billable, hourly_rate]
 ---
 
 # Log Time on Atera Ticket

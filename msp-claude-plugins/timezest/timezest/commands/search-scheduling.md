@@ -1,15 +1,16 @@
 ---
-name: search-scheduling
 description: List recent TimeZest scheduling requests, grouped by state
-arguments:
-  - name: state
-    description: Optional state filter (sent / booked / canceled / expired)
-    required: false
+argument-hint: "[state]"
+arguments: [state]
 ---
 
 # TimeZest Scheduling Search
 
 Pull recent TimeZest scheduling requests and produce a dispatch-friendly summary grouped by lifecycle state.
+
+## Arguments
+
+- `state` (optional) — Optional state filter (sent / booked / canceled / expired)
 
 ## Prerequisites
 

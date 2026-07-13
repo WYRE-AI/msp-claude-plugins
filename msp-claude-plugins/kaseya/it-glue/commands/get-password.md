@@ -1,20 +1,7 @@
 ---
-name: get-password
 description: Retrieve a password from IT Glue (with security logging)
-arguments:
-  - name: name
-    description: Password name or partial match
-    required: true
-  - name: organization
-    description: Organization name (required for security)
-    required: true
-  - name: category
-    description: Filter by password category
-    required: false
-  - name: show
-    description: Show the actual password value (logged for audit)
-    required: false
-    default: false
+argument-hint: "<name> <organization> [category] [show]"
+arguments: [name, organization, category, show]
 ---
 
 # Get IT Glue Password

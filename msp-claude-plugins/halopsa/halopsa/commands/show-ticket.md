@@ -1,26 +1,7 @@
 ---
-name: show-ticket
 description: Display comprehensive ticket information including history, actions, and related entities
-arguments:
-  - name: ticket_id
-    description: The HaloPSA ticket ID
-    required: true
-  - name: include_actions
-    description: Include action history (true/false)
-    required: false
-    default: true
-  - name: include_attachments
-    description: List attachments (true/false)
-    required: false
-    default: false
-  - name: include_assets
-    description: Include linked assets (true/false)
-    required: false
-    default: false
-  - name: format
-    description: Output format (summary, full, json)
-    required: false
-    default: summary
+argument-hint: "<ticket_id> [include_actions] [include_attachments] [include_assets] [format]"
+arguments: [ticket_id, include_actions, include_attachments, include_assets, format]
 ---
 
 # Show HaloPSA Ticket

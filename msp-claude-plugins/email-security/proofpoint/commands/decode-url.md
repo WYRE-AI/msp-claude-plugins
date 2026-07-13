@@ -1,14 +1,7 @@
 ---
-name: decode-url
 description: Decode a Proofpoint URL Defense rewritten URL back to the original URL
-arguments:
-  - name: url
-    description: The Proofpoint-rewritten URL to decode
-    required: true
-  - name: analyze
-    description: Also analyze the decoded URL for threats
-    required: false
-    default: false
+argument-hint: "<url> [analyze]"
+arguments: [url, analyze]
 ---
 
 # Decode Proofpoint URL

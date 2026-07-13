@@ -1,16 +1,7 @@
 ---
-name: change-quantity
 description: Change subscription seat/license quantity for a Sherweb customer
-arguments:
-  - name: customer
-    description: Customer name or ID
-    required: true
-  - name: subscription
-    description: Subscription ID or product name to identify the subscription
-    required: true
-  - name: quantity
-    description: New total quantity (absolute number, not a delta)
-    required: true
+argument-hint: "<customer> <subscription> <quantity>"
+arguments: [customer, subscription, quantity]
 ---
 
 # Change Sherweb Subscription Quantity

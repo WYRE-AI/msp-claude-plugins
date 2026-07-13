@@ -1,13 +1,7 @@
 ---
-name: alert-status
 description: Check current Domotz alerts across all agents
-arguments:
-  - name: agent_id
-    description: Filter alerts to a specific agent/site
-    required: false
-  - name: severity
-    description: Filter by severity level (critical, warning, info)
-    required: false
+argument-hint: "[agent_id] [severity]"
+arguments: [agent_id, severity]
 ---
 
 # Alert Status

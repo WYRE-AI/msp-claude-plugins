@@ -1,10 +1,7 @@
 ---
-name: org-health
 description: Organization health check covering agents, incidents, and escalations
-arguments:
-  - name: organization_id
-    description: The organization ID to check
-    required: true
+argument-hint: "<organization_id>"
+arguments: [organization_id]
 ---
 
 # Organization Health Check

@@ -1,18 +1,7 @@
 ---
-name: posture-review
 description: Cloud security posture review with compliance gap analysis
-arguments:
-  - name: severity
-    description: Filter by severity level (CRITICAL, HIGH, MEDIUM, LOW)
-    required: false
-  - name: view_type
-    description: Filter by domain (CLOUD, KUBERNETES, IDENTITY, INFRASTRUCTURE_AS_CODE, SECRET_SCANNING)
-    required: false
-    default: CLOUD
-  - name: limit
-    description: Maximum number of misconfigurations to return
-    required: false
-    default: 50
+argument-hint: "[severity] [view_type] [limit]"
+arguments: [severity, view_type, limit]
 ---
 
 # SentinelOne Cloud Security Posture Review

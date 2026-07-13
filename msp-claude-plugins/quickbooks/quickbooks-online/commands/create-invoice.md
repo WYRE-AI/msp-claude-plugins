@@ -1,33 +1,7 @@
 ---
-name: create-invoice
 description: Create an invoice for a client's managed services in QuickBooks Online
-arguments:
-  - name: customer
-    description: Customer name or ID to invoice
-    required: true
-  - name: line
-    description: Line item description (e.g., "Monthly IT Services")
-    required: true
-  - name: amount
-    description: Line item amount in dollars
-    required: true
-  - name: qty
-    description: Quantity (default 1)
-    required: false
-    default: "1"
-  - name: item
-    description: Service item name or ID from QBO Items list
-    required: false
-  - name: date
-    description: Invoice date (YYYY-MM-DD, default today)
-    required: false
-  - name: send
-    description: Send invoice via email after creation (true/false)
-    required: false
-    default: "false"
-  - name: memo
-    description: Customer-visible memo on the invoice
-    required: false
+argument-hint: "<customer> <line> <amount> [qty] [item] [date] [send] [memo]"
+arguments: [customer, line, amount, qty, item, date, send, memo]
 ---
 
 # Create QuickBooks Online Invoice

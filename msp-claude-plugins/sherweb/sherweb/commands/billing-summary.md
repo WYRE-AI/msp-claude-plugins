@@ -1,18 +1,7 @@
 ---
-name: billing-summary
 description: View payable charges for a Sherweb billing period with pricing breakdown
-arguments:
-  - name: period
-    description: Billing period ID or "latest" for the most recent period
-    required: false
-    default: latest
-  - name: customer
-    description: Customer name or ID to filter charges by
-    required: false
-  - name: charge_type
-    description: Filter by charge type (Setup, Recurring, Usage, all)
-    required: false
-    default: all
+argument-hint: "[period] [customer] [charge_type]"
+arguments: [period, customer, charge_type]
 ---
 
 # Sherweb Billing Summary

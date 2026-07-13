@@ -1,22 +1,7 @@
 ---
-name: get-asset
 description: Get detailed asset information including hardware, software, and alerts
-arguments:
-  - name: asset_id
-    description: Asset ID to look up
-    required: false
-  - name: query
-    description: Search by asset name or serial number
-    required: false
-  - name: client_id
-    description: Filter by client ID when searching
-    required: false
-  - name: include_software
-    description: Include installed software list (default false)
-    required: false
-  - name: include_alerts
-    description: Include recent alerts (default false)
-    required: false
+argument-hint: "[asset_id] [query] [client_id] [include_software] [include_alerts]"
+arguments: [asset_id, query, client_id, include_software, include_alerts]
 ---
 
 # Get SuperOps.ai Asset Details

@@ -1,25 +1,7 @@
 ---
-name: trace-message
 description: Trace an email through Mimecast by sender, recipient, subject, or date range
-arguments:
-  - name: sender
-    description: Sender email address (supports wildcards, e.g. *@domain.com)
-    required: false
-  - name: recipient
-    description: Recipient email address
-    required: false
-  - name: subject
-    description: Subject keyword (partial match)
-    required: false
-  - name: start
-    description: Start date/time in ISO 8601 format (e.g. 2026-03-01T00:00:00Z)
-    required: false
-  - name: end
-    description: End date/time in ISO 8601 format (e.g. 2026-03-01T23:59:59Z)
-    required: false
-  - name: status
-    description: Filter by delivery status (delivered, held, rejected, bounced)
-    required: false
+argument-hint: "[sender] [recipient] [subject] [start] [end] [status]"
+arguments: [sender, recipient, subject, start, end, status]
 ---
 
 # Mimecast Message Trace

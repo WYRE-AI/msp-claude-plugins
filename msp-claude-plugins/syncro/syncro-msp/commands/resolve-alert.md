@@ -1,20 +1,7 @@
 ---
-name: resolve-alert
 description: Resolve an RMM alert in Syncro
-arguments:
-  - name: alert_id
-    description: The alert ID to resolve
-    required: true
-  - name: resolution_note
-    description: Note explaining the resolution
-    required: false
-  - name: create_ticket
-    description: Create a ticket from this alert (default false)
-    required: false
-    default: false
-  - name: ticket_subject
-    description: Subject if creating ticket
-    required: false
+argument-hint: "<alert_id> [resolution_note] [create_ticket] [ticket_subject]"
+arguments: [alert_id, resolution_note, create_ticket, ticket_subject]
 ---
 
 # Resolve Syncro RMM Alert

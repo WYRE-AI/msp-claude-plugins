@@ -1,25 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in Atera
-arguments:
-  - name: customer
-    description: Customer name or ID
-    required: true
-  - name: title
-    description: Ticket title/summary
-    required: true
-  - name: description
-    description: Detailed description of the issue
-    required: false
-  - name: priority
-    description: Priority level (Low, Medium, High, Critical)
-    required: false
-  - name: contact
-    description: Contact name or email
-    required: false
-  - name: technicianEmail
-    description: Technician email to assign
-    required: false
+argument-hint: "<customer> <title> [description] [priority] [contact] [technicianEmail]"
+arguments: [customer, title, description, priority, contact, technicianEmail]
 ---
 
 # Create Atera Ticket

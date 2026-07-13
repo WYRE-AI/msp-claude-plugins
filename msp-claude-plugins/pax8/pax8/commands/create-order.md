@@ -1,24 +1,7 @@
 ---
-name: create-order
 description: Place an order for a product subscription in Pax8
-arguments:
-  - name: company
-    description: Company name or ID to place the order for
-    required: true
-  - name: product
-    description: Product name or ID to order
-    required: true
-  - name: quantity
-    description: Number of seats/licenses to order
-    required: true
-  - name: billing_term
-    description: Billing term (Monthly, Annual, Triennial)
-    required: false
-    default: Annual
-  - name: start_date
-    description: Subscription start date (YYYY-MM-DD)
-    required: false
-    default: today
+argument-hint: "<company> <product> <quantity> [billing_term] [start_date]"
+arguments: [company, product, quantity, billing_term, start_date]
 ---
 
 # Create Pax8 Order

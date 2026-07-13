@@ -1,10 +1,7 @@
 ---
-name: account-summary
 description: Get a security posture summary for a RocketCyber customer account
-arguments:
-  - name: account
-    description: Account name or ID to summarize
-    required: true
+argument-hint: "<account>"
+arguments: [account]
 ---
 
 # RocketCyber Account Summary

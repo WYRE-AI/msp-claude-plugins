@@ -1,29 +1,7 @@
 ---
-name: add-note
 description: Add an internal or external note to a ConnectWise PSA ticket
-arguments:
-  - name: ticket_id
-    description: The ConnectWise ticket ID
-    required: true
-  - name: text
-    description: The note content (supports multi-line)
-    required: true
-  - name: detail_description
-    description: Add to detail description field (default false)
-    required: false
-    default: false
-  - name: internal_analysis
-    description: Add to internal analysis field (default false)
-    required: false
-    default: false
-  - name: resolution
-    description: Add to resolution field (default false)
-    required: false
-    default: false
-  - name: flag
-    description: "Note visibility: internal (default), external, or both"
-    required: false
-    default: internal
+argument-hint: "<ticket_id> <text> [detail_description] [internal_analysis] [resolution] [flag]"
+arguments: [ticket_id, text, detail_description, internal_analysis, resolution, flag]
 ---
 
 # Add Note to ConnectWise PSA Ticket

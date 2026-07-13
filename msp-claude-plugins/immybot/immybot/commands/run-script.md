@@ -1,19 +1,18 @@
 ---
-name: run-script
 description: Find and execute an ImmyBot PowerShell script on a target computer (destructive, SYSTEM context)
-arguments:
-  - name: script
-    description: Script name or keyword to run
-    required: true
-  - name: computer
-    description: Target computer name or hostname
-    required: true
+argument-hint: "<script> <computer>"
+arguments: [script, computer]
 ---
 
 # ImmyBot Run Script
 
 Find the ImmyBot script "$ARGUMENTS.script" and execute it on
 "$ARGUMENTS.computer".
+
+## Arguments
+
+- `script` (required) — Script name or keyword to run
+- `computer` (required) — Target computer name or hostname
 
 ## Prerequisites
 

@@ -1,22 +1,7 @@
 ---
-name: reconcile-billing
 description: Compare Pax8 subscriptions against Xero or QBO invoices to find billing gaps
-arguments:
-  - name: company
-    description: Company/client name to reconcile (or "all" for full portfolio)
-    required: true
-  - name: accounting
-    description: Accounting platform to reconcile against
-    required: true
-    options: [xero, quickbooks]
-  - name: period
-    description: Billing period to check (e.g., "2026-02", "last-month", "last-quarter")
-    required: false
-    default: last-month
-  - name: threshold
-    description: Minimum discrepancy percentage to flag
-    required: false
-    default: "5"
+argument-hint: "<company> <accounting> [period] [threshold]"
+arguments: [company, accounting, period, threshold]
 ---
 
 # Reconcile Billing

@@ -1,29 +1,7 @@
 ---
-name: threat-triage
 description: Triage recent email threats detected by Abnormal Security by severity and attack type
-arguments:
-  - name: severity
-    description: Filter by severity (critical, high, medium, low)
-    required: false
-  - name: type
-    description: Filter by attack type (bec, phishing, malware, extortion, scam, spam, supply-chain)
-    required: false
-  - name: status
-    description: Filter by remediation status (remediated, not-remediated, post-remediated, all)
-    required: false
-    default: not-remediated
-  - name: start-date
-    description: Start of date range (ISO 8601 format)
-    required: false
-    default: 24 hours ago
-  - name: end-date
-    description: End of date range (ISO 8601 format)
-    required: false
-    default: now
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[severity] [type] [status] [start-date] [end-date] [limit]"
+arguments: [severity, type, status, start-date, end-date, limit]
 ---
 
 # Threat Triage

@@ -1,25 +1,7 @@
 ---
-name: log-time
 description: Log a time entry against a SuperOps.ai ticket
-arguments:
-  - name: ticket_id
-    description: The ticket ID to log time against
-    required: true
-  - name: duration
-    description: Duration in minutes
-    required: true
-  - name: description
-    description: Work description/notes
-    required: false
-  - name: billable
-    description: Mark as billable (default true)
-    required: false
-  - name: start_time
-    description: Start time (defaults to now minus duration)
-    required: false
-  - name: work_type
-    description: Type of work performed
-    required: false
+argument-hint: "<ticket_id> <duration> [description] [billable] [start_time] [work_type]"
+arguments: [ticket_id, duration, description, billable, start_time, work_type]
 ---
 
 # Log Time on SuperOps.ai Ticket

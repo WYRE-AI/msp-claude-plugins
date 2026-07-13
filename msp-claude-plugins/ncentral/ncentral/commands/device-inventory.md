@@ -1,18 +1,7 @@
 ---
-name: device-inventory
 description: Inventory devices for an N-central customer or site with class, warranty, and monitor-health breakdown
 argument-hint: "[org_unit_id] [filter_id] [limit]"
-arguments:
-  - name: org_unit_id
-    description: Customer or site org unit ID to scope the inventory to. Omit to prompt for selection.
-    required: false
-  - name: filter_id
-    description: Saved device filter ID to apply server-side (from ncentral_list_device_filters)
-    required: false
-  - name: limit
-    description: Maximum devices to fetch
-    required: false
-    default: "1000"
+arguments: [org_unit_id, filter_id, limit]
 ---
 
 # N-central Device Inventory

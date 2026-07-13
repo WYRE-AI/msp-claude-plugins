@@ -1,29 +1,7 @@
 ---
-name: search-quarantine
 description: Search quarantined messages in Proofpoint by sender, recipient, subject, or reason
-arguments:
-  - name: sender
-    description: Filter by sender email address (exact or partial match)
-    required: false
-  - name: recipient
-    description: Filter by recipient email address
-    required: false
-  - name: subject
-    description: Filter by subject line (substring match)
-    required: false
-  - name: reason
-    description: Filter by quarantine reason (spam, phish, malware, impostor, policy)
-    required: false
-  - name: start-date
-    description: Start date for search range (ISO 8601)
-    required: false
-  - name: end-date
-    description: End date for search range (ISO 8601)
-    required: false
-  - name: limit
-    description: Maximum results to return
-    required: false
-    default: 25
+argument-hint: "[sender] [recipient] [subject] [reason] [start-date] [end-date] [limit]"
+arguments: [sender, recipient, subject, reason, start-date, end-date, limit]
 ---
 
 # Search Proofpoint Quarantine

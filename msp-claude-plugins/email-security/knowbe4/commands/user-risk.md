@@ -1,16 +1,7 @@
 ---
-name: user-risk
 description: Get risk score and risk history for a KnowBe4 user
-arguments:
-  - name: user
-    description: User email, name, or ID
-    required: true
-  - name: period
-    description: Time period for risk history (e.g., "6 months", "1 year")
-    required: false
-  - name: compare
-    description: Compare to group or department average
-    required: false
+argument-hint: "<user> [period] [compare]"
+arguments: [user, period, compare]
 ---
 
 # Get User Risk Score and History

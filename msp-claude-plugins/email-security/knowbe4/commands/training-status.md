@@ -1,19 +1,7 @@
 ---
-name: training-status
 description: Check training completion status for users or groups in KnowBe4
-arguments:
-  - name: user
-    description: User email or ID to check
-    required: false
-  - name: group
-    description: Group name or ID to check
-    required: false
-  - name: campaign
-    description: Training campaign name or ID
-    required: false
-  - name: status
-    description: Filter by status (not_started, in_progress, completed, past_due)
-    required: false
+argument-hint: "[user] [group] [campaign] [status]"
+arguments: [user, group, campaign, status]
 ---
 
 # Check Training Completion Status

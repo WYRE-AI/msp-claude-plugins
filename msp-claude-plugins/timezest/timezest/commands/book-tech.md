@@ -1,16 +1,7 @@
 ---
-name: book-tech
 description: Book a TimeZest scheduling request for a technician against a PSA ticket
-arguments:
-  - name: psa_ticket
-    description: PSA ticket reference to associate the booking with (e.g. "connectwise:88421")
-    required: true
-  - name: resource
-    description: Technician name or team name to book; omit to book from the full pool
-    required: false
-  - name: appointment_type
-    description: Appointment type name (e.g. "Remote Session", "Onsite Visit")
-    required: false
+argument-hint: "<psa_ticket> [resource] [appointment_type]"
+arguments: [psa_ticket, resource, appointment_type]
 ---
 
 # TimeZest Book a Tech

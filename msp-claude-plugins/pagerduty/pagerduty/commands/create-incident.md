@@ -1,20 +1,7 @@
 ---
-name: create-incident
 description: Create a new PagerDuty incident on a service
-arguments:
-  - name: title
-    description: Short summary of the incident
-    required: true
-  - name: service_name
-    description: Name of the service to create the incident on
-    required: true
-  - name: urgency
-    description: Urgency level (high, low)
-    required: false
-    default: "high"
-  - name: details
-    description: Detailed description of the incident
-    required: false
+argument-hint: "<title> <service_name> [urgency] [details]"
+arguments: [title, service_name, urgency, details]
 ---
 
 # Create PagerDuty Incident

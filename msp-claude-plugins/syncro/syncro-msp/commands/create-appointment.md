@@ -1,31 +1,7 @@
 ---
-name: create-appointment
 description: Create a calendar appointment in Syncro
-arguments:
-  - name: subject
-    description: Appointment subject/title
-    required: true
-  - name: start_time
-    description: Start date and time (YYYY-MM-DD HH:MM)
-    required: true
-  - name: end_time
-    description: End date and time (YYYY-MM-DD HH:MM)
-    required: true
-  - name: customer_id
-    description: Associated customer ID
-    required: false
-  - name: ticket_id
-    description: Associated ticket ID
-    required: false
-  - name: user_id
-    description: Assigned technician ID (defaults to current user)
-    required: false
-  - name: location
-    description: Appointment location
-    required: false
-  - name: notes
-    description: Additional notes
-    required: false
+argument-hint: "<subject> <start_time> <end_time> [customer_id] [ticket_id] [user_id] [location] [notes]"
+arguments: [subject, start_time, end_time, customer_id, ticket_id, user_id, location, notes]
 ---
 
 # Create Syncro Appointment

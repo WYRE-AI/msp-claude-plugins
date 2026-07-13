@@ -1,13 +1,7 @@
 ---
-name: computer-inventory
 description: Generate a ThreatLocker computer inventory report
-arguments:
-  - name: organization_id
-    description: Optional organization (tenant) UUID
-    required: false
-  - name: group
-    description: Optional computer group name or ID to drill into
-    required: false
+argument-hint: "[organization_id] [group]"
+arguments: [organization_id, group]
 ---
 
 # ThreatLocker Computer Inventory

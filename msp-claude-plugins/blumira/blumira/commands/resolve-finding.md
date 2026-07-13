@@ -1,16 +1,7 @@
 ---
-name: resolve-finding
 description: Resolve a Blumira finding with the appropriate resolution type and notes
-arguments:
-  - name: finding_id
-    description: The UUID of the finding to resolve
-    required: true
-  - name: resolution_type
-    description: "Resolution type: valid, not-applicable, or false-positive"
-    required: true
-  - name: notes
-    description: Resolution notes explaining the decision
-    required: true
+argument-hint: "<finding_id> <resolution_type> <notes>"
+arguments: [finding_id, resolution_type, notes]
 ---
 
 # Resolve Finding

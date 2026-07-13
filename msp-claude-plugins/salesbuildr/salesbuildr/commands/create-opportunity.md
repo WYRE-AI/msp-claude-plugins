@@ -1,28 +1,19 @@
 ---
-name: create-opportunity
 description: Create a new opportunity in Salesbuildr
-arguments:
-  - name: name
-    description: Opportunity name/title
-    required: true
-  - name: company
-    description: Company name or ID
-    required: true
-  - name: contact
-    description: Contact name or ID
-    required: false
-  - name: value
-    description: Deal value in dollars
-    required: false
-  - name: stage
-    description: Pipeline stage
-    required: false
-  - name: close-date
-    description: Expected close date (YYYY-MM-DD)
-    required: false
+argument-hint: "<name> <company> [contact] [value] [stage] [close-date]"
+arguments: [name, company, contact, value, stage, close-date]
 ---
 
 # Create Salesbuildr Opportunity
+
+## Arguments
+
+- `name` (required) — Opportunity name/title
+- `company` (required) — Company name or ID
+- `contact` (optional) — Contact name or ID
+- `value` (optional) — Deal value in dollars
+- `stage` (optional) — Pipeline stage
+- `close-date` (optional) — Expected close date (YYYY-MM-DD)
 
 ## Prerequisites
 - Salesbuildr API key configured

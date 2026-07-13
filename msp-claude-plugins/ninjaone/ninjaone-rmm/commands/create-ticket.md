@@ -1,25 +1,18 @@
 ---
-name: ninjaone-create-ticket
 description: Create a new ticket in NinjaOne
-arguments:
-  - name: subject
-    description: Ticket subject/title
-    required: true
-  - name: organization
-    description: Organization name or ID
-    required: true
-  - name: description
-    description: Detailed description of the issue
-    required: false
-  - name: priority
-    description: Priority level (critical, high, medium, low)
-    required: false
-  - name: device_id
-    description: Link to a specific device
-    required: false
+argument-hint: "<subject> <organization> [description] [priority] [device_id]"
+arguments: [subject, organization, description, priority, device_id]
 ---
 
 Create a new ticket in NinjaOne for "$ARGUMENTS.organization".
+
+## Arguments
+
+- `subject` (required) — Ticket subject/title
+- `organization` (required) — Organization name or ID
+- `description` (optional) — Detailed description of the issue
+- `priority` (optional) — Priority level (critical, high, medium, low)
+- `device_id` (optional) — Link to a specific device
 
 ## Ticket Details
 - **Subject:** $ARGUMENTS.subject

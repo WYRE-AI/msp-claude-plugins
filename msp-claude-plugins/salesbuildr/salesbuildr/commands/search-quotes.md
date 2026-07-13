@@ -1,19 +1,16 @@
 ---
-name: search-quotes
 description: Search for quotes in Salesbuildr
-arguments:
-  - name: search
-    description: Search term for quote name/number
-    required: false
-  - name: company
-    description: Company name or ID to filter
-    required: false
-  - name: opportunity
-    description: Opportunity ID to filter
-    required: false
+argument-hint: "[search] [company] [opportunity]"
+arguments: [search, company, opportunity]
 ---
 
 # Search Salesbuildr Quotes
+
+## Arguments
+
+- `search` (optional) — Search term for quote name/number
+- `company` (optional) — Company name or ID to filter
+- `opportunity` (optional) — Opportunity ID to filter
 
 ## Prerequisites
 - Salesbuildr API key configured

@@ -1,21 +1,7 @@
 ---
-name: lookup-company
 description: Search for Autotask companies by name, ID, or other attributes
-arguments:
-  - name: query
-    description: Company name, partial name, or ID to search for
-    required: true
-  - name: type
-    description: Filter by company type (e.g., "Customer", "Lead", "Vendor")
-    required: false
-  - name: active
-    description: Filter active companies only (default true)
-    required: false
-    default: true
-  - name: limit
-    description: Maximum results to return (default 10)
-    required: false
-    default: 10
+argument-hint: "<query> [type] [active] [limit]"
+arguments: [query, type, active, limit]
 ---
 
 # Lookup Autotask Company

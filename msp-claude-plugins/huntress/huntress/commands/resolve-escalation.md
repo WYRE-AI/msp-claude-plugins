@@ -1,10 +1,7 @@
 ---
-name: resolve-escalation
 description: Review and resolve a Huntress escalation
-arguments:
-  - name: escalation_id
-    description: The escalation ID to review and resolve
-    required: true
+argument-hint: "<escalation_id>"
+arguments: [escalation_id]
 ---
 
 # Resolve Escalation

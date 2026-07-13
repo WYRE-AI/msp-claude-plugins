@@ -1,31 +1,7 @@
 ---
-name: create-ticket
 description: Create a new service ticket in HaloPSA
-arguments:
-  - name: client
-    description: Client name or ID
-    required: true
-  - name: summary
-    description: Ticket summary/title (max 255 characters)
-    required: true
-  - name: details
-    description: Detailed description of the issue (HTML supported)
-    required: false
-  - name: priority
-    description: Priority level 1-4 (1=Critical, 4=Low, default 3)
-    required: false
-  - name: tickettype
-    description: Ticket type name or ID (default Incident)
-    required: false
-  - name: contact
-    description: Contact/user name or email
-    required: false
-  - name: site
-    description: Site name or ID
-    required: false
-  - name: agent
-    description: Assigned agent name or ID
-    required: false
+argument-hint: "<client> <summary> [details] [priority] [tickettype] [contact] [site] [agent]"
+arguments: [client, summary, details, priority, tickettype, contact, site, agent]
 ---
 
 # Create HaloPSA Ticket
