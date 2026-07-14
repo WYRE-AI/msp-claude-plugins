@@ -1,6 +1,6 @@
 {
   "name": "wyre-site-editor",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Edit wyre.ai site content conversationally — change copy, preview it on a live URL, and publish safely, without touching git or a CMS",
   "author": {
     "name": "WYRE Technology"
