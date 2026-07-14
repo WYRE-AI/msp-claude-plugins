@@ -19,18 +19,20 @@ One-time setup so the site-editing skills can work. Everything here is
 walk-along: do the steps FOR the user where possible, and give click-by-click
 guidance where a browser is involved.
 
-## Identity (read first)
+## Identity
 
-The primary path is the user's **own GitHub account** with access to the
-`wyre-technology/wyre-ai` repository — edits and publishes are then
-attributed to the real person, which the WYRE content pipeline expects.
+Angela edits and publishes under her **own GitHub account**
+(`angelawyreai`) — she already has write/maintain access to
+`wyre-technology/wyre-ai`, so there is no invite to accept. Edits are
+attributed to her directly, which the WYRE content pipeline expects.
 
-> **[PENDING — identity decision]** Final identity model (personal account vs
-> managed credential) is with WYRE leadership. If a managed credential is
-> issued instead: it arrives via the WYRE team, gets configured with
-> `gh auth login --with-token`, and **every publishing gate in WYRE Site
-> Publish still applies unchanged** — a bot credential never relaxes the
-> confirm-before-merge rule.
+If someone else is being set up later and doesn't yet have access to the
+repo, stop and tell them to ask the WYRE team — do not improvise
+credentials. (If WYRE ever issues a managed/bot credential instead of a
+personal account for a future user: it gets configured with `gh auth login
+--with-token`, and **every publishing gate in WYRE Site Publish still
+applies unchanged** — a bot credential never relaxes the
+confirm-before-merge rule.)
 
 ## Steps
 
