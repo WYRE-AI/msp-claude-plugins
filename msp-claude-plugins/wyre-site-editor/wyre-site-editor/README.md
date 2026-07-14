@@ -8,16 +8,18 @@ publishes only when you say so. No git, no CMS login, no code.
 
 - "Change the homepage headline to *AI that ships*"
 - "Update the second service card's blurb"
+- "Update the pricing page FAQ answer about usage caps"
 - "Show me a preview" → clickable link to a live draft of the site
 - "Publish it" → the change goes live (after you've seen the preview)
 
 ## What's editable
 
-Homepage copy (hero + contact) and the five service cards, per the site's
-content contract (`docs/decap-content-contract.md` in
+Homepage copy (hero + contact), the five service cards, and pricing page
+copy (hero + FAQ), per the site's content contract
+(`docs/decap-content-contract.md` in
 [`wyre-technology/wyre-ai`](https://github.com/wyre-technology/wyre-ai)).
-Pricing copy/FAQ and features cards are planned next. Pricing **dollar
-amounts** are never editable here — they sync from the billing system.
+Features cards are planned next. Pricing **dollar amounts** are never
+editable here — they sync from the billing system.
 
 ## Safety model
 
