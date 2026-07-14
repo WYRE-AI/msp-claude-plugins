@@ -3,9 +3,10 @@ name: "WYRE Site Editing"
 when_to_use: >-
   When the user asks to change, update, edit, or rewrite any copy on the
   wyre.ai website — headline, subhead, call-to-action buttons, contact
-  section, or service cards. Use when: change the headline, update the
-  homepage, edit the site, rewrite the subhead, change a button, update a
-  service card, fix a typo on the site, or wyre.ai copy change.
+  section, service cards, pricing page copy, or pricing FAQ. Use when: change
+  the headline, update the homepage, edit the site, rewrite the subhead,
+  change a button, update a service card, fix a typo on the site, update the
+  pricing page, edit a pricing FAQ answer, or wyre.ai copy change.
 description: >
   Use this skill whenever the user wants to change content on wyre.ai.
   It turns a plain-language request ("change the homepage headline to X")
@@ -41,15 +42,22 @@ request" if needed, nothing lower-level.
 |---|---|
 | Homepage copy (hero + contact) | `src/data/homepage.json` |
 | Service cards (5) | `src/data/services.json` |
+| Pricing page copy (hero + FAQ) | `src/data/pricing.json` |
 
 Planned additions (do NOT edit until the contract marks them LOCKED):
-`src/data/pricing.json` (copy + FAQ), `src/data/features.json`.
+`src/data/features.json`.
 
 **Hard limits — never edit, regardless of what is asked:**
 - **Pricing dollar values.** They live in a generated file
   (`src/data/pricing-constants.json`) synced from Conduit's billing source of
   truth. If the user asks to change a price, explain that prices are managed
-  in the billing system and offer to pass the request to the WYRE team.
+  in the billing system and offer to pass the request to the WYRE team. This
+  applies inside `pricing.json` copy too: never hand-type a `$<number>` into
+  hero or FAQ text, even one that looks correct today — the build fails any
+  dollar figure that isn't a current generated price (see
+  `src/data/pricing.ts`'s `assertNoStaleDollarFigures` guard). If a FAQ
+  answer needs a derived number (e.g. included agent seats), use the
+  existing `{{includedAgentSeats}}`-style token instead of typing the digit.
 - `src/data/*.ts` — these are the schema files. Read them to learn field
   meanings and validation rules; never modify them.
 - `public/admin/config.yml`, any `.astro`, `.css`, or layout file, the hero
