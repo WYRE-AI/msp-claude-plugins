@@ -1,0 +1,12 @@
+{
+  "name": "devops-pack",
+  "displayName": "DevOps & Reliability",
+  "description": "Cross-vendor engineering reliability operations — on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management, observability, and platform tools you have connected.",
+  "version": "0.1.0",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
