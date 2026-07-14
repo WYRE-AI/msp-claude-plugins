@@ -19,7 +19,7 @@ const OUTPUT_PATH_SHARED = path.join(DOCS_DIR, 'src', 'data', 'sharedSkills.ts')
 const VALID_CATEGORIES = new Set([
   'psa', 'rmm', 'documentation', 'security', 'sales', 'accounting',
   'productivity', 'email-security', 'incident-management', 'monitoring',
-  'network', 'crm', 'marketplace',
+  'network', 'crm', 'marketplace', 'marketing',
 ]);
 
 function normalizeCategory(raw: string): string {
@@ -39,6 +39,7 @@ function deriveVendor(sourcePath: string): string {
   const vendorMap: Record<string, string> = {
     kaseya: 'Kaseya',
     'kaseya-quote-manager': 'Kaseya',
+    'wyre-site-editor': 'WYRE',
     connectwise: 'ConnectWise',
     ninjaone: 'NinjaOne',
     syncro: 'Syncro',

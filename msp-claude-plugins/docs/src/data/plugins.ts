@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security';
+  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketing' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -2395,6 +2395,40 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'ncentral/ncentral',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'wyre-site-editor',
+    name: 'Wyre Site Editor',
+    vendor: 'WYRE',
+    description: 'Conversational editor for the wyre.ai website — plain-language copy edits, live Cloudflare previews, gated publishing. No git or CMS knowledge needed.',
+    category: 'marketing',
+    maturity: 'beta',
+    features: [
+      'Setup',
+      'Site Editing',
+      'Site Preview',
+      'Site Publish'
+    ],
+    skills: [
+      { name: 'setup', description: 'Use this skill to prepare a machine for wyre.ai site editing: GitHub sign-in, getting the site\'s content repository onto the machine, and verifying access end-to-end.' },
+      { name: 'site-editing', description: 'Use this skill whenever the user wants to change content on wyre.ai.' },
+      { name: 'site-preview', description: 'Use this skill to get the live preview URL for a pending wyre.ai content change.' },
+      { name: 'site-publish', description: 'Use this skill to publish a previewed wyre.ai content change to the live site.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/edit-site', description: 'Change wyre.ai content conversationally — edits become a previewable change request' },
+      { name: '/preview-site', description: 'Get the live preview link for a pending wyre.ai change' },
+      { name: '/publish-site', description: 'Publish a previewed wyre.ai change to the live site (asks for explicit confirmation)' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'wyre-site-editor/wyre-site-editor',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
