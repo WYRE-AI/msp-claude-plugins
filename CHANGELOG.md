@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- **`wyre-site-editor`** — removed from this public marketplace (Aaron-directed, 2026-07-14): it's an internal-only plugin (Angela's conversational editor for the wyre.ai website), and was public in error for ~8.5 hours (added at #140, 13:04Z same day). No secrets/credentials were exposed — the plugin only contained skill docs, workflow instructions, and internal-process names (repo name, Cloudflare Pages project slug, a GitHub handle). Migrated intact to the new private `WYRE-AI/wyre-ai-plugins` marketplace; install now requires access to that repo. Marketplace version bumped to 1.20.0
+
 ### Added
 
 - **Industry workflow packs** — cross-vendor, job-shaped plugins (as distinct from the existing vendor-shaped catalog): `ops-pack` (MSP Operations — board health, dispatch prioritization, SLA monitoring, shift handoffs), `secops-pack` (Security Operations — alert severity normalization, containment playbooks, BEC response, incident timelines), `finance-pack` (Finance & Billing — agreement reconciliation, license true-up, margin analysis), and `compliance-pack` (Compliance — evidence mapping, standards drift, cyber-insurance questionnaires). Each ships 3 skills, 3 agents, and 3 commands, wired to Conduit (`https://conduit.wyre.ai/v1/mcp`) rather than a per-vendor MCP server — packs compose whatever PSA/RMM/security/accounting tools an org has connected via `conduit__search_tools` discovery, and degrade explicitly (not silently) when a relevant vendor family isn't connected. New `workflow-pack` marketplace category. Marketplace version bumped to 1.16.0
