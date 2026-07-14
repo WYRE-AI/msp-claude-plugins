@@ -25,9 +25,10 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   <p>
-    Every plugin in the catalog is covered by a published maintenance SLO: CI-enforced
-    installability on every commit, issue acknowledgment within two business days, and
-    a 90-day deprecation notice before anything is ever removed.
+    Every commit to the catalog passes automated validation before it lands, so
+    installability is enforced by CI rather than promised after the fact. Nothing is
+    removed silently — deprecations are announced in the changelog before a plugin
+    disappears.
   </p>
 
   <h2>One marketplace, two ways to use it</h2>
@@ -137,8 +138,8 @@ plugins run locally                     org grants · security
 
   <p>
     Each pack is a normal plugin in the marketplace: installable in Claude Code with
-    one command, enable-able in Conduit with one click, individually versioned, and
-    covered by the same maintenance SLO as everything else in the catalog.
+    one command, enable-able in Conduit with one click, and individually versioned
+    like everything else in the catalog.
   </p>
 
   <h2>Follow along</h2>

@@ -15,21 +15,18 @@ The community that formed around this repo — contributors, issue reporters, MS
 running these plugins in production — is the most valuable thing the project has
 built, and we intend to keep earning it.
 
-Concretely, that means a maintenance SLO for everything already shipped:
-
-| Commitment | Target |
-|---|---|
-| Marketplace stays installable | Every commit to `main` passes `claude plugin validate` in CI; `main` is branch-protected on that workflow |
-| Issue acknowledgment | Within 2 business days |
-| Regression in a shipped plugin (broken install, broken frontmatter) | Highest priority; fix targeted within 1 week |
-| Vendor API breakage | Production-tier plugins: fix or documented workaround targeted within 2 weeks. Beta/Alpha: best-effort, prioritized by reported usage |
-| Deprecation | Nothing disappears silently. A plugin is only removed after 90 days' notice in [CHANGELOG.md](CHANGELOG.md) and the README, and it remains installable through the notice window |
-| Changelog | Every user-visible change lands in [CHANGELOG.md](CHANGELOG.md) ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format) |
+Concretely: every commit to `main` passes `claude plugin validate` in CI, and
+`main` is branch-protected on that workflow, so the marketplace stays installable
+by construction. Nothing is removed silently — deprecations are called out in
+[CHANGELOG.md](CHANGELOG.md) and the README before a plugin disappears. Every
+user-visible change lands in [CHANGELOG.md](CHANGELOG.md) following
+[Keep a Changelog](https://keepachangelog.com/en/1.1.0/) conventions.
 
 Today the marketplace carries **63 plugins** — 300+ skills, 250+ slash commands,
 115+ subagents — across PSA, RMM, documentation, security, email security,
-monitoring, networking, accounting, CRM, and sales tooling. All of it is covered by
-the SLO above, whether it was written by WYRE or by a community contributor.
+monitoring, networking, accounting, CRM, and sales tooling. All of it is
+maintained under that same standard, whether it was written by WYRE or by a
+community contributor.
 
 ## One marketplace, two consumers
 
