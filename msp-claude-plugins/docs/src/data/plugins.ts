@@ -2646,6 +2646,42 @@ export const plugins: Plugin[] = [
     },
     path: 'devops-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'cloudops-pack',
+    name: 'Cloudops Pack',
+    vendor: 'Cloudops-pack',
+    description: 'Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Cloud Capacity Planning',
+      'Cloud Cost Management',
+      'Network Health Sweep'
+    ],
+    skills: [
+      { name: 'cloud-capacity-planning', description: 'Use this skill when right-sizing or forecasting capacity for cloud resources across whatever cloud platforms (Azure, DigitalOcean) are connected through the gateway.' },
+      { name: 'cloud-cost-management', description: 'Use this skill when tracking and flagging cloud spend anomalies across whatever cloud platforms (Azure, DigitalOcean) are connected through the gateway.' },
+      { name: 'network-health-sweep', description: 'Use this skill when checking device and network health across whatever network-monitoring tools (Auvik, Meraki, Domotz) are connected through the gateway.' }
+    ],
+    agents: [
+      { name: 'capacity-forecaster', description: 'Use this agent when an MSP needs to know whether current cloud resource capacity will hold up under growth, or which resources are already over- or under-provisioned.' },
+      { name: 'cost-anomaly-detector', description: 'Use this agent when an MSP needs to investigate unexpected cloud spend or hunt for orphaned/idle cloud resources that are still costing money.' },
+      { name: 'network-health-auditor', description: 'Use this agent when an MSP needs a portfolio-wide or single-client sweep of network device and link health across whatever network-monitoring tools are connected.' }
+    ],
+    commands: [
+      { name: '/capacity-check', description: 'Capacity forecast for cloud resources, scoped to a resource type or covering everything connected' },
+      { name: '/cost-report', description: 'Cloud cost anomaly and reclaimable-spend report for a given window' },
+      { name: '/network-sweep', description: 'Full network health sweep across all connected network-monitoring tools — devices down, degraded links, and topology changes' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'cloudops-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
