@@ -2574,6 +2574,42 @@ export const plugins: Plugin[] = [
     },
     path: 'compliance-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'sales-pack',
+    name: 'Sales Pack',
+    vendor: 'Sales-pack',
+    description: 'Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Pipeline Health',
+      'Quote To Close Tracking',
+      'Warm Lead Routing'
+    ],
+    skills: [
+      { name: 'pipeline-health', description: 'Use this skill when assessing CRM pipeline health across whatever CRM is actually connected through the gateway (typically HubSpot for this pack\'s target vendor set, but discovered rather than assumed).' },
+      { name: 'quote-to-close-tracking', description: 'Use this skill when tracing a deal\'s progress across the quote-to-close chain — a Pax8/Sherweb/Kaseya Quote Manager quote or a SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won deal in the CRM.' },
+      { name: 'warm-lead-routing', description: 'Use this skill when scoring lead warmth from intent and engagement signals — Warmly website-visitor identification, HubSpot form fills and email engagement, and Calendly booking activity — and proposing which rep a warm lead should be routed to.' }
+    ],
+    agents: [
+      { name: 'pipeline-auditor', description: 'Use this agent when a sales manager, deal desk owner, or MSP leadership needs a full cross-vendor sweep of the open sales pipeline — stalled and at-risk deals ranked by value and staleness, with each stall diagnosed against the full quote-to-close chain rather than CRM activity alone.' },
+      { name: 'proposal-follow-up-tracker', description: 'Use this agent when a sales rep, deal desk owner, or sales manager needs to know which proposals and quotes need attention right now, with a drafted follow-up action for each.' },
+      { name: 'warm-lead-router', description: 'Use this agent when a sales manager or rep needs to know which leads are showing real buying intent right now, and who should follow up on each one.' }
+    ],
+    commands: [
+      { name: '/pipeline-pulse', description: 'Pipeline snapshot - total pipeline value, stalled-deal count, deals closing this period, and biggest movers since last check' },
+      { name: '/stalled-deals', description: 'List deals/proposals with no forward movement within a window across the full quote-to-close chain, sorted by value' },
+      { name: '/warm-leads', description: 'List currently-warm leads with routing recommendations' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'sales-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
