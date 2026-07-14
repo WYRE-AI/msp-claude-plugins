@@ -2610,6 +2610,42 @@ export const plugins: Plugin[] = [
     },
     path: 'sales-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'devops-pack',
+    name: 'Devops Pack',
+    vendor: 'Devops-pack',
+    description: 'DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Error Budget Tracking',
+      'Incident Postmortem',
+      'Oncall Handoff'
+    ],
+    skills: [
+      { name: 'error-budget-tracking', description: 'Use this skill when computing or reporting error-budget status across whatever observability tools are connected through the gateway.' },
+      { name: 'incident-postmortem', description: 'Use this skill when assembling a blameless postmortem from an incident across whatever incident-management and observability tools are connected through the gateway.' },
+      { name: 'oncall-handoff', description: 'Use this skill when assembling a proper on-call handoff across whatever incident-management tool (Rootly, PagerDuty, BetterStack) is connected through the gateway.' }
+    ],
+    agents: [
+      { name: 'oncall-handoff-builder', description: 'Use this agent when an on-call engineer needs a structured shift handoff brief — what\'s currently paging or unresolved, what happened during the last shift, known-flaky alerts to watch, and anything escalated but not yet actioned — assembled from whatever incident-management tool is connected.' },
+      { name: 'postmortem-drafter', description: 'Use this agent when an engineer, SRE, or incident manager needs a full blameless postmortem drafted from a resolved incident — identified by ID or by a rough time window — reconstructed from the incident tool\'s event log plus correlated observability and deploy data.' },
+      { name: 'reliability-scorecard', description: 'Use this agent when a team lead, SRE, or engineering manager needs a ranked reliability status across connected services — error-budget burn rate where a formal SLO exists, degrading to raw error-rate/uptime trend reporting where it doesn\'t — worst service first.' }
+    ],
+    commands: [
+      { name: '/error-budget', description: 'Run the reliability scorecard for one service, or every connected service if omitted - error-budget burn rate where an SLO is defined, trend reporting otherwise' },
+      { name: '/oncall-brief', description: 'Generate the current on-call handoff brief - what\'s paging, what\'s escalated without an owner, last-shift history, and known-flaky alerts to watch' },
+      { name: '/postmortem', description: 'Draft a blameless postmortem for a given incident (by ID or name), or the most recent significant incident within a time window' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'devops-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
