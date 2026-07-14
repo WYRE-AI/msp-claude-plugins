@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -842,6 +842,63 @@
         "website",
         "content",
         "marketing"
+      ]
+    },
+    {
+      "name": "ops-pack",
+      "source": "./msp-claude-plugins/ops-pack",
+      "description": "MSP Operations \u2014 cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "operations",
+        "psa",
+        "rmm",
+        "sla",
+        "dispatch",
+        "msp"
+      ]
+    },
+    {
+      "name": "secops-pack",
+      "source": "./msp-claude-plugins/secops-pack",
+      "description": "Security Operations \u2014 cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "security",
+        "edr",
+        "mdr",
+        "incident-response",
+        "msp"
+      ]
+    },
+    {
+      "name": "finance-pack",
+      "source": "./msp-claude-plugins/finance-pack",
+      "description": "Finance & Billing \u2014 agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "finance",
+        "billing",
+        "psa",
+        "accounting",
+        "msp"
+      ]
+    },
+    {
+      "name": "compliance-pack",
+      "source": "./msp-claude-plugins/compliance-pack",
+      "description": "Compliance \u2014 evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "compliance",
+        "cis",
+        "soc2",
+        "hipaa",
+        "msp"
       ]
     }
   ]

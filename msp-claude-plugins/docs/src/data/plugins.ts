@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketing' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security';
+  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketing' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -2429,6 +2429,150 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'wyre-site-editor/wyre-site-editor',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'ops-pack',
+    name: 'Ops Pack',
+    vendor: 'Ops-pack',
+    description: 'MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Board Hygiene',
+      'Dispatch Prioritization',
+      'Sla Escalation Playbooks'
+    ],
+    skills: [
+      { name: 'board-hygiene', description: 'Use this skill for recurring ticket-board maintenance across whatever PSA is connected: detecting stale tickets (no activity in N days), finding and linking duplicate or related tickets, catching status-transition problems (tickets stuck in Waiting-on-Client past a threshold), and checking queue balance across technicians.' },
+      { name: 'dispatch-prioritization', description: 'Use this skill when scoring and assigning an unassigned ticket queue across whatever PSA (and, where useful, RMM) is connected through the gateway.' },
+      { name: 'sla-escalation-playbooks', description: 'Use this skill when triaging SLA pressure on whatever PSA is connected through the gateway.' }
+    ],
+    agents: [
+      { name: 'board-health-auditor', description: 'Use this agent when a service manager, dispatcher, or team lead needs a full cross-board health read on the connected PSA — unassigned aging, SLA-at-risk count, technician load balance, stale/stuck tickets, and duplicate clusters, rolled into a single scored report.' },
+      { name: 'dispatch-coordinator', description: 'Use this agent when the unassigned ticket queue needs to be triaged and assigned to technicians, factoring in SLA pressure, client tier, ticket age, and current technician load.' },
+      { name: 'stale-ticket-chaser', description: 'Use this agent when tickets have gone quiet and someone needs to figure out why and what to do about each one — not just that they\'re stale.' }
+    ],
+    commands: [
+      { name: '/eod-handoff', description: 'Generate an end-of-day handoff summary - open high-priority tickets, items awaiting next-shift action, and overnight on-call context if available' },
+      { name: '/morning-huddle', description: 'Daily kickoff report - SLA-at-risk count, unassigned queue size, yesterday\'s closed vs. opened, and any overnight escalations' },
+      { name: '/sla-breaches', description: 'List tickets currently breaching or about to breach SLA within a time window, sorted by urgency' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'ops-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'secops-pack',
+    name: 'Secops Pack',
+    vendor: 'Secops-pack',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Alert Severity Normalization',
+      'Bec Response',
+      'Containment Playbooks'
+    ],
+    skills: [
+      { name: 'alert-severity-normalization', description: 'Use this skill when triaging security alerts, incidents, or findings that come from more than one connected EDR/MDR/SIEM vendor and a single, comparable severity ranking is needed.' },
+      { name: 'bec-response', description: 'Use this skill when Business Email Compromise (BEC) is suspected or confirmed for a client.' },
+      { name: 'containment-playbooks', description: 'Use this skill when a security incident has been confirmed or is highly suspected and immediate first-response containment steps are needed.' }
+    ],
+    agents: [
+      { name: 'incident-timeline-builder', description: 'Use this agent when a security incident needs to be reconstructed into a single chronological timeline suitable for a client-facing incident report, pulling every relevant event across every connected security, PSA, and documentation tool for the client and time window in question.' },
+      { name: 'overnight-alert-summarizer', description: 'Use this agent when a technician needs a morning read on everything that fired overnight across the connected EDR/MDR/SIEM stack, normalized into one ranked digest instead of five separate vendor consoles.' },
+      { name: 'tenant-exposure-ranker', description: 'Use this agent when the MSP needs a portfolio-wide read on which clients carry the most current security risk — open critical findings, unpatched or uncontained threats, MFA coverage gaps, and stale EDR/agent coverage — ranked so leadership or the security team can prioritize attention.' }
+    ],
+    commands: [
+      { name: '/incident-report', description: 'Build a client-facing incident summary for a given client and time window, assembling a chronological timeline across every connected security, PSA, and documentation tool' },
+      { name: '/portfolio-sweep', description: 'Sweep every connected security tool across all clients/tenants, normalize findings, and report the top most urgent items portfolio-wide' },
+      { name: '/tenant-exposure', description: 'Run the exposure ranking for one client or the whole portfolio — open critical findings, unmitigated threats, MFA gaps, and stale EDR coverage' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'secops-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'finance-pack',
+    name: 'Finance Pack',
+    vendor: 'Finance-pack',
+    description: 'Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Agreement Reconciliation',
+      'License True Up',
+      'Margin Analysis'
+    ],
+    skills: [
+      { name: 'agreement-reconciliation', description: 'Use this skill when reconciling a PSA contract or agreement against what an MSP is actually invoicing in its accounting system, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
+      { name: 'license-true-up', description: 'Use this skill when matching cloud-marketplace subscription seat counts (Pax8, Sherweb) against what is actually being billed to the client and what is actually deployed/active in the tenant (M365/CIPP user counts where available).' },
+      { name: 'margin-analysis', description: 'Use this skill when computing per-client or per-service-line margin for an MSP: revenue from PSA billing/accounting invoices minus cost from Pax8/Sherweb wholesale pricing plus estimated labor from PSA time entries where available.' }
+    ],
+    agents: [
+      { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },
+      { name: 'profitability-ranker', description: 'Use this agent when an MSP owner, operations leader, or finance lead needs to rank clients from most to least profitable using actual revenue and cost data, flagging any operating at a loss.' },
+      { name: 'renewal-calendar-builder', description: 'Use this agent when an MSP account manager, sales leader, or operations manager needs a forward-looking view of every upcoming contract and subscription renewal across the connected PSA and cloud-marketplace distributors, with recommended lead time per renewal.' }
+    ],
+    commands: [
+      { name: '/month-end-recon', description: 'Run the full billing-drift sweep for a billing period, formatted as a month-end reconciliation report' },
+      { name: '/renewals', description: 'List upcoming contract and subscription renewals within a window, sorted by date' },
+      { name: '/true-up', description: 'Run the license true-up reconciliation for one client or the whole portfolio' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'finance-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'compliance-pack',
+    name: 'Compliance Pack',
+    vendor: 'Compliance-pack',
+    description: 'Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Evidence Mapping',
+      'Insurance Questionnaires',
+      'Standards Drift'
+    ],
+    skills: [
+      { name: 'evidence-mapping', description: 'Use this skill when a compliance control (CIS, SOC 2, HIPAA, or a cyber-insurance questionnaire line item) needs to be traced to concrete, retrievable evidence from connected MSP tooling rather than answered from memory or assumption.' },
+      { name: 'insurance-questionnaires', description: 'Use this skill when drafting answers to a cyber-insurance renewal or new-business questionnaire for an MSP client.' },
+      { name: 'standards-drift', description: 'Use this skill when a client\'s live configuration needs to be compared against a previously established baseline or standard to detect drift.' }
+    ],
+    agents: [
+      { name: 'control-drift-reporter', description: 'Use this agent when an MSP needs to know what has changed in a client\'s compliance posture since the last known-good baseline, prioritized by how much each change actually matters.' },
+      { name: 'evidence-packager', description: 'Use this agent when an MSP needs to gather and assemble compliance evidence for a client against a named framework or control set, producing a source-cited package an auditor or client can review.' },
+      { name: 'questionnaire-autofiller', description: 'Use this agent when a client needs its cyber-insurance renewal or new-business questionnaire drafted using live tool evidence rather than best-guess answers.' }
+    ],
+    commands: [
+      { name: '/drift-report', description: 'Report control and configuration drift since the last known-good baseline for a client or the whole portfolio' },
+      { name: '/evidence-pack', description: 'Build a source-cited compliance evidence package for a client against a named framework' },
+      { name: '/questionnaire', description: 'Draft evidence-backed answers to the standard cyber-insurance questionnaire for a client' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'compliance-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];

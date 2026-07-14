@@ -1,0 +1,12 @@
+{
+  "name": "secops-pack",
+  "displayName": "Security Operations",
+  "description": "Cross-vendor security alert triage and incident response — normalizes severity, runs containment playbooks, and builds incident timelines across whatever EDR/MDR/SIEM stack you have connected.",
+  "version": "0.1.0",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
