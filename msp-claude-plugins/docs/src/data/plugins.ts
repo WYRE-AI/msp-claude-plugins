@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketing' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
+  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -2398,40 +2398,6 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'wyre-site-editor',
-    name: 'Wyre Site Editor',
-    vendor: 'WYRE',
-    description: 'Conversational editor for the wyre.ai website — plain-language copy edits, live Cloudflare previews, gated publishing. No git or CMS knowledge needed.',
-    category: 'marketing',
-    maturity: 'beta',
-    features: [
-      'Setup',
-      'Site Editing',
-      'Site Preview',
-      'Site Publish'
-    ],
-    skills: [
-      { name: 'setup', description: 'Use this skill to prepare a machine for wyre.ai site editing: GitHub sign-in, getting the site\'s content repository onto the machine, and verifying access end-to-end.' },
-      { name: 'site-editing', description: 'Use this skill whenever the user wants to change content on wyre.ai.' },
-      { name: 'site-preview', description: 'Use this skill to get the live preview URL for a pending wyre.ai content change.' },
-      { name: 'site-publish', description: 'Use this skill to publish a previewed wyre.ai content change to the live site.' }
-    ],
-    agents: [],
-    commands: [
-      { name: '/edit-site', description: 'Change wyre.ai content conversationally — edits become a previewable change request' },
-      { name: '/preview-site', description: 'Get the live preview link for a pending wyre.ai change' },
-      { name: '/publish-site', description: 'Publish a previewed wyre.ai change to the live site (asks for explicit confirmation)' }
-    ],
-    apiInfo: {
-      baseUrl: '',
-      auth: '',
-      rateLimit: '',
-      docsUrl: ''
-    },
-    path: 'wyre-site-editor/wyre-site-editor',
-    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
-  },
-  {
     id: 'ops-pack',
     name: 'Ops Pack',
     vendor: 'Ops-pack',
@@ -2681,6 +2647,42 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'cloudops-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'awareness-pack',
+    name: 'Awareness Pack',
+    vendor: 'Awareness-pack',
+    description: 'Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Phishing Simulation Analysis',
+      'Risk Scoring',
+      'Training Completion Tracking'
+    ],
+    skills: [
+      { name: 'phishing-simulation-analysis', description: 'Use this skill when analyzing phishing-simulation campaign results: click-rate trends over time, repeat-clicker identification, and — where a technical threat-response tool is also connected — correlating simulated-phishing performance with real-world phishing incidents as a compounding risk signal.' },
+      { name: 'risk-scoring', description: 'Use this skill when building a per-user or per-org "human risk score" from training completion, phishing-simulation performance, and optionally real-world click-through data from connected email-security tools.' },
+      { name: 'training-completion-tracking', description: 'Use this skill when assessing security-awareness training completion for a single client or across the whole portfolio.' }
+    ],
+    agents: [
+      { name: 'human-risk-scorer', description: 'Use this agent when the MSP needs a per-user or per-org "human risk score" built from training completion and phishing-simulation performance, to rank the riskiest users or clients on the human/culture layer of security.' },
+      { name: 'phishing-simulation-analyst', description: 'Use this agent when the MSP needs to analyze phishing-simulation campaign results — click-rate trends over time and repeat-clicker identification — for a single client or across the portfolio.' },
+      { name: 'training-compliance-auditor', description: 'Use this agent when the MSP needs to verify security-awareness training completion for a single client or across the whole portfolio, and flag overdue users or clients falling behind their expected training cadence.' }
+    ],
+    commands: [
+      { name: '/phishing-results', description: 'Phishing-simulation results and click-rate trend for a given window' },
+      { name: '/risk-report', description: 'Human risk score report for one client or the whole portfolio, built from training completion and phishing-simulation performance' },
+      { name: '/training-status', description: 'Training completion snapshot for one client or the whole portfolio — completion rates, overdue users, and cadence status' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'awareness-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];

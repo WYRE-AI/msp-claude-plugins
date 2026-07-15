@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.20.0",
+  "version": "1.20.1",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -930,6 +930,20 @@
         "cloud",
         "capacity-planning",
         "cost-management",
+        "msp"
+      ]
+    },
+    {
+      "name": "awareness-pack",
+      "source": "./msp-claude-plugins/awareness-pack",
+      "description": "Security Awareness & Training \u2014 cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "security-awareness",
+        "training",
+        "phishing-simulation",
+        "risk-scoring",
         "msp"
       ]
     }
