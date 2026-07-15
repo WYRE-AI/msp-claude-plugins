@@ -2720,6 +2720,42 @@ export const plugins: Plugin[] = [
     },
     path: 'backup-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'assets-pack',
+    name: 'Assets Pack',
+    vendor: 'Assets-pack',
+    description: 'IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Eol Eos Flagging',
+      'Refresh Cycle Planning',
+      'Warranty Tracking'
+    ],
+    skills: [
+      { name: 'eol-eos-flagging', description: 'Use this skill when identifying devices, operating system versions, or firmware approaching or past end-of-life (EOL) or end-of-support (EOS), combining device inventory data (make/model/OS version) pulled from whatever RMM platforms are connected with general knowledge of common EOL/EOS dates for widely-deployed OS and hardware, and prioritizing the resulting risk list by device criticality.' },
+      { name: 'refresh-cycle-planning', description: 'Use this skill when building a forward-looking hardware refresh calendar by combining warranty expiration, EOL/EOS timing, and device age across whatever RMM platforms and documentation tools are connected through the gateway.' },
+      { name: 'warranty-tracking', description: 'Use this skill when pulling and normalizing warranty status across whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected through the gateway.' }
+    ],
+    agents: [
+      { name: 'eol-risk-assessor', description: 'Use this agent when someone needs to know which devices, OS versions, or firmware are approaching or past end-of-life/end-of-support, prioritized by how much it actually matters if left unaddressed.' },
+      { name: 'refresh-planner', description: 'Use this agent when someone needs a forward-looking hardware refresh calendar that combines warranty, EOL/EOS, and device age into a replace-now/plan-this-year/monitor plan.' },
+      { name: 'warranty-status-auditor', description: 'Use this agent when someone needs a portfolio-wide or client-specific view of hardware warranty coverage, pulled and normalized across every connected RMM and documentation tool.' }
+    ],
+    commands: [
+      { name: '/eol-report', description: 'EOL/EOS risk report — devices, OS versions, and firmware approaching or past end-of-life/end-of-support, prioritized by criticality' },
+      { name: '/refresh-calendar', description: 'Forward-looking hardware refresh calendar for the given window — replace-now / plan-this-year / monitor tiers' },
+      { name: '/warranty-status', description: 'Warranty status snapshot — expired, expiring-soon, and unknown-coverage devices for one client or the whole portfolio' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'assets-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
