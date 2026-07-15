@@ -1,0 +1,12 @@
+{
+  "name": "backup-pack",
+  "displayName": "Backup & DR Assurance",
+  "description": "Cross-vendor backup and disaster-recovery assurance — job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
+  "version": "0.1.0",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
