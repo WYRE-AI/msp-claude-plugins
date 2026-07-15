@@ -2684,6 +2684,42 @@ export const plugins: Plugin[] = [
     },
     path: 'awareness-pack',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'backup-pack',
+    name: 'Backup Pack',
+    vendor: 'Backup-pack',
+    description: 'Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Backup Job Health',
+      'Restore Test Verification',
+      'Retention Rpo Compliance'
+    ],
+    skills: [
+      { name: 'backup-job-health', description: 'Use this skill to assess portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: job success/failure rate, missed- backup detection, storage-consumption trending, and how to normalize very different vendor job models (image-based appliance backup vs.' },
+      { name: 'restore-test-verification', description: 'Use this skill to track and verify whether backups are recoverable rather than merely present: the difference between "a backup exists" and "a backup is recoverable," how to use screenshot/boot-verification features and spot-check restore drills as evidence, what counts as an adequate testing cadence for different data-criticality tiers, and how to flag backups that have never been restore-tested.' },
+      { name: 'retention-rpo-compliance', description: 'Use this skill to check actual retention configuration and backup cadence against contracted/required retention policy and RPO (recovery point objective) targets — detecting gaps where a client\'s contract specifies a retention window the appliance isn\'t actually configured for, or an RPO target the current backup frequency can\'t actually meet.' }
+    ],
+    agents: [
+      { name: 'backup-health-auditor', description: 'Use this agent when an MSP needs a portfolio-wide read on whether backup jobs are actually succeeding across whatever backup/BCDR tools are connected — missed backups, active failure streaks, and storage risk, ranked by severity.' },
+      { name: 'restore-readiness-checker', description: 'Use this agent when an MSP needs to know whether backups have actually been restore-tested, not just whether they\'re running — flagging clients or systems whose backups have never had a restore, boot-verification, or spot-check drill performed, with a recommended test schedule.' },
+      { name: 'retention-compliance-auditor', description: 'Use this agent when an MSP needs to verify that actual backup retention configuration and cadence meet contracted or required retention/RPO policy, rather than assuming appliance defaults are adequate.' }
+    ],
+    commands: [
+      { name: '/backup-status', description: 'Portfolio-wide backup job health snapshot - failure count, at-risk clients, and storage trends' },
+      { name: '/restore-check', description: 'Restore-readiness check - has this actually been restore-tested, for one client or the whole portfolio' },
+      { name: '/retention-audit', description: 'Retention and RPO compliance audit against contracted requirements, for one client or the whole portfolio' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'backup-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
