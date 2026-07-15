@@ -1,0 +1,12 @@
+{
+  "name": "awareness-pack",
+  "displayName": "Security Awareness & Training",
+  "description": "Cross-vendor security awareness operations — training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected. Complements secops-pack's technical threat response with the human-layer prevention side.",
+  "version": "0.1.0",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
