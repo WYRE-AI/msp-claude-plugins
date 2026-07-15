@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
+  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -2755,6 +2755,40 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'assets-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'clio',
+    name: 'Clio',
+    vendor: 'Clio',
+    description: 'Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing',
+    category: 'legal',
+    maturity: 'beta',
+    features: [
+      'Contact Management',
+      'Matters',
+      'Time Billing'
+    ],
+    skills: [
+      { name: 'contacts', description: 'Use this skill when creating, updating, searching, or reasoning about Clio contacts — the people and companies connected to matters.' },
+      { name: 'matters', description: 'Use this skill when creating, updating, searching, or reasoning about Clio matters — the case/client-file object that almost everything else in Clio hangs off of.' },
+      { name: 'time-billing', description: 'Use this skill when logging time or expense activities against a Clio matter, or when reading (not writing) bills.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the Clio Manage MCP tools — OAuth 2.0 Authorization Code connection via Conduit, the matters-as-hub data model, decision-tree tool navigation, pagination, and the deliberate v1 scope limits (no delete anywhere, documents metadata-only, communications/ calendar/bills read-only).' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/log-time', description: 'Log a time entry (billable activity) against a Clio matter' },
+      { name: '/matter-summary', description: 'Consolidated view of one Clio matter — contacts, open tasks, recent activities, recent communications, and bills' },
+      { name: '/search-contacts', description: 'Search Clio contacts by name, company, or email' },
+      { name: '/search-matters', description: 'Search or list Clio matters by name/client and status' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'clio/clio',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
