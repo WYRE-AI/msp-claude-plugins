@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Docs site: all gateway usage-credit content removed — the gateway is now all-you-can-eat on every plan.** Mirrors the credit-system removal in `wyre-technology/mcp-gateway` (PR #351). Pricing page + landing page plan cards drop `2,000/4,000 credits/seat/month` and `Custom credit packages` in favor of `Unlimited tool calls` / `Custom rate limits`; the PricingMatrix "Credits / month" row becomes "Tool calls: Unlimited" and its "1 credit = 1 successful vendor tool call" footnote now explains rate limits instead; the "What's a credit?" and "What happens when I run out of credits?" FAQs are replaced by an "Are tool calls really unlimited?" FAQ. Billing guides updated: plan comparison drops the credits row and the credit-limit section, plan-changes drops credit-allowance language (Stripe *proration* credit language is untouched — different meaning), refunds drops the partially-consumed-credit-blocks clause. The **Gateway Usage & Anomaly Auditor** advanced workflow is reworked: `get_credit_balance` no longer exists on the gateway, so the build/routine prompts now use only `get_admin_metrics`, `get_usage_summary`, and `list_connections` (steps renumbered, self-attribution note now says three calls, credit-runway analysis/delivery sections and the low-runway-alert extension removed). Warmly's "credit balance" plugin copy is untouched — that's Warmly's own API credits, not gateway credits.
+
 ### Removed
 
 - **`wyre-site-editor`** — removed from this public marketplace (Aaron-directed, 2026-07-14): it's an internal-only plugin (Angela's conversational editor for the wyre.ai website), and was public in error for ~8.5 hours (added at #140, 13:04Z same day). No secrets/credentials were exposed — the plugin only contained skill docs, workflow instructions, and internal-process names (repo name, Cloudflare Pages project slug, a GitHub handle). Migrated intact to the new private `WYRE-AI/wyre-ai-plugins` marketplace; install now requires access to that repo. Marketplace version bumped to 1.20.0
