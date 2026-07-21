@@ -7,8 +7,8 @@ import PricingMatrix from '@/components/PricingMatrix.astro';
 
 const faqs = [
   {
-    question: "What's a credit?",
-    answer: "One credit = one successful tool call to a connected vendor (e.g. fetching a ticket from ConnectWise, looking up a device in IT Glue). Browsing tools or failed calls don't count."
+    question: "Are tool calls really unlimited?",
+    answer: "Yes. There are no monthly quotas, credits, or per-call fees on any plan. Hourly rate limits exist purely to protect vendor APIs from runaway loops — normal team usage never hits them."
   },
   {
     question: "What's the difference between personal and org connections?",
@@ -17,10 +17,6 @@ const faqs = [
   {
     question: "Can I change plans later?",
     answer: "Yes. Upgrade or downgrade any time; changes take effect at the next billing cycle."
-  },
-  {
-    question: "What happens when I run out of credits?",
-    answer: "You can purchase credit blocks ($10 per 1,000 credits, no expiry) or upgrade to the next tier."
   },
   {
     question: "Is there an annual discount?",
@@ -62,7 +58,7 @@ const faqs = [
             "Up to 3 users",
             "3 personal connections per user",
             "5 shared org connections",
-            "2,000 credits/seat/month",
+            "Unlimited tool calls",
             "Team roles & invites",
             "Tool allowlists",
             "Email support",
@@ -80,7 +76,7 @@ const faqs = [
             "5+ users",
             "Unlimited personal connections",
             "Unlimited shared org connections",
-            "4,000 credits/seat/month (pooled)",
+            "Unlimited tool calls",
             "Audit log & log shipping",
             "Tool allowlists & service clients",
             "Dedicated support",
@@ -97,7 +93,7 @@ const faqs = [
             "Everything in Business",
             "SSO / SAML",
             "SCIM provisioning",
-            "Custom credit packages",
+            "Custom rate limits",
             "Uptime SLA",
             "Dedicated onboarding & CSM",
             "Custom contract terms",
