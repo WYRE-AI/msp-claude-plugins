@@ -5,6 +5,10 @@ import Footer from '@/components/Footer.astro';
 import PricingCard from '@/components/PricingCard.astro';
 import PricingMatrix from '@/components/PricingMatrix.astro';
 
+// New-account signups now start on Conduit (14-day trial). Only the plan
+// "Get started" CTAs route here; Enterprise still contacts sales.
+const signupUrl = import.meta.env.CONDUIT_SIGNUP_URL || 'https://conduit.wyre.ai/signup';
+
 const faqs = [
   {
     question: "Are tool calls really unlimited?",
@@ -64,7 +68,7 @@ const faqs = [
             "Email support",
           ]}
           cta="Get started"
-          ctaHref="https://mcp.wyre.ai/auth/choose"
+          ctaHref={signupUrl}
           highlighted={true}
         />
 
@@ -82,7 +86,7 @@ const faqs = [
             "Dedicated support",
           ]}
           cta="Get started"
-          ctaHref="https://mcp.wyre.ai/auth/choose"
+          ctaHref={signupUrl}
         />
 
         <PricingCard
@@ -164,7 +168,7 @@ const faqs = [
           Spin up the gateway in minutes — no infrastructure required.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
-          <a href="https://mcp.wyre.ai/auth/choose" class="btn btn-primary">Get started</a>
+          <a href={signupUrl} class="btn btn-primary">Get started</a>
           <a href="/getting-started" class="btn btn-secondary">Read the docs</a>
         </div>
       </div>

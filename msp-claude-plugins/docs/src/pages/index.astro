@@ -13,6 +13,10 @@ import { prompts } from '@/data/prompts';
 
 const baseUrl = import.meta.env.BASE_URL;
 const gatewayUrl = import.meta.env.GATEWAY_URL || 'https://mcp.wyre.ai';
+// New-account signups now start on Conduit (14-day trial). "Sign in" still
+// points at the gateway for existing customers; only the "get started" CTAs
+// route here.
+const signupUrl = import.meta.env.CONDUIT_SIGNUP_URL || 'https://conduit.wyre.ai/signup';
 
 const pluginCount = plugins.length;
 const skillCount = plugins.flatMap(p => p.skills).length;
@@ -133,7 +137,7 @@ const features = [
           <p class="text-[var(--muted)] text-sm mb-4">
             Connect your MSP tools to Claude Desktop in minutes. No servers to manage — just add your API credentials and go.
           </p>
-          <a href={`${gatewayUrl}/auth/choose`} class="btn btn-primary w-full text-center">Get Started</a>
+          <a href={signupUrl} class="btn btn-primary w-full text-center">Get Started</a>
         </div>
 
         <!-- Self-host path -->
@@ -236,7 +240,7 @@ const features = [
             </li>
           </ul>
           <div class="flex flex-wrap gap-3">
-            <a href={`${gatewayUrl}/auth/choose`} class="btn btn-primary text-sm">Get Started</a>
+            <a href={signupUrl} class="btn btn-primary text-sm">Get Started</a>
             <a href={`${baseUrl}getting-started/gateway/`} class="btn btn-secondary text-sm">Learn more about the gateway</a>
             <a href={`${baseUrl}getting-started/security/`} class="btn btn-secondary text-sm">Read our security model</a>
           </div>
@@ -302,7 +306,7 @@ const features = [
             "Email support",
           ]}
           cta="Get started"
-          ctaHref="https://mcp.wyre.ai/auth/choose"
+          ctaHref={signupUrl}
           highlighted={true}
         />
 
@@ -320,7 +324,7 @@ const features = [
             "Dedicated support",
           ]}
           cta="Get started"
-          ctaHref="https://mcp.wyre.ai/auth/choose"
+          ctaHref={signupUrl}
         />
 
         <PricingCard
@@ -378,7 +382,7 @@ const features = [
         </p>
 
         <div class="flex flex-wrap justify-center gap-4 mb-6">
-          <a href={`${gatewayUrl}/auth/choose`} class="btn btn-primary">Use the Gateway</a>
+          <a href={signupUrl} class="btn btn-primary">Start free trial</a>
           <a href={`${baseUrl}getting-started/`} class="btn btn-secondary">Self-Host Guide</a>
         </div>
 
