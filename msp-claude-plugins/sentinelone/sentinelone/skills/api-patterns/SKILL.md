@@ -84,10 +84,11 @@ The Purple MCP server supports three transport modes:
 
 The Purple MCP server requires Python and `uv`/`uvx`:
 
-```bash
-# Install uv (Python package manager)
-curl -LsSf https://astral.sh/uv/install.sh | sh
+Install `uv` (Python package manager) following the official
+instructions at https://docs.astral.sh/uv/getting-started/installation/
+(e.g. `pip install uv`, or your OS package manager).
 
+```bash
 # Verify installation
 uvx --version
 
