@@ -2790,6 +2790,49 @@ export const plugins: Plugin[] = [
     },
     path: 'clio/clio',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'scalepad',
+    name: 'Scalepad',
+    vendor: 'Scalepad',
+    description: 'ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)',
+    category: 'productivity',
+    maturity: 'production',
+    features: [
+      'Backup Radar',
+      'Controlmap',
+      'Core',
+      'Lifecycle Manager',
+      'Quoter'
+    ],
+    skills: [
+      { name: 'backup-radar', description: 'Use this skill when working with ScalePad Backup Radar — the read-only backup monitoring surface: per-client backup health records and backup device inventory, in regions us and eu.' },
+      { name: 'controlmap', description: 'Use this skill when working with ScalePad ControlMap — per-client compliance management: risk registers, control libraries, evidence collection, policies and procedures, framework objectives, assessments, and remediation action items across regions us, eu, ca, and au.' },
+      { name: 'core', description: 'Use this skill when working with the ScalePad Core API — the read-only, US-only unified data layer over clients, contacts, members, sites, opportunities, hardware and SaaS assets, the product catalog, service contracts, tickets, and integration configurations.' },
+      { name: 'lifecycle-manager', description: 'Use this skill when working with ScalePad Lifecycle Manager — the engagement and roadmap workflow product: initiatives, goals, meetings, action items, assessments, deliverables, budget forecasting, contracts, notes, hardware lifecycle records, and warranty pricing.' },
+      { name: 'quoter', description: 'Use this skill when working with Quoter through ScalePad — building and publishing quotes, managing the catalog (items, item groups, tiers, options, manufacturers), quote contacts, suppliers and datafeeds, and the OAuth helpers for the standalone api.quoter.com path.' },
+      { name: 'api-patterns', description: 'Use this skill when working with the ScalePad MCP tools — API-key authentication via the `X-ScalePad-Api-Key` header, tool discovery across the five product domains, cursor pagination, the 50-requests-per-5-seconds rate limit, and 402 subscription errors.' }
+    ],
+    agents: [
+      { name: 'compliance-auditor', description: 'Use this agent when auditing compliance posture in ControlMap — reviewing risks, control coverage, evidence freshness, assessments, or driving remediation action items across client tenants.' },
+      { name: 'lifecycle-analyst', description: 'Use this agent when analyzing hardware asset lifecycles, warranty coverage, refresh planning, vCIO roadmaps, or QBR preparation in ScalePad Lifecycle Manager and Core.' },
+      { name: 'quote-builder', description: 'Use this agent when building, revising, or publishing quotes in Quoter, or maintaining the Quoter catalog of items, groups, tiers, and suppliers.' }
+    ],
+    commands: [
+      { name: '/asset-lifecycle-report', description: 'Build an asset lifecycle/aging report for a client from ScalePad Lifecycle Manager' },
+      { name: '/backup-health', description: 'Check Backup Radar health across a client\'s backups and surface failures' },
+      { name: '/compliance-status', description: 'Summarize a client\'s ControlMap compliance posture — risks, controls, evidence, action items' },
+      { name: '/create-quote', description: 'Build and publish a Quoter quote step by step' },
+      { name: '/warranty-lookup', description: 'Look up warranty and lifecycle status for a client\'s hardware in ScalePad' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'scalepad/scalepad',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
