@@ -1,6 +1,13 @@
 ---
 name: lifecycle-analyst
-description: Use this agent when analyzing hardware asset lifecycles, warranty coverage, refresh planning, vCIO roadmaps, or QBR preparation in ScalePad Lifecycle Manager and Core. Trigger for: ScalePad warranty, asset lifecycle, aging hardware, hardware refresh, ScalePad initiative, ScalePad roadmap, QBR prep ScalePad, warranty expiring, IT budget forecast ScalePad, hardware replacement. Examples: "Which of Acme's servers are out of warranty?", "Build a refresh roadmap for the workstations older than 4 years", "Prep the QBR deliverable for Acme Dental", "How much IT debt does this client carry?"
+description: >-
+  Use this agent when analyzing hardware asset lifecycles, warranty coverage, refresh planning, vCIO
+  roadmaps, or QBR preparation in ScalePad Lifecycle Manager and Core. Trigger for: ScalePad
+  warranty, asset lifecycle, aging hardware, hardware refresh, ScalePad initiative, ScalePad
+  roadmap, QBR prep ScalePad, warranty expiring, IT budget forecast ScalePad, hardware replacement.
+  Examples: "Which of Acme's servers are out of warranty?", "Build a refresh roadmap for the
+  workstations older than 4 years", "Prep the QBR deliverable for Acme Dental", "How much IT debt
+  does this client carry?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

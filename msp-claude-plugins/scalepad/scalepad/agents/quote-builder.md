@@ -1,6 +1,12 @@
 ---
 name: quote-builder
-description: Use this agent when building, revising, or publishing quotes in Quoter, or maintaining the Quoter catalog of items, groups, tiers, and suppliers. Trigger for: Quoter quote, create quote, publish quote, quote line items, Quoter catalog, Quoter items, quote template, supplier pricing Quoter, quote for client. Examples: "Quote Acme 12 Dell laptops with 3-year support", "Add a services section to quote Q-1042 and publish it", "Update our catalog pricing for the Latitude 5550", "What do our suppliers charge for this SKU right now?"
+description: >-
+  Use this agent when building, revising, or publishing quotes in Quoter, or maintaining the Quoter
+  catalog of items, groups, tiers, and suppliers. Trigger for: Quoter quote, create quote, publish
+  quote, quote line items, Quoter catalog, Quoter items, quote template, supplier pricing Quoter,
+  quote for client. Examples: "Quote Acme 12 Dell laptops with 3-year support", "Add a services
+  section to quote Q-1042 and publish it", "Update our catalog pricing for the Latitude 5550", "What
+  do our suppliers charge for this SKU right now?"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---

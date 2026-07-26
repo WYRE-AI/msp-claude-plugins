@@ -1,6 +1,13 @@
 ---
 name: compliance-auditor
-description: Use this agent when auditing compliance posture in ControlMap — reviewing risks, control coverage, evidence freshness, assessments, or driving remediation action items across client tenants. Trigger for: ControlMap audit, compliance posture, risk register ScalePad, control coverage, evidence gaps, compliance assessment, remediation action items, framework objectives, SOC 2 ControlMap, compliance health. Examples: "Audit Acme's compliance posture in ControlMap", "Which controls are failing and what evidence is missing?", "Open remediation action items for the top 5 risks", "Answer the outstanding assessment questions for this client"
+description: >-
+  Use this agent when auditing compliance posture in ControlMap — reviewing risks, control coverage,
+  evidence freshness, assessments, or driving remediation action items across client tenants.
+  Trigger for: ControlMap audit, compliance posture, risk register ScalePad, control coverage,
+  evidence gaps, compliance assessment, remediation action items, framework objectives, SOC 2
+  ControlMap, compliance health. Examples: "Audit Acme's compliance posture in ControlMap", "Which
+  controls are failing and what evidence is missing?", "Open remediation action items for the top 5
+  risks", "Answer the outstanding assessment questions for this client"
 tools: ["Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---
