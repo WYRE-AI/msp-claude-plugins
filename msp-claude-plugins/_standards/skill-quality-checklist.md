@@ -1,41 +1,38 @@
 # Skill Quality Checklist
 
-Use this checklist to validate skills before submission.
+Use this checklist to validate skills before submission. It reflects the
+context-engineering guidance for Claude 5-generation models: skills are
+loaded on demand, so every line should either teach a concept, shape a
+workflow, or document a gotcha.
 
 ## Structure
 
 - [ ] SKILL.md file exists in `skills/skill-name/` directory
-- [ ] Frontmatter includes `description` field
-- [ ] Frontmatter includes `triggers` array with relevant keywords
-- [ ] File follows the skill template structure
+- [ ] Frontmatter includes `name`, `description`, and `when_to_use`
+- [ ] `description` states what the skill covers; `when_to_use` states
+      trigger conditions and keywords — no duplicated content between them
+- [ ] No `triggers:` array (trigger phrases belong in `when_to_use`)
+- [ ] SKILL.md is under ~350 lines; exhaustive reference material
+      (full field tables, complete error catalogs, long request/response
+      examples) lives in `references/*.md` and is linked from the
+      relevant section
 
 ## Content Quality
 
-### Overview Section
-- [ ] Clearly explains what the skill covers
-- [ ] Identifies target audience (MSP role)
-- [ ] States when to use this skill
-
-### Key Concepts
-- [ ] Defines domain-specific terminology
-- [ ] Explains relationships between concepts
-- [ ] Uses MSP-appropriate language
-
-### API Patterns
-- [ ] Includes real API endpoint examples
-- [ ] Shows request/response formats
-- [ ] Documents required fields vs optional
-- [ ] Notes rate limits or restrictions
-
-### Workflows
-- [ ] Describes common MSP workflows
-- [ ] Steps are numbered and clear
-- [ ] Includes decision points where relevant
-
-### Error Handling
-- [ ] Documents common errors
-- [ ] Provides causes and solutions
-- [ ] Includes error codes where applicable
+- [ ] Overview is brief — one paragraph on the domain and its MSP use
+- [ ] Content focuses on what Claude can't infer on its own: domain
+      concepts, non-obvious constraints, workflow ordering, gotchas
+- [ ] No generic filler ("test before deploying", "use meaningful
+      names") — if a Best Practices bullet applies to every vendor,
+      cut it
+- [ ] Each instruction appears once — no repetition for emphasis, no
+      ALL-CAPS warnings unless the operation destroys data or money
+- [ ] Enums and status codes are in compact tables
+- [ ] API examples show the request shapes that aren't guessable
+      (auth quirks, pagination casing, filter syntax)
+- [ ] Errors documented with cause and resolution, error codes where
+      applicable
+- [ ] Sections that would only hold boilerplate are omitted entirely
 
 ## Security
 
@@ -49,11 +46,10 @@ Use this checklist to validate skills before submission.
 - [ ] API examples validated against documentation
 - [ ] Tested with actual API (if access available)
 - [ ] Version compatibility noted
-- [ ] Last review date documented
 
 ## Final Review
 
 - [ ] Spell-checked
-- [ ] Links verified
-- [ ] Consistent formatting
-- [ ] Related skills linked
+- [ ] Links to `references/*.md` files resolve
+- [ ] Related Skills section only present if the links genuinely route
+      somewhere useful

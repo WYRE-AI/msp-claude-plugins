@@ -167,44 +167,47 @@ vendor/product/skills/skill-name/SKILL.md
 ```markdown
 ---
 name: "[Vendor] [Topic]"
+description: >
+  [What this skill covers — entities, API surface, workflows, gotchas.
+  One clear statement of coverage; don't restate when_to_use.]
 when_to_use: >-
   When [specific action or scenario]. Use when: trigger phrase 1,
   trigger phrase 2, or trigger phrase 3.
-description: >
-  Use this skill when [specific trigger conditions].
-  [Additional context about what this skill covers]. Fold trigger
-  phrases into this field or when_to_use - do NOT add a triggers: list.
 ---
 
 # Skill Title
 
 ## Overview
-[2-3 paragraphs explaining what this skill covers and why it's important]
+[One short paragraph: what this domain is and what an MSP does with it]
 
 ## Key Concepts
-[Tables, definitions, and core knowledge]
-
-## Field Reference
-[Complete field documentation with types and descriptions]
-
-## Business Logic
-[Workflows, validation rules, status transitions]
-
-## API Patterns
-[Concrete API examples with request/response]
+[Entities, relationships, terminology; compact tables for enums/status codes]
 
 ## Common Workflows
-[Step-by-step guides for common tasks]
+[Step-by-step guides with decision points and ordering constraints]
 
-## Error Handling
-[Common errors and resolutions]
+## API Patterns
+[The request shapes that aren't guessable — auth quirks, pagination
+casing, filter syntax]
 
-## Best Practices
-[Numbered list of recommendations]
-
-## Related Skills
-[Links to related skills]
+## Gotchas
+[Non-obvious behavior: rate limits, case-sensitive parameters, errors
+whose messages mislead. Cause and resolution for each]
 ```
+
+**Context-engineering rules** (see `_templates/skill-template/SKILL.md`
+and `_standards/skill-quality-checklist.md`):
+
+- `description` and `when_to_use` have distinct jobs — coverage vs.
+  trigger conditions. Don't duplicate content between them; never add a
+  `triggers:` list.
+- Keep SKILL.md under ~350 lines. Move exhaustive reference material
+  (full field tables, complete error catalogs, long request/response
+  examples) into `references/*.md` in the skill directory and link it
+  from the relevant section.
+- State each instruction once. Skip sections that would only hold
+  generic filler — a skill with three real gotchas beats one with eight
+  boilerplate sections.
 
 ### Example: Learning from Existing Skills
 
@@ -223,15 +226,19 @@ Study the Autotask tickets skill as a reference:
 
 Before submitting a skill, verify:
 
-- [ ] Frontmatter `when_to_use`/`description` carry accurate, comprehensive trigger phrases (no `triggers:` list)
+- [ ] `when_to_use` carries accurate, comprehensive trigger phrases;
+      `description` states coverage — no duplication, no `triggers:` list
+- [ ] SKILL.md is under ~350 lines; long reference material split into
+      linked `references/*.md` files
 - [ ] Overview explains the domain clearly
-- [ ] All relevant fields are documented with types
 - [ ] Status codes/enums have complete tables
 - [ ] API examples use realistic (but fake) data
 - [ ] No hardcoded credentials
-- [ ] Business logic includes validation rules
-- [ ] Error handling section is complete
-- [ ] Links to related skills work
+- [ ] Errors documented with cause and resolution
+- [ ] No generic filler; each instruction stated once
+- [ ] Links to related skills and reference files resolve
+
+The full checklist lives in `msp-claude-plugins/_standards/skill-quality-checklist.md`.
 
 ---
 
