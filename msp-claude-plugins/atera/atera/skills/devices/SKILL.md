@@ -1,14 +1,14 @@
 ---
 name: "Atera Devices"
 description: >
-  Use this skill when working with Atera device monitors - HTTP, SNMP, and TCP
-  monitors for network devices, services, and applications. Covers monitor types,
-  configuration, thresholds, and monitoring best practices.
-  Essential for MSP network monitoring through Atera.
+  Atera device monitors: HTTP, SNMP, and TCP monitor types for network
+  devices, services, and applications, plus monitor configuration,
+  thresholds, and polling behavior.
 when_to_use: >-
-  When working with HTTP, SNMP, and TCP monitors for network devices, services, and applications
-  in Atera device monitors. Use when: atera device, atera monitor, http monitor, snmp monitor, tcp
-  monitor, network monitor, device monitoring, snmp polling, uptime monitoring, or port monitor.
+  When configuring or troubleshooting Atera network and device monitors. Use
+  when: atera device, atera monitor, http monitor, snmp monitor, tcp
+  monitor, network monitor, device monitoring, snmp polling, uptime
+  monitoring, or port monitor.
 ---
 
 # Atera Device Monitoring

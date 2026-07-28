@@ -1,15 +1,16 @@
 ---
 name: "Blackpoint Incident Response"
+description: >
+  Blackpoint Cyber (CompassOne) detection investigation: the read-only
+  tool surface across tenants, assets, detections, and vulnerabilities,
+  the tenant → asset → detection → vulnerability drill-down, asset
+  relationship maps, dark-web and external-exposure cross-references,
+  and which tool domains are stubs.
 when_to_use: >-
   When investigating a Blackpoint Cyber / CompassOne detection, building an incident timeline
   across assets, or correlating detections with known vulnerabilities. Use when: blackpoint
   detection, blackpoint investigation, blackpoint incident, compassone detection, blackpoint
   vulnerability, blackpoint asset relationships, or blackpoint dark web.
-description: >
-  Use this skill when investigating a Blackpoint Cyber detection —
-  drilling from a tenant to its assets, walking the detection list,
-  pulling vulnerability and dark-web context, and assembling an
-  incident timeline.
 ---
 
 # Blackpoint Incident Response

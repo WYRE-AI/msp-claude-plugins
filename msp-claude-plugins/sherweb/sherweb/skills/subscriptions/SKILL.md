@@ -1,16 +1,16 @@
 ---
 name: "Sherweb Subscriptions"
 description: >
-  Use this skill when working with Sherweb subscriptions - viewing
-  subscriptions, changing quantities, license management, subscription
-  lifecycle, and quantity change workflows. Covers subscription states,
-  seat adjustments, and provisioning status.
+  Sherweb subscription management: the subscription lifecycle and its states,
+  seat/license quantity rules (absolute values, minimums, proration, commitment
+  restrictions), the quantity-change workflow, subscription and change-response
+  fields, and state-transition errors.
 when_to_use: >-
-  When viewing subscriptions, changing quantities, license management, subscription lifecycle, and
-  quantity change workflows. Use when: sherweb subscription, sherweb license, sherweb seat,
-  sherweb quantity, sherweb provision, sherweb activate, sherweb cancel subscription, subscription
-  management sherweb, license management sherweb, seat count sherweb, change quantity sherweb, or
-  subscription lifecycle sherweb.
+  When viewing Sherweb subscriptions or adjusting their seat/license quantities.
+  Use when: sherweb subscription, sherweb license, sherweb seat, sherweb quantity,
+  sherweb provision, sherweb activate, sherweb cancel subscription, subscription
+  management sherweb, license management sherweb, seat count sherweb, change quantity
+  sherweb, or subscription lifecycle sherweb.
 ---
 
 # Sherweb Subscription Management
@@ -241,16 +241,10 @@ The `quantity` field represents the number of licenses (seats, devices, or units
 
 ## Best Practices
 
-1. **Check state before modifying** - Always verify the subscription is `Active` before changing quantity
-2. **Use absolute quantities** - Specify the total desired seat count, not a delta (+5 or -3)
-3. **Verify after changes** - Always re-fetch the subscription to confirm the change applied
-4. **Understand commitment terms** - Annual or multi-year commitments restrict quantity decreases
-5. **Monitor pending states** - Subscriptions in pending states need follow-up attention
-6. **Plan renewals ahead** - Review upcoming renewals 30 days in advance
-7. **Track quantity history** - Document quantity changes for audit purposes
-8. **Optimize regularly** - Monthly review of seat counts vs actual usage prevents waste
-9. **Use customer filter** - Always filter by `customerId` when checking a specific client
-10. **Respect rate limits** - When iterating through all customers' subscriptions, pace API calls appropriately
+1. **Understand commitment terms** - Annual or multi-year commitments restrict quantity decreases
+2. **Monitor pending states** - Subscriptions in pending states need follow-up attention
+3. **Track quantity history** - Document quantity changes for audit purposes
+4. **Optimize regularly** - Monthly review of seat counts vs actual usage prevents waste
 
 ## Related Skills
 

@@ -1,15 +1,14 @@
 ---
 name: "Pax8 API Patterns"
 description: >
-  Use this skill when working with the Pax8 MCP tools - available tools,
-  parameters, pagination, sorting, filtering, rate limiting, error
-  handling, and best practices. Covers the official hosted MCP server
-  connection and all 15 Pax8 MCP tools.
+  Pax8 MCP fundamentals: the official hosted MCP server connection, all 15 Pax8 MCP
+  tools and their parameters, pagination, sorting, filtering, response shapes, rate
+  limiting, and error handling.
 when_to_use: >-
-  When working with available tools, parameters, pagination, sorting, filtering, rate limiting,
-  error handling, and best practices in the Pax8 MCP tools. Use when: pax8 api, pax8 query, pax8
-  filter, pax8 pagination, pax8 rate limit, pax8 authentication, pax8 mcp, pax8 endpoint, pax8
-  request, pax8 token, or pax8 tools.
+  When connecting to, querying, paginating, filtering, or troubleshooting the Pax8 API
+  or MCP tools. Use when: pax8 api, pax8 query, pax8 filter, pax8 pagination, pax8 rate
+  limit, pax8 authentication, pax8 mcp, pax8 endpoint, pax8 request, pax8 token, or pax8
+  tools.
 ---
 
 # Pax8 MCP Tools & API Patterns
@@ -277,14 +276,12 @@ When rate limited, the MCP tool will return an error. Wait before retrying. The 
 
 1. **Use maximum page size** - Set `size=200` to minimize total tool calls when fetching all records
 2. **Filter server-side** - Use tool parameters to narrow results rather than fetching everything
-3. **Monitor rate limits** - Stay well under 1000 requests per minute
-4. **Sort consistently** - Use `sort=name`, `order=asc` for predictable pagination results
-5. **Use UUIDs** - All Pax8 resource IDs are UUIDs; validate format before passing to tools
-6. **Use company-scoped queries** - Always pass `companyId` when checking a specific client's data
-7. **Paginate large results** - The full Pax8 catalog has thousands of products; always paginate
-8. **Cache results when appropriate** - Company and product data changes infrequently
-9. **Validate before creating** - Check for existing records before creating duplicates
-10. **Use the search parameter** - `pax8-list-products` supports a `search` parameter for flexible text matching
+3. **Sort consistently** - Use `sort=name`, `order=asc` for predictable pagination results
+4. **Use UUIDs** - All Pax8 resource IDs are UUIDs; validate format before passing to tools
+5. **Use company-scoped queries** - Always pass `companyId` when checking a specific client's data
+6. **Paginate large results** - The full Pax8 catalog has thousands of products; always paginate
+7. **Cache results when appropriate** - Company and product data changes infrequently
+8. **Use the search parameter** - `pax8-list-products` supports a `search` parameter for flexible text matching
 
 ## Related Skills
 

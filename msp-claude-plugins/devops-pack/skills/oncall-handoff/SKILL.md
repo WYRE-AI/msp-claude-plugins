@@ -1,5 +1,13 @@
 ---
 name: "On-Call Handoff"
+description: >
+  Assembling an on-call shift handoff from whatever incident-management tool
+  (Rootly, PagerDuty, BetterStack) is connected, plus corroborating
+  observability signal where available: the four handoff categories in
+  priority order (currently paging, escalated without an owner, last-shift
+  history, known-flaky watch list), why an empty open-incidents list is not
+  an empty handoff, and the bar for calling an alert known-flaky rather than
+  simply resolved.
 when_to_use: >-
   When constructing or reviewing an on-call shift handoff — surfacing what's
   currently paging or unresolved, what happened during the last shift, and
@@ -7,16 +15,6 @@ when_to_use: >-
   when: on-call handoff, shift handoff, what's open right now, oncall
   summary, taking over on-call, end of shift, who's on call, handing off the
   pager.
-description: >
-  Use this skill when assembling a proper on-call handoff across whatever
-  incident-management tool (Rootly, PagerDuty, BetterStack) is connected
-  through the gateway. Covers what belongs in a handoff — currently paging
-  or unresolved incidents, last-shift incident history and status,
-  known-flaky alerts worth flagging, and anything escalated but not yet
-  actioned — and, critically, how to use conduit__search_tools to discover
-  which incident-management tool is actually connected before assuming a
-  specific vendor's tool names. Do not hardcode a vendor's tool surface;
-  discover it first.
 ---
 
 # On-Call Handoff
@@ -159,14 +157,8 @@ picking one.
 
 ## Best Practices
 
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
-- Lead with what requires immediate action (currently paging, escalated
-  without owner) before background context (history, known-flaky).
 - Treat missing data (no observability connector, no formal handoff tool) as
   a stated gap, not a reason to skip the section silently.
-- Don't let a quiet current-incident list stand in for a full handoff — always
-  check shift history too.
 
 ## Related Skills
 

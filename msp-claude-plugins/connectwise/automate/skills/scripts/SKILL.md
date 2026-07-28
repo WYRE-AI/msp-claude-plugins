@@ -1,10 +1,10 @@
 ---
 name: "ConnectWise Automate Scripts"
 description: >
-  Use this skill when working with ConnectWise Automate scripts - listing,
-  executing, passing parameters, and retrieving results. Covers script types
-  (PowerShell, batch, VBScript), script folders, script execution on computers,
-  parameter handling, execution history, and result retrieval.
+  ConnectWise Automate script management: script types (PowerShell, batch,
+  VBScript, Shell), script folders, script execution on computers, parameter
+  handling and validation, execution status polling, and result/history
+  retrieval.
 when_to_use: >-
   When listing, executing, passing parameters, and retrieving results. Use when: automate script,
   automate powershell, automate execute, run script, script execution, script parameters, script
@@ -51,230 +51,11 @@ Scripts in ConnectWise Automate are automation routines that run on managed endp
 
 ## Field Reference
 
-### Script Fields
-
-```typescript
-interface Script {
-  // Identifiers
-  ScriptID: number;             // Primary key
-  ScriptGUID: string;           // Global unique ID
-  Name: string;                 // Script name
-
-  // Organization
-  FolderID: number;             // Folder ID
-  FolderPath: string;           // Full folder path
-
-  // Script Content
-  ScriptType: ScriptType;       // Type of script
-  ScriptVersion: number;        // Version number
-  Description: string;          // Script description
-
-  // Permissions
-  ClientID: number;             // 0 for global, or specific client
-  LocationID: number;           // 0 for all locations
-
-  // Parameters
-  Parameters: ScriptParameter[];
-
-  // Metadata
-  DateCreated: string;          // Creation date
-  DateModified: string;         // Last modified
-  ModifiedBy: string;           // Last editor
-  Enabled: boolean;             // Is active
-}
-
-type ScriptType = 'Automate' | 'PowerShell' | 'Batch' | 'VBScript' | 'Shell';
-
-interface ScriptParameter {
-  Name: string;                 // Parameter name
-  Type: ParameterType;          // Data type
-  Required: boolean;            // Is required
-  DefaultValue: string;         // Default if not provided
-  Description: string;          // Parameter help
-  Options: string[];            // For dropdown types
-}
-
-type ParameterType = 'String' | 'Number' | 'Boolean' | 'Dropdown' | 'Computer' | 'Client';
-```
-
-### Script Execution Fields
-
-```typescript
-interface ScriptExecution {
-  // Identifiers
-  ExecutionID: number;          // Unique execution ID
-  ScriptID: number;             // Script that ran
-  ComputerID: number;           // Target computer
-
-  // Status
-  Status: ExecutionStatus;      // Current status
-  ExitCode: number;             // Process exit code
-  StartTime: string;            // When started
-  EndTime: string;              // When finished
-  Duration: number;             // Seconds elapsed
-
-  // Results
-  Output: string;               // Script stdout
-  ErrorOutput: string;          // Script stderr
-  LogOutput: string;            // Automate log entries
-
-  // Context
-  TriggeredBy: string;          // Who/what initiated
-  Parameters: Record<string, string>;  // Passed parameters
-}
-
-type ExecutionStatus = 'Pending' | 'Running' | 'Completed' | 'Failed' | 'Timeout' | 'Cancelled';
-```
+See [references/fields.md](references/fields.md) for the complete `Script`, `ScriptParameter`, and `ScriptExecution` field reference (TypeScript interfaces).
 
 ## API Patterns
 
-### List All Scripts
-
-```http
-GET /cwa/api/v1/Scripts?pageSize=250
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-[
-  {
-    "ScriptID": 1001,
-    "Name": "Clear Temp Files",
-    "FolderPath": "Maintenance/Disk Cleanup",
-    "ScriptType": "PowerShell",
-    "Description": "Clears Windows temporary directories",
-    "Enabled": true,
-    "Parameters": [
-      {
-        "Name": "days",
-        "Type": "Number",
-        "Required": false,
-        "DefaultValue": "7",
-        "Description": "Delete files older than X days"
-      }
-    ]
-  }
-]
-```
-
-### Get Script Details
-
-```http
-GET /cwa/api/v1/Scripts/{scriptID}
-Authorization: Bearer {token}
-```
-
-### List Scripts by Folder
-
-```http
-GET /cwa/api/v1/Scripts?condition=FolderID = 5&pageSize=100
-Authorization: Bearer {token}
-```
-
-### Search Scripts by Name
-
-```http
-GET /cwa/api/v1/Scripts?condition=Name contains 'cleanup'&pageSize=50
-Authorization: Bearer {token}
-```
-
-### Execute Script on Computer
-
-```http
-POST /cwa/api/v1/Computers/{computerID}/Scripts/{scriptID}/Execute
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "Parameters": {
-    "days": "30",
-    "path": "C:\\Temp"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "ExecutionID": 98765,
-  "Status": "Pending",
-  "ComputerID": 12345,
-  "ScriptID": 1001,
-  "StartTime": "2024-02-15T10:45:00Z"
-}
-```
-
-### Get Execution Status
-
-```http
-GET /cwa/api/v1/Scripts/Executions/{executionID}
-Authorization: Bearer {token}
-```
-
-**Response (Running):**
-```json
-{
-  "ExecutionID": 98765,
-  "Status": "Running",
-  "StartTime": "2024-02-15T10:45:00Z",
-  "Duration": 30
-}
-```
-
-**Response (Completed):**
-```json
-{
-  "ExecutionID": 98765,
-  "Status": "Completed",
-  "ExitCode": 0,
-  "StartTime": "2024-02-15T10:45:00Z",
-  "EndTime": "2024-02-15T10:46:30Z",
-  "Duration": 90,
-  "Output": "Deleted 156 files totaling 2.3 GB",
-  "ErrorOutput": ""
-}
-```
-
-### Execute Script on Multiple Computers
-
-```http
-POST /cwa/api/v1/Scripts/{scriptID}/Execute
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "ComputerIDs": [12345, 12346, 12347],
-  "Parameters": {
-    "days": "30"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "Executions": [
-    { "ExecutionID": 98765, "ComputerID": 12345, "Status": "Pending" },
-    { "ExecutionID": 98766, "ComputerID": 12346, "Status": "Pending" },
-    { "ExecutionID": 98767, "ComputerID": 12347, "Status": "Pending" }
-  ]
-}
-```
-
-### Get Execution History for Computer
-
-```http
-GET /cwa/api/v1/Computers/{computerID}/Scripts/Executions?pageSize=50
-Authorization: Bearer {token}
-```
-
-### Get Execution History for Script
-
-```http
-GET /cwa/api/v1/Scripts/{scriptID}/Executions?pageSize=50
-Authorization: Bearer {token}
-```
+See [references/api.md](references/api.md) for the complete endpoint catalog: listing/searching scripts, executing on one or many computers, polling execution status, and retrieving execution history — with full request/response JSON examples.
 
 ## Workflows
 
@@ -531,67 +312,18 @@ function summarizeScriptResult(execution) {
 }
 ```
 
-### Safe Script Execution
-
-```javascript
-async function safeRunScript(client, computerId, scriptId, params = {}) {
-  // Verify computer is online
-  const computer = await client.request(`/Computers/${computerId}`);
-
-  if (computer.Status !== 'Online') {
-    return {
-      success: false,
-      error: `Computer is ${computer.Status}`,
-      lastContact: computer.LastContact
-    };
-  }
-
-  // Validate parameters
-  const validation = await validateScriptParams(client, scriptId, params);
-
-  if (!validation.valid) {
-    return {
-      success: false,
-      error: 'Invalid parameters',
-      details: validation.errors
-    };
-  }
-
-  // Execute the script
-  try {
-    const execution = await client.request(
-      `/Computers/${computerId}/Scripts/${scriptId}/Execute`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ Parameters: params })
-      }
-    );
-    return {
-      success: true,
-      executionId: execution.ExecutionID,
-      warnings: validation.warnings
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message
-    };
-  }
-}
-```
+See [references/examples.md](references/examples.md) for a "Safe Script Execution" wrapper (online check + parameter validation + execute) and a PowerShell script template.
 
 ## Best Practices
 
 1. **Verify computer online** - Check status before immediate execution
 2. **Validate parameters** - Check required and type before running
-3. **Use descriptive names** - Clear script naming conventions
-4. **Document parameters** - Add descriptions to all parameters
-5. **Handle timeouts** - Set appropriate execution timeouts
-6. **Log important output** - Capture key results in script output
-7. **Test before deploying** - Validate on test computers first
-8. **Use folders** - Organize scripts in logical folder structure
-9. **Version scripts** - Track changes in script content
-10. **Handle exit codes** - Return meaningful exit codes
+3. **Document parameters** - Add descriptions to all parameters
+4. **Handle timeouts** - Set appropriate execution timeouts
+5. **Log important output** - Capture key results in script output
+6. **Use folders** - Organize scripts in logical folder structure
+7. **Version scripts** - Track changes in script content
+8. **Handle exit codes** - Return meaningful exit codes
 
 ## Script Exit Code Interpretation
 
@@ -605,40 +337,6 @@ async function safeRunScript(client, computerId, scriptId, params = {}) {
 | 87 | Invalid parameter |
 | 1603 | Installation failed |
 | -1 | Script exception |
-
-## PowerShell Script Template
-
-```powershell
-# Script: Clear-TempFiles
-# Parameters: days, path
-param(
-    [int]$days = 7,
-    [string]$path = "$env:TEMP"
-)
-
-try {
-    $cutoff = (Get-Date).AddDays(-$days)
-    $files = Get-ChildItem -Path $path -Recurse -File |
-             Where-Object { $_.LastWriteTime -lt $cutoff }
-
-    $count = 0
-    $size = 0
-
-    foreach ($file in $files) {
-        $size += $file.Length
-        Remove-Item $file.FullName -Force -ErrorAction SilentlyContinue
-        $count++
-    }
-
-    $sizeGB = [math]::Round($size / 1GB, 2)
-    Write-Output "Deleted $count files totaling $sizeGB GB"
-    exit 0
-}
-catch {
-    Write-Error $_.Exception.Message
-    exit 1
-}
-```
 
 ## Related Skills
 

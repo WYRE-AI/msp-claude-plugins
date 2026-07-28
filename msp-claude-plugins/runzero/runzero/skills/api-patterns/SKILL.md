@@ -1,14 +1,14 @@
 ---
 name: "runZero API Patterns"
 description: >
-  Use this skill when working with the RunZero MCP tools —
-  available tools, authentication via Bearer token, Export API,
-  pagination, rate limiting, error handling, and best practices.
+  runZero API fundamentals: the available MCP tools, Bearer-token authentication, the
+  Export API for bulk retrieval, pagination, rate-limit headers, error codes, and the
+  runZero query language.
 when_to_use: >-
-  When working with available tools, authentication via Bearer token, Export API, pagination, rate
-  limiting, error handling, and best practices in the RunZero MCP tools. Use when: runzero api,
-  runzero authentication, runzero pagination, runzero rate limit, runzero mcp, runzero tools,
-  runzero request, runzero error, runzero connection, or runzero export.
+  When authenticating to, paginating, exporting from, or troubleshooting errors in the
+  runZero API or MCP tools. Use when: runzero api, runzero authentication, runzero
+  pagination, runzero rate limit, runzero mcp, runzero tools, runzero request, runzero
+  error, runzero connection, or runzero export.
 ---
 
 # RunZero MCP Tools & API Patterns
@@ -209,7 +209,6 @@ field:value AND field:value OR field:value
 - Apply query filters to scope results to relevant assets
 - Use site-based filtering to generate per-client reports
 - Cache site and explorer metadata to reduce API calls
-- Handle rate limits gracefully with exponential backoff
 - Use Organization API Tokens for scoped integrations
 
 ## Related Skills

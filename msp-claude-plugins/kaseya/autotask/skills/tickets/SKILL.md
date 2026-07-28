@@ -1,11 +1,10 @@
 ---
 name: "Autotask Tickets"
 description: >
-  Use this skill when working with Autotask tickets - creating, updating,
-  searching, or managing service desk operations. Covers ticket fields,
-  queues, statuses, priorities, SLAs, escalation rules, and workflow automations.
-  Includes business logic for validation, SLA calculations, and metrics.
-  Essential for MSP technicians handling service delivery through Autotask PSA.
+  Autotask ticket lifecycle: status/priority codes and transition rules,
+  the ticket field schema, SLA calculation and clock behavior, escalation
+  rules, ticket metrics, and the MCP tool surface (create, update, search,
+  history, notes) for MSP service desk operations.
 when_to_use: >-
   When creating, updating, searching, or managing service desk operations. Use when: autotask
   ticket, service ticket, create ticket autotask, ticket queue, ticket status, ticket priority,
@@ -68,69 +67,11 @@ ESCALATED (14) ─────> IN_PROGRESS (2) ────> COMPLETE (5)
 
 **Note:** In Autotask, lower numbers = lower priority. Priority 4 is most urgent.
 
-## Complete Ticket Field Reference
+## Ticket Field Reference
 
-### Core Fields
+Core fields to know: `title`, `companyID`, `status`, `priority`, `queueID` (all required on create); `contactID`, `issueType`/`subIssueType`, `assignedResourceID` + `assignedResourceRoleID` (must be set together), `dueDateTime`, and `resolution` (required when completing).
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | int | System | Auto-generated unique identifier |
-| `ticketNumber` | string | System | Human-readable (e.g., T20240215.0001) |
-| `title` | string(255) | Yes | Brief issue summary |
-| `description` | text | No | Detailed description |
-| `companyID` | int | Yes | Company/account reference |
-| `companyLocationID` | int | No | Site/location within company |
-| `contactID` | int | No | Primary contact for ticket |
-
-### Classification Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `status` | int | Yes | Current status (see codes above) |
-| `priority` | int | Yes | Urgency level (1-4) |
-| `queueID` | int | Yes | Service queue for routing |
-| `issueType` | int | No | Primary category |
-| `subIssueType` | int | No | Sub-category |
-| `ticketType` | int | No | Service Request, Incident, Problem, Change |
-| `ticketCategory` | int | No | Additional categorization |
-
-### Assignment Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `assignedResourceID` | int | No | Technician assigned |
-| `assignedResourceRoleID` | int | No | Role for billing |
-| `creatorResourceID` | int | System | Who created the ticket |
-| `lastActivityResourceID` | int | System | Last person to update |
-
-### SLA & Timeline Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `createDate` | datetime | System | When ticket was created |
-| `dueDateTime` | datetime | No | SLA due date/time |
-| `completedDate` | datetime | System | When marked complete |
-| `firstResponseDateTime` | datetime | System | First response timestamp |
-| `resolutionPlanDateTime` | datetime | No | Expected resolution time |
-| `resolvedDateTime` | datetime | System | Actual resolution time |
-| `lastActivityDate` | datetime | System | Last update timestamp |
-
-### Contract & Billing Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `contractID` | int | No | Associated contract |
-| `contractServiceID` | int | No | Specific service on contract |
-| `contractServiceBundleID` | int | No | Service bundle |
-| `estimatedHours` | decimal | No | Estimated effort |
-| `hoursToBeScheduled` | decimal | No | Hours remaining |
-
-### Resolution Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `resolution` | text | Conditional | Required when completing |
-| `resolutionType` | int | No | Resolution category |
+See [references/fields.md](references/fields.md) for the complete field reference (core, classification, assignment, SLA/timeline, contract/billing, and resolution fields).
 
 ## SLA Calculation Logic
 
@@ -145,25 +86,7 @@ const SLA_DEFAULTS = {
 };
 ```
 
-### SLA Calculation Example
-
-```javascript
-// Calculate SLA due dates
-function calculateSLADueDate(ticket, contractSLA) {
-  const now = new Date();
-  const priority = ticket.priority || 2; // Default to MEDIUM
-
-  // Use contract SLA if available, otherwise defaults
-  const responseHours = contractSLA?.responseTimeHours || SLA_DEFAULTS[priority].response;
-  const resolutionHours = contractSLA?.resolutionTimeHours || SLA_DEFAULTS[priority].resolution;
-
-  return {
-    responseBy: addHours(now, responseHours),
-    resolveBy: addHours(now, resolutionHours),
-    businessHoursOnly: true
-  };
-}
-```
+Contract SLA terms override these defaults when present. See [references/examples.md](references/examples.md) for the due-date calculation function.
 
 ### SLA Clock Behavior
 
@@ -178,41 +101,6 @@ function calculateSLADueDate(ticket, contractSLA) {
 
 ## Escalation Rules
 
-### Automatic Escalation Triggers
-
-```javascript
-function checkEscalationRules(ticket) {
-  const reasons = [];
-  const now = new Date();
-
-  // SLA Violation
-  if (ticket.dueDateTime && new Date(ticket.dueDateTime) < now) {
-    const hoursOverdue = Math.floor(
-      (now - new Date(ticket.dueDateTime)) / (1000 * 60 * 60)
-    );
-    reasons.push(`SLA violated by ${hoursOverdue} hours`);
-    escalationLevel = Math.min(3, Math.floor(hoursOverdue / 4) + 1);
-  }
-
-  // Stale Waiting Status
-  if (ticket.status === 6 && ticket.lastActivityDate) {
-    const daysSinceActivity = Math.floor(
-      (now - new Date(ticket.lastActivityDate)) / (1000 * 60 * 60 * 24)
-    );
-    if (daysSinceActivity > 7) {
-      reasons.push(`No customer response for ${daysSinceActivity} days`);
-    }
-  }
-
-  // Critical Without Assignment
-  if (ticket.priority === 4 && !ticket.assignedResourceID) {
-    reasons.push('Critical ticket without assigned resource');
-  }
-
-  return { requiresEscalation: reasons.length > 0, reasons };
-}
-```
-
 ### Escalation Levels
 
 | Level | Trigger | Action |
@@ -221,61 +109,11 @@ function checkEscalationRules(ticket) {
 | 2 | SLA 4-8 hours overdue | Notify team lead |
 | 3 | SLA 8+ hours overdue | Notify management |
 
+Automatic escalation triggers: an SLA violation (overdue `dueDateTime`), a stale `WAITING_CUSTOMER` status (no activity for 7+ days), and CRITICAL-priority tickets with no `assignedResourceID`. See [references/examples.md](references/examples.md) for the rule-check implementation.
+
 ## Ticket Metrics & KPIs
 
-### Key Performance Indicators
-
-```javascript
-function calculateTicketMetrics(tickets) {
-  const completedTickets = tickets.filter(t => t.status === 5);
-
-  // Average Resolution Time (hours)
-  const avgResolutionTime = completedTickets.reduce((sum, t) => {
-    if (t.createDate && t.completedDate) {
-      return sum + (new Date(t.completedDate) - new Date(t.createDate));
-    }
-    return sum;
-  }, 0) / completedTickets.length / (1000 * 60 * 60);
-
-  // SLA Compliance Rate
-  const ticketsWithSLA = tickets.filter(t => t.dueDateTime);
-  const slaCompliant = ticketsWithSLA.filter(t => {
-    if (t.status === 5) {
-      return new Date(t.completedDate) <= new Date(t.dueDateTime);
-    }
-    return new Date() <= new Date(t.dueDateTime);
-  }).length;
-  const slaCompliance = (slaCompliant / ticketsWithSLA.length) * 100;
-
-  return {
-    totalTickets: tickets.length,
-    averageResolutionTime: avgResolutionTime.toFixed(2),
-    slaCompliance: slaCompliance.toFixed(1) + '%',
-    escalatedCount: tickets.filter(t => t.status === 14).length
-  };
-}
-```
-
-### Status Distribution Report
-
-```json
-{
-  "statusDistribution": {
-    "NEW": 12,
-    "IN_PROGRESS": 45,
-    "WAITING_CUSTOMER": 8,
-    "WAITING_MATERIALS": 3,
-    "ESCALATED": 2,
-    "COMPLETE": 156
-  },
-  "priorityDistribution": {
-    "CRITICAL": 1,
-    "HIGH": 15,
-    "MEDIUM": 38,
-    "LOW": 22
-  }
-}
-```
+Key metrics: average resolution time (`completedDate` − `createDate` for COMPLETE tickets), SLA compliance rate (completed-on-time or still-within-SLA, divided by tickets with a due date), and escalation count. See [references/examples.md](references/examples.md) for the calculation function and a sample status/priority distribution report.
 
 ## MCP Tool Reference
 
@@ -418,16 +256,6 @@ Content-Type: application/json
 }
 ```
 
-**SLA-breached tickets:**
-```json
-{
-  "filter": [
-    {"field": "dueDateTime", "op": "lt", "value": "2024-02-15T12:00:00Z"},
-    {"field": "status", "op": "in", "value": [1, 2, 6, 13, 14]}
-  ]
-}
-```
-
 **Tickets created today (CORRECT — must use gte + lt range):**
 ```json
 {
@@ -440,68 +268,7 @@ Content-Type: application/json
 
 > **Warning:** Using only today's date returns **zero results**. You MUST use a range: `gte` today AND `lt` tomorrow. See the api-patterns skill for the full explanation and dynamic date computation.
 
-**Tickets by date range:**
-```json
-{
-  "filter": [
-    {"field": "createDate", "op": "between", "value": ["2024-02-01", "2024-02-29"]}
-  ]
-}
-```
-
-### Updating Ticket Status
-
-```http
-PATCH /v1.0/Tickets
-Content-Type: application/json
-```
-
-**Setting to Complete (requires resolution):**
-```json
-{
-  "id": 54321,
-  "status": 5,
-  "resolution": "Cleared Outlook cache and repaired Office installation. Monitored for 30 minutes, email flow restored."
-}
-```
-
-**Setting to Escalated (requires reason):**
-```json
-{
-  "id": 54321,
-  "status": 14,
-  "escalationReason": "Complex Exchange hybrid configuration issue requires senior engineer"
-}
-```
-
-### Adding Notes
-
-```http
-POST /v1.0/TicketNotes
-Content-Type: application/json
-```
-
-**Internal Note:**
-```json
-{
-  "ticketID": 54321,
-  "title": "Initial Triage",
-  "description": "Issue started after KB5034441 update. Known Outlook cache corruption issue.",
-  "noteType": 1,
-  "publish": 0
-}
-```
-
-**External Note (visible to client):**
-```json
-{
-  "ticketID": 54321,
-  "title": "Status Update",
-  "description": "We've identified the cause of the issue. A technician is working on the fix and will have it resolved within the hour.",
-  "noteType": 2,
-  "publish": 1
-}
-```
+See [references/api.md](references/api.md) for additional query patterns (SLA-breached tickets, date-range queries) and the full status-update / note-creation request bodies (complete-with-resolution, escalate-with-reason, internal vs external notes).
 
 ## Common Workflows
 
@@ -518,33 +285,7 @@ Content-Type: application/json
 
 ### Status Transition Validation
 
-```javascript
-function validateStatusTransition(currentStatus, newStatus, ticket) {
-  const requiredFields = [];
-  const warnings = [];
-
-  switch (newStatus) {
-    case 5: // COMPLETE
-      if (!ticket.resolution) requiredFields.push('resolution');
-      if (currentStatus === 1) warnings.push('Completing without In Progress step');
-      break;
-
-    case 2: // IN_PROGRESS
-      if (!ticket.assignedResourceID) warnings.push('No resource assigned');
-      break;
-
-    case 14: // ESCALATED
-      if (!ticket.escalationReason) requiredFields.push('escalationReason');
-      break;
-  }
-
-  return {
-    canTransition: requiredFields.length === 0,
-    requiredFields,
-    warnings
-  };
-}
-```
+Before transitioning a ticket, validate required fields per target status: COMPLETE requires `resolution` (and warns if skipping the IN_PROGRESS step), ESCALATED requires `escalationReason`, and IN_PROGRESS warns if no `assignedResourceID` is set. See [references/examples.md](references/examples.md) for the validation function.
 
 ## Error Handling
 
@@ -576,9 +317,8 @@ function validateStatusTransition(currentStatus, newStatus, ticket) {
 3. **Set accurate priority** - Use impact/urgency matrix, not everything is Critical
 4. **Log time immediately** - Don't batch at end of day
 5. **Update status promptly** - Keeps queues accurate for reporting
-6. **Document thoroughly** - Future technicians will thank you
-7. **Use internal notes for technical details** - Keep external notes professional
-8. **Monitor SLA metrics** - Address breaches before they escalate
+6. **Use internal notes for technical details** - Keep external notes professional
+7. **Monitor SLA metrics** - Address breaches before they escalate
 
 ## Related Skills
 

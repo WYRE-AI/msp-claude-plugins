@@ -1,16 +1,16 @@
 ---
 name: "Hudu Passwords"
 description: >
-  Use this skill when working with Hudu passwords (asset passwords) -
-  secure credential storage, retrieval, folders, and access patterns.
-  Covers security best practices, audit logging, password retrieval,
-  and proper handling of sensitive credentials. The API endpoint is
-  /api/v1/asset_passwords despite the UI calling them "Passwords."
+  Hudu secure credential storage: the /api/v1/asset_passwords endpoint
+  (the UI calls these "Passwords"), company scoping and password
+  folders, TOTP secrets, per-API-key password permissions, activity-log
+  auditing, rotation workflows, and output-safety rules for handling
+  plaintext credential values.
 when_to_use: >-
-  When working with secure credential storage, retrieval, folders, and access patterns in Hudu
-  passwords (asset passwords). Use when: hudu password, hudu credential, credential lookup,
-  password management, secure credentials, hudu credentials, password storage, credential
-  documentation, password access, or asset password.
+  When storing, retrieving, rotating, or auditing credentials in Hudu, or when a request
+  returns 403 on a password endpoint. Use when: hudu password, hudu credential, credential
+  lookup, password management, secure credentials, hudu credentials, password storage,
+  credential documentation, password access, or asset password.
 ---
 
 # Hudu Passwords Management
@@ -63,172 +63,48 @@ This is configured per API key in Admin > API Keys.
 
 ### Security Audit Trail
 
-Hudu logs all password access in the activity logs (`/api/v1/activity_logs`). This includes:
+Hudu logs all password access in the activity logs (`/api/v1/activity_logs`) — who accessed it, when, and what action (view, create, update, delete):
 
-- Who accessed the password
-- When it was accessed
-- What action was performed (view, create, update, delete)
+```http
+GET /api/v1/activity_logs?resource_type=AssetPassword&resource_id=789
+```
 
-## Field Reference
+### Fields
 
-### Core Fields
+Core fields: `company_id` (required), `name` (required), `username`, `password`, `url`, `description`, `password_type`, `otp_secret`, `password_folder_id`.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `company_id` | integer | Yes | Parent company |
-| `name` | string | Yes | Password display name |
-| `username` | string | No | Account username |
-| `password` | string | No | The actual password value |
-| `url` | string | No | Related URL/login page |
-| `description` | string | No | Additional notes |
-| `password_type` | string | No | Category/type label |
-| `otp_secret` | string | No | TOTP/2FA secret |
-
-### Password Folder Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `password_folder_id` | integer | Folder location |
-| `password_folder_name` | string | Folder name (read-only) |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `created_at` | datetime | Creation timestamp |
-| `updated_at` | datetime | Last update timestamp |
-| `slug` | string | URL-friendly identifier |
-| `url` | string | Full URL in Hudu |
-| `object_type` | string | Always "AssetPassword" |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Passwords
+| Operation | Request |
+|-----------|---------|
+| List / filter | `GET /api/v1/asset_passwords?company_id=123&name=Domain Admin&page=1` |
+| Get one | `GET /api/v1/asset_passwords/789` |
+| Create | `POST /api/v1/asset_passwords` with `{ "asset_password": { ... } }` |
+| Update | `PUT /api/v1/asset_passwords/789` |
+| Delete | `DELETE /api/v1/asset_passwords/789` (requires DELETE permission) |
 
-```http
-GET /api/v1/asset_passwords
-x-api-key: YOUR_API_KEY
-Content-Type: application/json
+`GET` on a single password returns the **plaintext `password` value** in the response body. Treat every response from this endpoint as sensitive.
+
+See [references/api.md](references/api.md) for the complete endpoint catalog with request/response examples.
+
+## Output Safety
+
+**Never include actual password values in:**
+- Correlation summaries or reports
+- Log files
+- Chat output or conversation history
+- Error messages
+- Any output that may be visible to unauthorized users
+
+When displaying password information, always mask the actual value:
+
 ```
-
-**By Company:**
-```http
-GET /api/v1/asset_passwords?company_id=123
-```
-
-**By Name:**
-```http
-GET /api/v1/asset_passwords?name=Domain Admin
-```
-
-**With Pagination:**
-```http
-GET /api/v1/asset_passwords?company_id=123&page=1
-```
-
-**Combined:**
-```http
-GET /api/v1/asset_passwords?company_id=123&name=admin
-```
-
-### Get Single Password
-
-```http
-GET /api/v1/asset_passwords/789
-x-api-key: YOUR_API_KEY
-```
-
-**Response:**
-```json
-{
-  "asset_password": {
-    "id": 789,
-    "company_id": 123,
-    "company_name": "Acme Corporation",
-    "name": "Domain Admin - ACME",
-    "username": "administrator@acme.local",
-    "password": "SecureP@ssw0rd123!",
-    "url": "https://dc01.acme.local",
-    "description": "Primary domain administrator account.\nUse for:\n- Domain controller management\n- Group Policy changes\n- AD user management",
-    "password_type": "Administrative",
-    "password_folder_id": 45,
-    "password_folder_name": "Infrastructure",
-    "otp_secret": null,
-    "slug": "domain-admin-acme",
-    "created_at": "2024-01-15T10:30:00.000Z",
-    "updated_at": "2025-11-15T14:22:00.000Z",
-    "url": "https://your-company.huducloud.com/passwords/789"
-  }
-}
-```
-
-**IMPORTANT: The password value is returned in the response. Never expose password values in correlation summaries, logs, or output visible to unauthorized users.**
-
-### Create Password
-
-```http
-POST /api/v1/asset_passwords
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "asset_password": {
-    "company_id": 123,
-    "name": "Domain Admin - ACME",
-    "username": "administrator@acme.local",
-    "password": "SecureP@ssw0rd123!",
-    "url": "https://dc01.acme.local",
-    "description": "Primary domain administrator account",
-    "password_type": "Administrative",
-    "password_folder_id": 45
-  }
-}
-```
-
-### Update Password
-
-```http
-PUT /api/v1/asset_passwords/789
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "asset_password": {
-    "password": "NewSecureP@ssw0rd456!",
-    "description": "Password rotated on 2026-02-15. Previous rotation: 2025-11-15."
-  }
-}
-```
-
-### Delete Password
-
-```http
-DELETE /api/v1/asset_passwords/789
-x-api-key: YOUR_API_KEY
-```
-
-**Warning:** Consider keeping passwords for audit purposes. Deletion requires DELETE permission on the API key.
-
-### Search Passwords
-
-**By Name:**
-```http
-GET /api/v1/asset_passwords?name=Domain Admin
-```
-
-**By Company:**
-```http
-GET /api/v1/asset_passwords?company_id=123
-```
-
-**Combined:**
-```http
-GET /api/v1/asset_passwords?company_id=123&name=firewall
+Password: Domain Admin - ACME
+Username: administrator@acme.local
+Password: **************
+URL:      https://dc01.acme.local
 ```
 
 ## Common Workflows
@@ -254,6 +130,8 @@ async function createSecurePassword(companyId, data) {
 
 ### Password Rotation Workflow
 
+Hudu keeps no rotation history of its own — append rotation dates to `description` so the audit trail survives.
+
 ```javascript
 async function rotatePassword(passwordId, newPassword, reason) {
   // Get current password info (for logging, not the value)
@@ -270,6 +148,8 @@ async function rotatePassword(passwordId, newPassword, reason) {
 ```
 
 ### Password Search by Context
+
+The API filters only on `name` and `company_id`; matching against description or URL requires a client-side pass.
 
 ```javascript
 async function findPasswordsForServer(companyId, serverName) {
@@ -329,6 +209,16 @@ async function generatePasswordReport(companyId) {
 }
 ```
 
+## Gotchas
+
+- **Endpoint is `asset_passwords`, not `passwords`.** The UI name and the API name differ; `/api/v1/passwords` does not exist.
+- **403 on this endpoint is a key-permission problem, not a bad key.** Password access is a per-API-key toggle in Admin > API Keys — a key that works everywhere else can still 403 here.
+- **`url` appears twice in responses** with different meanings: the credential's login URL on create/update, and the Hudu record URL in the read payload's metadata. Do not round-trip it blindly.
+- **Every read is logged.** Bulk enumeration of passwords generates a visible audit trail; scope by `company_id` rather than sweeping the tenant.
+- **Deletion is unrecoverable and drops the audit context.** Prefer keeping stale credentials with a rotation note.
+
+See [references/errors.md](references/errors.md) for the complete error and validation table plus a secure error-handling pattern.
+
 ## Security Best Practices
 
 ### Access Control
@@ -341,93 +231,18 @@ async function generatePasswordReport(companyId) {
 ### Password Hygiene
 
 1. **Regular rotation** - Rotate passwords on schedule (90 days recommended)
-2. **Strong passwords** - Enforce complexity requirements
-3. **Unique passwords** - Never reuse passwords across systems
-4. **Track changes** - Update description when passwords are rotated
-5. **Monitor stale passwords** - Alert on passwords not updated recently
+2. **Unique passwords** - Never reuse passwords across systems
+3. **Track changes** - Update description when passwords are rotated
+4. **Monitor stale passwords** - Alert on passwords not updated recently
 
-### Output Safety
-
-**CRITICAL: Never include actual password values in:**
-- Correlation summaries or reports
-- Log files
-- Chat output or conversation history
-- Error messages
-- Any output that may be visible to unauthorized users
-
-When displaying password information, always mask the actual value:
-
-```
-Password: Domain Admin - ACME
-Username: administrator@acme.local
-Password: **************
-URL:      https://dc01.acme.local
-```
-
-### Audit Logging
-
-Monitor password access using Hudu's activity logs:
-
-```http
-GET /api/v1/activity_logs?resource_type=AssetPassword&resource_id=789
-```
-
-## Error Handling
-
-### Common API Errors
-
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Name can't be blank | Provide password name |
-| 400 | Company is required | Include company_id |
-| 401 | Invalid API key | Check HUDU_API_KEY |
-| 403 | Password access denied | API key lacks password permission |
-| 404 | Password not found | Verify password ID |
-| 422 | Validation failed | Check required fields |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Name required | Missing name | Add name to request |
-| Company required | No company_id | Include company_id |
-| Access denied | API key lacks permission | Enable password access on API key |
-| Invalid folder | Bad folder_id | Query password folders first |
-
-### Secure Error Handling
-
-```javascript
-async function safeGetPassword(passwordId) {
-  try {
-    return await getAssetPassword(passwordId);
-  } catch (error) {
-    if (error.status === 403) {
-      console.log('Password access denied. API key may lack password permission.');
-      return null;
-    }
-
-    if (error.status === 404) {
-      console.log('Password not found.');
-      return null;
-    }
-
-    throw error;
-  }
-}
-```
-
-## Best Practices
+### Documentation Hygiene
 
 1. **Use descriptive names** - Include system name and account type (e.g., "Domain Admin - ACME")
 2. **Set password type** - Classify passwords (Administrative, Network, Application, etc.)
 3. **Organize with folders** - Create a logical folder hierarchy per company
 4. **Document purpose** - Use the description field to explain what the password is for
 5. **Track URLs** - Always include the login URL when applicable
-6. **Regular rotation** - Establish password rotation schedules
-7. **Monitor access** - Review activity logs for password access
-8. **Avoid deletion** - Archive or keep passwords for audit trails
-9. **Include 2FA** - Store TOTP secrets with the otp_secret field
-10. **Never expose values** - Never include password values in summaries or logs
+6. **Include 2FA** - Store TOTP secrets with the `otp_secret` field
 
 ## Related Skills
 

@@ -1,14 +1,14 @@
 ---
 name: "TimeZest API Patterns"
-when_to_use: >-
-  When working with TimeZest authentication, scheduling request payloads, PSA entity associations,
-  or polling cadence for status changes. Use when: timezest api, timezest authentication, timezest
-  bearer, timezest scheduling, timezest mcp, timezest associated entities, or timezest poll.
 description: >
-  Use this skill when working with the TimeZest MCP tools — Bearer
-  token authentication, the navigation pattern, scheduling-request
-  payloads that carry PSA associated_entities (ConnectWise / Autotask
-  / Halo ticket IDs), and the polling-only update model (no webhooks).
+  TimeZest MCP fundamentals: Bearer token authentication, the navigation
+  pattern, scheduling-request payloads that carry PSA associated_entities
+  (ConnectWise / Autotask / Halo ticket IDs), and the polling-only update
+  model (no webhooks).
+when_to_use: >-
+  When authenticating to or calling TimeZest through the MCP tools, building a scheduling-request
+  payload, or deciding a polling cadence. Use when: timezest api, timezest authentication, timezest
+  bearer, timezest scheduling, timezest mcp, timezest associated entities, or timezest poll.
 ---
 
 # TimeZest MCP Tools & API Patterns

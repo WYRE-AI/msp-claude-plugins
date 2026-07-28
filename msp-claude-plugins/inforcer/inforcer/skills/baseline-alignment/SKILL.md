@@ -1,16 +1,15 @@
 ---
 name: "Inforcer Baseline Alignment"
-when_to_use: >-
-  When working with Inforcer security baselines and tenant alignment — listing baseline templates,
-  reading a tenant's alignment score, and pulling the per-policy drift detail of a tenant vs its
-  assigned baseline. Use when: inforcer baseline, baseline template, tenant alignment, alignment
-  score, alignment details, policy drift, drift detail, or tenant policies.
 description: >
-  Use this skill when working with Inforcer baselines and alignment —
-  listing baseline templates, reading alignment scores, and pulling
-  alignment details (the per-policy drift breakdown of a tenant against
-  its assigned baseline). Also covers reading deployed tenant policy
-  state (read-only). This is the core drift-detection surface.
+  Inforcer's core drift-detection surface: baseline templates, tenant
+  alignment scores, alignment details (the per-policy breakdown of a tenant
+  against its assigned baseline), and reading deployed tenant policy state.
+  Read-only.
+when_to_use: >-
+  When listing baseline templates, reading a tenant's alignment score, or inspecting
+  per-policy drift against an assigned baseline.
+  Use when: inforcer baseline, baseline template, tenant alignment, alignment
+  score, alignment details, policy drift, drift detail, or tenant policies.
 ---
 
 # Inforcer Baseline Alignment & Drift

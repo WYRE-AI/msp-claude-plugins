@@ -1,9 +1,12 @@
 ---
+name: "Autotask Ticket Notes & Attachments"
 description: >-
-  Use this skill when working with Autotask ticket notes, ticket attachments, and ticket charges —
-  retrieving individual notes, downloading attachments, managing labor charges on tickets.
-  Supplements the core tickets skill with the secondary entities attached to tickets. Use when:
-  autotask ticket note, autotask ticket attachment, autotask ticket charge, get ticket note
+  Autotask ticket notes, attachments, and charges — the secondary entities attached to tickets:
+  retrieving/searching notes and attachments, and creating, updating, or searching ticket charges
+  for labor and expenses billed directly to a ticket.
+when_to_use: >-
+  When retrieving ticket notes, downloading ticket attachments, or managing ticket charges. Use
+  when: autotask ticket note, autotask ticket attachment, autotask ticket charge, get ticket note
   autotask, download ticket attachment, ticket charges autotask, autotask labor charge, autotask
   ticket charges, search ticket notes autotask, or search ticket attachments autotask.
 ---

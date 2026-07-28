@@ -1,10 +1,10 @@
 ---
 name: "Datto RMM API Patterns"
 description: >
-  Use this skill when working with the Datto RMM API - authentication, OAuth 2.0 flow,
-  platform selection, pagination, rate limiting, and error handling. Covers all 6 platforms
-  (Pinotage, Merlot, Concord, Vidal, Zinfandel, Syrah), token lifecycle, timestamp handling,
-  and best practices for API integration.
+  Datto RMM REST API v2 fundamentals: OAuth 2.0 client-credentials-style
+  authentication, the 6 regional platforms (Pinotage, Merlot, Concord,
+  Vidal, Zinfandel, Syrah), token lifecycle, cursor-based pagination,
+  rate limiting, Unix-millisecond timestamps, and error handling.
 when_to_use: >-
   When working with authentication, OAuth 2.0 flow, platform selection, pagination, rate limiting,
   and error handling in the Datto RMM API. Use when: datto api, rmm api, datto authentication, rmm
@@ -247,66 +247,7 @@ GET /api/v2/alerts/open?since=1707991200000
 
 ## Workflows
 
-### Complete API Request Flow
-
-```javascript
-class DattoRMMClient {
-  constructor(platform, apiKey, apiSecret) {
-    this.baseUrl = `https://${platform}-api.centrastage.net`;
-    this.apiKey = apiKey;
-    this.apiSecret = apiSecret;
-    this.token = null;
-    this.tokenExpiry = 0;
-  }
-
-  async ensureToken() {
-    if (!this.token || Date.now() > this.tokenExpiry - 60000) {
-      const auth = await getAccessToken(
-        this.platform,
-        this.apiKey,
-        this.apiSecret
-      );
-      this.token = auth.token;
-      this.tokenExpiry = auth.expiresAt;
-    }
-    return this.token;
-  }
-
-  async request(endpoint, options = {}) {
-    const token = await this.ensureToken();
-
-    const response = await requestWithRetry(
-      `${this.baseUrl}${endpoint}`,
-      {
-        ...options,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          ...options.headers
-        }
-      }
-    );
-
-    if (!response.ok) {
-      throw new DattoAPIError(response);
-    }
-
-    return response.json();
-  }
-
-  async getDevices() {
-    return this.request('/api/v2/devices?max=250');
-  }
-
-  async getDevice(uid) {
-    return this.request(`/api/v2/device/${uid}`);
-  }
-
-  async getAlerts() {
-    return this.request('/api/v2/alerts/open');
-  }
-}
-```
+See [references/examples.md](references/examples.md) for a complete `DattoRMMClient` class that ties together token caching, retry, and requests.
 
 ### Site-Scoped Queries
 
@@ -351,55 +292,7 @@ GET /api/v2/site/{siteUid}/alerts/resolved
 }
 ```
 
-### Error Handling Pattern
-
-```javascript
-class DattoAPIError extends Error {
-  constructor(response, data) {
-    super(data?.message || `API Error: ${response.status}`);
-    this.status = response.status;
-    this.errorCode = data?.errorCode;
-    this.details = data?.details;
-  }
-}
-
-async function handleApiResponse(response) {
-  if (response.ok) {
-    return response.json();
-  }
-
-  const data = await response.json().catch(() => ({}));
-
-  switch (response.status) {
-    case 401:
-      throw new DattoAPIError(response, {
-        ...data,
-        message: 'Authentication failed. Check API credentials or refresh token.'
-      });
-
-    case 403:
-      throw new DattoAPIError(response, {
-        ...data,
-        message: 'Permission denied. Verify API key has required permissions.'
-      });
-
-    case 404:
-      throw new DattoAPIError(response, {
-        ...data,
-        message: 'Resource not found. Check UID validity.'
-      });
-
-    case 429:
-      throw new DattoAPIError(response, {
-        ...data,
-        message: 'Rate limited. Implement backoff strategy.'
-      });
-
-    default:
-      throw new DattoAPIError(response, data);
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the full `DattoAPIError` class and status-code-to-message mapping pattern.
 
 ## Best Practices
 
@@ -412,7 +305,6 @@ async function handleApiResponse(response) {
 7. **Cache reference data** - Sites and account info change infrequently
 8. **Scope queries to sites** - Use site-level endpoints when possible
 9. **Monitor rate limit headers** - Track remaining requests proactively
-10. **Log API calls** - Enable debugging and audit trails
 
 ## Common Query Patterns
 
@@ -437,26 +329,7 @@ const device = devices.find(d =>
 const device = await client.getDevice(deviceUid);
 ```
 
-### Batch Operations
-
-```javascript
-async function batchProcess(items, processor, { batchSize = 10, delayMs = 1000 }) {
-  const results = [];
-
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-    const batchResults = await Promise.all(batch.map(processor));
-    results.push(...batchResults);
-
-    // Respect rate limits between batches
-    if (i + batchSize < items.length) {
-      await sleep(delayMs);
-    }
-  }
-
-  return results;
-}
-```
+Batch processing with rate-limit-friendly delays is shown in [references/examples.md](references/examples.md).
 
 ## Related Skills
 

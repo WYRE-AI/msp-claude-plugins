@@ -1,13 +1,12 @@
 ---
 name: "runZero Wireless"
 description: >
-  Use this skill when working with RunZero wireless network discovery —
-  listing discovered wireless networks, identifying rogue access points,
-  analyzing wireless security configurations, and auditing SSIDs.
+  runZero wireless network discovery: discovered wireless networks, rogue access point
+  identification, wireless security configuration analysis, and SSID auditing.
 when_to_use: >-
-  When listing discovered wireless networks, identifying rogue access points, analyzing wireless
-  security configurations, and auditing SSIDs. Use when: runzero wireless, wireless network, wifi
-  discovery, rogue ap, rogue access point, wireless security, ssid, wireless audit, or wifi scan.
+  When auditing wireless networks or hunting rogue access points discovered by runZero.
+  Use when: runzero wireless, wireless network, wifi discovery, rogue ap, rogue access
+  point, wireless security, ssid, wireless audit, or wifi scan.
 ---
 
 # RunZero Wireless

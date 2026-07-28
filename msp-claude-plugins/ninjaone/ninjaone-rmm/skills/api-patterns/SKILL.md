@@ -1,12 +1,14 @@
 ---
 name: "NinjaOne API Patterns"
 description: >
-  Use this skill for NinjaOne API authentication, pagination, rate limiting,
-  and error handling patterns. Essential foundation for all NinjaOne API operations.
+  NinjaOne Public API fundamentals shared by every other NinjaOne skill: regional
+  base URLs, OAuth 2.0 client-credentials auth and scopes, request shapes,
+  cursor-based pagination, rate-limit headers and 429 handling, HTTP status codes
+  and error response format, and webhook configuration.
 when_to_use: >-
-  When working with NinjaOne API authentication, pagination, rate limiting, and error handling
-  patterns. Use when: ninjaone api, ninjarmm api, ninja authentication, ninja oauth, ninja rate
-  limit, or ninja pagination.
+  When authenticating to or calling the NinjaOne API, or handling its pagination, rate
+  limits, and errors. Use when: ninjaone api, ninjarmm api, ninja authentication, ninja
+  oauth, ninja rate limit, or ninja pagination.
 ---
 
 # NinjaOne API Patterns
@@ -278,12 +280,7 @@ DELETE /api/v2/webhook
 
 ## Best Practices
 
-1. **Store tokens securely** - Never commit credentials
-2. **Handle token expiration** - Refresh before requests fail
-3. **Use appropriate scopes** - Request minimum needed
-4. **Implement retries** - Handle transient failures
-5. **Log API calls** - Debug and audit trail
-6. **Validate responses** - Don't assume success
+1. **Use appropriate scopes** - Request the minimum needed (`monitoring`, `management`, `control`)
 
 ## Related Skills
 

@@ -1,6 +1,12 @@
 ---
 name: "microsoft-graph-querying"
-description: "Use this skill when answering identity or directory questions against a client's Microsoft Entra tenant via the Microsoft Graph MCP Server for Enterprise. Teaches the RAG query loop — microsoft_graph_suggest_queries to find candidate Graph API calls, pick the best one, then microsoft_graph_get to execute it, with microsoft_graph_list_properties for entity schema. Everything is read-only and honors the caller's RBAC."
+description: >
+  The RAG query loop for the Microsoft Graph MCP Server for Enterprise —
+  microsoft_graph_suggest_queries to retrieve vetted candidate Graph calls,
+  microsoft_graph_get to execute them, microsoft_graph_list_properties for entity
+  schema — with worked identity and directory examples, result-presentation
+  guidance, and the read-only, RBAC-scoped, rate-limited constraints on what comes
+  back.
 when_to_use: >-
   When asked any question about a tenant's users, groups, applications, devices, licenses, sign-in
   activity, or directory roles that should be answered through the Microsoft Graph MCP server —

@@ -1,6 +1,10 @@
 ---
 name: "azure-mcp-observability"
-description: "Use this skill for Azure observability, diagnostics, and resource-health work through the azure-mcp connector — pulling Azure Monitor metrics, running Log Analytics KQL queries, checking alert state, reading Resource Health status, triaging AppLens diagnostics, and reviewing Azure Advisor recommendations. All read-only."
+description: >
+  The read-only observability half of the azure-mcp connector — the monitor,
+  resourcehealth, applens, and advisor namespaces: Azure Monitor metrics, Log
+  Analytics KQL, alert-rule state, platform health states, AppLens detectors, and
+  Advisor recommendation categories, plus the degraded-resource investigation order.
 when_to_use: >-
   When investigating a degraded or unhealthy Azure resource, querying logs/metrics, checking
   alerts, or triaging Advisor recommendations across a subscription. Use when: azure monitor, log

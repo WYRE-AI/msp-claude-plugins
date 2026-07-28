@@ -1,6 +1,6 @@
 ---
 name: "cipp-mailboxes"
-description: "Use this skill when working with Exchange Online mailboxes through CIPP — listing mailboxes, auditing mailbox permissions, configuring out-of-office auto-replies, and setting email forwarding. Covers the mailbox surface most relevant to MSP operations: offboarding, leave coverage, BEC remediation."
+description: "The four Exchange Online mailbox operations CIPP exposes — mailbox inventory, delegate/full-access permission audit, out-of-office, and email forwarding — plus the BEC-remediation, offboarding, and leave-coverage sequences built from them."
 when_to_use: >-
   When listing mailboxes, checking mailbox delegate/full-access permissions, configuring
   out-of-office, or setting email forwarding for a tenant. Use when: cipp mailbox, mailbox

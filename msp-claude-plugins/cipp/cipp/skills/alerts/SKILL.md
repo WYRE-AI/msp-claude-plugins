@@ -1,6 +1,6 @@
 ---
 name: "cipp-alerts"
-description: "Use this skill when working with CIPP alerts and audit logs — reviewing the queued alert backlog across tenants, investigating sign-in or admin activity in audit logs, correlating alerts with tenants. Read-only triage surface for the CIPP alerting subsystem."
+description: "CIPP's read-only alerting and audit surface: the cross-tenant alert queue, tenant-scoped M365 unified audit log queries, the audit operations worth filtering on during a compromise investigation, and audit lag/retention behavior."
 when_to_use: >-
   When triaging the CIPP alert queue or pulling tenant audit logs for investigation. Use when:
   cipp alert, alert queue, audit log, sign in log, admin activity, cipp investigation, or audit

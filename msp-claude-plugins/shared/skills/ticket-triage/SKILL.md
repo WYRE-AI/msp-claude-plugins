@@ -1,14 +1,14 @@
 ---
 name: "Ticket Triage"
 description: >
-  Use this skill when triaging tickets in any PSA - determining priority,
-  categorization, routing, and initial response. Vendor-agnostic best
-  practices for efficient ticket handling applicable to Autotask,
+  Vendor-agnostic PSA ticket triage: priority determination, categorization,
+  routing, and initial response practices applicable to Autotask,
   ConnectWise, HaloPSA, and other platforms.
 when_to_use: >-
-  When triaging tickets in any PSA - determining priority, categorization, routing, and initial
-  response. Use when: ticket triage, prioritize ticket, categorize ticket, ticket routing, ticket
-  assessment, initial ticket response, ticket classification, or service desk triage.
+  When assessing an incoming ticket to set its priority, category, owner,
+  and first response. Use when: ticket triage, prioritize ticket, categorize
+  ticket, ticket routing, ticket assessment, initial ticket response, ticket
+  classification, or service desk triage.
 ---
 
 # Ticket Triage Best Practices

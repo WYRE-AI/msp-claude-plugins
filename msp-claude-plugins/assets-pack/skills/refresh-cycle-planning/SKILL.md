@@ -1,20 +1,17 @@
 ---
 name: "Refresh Cycle Planning"
+description: >
+  Forward-looking hardware refresh planning: combining warranty expiration,
+  EOL/EOS timing, and device age from whatever RMM and documentation platforms
+  are connected into replace-now / plan-this-year / monitor tiers, laying those
+  tiers onto a dated calendar, surfacing replacement clusters, and keeping an
+  explicit insufficient-data bucket. Planning only — not quoting or procurement.
 when_to_use: >-
   When building a forward-looking hardware refresh calendar or deciding
   which devices need replacing this year versus later. Use when: refresh
   planning, hardware refresh calendar, what needs replacing, capital
   planning for hardware, replacement schedule, budget for new hardware,
   which devices to replace next.
-description: >
-  Use this skill when building a forward-looking hardware refresh calendar
-  by combining warranty expiration, EOL/EOS timing, and device age across
-  whatever RMM platforms and documentation tools are connected through the
-  gateway. Covers how to bucket devices into replace-now, plan-this-year,
-  and monitor tiers so refresh conversations happen proactively — ahead of
-  a failure or a forced EOL migration — rather than reactively after
-  something breaks. Always use conduit__search_tools to discover which
-  tools are actually connected before assuming a specific vendor.
 ---
 
 # Refresh Cycle Planning
@@ -161,18 +158,6 @@ Default to commonly-used industry assumptions (e.g., 4-5 years for
 desktops/laptops) and state explicitly that this is a default assumption,
 not the org's own policy — invite confirmation of the actual policy rather
 than presenting the default as authoritative.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's
-  tool name.
-- Never assign a tier without a visible, specific rationale per device.
-- Keep "insufficient data" as its own bucket — don't let missing data
-  default a device into "monitor."
-- Call out clustering explicitly; it's a planning signal, not just a
-  formatting convenience.
-- This skill plans; it doesn't quote or procure — hand tiered output to a
-  quoting/sales workflow as a deliberate next step, not an automatic one.
 
 ## Related Skills
 

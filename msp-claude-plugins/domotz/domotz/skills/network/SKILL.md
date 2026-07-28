@@ -1,12 +1,12 @@
 ---
 name: "Domotz Network"
 description: >
-  Use this skill when working with Domotz network operations --
-  network scanning, SNMP polling, port monitoring, speed tests,
-  and network topology discovery.
+  Domotz network operations: agent-driven network scanning and discovery
+  (ARP, SNMP, DNS, MAC OUI), SNMP polling of interface and system metrics,
+  TCP port monitoring, speed tests, and the tools and error modes for each.
 when_to_use: >-
-  When working with network scanning, SNMP polling, port monitoring, speed tests, and network
-  topology discovery in Domotz network operations. Use when: domotz network, network scan, snmp,
+  When scanning a network, polling SNMP data, checking service ports, or measuring
+  site bandwidth through Domotz agents. Use when: domotz network, network scan, snmp,
   port monitoring, speed test, network discovery, network topology, bandwidth, port check, or snmp
   polling.
 ---
@@ -182,7 +182,6 @@ Parameters:
 - Monitor SNMP metrics for all critical network infrastructure
 - Set up port monitoring for business-critical services
 - Run periodic speed tests to track ISP performance
-- Compare discovered devices against documented inventory
 - Use SNMP data to build capacity planning reports
 - Configure alert profiles for SNMP threshold violations
 

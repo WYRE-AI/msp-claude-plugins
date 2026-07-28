@@ -1,14 +1,13 @@
 ---
 name: "PandaDoc Documents"
 description: >
-  Use this skill when working with PandaDoc documents - creating proposals,
-  quotes, contracts, SOWs, and MSAs from templates, sending documents
-  for signature, checking document status, downloading signed copies,
-  and managing the full document lifecycle. Covers all document statuses,
-  content tokens, pricing tables, and e-signature workflows.
+  PandaDoc document lifecycle end to end: creating documents from templates,
+  sending for e-signature, status checks and PDF downloads, the full document
+  status enum, MSP document types, content tokens, pricing-table structure,
+  document and recipient fields, and status-transition errors.
 when_to_use: >-
-  When creating proposals, quotes, contracts, SOWs, and MSAs from templates, sending documents for
-  signature, checking document status, downloading signed copies. Use when: pandadoc document,
+  When creating, sending, tracking, or downloading a PandaDoc document — proposals, quotes,
+  contracts, SOWs, or MSAs. Use when: pandadoc document,
   pandadoc proposal, pandadoc contract, pandadoc quote, pandadoc sign, pandadoc signature,
   pandadoc send, pandadoc status, pandadoc download, pandadoc create document, document lifecycle,
   or e-signature.
@@ -322,11 +321,9 @@ Pricing tables contain line items for services and products:
 3. **Set expiration dates** - Add expiration to proposals to create urgency and keep pipeline clean
 4. **Tag documents** - Use tags for client name, document type, and project for easy filtering
 5. **Include cover messages** - Personalize the email when sending for signature
-6. **Monitor sent documents** - Check for documents sent more than 7 days ago without action
-7. **Archive completed documents** - Download and archive signed documents in your PSA or file system
-8. **Use signing order** - For multi-party agreements, set signing order to control the flow
-9. **Verify before sending** - Review document details after creation and before sending
-10. **Track grand totals** - Use the `grand_total` field to track proposal values in your pipeline
+6. **Archive completed documents** - Download and archive signed documents in your PSA or file system
+7. **Use signing order** - For multi-party agreements, set signing order to control the flow
+8. **Track grand totals** - Use the `grand_total` field to track proposal values in your pipeline
 
 ## Related Skills
 

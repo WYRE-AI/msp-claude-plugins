@@ -1,18 +1,14 @@
 ---
 name: "Abnormal Security API Patterns"
 description: >
-  Use this skill when working with the Abnormal Security REST API -
-  Bearer token authentication, base URLs, rate limiting, pagination,
-  OData filtering, error handling, and common API patterns. Covers
-  token management, request/response formats, and integration best practices.
-  Essential for developers and MSP administrators integrating with the
-  Abnormal Security API.
+  Abnormal Security REST API fundamentals: Bearer token authentication, base
+  URLs, rate limiting, pagination, OData filtering, request/response
+  formats, and error handling.
 when_to_use: >-
-  When working with bearer token authentication, base URLs, rate limiting, pagination, OData
-  filtering, error handling, and common API patterns in the Abnormal Security REST API. Use when:
-  abnormal api, abnormal authentication, abnormal rest api, abnormal rate limit, abnormal
-  pagination, abnormal api error, abnormal api token, abnormal odata filter, or abnormal security
-  api.
+  When authenticating to or calling the Abnormal Security REST API. Use
+  when: abnormal api, abnormal authentication, abnormal rest api, abnormal
+  rate limit, abnormal pagination, abnormal api error, abnormal api token,
+  abnormal odata filter, or abnormal security api.
 ---
 
 # Abnormal Security REST API Patterns
@@ -332,14 +328,11 @@ const [threats, cases, atoCases] = await Promise.all([
 
 ## Best Practices
 
-1. **Store tokens securely** - Use environment variables, never hardcode
-2. **Implement retry logic** - Handle 429 and 5xx errors gracefully
-3. **Use OData filters** - Reduce response size and processing time
-4. **Paginate all list calls** - Never assume results fit in one page
-5. **Monitor rate limits** - Track usage to avoid throttling
-6. **Validate inputs** - Check IDs and filter syntax before sending
-7. **Log API calls** - Enable debugging and audit trails
-8. **Use ISO 8601 dates** - Always include timezone (Z suffix for UTC)
+1. **Implement retry logic** - Handle 429 and 5xx errors gracefully
+2. **Use OData filters** - Reduce response size and processing time
+3. **Paginate all list calls** - Never assume results fit in one page
+4. **Monitor rate limits** - Track usage to avoid throttling
+5. **Use ISO 8601 dates** - Always include timezone (Z suffix for UTC)
 
 ## Related Skills
 

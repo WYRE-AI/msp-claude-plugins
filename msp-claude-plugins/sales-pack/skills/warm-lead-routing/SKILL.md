@@ -1,18 +1,17 @@
 ---
 name: "Warm Lead Routing"
+description: >
+  Lead-warmth scoring from intent and engagement signals — Warmly
+  website-visitor identification, CRM form fills and email engagement, and
+  Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool
+  tiering, plus routing recommendations based on owner continuity, CRM
+  routing rules, or rep capacity, and the degradation path to CRM-only
+  signals when intent tools aren't connected.
 when_to_use: >-
   When identifying which leads are showing real buying intent right now and
   who should follow up on them. Use when: warm leads, hot leads, who should
   follow up on this lead, lead routing, lead scoring, which leads are
   engaged, intent signals, website visitor identification.
-description: >
-  Use this skill when scoring lead warmth from intent and engagement signals
-  — Warmly website-visitor identification, HubSpot form fills and email
-  engagement, and Calendly booking activity — and proposing which rep a warm
-  lead should be routed to. Covers a practical scoring approach for "how warm
-  is this lead" and explicit handling for when intent-signal tools (Warmly,
-  Calendly) aren't connected, falling back to CRM-only engagement signals
-  rather than failing outright.
 ---
 
 # Warm Lead Routing
@@ -131,17 +130,6 @@ connected, and that none was found. Do not fabricate leads or scores.
 Report that no leads currently meet the Warm threshold, rather than lowering
 the bar to force a result — an empty warm-leads list is itself useful
 information.
-
-## Best Practices
-
-- Never silently drop a signal source from consideration — state which were
-  used and which weren't connected, every time.
-- Keep tiering explainable: show the signal(s) that earned each lead's tier.
-- Treat a booking (Calendly) as close to an automatic "Hot" — it is a
-  deliberate action, not a passive behavioral trace, and should rarely be
-  outranked by weaker signals.
-- Default to proposing routing, not writing it — this skill informs a rep or
-  manager's decision, it doesn't replace it, unless explicitly asked to act.
 
 ## Related Skills
 

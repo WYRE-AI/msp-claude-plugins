@@ -1,12 +1,12 @@
 ---
 name: "PagerDuty Alerts"
 description: >
-  Use this skill when working with PagerDuty alerts -- alert management,
-  alert grouping, suppression, event routing, and the Events API v2
-  for sending trigger, acknowledge, and resolve events.
+  PagerDuty alerts: the alert-vs-incident model, alert statuses, grouping
+  modes, event rules for routing and suppression, dedup_key deduplication,
+  and the Events API v2 trigger/acknowledge/resolve payloads.
 when_to_use: >-
-  When working with alert management, alert grouping, suppression, event routing, and the Events
-  API v2 for sending trigger, acknowledge, and resolve events in PagerDuty alerts. Use when:
+  When inspecting alerts on an incident, tuning alert noise, or sending events into
+  PagerDuty from a monitoring tool. Use when:
   pagerduty alert, alert grouping, alert suppression, event routing, events api, pagerduty event,
   alert deduplication, or alert noise.
 ---
@@ -235,10 +235,8 @@ The Events API v2 is used by monitoring tools to send events to PagerDuty. Event
 
 - Use meaningful `dedup_key` values for proper deduplication
 - Include rich `custom_details` in events for faster investigation
-- Configure intelligent alert grouping to reduce incident noise
 - Create suppression rules for planned maintenance or known issues
 - Set appropriate severity levels at the event source
-- Monitor alert-to-incident ratios to identify noisy services
 - Use the Events API v2 (not v1) for all new integrations
 - Include `source`, `component`, and `group` fields for better context
 

@@ -1,16 +1,14 @@
 ---
 name: "Proofpoint Threat Intelligence"
 description: >
-  Use this skill when working with Proofpoint threat intelligence - campaign tracking,
-  threat families, indicators of compromise (IOCs), forensic evidence, and threat
-  landscape analysis. Covers campaign details, actor attribution, threat indicators,
-  and how to investigate and track threat campaigns across the organization.
+  Proofpoint Threat Intelligence fundamentals: campaign tracking, threat families
+  and actors, indicators of compromise (IOCs), and how campaign/IOC data enriches
+  individual TAP threat events.
 when_to_use: >-
-  When working with campaign tracking, threat families, indicators of compromise (IOCs), forensic
-  evidence, and threat landscape analysis in Proofpoint threat intelligence. Use when: proofpoint
-  threat intelligence, proofpoint campaign, threat campaign, proofpoint ioc, indicators of
-  compromise, threat family, proofpoint threat, threat actor, proofpoint intel, campaign tracking,
-  threat indicator, or proofpoint malware family.
+  When investigating threat campaigns, threat families, actors, or IOCs, or correlating TAP events
+  with broader context. Use when: proofpoint threat intelligence, proofpoint campaign, threat
+  campaign, proofpoint ioc, indicators of compromise, threat family, proofpoint threat, threat
+  actor, proofpoint intel, campaign tracking, threat indicator, or proofpoint malware family.
 ---
 
 # Proofpoint Threat Intelligence

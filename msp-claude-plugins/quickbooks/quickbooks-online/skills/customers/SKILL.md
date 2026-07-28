@@ -1,10 +1,10 @@
 ---
 name: "QuickBooks Online Customers"
 description: >
-  Use this skill when working with QuickBooks Online customers (clients) -
-  creating, searching, updating, and managing MSP client records.
-  Covers customer fields, sub-customers, billing addresses, payment terms,
-  balance tracking, and cross-referencing with PSA platforms.
+  QuickBooks Online Customer entity: the parent/sub-customer (job) hierarchy,
+  contact, address, billing and hierarchy fields, payment terms, balance and
+  BalanceWithJobs tracking, sparse updates, deactivation, query syntax, error
+  codes, and PSA cross-referencing patterns for MSP client records.
 when_to_use: >-
   When creating, searching, updating, and managing MSP client records. Use when: quickbooks
   customer, qbo customer, quickbooks client, qbo client, customer lookup, customer management,
@@ -52,69 +52,15 @@ Payment terms control when invoices are due:
 
 QBO automatically tracks the customer balance (sum of all unpaid invoices minus unapplied payments). This is critical for MSP accounts receivable management.
 
-## Field Reference
+### Key Fields
 
-### Core Fields
+`DisplayName` is the only required field on create and must be unique across the
+company file. `Balance` and `BalanceWithJobs` are read-only — the latter rolls up
+sub-customers. Sub-customers are defined by `ParentRef.value` plus `Job: true`,
+and `FullyQualifiedName` holds the colon-delimited path. `SyncToken` is required
+on every update.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Id` | string | System | Auto-generated unique identifier |
-| `DisplayName` | string | Yes | Unique display name (customer-facing) |
-| `CompanyName` | string | No | Legal company name |
-| `GivenName` | string | No | Contact first name |
-| `FamilyName` | string | No | Contact last name |
-| `Active` | boolean | No | Whether customer is active (default: true) |
-| `Balance` | decimal | Read-only | Outstanding balance |
-| `BalanceWithJobs` | decimal | Read-only | Balance including sub-customers |
-| `SyncToken` | string | Required for updates | Optimistic locking token |
-
-### Contact Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `PrimaryPhone.FreeFormNumber` | string | Primary phone number |
-| `AlternatePhone.FreeFormNumber` | string | Alternate phone |
-| `Mobile.FreeFormNumber` | string | Mobile phone |
-| `Fax.FreeFormNumber` | string | Fax number |
-| `PrimaryEmailAddr.Address` | string | Primary email (used for invoice delivery) |
-| `WebAddr.URI` | string | Website URL |
-
-### Address Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `BillAddr.Line1` | string | Billing street address |
-| `BillAddr.City` | string | Billing city |
-| `BillAddr.CountrySubDivisionCode` | string | Billing state/province |
-| `BillAddr.PostalCode` | string | Billing postal code |
-| `BillAddr.Country` | string | Billing country |
-| `ShipAddr` | object | Shipping address (same structure as BillAddr) |
-
-### Billing Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `SalesTermRef.value` | string | Payment terms ID (e.g., Net 30) |
-| `PaymentMethodRef.value` | string | Default payment method ID |
-| `CurrencyRef.value` | string | Currency code (e.g., "USD") |
-| `PreferredDeliveryMethod` | string | "Print", "Email", or "None" |
-| `Taxable` | boolean | Whether customer is taxable |
-
-### Hierarchy Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `ParentRef.value` | string | Parent customer ID (for sub-customers) |
-| `Job` | boolean | Whether this is a job (sub-customer) |
-| `Level` | integer | Depth in hierarchy (0 = top-level) |
-| `FullyQualifiedName` | string | Full path (e.g., "Acme Corp:Managed Services") |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MetaData.CreateTime` | datetime | Creation timestamp |
-| `MetaData.LastUpdatedTime` | datetime | Last update timestamp |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
@@ -268,41 +214,8 @@ Authorization: Bearer {access_token}
 4. **Configure email delivery** for automated invoice sending
 5. **Link to PSA** using Notes or custom fields for cross-reference
 
-```javascript
-async function onboardMspClient(clientData) {
-  // Step 1: Create parent customer
-  const customer = await createCustomer({
-    DisplayName: clientData.companyName,
-    CompanyName: clientData.companyName,
-    GivenName: clientData.contactFirstName,
-    FamilyName: clientData.contactLastName,
-    PrimaryPhone: { FreeFormNumber: clientData.phone },
-    PrimaryEmailAddr: { Address: clientData.billingEmail },
-    BillAddr: {
-      Line1: clientData.address,
-      City: clientData.city,
-      CountrySubDivisionCode: clientData.state,
-      PostalCode: clientData.zip
-    },
-    SalesTermRef: { value: clientData.paymentTermId || '3' }, // Net 30
-    PreferredDeliveryMethod: 'Email',
-    Notes: `MSP client. Contract start: ${clientData.contractStart}. PSA ID: ${clientData.psaId}`
-  });
-
-  // Step 2: Create sub-customers for service lines
-  const serviceLines = ['Managed Services', 'Project Work', 'Hardware'];
-  for (const line of serviceLines) {
-    await createCustomer({
-      DisplayName: `${clientData.companyName}:${line}`,
-      ParentRef: { value: customer.Id },
-      Job: true,
-      BillWithParent: true
-    });
-  }
-
-  return customer;
-}
-```
+See [references/examples.md](references/examples.md) for the full onboarding
+implementation.
 
 ### Customer Balance Review
 
@@ -376,56 +289,20 @@ async function findCustomerByPsaId(psaId) {
 
 ## Error Handling
 
-### Common API Errors
+- **6240 Duplicate Name** is the most common create failure. QBO enforces
+  uniqueness on `DisplayName` across Customers, Vendors, and Employees, so the
+  recovery path is to look up the existing record rather than retry with a
+  variant name.
+- **Customers cannot be deleted, only deactivated** (`Active: false` via a sparse
+  update). Deactivating a parent does not cascade to sub-customers — deactivate
+  each sub-customer explicitly.
+- **Non-sparse updates overwrite omitted fields with null.** Always send
+  `sparse: true` with the current `SyncToken` for partial updates.
+- **There is no custom field for PSA IDs by default**, so cross-references live
+  in `Notes`, which is not queryable with LIKE — fetch and filter client-side.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 6240 | Duplicate Name | Use a unique DisplayName |
-| 610 | Object Not Found | Verify customer ID |
-| 5010 | Stale Object | Re-fetch SyncToken and retry |
-| 2050 | Invalid Reference | Check ParentRef or SalesTermRef values |
-| 3200 | Auth Failed | Refresh access token |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| DisplayName required | Missing DisplayName | Add DisplayName to request |
-| Duplicate DisplayName | Name already exists | Use unique name or append qualifier |
-| Invalid ParentRef | Non-existent parent | Verify parent customer ID |
-| Invalid SalesTermRef | Bad term ID | Query Terms entity for valid IDs |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateCustomer(data) {
-  try {
-    return await createCustomer(data);
-  } catch (error) {
-    const fault = error.Fault;
-    if (!fault) throw error;
-
-    const errorCode = fault.Error?.[0]?.code;
-
-    if (errorCode === '6240') {
-      // Duplicate -- find existing customer
-      const existing = await qboQuery(
-        `SELECT * FROM Customer WHERE DisplayName = '${data.DisplayName}'`
-      );
-      return existing.QueryResponse.Customer?.[0];
-    }
-
-    if (errorCode === '5010') {
-      // Stale SyncToken -- re-fetch and retry
-      const fresh = await getCustomer(data.Id);
-      data.SyncToken = fresh.SyncToken;
-      return await updateCustomer(data);
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the full error-code and
+validation tables plus a recovery pattern.
 
 ## Best Practices
 
@@ -440,14 +317,7 @@ async function safeCreateCustomer(data) {
 9. **Review balances regularly** - Use balance queries to monitor aged receivables
 10. **Use sparse updates** - Only send changed fields with `sparse: true` to avoid overwriting data
 
-## Endpoint Reference
-
-| Operation | Method | Endpoint |
-|-----------|--------|----------|
-| Create | POST | `/v3/company/{realmId}/customer` |
-| Read | GET | `/v3/company/{realmId}/customer/{id}` |
-| Update | POST | `/v3/company/{realmId}/customer` |
-| Query | GET | `/v3/company/{realmId}/query?query=...` |
+See [references/api.md](references/api.md) for the complete endpoint reference.
 
 ## Related Skills
 

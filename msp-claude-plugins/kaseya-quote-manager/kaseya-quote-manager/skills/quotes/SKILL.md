@@ -1,13 +1,13 @@
 ---
 name: "Kaseya Quote Manager Quotes & Sales Orders"
+description: >
+  Kaseya Quote Manager quoting data: the quote → section → line item
+  hierarchy, and the sales orders, order lines, and payments a quote becomes
+  once accepted. Read-only tool surface.
 when_to_use: >-
   When viewing or analyzing quotes, quote sections/lines, or sales orders in Kaseya Quote Manager.
   Use when: kaseya quote manager quote, kqm quote, kqm quote lines, kqm sales order, quote manager
   sales order, or quote sections lines.
-description: >
-  Use this skill when navigating Kaseya Quote Manager quotes — drilling from
-  a quote into its sections and line items, and following quotes through to
-  sales orders, order lines, and payments. The tool surface is read-only.
 ---
 
 # Kaseya Quote Manager — Quotes & Sales Orders

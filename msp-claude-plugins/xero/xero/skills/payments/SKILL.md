@@ -1,15 +1,14 @@
 ---
 name: "Xero Payments"
 description: >
-  Use this skill when working with Xero payments - recording payments,
-  tracking outstanding balances, payment allocation, overpayments,
-  prepayments, and batch payment operations. Covers payment workflows
-  for MSP client billing, vendor payments, and reconciliation.
+  Xero payments: recording AR and AP payments, partial payments, payment
+  allocation, overpayments and prepayments, batch payment creation, and
+  outstanding-balance and aging tracking for MSP billing and reconciliation.
 when_to_use: >-
-  When recording payments, tracking outstanding balances, payment allocation, overpayments,
-  prepayments, and batch payment operations. Use when: xero payment, xero pay, payment tracking,
-  payment status, outstanding balance, overdue payment, payment reconciliation, record payment,
-  payment allocation, or accounts receivable.
+  When recording payments, tracking outstanding balances, or reconciling money
+  against invoices in Xero. Use when: xero payment, xero pay, payment tracking,
+  payment status, outstanding balance, overdue payment, payment reconciliation,
+  record payment, payment allocation, or accounts receivable.
 ---
 
 # Xero Payments Management
@@ -44,175 +43,37 @@ Invoice (AUTHORISED) + Partial Payment --> Invoice (AUTHORISED, AmountDue reduce
 Invoice (AUTHORISED) + Overpayment --> Invoice (PAID) + Overpayment Credit
 ```
 
-## Field Reference
+### Key Fields
 
-### Core Fields
+A payment needs an `Invoice` (by `InvoiceID` or `InvoiceNumber`), an `Account`
+(by `AccountID` or `Code`, and it must be a `BANK` account), a `Date`, and an
+`Amount`. `Status` and `PaymentType` are read-only and derived.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `PaymentID` | string (UUID) | System | Auto-generated unique identifier |
-| `Invoice` | object | Yes* | Invoice being paid (InvoiceID or InvoiceNumber) |
-| `Account` | object | Yes | Bank account receiving/sending payment (AccountID or Code) |
-| `Date` | string | Yes | Payment date (YYYY-MM-DDT00:00:00) |
-| `Amount` | decimal | Yes | Payment amount |
-| `CurrencyRate` | decimal | No | Exchange rate for multi-currency |
-| `Reference` | string | No | Payment reference (e.g., check number, EFT ref) |
-| `IsReconciled` | boolean | No | Whether the payment is reconciled |
-| `Status` | string | Read-only | AUTHORISED or DELETED |
-| `PaymentType` | string | Read-only | ACCRECPAYMENT, ACCPAYPAYMENT, etc. |
-
-*Either Invoice or CreditNote is required.
-
-### Related Object Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `Invoice.InvoiceID` | string | UUID of the invoice |
-| `Invoice.InvoiceNumber` | string | Invoice number |
-| `Account.AccountID` | string | UUID of the bank account |
-| `Account.Code` | string | Account code of the bank account |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Payments
+Every request needs both `Authorization: Bearer ${ACCESS_TOKEN}` and
+`xero-tenant-id: ${XERO_TENANT_ID}`. Xero-specific quirks:
+
+- **Payments are immutable.** The only supported "update" is POSTing
+  `Status: "DELETED"` to `/Payments/{PaymentID}`; to correct a payment,
+  delete and re-create it.
+- **Batch creation** posts a `Payments` array. Add `?summarizeErrors=false`
+  so valid payments still commit when one item in the batch fails.
+- **Filters go in a URL-encoded `where` clause**; dates use
+  `DateTime(yyyy,m,d)` and UUID comparisons use `guid("...")`:
 
 ```bash
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments" \
+# Payments received (AR) in a date range
+curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments?where=PaymentType==%22ACCRECPAYMENT%22&&Date>=DateTime(2026,3,1)" \
   -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "xero-tenant-id: ${XERO_TENANT_ID}" \
   -H "Accept: application/json"
 ```
 
-**With Filters:**
-
-```bash
-# Payments received (AR)
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments?where=PaymentType==%22ACCRECPAYMENT%22" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Payments in a date range
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments?where=Date>=DateTime(2026,3,1)&&Date<=DateTime(2026,3,31)" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Payments for a specific invoice
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments?where=Invoice.InvoiceID==guid(%22${INVOICE_ID}%22)" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-### Get Single Payment
-
-```bash
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Payments/${PAYMENT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-### Record a Payment (AR - Client Pays Invoice)
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Payments" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Invoice": {
-      "InvoiceID": "'${INVOICE_ID}'"
-    },
-    "Account": {
-      "Code": "090"
-    },
-    "Date": "2026-03-15T00:00:00",
-    "Amount": 2500.00,
-    "Reference": "EFT-2026-0315-ACME"
-  }'
-```
-
-### Record a Payment (AP - Pay Vendor Bill)
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Payments" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Invoice": {
-      "InvoiceID": "'${VENDOR_BILL_ID}'"
-    },
-    "Account": {
-      "Code": "090"
-    },
-    "Date": "2026-03-10T00:00:00",
-    "Amount": 525.00,
-    "Reference": "CHK-4521"
-  }'
-```
-
-### Record Partial Payment
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Payments" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Invoice": {
-      "InvoiceID": "'${INVOICE_ID}'"
-    },
-    "Account": {
-      "Code": "090"
-    },
-    "Date": "2026-03-15T00:00:00",
-    "Amount": 1000.00,
-    "Reference": "Partial payment - remainder due by 3/31"
-  }'
-```
-
-### Delete (Reverse) a Payment
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Payments/${PAYMENT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "PaymentID": "'${PAYMENT_ID}'",
-    "Status": "DELETED"
-  }'
-```
-
-### Batch Create Payments
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Payments?summarizeErrors=false" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Payments": [
-      {
-        "Invoice": { "InvoiceID": "inv-001" },
-        "Account": { "Code": "090" },
-        "Date": "2026-03-15T00:00:00",
-        "Amount": 2500.00,
-        "Reference": "EFT-ACME"
-      },
-      {
-        "Invoice": { "InvoiceID": "inv-002" },
-        "Account": { "Code": "090" },
-        "Date": "2026-03-15T00:00:00",
-        "Amount": 1800.00,
-        "Reference": "EFT-TECHSTART"
-      }
-    ]
-  }'
-```
+See [references/api.md](references/api.md) for the full endpoint catalog and
+AR/AP/partial/batch payment examples.
 
 ## Common Workflows
 
@@ -358,27 +219,20 @@ async function getCollectionsSummary(month) {
 }
 ```
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- **A payment cannot exceed `AmountDue`.** Xero rejects the request rather than
+  creating an overpayment automatically; re-read the invoice and pay the exact
+  outstanding amount, or record an Overpayment explicitly.
+- **Only `BANK` type accounts accept payments.** Pointing at a revenue or
+  current-asset account returns "Account is not valid for payments."
+- **The invoice must be `AUTHORISED`.** DRAFT and SUBMITTED invoices reject
+  payments with "Invoice is not awaiting payment."
+- **Payment date cannot precede the invoice date.**
+- **Deleting a payment reopens the invoice** — its status drops back from PAID
+  to AUTHORISED with the amount restored to `AmountDue`.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Payment amount exceeds the amount outstanding | Reduce payment amount to match AmountDue |
-| 400 | Account is not valid for payments | Use a bank account (type BANK) |
-| 400 | Invoice is not awaiting payment | Invoice must be AUTHORISED status |
-| 400 | Payment date is before invoice date | Set payment date on or after invoice date |
-| 401 | Unauthorized | Refresh access token |
-| 404 | Invoice not found | Verify InvoiceID |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Amount exceeds outstanding | Overpayment attempted | Use exact AmountDue or less |
-| Invalid account | Non-bank account used | Use a BANK type account |
-| Invoice not payable | Wrong invoice status | Authorize invoice first |
-| Date before invoice | Payment pre-dates invoice | Adjust payment date |
+See [references/errors.md](references/errors.md) for the complete error-code table.
 
 ### Error Recovery Pattern
 
@@ -404,32 +258,16 @@ async function safeRecordPayment(paymentData) {
 }
 ```
 
-## Endpoint Reference
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/Payments` | GET | List payments (paginated, filterable) |
-| `/Payments` | POST | Create payments (single or batch) |
-| `/Payments/{PaymentID}` | GET | Get single payment |
-| `/Payments/{PaymentID}` | POST | Update payment (delete only) |
-| `/Overpayments` | GET | List overpayments |
-| `/Overpayments/{OverpaymentID}` | GET | Get single overpayment |
-| `/Overpayments/{OverpaymentID}/Allocations` | PUT | Allocate overpayment to invoices |
-| `/Prepayments` | GET | List prepayments |
-| `/Prepayments/{PrepaymentID}/Allocations` | PUT | Allocate prepayment to invoices |
-
 ## Best Practices
 
-1. **Use the correct bank account** - Payments must reference a BANK type account
-2. **Include payment references** - Add EFT numbers, check numbers for reconciliation
-3. **Verify amount before recording** - Check invoice AmountDue to avoid overpayment errors
-4. **Record payments promptly** - Keep payment dates accurate for cash flow reporting
-5. **Use batch operations** - Record multiple payments in one API call when processing bank statements
-6. **Monitor overdue invoices** - Build alerts for invoices past due date
-7. **Handle partial payments** - Track remaining balance and follow up
-8. **Reconcile regularly** - Match Xero payments to bank statements
-9. **Delete, don't modify** - To correct a payment, delete and re-create
-10. **Track payment patterns** - Monitor which clients consistently pay late
+1. **Include payment references** - Add EFT numbers, check numbers for reconciliation
+2. **Verify amount before recording** - Check invoice AmountDue to avoid overpayment errors
+3. **Record payments promptly** - Keep payment dates accurate for cash flow reporting
+4. **Use batch operations** - Record multiple payments in one API call when processing bank statements
+5. **Monitor overdue invoices** - Build alerts for invoices past due date
+6. **Handle partial payments** - Track remaining balance and follow up
+7. **Reconcile regularly** - Match Xero payments to bank statements
+8. **Track payment patterns** - Monitor which clients consistently pay late
 
 ## Related Skills
 

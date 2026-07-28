@@ -1,14 +1,14 @@
 ---
 name: "Kaseya VSA API Patterns"
-when_to_use: >-
-  When working with the Kaseya VSA REST API — authentication, pagination, rate limits, error
-  handling, or planning Kaseya VSA integrations. Use when: kaseya vsa, vsa api, kaseya rmm, kaseya
-  patch management, agent procedures, kaseya one, or vsa authentication.
 description: >
-  Use this skill when working with the Kaseya VSA REST API. Covers two-step token-based
-  authentication, the /api/v1.0 surface, pagination ($skip/$top), filtering ($filter),
-  request/response envelope, error codes, and Kaseya One SSO bearer-token auth for
-  unified-login tenants.
+  Kaseya VSA REST API fundamentals: two-step token-based authentication, the
+  /api/v1.0 surface, pagination ($skip/$top) and filtering ($filter), the
+  request/response envelope, error codes, and Kaseya One SSO bearer-token
+  auth for unified-login tenants.
+when_to_use: >-
+  When working with the Kaseya VSA REST API, or planning Kaseya VSA integrations. Use when:
+  kaseya vsa, vsa api, kaseya rmm, kaseya patch management, agent procedures, kaseya one, or vsa
+  authentication.
 ---
 
 # Kaseya VSA API Patterns

@@ -1,13 +1,12 @@
 ---
 name: "runZero Tasks"
 description: >
-  Use this skill when working with RunZero scan tasks — creating scans,
-  scheduling recurring scans, managing explorers, configuring scan
-  parameters, and reviewing scan results.
+  runZero scan tasks: creating scans, scheduling recurring scans, managing explorers,
+  configuring scan parameters, and reviewing scan results.
 when_to_use: >-
-  When creating scans, scheduling recurring scans, managing explorers, configuring scan
-  parameters, and reviewing scan results. Use when: runzero scan, runzero task, network scan, scan
-  schedule, scan explorer, scan configuration, scan results, discovery scan, or scan targets.
+  When launching, scheduling, configuring, or reviewing runZero scans. Use when: runzero
+  scan, runzero task, network scan, scan schedule, scan explorer, scan configuration,
+  scan results, discovery scan, or scan targets.
 ---
 
 # RunZero Tasks (Scans)

@@ -1,11 +1,11 @@
 ---
 name: "Warmly Visitor Intelligence"
 description: >
-  Use this skill when triaging or acting on identified website visitors and
-  account-level engagement from Warmly - prioritizing warm accounts for
-  outreach, filtering visitors by ICP fit, scoring engagement depth,
-  matching visitors to CRM records, or watching identification credit burn.
-  Covers list_warm_visitors, list_warm_accounts, and get_credits_remaining.
+  Acting on Warmly's identified website visitors and account-level engagement:
+  choosing between list_warm_visitors, list_warm_accounts, and
+  get_credits_remaining; ICP filtering, engagement-depth scoring,
+  CRM-intersection routing, credit-burn checks, MSP-specific outreach plays, and
+  the limits of visitor identification as an intent signal.
 when_to_use: >-
   When triaging warm accounts, exporting visitor lists, scoring engagement, matching visitors to
   CRM records, or checking credit balance with Warmly. Use when: warmly visitors, warmly accounts,

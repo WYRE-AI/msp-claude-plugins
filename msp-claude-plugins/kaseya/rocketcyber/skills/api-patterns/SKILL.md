@@ -1,15 +1,13 @@
 ---
 name: "RocketCyber API Patterns"
 description: >
-  Use this skill when working with the RocketCyber API - authentication, Bearer token flow,
-  base URL selection, pagination, rate limiting, error handling, and account hierarchy.
-  Covers regional endpoints, query parameter patterns, and best practices for SOC
-  API integration.
+  RocketCyber REST API v3 fundamentals: Bearer token authentication, regional
+  base URL selection, pagination, rate limiting, error handling, and account
+  hierarchy navigation.
 when_to_use: >-
-  When working with authentication, Bearer token flow, base URL selection, pagination, rate
-  limiting, error handling, and account hierarchy in the RocketCyber API. Use when: rocketcyber
-  api, rocketcyber authentication, rocketcyber query, rocketcyber pagination, rocketcyber rate
-  limit, rocketcyber token, rocketcyber base url, or soc api.
+  When working with the RocketCyber API. Use when: rocketcyber api, rocketcyber authentication,
+  rocketcyber query, rocketcyber pagination, rocketcyber rate limit, rocketcyber token, rocketcyber
+  base url, or soc api.
 ---
 
 # RocketCyber API Patterns

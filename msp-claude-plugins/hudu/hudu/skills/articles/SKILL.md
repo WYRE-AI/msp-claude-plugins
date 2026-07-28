@@ -1,14 +1,14 @@
 ---
 name: "Hudu Articles"
 description: >
-  Use this skill when working with Hudu articles (knowledge base) -
-  creating, searching, updating, and managing documentation articles.
-  Covers article folders, drafts, sharing, content format (HTML),
-  versioning, and search patterns for comprehensive knowledge management.
+  Hudu knowledge base articles: HTML content format, company-scoped vs
+  global articles, article folders (including nesting), drafts vs
+  published, the /api/v1/articles endpoint surface, and search,
+  templating, and documentation-health patterns.
 when_to_use: >-
-  When creating, searching, updating, and managing documentation articles. Use when: hudu article,
-  hudu knowledge base, hudu kb, hudu documentation, hudu runbook, hudu procedure, knowledge base
-  article, article management, or hudu docs.
+  When creating, searching, updating, or managing Hudu documentation articles and their folders.
+  Use when: hudu article, hudu knowledge base, hudu kb, hudu documentation, hudu runbook, hudu
+  procedure, knowledge base article, article management, or hudu docs.
 ---
 
 # Hudu Articles Management
@@ -28,9 +28,11 @@ Articles can be scoped in two ways:
 | Company-specific | Tied to a single company | Network diagram for Acme Corp |
 | Global | Available across all companies | Standard new user setup procedure |
 
+Scope is controlled entirely by `company_id` — omit it (or set it to null) to create a global article.
+
 ### Article Folders
 
-Folders organize articles within a company or globally:
+Folders organize articles within a company or globally, and can be nested via `parent_folder_id`:
 
 ```
 Company: Acme Corporation
@@ -66,194 +68,27 @@ Articles can be saved as drafts before publishing:
 | Draft | Work in progress, not visible to all users |
 | Published | Visible to users with appropriate permissions |
 
-## Field Reference
+### Fields
 
-### Core Fields
+Key fields: `id`, `company_id`, `name` (required), `content` (HTML), `folder_id`, `draft`, `slug`, `created_at`, `updated_at`, `url`.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `company_id` | integer | No | Parent company (null for global articles) |
-| `name` | string | Yes | Article title |
-| `content` | string | No | Rich HTML content |
-| `folder_id` | integer | No | Folder location |
-| `draft` | boolean | No | Whether article is a draft |
-| `slug` | string | System | URL-friendly identifier |
-
-### Relationship Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `company_name` | string | Parent company name (read-only) |
-| `folder_name` | string | Folder name (read-only) |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `created_at` | datetime | Creation timestamp |
-| `updated_at` | datetime | Last update timestamp |
-| `url` | string | Full URL to article in Hudu |
-| `object_type` | string | Always "Article" |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Articles
+| Operation | Request |
+|-----------|---------|
+| List / filter | `GET /api/v1/articles?company_id=123&name=backup&page=1` |
+| Get one | `GET /api/v1/articles/456` |
+| Create | `POST /api/v1/articles` with `{ "article": { ... } }` |
+| Update | `PUT /api/v1/articles/456` |
+| Delete | `DELETE /api/v1/articles/456` |
+| Archive | `PUT /api/v1/articles/456/archive` |
+| Folders | `GET|POST /api/v1/folders` (filter with `?company_id=`) |
 
-```http
-GET /api/v1/articles
-x-api-key: YOUR_API_KEY
-Content-Type: application/json
-```
+All requests use the `x-api-key` header. Request and response bodies are wrapped in a singular resource key (`article`, `folder`).
 
-**By Company:**
-```http
-GET /api/v1/articles?company_id=123
-```
-
-**By Name:**
-```http
-GET /api/v1/articles?name=backup
-```
-
-**With Pagination:**
-```http
-GET /api/v1/articles?company_id=123&page=1
-```
-
-### Get Single Article
-
-```http
-GET /api/v1/articles/456
-x-api-key: YOUR_API_KEY
-```
-
-**Response:**
-```json
-{
-  "article": {
-    "id": 456,
-    "name": "Backup Procedure - Daily Operations",
-    "content": "<h1>Backup Procedure</h1><h2>Overview</h2><p>The daily backup runs at 10PM...</p>",
-    "company_id": 123,
-    "company_name": "Acme Corporation",
-    "folder_id": 15,
-    "folder_name": "Procedures",
-    "draft": false,
-    "slug": "backup-procedure-daily-operations",
-    "created_at": "2024-06-15T10:30:00.000Z",
-    "updated_at": "2025-12-01T14:22:00.000Z",
-    "url": "https://your-company.huducloud.com/a/backup-procedure-daily-operations-abcdef"
-  }
-}
-```
-
-### Create Article
-
-```http
-POST /api/v1/articles
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-**Company-specific article:**
-```json
-{
-  "article": {
-    "name": "New User Setup Procedure",
-    "company_id": 123,
-    "folder_id": 20,
-    "content": "<h1>New User Setup Procedure</h1><h2>Overview</h2><p>This procedure covers setting up a new user account for Acme Corporation.</p><h2>Prerequisites</h2><ul><li>Active Directory access</li><li>Microsoft 365 admin access</li></ul><h2>Steps</h2><ol><li>Create AD account with naming convention: first.last</li><li>Assign Microsoft 365 E3 license</li><li>Configure email signature using company template</li><li>Add to appropriate security groups</li></ol>"
-  }
-}
-```
-
-**Global article (no company_id):**
-```json
-{
-  "article": {
-    "name": "Standard Password Policy",
-    "content": "<h1>Standard Password Policy</h1><p>All managed client accounts must follow these requirements...</p><ul><li>Minimum 14 characters</li><li>Must include uppercase, lowercase, numbers, and symbols</li><li>Rotate every 90 days</li></ul>"
-  }
-}
-```
-
-### Update Article
-
-```http
-PUT /api/v1/articles/456
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "article": {
-    "content": "<h1>Backup Procedure - Updated</h1><p>Updated backup schedule...</p>",
-    "draft": false
-  }
-}
-```
-
-### Delete Article
-
-```http
-DELETE /api/v1/articles/456
-x-api-key: YOUR_API_KEY
-```
-
-### Archive Article
-
-```http
-PUT /api/v1/articles/456/archive
-x-api-key: YOUR_API_KEY
-```
-
-## Folder Management
-
-### List Folders
-
-```http
-GET /api/v1/folders
-x-api-key: YOUR_API_KEY
-```
-
-**By Company:**
-```http
-GET /api/v1/folders?company_id=123
-```
-
-### Create Folder
-
-```http
-POST /api/v1/folders
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "folder": {
-    "name": "Procedures",
-    "company_id": 123,
-    "parent_folder_id": null,
-    "description": "Standard operating procedures for Acme Corporation"
-  }
-}
-```
-
-### Nested Folders
-
-```json
-{
-  "folder": {
-    "name": "Disaster Recovery",
-    "company_id": 123,
-    "parent_folder_id": 15,
-    "description": "DR plans and procedures"
-  }
-}
-```
+See [references/api.md](references/api.md) for the complete endpoint catalog with request/response examples.
 
 ## Common Workflows
 
@@ -291,6 +126,8 @@ async function createRunbook(companyId, runbookData) {
 ```
 
 ### Article Search
+
+The API filters on `name` only — full-text search across `content` must be done client-side after fetching.
 
 ```javascript
 async function searchArticles(companyId, query) {
@@ -337,6 +174,8 @@ async function documentationHealthCheck(companyId) {
 
 ### Clone Article to Another Company
 
+Folder IDs are company-scoped, so do not carry `folder_id` across companies — resolve or create a folder in the target company first.
+
 ```javascript
 async function cloneArticle(articleId, targetCompanyId, newName) {
   const template = await getArticle(articleId);
@@ -351,125 +190,26 @@ async function cloneArticle(articleId, targetCompanyId, newName) {
 
 ## Article Templates
 
-### Network Overview
+Standard HTML skeletons for Network Overview and Disaster Recovery Plan articles are in
+[references/templates.md](references/templates.md).
 
-```html
-<h1>Network Overview</h1>
+## Gotchas
 
-<h2>Network Topology</h2>
-<p>[Network diagram image here]</p>
+- **Folder IDs are scoped to a company.** Passing a `folder_id` belonging to another company yields a 422; on failure, retry without `folder_id` to create at root level.
+- **A missing `company_id` is not an error** — it silently creates a global article visible to every company. Double-check before creating client-specific content.
+- **Content is raw HTML.** Values interpolated into `content` are not escaped by the API; sanitize any untrusted input before writing.
+- **Archive is a distinct verb** (`PUT /articles/:id/archive`), not an `archived` field on update.
 
-<h2>IP Addressing</h2>
-<table>
-  <tr><th>Subnet</th><th>VLAN</th><th>Purpose</th></tr>
-  <tr><td>192.168.1.0/24</td><td>1</td><td>Servers</td></tr>
-  <tr><td>192.168.10.0/24</td><td>10</td><td>Workstations</td></tr>
-  <tr><td>192.168.20.0/24</td><td>20</td><td>Guest WiFi</td></tr>
-</table>
-
-<h2>Core Infrastructure</h2>
-<p>[Asset references here]</p>
-
-<h2>Firewall Rules Summary</h2>
-<p>[Rule overview]</p>
-
-<h2>Related Credentials</h2>
-<p>[Embedded passwords]</p>
-```
-
-### Disaster Recovery Plan
-
-```html
-<h1>Disaster Recovery Plan</h1>
-
-<h2>Emergency Contacts</h2>
-<table>
-  <tr><th>Role</th><th>Name</th><th>Phone</th></tr>
-  <tr><td>Primary Contact</td><td>John Smith</td><td>555-123-4567</td></tr>
-  <tr><td>IT Manager</td><td>Jane Doe</td><td>555-987-6543</td></tr>
-</table>
-
-<h2>Critical Systems (Recovery Priority)</h2>
-<ol>
-  <li>Domain Controller - RTO: 1 hour</li>
-  <li>Email Server - RTO: 2 hours</li>
-  <li>File Server - RTO: 4 hours</li>
-  <li>Line of Business App - RTO: 8 hours</li>
-</ol>
-
-<h2>Recovery Procedures</h2>
-<h3>Complete Site Failure</h3>
-<ol>
-  <li>Activate backup site / cloud DR</li>
-  <li>Restore domain controller from latest backup</li>
-  <li>Verify DNS failover</li>
-  <li>Restore email services</li>
-  <li>Restore file server from backup</li>
-</ol>
-
-<h2>Required Credentials</h2>
-<p>[Embedded password references]</p>
-
-<h2>Vendor Support Contacts</h2>
-<table>
-  <tr><th>Vendor</th><th>Support Number</th><th>Account Number</th></tr>
-  <tr><td>ISP</td><td>800-555-1234</td><td>ACCT-12345</td></tr>
-  <tr><td>Backup Vendor</td><td>800-555-5678</td><td>ACCT-67890</td></tr>
-</table>
-```
-
-## Error Handling
-
-### Common API Errors
-
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Name can't be blank | Provide article name |
-| 401 | Invalid API key | Check HUDU_API_KEY |
-| 404 | Article not found | Verify article ID |
-| 422 | Validation failed | Check required fields |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Name required | Missing name | Add name to request |
-| Invalid folder | Bad folder_id | Query /folders first |
-| Invalid company | Bad company_id | Query /companies first |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateArticle(data) {
-  try {
-    return await createArticle(data);
-  } catch (error) {
-    if (error.status === 422) {
-      // Handle invalid folder
-      if (error.message?.includes('folder')) {
-        console.log('Invalid folder. Creating at root level.');
-        delete data.folder_id;
-        return await createArticle(data);
-      }
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the complete error and validation table plus a recovery pattern.
 
 ## Best Practices
 
 1. **Use consistent structure** - Follow templates for standard articles
 2. **Organize with folders** - Create a logical folder hierarchy per company
-3. **Keep content current** - Review and update articles regularly
-4. **Use global articles** - Share standard procedures across all companies
-5. **Include visual aids** - Add diagrams, screenshots, and tables
-6. **Use meaningful names** - Clear, descriptive article titles
-7. **Include metadata** - Add last reviewed date and author at the top
-8. **Standardize formatting** - Consistent headings and structure
-9. **Link related resources** - Reference assets and passwords
-10. **Regular audits** - Review documentation quarterly for accuracy
+3. **Use global articles** - Share standard procedures across all companies
+4. **Include visual aids** - Add diagrams, screenshots, and tables
+5. **Include metadata** - Add last reviewed date and author at the top
+6. **Link related resources** - Reference assets and passwords
 
 ## Related Skills
 

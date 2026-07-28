@@ -1,16 +1,15 @@
 ---
 name: "ImmyBot API Patterns"
+description: >
+  ImmyBot MCP fundamentals: Entra ID OAuth 2.0 client-credentials auth (four
+  fields), the `immybot_<domain>_<action>` tool naming and domain list, the
+  two-step desired-state deployment model, the four destructive operations that
+  need explicit confirmation, task/session polling cadence, and HTTP error codes.
 when_to_use: >-
   When working with ImmyBot authentication (Entra ID OAuth client credentials), the desired-state
   model, destructive write operations, or task / maintenance-session polling. Use when: immybot
   api, immybot authentication, immybot oauth, immybot entra, immybot mcp, immybot desired state,
   or immybot maintenance session.
-description: >
-  Use this skill when working with the ImmyBot MCP tools — Entra ID
-  OAuth 2.0 client-credentials authentication (4 fields), the
-  two-step desired-state deployment model, destructive operations
-  that need explicit confirmation, and the task/session polling
-  cadence.
 ---
 
 # ImmyBot MCP Tools & API Patterns
@@ -115,8 +114,6 @@ reaches a terminal state.
 
 ## Best Practices
 
-- Treat ImmyBot deployments as code: configure desired state, then
-  let maintenance reconcile.
 - For MSP work, scope by tenant first (`immybot_tenants_get`) and
   pivot down — never modify deployments without confirming the
   tenant.

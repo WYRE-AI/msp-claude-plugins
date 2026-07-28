@@ -1,15 +1,15 @@
 ---
 name: "ThreatLocker Computer Groups"
 description: >
-  Use this skill when working with ThreatLocker computer groups —
-  the policy-scoping boundary that determines which allow/deny rules
-  apply to which endpoints. Covers listing groups, mapping computer to
-  group, and the difference between the dropdown and full list endpoints.
+  ThreatLocker computer groups — the policy-scoping boundary that determines which
+  allow/deny rules apply to which endpoints. Covers listing groups, mapping a computer
+  to its group, and the difference between the dropdown and full list endpoints.
 when_to_use: >-
-  When scoping policies, mapping computers to groups, choosing a target group for new endpoints,
-  or auditing global vs org-specific group usage. Use when: threatlocker computer group,
-  threatlocker policy scope, threatlocker group dropdown, threatlocker groups list, threatlocker
-  ostype, assign computer group, or threatlocker policy targeting.
+  When scoping policies, mapping computers to groups, choosing a target group for new
+  endpoints, or auditing global vs org-specific group usage. Use when: threatlocker
+  computer group, threatlocker policy scope, threatlocker group dropdown, threatlocker
+  groups list, threatlocker ostype, assign computer group, or threatlocker policy
+  targeting.
 ---
 
 # ThreatLocker Computer Groups

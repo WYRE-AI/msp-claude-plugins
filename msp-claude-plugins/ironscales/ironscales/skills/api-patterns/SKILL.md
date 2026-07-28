@@ -1,12 +1,13 @@
 ---
 name: "IRONSCALES API Patterns"
 description: >
-  Use this skill when working with Ironscales MCP tools — available tools,
-  API key and company ID authentication, pagination, rate limiting, and
-  error handling.
+  Ironscales MCP fundamentals: API-key plus company-ID header authentication and
+  the per-tenant scoping that follows from it, the tool surface across incidents,
+  statistics, and allowlist management, offset/limit pagination, rate-limit
+  behavior, and the HTTP error-code table.
 when_to_use: >-
-  When working with available tools, API key and company ID authentication, pagination, rate
-  limiting, and error handling in Ironscales MCP tools. Use when: ironscales, ironscales api,
+  When authenticating to the Ironscales MCP server, paging through its results, or
+  diagnosing an API error. Use when: ironscales, ironscales api,
   ironscales mcp, ironscales tools, ironscales authentication, ironscales pagination, ironscales
   error, or ironscales connection.
 ---
@@ -36,8 +37,6 @@ Generate credentials at: **Ironscales Platform > Settings > API**
 export IRONSCALES_API_KEY="your-api-key"
 export IRONSCALES_COMPANY_ID="your-company-id"
 ```
-
-> **IMPORTANT:** Never hardcode credentials. Always use environment variables or the MCP Gateway.
 
 The Company ID scopes all API requests to a specific tenant. MSPs managing multiple clients require a separate API key and company ID per client.
 
@@ -123,7 +122,6 @@ Ironscales enforces per-endpoint rate limits.
 
 ## Best Practices
 
-- Always include `companyId` in all requests (handled automatically by the MCP server)
 - Use status filters (`open`, `closed`) to focus on actionable incidents
 - Combine `offset` pagination with status filters to efficiently process large incident backlogs
 - Verify incident status before attempting classification — closed incidents cannot be reclassified

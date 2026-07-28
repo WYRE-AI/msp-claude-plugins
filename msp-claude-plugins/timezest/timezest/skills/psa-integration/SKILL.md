@@ -1,17 +1,15 @@
 ---
 name: "TimeZest PSA Integration"
+description: >
+  Wiring a TimeZest scheduling request into a PSA: the associatedEntities
+  payload shapes for ConnectWise, Autotask, and Halo tickets, the difference
+  between the pod and generate_url trigger modes, and the causes of bookings
+  that complete but never update the PSA ticket.
 when_to_use: >-
-  When linking a TimeZest scheduling request to a PSA ticket — building the associatedEntities
-  payload for ConnectWise / Autotask / Halo, choosing pod vs generate_url trigger mode, and
-  diagnosing bookings that did not sync to the PSA. Use when: timezest psa, associated entities,
+  When linking a TimeZest scheduling request to a PSA ticket, or diagnosing a booking that
+  did not sync back. Use when: timezest psa, associated entities,
   link to connectwise ticket, link to autotask ticket, link to halo ticket, timezest pod mode,
   timezest generate url, booking didnt sync to psa, or orphan scheduling request.
-description: >
-  Use this skill to wire a TimeZest scheduling request into a PSA —
-  building correct associatedEntities entries for ConnectWise,
-  Autotask, or Halo tickets, choosing between the pod and generate_url
-  trigger modes, and diagnosing bookings that completed but never
-  updated the PSA ticket.
 ---
 
 # TimeZest PSA Integration

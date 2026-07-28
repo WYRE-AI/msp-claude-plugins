@@ -1,15 +1,15 @@
 ---
 name: "Blackpoint Cyber API Patterns"
+description: >
+  Blackpoint Cyber (CompassOne) MCP fundamentals: API-token header auth
+  and its internal Bearer forwarding, the partner-tenant-asset
+  hierarchy, navigation tools, which tool domains are functional versus
+  stubbed, pagination, and HTTP error causes.
 when_to_use: >-
   When working with Blackpoint Cyber / CompassOne authentication, partner-tenant-asset hierarchy,
   or pagination through detections and vulnerabilities. Use when: blackpoint api, blackpoint
   authentication, blackpoint mcp, compassone api, compassone authentication, blackpoint tenant, or
   blackpoint asset.
-description: >
-  Use this skill when working with the Blackpoint Cyber (CompassOne)
-  MCP tools — Bearer token authentication, the partner-tenant-asset
-  hierarchy, navigation tools, and the read-only tool surface across
-  tenants, assets, detections, and vulnerabilities.
 ---
 
 # Blackpoint Cyber (CompassOne) MCP Tools & API Patterns

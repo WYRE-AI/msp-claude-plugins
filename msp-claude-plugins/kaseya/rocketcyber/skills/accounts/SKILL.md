@@ -1,15 +1,13 @@
 ---
 name: "RocketCyber Accounts"
 description: >
-  Use this skill when working with RocketCyber accounts - provider/customer
-  hierarchy, account management, sub-account navigation, account settings,
-  and security policy configuration. Covers account CRUD operations and
-  multi-tenant MSP patterns.
+  RocketCyber's provider/customer account hierarchy: sub-account navigation,
+  account CRUD operations, account settings, security policy configuration,
+  and multi-tenant MSP patterns.
 when_to_use: >-
-  When working with provider/customer hierarchy, account management, sub-account navigation,
-  account settings, and security policy configuration in RocketCyber accounts. Use when:
-  rocketcyber account, rocketcyber customer, rocketcyber provider, rocketcyber tenant, rocketcyber
-  organization, account hierarchy rocketcyber, rocketcyber sub-account, or rocketcyber client.
+  When working with RocketCyber accounts. Use when: rocketcyber account, rocketcyber customer,
+  rocketcyber provider, rocketcyber tenant, rocketcyber organization, account hierarchy
+  rocketcyber, rocketcyber sub-account, or rocketcyber client.
 ---
 
 # RocketCyber Account Management

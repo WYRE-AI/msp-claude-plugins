@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Automate Computers"
 description: >
-  Use this skill when working with ConnectWise Automate computers/endpoints - listing,
-  searching, managing, and monitoring devices. Covers computer identifiers (ComputerID,
-  Name, MAC), computer statuses (online/offline), hardware/software inventory, patch
-  status, antivirus status, and remote management operations.
+  ConnectWise Automate computer/endpoint management: computer identifiers (ComputerID,
+  Name, ComputerGUID, MAC), status values, OS types, hardware/software inventory, disk,
+  patch, and antivirus status, plus remote management operations.
 when_to_use: >-
   When listing, searching, managing, and monitoring devices. Use when: automate computer, automate
   endpoint, automate device, automate agent, computer status, computer lookup, managed computer,
@@ -52,264 +51,29 @@ Every computer has multiple identifiers:
 
 ## Field Reference
 
-### Core Computer Fields
+Computer objects expose roughly 30 fields covering identifiers, client/location
+association, status, network, OS, hardware, agent, and timestamp data, plus an
+`ExtraData` map for Extra Data Fields (EDFs). `ComputerInventory` objects cover drives,
+software, memory, network adapters, printers, services, and monitors.
 
-```typescript
-interface Computer {
-  // Identifiers
-  ComputerID: number;           // Primary key
-  Name: string;                 // Hostname
-  ComputerGUID: string;         // GUID
-
-  // Client/Location Association
-  ClientID: number;             // Parent client ID
-  LocationID: number;           // Location within client
-  Client: {
-    Name: string;               // Client name
-  };
-  Location: {
-    Name: string;               // Location name
-  };
-
-  // Status
-  Status: string;               // Online, Offline, Degraded
-  LastContact: string;          // ISO datetime of last check-in
-  Uptime: number;               // Uptime in seconds
-
-  // Network
-  IPAddress: string;            // Internal IP
-  ExternalIP: string;           // External/public IP
-  DefaultGateway: string;       // Gateway IP
-  MAC: string;                  // Primary MAC address
-
-  // Operating System
-  OS: string;                   // "Windows 10 Pro"
-  OSType: string;               // "Windows", "macOS", "Linux"
-  OSVersion: string;            // "10.0.19045"
-  SerialNumber: string;         // OS serial/product key
-
-  // Hardware
-  Manufacturer: string;         // "Dell Inc."
-  Model: string;                // "OptiPlex 7090"
-  TotalMemory: number;          // RAM in MB
-  ProcessorName: string;        // CPU model
-  ProcessorCount: number;       // Number of CPUs
-
-  // Agent
-  AgentVersion: string;         // "2023.1.0.123"
-  RemoteAgentVersion: string;   // Remote agent version
-
-  // Timestamps
-  DateAdded: string;            // When computer was added
-  LastInventory: string;        // Last inventory scan
-  LastPatched: string;          // Last patch operation
-
-  // Extra Data Fields (EDFs)
-  ExtraData: {
-    [key: string]: string;      // Custom fields
-  };
-}
-```
-
-### Computer Inventory Fields
-
-```typescript
-interface ComputerInventory {
-  // Disk Information
-  Drives: DriveInfo[];
-
-  // Software
-  Software: SoftwareItem[];
-
-  // Hardware
-  Memory: MemoryModule[];
-  NetworkAdapters: NetworkAdapter[];
-  Printers: Printer[];
-
-  // Services
-  Services: Service[];
-
-  // Monitors/Displays
-  Monitors: Monitor[];
-}
-
-interface DriveInfo {
-  Letter: string;               // "C:"
-  Type: string;                 // "Fixed", "Network", "Removable"
-  FileSystem: string;           // "NTFS"
-  TotalSize: number;            // Size in MB
-  FreeSpace: number;            // Free space in MB
-  PercentFree: number;          // Percentage free
-}
-
-interface SoftwareItem {
-  Name: string;                 // Application name
-  Publisher: string;            // Software publisher
-  Version: string;              // Installed version
-  InstallDate: string;          // When installed
-}
-```
+See [references/fields.md](references/fields.md) for the complete `Computer` and
+`ComputerInventory` field reference.
 
 ## API Patterns
 
-### List All Computers
+All endpoints require `Authorization: Bearer {token}` (see the API Patterns skill for
+authentication and token management). Core calls:
 
-```http
-GET /cwa/api/v1/Computers?pageSize=250
-Authorization: Bearer {token}
-```
+- List: `GET /cwa/api/v1/Computers?pageSize=250`
+- Get one: `GET /cwa/api/v1/Computers/{computerID}`
+- Filter: `GET /cwa/api/v1/Computers?condition=ClientID = 100&pageSize=250` (or
+  `Status = 'Online'`, `OS contains 'Windows Server'`, etc. - see the API Patterns
+  skill for full OData filter syntax)
+- Sub-resources: `/Computers/{id}/Drives`, `/Computers/{id}/Software`,
+  `/Computers/{id}/Patches`, `/Computers/{id}/Antivirus`
 
-**Response:**
-```json
-[
-  {
-    "ComputerID": 12345,
-    "Name": "ACME-DC01",
-    "ClientID": 100,
-    "LocationID": 1,
-    "Status": "Online",
-    "IPAddress": "192.168.1.10",
-    "OS": "Windows Server 2022 Standard",
-    "LastContact": "2024-02-15T10:30:00Z",
-    "Client": {
-      "Name": "Acme Corporation"
-    },
-    "Location": {
-      "Name": "Main Office"
-    }
-  }
-]
-```
-
-### Get Single Computer
-
-```http
-GET /cwa/api/v1/Computers/{computerID}
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-{
-  "ComputerID": 12345,
-  "Name": "ACME-DC01",
-  "ComputerGUID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "ClientID": 100,
-  "LocationID": 1,
-  "Status": "Online",
-  "IPAddress": "192.168.1.10",
-  "ExternalIP": "203.0.113.50",
-  "MAC": "00:1A:2B:3C:4D:5E",
-  "OS": "Windows Server 2022 Standard",
-  "OSVersion": "10.0.20348",
-  "Manufacturer": "Dell Inc.",
-  "Model": "PowerEdge R640",
-  "SerialNumber": "ABC1234567",
-  "TotalMemory": 32768,
-  "ProcessorName": "Intel Xeon Gold 6230",
-  "AgentVersion": "2023.1.0.123",
-  "LastContact": "2024-02-15T10:30:00Z",
-  "Uptime": 864000,
-  "DateAdded": "2023-01-15T08:00:00Z"
-}
-```
-
-### Filter Computers by Client
-
-```http
-GET /cwa/api/v1/Computers?condition=ClientID = 100&pageSize=250
-Authorization: Bearer {token}
-```
-
-### Filter Computers by Status
-
-```http
-GET /cwa/api/v1/Computers?condition=Status = 'Online'&pageSize=250
-Authorization: Bearer {token}
-```
-
-### Filter by OS Type
-
-```http
-GET /cwa/api/v1/Computers?condition=OS contains 'Windows Server'&pageSize=250
-Authorization: Bearer {token}
-```
-
-### Get Computer Drives
-
-```http
-GET /cwa/api/v1/Computers/{computerID}/Drives
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-[
-  {
-    "DriveID": 1,
-    "Letter": "C:",
-    "Type": "Fixed",
-    "FileSystem": "NTFS",
-    "TotalSize": 500000,
-    "FreeSpace": 150000,
-    "PercentFree": 30
-  }
-]
-```
-
-### Get Computer Software
-
-```http
-GET /cwa/api/v1/Computers/{computerID}/Software
-Authorization: Bearer {token}
-```
-
-### Get Patch Status
-
-```http
-GET /cwa/api/v1/Computers/{computerID}/Patches
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-{
-  "Installed": 145,
-  "Missing": 3,
-  "Pending": 2,
-  "Failed": 0,
-  "Patches": [
-    {
-      "KBID": "KB5034441",
-      "Title": "2024-01 Security Update",
-      "Status": "Missing",
-      "Severity": "Critical",
-      "ReleaseDate": "2024-01-09T00:00:00Z"
-    }
-  ]
-}
-```
-
-### Get Antivirus Status
-
-```http
-GET /cwa/api/v1/Computers/{computerID}/Antivirus
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-{
-  "Product": "Windows Defender",
-  "Version": "4.18.2401.7",
-  "DefinitionVersion": "1.405.123.0",
-  "DefinitionDate": "2024-02-15T00:00:00Z",
-  "RealTimeProtection": true,
-  "LastScan": "2024-02-15T03:00:00Z",
-  "ScanType": "Quick",
-  "ThreatsFound": 0
-}
-```
+See [references/api.md](references/api.md) for the complete endpoint catalog with
+example requests and responses.
 
 ## Workflows
 

@@ -1,22 +1,19 @@
 ---
 name: "SLA Escalation Playbooks"
+description: >
+  A cross-PSA escalation framework for SLA pressure: how each PSA family
+  (Autotask, HaloPSA, ConnectWise Manage, Syncro, Kaseya BMS) models
+  SLA/priority state and where breach risk lives in each, a normalized
+  breach-risk state model (healthy, at risk, breached-response,
+  breached-resolution) with the default escalation action per state, how
+  notification audience shifts by contract tier, and the evidence to gather
+  before paging anyone.
 when_to_use: >-
   When a ticket is approaching or has breached its SLA response or resolution
   target and the operator needs to know how — and to whom — to escalate it.
   Use when: SLA breach, SLA at risk, escalate this ticket, who do I notify,
   breach notification, response time risk, resolution target missed, "what's
   about to breach".
-description: >
-  Use this skill when triaging SLA pressure on whatever PSA is connected
-  through the gateway. Covers how to read breach-risk state across the major
-  PSA families (Autotask, HaloPSA, ConnectWise Manage, Syncro, Kaseya BMS),
-  a common escalation decision framework that sits on top of those different
-  data models, how escalation severity and audience change by contract tier,
-  and what evidence to gather before paging someone. Resolve status/priority/
-  SLA IDs via the connected PSA's own list tools (e.g.
-  autotask__list_ticket_priorities, halopsa__tickets_list) — never hardcode
-  tenant-specific IDs. If no PSA is connected, this skill degrades to general
-  escalation guidance and says so explicitly.
 ---
 
 # SLA Escalation Playbooks
@@ -118,17 +115,8 @@ figures or invent a ticket's breach state.
 
 ## Best Practices
 
-- Always resolve priority/status/SLA-profile IDs via the connected PSA's own list
-  tools before interpreting a ticket — these are tenant-configurable and vary
-  instance to instance.
-- State the breach-risk threshold you used (e.g., "less than 25% of window
-  remaining") so the reader can recalibrate if their org's norm differs.
-- Distinguish "breached because nobody worked it" from "breached because the client
-  hasn't responded" — the remediation and the notification target are different.
 - Log the escalation itself as a ticket note/action where the PSA supports it, so the
   audit trail lives with the ticket, not just in chat.
-- Never invent a contract tier or SLA target — pull it from the PSA/contract record,
-  or state plainly that it's unknown.
 
 ## Related Skills
 

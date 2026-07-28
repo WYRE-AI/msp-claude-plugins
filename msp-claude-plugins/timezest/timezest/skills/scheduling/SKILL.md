@@ -1,15 +1,14 @@
 ---
 name: "TimeZest Scheduling"
+description: >
+  The TimeZest scheduling-request lifecycle: resolving the right agent and
+  appointment type, creating a request against a ConnectWise / Autotask /
+  Halo ticket, polling its status through to booking, and canceling.
 when_to_use: >-
   When booking a technician's time against a PSA ticket through TimeZest, checking status of a
   scheduling request, or canceling a pending request. Use when: timezest book, timezest schedule,
   book a tech, schedule a technician, timezest appointment, send timezest link, or timezest
   cancel.
-description: >
-  Use this skill to book a technician against a ConnectWise / Autotask
-  / Halo PSA ticket via TimeZest — resolving the right agent and
-  appointment type, creating a scheduling request, polling its status,
-  and canceling when needed.
 ---
 
 # TimeZest Scheduling

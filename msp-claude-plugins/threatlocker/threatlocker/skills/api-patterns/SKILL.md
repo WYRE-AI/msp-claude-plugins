@@ -1,16 +1,15 @@
 ---
 name: "ThreatLocker API Patterns"
 description: >
-  Use this skill when working with the ThreatLocker MCP tools —
-  raw-key authentication (NO Bearer prefix), multi-tenant routing via
-  organizationId header, POST-heavy "GetByParameters" endpoints,
-  pagination shape, and child-organization fan-out patterns.
+  ThreatLocker Portal API fundamentals: raw-key authentication (no Bearer prefix),
+  multi-tenant routing via the organizationId header, POST-based "GetByParameters" list
+  endpoints, pagination shape, and child-organization fan-out patterns.
 when_to_use: >-
-  When working with ThreatLocker auth headers, multi-tenant requests, POST-based list endpoints,
-  pagination, or fanning queries across child organizations. Use when: threatlocker api,
-  threatlocker authentication, threatlocker pagination, threatlocker organizationid, threatlocker
-  mcp, threatlocker tools, threatlocker child organizations, threatlocker getbyparameters, or
-  threatlocker portalapi.
+  When working with ThreatLocker auth headers, multi-tenant requests, POST-based list
+  endpoints, pagination, or fanning queries across child organizations. Use when:
+  threatlocker api, threatlocker authentication, threatlocker pagination, threatlocker
+  organizationid, threatlocker mcp, threatlocker tools, threatlocker child
+  organizations, threatlocker getbyparameters, or threatlocker portalapi.
 ---
 
 # ThreatLocker MCP Tools & API Patterns

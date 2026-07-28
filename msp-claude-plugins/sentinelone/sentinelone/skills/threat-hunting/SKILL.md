@@ -1,15 +1,13 @@
 ---
 name: "SentinelOne Threat Hunting"
 description: >
-  Use this skill when working with SentinelOne PowerQuery and the
-  Singularity Data Lake - executing threat hunting queries, understanding
-  PowerQuery pipeline syntax, managing time ranges, and analyzing query
-  results. Covers the powerquery, get_timestamp_range, and
-  iso_to_unix_timestamp tools, query syntax reference, common hunting
-  scenarios, and integration with Purple AI for query generation.
+  PowerQuery against the Singularity Data Lake: the Scalyr-based pipeline syntax
+  (distinct from SPL, SQL, KQL, and Elasticsearch DSL), the powerquery,
+  get_timestamp_range, and iso_to_unix_timestamp tools, time-range and row-limit
+  handling, common hunting scenarios, and the Purple AI generation path.
 when_to_use: >-
-  When executing threat hunting queries, understanding PowerQuery pipeline syntax, managing time
-  ranges, and analyzing query results. Use when: sentinelone powerquery, sentinelone data lake,
+  When running forensic or threat-hunting queries over SentinelOne telemetry, or debugging
+  PowerQuery syntax and time ranges. Use when: sentinelone powerquery, sentinelone data lake,
   sentinelone query, sentinelone hunt, threat hunting, powerquery, singularity data lake,
   sentinelone forensic, sentinelone telemetry, sentinelone search, sentinelone log, or scalyr
   query.

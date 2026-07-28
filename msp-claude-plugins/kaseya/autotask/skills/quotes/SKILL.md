@@ -1,17 +1,14 @@
 ---
 name: "Autotask Quotes"
 description: >
-  Use this skill when working with Autotask quotes and quote line items -
-  creating quotes for customers, adding products/services/bundles as line items,
-  managing pricing and discounts, linking quotes to opportunities, and building
-  proposals. Covers the full quote lifecycle including item types, discount
-  structures, and quote-to-opportunity workflows.
+  Autotask quote structure and line items - quote item types (product, service, service
+  bundle, labor, expense, shipping), the mutually-exclusive catalog reference rules, and
+  the three discount mechanisms (unit, line, percentage) used to build customer proposals.
 when_to_use: >-
   When creating quotes for customers, adding products/services/bundles as line items, managing
-  pricing and discounts, linking quotes to opportunities, and building proposals. Use when:
-  autotask quote, create quote, quote item, quote line item, proposal, pricing quote, customer
-  quote, quote builder, add to quote, quote discount, quote opportunity, build quote, or sales
-  quote.
+  pricing and discounts, or linking quotes to opportunities. Use when: autotask quote, create
+  quote, quote item, quote line item, proposal, pricing quote, customer quote, quote builder, add
+  to quote, quote discount, quote opportunity, build quote, or sales quote.
 ---
 
 # Autotask Quote Management

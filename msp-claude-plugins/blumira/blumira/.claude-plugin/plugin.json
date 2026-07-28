@@ -1,6 +1,6 @@
 {
   "name": "blumira",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Claude plugins for Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
   "author": {
     "name": "MSP Claude Plugins Community"

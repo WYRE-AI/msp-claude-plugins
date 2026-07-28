@@ -1,15 +1,15 @@
 ---
 name: "Hudu Assets"
 description: >
-  Use this skill when working with Hudu assets and asset layouts - servers,
-  workstations, network devices, and other documented items. Covers asset
-  CRUD, asset layout templates, custom fields, archiving, linking assets
-  to companies, and search/filter patterns.
+  Hudu assets and asset layouts: the layout-as-template model, custom
+  field types, the `custom_fields` key/value array shape, archiving vs
+  deletion, company scoping, and filter patterns across
+  /api/v1/assets and /api/v1/asset_layouts.
 when_to_use: >-
-  When working with servers, workstations, network devices, and other documented items in Hudu
-  assets and asset layouts. Use when: hudu asset, hudu configuration, hudu server, hudu
-  workstation, hudu device, asset layout, asset management, device inventory, hardware tracking,
-  or hudu ci.
+  When creating, querying, updating, or archiving documented items in Hudu, or when designing
+  the asset layouts that define their fields. Use when: hudu asset, hudu configuration, hudu
+  server, hudu workstation, hudu device, asset layout, asset management, device inventory,
+  hardware tracking, or hudu ci.
 ---
 
 # Hudu Assets Management
@@ -64,268 +64,45 @@ Each asset layout defines custom fields. Field types include:
 - **Asset Layout** = the template/schema (like a database table definition)
 - **Asset** = an instance of a layout (like a row in the table)
 
-## Field Reference
+### Fields
 
-### Core Asset Fields
+Every asset requires `company_id`, `asset_layout_id`, and `name`. `primary_serial`, `primary_model`, and `primary_mail` are first-class columns; everything else lives in the layout-defined custom fields.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `company_id` | integer | Yes | Parent company |
-| `asset_layout_id` | integer | Yes | The layout (template) this asset uses |
-| `name` | string | Yes | Asset display name |
-| `primary_serial` | string | No | Primary serial number |
-| `primary_model` | string | No | Primary model name |
-| `primary_mail` | string | No | Primary email |
-| `archived` | boolean | No | Whether the asset is archived |
-| `slug` | string | System | URL-friendly identifier |
-| `object_type` | string | System | Always "Asset" |
-
-### Custom Fields (Dynamic)
-
-Custom fields are stored in a `fields` array, where each entry is a key-value pair defined by the asset layout:
-
-```json
-{
-  "asset": {
-    "name": "DC-01",
-    "asset_layout_id": 5,
-    "company_id": 1,
-    "custom_fields": [
-      { "hostname": "dc-01.acme.local" },
-      { "ip_address": "192.168.1.10" },
-      { "operating_system": "Windows Server 2022" },
-      { "ram_gb": 32 },
-      { "warranty_expiry": "2027-01-15" }
-    ]
-  }
-}
-```
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `created_at` | datetime | Creation timestamp |
-| `updated_at` | datetime | Last update timestamp |
-| `url` | string | Full URL to asset in Hudu |
-| `asset_layout_name` | string | Name of the asset layout (read-only) |
-| `company_name` | string | Name of the parent company (read-only) |
-
-### Asset Layout Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `name` | string | Yes | Layout name (e.g., "Server") |
-| `icon` | string | No | Font Awesome icon class |
-| `color` | string | No | Hex color code |
-| `icon_color` | string | No | Icon color |
-| `active` | boolean | No | Whether layout is active |
-| `sidebar_folder_id` | integer | No | Sidebar folder |
-| `fields` | array | Yes | Array of field definitions |
+See [references/fields.md](references/fields.md) for the complete field reference, including asset layout fields.
 
 ## API Patterns
 
-### List Assets
+| Operation | Request |
+|-----------|---------|
+| List / filter | `GET /api/v1/assets?company_id=123&asset_layout_id=5&name=DC-01&archived=false&page=1` |
+| Find by serial | `GET /api/v1/assets?primary_serial=ABC123456789` |
+| Get one | `GET /api/v1/assets/789` |
+| Create | `POST /api/v1/assets` with `{ "asset": { ... } }` |
+| Update | `PUT /api/v1/assets/789` |
+| Delete | `DELETE /api/v1/assets/789` |
+| Archive / unarchive | `PUT /api/v1/assets/789/archive` \| `/unarchive` |
+| Layouts | `GET|POST /api/v1/asset_layouts` (filter with `?name=Server`) |
 
-```http
-GET /api/v1/assets
-x-api-key: YOUR_API_KEY
-Content-Type: application/json
-```
+All requests use the `x-api-key` header. Request and response bodies are wrapped in a singular resource key (`asset`, `asset_layout`).
 
-**By Company:**
-```http
-GET /api/v1/assets?company_id=123
-```
-
-**By Asset Layout:**
-```http
-GET /api/v1/assets?asset_layout_id=5
-```
-
-**Combined Filters:**
-```http
-GET /api/v1/assets?company_id=123&asset_layout_id=5
-GET /api/v1/assets?company_id=123&name=DC-01
-GET /api/v1/assets?company_id=123&archived=false
-GET /api/v1/assets?primary_serial=ABC123456789
-```
-
-**With Pagination:**
-```http
-GET /api/v1/assets?company_id=123&page=1
-GET /api/v1/assets?company_id=123&page=2
-```
-
-### Get Single Asset
-
-```http
-GET /api/v1/assets/789
-x-api-key: YOUR_API_KEY
-```
-
-### Create Asset
-
-```http
-POST /api/v1/assets
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-**Server Example:**
-```json
-{
-  "asset": {
-    "name": "DC-01",
-    "asset_layout_id": 5,
-    "company_id": 123,
-    "primary_serial": "ABC123456789",
-    "primary_model": "Dell PowerEdge R740",
-    "custom_fields": [
-      { "hostname": "dc-01.acme.local" },
-      { "ip_address": "192.168.1.10" },
-      { "operating_system": "Windows Server 2022" },
-      { "ram_gb": 32 },
-      { "cpu": "Intel Xeon Gold 6248" },
-      { "warranty_expiry": "2027-01-15" },
-      { "notes": "Primary domain controller for Acme Corporation" }
-    ]
-  }
-}
-```
-
-**Workstation Example:**
-```json
-{
-  "asset": {
-    "name": "WS-JSMITH",
-    "asset_layout_id": 7,
-    "company_id": 123,
-    "primary_serial": "XYZ987654321",
-    "primary_model": "Dell OptiPlex 7090",
-    "custom_fields": [
-      { "hostname": "ws-jsmith.acme.local" },
-      { "assigned_user": "John Smith" },
-      { "department": "Sales" },
-      { "ip_address": "192.168.1.150" },
-      { "operating_system": "Windows 11 Pro" },
-      { "warranty_expiry": "2026-06-30" }
-    ]
-  }
-}
-```
-
-### Update Asset
-
-```http
-PUT /api/v1/assets/789
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
+Custom field values are written as an array of single-key objects keyed by the field's snake_cased label, **not** as a flat object:
 
 ```json
-{
-  "asset": {
-    "name": "DC-01",
-    "custom_fields": [
-      { "ip_address": "192.168.1.20" },
-      { "notes": "IP updated after network migration on 2026-02-15" }
-    ]
-  }
-}
+"custom_fields": [
+  { "hostname": "dc-01.acme.local" },
+  { "ip_address": "192.168.1.10" }
+]
 ```
 
-### Delete Asset
+On read they come back on the asset as `fields`, not `custom_fields`.
 
-```http
-DELETE /api/v1/assets/789
-x-api-key: YOUR_API_KEY
-```
-
-### Archive / Unarchive Asset
-
-```http
-PUT /api/v1/assets/789/archive
-x-api-key: YOUR_API_KEY
-```
-
-```http
-PUT /api/v1/assets/789/unarchive
-x-api-key: YOUR_API_KEY
-```
-
-### List Asset Layouts
-
-```http
-GET /api/v1/asset_layouts
-x-api-key: YOUR_API_KEY
-```
-
-**By Name:**
-```http
-GET /api/v1/asset_layouts?name=Server
-```
-
-### Get Single Asset Layout
-
-```http
-GET /api/v1/asset_layouts/5
-x-api-key: YOUR_API_KEY
-```
-
-**Response:**
-```json
-{
-  "asset_layout": {
-    "id": 5,
-    "name": "Server",
-    "icon": "fas fa-server",
-    "color": "#2196F3",
-    "active": true,
-    "fields": [
-      { "label": "Hostname", "field_type": "Text", "required": true, "position": 1 },
-      { "label": "IP Address", "field_type": "Text", "required": false, "position": 2 },
-      { "label": "Operating System", "field_type": "Dropdown", "required": false, "position": 3 },
-      { "label": "RAM (GB)", "field_type": "Number", "required": false, "position": 4 },
-      { "label": "Warranty Expiry", "field_type": "Date", "required": false, "position": 5 },
-      { "label": "Notes", "field_type": "RichText", "required": false, "position": 6 }
-    ]
-  }
-}
-```
-
-### Create Asset Layout
-
-```http
-POST /api/v1/asset_layouts
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "asset_layout": {
-    "name": "Network Switch",
-    "icon": "fas fa-network-wired",
-    "color": "#4CAF50",
-    "active": true,
-    "fields": [
-      { "label": "IP Address", "field_type": "Text", "required": true, "position": 1 },
-      { "label": "Model", "field_type": "Text", "required": false, "position": 2 },
-      { "label": "Firmware Version", "field_type": "Text", "required": false, "position": 3 },
-      { "label": "Port Count", "field_type": "Number", "required": false, "position": 4 },
-      { "label": "Location", "field_type": "Text", "required": false, "position": 5 },
-      { "label": "Managed", "field_type": "CheckBox", "required": false, "position": 6 }
-    ]
-  }
-}
-```
+See [references/api.md](references/api.md) for the complete endpoint catalog with request/response examples.
 
 ## Common Workflows
 
 ### Asset Onboarding
+
+Layout IDs are instance-specific — resolve the layout by name before creating the asset rather than hardcoding an ID.
 
 ```javascript
 async function onboardAsset(companyId, assetData) {
@@ -349,6 +126,8 @@ async function onboardAsset(companyId, assetData) {
 ```
 
 ### Warranty Tracking
+
+Warranty dates live in a layout-defined custom field, so they cannot be filtered server-side — fetch and filter client-side.
 
 ```javascript
 async function getExpiringWarranties(daysAhead = 90) {
@@ -414,60 +193,26 @@ async function generateAssetInventory(companyId) {
 }
 ```
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- **`custom_fields` on write, `fields` on read.** Round-tripping an asset requires renaming the key.
+- **Custom fields are not queryable.** Only `company_id`, `asset_layout_id`, `name`, `primary_serial`, and `archived` filter server-side; anything layout-defined must be filtered after fetching.
+- **A 422 on create usually means a layout-required field is missing.** Fetch the layout and inspect `fields` where `required: true` — the error message does not name the field.
+- **Layout IDs differ per Hudu instance.** Look them up by name; never hardcode.
+- **Archive is a distinct verb** (`PUT /assets/:id/archive`), not an `archived` field on update. Archived assets are excluded from default listings.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Name can't be blank | Provide asset name |
-| 400 | Company is required | Include company_id |
-| 400 | Asset layout is required | Include asset_layout_id |
-| 401 | Invalid API key | Check HUDU_API_KEY |
-| 404 | Asset not found | Verify asset ID |
-| 422 | Validation failed | Check required custom fields per layout |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Name required | Missing name | Add name to request |
-| Company required | No company_id | Include company_id |
-| Layout required | No asset_layout_id | Include asset_layout_id |
-| Invalid layout | Bad asset_layout_id | Query /asset_layouts first |
-| Required field missing | Layout requires a field | Check layout fields and provide required ones |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateAsset(data) {
-  try {
-    return await createAsset(data);
-  } catch (error) {
-    if (error.status === 422) {
-      // Check if layout requires fields we didn't provide
-      const layout = await getAssetLayout(data.asset_layout_id);
-      const requiredFields = layout.fields.filter(f => f.required);
-      console.log('Required fields for this layout:', requiredFields.map(f => f.label));
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the complete error and validation table plus a recovery pattern.
 
 ## Best Practices
 
 1. **Standardize naming** - Use consistent format (e.g., SITE-TYPE-NUM: NYC-DC-01)
-2. **Always set company** - All assets must belong to a company
-3. **Use appropriate layouts** - Choose the right asset layout for the device type
-4. **Track serial numbers** - Enable warranty lookups and asset verification
-5. **Document custom fields** - Fill in all relevant fields, not just the name
-6. **Archive, don't delete** - Preserve historical records for decommissioned assets
-7. **Create layouts thoughtfully** - Design layouts with fields MSP technicians actually need
-8. **Keep layouts consistent** - Use the same layout across all companies for the same device type
-9. **Link related assets** - Use AssetTag fields to connect VMs to hosts, apps to servers
-10. **Regular audits** - Verify asset accuracy quarterly
+2. **Use appropriate layouts** - Choose the right asset layout for the device type
+3. **Track serial numbers** - Enable warranty lookups and asset verification
+4. **Document custom fields** - Fill in all relevant fields, not just the name
+5. **Archive, don't delete** - Preserve historical records for decommissioned assets
+6. **Create layouts thoughtfully** - Design layouts with fields MSP technicians actually need
+7. **Keep layouts consistent** - Use the same layout across all companies for the same device type
+8. **Link related assets** - Use AssetTag fields to connect VMs to hosts, apps to servers
 
 ## Related Skills
 

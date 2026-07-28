@@ -1,14 +1,13 @@
 ---
 name: "Pax8 Companies"
 description: >
-  Use this skill when working with Pax8 companies (MSP clients) -
-  searching, retrieving, and managing client records in the
-  Pax8 marketplace. Covers company fields, contact management, billing
-  settings, and cross-referencing with subscriptions and orders.
+  Pax8 companies (MSP clients): company records and fields, contact management, billing
+  and order-approval settings, and cross-referencing companies with subscriptions and
+  orders.
 when_to_use: >-
-  When searching, retrieving, and managing client records in the Pax8 marketplace. Use when: pax8
-  company, pax8 client, pax8 organization, pax8 customer, company lookup pax8, company management
-  pax8, pax8 contact, or client management pax8.
+  When searching, retrieving, or managing client records in the Pax8 marketplace. Use
+  when: pax8 company, pax8 client, pax8 organization, pax8 customer, company lookup
+  pax8, company management pax8, pax8 contact, or client management pax8.
 ---
 
 # Pax8 Companies Management
@@ -196,11 +195,9 @@ Use the `externalId` field to match Pax8 companies with PSA records:
 3. **Enable order approval** - Use `orderApprovalRequired` for new clients until trust is established
 4. **Audit regularly** - Review company list quarterly for inactive or orphaned records
 5. **Standardize naming** - Use consistent company naming conventions across Pax8 and your PSA
-6. **Use pagination** - Always paginate when listing companies; do not assume small result sets
-7. **Cache company lists** - Company data changes infrequently; cache for short periods
-8. **Validate before creating** - Search for existing companies before creating duplicates
-9. **Track billing config** - Document which companies have bill-on-behalf-of enabled
-10. **Sync with PSA** - Regularly verify that Pax8 companies match your PSA company records
+6. **Cache company lists** - Company data changes infrequently; cache for short periods
+7. **Track billing config** - Document which companies have bill-on-behalf-of enabled
+8. **Sync with PSA** - Regularly verify that Pax8 companies match your PSA company records
 
 ## Related Skills
 

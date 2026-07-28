@@ -1,12 +1,13 @@
 ---
 name: "Domotz Devices"
 description: >
-  Use this skill when working with Domotz device inventory --
-  listing devices, searching by name/IP/MAC, checking device status,
-  viewing device details, and understanding network topology.
+  Domotz device inventory: how agents discover and classify devices, the
+  identification attributes (IP, MAC, hostname, display name, vendor), the
+  ONLINE/OFFLINE/UNKNOWN status model, and the list/get/search tools plus
+  inventory and topology workflows built on them.
 when_to_use: >-
-  When listing devices, searching by name/IP/MAC, checking device status, viewing device details,
-  and understanding network topology. Use when: domotz device, device inventory, device discovery,
+  When looking up, listing, or auditing devices discovered by a Domotz agent.
+  Use when: domotz device, device inventory, device discovery,
   device status, device search, device lookup, network device, device list, find device, or device
   details.
 ---

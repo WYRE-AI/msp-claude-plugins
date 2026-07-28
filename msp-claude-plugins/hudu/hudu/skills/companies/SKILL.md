@@ -1,12 +1,13 @@
 ---
 name: "Hudu Companies"
 description: >
-  Use this skill when working with Hudu companies (clients/organizations) -
-  creating, searching, updating, archiving, and managing client documentation.
-  Covers company fields, PSA integration matching, parent/child relationships,
-  and related resources like assets, passwords, and articles.
+  Hudu companies (clients/organizations): company field reference, parent/child
+  hierarchy, PSA integration matching via id_in_integration, the /api/v1/companies
+  CRUD plus archive/unarchive endpoints, onboarding and offboarding workflows, and
+  how companies scope assets, passwords, articles, and websites.
 when_to_use: >-
-  When creating, searching, updating, archiving, and managing client documentation. Use when: hudu
+  When looking up, creating, updating, or archiving a company in Hudu, or scoping other
+  Hudu records to a client. Use when: hudu
   company, hudu client, hudu organization, company lookup, company documentation, company
   management, hudu org, or client documentation.
 ---
@@ -347,10 +348,8 @@ async function safeCreateCompany(data) {
 4. **Link to PSA** - Always set `id_in_integration` for cross-platform lookups
 5. **Use parent/child** - Organize multi-location or division clients
 6. **Archive, don't delete** - Preserve historical documentation
-7. **Regular audits** - Review company list quarterly
-8. **Standardize naming** - Use consistent naming conventions across companies
-9. **Include address info** - Useful for dispatch and site visit planning
-10. **Document website** - Track the company's primary website URL
+7. **Include address info** - Useful for dispatch and site visit planning
+8. **Document website** - Track the company's primary website URL
 
 ## Related Skills
 

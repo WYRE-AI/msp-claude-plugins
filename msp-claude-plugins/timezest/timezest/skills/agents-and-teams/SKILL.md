@@ -1,16 +1,14 @@
 ---
 name: "TimeZest Agents & Teams"
+description: >
+  TimeZest agents (individual technicians) and teams (round-robin / shared
+  availability pools): listing each, fetching detail for a named resource,
+  and the criteria for booking an agent versus a team.
 when_to_use: >-
-  When resolving which technician or team to book in TimeZest — listing agents, listing teams, and
-  choosing between an individual agent and a round-robin team for a scheduling request. Use when:
+  When resolving which technician or team to book in TimeZest before creating a scheduling
+  request. Use when:
   timezest agents, timezest teams, list technicians, which tech is available, timezest round
   robin, resolve technician, book a team, or timezest agent lookup.
-description: >
-  Use this skill to resolve the right bookable resource in TimeZest
-  before creating a scheduling request — listing agents (individual
-  technicians) and teams (round-robin / shared availability pools),
-  fetching detail for a named resource, and deciding when to book an
-  agent versus a team.
 ---
 
 # TimeZest Agents & Teams

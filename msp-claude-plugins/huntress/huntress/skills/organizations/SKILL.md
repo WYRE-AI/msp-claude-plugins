@@ -1,12 +1,13 @@
 ---
 name: "Huntress Organizations"
 description: >
-  Use this skill when managing Huntress organizations — creating, listing,
-  updating, deleting organizations, and managing client org structure for
-  MSP multi-tenancy.
+  Huntress organizations as the multi-tenant boundary: org structure, the
+  organization key used for agent deployment, full CRUD operations, client
+  onboarding and offboarding workflows, and the duplicate-key and
+  active-agent deletion errors.
 when_to_use: >-
-  When managing Huntress organizations — creating, listing, updating, deleting organizations, and
-  managing client org structure for MSP multi-tenancy. Use when: huntress organization, huntress
+  When creating, listing, updating, or deleting Huntress organizations, or onboarding and
+  offboarding a client tenant. Use when: huntress organization, huntress
   org, organization management, create organization, delete organization, client management, or
   multi-tenant.
 ---

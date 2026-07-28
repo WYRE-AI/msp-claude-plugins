@@ -1,11 +1,9 @@
 ---
 name: "Alternative Payments Customers"
 description: >
-  Use this skill when working with Alternative Payments customers and their
-  users - listing, retrieving, and creating customers, adding users to a
-  customer, and archiving customers. Covers customer fields, the customer/user
-  relationship, MSP client onboarding, and the destructive archive operation
-  that requires confirmation.
+  Alternative Payments customers and their users: customer fields and
+  status, the customer/user relationship, MSP client onboarding, and the
+  destructive archive operation that requires confirmation.
 when_to_use: >-
   When listing, retrieving, creating, or archiving Alternative Payments customers, or managing the
   users attached to a customer. Use when: alternative payments customer, create customer, list
@@ -236,7 +234,6 @@ when reconciling Alternative Payments activity against your billing system.
 3. **Confirm before archiving** — `DELETE` is destructive; check for open invoices first.
 4. **Paginate with cursors** — loop on `has_more` / `next_cursor` for large lists.
 5. **Stay under 5 req/sec** — batch onboarding loops should pace their requests.
-6. **Read bodies as text then parse** — avoids "body already read" errors.
 
 ## Endpoint Reference
 

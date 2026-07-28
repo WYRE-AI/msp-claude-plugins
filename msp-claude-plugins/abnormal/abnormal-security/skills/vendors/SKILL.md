@@ -1,17 +1,15 @@
 ---
 name: "Abnormal Security Vendors"
 description: >
-  Use this skill when working with Abnormal Security VendorBase vendor
-  risk assessment - vendor risk scores, compromised vendor detection,
-  vendor domain analysis, and supply chain email threat monitoring.
-  Covers vendor risk levels, risk factors, compromised vendor workflows,
-  and vendor-related threat investigation. Essential for MSP security
-  analysts monitoring third-party vendor risk via Abnormal Security.
+  Abnormal Security VendorBase vendor risk: vendor risk scores and levels,
+  risk factors, compromised-vendor detection, vendor domain analysis, and
+  supply-chain email threat workflows.
 when_to_use: >-
-  When working with vendor risk scores, compromised vendor detection, vendor domain analysis. Use
-  when: abnormal vendor, vendor risk, vendorbase, compromised vendor, vendor domain, supply chain
-  risk, vendor assessment, third party risk, vendor email security, vendor compromise, or vendor
-  risk score.
+  When assessing third-party vendor risk or investigating a compromised
+  vendor in Abnormal Security. Use when: abnormal vendor, vendor risk,
+  vendorbase, compromised vendor, vendor domain, supply chain risk, vendor
+  assessment, third party risk, vendor email security, vendor compromise, or
+  vendor risk score.
 ---
 
 # Abnormal Security VendorBase Vendor Risk Assessment

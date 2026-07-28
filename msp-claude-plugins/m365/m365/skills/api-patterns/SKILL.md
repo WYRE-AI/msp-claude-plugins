@@ -1,12 +1,12 @@
 ---
 name: "Microsoft 365 API Patterns"
 description: >
-  Use this skill for Microsoft Graph API fundamentals - authentication patterns,
-  OData query operators, pagination, throttling/retry, batch requests, and delta
-  queries. Reference when constructing M365 API calls or debugging errors.
+  Microsoft Graph fundamentals shared by every M365 skill: Entra token scopes and
+  the per-request Bearer model, OData query operators and filter syntax,
+  @odata.nextLink pagination, delta queries for incremental sync, 429 throttling
+  and retry behavior, JSON batching, and the common Graph error codes.
 when_to_use: >-
-  When working with Microsoft Graph API fundamentals - authentication patterns, OData query
-  operators, pagination, throttling/retry, batch requests. Use when: microsoft graph api, graph
+  When constructing Microsoft Graph requests or debugging Graph errors. Use when: microsoft graph api, graph
   api patterns, m365 api, graph odata, graph pagination, graph throttling, graph batch, graph
   filter syntax, m365 api error, or graph delta query.
 ---

@@ -1,15 +1,15 @@
 ---
 name: "ImmyBot Software Deployment"
+description: >
+  ImmyBot's desired-state software deployment model end-to-end: the software
+  catalog, deployment, maintenance-session and computer tool surfaces; the
+  canonical select → scope → assert → reconcile → verify workflow; and the
+  pinned-vs-latest, conflicting-deployment, and reboot edge cases.
 when_to_use: >-
   When deploying software to Windows endpoints via ImmyBot, configuring desired state, running
   maintenance sessions, or auditing per-computer compliance. Use when: immybot deploy, immybot
   install, immybot software, immybot maintenance, deploy software immybot, immybot compliance, or
   desired state windows software.
-description: >
-  Use this skill when configuring desired-state software deployments
-  in ImmyBot — picking the software, scoping the deployment to a
-  tenant or computer, kicking off a maintenance session to reconcile,
-  and checking compliance afterwards.
 ---
 
 # ImmyBot Software Deployment

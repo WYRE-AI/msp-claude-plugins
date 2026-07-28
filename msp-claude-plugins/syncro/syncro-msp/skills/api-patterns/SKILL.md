@@ -1,13 +1,13 @@
 ---
 name: "Syncro API Patterns"
 description: >
-  Use this skill when working with the Syncro MSP API - authentication,
-  pagination, rate limiting, and error handling. Covers API key setup,
-  request patterns, response handling, and best practices for API integration.
+  Syncro MSP REST API fundamentals: API key setup and authentication,
+  request and response patterns, pagination, rate limiting, and error
+  handling.
 when_to_use: >-
-  When working with authentication, pagination, rate limiting, and error handling in the Syncro
-  MSP API. Use when: syncro api, syncro authentication, syncro api key, syncro pagination, syncro
-  rate limit, api error syncro, syncro rest api, or syncro integration.
+  When authenticating to or calling the Syncro MSP API. Use when: syncro
+  api, syncro authentication, syncro api key, syncro pagination, syncro rate
+  limit, api error syncro, syncro rest api, or syncro integration.
 ---
 
 # Syncro MSP API Patterns
@@ -44,7 +44,9 @@ export SYNCRO_SUBDOMAIN="your-subdomain"  # e.g., "acme" for acme.syncromsp.com
 
 ### Base URL Format
 
-The API base URL uses your subdomain:
+The API base URL uses your subdomain — requests to the wrong subdomain
+authenticate against a different tenant, so verify it matches the account you
+intend to hit:
 
 ```
 https://{subdomain}.syncromsp.com/api/v1/
@@ -73,9 +75,14 @@ GET /api/v1/tickets?page=3
 |-----------|-------------|---------|
 | `page` | Page number (1-based) | 1 |
 
+There is no page-size parameter — `per_page` is fixed at 25 by the server and
+reported back in `meta`, so a large result set always costs `total_pages`
+requests.
+
 ### Response Metadata
 
-Responses include pagination information:
+Responses include pagination information. Note the collection is keyed by
+resource name (`tickets`, `customers`, ...), not a generic `data` key:
 
 ```json
 {
@@ -89,44 +96,15 @@ Responses include pagination information:
 }
 ```
 
-### Efficient Pagination Pattern
-
-```javascript
-async function fetchAllTickets(filter = {}) {
-  const allItems = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(
-      `https://${SUBDOMAIN}.syncromsp.com/api/v1/tickets?page=${page}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-
-    const data = await response.json();
-    allItems.push(...data.tickets);
-
-    hasMore = page < data.meta.total_pages;
-    page++;
-
-    // Respect rate limits
-    await sleep(350); // ~170 req/min to stay under 180/min
-  }
-
-  return allItems;
-}
-```
+See [references/examples.md](references/examples.md) for a working page-walking implementation.
 
 ## Rate Limiting
 
 ### Rate Limit Policy
 
 Syncro enforces a rate limit of **180 requests per minute** per IP address.
+Because the limit is per-IP rather than per-key, separate integrations sharing
+an egress address contend for the same budget.
 
 ### Rate Limit Response
 
@@ -143,102 +121,10 @@ Retry-After: 30
 }
 ```
 
-### Retry Strategy
+At 180 req/min, a ~350ms delay between calls keeps a single-threaded client
+safely under the ceiling.
 
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || 30;
-        const jitter = Math.random() * 1000;
-        console.log(`Rate limited. Waiting ${retryAfter}s...`);
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      // Exponential backoff with jitter
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await sleep(delay);
-    }
-  }
-}
-```
-
-### Batch Processing
-
-For bulk operations, throttle requests:
-
-```javascript
-async function batchProcess(items, processFunc, delayMs = 350) {
-  const results = [];
-
-  for (const item of items) {
-    const result = await processFunc(item);
-    results.push(result);
-    await sleep(delayMs);
-  }
-
-  return results;
-}
-```
-
-## Request Patterns
-
-### GET - Retrieve Data
-
-**Single resource:**
-```http
-GET /api/v1/tickets/12345
-Authorization: Bearer YOUR_API_KEY
-```
-
-**List with filters:**
-```http
-GET /api/v1/tickets?customer_id=123&status=open&page=1
-Authorization: Bearer YOUR_API_KEY
-```
-
-### POST - Create Resources
-
-```http
-POST /api/v1/tickets
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
-
-{
-  "customer_id": 12345,
-  "subject": "New support request",
-  "status": "New",
-  "priority": "Medium"
-}
-```
-
-### PUT - Update Resources
-
-```http
-PUT /api/v1/tickets/12345
-Authorization: Bearer YOUR_API_KEY
-Content-Type: application/json
-
-{
-  "status": "Resolved",
-  "priority": "Low"
-}
-```
-
-### DELETE - Remove Resources
-
-```http
-DELETE /api/v1/contacts/67890
-Authorization: Bearer YOUR_API_KEY
-```
+See [references/examples.md](references/examples.md) for retry-with-backoff and throttled batch-processing implementations.
 
 ## Common Query Parameters
 
@@ -270,6 +156,10 @@ Authorization: Bearer YOUR_API_KEY
 
 ### Error Response Format
 
+Validation failures (422) return a per-field `errors` array in addition to the
+top-level `error` string — read the array, not just the string, to know which
+field was rejected:
+
 ```json
 {
   "error": "Validation failed",
@@ -282,122 +172,22 @@ Authorization: Bearer YOUR_API_KEY
 }
 ```
 
-### Error Handling Pattern
+See [references/examples.md](references/examples.md) for a request wrapper that maps these statuses to actionable errors.
 
-```javascript
-async function makeRequest(url, options) {
-  const response = await fetch(url, options);
+## Request Patterns and Endpoints
 
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
+Syncro follows conventional REST verbs: `GET` to read, `POST` to create, `PUT`
+to update, `DELETE` to remove. Sub-resource actions are `POST` to a named path
+(e.g. `/tickets/{id}/comment`, `/invoices/{id}/email`).
 
-    switch (response.status) {
-      case 401:
-        throw new Error('Invalid API key. Check your credentials.');
-      case 403:
-        throw new Error('Permission denied. Check API key permissions.');
-      case 404:
-        throw new Error('Resource not found.');
-      case 422:
-        const messages = errorData.errors?.map(e => `${e.field}: ${e.message}`).join(', ');
-        throw new Error(`Validation failed: ${messages}`);
-      case 429:
-        throw new Error('Rate limited. Try again later.');
-      default:
-        throw new Error(`API error: ${response.status}`);
-    }
-  }
-
-  return response.json();
-}
-```
-
-## Common Endpoints
-
-### Tickets
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/tickets` | List tickets |
-| POST | `/api/v1/tickets` | Create ticket |
-| GET | `/api/v1/tickets/{id}` | Get ticket |
-| PUT | `/api/v1/tickets/{id}` | Update ticket |
-| POST | `/api/v1/tickets/{id}/comment` | Add comment |
-| POST | `/api/v1/tickets/{id}/timer` | Timer operations |
-
-### Customers
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/customers` | List customers |
-| POST | `/api/v1/customers` | Create customer |
-| GET | `/api/v1/customers/{id}` | Get customer |
-| PUT | `/api/v1/customers/{id}` | Update customer |
-
-### Contacts
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/contacts` | List contacts |
-| POST | `/api/v1/contacts` | Create contact |
-| GET | `/api/v1/contacts/{id}` | Get contact |
-| PUT | `/api/v1/contacts/{id}` | Update contact |
-| DELETE | `/api/v1/contacts/{id}` | Delete contact |
-
-### Assets
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/customer_assets` | List assets |
-| POST | `/api/v1/customer_assets` | Create asset |
-| GET | `/api/v1/customer_assets/{id}` | Get asset |
-| PUT | `/api/v1/customer_assets/{id}` | Update asset |
-| DELETE | `/api/v1/customer_assets/{id}` | Delete asset |
-| GET | `/api/v1/customer_assets/{id}/patches` | Get patches |
-
-### Invoices
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/v1/invoices` | List invoices |
-| POST | `/api/v1/invoices` | Create invoice |
-| GET | `/api/v1/invoices/{id}` | Get invoice |
-| PUT | `/api/v1/invoices/{id}` | Update invoice |
-| POST | `/api/v1/invoices/{id}/email` | Email invoice |
-| POST | `/api/v1/invoices/{id}/payments` | Record payment |
+See [references/api.md](references/api.md) for the complete endpoint catalog, request shapes, and cURL examples.
 
 ## Best Practices
 
-1. **Store API key securely** - Use environment variables, never commit to code
-2. **Use subdomain correctly** - Ensure URL matches your account
-3. **Implement retry logic** - Handle rate limits and transient errors
-4. **Paginate large requests** - Don't fetch unbounded result sets
-5. **Cache reference data** - Reduce API calls for static lookups
-6. **Log API calls** - Enable debugging and audit trails
-7. **Validate before sending** - Check required fields client-side
-8. **Handle errors gracefully** - Provide meaningful error messages
-9. **Respect rate limits** - Space out requests appropriately
-10. **Test in sandbox first** - If available, use test environment
-
-## Request Example with cURL
-
-```bash
-# List tickets
-curl -X GET "https://acme.syncromsp.com/api/v1/tickets?page=1" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json"
-
-# Create ticket
-curl -X POST "https://acme.syncromsp.com/api/v1/tickets" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "customer_id": 12345,
-    "subject": "New ticket",
-    "status": "New",
-    "priority": "Medium"
-  }'
-```
+1. **Cache reference data** - Reduce API calls for static lookups
+2. **Paginate large requests** - Don't fetch unbounded result sets
+3. **Log API calls** - Enable debugging and audit trails when the per-IP rate
+   limit is shared across integrations
 
 ## Related Skills
 

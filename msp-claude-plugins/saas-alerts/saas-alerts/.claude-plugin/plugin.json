@@ -1,6 +1,6 @@
 {
   "name": "saas-alerts",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, and multi-tenant response",
   "author": { "name": "WYRE AI" },
   "homepage": "https://github.com/wyre-technology/msp-claude-plugins",

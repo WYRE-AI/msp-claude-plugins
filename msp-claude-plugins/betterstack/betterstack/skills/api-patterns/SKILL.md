@@ -1,17 +1,16 @@
 ---
 name: "Better Stack API Patterns"
 description: >
-  Use this skill when working with the Better Stack MCP tools --
-  available tools, authentication via Bearer token, API structure,
-  cursor-based pagination, rate limiting, error handling,
-  and best practices. Better Stack covers Uptime, Telemetry (Logtail),
-  and Error Tracking products in a single MCP server.
+  Better Stack MCP and API surface across Uptime, Telemetry (Logtail), and
+  Error Tracking: available tools, Bearer token authentication, API
+  structure, cursor-based pagination, rate limiting, and error handling.
 when_to_use: >-
-  When working with available tools, authentication via Bearer token, API structure, cursor-based
-  pagination, rate limiting, error handling. Use when: betterstack api, betterstack
-  authentication, betterstack pagination, betterstack rate limit, betterstack mcp, betterstack
-  tools, betterstack request, betterstack error, betterstack connection, betterstack token,
-  betterstack credentials, or better stack api.
+  When authenticating to or calling Better Stack through its MCP tools or
+  REST API. Use when: betterstack api, betterstack authentication,
+  betterstack pagination, betterstack rate limit, betterstack mcp,
+  betterstack tools, betterstack request, betterstack error, betterstack
+  connection, betterstack token, betterstack credentials, or better stack
+  api.
 ---
 
 # Better Stack MCP Tools & API Patterns
@@ -195,8 +194,6 @@ Better Stack enforces API rate limits per token.
 - Prefer ClickHouse SQL (`execute_query`) for log analysis over browsing
 - Pause monitors during maintenance to prevent false-positive incidents
 - Cache monitor and status page metadata to reduce API calls
-- Handle rate limits gracefully with exponential backoff
-- Log API errors with request context for debugging
 
 ## Related Skills
 

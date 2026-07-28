@@ -1,15 +1,14 @@
 ---
 name: "Proofpoint Quarantine"
 description: >
-  Use this skill when working with Proofpoint email quarantine - listing, searching,
-  releasing, and deleting quarantined messages. Covers quarantine reasons, sender and
-  recipient filtering, bulk operations, quarantine folders, and message preview.
-  Essential for MSP help desk teams managing quarantined email for clients.
+  Proofpoint quarantine management fundamentals: quarantine reasons and folders,
+  message states, search/filter parameters, and release/delete workflows for
+  admin and end-user quarantine.
 when_to_use: >-
-  When listing, searching, releasing, and deleting quarantined messages. Use when: proofpoint
-  quarantine, quarantined email, release quarantine, quarantine search, email quarantine,
-  quarantine management, blocked email, quarantine release, quarantine delete, quarantine folder,
-  spam quarantine, phishing quarantine, or bulk quarantine.
+  When listing, searching, releasing, or deleting quarantined messages in Proofpoint. Use when:
+  proofpoint quarantine, quarantined email, release quarantine, quarantine search, email
+  quarantine, quarantine management, blocked email, quarantine release, quarantine delete,
+  quarantine folder, spam quarantine, phishing quarantine, or bulk quarantine.
 ---
 
 # Proofpoint Quarantine Management

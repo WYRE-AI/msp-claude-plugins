@@ -1,18 +1,15 @@
 ---
 name: "Abnormal Security Cases"
 description: >
-  Use this skill when working with Abnormal Security abuse mailbox cases -
-  user-reported emails, case triage, remediation actions, case lifecycle,
-  and phishing simulation management. Covers case statuses, judgments,
-  bulk actions, and MSP workflows for managing user-reported suspicious emails.
-  Essential for MSP security analysts triaging abuse mailbox submissions
-  in Abnormal Security.
+  Abnormal Security abuse mailbox cases: user-reported email submissions,
+  case statuses and judgments, the case lifecycle, bulk and remediation
+  actions, and phishing simulation handling.
 when_to_use: >-
-  When working with user-reported emails, case triage, remediation actions, case lifecycle, and
-  phishing simulation management in Abnormal Security abuse mailbox cases. Use when: abnormal
-  case, abuse mailbox, user reported email, reported phishing, case triage, case review, abnormal
-  cases, abuse case management, phishing report, user submission, case remediation, or case
-  judgment.
+  When triaging or remediating user-reported suspicious emails in the
+  Abnormal Security abuse mailbox. Use when: abnormal case, abuse mailbox,
+  user reported email, reported phishing, case triage, case review, abnormal
+  cases, abuse case management, phishing report, user submission, case
+  remediation, or case judgment.
 ---
 
 # Abnormal Security Abuse Mailbox Cases

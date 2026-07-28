@@ -1,9 +1,12 @@
 ---
+name: "HaloPSA Agents"
 description: >-
-  Use this skill when working with HaloPSA agents (technicians) and teams — listing technicians,
-  retrieving agent details, and listing team structures. Essential for MSP service managers
-  assigning tickets, understanding team capacity, and looking up technician IDs for ticket
-  assignment. Use when: halopsa agent, halopsa technician, halopsa team, list agents halopsa,
+  HaloPSA agents (technicians) and teams as a read-only MCP surface: listing
+  technicians, retrieving agent detail, listing team structures, and the
+  inactive-agent filter. Agent IDs resolved here are what ticket assignment needs.
+when_to_use: >-
+  When assigning HaloPSA tickets, gauging team capacity, or looking up a technician or team ID.
+  Use when: halopsa agent, halopsa technician, halopsa team, list agents halopsa,
   halopsa tech list, halopsa teams, find technician halopsa, agent details halopsa, or team list
   halopsa.
 ---

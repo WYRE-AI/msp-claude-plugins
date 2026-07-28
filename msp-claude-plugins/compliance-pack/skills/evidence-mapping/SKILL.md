@@ -1,13 +1,12 @@
 ---
 name: "Evidence Mapping"
 description: >
-  Use this skill when a compliance control (CIS, SOC 2, HIPAA, or a cyber-insurance
-  questionnaire line item) needs to be traced to concrete, retrievable evidence from
-  connected MSP tooling rather than answered from memory or assumption. Covers how to
-  resolve a control statement to specific gateway tool calls across CIPP (M365/Entra),
-  Liongard (infrastructure inspections), and IT Glue/Hudu (documentation), and the
-  critical distinction between evidence that proves a control is actually met versus
-  evidence that only proves the control is written down as policy.
+  Tracing a compliance control (CIS, SOC 2, HIPAA, or a cyber-insurance
+  questionnaire line item) to concrete, retrievable tool evidence: which vendor
+  family can observe what — CIPP for live M365/Entra configuration, Liongard
+  for point-in-time infrastructure state, IT Glue/Hudu for documentation — a
+  representative control-to-tool-call map, and the evidentiary weights that
+  separate Configured from Documented, Contradicted, and Unable to Verify.
 when_to_use: >-
   When mapping a named control or questionnaire line item to live tool evidence, when
   deciding whether a piece of evidence proves configuration or only proves

@@ -1,14 +1,13 @@
 ---
 name: "SalesBuildr Quotes"
 description: >
-  Use this skill when creating, searching, or viewing quotes in Salesbuildr.
-  Quotes contain line items (products) and are linked to companies, contacts,
-  and optionally opportunities. Covers quote creation with products, searching
-  quotes, and retrieving quote details with line items.
+  Salesbuildr quotes: quote creation with product line items, quote search,
+  and retrieving quote details, plus how quotes link to companies, contacts,
+  and opportunities.
 when_to_use: >-
-  When creating, searching, or viewing quotes in Salesbuildr. Use when: salesbuildr quote,
-  salesbuildr quotes, create quote salesbuildr, quote line items, salesbuildr proposal, or search
-  quotes salesbuildr.
+  When creating, searching, or viewing a Salesbuildr quote. Use when:
+  salesbuildr quote, salesbuildr quotes, create quote salesbuildr, quote
+  line items, salesbuildr proposal, or search quotes salesbuildr.
 ---
 
 # Salesbuildr Quotes

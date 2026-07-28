@@ -1,13 +1,13 @@
 ---
 name: "Datto BCDR API Patterns"
-when_to_use: >-
-  When working with the Datto BCDR / SIRIS / Alto Backup Portal API — auth, pagination, screenshot
-  retrieval, recovery point queries. Use when: datto bcdr, datto backup, datto siris, datto alto,
-  bcdr api, screenshot verification, recovery point, or datto portal.
 description: >
-  Use this skill when integrating with the Datto BCDR (Backup Portal) REST API. Covers
-  the public/private key HMAC-SHA256 signing flow, the /v1 endpoint surface, pagination,
-  appliance/agent hierarchy, screenshot verification retrieval, and known gotchas.
+  Datto BCDR (Backup Portal) REST API fundamentals: public/private key
+  HMAC-SHA256 request signing, the /v1 endpoint surface, pagination,
+  appliance/agent hierarchy, and screenshot verification retrieval.
+when_to_use: >-
+  When working with the Datto BCDR / SIRIS / Alto Backup Portal API. Use when: datto bcdr, datto
+  backup, datto siris, datto alto, bcdr api, screenshot verification, recovery point, or datto
+  portal.
 ---
 
 # Datto BCDR API Patterns

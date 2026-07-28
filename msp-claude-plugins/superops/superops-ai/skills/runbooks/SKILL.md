@@ -1,10 +1,9 @@
 ---
 name: "SuperOps Runbooks"
 description: >
-  Use this skill when working with SuperOps.ai runbooks and scripts - listing,
-  executing, monitoring, and managing automated scripts on assets. Covers script
-  types, execution parameters, scheduling, and result handling.
-  Essential for MSP automation through SuperOps.ai RMM.
+  SuperOps.ai RMM script automation: script types and OS targeting, run-as contexts,
+  execution priority, parameterized arguments, single-asset and batch execution,
+  recurring schedules, execution status polling, and exit-code interpretation.
 when_to_use: >-
   When listing, executing, monitoring, and managing automated scripts on assets. Use when:
   superops runbook, superops script, run script superops, execute script, automation superops,
@@ -15,549 +14,87 @@ when_to_use: >-
 
 ## Overview
 
-SuperOps.ai provides powerful automation through scripts (runbooks) that can be executed on managed assets. Scripts can perform maintenance tasks, remediation actions, data collection, and custom automation. This skill covers script discovery, execution, scheduling, and result monitoring.
+SuperOps.ai provides automation through scripts (runbooks) that execute on managed assets — maintenance tasks, remediation actions, data collection, and custom automation. This skill covers script discovery, execution, scheduling, and result monitoring.
 
-## Script Types
+## Key Concepts
 
-| Type | Description | Use Case |
-|------|-------------|----------|
-| **PowerShell** | Windows PowerShell scripts | Windows automation |
-| **Batch** | Windows batch scripts | Simple Windows tasks |
-| **Bash** | Unix shell scripts | macOS/Linux automation |
-| **Python** | Python scripts | Cross-platform automation |
+A **script** is a stored definition (`scriptId`, type, content, parameters, timeout, `osType`).
+Executing it creates an **execution instance** identified by `actionConfigId`; running it
+across multiple assets creates a **batch** identified by `batchId`. Scheduling produces a
+`scheduleId`.
 
-## Run As Options
+| Script type | Target OS |
+|------|-------------|
+| **PowerShell** | Windows automation |
+| **Batch** | Simple Windows tasks |
+| **Bash** | macOS/Linux automation |
+| **Python** | Cross-platform automation |
 
-| Option | Description | When to Use |
-|--------|-------------|-------------|
-| **System** | Run as SYSTEM account | Admin tasks, service management |
-| **Logged-in User** | Current user context | User-specific tasks |
-| **Specific User** | Custom credentials | Specific permission needs |
+| Run As | When to use |
+|--------|-------------|
+| **System** | Admin tasks, service management |
+| **Logged-in User** | User-specific tasks |
+| **Specific User** | Specific permission needs |
 
-## Execution Priority
-
-| Priority | Description |
+| Priority | Behavior |
 |----------|-------------|
 | **Immediate** | Execute as soon as possible |
 | **Normal** | Standard queue priority |
 | **Low** | Execute during low activity |
 
-## Key Script Fields
-
-### Script Definition Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `scriptId` | ID | Unique identifier |
-| `name` | String | Script name |
-| `description` | String | What the script does |
-| `type` | Enum | PowerShell, Batch, Bash, Python |
-| `content` | String | Script source code |
-| `parameters` | [Parameter] | Input parameters |
-| `timeout` | Int | Execution timeout (seconds) |
-| `osType` | Enum | Windows, macOS, Linux |
-
-### Execution Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `actionConfigId` | ID | Execution instance ID |
-| `status` | Enum | Pending, Running, Success, Failed |
-| `startTime` | DateTime | Execution start |
-| `endTime` | DateTime | Execution end |
-| `exitCode` | Int | Script exit code |
-| `output` | String | Script output |
-| `error` | String | Error messages |
-
-## GraphQL Operations
-
-### List Available Scripts
-
-```graphql
-query getScriptList($input: ListInfoInput!) {
-  getScriptList(input: $input) {
-    scripts {
-      scriptId
-      name
-      description
-      type
-      osType
-      category
-      parameters {
-        name
-        description
-        type
-        required
-        defaultValue
-      }
-      createdTime
-      lastModifiedTime
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-**Variables - All Scripts:**
-```json
-{
-  "input": {
-    "first": 50,
-    "orderBy": {
-      "field": "name",
-      "direction": "ASC"
-    }
-  }
-}
-```
-
-**Variables - Windows PowerShell Scripts:**
-```json
-{
-  "input": {
-    "filter": {
-      "osType": "Windows",
-      "type": "PowerShell"
-    }
-  }
-}
-```
-
-### Get Scripts by OS Type
-
-```graphql
-query getScriptListByType($input: ScriptListByTypeInput!) {
-  getScriptListByType(input: $input) {
-    scripts {
-      scriptId
-      name
-      description
-      type
-      parameters {
-        name
-        type
-        required
-      }
-    }
-    listInfo {
-      totalCount
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "osType": "Windows",
-    "first": 100
-  }
-}
-```
-
-### Get Script Details
-
-```graphql
-query getScript($input: ScriptIdentifierInput!) {
-  getScript(input: $input) {
-    scriptId
-    name
-    description
-    type
-    osType
-    category
-    content
-    timeout
-    parameters {
-      name
-      description
-      type
-      required
-      defaultValue
-      validValues
-    }
-    runAs
-    createdBy {
-      id
-      name
-    }
-    createdTime
-    lastModifiedTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "scriptId": "script-uuid"
-  }
-}
-```
-
-### Run Script on Single Asset
-
-```graphql
-mutation runScriptOnAsset($input: RunScriptInput!) {
-  runScriptOnAsset(input: $input) {
-    actionConfigId
-    script {
-      scriptId
-      name
-    }
-    asset {
-      assetId
-      name
-    }
-    arguments {
-      name
-      value
-    }
-    status
-    scheduledTime
-    runAs
-  }
-}
-```
-
-**Variables - Immediate Execution:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "runAs": "System",
-    "priority": "Immediate"
-  }
-}
-```
-
-**Variables - With Parameters:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "ServiceName",
-        "value": "Spooler"
-      },
-      {
-        "name": "Action",
-        "value": "Restart"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
-```
-
-### Run Script on Multiple Assets
-
-```graphql
-mutation runScriptOnAssets($input: RunScriptOnAssetsInput!) {
-  runScriptOnAssets(input: $input) {
-    batchId
-    script {
-      scriptId
-      name
-    }
-    assetsCount
-    status
-    scheduledTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-1", "asset-2", "asset-3"],
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "param1",
-        "value": "value1"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
-```
-
-### Schedule Script Execution
-
-```graphql
-mutation scheduleScript($input: ScheduleScriptInput!) {
-  scheduleScript(input: $input) {
-    scheduleId
-    script {
-      scriptId
-      name
-    }
-    assets {
-      assetId
-      name
-    }
-    scheduledTime
-    recurrence {
-      type
-      interval
-      daysOfWeek
-    }
-    status
-  }
-}
-```
-
-**Variables - One-Time Schedule:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-uuid"],
-    "scriptId": "script-uuid",
-    "scheduledTime": "2024-02-15T22:00:00Z",
-    "runAs": "System"
-  }
-}
-```
-
-**Variables - Recurring Schedule:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-uuid"],
-    "scriptId": "script-uuid",
-    "scheduledTime": "2024-02-15T22:00:00Z",
-    "recurrence": {
-      "type": "Weekly",
-      "interval": 1,
-      "daysOfWeek": ["Monday", "Wednesday", "Friday"]
-    },
-    "runAs": "System"
-  }
-}
-```
-
-### Get Script Execution Status
-
-```graphql
-query getScriptExecution($input: ScriptExecutionInput!) {
-  getScriptExecution(input: $input) {
-    actionConfigId
-    script {
-      scriptId
-      name
-    }
-    asset {
-      assetId
-      name
-    }
-    status
-    startTime
-    endTime
-    exitCode
-    output
-    error
-    duration
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "actionConfigId": "execution-uuid"
-  }
-}
-```
-
-### Get Batch Execution Results
-
-```graphql
-query getBatchExecution($input: BatchExecutionInput!) {
-  getBatchExecution(input: $input) {
-    batchId
-    script {
-      scriptId
-      name
-    }
-    status
-    totalAssets
-    completedCount
-    successCount
-    failedCount
-    executions {
-      asset {
-        assetId
-        name
-      }
-      status
-      exitCode
-      output
-      error
-    }
-  }
-}
-```
-
-### List Script Execution History
-
-```graphql
-query getScriptExecutionHistory($input: ScriptExecutionHistoryInput!) {
-  getScriptExecutionHistory(input: $input) {
-    executions {
-      actionConfigId
-      script {
-        scriptId
-        name
-      }
-      asset {
-        assetId
-        name
-        client { name }
-      }
-      status
-      startTime
-      endTime
-      exitCode
-      triggeredBy {
-        id
-        name
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-    }
-  }
-}
-```
-
-**Variables - Recent Executions:**
-```json
-{
-  "input": {
-    "first": 50,
-    "orderBy": {
-      "field": "startTime",
-      "direction": "DESC"
-    }
-  }
-}
-```
-
-**Variables - By Asset:**
-```json
-{
-  "input": {
-    "filter": {
-      "assetId": "asset-uuid"
-    },
-    "first": 20
-  }
-}
-```
+See [references/fields.md](references/fields.md) for the complete script and execution
+field reference.
 
 ## Common Workflows
 
-### Remediation Workflow
+### Remediation
 
-```graphql
-# 1. Check if asset is online
-query checkAssetStatus {
-  getAsset(input: { assetId: "asset-uuid" }) {
-    status
-    lastSeen
-  }
-}
+1. Query the asset (`getAsset`) and confirm `status` is Online — a script queued to an
+   offline asset stays Pending until it checks in.
+2. `runScriptOnAsset` with `priority: "Immediate"` and the required `arguments`.
+3. Capture the returned `actionConfigId`.
+4. Poll `getScriptExecution` until status reaches a terminal value, then read `exitCode`,
+   `output`, and `error`.
 
-# 2. Run remediation script
-mutation runRemediation {
-  runScriptOnAsset(input: {
-    assetId: "asset-uuid",
-    scriptId: "restart-service-script",
-    arguments: [{ name: "ServiceName", value: "Spooler" }],
-    runAs: "System",
-    priority: "Immediate"
-  }) {
-    actionConfigId
-    status
-  }
-}
+### Maintenance Window
 
-# 3. Check execution result
-query checkResult {
-  getScriptExecution(input: { actionConfigId: "exec-uuid" }) {
-    status
-    exitCode
-    output
-    error
-  }
-}
-```
+Use `runScriptOnAssets` with an `assetIds` array, a future `scheduledTime` (UTC ISO 8601),
+and `priority: "Low"`. Track the returned `batchId` with `getBatchExecution`, which
+reports `successCount` / `failedCount` alongside per-asset results.
 
-### Maintenance Window Automation
+### Data Collection
 
-```graphql
-# Schedule maintenance scripts for multiple assets
-mutation scheduleMaintenanceWindow {
-  runScriptOnAssets(input: {
-    assetIds: ["asset-1", "asset-2", "asset-3"],
-    scriptId: "windows-update-script",
-    scheduledTime: "2024-02-17T02:00:00Z",
-    runAs: "System",
-    priority: "Low"
-  }) {
-    batchId
-    assetsCount
-    scheduledTime
-  }
-}
-```
+1. `getAssetList` filtered by client and `status: "Online"` to build the asset list.
+2. Feed those `assetId` values into `runScriptOnAssets` with the collection script.
+3. Read results from `getBatchExecution`.
 
-### Data Collection Workflow
+### Recurring Schedules
 
-```graphql
-# Run inventory collection across client assets
-mutation collectInventory($clientId: ID!) {
-  # First get all assets for client
-  assets: getAssetList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      status: "Online"
-    }
-  }) {
-    assets { assetId }
-  }
-}
+`scheduleScript` accepts a `recurrence` object (`type`, `interval`, `daysOfWeek`) alongside
+`scheduledTime`. Omit `recurrence` for a one-time run.
 
-# Then run collection script
-mutation runCollection {
-  runScriptOnAssets(input: {
-    assetIds: ["asset-1", "asset-2"],
-    scriptId: "software-inventory-script",
-    runAs: "System"
-  }) {
-    batchId
-  }
-}
-```
+## API Patterns
+
+| Operation | GraphQL |
+|-----------|---------|
+| List scripts | `getScriptList(input: ListInfoInput!)` |
+| List by OS | `getScriptListByType(input: ScriptListByTypeInput!)` |
+| Get script | `getScript(input: ScriptIdentifierInput!)` |
+| Run on one asset | `runScriptOnAsset(input: RunScriptInput!)` |
+| Run on many assets | `runScriptOnAssets(input: RunScriptOnAssetsInput!)` |
+| Schedule | `scheduleScript(input: ScheduleScriptInput!)` |
+| Execution status | `getScriptExecution(input: ScriptExecutionInput!)` |
+| Batch results | `getBatchExecution(input: BatchExecutionInput!)` |
+| Execution history | `getScriptExecutionHistory(input: ScriptExecutionHistoryInput!)` |
+
+Arguments are passed as an array of `{ name, value }` objects — values are strings even
+for numeric parameters. `runAs` must be supplied per execution; it is not inherited from
+the script definition's `runAs` default unless omitted.
+
+See [references/api.md](references/api.md) for the complete operation catalog with
+request/response examples and end-to-end workflow queries.
 
 ## Error Handling
-
-### Common Errors
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
@@ -569,6 +106,9 @@ mutation runCollection {
 | Rate limit exceeded | Over 800 req/min | Implement backoff |
 
 ### Exit Code Interpretation
+
+Exit code 137 means the agent killed the script on timeout, not that the script failed
+on its own — check the script's `timeout` before assuming a logic error.
 
 ```javascript
 // Common exit codes
@@ -590,6 +130,9 @@ function interpretExitCode(code) {
 ```
 
 ### Execution Status Handling
+
+Execution is asynchronous — the mutation returns before the script runs. Poll until the
+status is one of `Success`, `Failed`, `Timeout`, or `Cancelled`.
 
 ```javascript
 // Poll for execution completion
@@ -617,12 +160,10 @@ async function waitForExecution(actionConfigId, maxWaitMs = 300000) {
 2. **Use parameters** - Make scripts reusable with parameters
 3. **Set appropriate timeouts** - Prevent hung scripts
 4. **Handle errors in scripts** - Return meaningful exit codes
-5. **Log script output** - Capture output for troubleshooting
-6. **Use scheduling** - Run maintenance during off-hours
-7. **Monitor batch executions** - Track success/failure rates
-8. **Document scripts** - Clear descriptions and parameter docs
-9. **Version control** - Track script changes
-10. **Check asset status** - Verify online before running
+5. **Use scheduling** - Run maintenance during off-hours
+6. **Monitor batch executions** - Track success/failure rates
+7. **Document scripts** - Clear descriptions and parameter docs
+8. **Check asset status** - Verify online before running
 
 ## Related Skills
 

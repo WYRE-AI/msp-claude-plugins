@@ -1,14 +1,13 @@
 ---
 name: "Better Stack Status Pages"
 description: >
-  Use this skill when working with Better Stack status pages --
-  managing status pages, adding resources/components, posting
-  maintenance windows, and communicating service status to end users.
+  Better Stack status pages: status page configuration, resources and
+  components, maintenance windows, and public service-status communication.
 when_to_use: >-
-  When managing status pages, adding resources/components, posting maintenance windows, and
-  communicating service status to end users. Use when: betterstack status page, status page,
-  status page component, maintenance window, service status, status update, public status, or
-  better stack status.
+  When managing a Better Stack status page or publishing service status to
+  end users. Use when: betterstack status page, status page, status page
+  component, maintenance window, service status, status update, public
+  status, or better stack status.
 ---
 
 # Better Stack Status Pages

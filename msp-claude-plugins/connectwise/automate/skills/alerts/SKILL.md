@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Automate Alerts"
 description: >
-  Use this skill when working with ConnectWise Automate alerts - listing active
-  alerts, acknowledging alerts, viewing alert history, and creating tickets from
-  alerts. Covers alert sources (monitors, scripts, events), alert severity levels,
-  alert lifecycle management, and ticket integration.
+  ConnectWise Automate alert management: alert sources (monitors, scripts,
+  events), severity levels, lifecycle states, acknowledgment, resolution,
+  history tracking, and PSA ticket creation from alerts.
 when_to_use: >-
   When listing active alerts, acknowledging alerts, viewing alert history, and creating tickets
   from alerts. Use when: automate alert, automate notification, alert acknowledgment, alert
@@ -59,275 +58,20 @@ Generated → Active → Acknowledged → Resolved
 | `Cleared` | Condition auto-cleared |
 | `Suppressed` | Temporarily hidden |
 
-## Field Reference
-
-### Alert Fields
-
-```typescript
-interface Alert {
-  // Identifiers
-  AlertID: number;              // Primary key
-  AlertGUID: string;            // Global unique ID
-
-  // Source
-  Source: AlertSource;          // Monitor, Script, EventLog, System
-  SourceID: number;             // ID of source (MonitorID, ScriptID, etc.)
-  SourceName: string;           // Name of source
-
-  // Target
-  ComputerID: number;           // Affected computer
-  ComputerName: string;         // Computer hostname
-  ClientID: number;             // Parent client
-  ClientName: string;           // Client name
-  LocationID: number;           // Location ID
-
-  // Alert Details
-  Subject: string;              // Alert title
-  Message: string;              // Detailed message
-  Severity: AlertSeverity;      // 1-4 severity level
-  Status: AlertStatus;          // Current status
-
-  // Timestamps
-  TimeGenerated: string;        // When created
-  TimeAcknowledged: string;     // When acknowledged
-  TimeResolved: string;         // When resolved
-  LastUpdate: string;           // Last status change
-
-  // Acknowledgment
-  AcknowledgedBy: string;       // User who acknowledged
-  Notes: string;                // Acknowledgment notes
-
-  // Ticket Integration
-  TicketID: number;             // Linked ticket ID
-  TicketStatus: string;         // Ticket status
-
-  // Context
-  Category: string;             // Alert category
-  AdditionalData: object;       // Extra context data
-}
-
-type AlertSource = 'Monitor' | 'Script' | 'EventLog' | 'System' | 'Manual';
-type AlertSeverity = 1 | 2 | 3 | 4;
-type AlertStatus = 'New' | 'Active' | 'Acknowledged' | 'Resolved' | 'Cleared' | 'Suppressed';
-```
-
-### Alert History Fields
-
-```typescript
-interface AlertHistory {
-  HistoryID: number;
-  AlertID: number;
-  Action: string;               // Status change, note added, etc.
-  ActionBy: string;             // User who made change
-  ActionTime: string;           // When action occurred
-  PreviousStatus: string;
-  NewStatus: string;
-  Notes: string;
-}
-```
+See [references/fields.md](references/fields.md) for the complete Alert and AlertHistory field reference.
 
 ## API Patterns
 
-### List Active Alerts
+Alerts are managed through `/cwa/api/v1/Alerts` endpoints using a SQL-like `condition` query parameter for filtering (not standard REST query params):
 
 ```http
 GET /cwa/api/v1/Alerts?condition=Status in ('New','Active')&pageSize=100
 Authorization: Bearer {token}
 ```
 
-**Response:**
-```json
-[
-  {
-    "AlertID": 54321,
-    "Subject": "Disk C: Low Space",
-    "Message": "Disk C: is 8% free on ACME-DC01",
-    "Severity": 2,
-    "Status": "Active",
-    "ComputerID": 12345,
-    "ComputerName": "ACME-DC01",
-    "ClientName": "Acme Corporation",
-    "Source": "Monitor",
-    "SourceName": "Disk Space Monitor",
-    "TimeGenerated": "2024-02-15T08:30:00Z",
-    "Category": "Performance"
-  }
-]
-```
+Action endpoints (`Acknowledge`, `Resolve`, `Suppress`, `CreateTicket`) are POST requests to `/Alerts/{alertID}/{Action}` and most require a `Notes` field in the body. A bulk acknowledgment endpoint exists at `/Alerts/BulkAcknowledge` for handling related alerts together.
 
-### Get Alert Details
-
-```http
-GET /cwa/api/v1/Alerts/{alertID}
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-{
-  "AlertID": 54321,
-  "AlertGUID": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "Subject": "Disk C: Low Space",
-  "Message": "Disk C: is 8% free on ACME-DC01\n\nTotal: 500 GB\nFree: 40 GB\nThreshold: 10%",
-  "Severity": 2,
-  "Status": "Active",
-  "ComputerID": 12345,
-  "ComputerName": "ACME-DC01",
-  "ClientID": 100,
-  "ClientName": "Acme Corporation",
-  "LocationID": 1,
-  "Source": "Monitor",
-  "SourceID": 5001,
-  "SourceName": "Disk Space Monitor",
-  "TimeGenerated": "2024-02-15T08:30:00Z",
-  "Category": "Performance",
-  "AdditionalData": {
-    "DriveLetter": "C:",
-    "FreeSpaceGB": 40,
-    "TotalSpaceGB": 500,
-    "FreePercent": 8
-  }
-}
-```
-
-### Filter Alerts by Client
-
-```http
-GET /cwa/api/v1/Alerts?condition=ClientID = 100 and Status = 'Active'&pageSize=100
-Authorization: Bearer {token}
-```
-
-### Filter Alerts by Severity
-
-```http
-GET /cwa/api/v1/Alerts?condition=Severity >= 3 and Status = 'Active'&pageSize=100
-Authorization: Bearer {token}
-```
-
-### Acknowledge Alert
-
-```http
-POST /cwa/api/v1/Alerts/{alertID}/Acknowledge
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "Notes": "Investigating disk space issue"
-}
-```
-
-**Response:**
-```json
-{
-  "AlertID": 54321,
-  "Status": "Acknowledged",
-  "AcknowledgedBy": "admin@example.com",
-  "TimeAcknowledged": "2024-02-15T10:45:00Z"
-}
-```
-
-### Resolve Alert
-
-```http
-POST /cwa/api/v1/Alerts/{alertID}/Resolve
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "Notes": "Cleared 50GB of temp files. Disk now at 18% free."
-}
-```
-
-### Add Note to Alert
-
-```http
-POST /cwa/api/v1/Alerts/{alertID}/Notes
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "Note": "Contacted user about large files in Downloads folder"
-}
-```
-
-### Create Ticket from Alert
-
-```http
-POST /cwa/api/v1/Alerts/{alertID}/CreateTicket
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "TicketSubject": "Disk Space Critical on ACME-DC01",
-  "Priority": 2,
-  "BoardID": 1,
-  "Notes": "Auto-created from Automate alert"
-}
-```
-
-**Response:**
-```json
-{
-  "AlertID": 54321,
-  "TicketID": 98765,
-  "TicketNumber": "TKT-2024-00123",
-  "TicketStatus": "New"
-}
-```
-
-### Get Alert History
-
-```http
-GET /cwa/api/v1/Alerts/{alertID}/History
-Authorization: Bearer {token}
-```
-
-**Response:**
-```json
-[
-  {
-    "HistoryID": 1,
-    "Action": "Created",
-    "ActionTime": "2024-02-15T08:30:00Z",
-    "NewStatus": "New"
-  },
-  {
-    "HistoryID": 2,
-    "Action": "Acknowledged",
-    "ActionBy": "admin@example.com",
-    "ActionTime": "2024-02-15T10:45:00Z",
-    "PreviousStatus": "Active",
-    "NewStatus": "Acknowledged",
-    "Notes": "Investigating disk space issue"
-  }
-]
-```
-
-### Suppress Alert
-
-```http
-POST /cwa/api/v1/Alerts/{alertID}/Suppress
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "Duration": 3600,
-  "Reason": "Scheduled maintenance window"
-}
-```
-
-### Bulk Acknowledge Alerts
-
-```http
-POST /cwa/api/v1/Alerts/BulkAcknowledge
-Authorization: Bearer {token}
-Content-Type: application/json
-
-{
-  "AlertIDs": [54321, 54322, 54323],
-  "Notes": "Bulk acknowledgment for server maintenance"
-}
-```
+See [references/api.md](references/api.md) for the complete endpoint catalog with request/response examples (list, filter by client/severity, acknowledge, resolve, add note, create ticket, get history, suppress, bulk acknowledge).
 
 ## Workflows
 
@@ -565,51 +309,7 @@ async function checkAlertEscalation(client) {
 | Invalid status | 400 | Invalid status transition | Follow lifecycle rules |
 | Ticket creation failed | 400 | PSA integration error | Check ticket board config |
 
-### Error Response Example
-
-```json
-{
-  "error": {
-    "code": "BadRequest",
-    "message": "Cannot acknowledge already resolved alert"
-  }
-}
-```
-
-### Safe Alert Resolution
-
-```javascript
-async function safeResolveAlert(client, alertId, notes) {
-  // Get current alert status
-  const alert = await client.request(`/Alerts/${alertId}`);
-
-  if (alert.Status === 'Resolved' || alert.Status === 'Cleared') {
-    return {
-      success: false,
-      error: `Alert already ${alert.Status.toLowerCase()}`
-    };
-  }
-
-  try {
-    await client.request(`/Alerts/${alertId}/Resolve`, {
-      method: 'POST',
-      body: JSON.stringify({ Notes: notes })
-    });
-
-    return {
-      success: true,
-      alertId,
-      previousStatus: alert.Status,
-      newStatus: 'Resolved'
-    };
-  } catch (error) {
-    return {
-      success: false,
-      error: error.message
-    };
-  }
-}
-```
+See [references/examples.md](references/examples.md) for a sample error response, a safe-resolve helper that checks status before resolving, and a full multi-step alert response workflow template.
 
 ## Best Practices
 
@@ -619,79 +319,9 @@ async function safeResolveAlert(client, alertId, notes) {
 4. **Use bulk operations** - Handle related alerts together
 5. **Set up escalation rules** - Don't let alerts age
 6. **Filter by severity** - Focus on critical first
-7. **Review alert history** - Understand recurring patterns
+7. **Review alert history** - Understand recurring patterns and audit old/stale alerts
 8. **Suppress during maintenance** - Avoid alert fatigue
 9. **Link to documentation** - Reference runbooks in notes
-10. **Regular alert review** - Audit old/stale alerts
-
-## Alert Response Workflow Template
-
-```javascript
-async function standardAlertResponse(client, alertId) {
-  const workflow = {
-    steps: [],
-    success: true
-  };
-
-  try {
-    // Step 1: Get alert details
-    const alert = await client.request(`/Alerts/${alertId}`);
-    workflow.steps.push({
-      step: 'Get Alert',
-      status: 'success',
-      data: {
-        subject: alert.Subject,
-        severity: alert.Severity,
-        computer: alert.ComputerName
-      }
-    });
-
-    // Step 2: Acknowledge if not already
-    if (alert.Status === 'New' || alert.Status === 'Active') {
-      await client.request(`/Alerts/${alertId}/Acknowledge`, {
-        method: 'POST',
-        body: JSON.stringify({ Notes: 'Investigating alert' })
-      });
-      workflow.steps.push({ step: 'Acknowledge', status: 'success' });
-    }
-
-    // Step 3: Create ticket if critical/error
-    if (alert.Severity >= 3) {
-      const ticket = await client.request(`/Alerts/${alertId}/CreateTicket`, {
-        method: 'POST',
-        body: JSON.stringify({
-          TicketSubject: alert.Subject,
-          Priority: alert.Severity === 4 ? 1 : 2,
-          BoardID: 1
-        })
-      });
-      workflow.steps.push({
-        step: 'Create Ticket',
-        status: 'success',
-        ticketId: ticket.TicketID
-      });
-    }
-
-    // Step 4: Check computer status
-    const computer = await client.request(`/Computers/${alert.ComputerID}`);
-    workflow.steps.push({
-      step: 'Check Computer',
-      status: 'success',
-      computerStatus: computer.Status
-    });
-
-  } catch (error) {
-    workflow.success = false;
-    workflow.steps.push({
-      step: 'Error',
-      status: 'failed',
-      error: error.message
-    });
-  }
-
-  return workflow;
-}
-```
 
 ## Related Skills
 

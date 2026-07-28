@@ -1,10 +1,11 @@
 ---
 name: "Huntress Escalations"
 description: >
-  Use this skill when working with Huntress escalations — listing,
-  reviewing, and resolving escalations from the Huntress SOC team.
+  Huntress SOC escalations: how an escalation differs from an incident,
+  escalation priority levels, the list/get/resolve tools, escalation-to-incident
+  correlation, and the already-resolved and not-found error cases.
 when_to_use: >-
-  When listing, reviewing, and resolving escalations from the Huntress SOC team. Use when:
+  When reviewing or resolving escalations raised by the Huntress SOC team. Use when:
   huntress escalation, escalation review, escalation resolve, soc escalation, or threat
   escalation.
 ---

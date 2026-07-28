@@ -1,16 +1,14 @@
 ---
 name: "Inforcer Audit Events"
+description: >
+  Inforcer's read-only record of changes and activity: searching and
+  filtering auditEvents, enumerating the event-type catalog to build valid
+  filters, and the continuationToken paging audit searches require.
 when_to_use: >-
-  When searching Inforcer audit events or listing the available event types — reading the
-  read-only change/activity history for a managed tenant or across the portfolio. Use when:
+  When searching Inforcer audit events, or listing the available event types, for a managed
+  tenant or across the portfolio. Use when:
   inforcer audit, audit events, auditevents, event types, change history inforcer, who changed
   inforcer, inforcer activity log, or audit search inforcer.
-description: >
-  Use this skill when searching Inforcer audit events and listing the
-  available event types — the read-only history of changes and activity
-  Inforcer has recorded. Covers searching/filtering auditEvents,
-  enumerating the event-type catalog to build valid filters, and the
-  continuationToken paging that audit searches require. Read-only.
 ---
 
 # Inforcer Audit Events

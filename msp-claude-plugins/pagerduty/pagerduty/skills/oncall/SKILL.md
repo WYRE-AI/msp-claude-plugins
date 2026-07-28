@@ -1,14 +1,13 @@
 ---
 name: "PagerDuty On-Call"
 description: >
-  Use this skill when working with PagerDuty on-call management - viewing who
-  is currently on-call, managing schedules and rotation layers, configuring
-  escalation policies, creating temporary overrides, and adding or removing
-  team members. Covers list_oncalls, list_schedules, get_schedule,
-  list_escalation_policies, and schedule override tools.
+  PagerDuty on-call model: schedules with rotation layers, restrictions, the
+  computed final schedule, and overrides; escalation policy tiers and
+  timeouts; on-call entry fields; and the schedule, escalation policy, and
+  team MCP tools.
 when_to_use: >-
-  When working with call management - viewing who is currently on-call, managing schedules and
-  rotation layers, configuring escalation policies, creating temporary overrides. Use when:
+  When determining who is on-call, building or adjusting schedules and rotations,
+  reviewing escalation coverage, or arranging shift overrides. Use when:
   pagerduty oncall, pagerduty on-call, pagerduty schedule, pagerduty rotation, pagerduty
   escalation, pagerduty escalation policy, pagerduty override, pagerduty who is on call, pagerduty
   shift, pagerduty team member, pagerduty responder, or pagerduty page.

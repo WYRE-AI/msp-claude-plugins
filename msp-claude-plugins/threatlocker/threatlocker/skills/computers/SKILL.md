@@ -1,15 +1,15 @@
 ---
 name: "ThreatLocker Computers"
 description: >
-  Use this skill when working with ThreatLocker-protected endpoints —
-  fleet inventory, identifying offline agents, drilling into a single
-  computer's check-in history, and correlating computers across
-  organizations and groups.
+  ThreatLocker-protected endpoints: fleet inventory, identifying offline agents, a
+  single computer's check-in history, and correlating computers across organizations and
+  groups.
 when_to_use: >-
-  When listing, inspecting, or auditing ThreatLocker computers across one or many organizations,
-  including offline-agent triage and check-in history. Use when: threatlocker computer,
-  threatlocker endpoint, threatlocker agent inventory, threatlocker offline, threatlocker last
-  seen, threatlocker checkin, threatlocker fleet, or endpoint inventory threatlocker.
+  When listing, inspecting, or auditing ThreatLocker computers across one or many
+  organizations, including offline-agent triage and check-in history. Use when:
+  threatlocker computer, threatlocker endpoint, threatlocker agent inventory,
+  threatlocker offline, threatlocker last seen, threatlocker checkin, threatlocker
+  fleet, or endpoint inventory threatlocker.
 ---
 
 # ThreatLocker Computers

@@ -1,6 +1,10 @@
 ---
 name: "azure-mcp-connection"
-description: "Use this skill when connecting the azure-mcp vendor through the WYRE MCP Gateway — registering an Azure service principal, supplying tenantId/clientId/clientSecret, and granting least-privilege Reader-tier RBAC. Covers the read-only deployment model and why broader write roles must not be granted."
+description: >
+  Onboarding the azure-mcp connector in the WYRE MCP Gateway: Azure service-principal
+  registration, the tenantId/clientId/clientSecret triple, least-privilege Reader-tier
+  RBAC assignments, the gateway's read-only namespace allowlist, and connection
+  verification and failure modes (expired secret, missing role assignment).
 when_to_use: >-
   When setting up or troubleshooting the azure-mcp connector — creating an Azure service
   principal, choosing RBAC roles, or explaining the read-only constraint to an MSP onboarding a

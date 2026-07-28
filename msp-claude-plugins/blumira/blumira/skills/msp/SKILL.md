@@ -1,12 +1,12 @@
 ---
 name: "Blumira MSP"
 description: >
-  Use this skill when working with Blumira MSP (Managed Service Provider)
-  multi-tenant operations, including managing multiple client accounts,
-  cross-account finding queries, and per-account device/user management.
+  Blumira's MSP path group (`/msp/*`): managed-account enumeration, cross-account
+  and per-account finding queries, per-account device, agent-key and user
+  management, and how MSP paths differ from org paths.
 when_to_use: >-
-  When working with tenant operations, including managing multiple client accounts, cross-account
-  finding queries. Use when: blumira msp, multi-tenant, managed accounts, client accounts,
+  When operating across multiple Blumira client accounts using MSP-level credentials.
+  Use when: blumira msp, multi-tenant, managed accounts, client accounts,
   cross-account, msp findings, or msp overview.
 ---
 

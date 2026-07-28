@@ -1,12 +1,13 @@
 ---
 name: "Huntress Signals"
 description: >
-  Use this skill when working with Huntress security signals — monitoring,
-  listing, filtering, and investigating signals across managed endpoints.
+  Huntress security signals: how signals differ from incidents, the signal
+  types, listing and filtering by organization, and the threat-hunting and
+  pattern-analysis workflows built on signal data.
 when_to_use: >-
-  When monitoring, listing, filtering, and investigating signals across managed endpoints. Use
-  when: huntress signal, security signal, threat signal, detection signal, or signal
-  investigation.
+  When monitoring, filtering, or investigating Huntress signals, or hunting for threat
+  patterns across managed endpoints. Use when: huntress signal, security signal, threat
+  signal, detection signal, or signal investigation.
 ---
 
 # Huntress Signals

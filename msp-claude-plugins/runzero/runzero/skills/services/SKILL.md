@@ -1,14 +1,13 @@
 ---
 name: "runZero Services"
 description: >
-  Use this skill when working with RunZero services — listing discovered
-  services, filtering by port or protocol, identifying vulnerabilities,
-  and auditing exposed services across sites.
+  runZero discovered services: listing services, filtering by port or protocol,
+  identifying vulnerabilities, and auditing exposed services across sites.
 when_to_use: >-
-  When listing discovered services, filtering by port or protocol, identifying vulnerabilities,
-  and auditing exposed services across sites. Use when: runzero service, discovered service,
-  service inventory, open port, service protocol, service vulnerability, port scan, exposed
-  service, or service audit.
+  When reviewing discovered services, open ports, protocols, or service exposure across
+  runZero sites. Use when: runzero service, discovered service, service inventory, open
+  port, service protocol, service vulnerability, port scan, exposed service, or service
+  audit.
 ---
 
 # RunZero Services

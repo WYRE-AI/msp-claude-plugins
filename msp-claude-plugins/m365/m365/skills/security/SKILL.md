@@ -1,13 +1,14 @@
 ---
 name: "Microsoft 365 Security"
 description: >
-  Use this skill for Microsoft 365 security posture checks - MFA enrollment
-  status, conditional access policies, risky sign-ins, suspicious inbox rules,
-  compromised account indicators, and security audit tasks. Critical for MSPs
-  performing security reviews or investigating suspected account compromises.
+  The M365 tenant security checks that distinguish a secure tenant from a
+  vulnerable one: per-user authentication-method inspection for real MFA
+  enrollment, sign-in risk and risky users, suspicious inbox rules, legacy
+  authentication exposure, conditional access coverage, Secure Score, and the
+  indicator set for a compromised account.
 when_to_use: >-
-  When working with Microsoft 365 security posture checks - MFA enrollment status, conditional
-  access policies, risky sign-ins, suspicious inbox rules. Use when: m365 security, m365 mfa, mfa
+  When reviewing an M365 tenant's security posture or investigating a suspected account
+  compromise. Use when: m365 security, m365 mfa, mfa
   enrollment, conditional access, risky sign-in, account compromise m365, m365 security audit,
   suspicious activity m365, m365 security score, entra security, or m365 sign-in logs.
 ---

@@ -1,14 +1,14 @@
 ---
 name: "Syncro Assets"
 description: >
-  Use this skill when working with Syncro MSP assets - tracking hardware,
-  software, and devices for customers. Covers asset fields, RMM integration,
-  patch management, and asset-related operations. Essential for MSP inventory
-  management and endpoint monitoring through Syncro.
+  Syncro MSP assets: asset records and fields for hardware, software, and
+  devices, RMM integration, patch management data, and asset search and
+  update operations.
 when_to_use: >-
-  When tracking hardware, software, and devices for customers. Use when: syncro asset, syncro
-  device, syncro computer, asset management syncro, rmm syncro, syncro inventory, syncro endpoint,
-  patch management syncro, asset search syncro, or syncro hardware.
+  When tracking or looking up customer hardware, software, and devices in
+  Syncro. Use when: syncro asset, syncro device, syncro computer, asset
+  management syncro, rmm syncro, syncro inventory, syncro endpoint, patch
+  management syncro, asset search syncro, or syncro hardware.
 ---
 
 # Syncro MSP Asset Management

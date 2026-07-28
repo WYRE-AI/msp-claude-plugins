@@ -1,12 +1,13 @@
 ---
 name: "Rootly Workflows"
 description: >
-  Use this skill when working with Rootly workflows -- creating automated
-  incident response workflows, configuring triggers, actions, conditions,
-  and managing workflow lifecycle.
+  Rootly's incident-response automation model: the trigger / condition / action
+  structure, the full catalog of trigger, action, and condition types, workflow
+  CRUD and enable/disable, and the failure modes behind stale, over-firing, or
+  circularly chained workflows.
 when_to_use: >-
-  When creating automated incident response workflows, configuring triggers, actions, conditions,
-  and managing workflow lifecycle. Use when: rootly workflow, automated workflow, workflow
+  When building, enabling, or auditing automated incident-response
+  workflows. Use when: rootly workflow, automated workflow, workflow
   trigger, workflow action, incident automation, response automation, workflow condition, or
   runbook automation.
 ---
@@ -195,11 +196,9 @@ Parameters:
 
 ## Best Practices
 
-- Start simple -- automate one high-value action at a time
 - Always test workflows with a non-production incident before enabling
 - Use specific conditions to avoid workflows firing on every incident
 - Name workflows descriptively (e.g., "SEV0 Production - Page Platform Team")
-- Review and update workflows quarterly as team structures change
 - Monitor workflow trigger counts to detect misconfiguration
 - Disable rather than delete workflows you might need again
 - Document the purpose of each workflow in the description field

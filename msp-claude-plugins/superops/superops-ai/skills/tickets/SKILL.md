@@ -1,16 +1,15 @@
 ---
 name: "SuperOps Tickets"
 description: >
-  Use this skill when working with SuperOps.ai tickets - creating, updating,
-  searching, or managing service desk operations. Covers ticket fields,
-  statuses, priorities, assignments, notes, time entries, and workflow automations.
-  Includes business logic for validation and common MSP workflows.
-  Essential for MSP technicians handling service delivery through SuperOps.ai PSA.
+  SuperOps.ai service desk ticketing: ticket fields, status and priority
+  enums, client/site/requester/assignee associations, notes, time entries,
+  and the GraphQL mutations and queries behind them. Includes triage and
+  escalation workflows, input validation rules, and common ticket API errors.
 when_to_use: >-
-  When creating, updating, searching, or managing service desk operations. Use when: superops
-  ticket, service ticket superops, create ticket superops, ticket status superops, ticket
-  priority, superops service desk, ticket triage, escalate ticket, resolve ticket superops, ticket
-  notes superops, or time entry ticket.
+  When creating, updating, searching, or managing service desk operations in SuperOps.ai.
+  Use when: superops ticket, service ticket superops, create ticket superops, ticket status
+  superops, ticket priority, superops service desk, ticket triage, escalate ticket, resolve
+  ticket superops, ticket notes superops, or time entry ticket.
 ---
 
 # SuperOps.ai Ticket Management
@@ -40,312 +39,38 @@ SuperOps.ai tickets are the core unit of service delivery in the PSA. Every clie
 
 ## Key Ticket Fields
 
-### Core Fields
+Only two fields are required on create: `subject` (String) and `client`
+(ClientIdentifier). The rest are optional but drive routing and reporting:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `ticketId` | ID | System | Auto-generated unique identifier |
-| `ticketNumber` | String | System | Human-readable ticket number |
-| `subject` | String | Yes | Brief issue summary |
-| `description` | String | No | Detailed description |
-| `ticketType` | Enum | No | Incident, Service Request, Problem, Change |
-| `requestType` | Enum | No | Classification type |
-| `source` | Enum | No | How ticket was created (email, portal, phone) |
+| Field | Type | Purpose |
+|-------|------|---------|
+| `assignee` / `techGroup` | Identifier | Routing to a technician or queue |
+| `requester` | RequesterIdentifier | Person who reported (accepts `email`) |
+| `priority` | Enum | Critical, High, Medium, Low |
+| `ticketType` | Enum | Incident, Service Request, Problem, Change |
+| `category` | CategoryIdentifier | Service category |
 
-### Assignment Fields
+Identifier inputs are objects, not scalars — `client` takes `{ "accountId": ... }`,
+`techGroup` and `category` accept `{ "name": ... }`, `requester` accepts `{ "email": ... }`.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `client` | ClientIdentifier | Yes | Client/account reference |
-| `site` | SiteIdentifier | No | Site within client |
-| `requester` | RequesterIdentifier | No | Person who reported |
-| `assignee` | TechnicianIdentifier | No | Assigned technician |
-| `techGroup` | TechGroupIdentifier | No | Technician group |
-
-### Classification Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `priority` | Enum | No | Critical, High, Medium, Low |
-| `impact` | Enum | No | Impact level |
-| `urgency` | Enum | No | Urgency level |
-| `category` | CategoryIdentifier | No | Service category |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## GraphQL Operations
 
-### Create a Ticket
+| Operation | Type | Purpose |
+|-----------|------|---------|
+| `createTicket` | mutation | Create a ticket |
+| `getTicketList` | query | List/search tickets with filter, orderBy, cursor paging |
+| `getTicket` | query | Full detail for one ticket |
+| `updateTicket` | mutation | Change status, priority, assignee, resolution |
+| `addTicketNote` | mutation | Internal (`isPublic: false`) or client-visible note |
+| `addTicketTimeEntry` | mutation | Log time (`duration` in minutes, `billable` flag) |
 
-```graphql
-mutation createTicket($input: CreateTicketInput!) {
-  createTicket(input: $input) {
-    ticketId
-    ticketNumber
-    subject
-    status
-    priority
-    createdTime
-    client {
-      accountId
-      name
-    }
-    assignee {
-      id
-      name
-    }
-  }
-}
-```
+`getTicketList` returns a `listInfo` block (`totalCount`, `hasNextPage`, `endCursor`)
+for cursor pagination; `first` controls page size.
 
-**Variables:**
-```json
-{
-  "input": {
-    "subject": "Unable to access email - Outlook disconnected",
-    "description": "User reports Outlook showing disconnected status since 9am. Webmail works fine.",
-    "client": {
-      "accountId": "abc123"
-    },
-    "priority": "HIGH",
-    "requester": {
-      "email": "john.smith@acme.com"
-    },
-    "techGroup": {
-      "name": "Service Desk"
-    },
-    "category": {
-      "name": "Email"
-    }
-  }
-}
-```
-
-### List Tickets
-
-```graphql
-query getTicketList($input: ListInfoInput!) {
-  getTicketList(input: $input) {
-    tickets {
-      ticketId
-      ticketNumber
-      subject
-      status
-      priority
-      createdTime
-      lastUpdatedTime
-      client {
-        accountId
-        name
-      }
-      assignee {
-        id
-        name
-      }
-      requester {
-        id
-        name
-        email
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-**Variables with Filters:**
-```json
-{
-  "input": {
-    "first": 50,
-    "filter": {
-      "status": ["Open", "In Progress"],
-      "priority": ["Critical", "High"],
-      "client": {
-        "accountId": "abc123"
-      }
-    },
-    "orderBy": {
-      "field": "createdTime",
-      "direction": "DESC"
-    }
-  }
-}
-```
-
-### Get Single Ticket
-
-```graphql
-query getTicket($input: TicketIdentifierInput!) {
-  getTicket(input: $input) {
-    ticketId
-    ticketNumber
-    subject
-    description
-    status
-    priority
-    impact
-    urgency
-    createdTime
-    lastUpdatedTime
-    client {
-      accountId
-      name
-    }
-    site {
-      id
-      name
-    }
-    requester {
-      id
-      name
-      email
-      phone
-    }
-    assignee {
-      id
-      name
-      email
-    }
-    techGroup {
-      id
-      name
-    }
-    category {
-      id
-      name
-    }
-    customFields {
-      name
-      value
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here"
-  }
-}
-```
-
-### Update a Ticket
-
-```graphql
-mutation updateTicket($input: UpdateTicketInput!) {
-  updateTicket(input: $input) {
-    ticketId
-    ticketNumber
-    status
-    priority
-    assignee {
-      id
-      name
-    }
-    lastUpdatedTime
-  }
-}
-```
-
-**Variables - Assign and Change Status:**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here",
-    "status": "In Progress",
-    "assignee": {
-      "id": "tech-uuid"
-    },
-    "priority": "HIGH"
-  }
-}
-```
-
-**Variables - Resolve Ticket:**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here",
-    "status": "Resolved",
-    "resolution": "Cleared Outlook cache and repaired Office installation. Email flow restored."
-  }
-}
-```
-
-### Add Ticket Note
-
-```graphql
-mutation addTicketNote($input: AddTicketNoteInput!) {
-  addTicketNote(input: $input) {
-    noteId
-    content
-    createdTime
-    isPublic
-    createdBy {
-      id
-      name
-    }
-  }
-}
-```
-
-**Variables - Internal Note:**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here",
-    "content": "Checked event logs - found KB5034441 update correlation. Known Outlook cache issue.",
-    "isPublic": false
-  }
-}
-```
-
-**Variables - Public Note (visible to client):**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here",
-    "content": "We've identified the cause of the issue. A technician is working on the fix and will have it resolved within the hour.",
-    "isPublic": true
-  }
-}
-```
-
-### Add Time Entry
-
-```graphql
-mutation addTicketTimeEntry($input: AddTimeEntryInput!) {
-  addTicketTimeEntry(input: $input) {
-    timeEntryId
-    ticketId
-    duration
-    description
-    technician {
-      id
-      name
-    }
-    createdTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid-here",
-    "duration": 30,
-    "description": "Troubleshooting Outlook connectivity, cleared cache, repaired Office installation",
-    "workType": "Remote Support",
-    "billable": true
-  }
-}
-```
+See [references/api.md](references/api.md) for the full operation catalog with
+request shapes and variable examples.
 
 ## Common Workflows
 
@@ -361,64 +86,16 @@ mutation addTicketTimeEntry($input: AddTimeEntryInput!) {
 
 ### Ticket Triage Workflow
 
-```graphql
-# 1. Get unassigned tickets
-query getUnassignedTickets($input: ListInfoInput!) {
-  getTicketList(input: $input) {
-    tickets {
-      ticketId
-      ticketNumber
-      subject
-      priority
-      client { name }
-      createdTime
-    }
-  }
-}
-```
-
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "status": ["Open"],
-      "assignee": null
-    },
-    "orderBy": {
-      "field": "priority",
-      "direction": "DESC"
-    }
-  }
-}
-```
+1. Query `getTicketList` filtered to `status: ["Open"]` with `assignee: null`,
+   ordered by `priority` descending.
+2. Assign each ticket via `updateTicket` (set `assignee` and `status: "In Progress"`).
 
 ### Escalation Workflow
 
-```graphql
-mutation escalateTicket($input: UpdateTicketInput!) {
-  updateTicket(input: $input) {
-    ticketId
-    status
-    priority
-    techGroup { name }
-  }
-}
-```
+Escalation is an `updateTicket` call that raises `priority` and reassigns
+`techGroup` to the higher tier, with an `escalationReason` recording why.
 
-Variables:
-```json
-{
-  "input": {
-    "ticketId": "ticket-uuid",
-    "priority": "CRITICAL",
-    "techGroup": {
-      "name": "Tier 2 Support"
-    },
-    "escalationReason": "Complex Exchange hybrid configuration issue"
-  }
-}
-```
+See [references/api.md](references/api.md) for both workflow queries.
 
 ## Error Handling
 
@@ -462,8 +139,7 @@ function validateTicketInput(input) {
 3. **Set accurate priority** - Use impact/urgency matrix
 4. **Log time immediately** - Don't batch at end of day
 5. **Update status promptly** - Keeps queues accurate
-6. **Document thoroughly** - Future technicians will thank you
-7. **Use internal notes for technical details** - Keep public notes professional
+6. **Use internal notes for technical details** - Keep public notes professional
 
 ## Related Skills
 

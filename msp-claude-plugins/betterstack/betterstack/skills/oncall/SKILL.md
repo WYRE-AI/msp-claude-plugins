@@ -1,16 +1,16 @@
 ---
 name: "Better Stack On-Call"
 description: >
-  Use this skill when working with Better Stack on-call schedules --
-  on-call calendars, escalation/notification policies, rotation management,
-  understanding who is currently on-call, and responding to active incidents
-  via the on-call flow.
+  Better Stack on-call: on-call calendars and rotations, escalation and
+  notification policies, alert routing, and determining who is currently on
+  call.
 when_to_use: >-
-  When working with call schedules -- on-call calendars, escalation/notification policies,
-  rotation management, understanding who is currently on-call. Use when: betterstack on-call,
-  betterstack oncall, on-call schedule, on-call calendar, escalation policy, notification policy,
-  alert routing, on-call rotation, betterstack schedule, betterstack who is on call, betterstack
-  paging, or betterstack responder.
+  When finding out who is on call, editing rotations or escalation policies,
+  or paging responders in Better Stack. Use when: betterstack on-call,
+  betterstack oncall, on-call schedule, on-call calendar, escalation policy,
+  notification policy, alert routing, on-call rotation, betterstack
+  schedule, betterstack who is on call, betterstack paging, or betterstack
+  responder.
 ---
 
 # Better Stack On-Call Management

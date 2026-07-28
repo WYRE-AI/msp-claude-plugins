@@ -1,13 +1,12 @@
 ---
 name: "Better Stack Logging"
 description: >
-  Use this skill when working with Better Stack log management (Logtail) --
-  querying logs, managing log sources, structured log search,
-  log-based alerting, and log analysis workflows.
+  Better Stack log management (Logtail): log sources, structured log search
+  and query syntax, log-based alerting, and log analysis workflows.
 when_to_use: >-
-  When querying logs, managing log sources, structured log search, log-based alerting, and log
-  analysis workflows. Use when: betterstack logs, logtail, log search, log query, log source,
-  search logs, log management, better stack logging, or log analysis.
+  When querying logs or managing log sources in Better Stack / Logtail. Use
+  when: betterstack logs, logtail, log search, log query, log source, search
+  logs, log management, better stack logging, or log analysis.
 ---
 
 # Better Stack Log Management (Logtail)
@@ -189,7 +188,6 @@ Parameters:
 - Use source filters to scope queries to relevant services
 - Create saved queries for common investigation patterns
 - Set up log-based alerts for critical error patterns
-- Rotate source tokens periodically for security
 - Use log levels consistently: error for failures, warn for degradation, info for operations
 - Include contextual fields (user_id, tenant_id, request_id) for efficient filtering
 

@@ -1,13 +1,13 @@
 ---
 name: "PandaDoc API Patterns"
 description: >
-  Use this skill when working with PandaDoc MCP tools - available tools,
-  API key authentication, the hosted MCP server connection, documentation
-  search, code generation assistance, rate limiting, error handling,
-  and best practices for the PandaDoc API.
+  PandaDoc hosted MCP server and API fundamentals: API-key authentication and
+  which operations work without a key, the complete MCP tool catalog (documents,
+  templates, recipients, docs search, code samples), page-based pagination,
+  document and template filters, rate limits per plan, and error codes.
 when_to_use: >-
-  When working with available tools, API key authentication, the hosted MCP server connection,
-  documentation search, code generation assistance, rate limiting, error handling. Use when:
+  When connecting to the PandaDoc MCP server or calling the PandaDoc API, or when
+  troubleshooting authentication, pagination, rate limits, or error responses. Use when:
   pandadoc api, pandadoc query, pandadoc authentication, pandadoc mcp, pandadoc rate limit,
   pandadoc request, pandadoc api key, pandadoc tools, pandadoc connection, pandadoc endpoint, or
   pandadoc auth.
@@ -17,7 +17,7 @@ when_to_use: >-
 
 ## Overview
 
-PandaDoc provides a hosted MCP server at `https://developers.pandadoc.com/mcp` for AI tool integration. The MCP server provides direct API access to PandaDoc's document automation platform, documentation search, and code generation assistance. This skill covers MCP server connection, authentication, the complete tool reference, rate limiting, error handling, and best practices.
+PandaDoc provides a hosted MCP server at `https://developers.pandadoc.com/mcp` for AI tool integration. The MCP server provides direct API access to PandaDoc's document automation platform, documentation search, and code generation assistance.
 
 ## Connection & Authentication
 
@@ -240,14 +240,13 @@ When rate limited, the API returns HTTP 429. Wait before retrying. Use exponenti
 
 1. **Use template-based creation** - Always create documents from templates for consistency
 2. **Filter server-side** - Use `status`, `q`, and `tag` parameters to narrow results
-3. **Monitor rate limits** - Stay well under your plan's request limit
-4. **Use document tags** - Tag documents by client, type, or project for easy filtering
-5. **Check status before sending** - Verify a document is in `draft` status before sending
-6. **Use content tokens** - Populate template variables (tokens) to personalize documents
-7. **Set expiration dates** - Use expiration dates on proposals to create urgency
-8. **Track recipient completion** - Check `has_completed` for each recipient to monitor progress
-9. **Download completed documents** - Archive signed documents after completion
-10. **Use folders** - Organize templates and documents in folders for better management
+3. **Use document tags** - Tag documents by client, type, or project for easy filtering
+4. **Check status before sending** - Verify a document is in `draft` status before sending
+5. **Use content tokens** - Populate template variables (tokens) to personalize documents
+6. **Set expiration dates** - Use expiration dates on proposals to create urgency
+7. **Track recipient completion** - Check `has_completed` for each recipient to monitor progress
+8. **Download completed documents** - Archive signed documents after completion
+9. **Use folders** - Organize templates and documents in folders for better management
 
 ## Related Skills
 

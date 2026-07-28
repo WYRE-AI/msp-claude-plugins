@@ -1,14 +1,13 @@
 ---
 name: "Atera API Patterns"
 description: >
-  Use this skill when working with the Atera REST API - authentication,
-  pagination, rate limiting, and error handling. Covers X-API-KEY header
-  authentication, OData-style pagination, 700 requests/minute rate limits,
-  and best practices for API integration.
+  Atera REST API fundamentals: X-API-KEY header authentication, OData-style
+  pagination, the 700 requests/minute rate limit, endpoint conventions, and
+  error handling.
 when_to_use: >-
-  When working with authentication, pagination, rate limiting, and error handling in the Atera
-  REST API. Use when: atera api, atera authentication, api key atera, atera pagination, api rate
-  limit, atera rest api, api error atera, or odata pagination.
+  When authenticating to or calling the Atera REST API. Use when: atera api,
+  atera authentication, api key atera, atera pagination, api rate limit,
+  atera rest api, api error atera, or odata pagination.
 ---
 
 # Atera API Patterns
@@ -51,17 +50,9 @@ Accept: application/json
 export ATERA_API_KEY="your-api-key-here"
 ```
 
-### Security Best Practices
-
-1. **Never commit API keys** - Use environment variables
-2. **Rotate keys periodically** - Generate new keys regularly
-3. **Use HTTPS only** - Atera requires HTTPS
-4. **Limit key access** - Only share with necessary services
-5. **Monitor usage** - Watch for unauthorized access
-
 ## Base URL
 
-All API requests use the following base URL:
+All API requests use the following base URL. Atera requires HTTPS; plain HTTP is rejected.
 
 ```
 https://app.atera.com/api/v3
@@ -107,46 +98,14 @@ X-API-KEY: {api_key}
 | `itemsInPage` | int | Items in current page |
 | `totalPages` | int | Total number of pages |
 
-### Efficient Pagination Pattern
-
-```javascript
-async function fetchAllItems(endpoint) {
-  const allItems = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(
-      `https://app.atera.com/api/v3/${endpoint}?page=${page}&itemsInPage=50`,
-      {
-        headers: {
-          'X-API-KEY': process.env.ATERA_API_KEY
-        }
-      }
-    );
-
-    const data = await response.json();
-    allItems.push(...data.items);
-
-    hasMore = page < data.totalPages;
-    page++;
-
-    // Respect rate limits
-    if (hasMore) {
-      await sleep(100); // 100ms between requests
-    }
-  }
-
-  return allItems;
-}
-```
-
 ### Pagination Best Practices
 
 1. **Use maximum page size** - 50 items reduces API calls
 2. **Add delays between pages** - Avoid hitting rate limits
 3. **Cache total counts** - Don't re-fetch unnecessarily
 4. **Implement retry logic** - Handle transient failures
+
+See [references/examples.md](references/examples.md) for a working page-walking implementation.
 
 ## Rate Limiting
 
@@ -174,81 +133,7 @@ When rate limited (HTTP 429):
 }
 ```
 
-### Retry Strategy with Exponential Backoff
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        // Rate limited - wait and retry
-        const retryAfter = parseInt(response.headers.get('Retry-After')) || 30;
-        const jitter = Math.random() * 1000;
-        console.log(`Rate limited. Waiting ${retryAfter}s...`);
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      // Exponential backoff with jitter
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      console.log(`Attempt ${attempt + 1} failed. Retrying in ${delay}ms...`);
-      await sleep(delay);
-    }
-  }
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-```
-
-### Request Throttling
-
-To stay within limits, implement request throttling:
-
-```javascript
-class RateLimiter {
-  constructor(maxRequests = 700, windowMs = 60000) {
-    this.maxRequests = maxRequests;
-    this.windowMs = windowMs;
-    this.requests = [];
-  }
-
-  async throttle() {
-    const now = Date.now();
-
-    // Remove requests outside window
-    this.requests = this.requests.filter(t => t > now - this.windowMs);
-
-    if (this.requests.length >= this.maxRequests) {
-      // Wait until oldest request expires
-      const waitTime = this.requests[0] - (now - this.windowMs) + 100;
-      await sleep(waitTime);
-    }
-
-    this.requests.push(Date.now());
-  }
-}
-
-const limiter = new RateLimiter();
-
-async function makeRequest(endpoint) {
-  await limiter.throttle();
-  return fetch(`https://app.atera.com/api/v3/${endpoint}`, {
-    headers: { 'X-API-KEY': process.env.ATERA_API_KEY }
-  });
-}
-```
+See [references/examples.md](references/examples.md) for exponential-backoff retry and a sliding-window throttler.
 
 ## Error Handling
 
@@ -274,229 +159,29 @@ async function makeRequest(endpoint) {
 }
 ```
 
-### Error Handling Pattern
-
-```javascript
-async function handleAteraRequest(endpoint, options = {}) {
-  const response = await fetch(
-    `https://app.atera.com/api/v3/${endpoint}`,
-    {
-      ...options,
-      headers: {
-        'X-API-KEY': process.env.ATERA_API_KEY,
-        'Content-Type': 'application/json',
-        ...options.headers
-      }
-    }
-  );
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-
-    switch (response.status) {
-      case 401:
-        throw new Error('Invalid API key. Check ATERA_API_KEY.');
-      case 403:
-        throw new Error('Permission denied. Check API key permissions.');
-      case 404:
-        throw new Error(`Resource not found: ${endpoint}`);
-      case 429:
-        throw new Error('Rate limit exceeded. Implement backoff.');
-      default:
-        throw new Error(error.Message || `API error: ${response.status}`);
-    }
-  }
-
-  return response.json();
-}
-```
+See [references/examples.md](references/examples.md) for a request wrapper that maps these statuses to actionable errors.
 
 ## CRUD Operations
 
-### Create (POST)
+Atera does not use `PUT`. **Updates are a `POST` to the entity's ID URL** — the same verb as create, distinguished only by whether the URL carries an ID:
 
 ```http
-POST /api/v3/tickets
-X-API-KEY: {api_key}
-Content-Type: application/json
-
-{
-  "TicketTitle": "New ticket",
-  "Description": "Issue description",
-  "EndUserID": 12345,
-  "TicketPriority": "Medium"
-}
+POST /api/v3/tickets          # create
+POST /api/v3/tickets/54321    # update
+DELETE /api/v3/tickets/54321  # delete
 ```
 
-**Response:**
-```json
-{
-  "ActionID": 54321,
-  "TicketID": 54321
-}
-```
+Write responses return an `ActionID` alongside the entity ID rather than the full entity, so re-read the record if you need its post-write state.
 
-### Read (GET)
-
-**Single entity:**
-```http
-GET /api/v3/tickets/54321
-X-API-KEY: {api_key}
-```
-
-**List with pagination:**
-```http
-GET /api/v3/tickets?page=1&itemsInPage=50
-X-API-KEY: {api_key}
-```
-
-### Update (POST to specific ID)
-
-```http
-POST /api/v3/tickets/54321
-X-API-KEY: {api_key}
-Content-Type: application/json
-
-{
-  "TicketStatus": "Resolved",
-  "TicketPriority": "Low"
-}
-```
-
-### Delete (DELETE)
-
-```http
-DELETE /api/v3/tickets/54321
-X-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "ActionID": 54321,
-  "Success": true
-}
-```
-
-## Available Endpoints
-
-### Core Resources
-
-| Endpoint | Methods | Description |
-|----------|---------|-------------|
-| `/tickets` | GET, POST, DELETE | Service tickets |
-| `/tickets/{id}/comments` | GET, POST | Ticket comments |
-| `/tickets/{id}/workhours` | GET | Work hour entries |
-| `/agents` | GET, DELETE | RMM agents |
-| `/agents/{id}/powershell` | POST | Run PowerShell |
-| `/customers` | GET, POST, DELETE | Customers |
-| `/contacts` | GET, POST, DELETE | Contacts |
-| `/alerts` | GET, POST, DELETE | Alerts |
-
-### Device Monitors
-
-| Endpoint | Methods | Description |
-|----------|---------|-------------|
-| `/devices/generic` | GET | All devices |
-| `/devices/http` | GET, POST, DELETE | HTTP monitors |
-| `/devices/snmp` | GET, POST, DELETE | SNMP v1/v2c monitors |
-| `/devices/snmpv3` | GET, POST, DELETE | SNMP v3 monitors |
-| `/devices/tcp` | GET, POST, DELETE | TCP monitors |
-
-### Additional Resources
-
-| Endpoint | Methods | Description |
-|----------|---------|-------------|
-| `/contracts` | GET | Service contracts |
-| `/billing/invoices` | GET | Billing invoices |
-| `/customvalues` | GET, POST, DELETE | Custom field values |
-| `/knowledgebases` | GET | Knowledge base articles |
-| `/rates` | GET, POST | Product/expense rates |
+See [references/api.md](references/api.md) for the complete endpoint catalog and full request/response shapes.
 
 ## Performance Optimization
 
-### Batch Operations
+- **Batch operations** - group related requests, with a delay between batches
+- **Cache reference data** - customers, contacts, and contracts change slowly
+- **Parallelize independent reads** - but count them against the 700/min budget
 
-When processing multiple items, batch requests:
-
-```javascript
-async function batchProcess(items, batchSize = 10, delayMs = 1000) {
-  const results = [];
-
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-
-    const batchResults = await Promise.all(
-      batch.map(item => processItem(item))
-    );
-
-    results.push(...batchResults);
-
-    // Delay between batches to respect rate limits
-    if (i + batchSize < items.length) {
-      await sleep(delayMs);
-    }
-  }
-
-  return results;
-}
-```
-
-### Caching Strategy
-
-Cache slowly-changing data to reduce API calls:
-
-```javascript
-const cache = new Map();
-
-async function getCachedData(key, fetchFn, ttlMs = 300000) {
-  const cached = cache.get(key);
-
-  if (cached && cached.expires > Date.now()) {
-    return cached.data;
-  }
-
-  const data = await fetchFn();
-  cache.set(key, {
-    data,
-    expires: Date.now() + ttlMs
-  });
-
-  return data;
-}
-
-// Usage
-const customers = await getCachedData(
-  'customers',
-  () => fetchAllItems('customers'),
-  5 * 60 * 1000 // 5 minute cache
-);
-```
-
-### Parallel Requests
-
-For independent requests, use parallel execution:
-
-```javascript
-const [tickets, agents, alerts] = await Promise.all([
-  fetchAllItems('tickets'),
-  fetchAllItems('agents'),
-  fetchAllItems('alerts')
-]);
-```
-
-## Best Practices Summary
-
-1. **Use X-API-KEY header** - Never include key in URL
-2. **Implement rate limiting** - Stay under 700 req/min
-3. **Add retry logic** - Handle transient failures
-4. **Use pagination** - Request 50 items per page
-5. **Cache reference data** - Reduce redundant requests
-6. **Handle errors gracefully** - Log and recover
-7. **Monitor usage** - Track API call volume
-8. **Batch operations** - Group related requests
-9. **Use HTTPS only** - Required by Atera
-10. **Validate inputs** - Check before sending
+See [references/examples.md](references/examples.md) for batching, caching, and parallel-fetch implementations.
 
 ## Related Skills
 

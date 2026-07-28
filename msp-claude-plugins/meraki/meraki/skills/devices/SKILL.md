@@ -1,10 +1,9 @@
 ---
 name: "Meraki Devices"
 description: >
-  Use this skill when working with Cisco Meraki device inventory and
-  lifecycle -- listing devices in a network, getting a device by serial,
-  rebooting, removing, and checking device/uplink status via
-  meraki_raw_request across MX, MS, MR, MV, MG, and MT hardware.
+  Cisco Meraki device inventory and lifecycle: serial-based identity, the
+  MX/MS/MR/MV/MG/MT product lines, org inventory vs network assignment,
+  reboot and removal, and device/uplink status via meraki_raw_request.
 when_to_use: >-
   When working with Meraki device inventory and lifecycle -- list, get by serial, reboot, remove,
   and check device or uplink status. Use when: meraki device, meraki serial, meraki inventory,

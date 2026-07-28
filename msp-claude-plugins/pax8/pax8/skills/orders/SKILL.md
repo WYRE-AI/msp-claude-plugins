@@ -1,14 +1,13 @@
 ---
 name: "Pax8 Orders"
 description: >
-  Use this skill when working with Pax8 orders - viewing orders,
-  tracking provisioning status, understanding order line items, and
-  managing the order-to-subscription workflow. Covers order retrieval,
-  status tracking, and provisioning timelines.
+  Pax8 orders: order retrieval, order line items, provisioning status and timelines,
+  billing terms, and the order-to-subscription workflow.
 when_to_use: >-
-  When viewing orders, tracking provisioning status, understanding order line items, and managing
-  the order-to-subscription workflow. Use when: pax8 order, pax8 purchase, pax8 provision, pax8
-  buy, place order pax8, order status, order tracking, new subscription order, or pax8 ordering.
+  When viewing orders, tracking provisioning status, or following an order through to an
+  active subscription. Use when: pax8 order, pax8 purchase, pax8 provision, pax8 buy,
+  place order pax8, order status, order tracking, new subscription order, or pax8
+  ordering.
 ---
 
 # Pax8 Order Management

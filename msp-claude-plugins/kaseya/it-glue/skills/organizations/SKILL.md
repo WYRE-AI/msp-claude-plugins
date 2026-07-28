@@ -1,10 +1,10 @@
 ---
 name: "IT Glue Organizations"
 description: >
-  Use this skill when working with IT Glue organizations (companies/clients) -
-  creating, searching, updating, and managing client documentation. Covers
-  organization types, statuses, parent/child relationships, PSA sync, quick
-  notes, and related resources like configurations, contacts, and passwords.
+  IT Glue organizations (companies/clients): the foundational entity all
+  documentation, configurations, contacts, passwords, and flexible assets
+  attach to. Covers organization types, statuses, parent/child relationships,
+  PSA sync fields, and quick notes.
 when_to_use: >-
   When creating, searching, updating, and managing client documentation. Use when: it glue
   organization, it glue company, client documentation, organization lookup, it glue client,
@@ -351,10 +351,9 @@ async function safeCreateOrganization(data) {
 4. **Link to PSA** - Always set psa-id for cross-platform lookups
 5. **Use parent/child** - Organize multi-location or division clients
 6. **Archive, don't delete** - Preserve historical documentation
-7. **Regular audits** - Review organization list quarterly
-8. **Document alerts** - Use alert field for critical client notices
-9. **Primary contact** - Always set a primary contact for each org
-10. **Standardize naming** - Use consistent naming conventions
+7. **Document alerts** - Use alert field for critical client notices
+8. **Primary contact** - Always set a primary contact for each org
+9. **Standardize naming** - Use consistent naming conventions
 
 ## Related Skills
 

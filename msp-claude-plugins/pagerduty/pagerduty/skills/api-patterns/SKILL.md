@@ -1,14 +1,14 @@
 ---
 name: "PagerDuty API Patterns"
 description: >
-  Use this skill when working with PagerDuty MCP tools - authentication setup,
-  complete 66-tool reference, REST API pagination, token format (Token token=),
-  rate limits, error handling, and hosted MCP connection details. Covers all
-  13 tool categories: incidents, on-call, schedules, escalation policies,
-  services, event orchestrations, status pages, teams, users, and more.
+  PagerDuty API and hosted MCP fundamentals: US/EU MCP endpoints, the
+  `Token token=` auth header and token types, the complete 66-tool reference
+  across 13 categories (incidents, on-call, schedules, escalation policies,
+  services, event orchestrations, status pages, teams, users, and more),
+  offset pagination, common filter parameters, rate limits, and error codes.
 when_to_use: >-
-  When working with authentication setup, complete 66-tool reference, REST API pagination, token
-  format (Token token=), rate limits, error handling. Use when: pagerduty api, pagerduty mcp,
+  When authenticating to PagerDuty, connecting to its MCP server, or shaping any
+  PagerDuty request. Use when: pagerduty api, pagerduty mcp,
   pagerduty token, pagerduty authentication, pagerduty pagination, pagerduty tools, pagerduty
   connection, pagerduty request, pagerduty credentials, pagerduty rate limit, or pagerduty
   endpoint.
@@ -220,11 +220,10 @@ Most list tools support these standard filters:
 
 ## Best Practices
 
-1. **Use `Token token=` format** — `Bearer` will always return 401
-2. **Filter server-side** — Use `team_ids[]` and `service_ids[]` to scope results
-3. **Paginate with limit=100** — Max allowed; reduces round trips for large accounts
-4. **Use `since`/`until` for incident queries** — Avoid unbounded queries on large accounts
-5. **List before get** — Always list to find IDs before calling single-resource get tools
+1. **Filter server-side** — Use `team_ids[]` and `service_ids[]` to scope results
+2. **Paginate with limit=100** — Max allowed; reduces round trips for large accounts
+3. **Use `since`/`until` for incident queries** — Avoid unbounded queries on large accounts
+4. **List before get** — Always list to find IDs before calling single-resource get tools
 
 ## Related Skills
 

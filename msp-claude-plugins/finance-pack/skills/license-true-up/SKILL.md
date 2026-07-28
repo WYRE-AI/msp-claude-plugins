@@ -1,11 +1,12 @@
 ---
 name: "License True-Up"
 description: >
-  Use this skill when matching cloud-marketplace subscription seat counts
-  (Pax8, Sherweb) against what is actually being billed to the client and what
-  is actually deployed/active in the tenant (M365/CIPP user counts where
-  available). Catches "paying for 50 seats but billing for 45" and
-  "deprovisioned 5 users but never reduced the subscription" gaps.
+  Three-way seat reconciliation per client per SKU: seats provisioned in a
+  cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA
+  billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).
+  Covers the finding class for each pairwise mismatch, disabled users holding
+  paid licenses, intentional-buffer caveats, and how to degrade to a two-way
+  check when an axis isn't connected.
 when_to_use: >-
   When checking whether marketplace-purchased seats, billed seats, and
   actually-deployed seats all agree for a client or across the portfolio. Use
@@ -48,13 +49,6 @@ too.
 | Pax8 / Sherweb | Provisioned seat count, unit cost, SKU, renewal/commitment term | Yes (at least one) |
 | Accounting (QuickBooks Online / Xero) or PSA billing (Autotask/HaloPSA/ConnectWise/Syncro billing items) | Billed seat count and sell price | Yes (at least one) |
 | Microsoft 365 / Entra (via `microsoft-graph`) or CIPP | Actually assigned/active seat count, per-user license and account status | Optional — strongly recommended when available |
-
-If no marketplace distributor is connected, this skill cannot run — there is no
-provisioned baseline. If neither an accounting platform nor PSA billing data is
-connected, the skill degrades to a two-way check (provisioned vs. deployed)
-and says so explicitly. If M365/CIPP is not connected, the skill degrades to a
-two-way check (provisioned vs. billed) — still valuable, just report the missing
-axis rather than guessing deployment.
 
 ## Workflow
 

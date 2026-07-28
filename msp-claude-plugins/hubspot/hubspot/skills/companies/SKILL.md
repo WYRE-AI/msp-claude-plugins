@@ -1,12 +1,11 @@
 ---
 name: "HubSpot Companies"
 description: >
-  Use this skill when working with HubSpot companies - searching, creating,
-  updating, and auditing company records in HubSpot CRM. Covers company
-  fields, industry classification, lifecycle stages, domain matching,
-  and cross-referencing with contacts, deals, and tickets.
+  HubSpot company records: core fields, industry classification values,
+  lifecycle stages, domain-based deduplication and automatic contact-company
+  matching, and cross-referencing associated contacts, deals, and tickets.
 when_to_use: >-
-  When searching, creating, updating, and auditing company records in HubSpot CRM. Use when:
+  When searching, creating, updating, or auditing company records in HubSpot CRM. Use when:
   hubspot company, hubspot organization, hubspot client, hubspot account, company search hubspot,
   company management hubspot, hubspot domain, hubspot industry, client management hubspot, or
   company audit hubspot.
@@ -312,15 +311,14 @@ Common industry values for MSP clients:
 ## Best Practices
 
 1. **Always set domain** - The domain field enables automatic contact-company association and deduplication
-2. **Search before creating** - Check by domain to avoid duplicate company records
-3. **Use lifecycle stages** - Track companies through your MSP's sales pipeline
-4. **Set industry** - Categorize companies by industry for better segmentation and reporting
-5. **Assign owners** - Set `hubspot_owner_id` to assign an account manager to each client
-6. **Track employee count and revenue** - Keep these fields updated for client sizing and prioritization
-7. **Associate all contacts** - Ensure every contact at a client company is linked to the company record
-8. **Audit quarterly** - Review company records for completeness and accuracy
-9. **Use company type** - Set the `type` field (Prospect, Partner, Vendor, etc.) for clear categorization
-10. **Standardize naming** - Use consistent company naming conventions across HubSpot and your PSA
+2. **Use lifecycle stages** - Track companies through your MSP's sales pipeline
+3. **Set industry** - Categorize companies by industry for better segmentation and reporting
+4. **Assign owners** - Set `hubspot_owner_id` to assign an account manager to each client
+5. **Track employee count and revenue** - Keep these fields updated for client sizing and prioritization
+6. **Associate all contacts** - Ensure every contact at a client company is linked to the company record
+7. **Audit quarterly** - Review company records for completeness and accuracy
+8. **Use company type** - Set the `type` field (Prospect, Partner, Vendor, etc.) for clear categorization
+9. **Standardize naming** - Use consistent company naming conventions across HubSpot and your PSA
 
 ## Related Skills
 

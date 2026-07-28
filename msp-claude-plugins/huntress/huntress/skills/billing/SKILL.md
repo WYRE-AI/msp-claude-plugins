@@ -1,12 +1,12 @@
 ---
 name: "Huntress Billing"
 description: >
-  Use this skill when generating Huntress billing and summary reports —
-  listing available reports, retrieving billing details, and creating
-  client-facing summaries for MSP invoicing.
+  Huntress billing and summary reports: what each report type contains, the
+  list/get tools for both, and the monthly reconciliation, QBR security
+  summary, and cost-analysis workflows an MSP builds from them.
 when_to_use: >-
-  When generating Huntress billing and summary reports — listing available reports, retrieving
-  billing details, and creating client-facing summaries for MSP invoicing. Use when: huntress
+  When pulling Huntress billing or summary reports for invoicing, reconciliation, or a
+  client-facing security summary. Use when: huntress
   billing, huntress report, billing report, summary report, client invoice, or msp billing.
 ---
 

@@ -1,17 +1,16 @@
 ---
 name: "ThreatLocker Approval Requests"
 description: >
-  Use this skill when triaging ThreatLocker application approval
-  requests — the heart of day-to-day ThreatLocker operations. Covers
-  pulling the pending queue, grouping requests by application/hash,
-  applying signed-publisher heuristics, and recommending approve/deny
-  decisions with audit-friendly reasoning.
+  ThreatLocker application approval request triage: pulling the pending queue, grouping
+  requests by application and hash, signed-publisher and path heuristics, and
+  approve/deny recommendations with audit-friendly reasoning.
 when_to_use: >-
-  When triaging pending application approvals, evaluating signer/path heuristics, classifying
-  high-confidence vs needs-review requests, or producing an approval queue summary. Use when:
-  threatlocker approval, threatlocker pending approval, threatlocker approve application,
-  threatlocker deny application, threatlocker request triage, threatlocker application request,
-  approve threatlocker, permit application threatlocker, or threatlocker queue.
+  When triaging pending application approvals, evaluating signer/path heuristics,
+  classifying high-confidence vs needs-review requests, or producing an approval queue
+  summary. Use when: threatlocker approval, threatlocker pending approval, threatlocker
+  approve application, threatlocker deny application, threatlocker request triage,
+  threatlocker application request, approve threatlocker, permit application
+  threatlocker, or threatlocker queue.
 ---
 
 # ThreatLocker Approval Requests

@@ -1,19 +1,17 @@
 ---
 name: "Network Health Sweep"
+description: >
+  A normalized device and network health sweep across whatever
+  network-monitoring tools (Auvik, Meraki, Domotz) are connected: each vendor
+  family's data model and native status fields mapped into one
+  Down/Degraded/Unknown/Healthy taxonomy, default interface error and
+  utilization thresholds, topology-change detection, and why an offline
+  Domotz collector renders its devices "unknown" rather than "down".
 when_to_use: >-
   When running a portfolio-wide or single-client network health check across
   whatever network monitoring tools are connected. Use when: network health,
   network audit, device down, device offline, interface errors, interface
   utilization, topology change, network status review, is the network okay.
-description: >
-  Use this skill when checking device and network health across whatever
-  network-monitoring tools (Auvik, Meraki, Domotz) are connected through the
-  gateway. Covers device-down detection, interface error/utilization
-  thresholds, topology-change detection, and how to reconcile each vendor
-  family's different data model — Auvik's device/interface model, Meraki's
-  dashboard-org/network model, Domotz's agent-based collector model — into
-  one normalized health view. Always use conduit__search_tools to discover
-  what's actually connected before assuming a specific vendor's tool names.
 ---
 
 # Network Health Sweep
@@ -148,17 +146,9 @@ and why, and don't let one vendor's failure suppress the rest of the report.
 
 ## Best Practices
 
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
 - Keep each vendor's native status visible alongside the normalized status in
   the output, so a technician can cross-check against the vendor's own
   console if needed.
-- State default thresholds explicitly when no client-specific policy is
-  known, so the reader can tell a tuned judgment from an assumed one.
-- Treat an offline collector (Domotz agent) as a distinct failure mode from a
-  down device — conflating them produces false "everything is down" reports.
-- Don't silently drop a vendor family from the sweep because a lookup failed
-  — report the gap.
 
 ## Related Skills
 

@@ -1,11 +1,9 @@
 ---
 name: "Clio Matters"
 description: >
-  Use this skill when creating, updating, searching, or reasoning about
-  Clio matters — the case/client-file object that almost everything else
-  in Clio hangs off of. Covers the matter status lifecycle, linking a
-  matter to a client contact, practice areas, custom fields, and matter
-  numbering.
+  Clio matters -- the case/client-file object that almost everything else
+  in Clio hangs off of: the matter status lifecycle, linking a matter to a
+  client contact, practice areas, custom fields, and matter numbering.
 when_to_use: >-
   When creating, updating, searching, or summarizing a Clio matter, or when
   deciding what a matter's status means. Use when: clio matter, clio case,

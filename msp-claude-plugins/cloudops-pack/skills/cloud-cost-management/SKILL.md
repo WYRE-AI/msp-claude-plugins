@@ -1,19 +1,19 @@
 ---
 name: "Cloud Cost Management"
+description: >
+  Cloud spend anomaly detection and reclaimable-spend hunting on whatever
+  platforms (Azure, DigitalOcean) are connected: the signals that make a
+  spend increase an anomaly rather than expected cost, the per-platform
+  orphaned/idle resource catalog (unattached storage, idle load balancers,
+  stopped-but-not-deallocated compute, idle managed databases, orphaned
+  network resources), and how to build a monthly cost trend view — or a
+  clearly labeled inventory-and-list-pricing estimate when a platform
+  exposes no billing data.
 when_to_use: >-
   When tracking cloud spend, investigating a cost spike, or hunting for
   orphaned/idle resources that are still incurring cost. Use when: cloud
   cost anomaly, unexpected cloud spend, cost spike, orphaned resources, idle
   resources, cloud bill went up, reclaim spend, cost trend.
-description: >
-  Use this skill when tracking and flagging cloud spend anomalies across
-  whatever cloud platforms (Azure, DigitalOcean) are connected through the
-  gateway. Covers unexpected cost spikes, orphaned/idle resources still
-  incurring cost (unattached volumes, idle load balancers, stopped-but-not-
-  deallocated compute), and how to build a monthly cost trend view from
-  whatever billing/usage data each connected platform exposes. Always use
-  conduit__search_tools to discover which cloud platforms are actually
-  connected before assuming a specific vendor.
 ---
 
 # Cloud Cost Management
@@ -146,19 +146,6 @@ as an estimate. Never present an estimate as a billed actual.
 Report it with its confidence level and evidence rather than omitting it or
 overstating certainty — a "likely idle, needs confirmation" finding is still
 useful if labeled honestly.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
-- Rank both anomalies and reclaimable-spend findings by dollar impact, not
-  alphabetically or by discovery order — the reader's attention should go to
-  the biggest numbers first.
-- Clearly separate "investigate this spike" from "reclaim this idle
-  resource" — they're different actions.
-- Label estimates as estimates; never present a derived figure as a billed
-  actual.
-- State the comparison window explicitly for every anomaly finding.
 
 ## Related Skills
 

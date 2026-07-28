@@ -1,280 +1,44 @@
 ---
 name: "Liongard Systems"
 description: >
-  Use this skill when working with Liongard systems, system details,
-  dataprints for JMESPath evaluation, or asset inventory. Covers
-  discovered systems from inspections, system detail data, dataprint
-  extraction, and identity/device profiles.
+  Liongard systems — the assets discovered by inspections — plus their
+  detail data (raw configuration JSON with historical snapshots),
+  dataprint extraction via JMESPath expressions, and the v2 Asset
+  Inventory identity and device profiles that correlate one entity
+  across multiple inspectors.
 when_to_use: >-
-  When working with Liongard systems, system details, dataprints for JMESPath evaluation, or asset
-  inventory. Use when: liongard system, liongard device, system detail, dataprint, jmespath,
-  liongard asset, liongard inventory, system data liongard, or liongard identity.
+  When listing or inspecting discovered assets, reading configuration data out of a
+  system's detail record, writing JMESPath/dataprint expressions, or correlating
+  identities and devices across platforms. Use when: liongard system, liongard device,
+  system detail, dataprint, jmespath, liongard asset, liongard inventory, system data
+  liongard, or liongard identity.
 ---
 
 # Liongard Systems & Data
 
 ## Overview
 
-Systems are the entities discovered during Liongard inspections. When a launchpoint runs an inspection, it discovers systems such as servers, firewalls, cloud services, user accounts, domain controllers, and other infrastructure components. Each system contains detailed configuration data captured at the time of inspection, providing a historical record of the IT environment.
+Systems are the entities discovered during Liongard inspections. When a launchpoint runs an inspection, it discovers systems such as servers, firewalls, cloud services, user accounts, domain controllers, and other infrastructure components. Each system carries detailed configuration data captured at the time of inspection, giving a historical record of the IT environment.
 
-## System Fields
+## Key Concepts
 
-### Core Fields
+### Systems
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `ID` | int | Unique system identifier |
-| `Name` | string | System display name |
-| `InspectorID` | int | Inspector that discovered this system |
-| `InspectorName` | string | Inspector display name |
-| `LaunchpointID` | int | Launchpoint that produced this system |
-| `LaunchpointName` | string | Launchpoint display name |
-| `EnvironmentID` | int | Parent environment |
-| `EnvironmentName` | string | Environment display name |
-| `Status` | string | Active, Inactive, Error |
-| `LastInspection` | datetime | Last successful inspection timestamp |
-| `SystemType` | string | Type classification (Server, Firewall, etc.) |
-| `CreatedOn` | datetime | First discovery timestamp |
-| `UpdatedOn` | datetime | Last update timestamp |
+A system is identified by `ID` and always traces back to the `InspectorID` that found it, the `LaunchpointID` that produced it, and the parent `EnvironmentID`. `Status` is one of `Active`, `Inactive`, or `Error`; `LastInspection` tells you how fresh the data is. `DetailCount` and `DetectionCount` are only returned on the single-system GET, not in list responses.
 
-### Extended Fields
+See [references/fields.md](references/fields.md) for the complete field reference and the entity relationship map.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `DetailCount` | int | Number of detail records available |
-| `DetectionCount` | int | Number of detections for this system |
-| `Tags` | array | User-assigned tags |
+### System Details
 
-## API Patterns
+System details contain the raw configuration data captured during inspections — the actual IT documentation payload: user lists, firewall rules, backup statuses, license counts, security settings. Details are stored as structured JSON under a top-level `Data` key and can be queried with JMESPath via the dataprints API. Details are versioned: passing `?date=YYYY-MM-DD` returns the snapshot as of that date, which is what makes configuration diffing possible.
 
-### List All Systems
+### Dataprints
 
-```http
-GET /api/v1/systems?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
+Dataprints evaluate a JMESPath expression server-side against a system's detail record, so you retrieve exactly the fields you need instead of pulling the whole detail document and parsing it client-side.
 
-**Response:**
-```json
-{
-  "Data": [
-    {
-      "ID": 10001,
-      "Name": "DC01.acme.local",
-      "InspectorID": 100,
-      "InspectorName": "Active Directory",
-      "LaunchpointID": 5001,
-      "LaunchpointName": "Acme Corp - Active Directory",
-      "EnvironmentID": 1234,
-      "EnvironmentName": "Acme Corporation",
-      "Status": "Active",
-      "LastInspection": "2024-02-15T02:15:00Z",
-      "SystemType": "Domain Controller",
-      "CreatedOn": "2023-06-01T10:30:00Z",
-      "UpdatedOn": "2024-02-15T02:15:00Z"
-    }
-  ],
-  "TotalRows": 2500,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 25,
-  "PageSize": 100
-}
-```
+### Asset Inventory (v2)
 
-### Filter Systems by Environment
-
-```http
-GET /api/v1/systems?environmentId={environmentId}&page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-### Filter Systems by Inspector
-
-```http
-GET /api/v1/systems?inspectorId={inspectorId}&page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-### Filter Systems by Launchpoint
-
-```http
-GET /api/v1/systems?launchpointId={launchpointId}&page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-### Get System by ID
-
-```http
-GET /api/v1/systems/{systemId}
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "ID": 10001,
-  "Name": "DC01.acme.local",
-  "InspectorID": 100,
-  "InspectorName": "Active Directory",
-  "LaunchpointID": 5001,
-  "LaunchpointName": "Acme Corp - Active Directory",
-  "EnvironmentID": 1234,
-  "EnvironmentName": "Acme Corporation",
-  "Status": "Active",
-  "LastInspection": "2024-02-15T02:15:00Z",
-  "SystemType": "Domain Controller",
-  "DetailCount": 45,
-  "DetectionCount": 2,
-  "CreatedOn": "2023-06-01T10:30:00Z",
-  "UpdatedOn": "2024-02-15T02:15:00Z"
-}
-```
-
-## System Details
-
-### What Are System Details?
-
-System details contain the raw configuration data captured during inspections. This is the actual IT documentation data -- user lists, firewall rules, backup statuses, license counts, security settings, and more. Details are stored as structured JSON and can be queried using JMESPath expressions via the dataprints API.
-
-### Get System Detail
-
-```http
-GET /api/v1/systems/{systemId}/detail
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response (example for Active Directory system):**
-```json
-{
-  "SystemID": 10001,
-  "InspectionDate": "2024-02-15T02:15:00Z",
-  "Data": {
-    "DomainName": "acme.local",
-    "FunctionalLevel": "Windows2016Domain",
-    "DomainControllers": [
-      {
-        "Name": "DC01",
-        "IPAddress": "10.0.1.10",
-        "OperatingSystem": "Windows Server 2022",
-        "FSMORoles": ["PDCEmulator", "RIDMaster"]
-      },
-      {
-        "Name": "DC02",
-        "IPAddress": "10.0.1.11",
-        "OperatingSystem": "Windows Server 2022",
-        "FSMORoles": ["InfrastructureMaster"]
-      }
-    ],
-    "Users": {
-      "TotalCount": 150,
-      "EnabledCount": 142,
-      "DisabledCount": 8,
-      "LockedOutCount": 0
-    },
-    "Groups": {
-      "TotalCount": 85,
-      "SecurityGroups": 60,
-      "DistributionGroups": 25
-    },
-    "GroupPolicyObjects": {
-      "TotalCount": 12,
-      "LinkedCount": 10,
-      "UnlinkedCount": 2
-    },
-    "PasswordPolicy": {
-      "MinimumLength": 12,
-      "ComplexityEnabled": true,
-      "MaxAge": 90,
-      "MinAge": 1,
-      "HistoryCount": 24,
-      "LockoutThreshold": 5,
-      "LockoutDuration": 30
-    }
-  }
-}
-```
-
-### Historical Detail Snapshots
-
-System details maintain historical snapshots for comparison:
-
-```http
-GET /api/v1/systems/{systemId}/detail?date=2024-01-15
-X-ROAR-API-KEY: {api_key}
-```
-
-## Dataprints
-
-### What Are Dataprints?
-
-Dataprints provide a way to extract specific data from system details using JMESPath expressions. Instead of fetching the entire system detail and parsing it client-side, you can use dataprints to query exactly the data you need.
-
-### Evaluate Dataprint by System Detail ID
-
-```http
-POST /api/v2/dataprints-evaluate-systemdetailid
-X-ROAR-API-KEY: {api_key}
-Content-Type: application/json
-```
-
-```json
-{
-  "SystemDetailID": 10001,
-  "Expression": "Data.Users.TotalCount"
-}
-```
-
-**Response:**
-```json
-{
-  "Result": 150
-}
-```
-
-### Complex JMESPath Examples
-
-**Get all domain controller names:**
-```json
-{
-  "SystemDetailID": 10001,
-  "Expression": "Data.DomainControllers[*].Name"
-}
-```
-
-**Response:**
-```json
-{
-  "Result": ["DC01", "DC02"]
-}
-```
-
-**Get users with specific criteria:**
-```json
-{
-  "SystemDetailID": 10001,
-  "Expression": "Data.DomainControllers[?OperatingSystem=='Windows Server 2022'].Name"
-}
-```
-
-**Extract nested configuration:**
-```json
-{
-  "SystemDetailID": 10001,
-  "Expression": "Data.PasswordPolicy.{MinLength: MinimumLength, Complexity: ComplexityEnabled, MaxAge: MaxAge}"
-}
-```
-
-**Response:**
-```json
-{
-  "Result": {
-    "MinLength": 12,
-    "Complexity": true,
-    "MaxAge": 90
-  }
-}
-```
+Asset Inventory aggregates identities and devices across *all* inspectors into single profiles. Each profile carries a `Sources` array showing every inspector that observed that entity — an AD account and its Microsoft 365 counterpart resolve to one identity, a physical host and its vSphere VM record to one device. This is the cross-platform view; per-inspector data stays on the systems themselves. Note that inventory IDs are UUID strings, not the integer IDs used elsewhere in the API.
 
 ### JMESPath Quick Reference
 
@@ -289,157 +53,16 @@ Content-Type: application/json
 | `Data.Array[*].Name | sort(@)` | Sort values |
 | `Data.Array[?Age > \`30\`]` | Numeric comparison |
 
-## Asset Inventory (v2)
+## API Patterns
 
-### Identity Profiles
+The full endpoint catalog with request/response bodies lives in [references/api.md](references/api.md). The non-obvious parts:
 
-Asset Inventory aggregates user identities discovered across all inspections:
-
-```http
-GET /api/v2/inventory/identities?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "Data": [
-    {
-      "ID": "identity-uuid-1234",
-      "DisplayName": "John Smith",
-      "Email": "john.smith@acme.com",
-      "EnvironmentID": 1234,
-      "Sources": [
-        {
-          "Inspector": "Active Directory",
-          "SystemID": 10001,
-          "Username": "jsmith",
-          "Status": "Enabled"
-        },
-        {
-          "Inspector": "Microsoft 365",
-          "SystemID": 10050,
-          "Username": "john.smith@acme.com",
-          "LicenseAssigned": true
-        }
-      ],
-      "LastSeen": "2024-02-15T02:15:00Z"
-    }
-  ],
-  "TotalRows": 500,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 5,
-  "PageSize": 100
-}
-```
-
-### Get Identity by ID
-
-```http
-GET /api/v2/inventory/identities/{identityId}
-X-ROAR-API-KEY: {api_key}
-```
-
-### Device Profiles
-
-Asset Inventory also aggregates device information:
-
-```http
-GET /api/v2/inventory/devices?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "Data": [
-    {
-      "ID": "device-uuid-5678",
-      "Hostname": "SERVER-DC01",
-      "EnvironmentID": 1234,
-      "IPAddresses": ["10.0.1.10"],
-      "OperatingSystem": "Windows Server 2022",
-      "Sources": [
-        {
-          "Inspector": "Active Directory",
-          "SystemID": 10001,
-          "Role": "Domain Controller"
-        },
-        {
-          "Inspector": "VMware vSphere",
-          "SystemID": 10100,
-          "VMName": "DC01-VM"
-        }
-      ],
-      "LastSeen": "2024-02-15T02:15:00Z"
-    }
-  ],
-  "TotalRows": 800,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 8,
-  "PageSize": 100
-}
-```
-
-### Get Device by ID
-
-```http
-GET /api/v2/inventory/devices/{deviceId}
-X-ROAR-API-KEY: {api_key}
-```
+- **System list filters are camelCase query params** — `environmentId`, `inspectorId`, `launchpointId` — while response bodies are PascalCase (`Data`, `TotalRows`, `HasMoreRows`, `CurrentPage`, `TotalPages`, `PageSize`). Page until `HasMoreRows` is false.
+- **Details live on a sub-resource**: `GET /api/v1/systems/{systemId}/detail`. Add `?date=` for a historical snapshot.
+- **Dataprint evaluation is v2 and POST-only**: `POST /api/v2/dataprints-evaluate-systemdetailid` with `{"SystemDetailID": ..., "Expression": ...}`, returning a bare `{"Result": ...}`. Note it keys on the *system detail* ID, not the system ID.
+- **Asset Inventory is a separate v2 namespace**: `/api/v2/inventory/identities` and `/api/v2/inventory/devices`, each with a `/{id}` single-fetch.
 
 ## Common Workflows
-
-### Finding Systems by Environment
-
-```javascript
-async function getEnvironmentSystems(environmentId) {
-  const systems = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(
-      `https://${instance}.app.liongard.com/api/v1/systems?environmentId=${environmentId}&page=${page}&pageSize=500`,
-      {
-        headers: { 'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY }
-      }
-    );
-
-    const data = await response.json();
-    systems.push(...data.Data);
-    hasMore = data.HasMoreRows;
-    page++;
-  }
-
-  return systems;
-}
-```
-
-### Extracting Configuration Data
-
-```javascript
-async function getPasswordPolicy(systemDetailId) {
-  const response = await fetch(
-    `https://${instance}.app.liongard.com/api/v2/dataprints-evaluate-systemdetailid`,
-    {
-      method: 'POST',
-      headers: {
-        'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        SystemDetailID: systemDetailId,
-        Expression: 'Data.PasswordPolicy'
-      })
-    }
-  );
-
-  return response.json();
-}
-```
 
 ### Comparing System Snapshots
 
@@ -456,57 +79,24 @@ async function getPasswordPolicy(systemDetailId) {
 4. **Check status** - Verify enabled/disabled status across platforms
 5. **Report findings** - Generate cross-platform identity report
 
-## Error Handling
+See [references/examples.md](references/examples.md) for worked implementations of paginated system retrieval and dataprint extraction.
 
-### Common API Errors
+## Gotchas
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Invalid system ID | Verify system exists |
-| 401 | Unauthorized | Check API key |
-| 404 | System not found | Confirm system ID |
-| 404 | System detail not found | System may not have been inspected yet |
-| 422 | Invalid JMESPath expression | Check expression syntax |
-| 429 | Rate limited | Wait and retry (300 req/min) |
+- **Rate limit is 300 requests/minute.** Sweeping systems across a large partner instance hits this fast — page with a large `pageSize` rather than many small requests.
+- **A 404 on `/detail` usually means "never inspected", not "bad ID".** Check `LastInspection` on the system before treating it as missing.
+- **A JMESPath path that doesn't exist returns a null `Result`, not an error.** Only syntax errors produce 422, so null is ambiguous between "field absent" and "field genuinely null" — verify against the detail document when it matters.
+- **Detail schemas vary by inspector.** Fields present on one inspector's systems may be absent on another's, so never assume a shared shape across system types.
 
-### JMESPath Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Invalid expression | Syntax error in JMESPath | Validate expression syntax |
-| Null result | Path doesn't exist in data | Check available data fields |
-| Type mismatch | Comparing incompatible types | Verify field types |
+See [references/errors.md](references/errors.md) for the complete API and JMESPath error tables.
 
 ## Best Practices
 
 1. **Use dataprints for specific data** - Avoid fetching entire system details when you only need a few fields
 2. **Cache system lists** - Systems change infrequently, cache for minutes
 3. **Filter by environment** - Always scope queries to specific environments
-4. **Handle null data** - Some systems may not have all expected fields
-5. **Use pagination** - Never fetch unbounded system lists
-6. **Monitor detail counts** - Track detail count changes for data quality
-7. **Leverage asset inventory** - Use identities and devices for cross-platform views
-
-## Data Relationships
-
-```
-System (SystemID)
-    |
-    +-- Inspector (InspectorID)
-    +-- Launchpoint (LaunchpointID)
-    +-- Environment (EnvironmentID)
-    |
-    +-- System Details
-    |       +-- Raw Configuration Data (JSON)
-    |       +-- Historical Snapshots
-    |       +-- Dataprints (JMESPath queries)
-    |
-    +-- Detections (DetectionID)
-    |
-    +-- Asset Inventory
-            +-- Identity Profiles
-            +-- Device Profiles
-```
+4. **Monitor detail counts** - Track detail count changes for data quality
+5. **Leverage asset inventory** - Use identities and devices for cross-platform views
 
 ## Related Skills
 

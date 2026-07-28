@@ -1,22 +1,18 @@
 ---
 name: "Error Budget Tracking"
+description: >
+  Error-budget and burn-rate assessment from whatever observability tools
+  (Sentry, Datadog, Grafana, BetterStack) are connected: SLI, SLO, error
+  budget, and burn rate applied practically, how to compute burn rate from
+  available SLI data and the thresholds that make it actionable, what
+  separates a budget-threatening trend from noise, and the fallback to raw
+  trend reporting against a trailing baseline when no formal SLO is defined.
 when_to_use: >-
   When assessing whether a service is burning through its error budget too
   fast, reviewing uptime or error-rate trends, or reporting reliability
   status against an SLO. Use when: error budget, burn rate, SLO status,
   reliability scorecard, uptime review, are we meeting our SLOs, error rate
   trend, how reliable is this service.
-description: >
-  Use this skill when computing or reporting error-budget status across
-  whatever observability tools are connected through the gateway. Covers
-  SLO/error-budget concepts applied practically — how to compute current
-  burn rate from available observability data (Sentry error rate,
-  Datadog/Grafana uptime or latency SLIs, BetterStack uptime checks), what
-  counts as a budget-threatening trend versus noise, and how to degrade
-  gracefully when no formal SLO is defined (fall back to raw
-  error-rate/uptime trend reporting instead of a burn-rate calculation).
-  Discover connected tools via conduit__search_tools before assuming a
-  specific vendor; never hardcode a tool surface.
 ---
 
 # Error Budget Tracking
@@ -173,20 +169,6 @@ never invent a target to force a burn-rate number.
 State this explicitly (e.g., "only 2 days of history available, insufficient
 for a reliable 7-day baseline comparison") rather than reporting a trend
 built on too little data as if it were solid.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
-- Never fabricate an SLO target — ask, use a user-supplied ad hoc target, or
-  degrade to trend reporting.
-- State the formula and source data behind any burn-rate number; a number
-  without its inputs isn't defensible.
-- Don't call a single data point a trend — require multiple observations
-  across a meaningful fraction of the window.
-- When ranking multiple services, be explicit about which used a formal
-  burn-rate calculation and which used a fallback trend report — don't blend
-  the two silently into one comparable-looking number.
 
 ## Related Skills
 

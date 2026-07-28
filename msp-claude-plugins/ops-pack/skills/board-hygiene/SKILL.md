@@ -1,17 +1,16 @@
 ---
 name: "Board Hygiene"
+description: >
+  Board-wide ticket maintenance, distinct from working any single ticket:
+  stale-ticket detection with per-status staleness thresholds, the
+  Waiting-on-Client rot case and its three valid resolutions,
+  duplicate/related-ticket detection signals and safe linking, and
+  technician queue-balance assessment weighted by more than raw ticket count.
 when_to_use: >-
   When performing recurring maintenance on the ticket board rather than
   working an individual ticket. Use when: stale tickets, tickets going cold,
   duplicate tickets, related tickets, waiting on client too long, queue
   balance, board cleanup, board audit, board maintenance.
-description: >
-  Use this skill for recurring ticket-board maintenance across whatever PSA
-  is connected: detecting stale tickets (no activity in N days), finding and
-  linking duplicate or related tickets, catching status-transition problems
-  (tickets stuck in Waiting-on-Client past a threshold), and checking
-  queue balance across technicians. This is board-wide hygiene, distinct
-  from working any single ticket.
 ---
 
 # Board Hygiene
@@ -130,12 +129,8 @@ ticket counts, staleness, or duplicates.
 
 ## Best Practices
 
-- State the thresholds used (staleness days, Waiting-on-Client days) in every
-  report — they're judgment calls, and the reader needs to know what was applied.
 - Never auto-close, auto-merge, or auto-reassign as part of a hygiene sweep —
   recommend, don't execute, unless explicitly instructed otherwise.
-- Prefer fuzzy/semantic duplicate detection over exact string matching; MSP clients
-  rarely describe the same problem the same way twice.
 - Surface the worst offenders first — a board hygiene report that buries the ticket
   that's been stuck for six weeks under 40 healthy tickets has failed its purpose.
 

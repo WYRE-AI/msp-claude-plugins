@@ -1,12 +1,11 @@
 ---
 name: "Human Risk Scoring"
 description: >
-  Use this skill when building a per-user or per-org "human risk score" from
-  training completion, phishing-simulation performance, and optionally
-  real-world click-through data from connected email-security tools. Covers
-  a simple, explainable, non-black-box scoring approach and how to degrade
-  gracefully to training-completion-only scoring when phishing-simulation
-  data isn't available.
+  Explainable per-user and per-org human risk scoring from training-completion
+  status, phishing-simulation failure history, and optional real-world
+  click/attack-targeting signal: the weighted factor table, three-tier
+  bucketing, per-org rollup as a distribution rather than a blended number,
+  and graceful degradation when only some inputs are connected.
 when_to_use: >-
   When ranking users or clients by human-layer security risk, or building a
   culture/awareness risk score. Use when: human risk score, riskiest users,
@@ -143,19 +142,6 @@ training-overdue status wasn't available as an input.
 Proceed with training + simulation scoring; note that real-world
 click-through enrichment wasn't available rather than treating its absence
 as a scoring failure.
-
-## Best Practices
-
-- Never present a black-box numeric score without the underlying factors
-  visible alongside it.
-- Always label which inputs were actually used for a given score run.
-- Weight compounding signals (repeat sim failure + real-world incident)
-  distinctly higher than either signal alone, but keep the reasoning
-  visible rather than hard-coding an opaque multiplier.
-- Rank by proportion, not raw count, when comparing orgs of different sizes.
-- Degrade gracefully and say so explicitly — a partial score labeled as
-  partial is useful; an unlabeled partial score presented as complete is
-  actively misleading.
 
 ## Related Skills
 

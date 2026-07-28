@@ -1,13 +1,13 @@
 ---
 name: "HubSpot API Patterns"
 description: >
-  Use this skill when working with the HubSpot MCP tools - available tools,
-  OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP transport,
-  rate limiting, error handling, and best practices. Covers the official
-  remote MCP server connection and all HubSpot CRM MCP tools.
+  HubSpot's official remote MCP server and the CRM Search API behind it: the
+  complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP,
+  automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/
+  pagination syntax, plan-tier rate limits, and error handling.
 when_to_use: >-
-  When working with available tools, OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP
-  transport, rate limiting, error handling, and best practices in the HubSpot MCP tools. Use when:
+  When connecting to the HubSpot MCP server, constructing CRM search queries, or diagnosing auth,
+  scope, and rate-limit failures. Use when:
   hubspot api, hubspot query, hubspot filter, hubspot rate limit, hubspot authentication, hubspot
   mcp, hubspot oauth, hubspot request, hubspot scope, hubspot tools, hubspot connection, or
   hubspot search api.
@@ -300,16 +300,14 @@ When rate limited, the MCP tool will return a 429 error. Wait before retrying. T
 
 ## Best Practices
 
-1. **Use search tools** - Use `hubspot_search_*` tools with filters instead of listing all records
+1. **Filter server-side** - Use `hubspot_search_*` tools with `filterGroups` instead of listing all records
 2. **Use maximum page size** - Set `limit=100` to minimize total tool calls
-3. **Filter server-side** - Use `filterGroups` to narrow results rather than fetching everything
-4. **Monitor rate limits** - Stay well under 100 requests per 10 seconds
-5. **Use associations** - Link related objects (contacts to companies, deals to contacts) for full context
-6. **Check properties first** - Use `list_*_properties` tools to discover available fields before searching
-7. **Validate before creating** - Search for existing records before creating duplicates
-8. **Use lifecycle stages** - Track contacts and companies through their lifecycle for accurate reporting
-9. **Cache property lists** - Property definitions change infrequently; reference them across multiple operations
-10. **Handle sensitive data** - Remember that PHI properties are excluded from MCP responses by design
+3. **Monitor rate limits** - Stay well under 100 requests per 10 seconds
+4. **Use associations** - Link related objects (contacts to companies, deals to contacts) for full context
+5. **Check properties first** - Use `list_*_properties` tools to discover available fields before searching
+6. **Validate before creating** - Search for existing records before creating duplicates
+7. **Use lifecycle stages** - Track contacts and companies through their lifecycle for accurate reporting
+8. **Cache property lists** - Property definitions change infrequently; reference them across multiple operations
 
 ## Related Skills
 

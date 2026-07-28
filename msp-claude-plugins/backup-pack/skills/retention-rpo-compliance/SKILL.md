@@ -1,5 +1,13 @@
 ---
 name: "Retention & RPO Compliance"
+description: >
+  Comparing configured backup retention and cadence against contracted
+  retention windows and RPO (recovery point objective) targets: the two
+  distinct retention gap types (configured-shorter-than-contracted vs.
+  storage-forced truncation), why achievable RPO must be derived from actual
+  job success history rather than the nominal schedule, where the contracted
+  side of the comparison actually lives, and why "no documented requirement"
+  is its own finding rather than an automatic pass.
 when_to_use: >-
   When checking whether actual backup retention configuration and cadence
   meet a contracted or required policy, rather than assuming the appliance
@@ -7,12 +15,6 @@ when_to_use: >-
   retention policy, recovery point objective, are we meeting retention
   requirements, backup contract compliance, retention gap, how far back can
   we restore.
-description: >
-  Use this skill to check actual retention configuration and backup cadence
-  against contracted/required retention policy and RPO (recovery point
-  objective) targets — detecting gaps where a client's contract specifies a
-  retention window the appliance isn't actually configured for, or an RPO
-  target the current backup frequency can't actually meet.
 ---
 
 # Retention & RPO Compliance
@@ -133,12 +135,6 @@ backup cadence to compare against requirements." Do not fabricate configured val
 
 - Always state both sides of the comparison explicitly in output — the contracted/
   required value and the actual configured value — never just a pass/fail verdict.
-- Distinguish configuration gaps from storage-forced truncation; they have different
-  owners and different fixes.
-- Compute achievable RPO from actual job success history, not just the nominal
-  schedule.
-- Never treat "no documented requirement" as equivalent to "compliant" — flag the
-  missing documentation as its own gap.
 
 ## Related Skills
 

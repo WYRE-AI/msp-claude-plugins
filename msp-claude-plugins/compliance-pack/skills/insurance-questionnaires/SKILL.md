@@ -1,12 +1,13 @@
 ---
 name: "Cyber Insurance Questionnaires"
 description: >
-  Use this skill when drafting answers to a cyber-insurance renewal or new-business
-  questionnaire for an MSP client. Covers the standard recurring question set (MFA
-  everywhere, EDR deployed, backups tested, incident response plan documented,
-  employee security training) and how to answer each type by pulling live evidence
-  from connected tools rather than guessing, plus how to flag questions that cannot
-  be answered with current tool coverage instead of submitting an unverified answer.
+  Drafting tool-verified answers to cyber-insurance renewal, new-business, and
+  underwriter security questionnaires: the standard recurring question set (MFA
+  everywhere including privileged accounts, EDR coverage ratio, tested and
+  immutable backups, documented and tested IR plan, security awareness
+  training), which connected tools actually answer each one, and the
+  evidence-backed / documented-only / unable-to-verify labeling discipline that
+  keeps an answer defensible during a claim investigation.
 when_to_use: >-
   When answering or drafting responses to a cyber-insurance questionnaire, renewal
   application, or underwriter security questionnaire for a client. Use when: insurance

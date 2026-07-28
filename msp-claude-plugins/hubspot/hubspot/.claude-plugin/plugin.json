@@ -1,6 +1,6 @@
 {
   "name": "hubspot",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Claude plugins for HubSpot CRM - contacts, companies, deals, tickets, activities, and associations",
   "author": {
     "name": "MSP Claude Plugins Community"

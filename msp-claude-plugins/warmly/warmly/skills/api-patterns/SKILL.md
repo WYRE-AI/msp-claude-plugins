@@ -1,14 +1,13 @@
 ---
 name: "Warmly API Patterns"
 description: >
-  Use this skill when working with the Warmly MCP tools - available tools,
-  WorkOS AuthKit OAuth 2.0 + PKCE authentication, organization scoping,
-  Streamable HTTP transport, credit usage, error handling, and best practices.
-  Covers the official remote MCP server connection and all Warmly visitor
-  intelligence tools.
+  Warmly's remote MCP server: WorkOS AuthKit OAuth 2.0 + PKCE authentication, RFC 9728
+  protected-resource metadata, multi-organization scoping, the stateful Streamable HTTP
+  session model, the three read-only visitor-intelligence tools and their fields, credit
+  semantics, error codes, and rate-limit guidance.
 when_to_use: >-
-  When working with available tools, authentication, organization scoping, transport, credits,
-  error handling, and best practices in the Warmly MCP tools. Use when: warmly api, warmly mcp,
+  When connecting to or calling the Warmly MCP server, or diagnosing an auth, org-scoping,
+  session, or credit problem. Use when: warmly api, warmly mcp,
   warmly oauth, warmly authkit, warmly authentication, warmly request, warmly tools, warmly
   connection, warmly organization, warmly credits, warmly rate limit, or warmly error.
 ---

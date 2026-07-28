@@ -1,13 +1,13 @@
 ---
 name: "SuperOps Alerts"
 description: >
-  Use this skill when working with SuperOps.ai alerts - listing, filtering,
-  acknowledging, and resolving alerts from monitored assets. Covers alert
-  types, severity levels, status management, and automated alert workflows.
-  Essential for MSP technicians handling RMM monitoring through SuperOps.ai.
+  SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle
+  and valid transitions, asset/client/monitor associations, and the GraphQL
+  operations for listing, acknowledging, resolving, and converting alerts
+  into tickets. Includes triage, dashboard, and client-reporting workflows.
 when_to_use: >-
-  When listing, filtering, acknowledging, and resolving alerts from monitored assets. Use when:
-  superops alert, alert management, list alerts superops, acknowledge alert, resolve alert
+  When listing, filtering, acknowledging, or resolving alerts from SuperOps.ai monitored assets.
+  Use when: superops alert, alert management, list alerts superops, acknowledge alert, resolve alert
   superops, alert severity, monitoring alert, rmm alert, asset alert, or alert status.
 ---
 
@@ -49,425 +49,58 @@ SuperOps.ai RMM generates alerts when monitored conditions are triggered on mana
 
 ## Key Alert Fields
 
-### Core Fields
+An alert carries `alertId`, `message`, `severity`, `status`, `type`, and the
+`createdTime`/`acknowledgedTime`/`resolvedTime` timestamps. It associates to an
+`asset`, `client`, `site`, the triggering `monitor`, and optionally a linked
+`ticket`. Resolution metadata lives in `acknowledgedBy`, `resolvedBy`, and
+`resolutionNotes`.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `alertId` | ID | Unique identifier |
-| `message` | String | Alert message/description |
-| `severity` | Enum | Critical, High, Medium, Low |
-| `status` | Enum | Active, Acknowledged, Resolved |
-| `type` | String | Alert category |
-| `createdTime` | DateTime | When alert was triggered |
-| `acknowledgedTime` | DateTime | When acknowledged |
-| `resolvedTime` | DateTime | When resolved |
-
-### Association Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `asset` | Asset | Source asset |
-| `client` | Client | Associated client |
-| `site` | Site | Associated site |
-| `monitor` | Monitor | Triggering monitor |
-| `ticket` | Ticket | Linked ticket (if any) |
-
-### Resolution Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `acknowledgedBy` | Technician | Who acknowledged |
-| `resolvedBy` | Technician | Who resolved |
-| `resolutionNotes` | String | Resolution details |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## GraphQL Operations
 
-### List Alerts
+| Operation | Type | Purpose |
+|-----------|------|---------|
+| `getAlertList` | query | List/filter alerts across all assets |
+| `getAlertsForAsset` | query | Alerts scoped to one `assetId` |
+| `getAlert` | query | Full detail including `monitor` threshold and `history` |
+| `acknowledgeAlerts` | mutation | Takes an `alertIds` array — bulk-capable |
+| `resolveAlerts` | mutation | Takes `alertIds` plus `resolutionNotes` |
+| `createTicketFromAlert` | mutation | Converts an alert to a linked ticket |
 
-```graphql
-query getAlertList($input: ListInfoInput!) {
-  getAlertList(input: $input) {
-    alerts {
-      alertId
-      message
-      severity
-      status
-      type
-      createdTime
-      acknowledgedTime
-      resolvedTime
-      asset {
-        assetId
-        name
-        status
-      }
-      client {
-        accountId
-        name
-      }
-      site {
-        id
-        name
-      }
-      acknowledgedBy {
-        id
-        name
-      }
-      ticket {
-        ticketId
-        ticketNumber
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
+Both mutations take arrays (`alertIds`), so a single call handles bulk
+acknowledgment or resolution. `getAlertList` returns a `listInfo` block
+(`totalCount`, `hasNextPage`, `endCursor`) for cursor pagination.
 
-**Variables - Active Critical Alerts:**
-```json
-{
-  "input": {
-    "first": 50,
-    "filter": {
-      "status": "Active",
-      "severity": ["Critical", "High"]
-    },
-    "orderBy": {
-      "field": "createdTime",
-      "direction": "DESC"
-    }
-  }
-}
-```
+Filters accept either a scalar or an array for `status` and `severity`
+(`"status": "Active"` and `"status": ["Active", "Acknowledged"]` are both valid),
+and `createdTime` supports `gte`/`lte` range operators.
 
-**Variables - Alerts by Client:**
-```json
-{
-  "input": {
-    "first": 100,
-    "filter": {
-      "client": {
-        "accountId": "client-uuid"
-      },
-      "status": ["Active", "Acknowledged"]
-    }
-  }
-}
-```
-
-**Variables - Alerts by Type:**
-```json
-{
-  "input": {
-    "filter": {
-      "type": "Disk Space",
-      "status": "Active"
-    }
-  }
-}
-```
-
-### Get Alerts for Specific Asset
-
-```graphql
-query getAlertsForAsset($input: AssetDetailsListInput!) {
-  getAlertsForAsset(input: $input) {
-    alerts {
-      alertId
-      message
-      severity
-      status
-      type
-      createdTime
-      monitor {
-        id
-        name
-        type
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "first": 50,
-    "filter": {
-      "status": ["Active", "Acknowledged"]
-    }
-  }
-}
-```
-
-### Get Single Alert Details
-
-```graphql
-query getAlert($input: AlertIdentifierInput!) {
-  getAlert(input: $input) {
-    alertId
-    message
-    severity
-    status
-    type
-    createdTime
-    acknowledgedTime
-    resolvedTime
-    asset {
-      assetId
-      name
-      ipAddress
-      status
-      client {
-        accountId
-        name
-      }
-    }
-    monitor {
-      id
-      name
-      type
-      threshold
-      condition
-    }
-    acknowledgedBy {
-      id
-      name
-      email
-    }
-    resolvedBy {
-      id
-      name
-      email
-    }
-    resolutionNotes
-    ticket {
-      ticketId
-      ticketNumber
-      status
-    }
-    history {
-      timestamp
-      action
-      performedBy {
-        name
-      }
-      notes
-    }
-  }
-}
-```
-
-### Acknowledge Alerts
-
-```graphql
-mutation acknowledgeAlerts($input: AcknowledgeAlertsInput!) {
-  acknowledgeAlerts(input: $input) {
-    success
-    acknowledgedCount
-    alerts {
-      alertId
-      status
-      acknowledgedTime
-      acknowledgedBy {
-        id
-        name
-      }
-    }
-  }
-}
-```
-
-**Variables - Single Alert:**
-```json
-{
-  "input": {
-    "alertIds": ["alert-uuid"],
-    "notes": "Investigating disk space issue on server"
-  }
-}
-```
-
-**Variables - Bulk Acknowledge:**
-```json
-{
-  "input": {
-    "alertIds": ["alert-1", "alert-2", "alert-3"],
-    "notes": "Bulk acknowledgment - scheduled maintenance window"
-  }
-}
-```
-
-### Resolve Alerts
-
-```graphql
-mutation resolveAlerts($input: ResolveAlertInput!) {
-  resolveAlerts(input: $input)
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "alertIds": ["alert-uuid"],
-    "resolutionNotes": "Cleared temp files, disk space now at 45% free"
-  }
-}
-```
-
-### Create Ticket from Alert
-
-```graphql
-mutation createTicketFromAlert($input: CreateTicketFromAlertInput!) {
-  createTicketFromAlert(input: $input) {
-    ticketId
-    ticketNumber
-    subject
-    status
-    alert {
-      alertId
-      status
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "alertId": "alert-uuid",
-    "subject": "Critical: Low disk space on ACME-SERVER01",
-    "priority": "HIGH",
-    "techGroup": {
-      "name": "Service Desk"
-    },
-    "additionalNotes": "Auto-generated from monitoring alert"
-  }
-}
-```
+See [references/api.md](references/api.md) for the full operation catalog with
+request shapes and variable examples.
 
 ## Common Workflows
 
 ### Alert Triage Workflow
 
-```graphql
-# Step 1: Get all active critical alerts
-query getCriticalAlerts {
-  getAlertList(input: {
-    filter: {
-      status: "Active",
-      severity: "Critical"
-    },
-    orderBy: { field: "createdTime", direction: "ASC" }
-  }) {
-    alerts {
-      alertId
-      message
-      asset { name }
-      client { name }
-      createdTime
-    }
-  }
-}
-
-# Step 2: Acknowledge alert being worked
-mutation acknowledgeAlert {
-  acknowledgeAlerts(input: {
-    alertIds: ["alert-uuid"],
-    notes: "Investigating issue"
-  })
-}
-
-# Step 3: Create ticket if needed
-mutation createTicket {
-  createTicketFromAlert(input: {
-    alertId: "alert-uuid",
-    priority: "CRITICAL"
-  })
-}
-
-# Step 4: Resolve when fixed
-mutation resolveAlert {
-  resolveAlerts(input: {
-    alertIds: ["alert-uuid"],
-    resolutionNotes: "Issue resolved - rebooted service"
-  })
-}
-```
+1. Query `getAlertList` filtered to `status: "Active"`, `severity: "Critical"`,
+   ordered by `createdTime` ascending (oldest first).
+2. `acknowledgeAlerts` on the alert being worked, with investigation notes.
+3. `createTicketFromAlert` if the issue needs tracked service delivery.
+4. `resolveAlerts` with `resolutionNotes` once fixed.
 
 ### Alert Summary Dashboard
 
-```graphql
-query getAlertSummary {
-  criticalAlerts: getAlertList(input: {
-    filter: { status: "Active", severity: "Critical" }
-  }) {
-    listInfo { totalCount }
-  }
-  highAlerts: getAlertList(input: {
-    filter: { status: "Active", severity: "High" }
-  }) {
-    listInfo { totalCount }
-  }
-  acknowledgedAlerts: getAlertList(input: {
-    filter: { status: "Acknowledged" }
-  }) {
-    listInfo { totalCount }
-  }
-  recentResolved: getAlertList(input: {
-    filter: { status: "Resolved" },
-    first: 10,
-    orderBy: { field: "resolvedTime", direction: "DESC" }
-  }) {
-    alerts {
-      alertId
-      message
-      resolvedTime
-      asset { name }
-    }
-  }
-}
-```
+Use GraphQL query aliases to fetch several counts in a single request — active
+Critical, active High, Acknowledged, and recently Resolved — each reading only
+`listInfo { totalCount }`.
 
 ### Client Alert Report
 
-```graphql
-query getClientAlertReport($clientId: ID!, $startDate: DateTime!, $endDate: DateTime!) {
-  getAlertList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      createdTime: {
-        gte: $startDate,
-        lte: $endDate
-      }
-    }
-  }) {
-    alerts {
-      alertId
-      message
-      severity
-      status
-      type
-      createdTime
-      resolvedTime
-      asset { name }
-    }
-    listInfo { totalCount }
-  }
-}
-```
+Filter `getAlertList` by `client.accountId` plus a `createdTime` `gte`/`lte`
+range to produce a period report of alerts raised and resolved.
+
+See [references/api.md](references/api.md) for all three workflow queries.
 
 ## Error Handling
 
@@ -502,11 +135,10 @@ function canTransition(currentStatus, newStatus) {
 1. **Acknowledge promptly** - Show clients issues are being tracked
 2. **Create tickets for complex issues** - Link alert to ticket for tracking
 3. **Document resolutions** - Helps with recurring issues
-4. **Use bulk operations** - Efficient handling of multiple alerts
+4. **Use bulk operations** - One `alertIds` array beats N calls
 5. **Set up auto-resolution** - Let transient issues clear themselves
-6. **Filter by severity** - Focus on critical alerts first
-7. **Monitor acknowledgment time** - Track response SLAs
-8. **Review alert patterns** - Identify recurring problems
+6. **Monitor acknowledgment time** - Track response SLAs
+7. **Review alert patterns** - Identify recurring problems
 
 ## Related Skills
 

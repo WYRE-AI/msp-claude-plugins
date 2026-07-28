@@ -1,11 +1,11 @@
 ---
 name: "Blumira Users"
 description: >
-  Use this skill when listing or looking up Blumira users, finding user IDs
-  for finding assignment, or auditing user access.
+  Blumira organization users: listing and filtering users, user roles, and looking
+  up the user IDs required for finding assignment and access audits.
 when_to_use: >-
-  When listing or looking up Blumira users, finding user IDs for finding assignment, or auditing
-  user access. Use when: blumira user, user list, assign user, or user management.
+  When you need a Blumira user ID or are auditing who has organization
+  access. Use when: blumira user, user list, assign user, or user management.
 ---
 
 # Blumira Users

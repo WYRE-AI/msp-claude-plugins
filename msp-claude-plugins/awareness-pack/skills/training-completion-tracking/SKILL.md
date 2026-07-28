@@ -1,13 +1,11 @@
 ---
 name: "Training Completion Tracking"
 description: >
-  Use this skill when assessing security-awareness training completion for a
-  single client or across the whole portfolio. Covers overdue-training
-  detection, per-org completion-rate calculation, and how to flag clients
-  falling behind their contracted training cadence (e.g. quarterly phishing
-  simulations, annual security-awareness modules) — across whatever
-  training/awareness platform is connected, discovered via
-  conduit__search_tools rather than assumed.
+  Security-awareness training completion across whatever training/awareness
+  platform is connected: assignment-overdue versus cadence-overdue detection,
+  per-campaign and per-org completion-rate calculation, ranking clients that
+  have fallen behind a contracted cadence, and the unmeasured-versus-0%
+  distinction.
 when_to_use: >-
   When checking whether users or clients have completed required security
   awareness training, or when a portfolio-wide training compliance snapshot
@@ -133,13 +131,9 @@ input) rather than assuming a default like "quarterly."
 
 ## Best Practices
 
-- Always discover the connected platform via `conduit__search_tools` before
-  calling any tool by a guessed name — tool names follow
-  `<vendor-slug>__<tool_name>` (e.g. `knowbe4__list_campaigns`).
-- Keep per-campaign completion rates visible alongside any blended
-  org-level rollup; don't let one hide the other.
-- Treat "unmeasured" (no connector) and "0% complete" (connector present,
-  genuinely no completions) as distinct findings — never conflate them.
+- Tool names follow `<vendor-slug>__<tool_name>` (e.g.
+  `knowbe4__list_campaigns`) — discover them via `conduit__search_tools`
+  rather than guessing.
 - Where Proofpoint or Avanan phishing-simulation data is available
   alongside KnowBe4, note it as corroborating context in this skill, but
   hand off correlation with real-world click data to the

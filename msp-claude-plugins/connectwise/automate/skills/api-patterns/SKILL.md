@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Automate API Patterns"
 description: >
-  Use this skill when working with the ConnectWise Automate REST API - authentication
-  methods, token management, pagination, filtering with OData syntax, rate limiting,
-  and error handling. Covers both integrator and user authentication, request patterns,
-  and best practices for API integration.
+  ConnectWise Automate REST API fundamentals: integrator and user+2FA authentication,
+  token lifecycle, pagination, OData-style filtering, rate limiting, and error
+  handling patterns for API integration.
 when_to_use: >-
   When working with authentication methods, token management, pagination, filtering with OData
   syntax, rate limiting, and error handling in the ConnectWise Automate REST API. Use when:
@@ -147,23 +146,20 @@ Content-Type: application/json
 
 ## Pagination
 
-ConnectWise Automate uses offset-based pagination:
-
-### Pagination Parameters
+ConnectWise Automate uses offset-based pagination with lowercase `page`/`pageSize`
+query parameters (max `pageSize` is 1000):
 
 | Parameter | Type | Default | Max | Description |
 |-----------|------|---------|-----|-------------|
 | `page` | integer | 1 | - | Page number (1-based) |
 | `pageSize` | integer | 50 | 1000 | Items per page |
 
-### Pagination Request
-
 ```http
 GET /cwa/api/v1/Computers?page=1&pageSize=100
 Authorization: Bearer {token}
 ```
 
-### Pagination Response Headers
+Track pagination via response headers rather than assuming page count:
 
 | Header | Description |
 |--------|-------------|
@@ -172,40 +168,9 @@ Authorization: Bearer {token}
 | `X-Page-Size` | Items per page |
 | `X-Total-Pages` | Total number of pages |
 
-### Efficient Pagination Pattern
-
-```javascript
-async function fetchAllComputers(token, baseUrl) {
-  const allComputers = [];
-  let page = 1;
-  const pageSize = 250;
-  let totalPages = 1;
-
-  while (page <= totalPages) {
-    const response = await fetch(
-      `${baseUrl}/Computers?page=${page}&pageSize=${pageSize}`,
-      {
-        headers: { Authorization: `Bearer ${token}` }
-      }
-    );
-
-    // Get pagination info from headers
-    totalPages = parseInt(response.headers.get('X-Total-Pages') || '1');
-
-    const computers = await response.json();
-    allComputers.push(...computers);
-
-    page++;
-
-    // Respect rate limits
-    if (page <= totalPages) {
-      await sleep(100);
-    }
-  }
-
-  return allComputers;
-}
-```
+See [references/examples.md](references/examples.md) for a complete
+`fetchAllComputers` pagination loop that reads `X-Total-Pages` and paces requests to
+respect rate limits.
 
 ## Filtering with OData
 
@@ -270,17 +235,9 @@ const url = `/Computers?condition=${encodeURIComponent(condition)}`;
 
 ## Rate Limiting
 
-ConnectWise Automate enforces rate limits to protect server resources.
-
-### Rate Limit Details
-
-| Limit Type | Typical Threshold | Consequence |
-|------------|-------------------|-------------|
-| Requests per minute | ~60 | HTTP 429 response |
-| Concurrent requests | ~10 | Request queuing |
-| Daily requests | Varies | May require config change |
-
-### Rate Limit Headers
+ConnectWise Automate enforces rate limits to protect server resources (~60 requests
+per minute, ~10 concurrent; daily limits vary by config). Exceeding them returns
+HTTP 429.
 
 | Header | Description |
 |--------|-------------|
@@ -289,225 +246,25 @@ ConnectWise Automate enforces rate limits to protect server resources.
 | `X-RateLimit-Reset` | Seconds until reset |
 | `Retry-After` | Seconds to wait (on 429) |
 
-### Rate Limit Handling
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const response = await fetch(url, options);
-
-    if (response.status === 429) {
-      const retryAfter = response.headers.get('Retry-After') || 60;
-      console.log(`Rate limited. Waiting ${retryAfter}s...`);
-      await sleep(retryAfter * 1000);
-      continue;
-    }
-
-    if (!response.ok && response.status >= 500) {
-      // Server error - retry with backoff
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await sleep(delay);
-      continue;
-    }
-
-    return response;
-  }
-
-  throw new Error('Max retries exceeded');
-}
-```
+On a 429, read `Retry-After` and wait before retrying; on a 5xx, retry with
+exponential backoff. See [references/examples.md](references/examples.md) for a
+`requestWithRetry` implementation.
 
 ## Error Handling
 
-### HTTP Status Codes
+Common statuses: 401 (token expired - re-authenticate), 403 (permission denied), 404
+(not found), 429 (rate limited - see Rate Limiting above), 500/503 (retry with
+backoff). Error responses are shaped as `{ "error": { "code", "message", "details" } }`.
 
-| Code | Meaning | Action |
-|------|---------|--------|
-| 200 | Success | Process response |
-| 201 | Created | Entity created |
-| 204 | No Content | Success, no body |
-| 400 | Bad Request | Check request format |
-| 401 | Unauthorized | Refresh token |
-| 403 | Forbidden | Check permissions |
-| 404 | Not Found | Entity doesn't exist |
-| 429 | Rate Limited | Wait and retry |
-| 500 | Server Error | Retry with backoff |
-| 503 | Unavailable | Server maintenance |
-
-### Error Response Format
-
-```json
-{
-  "error": {
-    "code": "BadRequest",
-    "message": "Invalid filter syntax in condition parameter",
-    "details": {
-      "field": "condition",
-      "value": "Status == 'Online'"
-    }
-  }
-}
-```
-
-### Error Handling Pattern
-
-```javascript
-class AutomateAPIError extends Error {
-  constructor(response, data) {
-    super(data?.error?.message || `API Error: ${response.status}`);
-    this.status = response.status;
-    this.code = data?.error?.code;
-    this.details = data?.error?.details;
-  }
-}
-
-async function handleApiResponse(response) {
-  if (response.ok) {
-    // Handle empty response
-    const text = await response.text();
-    return text ? JSON.parse(text) : null;
-  }
-
-  const data = await response.json().catch(() => ({}));
-
-  switch (response.status) {
-    case 401:
-      throw new AutomateAPIError(response, {
-        error: {
-          code: 'Unauthorized',
-          message: 'Token expired or invalid. Re-authenticate.'
-        }
-      });
-
-    case 403:
-      throw new AutomateAPIError(response, {
-        error: {
-          code: 'Forbidden',
-          message: 'Permission denied. Check user rights.'
-        }
-      });
-
-    case 404:
-      throw new AutomateAPIError(response, {
-        error: {
-          code: 'NotFound',
-          message: 'Resource not found.'
-        }
-      });
-
-    case 429:
-      throw new AutomateAPIError(response, {
-        error: {
-          code: 'RateLimited',
-          message: 'Too many requests. Implement backoff.'
-        }
-      });
-
-    default:
-      throw new AutomateAPIError(response, data);
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the complete HTTP status code
+table, error response format, and a reusable `AutomateAPIError`/`handleApiResponse`
+error-handling pattern.
 
 ## Complete API Client
 
-```javascript
-class ConnectWiseAutomateClient {
-  constructor(server, username, password) {
-    this.baseUrl = `https://${server}/cwa/api/v1`;
-    this.username = username;
-    this.password = password;
-    this.token = null;
-    this.tokenExpiry = 0;
-  }
-
-  async authenticate() {
-    const response = await fetch(`${this.baseUrl}/APICredentials`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        Username: this.username,
-        Password: this.password
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error('Authentication failed');
-    }
-
-    const data = await response.json();
-    this.token = data.AccessToken;
-    this.tokenExpiry = Date.now() + (data.ExpiresIn * 1000);
-
-    return this.token;
-  }
-
-  async ensureToken() {
-    // Refresh token 5 minutes before expiry
-    if (!this.token || Date.now() > this.tokenExpiry - 300000) {
-      await this.authenticate();
-    }
-    return this.token;
-  }
-
-  async request(endpoint, options = {}) {
-    const token = await this.ensureToken();
-
-    const response = await requestWithRetry(
-      `${this.baseUrl}${endpoint}`,
-      {
-        ...options,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-          ...options.headers
-        }
-      }
-    );
-
-    return handleApiResponse(response);
-  }
-
-  // Convenience methods
-  async getComputers(condition = null) {
-    let url = '/Computers?pageSize=250';
-    if (condition) {
-      url += `&condition=${encodeURIComponent(condition)}`;
-    }
-    return this.request(url);
-  }
-
-  async getComputer(id) {
-    return this.request(`/Computers/${id}`);
-  }
-
-  async getClients(condition = null) {
-    let url = '/Clients?pageSize=250';
-    if (condition) {
-      url += `&condition=${encodeURIComponent(condition)}`;
-    }
-    return this.request(url);
-  }
-
-  async getAlerts(condition = null) {
-    let url = '/Alerts?pageSize=100';
-    if (condition) {
-      url += `&condition=${encodeURIComponent(condition)}`;
-    }
-    return this.request(url);
-  }
-
-  async runScript(computerId, scriptId, params = {}) {
-    return this.request(
-      `/Computers/${computerId}/Scripts/${scriptId}/Execute`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ Parameters: params })
-      }
-    );
-  }
-}
-```
+A full `ConnectWiseAutomateClient` class that combines token caching, retry-with-backoff,
+and pagination-aware request methods (`getComputers`, `getClients`, `getAlerts`,
+`runScript`) is available in [references/examples.md](references/examples.md).
 
 ## Best Practices
 
@@ -520,7 +277,6 @@ class ConnectWiseAutomateClient {
 7. **URL-encode conditions** - Prevent syntax errors
 8. **Log API calls** - Enable debugging and audit trails
 9. **Validate inputs** - Check data before sending
-10. **Test in sandbox** - Validate queries before production
 
 ## Common Query Patterns
 

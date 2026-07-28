@@ -1,8 +1,12 @@
 ---
+name: "HaloPSA Invoices"
 description: >-
-  Use this skill when working with HaloPSA invoices — listing invoices by client or date range,
-  filtering by payment and send status, and retrieving individual invoice details. Essential for
-  MSP finance teams tracking billing, chasing unpaid invoices, and reconciling client accounts.
+  HaloPSA invoices as a read-only MCP surface: listing by client or date range,
+  filtering by payment and send status, retrieving line-item detail on a single
+  invoice, and the reporting and reconciliation workflows built on them.
+when_to_use: >-
+  When an MSP finance task needs HaloPSA invoice data — tracking billing, chasing unpaid
+  invoices, or reconciling client accounts.
   Use when: halopsa invoice, halopsa billing invoice, list invoices halopsa, unpaid invoices
   halopsa, halopsa invoice status, invoice search halopsa, halopsa finance, halopsa invoice
   details, or paid invoices halopsa.

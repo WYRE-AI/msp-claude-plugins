@@ -1,14 +1,14 @@
 ---
 name: "N-central Devices"
+description: >
+  N-central device records: listing with saved device filters (filterId),
+  asset and warranty lookups, lifecycle reads and updates, and
+  service-monitor status triage on a single device.
 when_to_use: >-
   When listing, filtering, or auditing N-central devices, looking up assets and warranty/lifecycle
   data, updating lifecycle records, or triaging failed service monitors. Use when: ncentral
   device, ncentral inventory, ncentral filter, ncentral asset, ncentral warranty, ncentral
   lifecycle, ncentral service status, or device filter.
-description: >
-  Use this skill when working with N-central device records — listing with
-  saved device filters (filterId), asset and warranty lookups, lifecycle
-  reads and updates, and service-monitor status triage on a single device.
 ---
 
 # N-central Devices

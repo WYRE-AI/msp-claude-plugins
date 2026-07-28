@@ -1,14 +1,14 @@
 ---
 name: "Atera Tickets"
 description: >
-  Use this skill when working with Atera tickets - creating, updating,
-  searching, or managing service desk operations. Covers ticket fields,
-  statuses, priorities, comments, work hours, and billing duration.
-  Essential for MSP technicians handling service delivery through Atera.
+  Atera service desk tickets: ticket fields, statuses, priorities, comments,
+  work hours, and billing duration.
 when_to_use: >-
-  When creating, updating, searching, or managing service desk operations. Use when: atera ticket,
-  service ticket atera, create ticket atera, ticket status atera, ticket priority atera, atera
-  service desk, ticket comments, work hours atera, billable hours, or resolve ticket atera.
+  When creating, updating, searching, or managing Atera service desk
+  tickets. Use when: atera ticket, service ticket atera, create ticket
+  atera, ticket status atera, ticket priority atera, atera service desk,
+  ticket comments, work hours atera, billable hours, or resolve ticket
+  atera.
 ---
 
 # Atera Ticket Management

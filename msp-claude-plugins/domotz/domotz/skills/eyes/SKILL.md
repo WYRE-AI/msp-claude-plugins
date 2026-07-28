@@ -1,12 +1,12 @@
 ---
 name: "Domotz Eyes"
 description: >
-  Use this skill when working with Domotz Eyes -- TCP and HTTP
-  sensors, custom monitoring checks, synthetic tests, latency
-  tracking, and service availability monitoring.
+  Domotz Eyes, the agent-run synthetic monitoring sensors: TCP, HTTP, and
+  custom Eye types, their UP/DOWN/WARNING status model, listing sensors and
+  historical results, and diagnosing failed or high-latency checks.
 when_to_use: >-
-  When working with TCP and HTTP sensors, custom monitoring checks, synthetic tests, latency
-  tracking, and service availability monitoring in Domotz Eyes. Use when: domotz eyes, domotz
+  When inspecting or reasoning about Domotz synthetic sensors and their check
+  results. Use when: domotz eyes, domotz
   sensor, tcp check, http check, service monitoring, synthetic monitoring, latency check, uptime
   monitoring, domotz eye, or custom monitor.
 ---

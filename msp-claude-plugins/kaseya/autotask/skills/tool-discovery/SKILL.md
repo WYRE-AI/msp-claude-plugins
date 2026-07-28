@@ -1,13 +1,11 @@
 ---
 name: "Autotask Tool Discovery"
 description: >
-  Use this skill when Autotask MCP tools aren't loading, when you can't find
-  the right Autotask tool to call, or when working with a lazy-loaded MCP
-  connection where only meta-tools are available. Covers the progressive
-  discovery pattern using list_categories, list_category_tools, and
-  execute_tool, plus the intelligent router for natural language tool lookup.
+  The Autotask MCP lazy-loading pattern - four meta-tools (list_categories, list_category_tools,
+  execute_tool, router) that expose the full 39+ tool catalog progressively instead of loading
+  every tool schema upfront, plus the natural-language router for intent-based tool lookup.
 when_to_use: >-
-  When autotask MCP tools aren't loading, when you can't find the right Autotask tool to call, or
+  When Autotask MCP tools aren't loading, when you can't find the right Autotask tool to call, or
   when working with a lazy-loaded MCP connection where only meta-tools are available. Use when:
   autotask tools not loading, can't find autotask tool, autotask tool discovery, which autotask
   tool, autotask lazy loading, autotask mcp not working, discover autotask tools, autotask meta

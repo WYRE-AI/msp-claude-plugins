@@ -1,15 +1,15 @@
 ---
 name: "N-central Organizations"
+description: >
+  N-central org units: the service organization -> customer -> site
+  hierarchy, the org-unit vs customer distinction, agent registration
+  tokens (credential-sensitive), and custom properties at both org and
+  device level.
 when_to_use: >-
   When navigating the N-central service organization / customer / site hierarchy, working with org
   units, registration tokens, or org- and device-level custom properties. Use when: ncentral
   customer, ncentral site, ncentral service organization, ncentral org unit, ncentral hierarchy,
   ncentral registration token, ncentral custom property, or ncentral custom properties.
-description: >
-  Use this skill when working with N-central org units — the service
-  organization → customer → site hierarchy, the org-unit vs customer
-  distinction, agent registration tokens (credential-sensitive), and
-  custom properties at both org and device level.
 ---
 
 # N-central Organizations

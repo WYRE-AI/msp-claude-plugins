@@ -1,12 +1,11 @@
 ---
 name: "ConnectWise Manage Product Catalog"
 description: >
-  Use this skill when working with the ConnectWise PSA product catalog — searching,
-  creating, or updating catalog items (SKUs), managing categories, subcategories,
-  manufacturers, or using catalog items on quotes, opportunities, agreements, and
-  tickets. Covers the full catalog item field reference, the common MSP workflows
-  (hardware SKU, software license, managed service, agreement add-on), and the
-  passthrough pattern for fields not surfaced on the MCP tool directly.
+  ConnectWise PSA product catalog: catalog items (SKUs), categories, subcategories,
+  manufacturers, and their use on quotes, opportunities, agreements, and tickets.
+  Covers the full catalog item field reference, common MSP workflows (hardware SKU,
+  software license, managed service, agreement add-on), and the passthrough pattern
+  for fields not surfaced on the MCP tool directly.
 when_to_use: >-
   When searching, creating, or updating ConnectWise PSA product catalog items (SKUs), categories,
   subcategories, or manufacturers. Use when: connectwise product, connectwise catalog, connectwise

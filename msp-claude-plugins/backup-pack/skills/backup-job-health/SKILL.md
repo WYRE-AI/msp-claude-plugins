@@ -1,17 +1,19 @@
 ---
 name: "Backup Job Health"
+description: >
+  Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools
+  are connected: the two structurally different job models (image-based
+  appliance backup vs. SaaS-data snapshot backup) and how to normalize them
+  into one health record per protected unit, why a live consecutive-failure
+  streak matters more than a trailing success rate, the missed-versus-failed
+  distinction and its different root causes, and the two storage-trending
+  risk patterns (approaching capacity, anomalous growth).
 when_to_use: >-
   When assessing whether backup jobs are actually running successfully across
   a portfolio, rather than checking one client's one appliance in isolation.
   Use when: backup health, backup job failures, missed backups, backup
   success rate, failed backup jobs, backup storage trending, is this client's
   backups running, backup audit, backup job status.
-description: >
-  Use this skill to assess portfolio-wide backup job health across whatever
-  BCDR and SaaS-backup tools are connected: job success/failure rate, missed-
-  backup detection, storage-consumption trending, and how to normalize very
-  different vendor job models (image-based appliance backup vs. SaaS-data
-  snapshot backup) into one comparable health view.
 ---
 
 # Backup Job Health
@@ -143,13 +145,7 @@ fabricate success rates, job counts, or storage figures.
 
 ## Best Practices
 
-- Always distinguish trailing success rate from current failure streak — lead with
-  the streak, since it's the more actionable signal.
-- Always separate "missed" from "failed" — they have different root causes and
-  different remediation owners.
 - State the rolling window used (default 30 days) explicitly in every report.
-- Never let a healthy trailing average suppress a live failure streak in the report
-  ordering — worst-current-state leads, not best-historical-average.
 
 ## Related Skills
 

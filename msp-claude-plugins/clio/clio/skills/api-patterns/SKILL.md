@@ -1,12 +1,11 @@
 ---
 name: "Clio API Patterns"
 description: >
-  Use this skill when working with the Clio Manage MCP tools — OAuth 2.0
-  Authorization Code connection via Conduit, the matters-as-hub data model,
-  decision-tree tool navigation, pagination, and the deliberate v1 scope
-  limits (no delete anywhere, documents metadata-only, communications/
-  calendar/bills read-only). Essential background before touching any other
-  Clio skill.
+  Clio Manage MCP fundamentals: OAuth 2.0 Authorization Code connection via
+  Conduit, region selection, the matters-as-hub data model, decision-tree
+  tool navigation, pagination, and the deliberate v1 scope limits (no
+  delete anywhere, documents metadata-only, communications/calendar/bills
+  read-only).
 when_to_use: >-
   When connecting to Clio, navigating its MCP tools, or explaining why a
   Clio operation isn't available. Use when: clio api, clio auth, clio oauth,

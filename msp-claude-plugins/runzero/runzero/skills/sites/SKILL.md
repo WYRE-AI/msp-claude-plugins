@@ -1,13 +1,12 @@
 ---
 name: "runZero Sites"
 description: >
-  Use this skill when working with RunZero sites — creating and managing
-  organization sites, defining scan scope, deploying explorers, and
-  organizing assets by location or client.
+  runZero sites: creating and managing organization sites, defining scan scope and
+  exclusions, deploying explorers, and organizing assets by location or client.
 when_to_use: >-
-  When creating and managing organization sites, defining scan scope, deploying explorers, and
-  organizing assets by location or client. Use when: runzero site, runzero organization, site
-  management, site scope, site create, explorer deployment, site overview, or client site.
+  When creating, scoping, or organizing runZero sites, or deploying explorers to them.
+  Use when: runzero site, runzero organization, site management, site scope, site
+  create, explorer deployment, site overview, or client site.
 ---
 
 # RunZero Sites

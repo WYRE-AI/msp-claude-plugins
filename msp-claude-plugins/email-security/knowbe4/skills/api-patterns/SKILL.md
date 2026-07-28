@@ -1,13 +1,11 @@
 ---
 name: "KnowBe4 API Patterns"
 description: >
-  Use this skill when working with the KnowBe4 REST API - Bearer token authentication,
-  multi-region base URLs, pagination, rate limiting, error handling, and common
-  request patterns. Covers all KnowBe4 API regions (US, EU, CA, UK, DE),
-  authentication headers, response formats, and retry strategies.
+  KnowBe4 REST API fundamentals: Bearer token authentication, multi-region base
+  URLs (US, EU, CA, UK, DE), pagination, rate limiting, error handling, and
+  response formats.
 when_to_use: >-
-  When working with bearer token authentication, multi-region base URLs, pagination, rate
-  limiting, error handling, and common request patterns in the KnowBe4 REST API. Use when: knowbe4
+  When working with the KnowBe4 REST API directly or through MCP tools. Use when: knowbe4
   api, knowbe4 authentication, knowbe4 api key, knowbe4 region, knowbe4 rate limit, knowbe4
   pagination, knowbe4 api error, knowbe4 rest api, knowbe4 base url, or knowbe4 bearer token.
 ---
@@ -381,13 +379,12 @@ All dates use ISO 8601 format:
 1. **Cache reference data** -- User and group lists change infrequently; cache for 5-15 minutes
 2. **Use maximum page size** -- Set `per_page=500` to minimize API calls
 3. **Verify region first** -- A wrong region causes confusing 404 errors
-4. **Store API key securely** -- Use environment variables or secrets manager, never hardcode
-5. **Monitor rate limits** -- Log request counts to avoid hitting daily limits
-6. **Handle pagination completely** -- Always check `Total-Pages` header
-7. **Use consistent date ranges** -- ISO 8601 format, always include timezone
-8. **Test with account endpoint** -- `GET /v1/account` is the simplest way to verify connectivity
-9. **Log API errors** -- Include response body for debugging
-10. **Implement circuit breaker** -- If API is consistently failing, back off gracefully
+4. **Monitor rate limits** -- Log request counts to avoid hitting daily limits
+5. **Handle pagination completely** -- Always check `Total-Pages` header
+6. **Use consistent date ranges** -- ISO 8601 format, always include timezone
+7. **Test with account endpoint** -- `GET /v1/account` is the simplest way to verify connectivity
+8. **Log API errors** -- Include response body for debugging
+9. **Implement circuit breaker** -- If API is consistently failing, back off gracefully
 
 ## Related Skills
 

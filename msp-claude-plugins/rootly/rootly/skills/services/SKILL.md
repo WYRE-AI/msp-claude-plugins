@@ -1,12 +1,13 @@
 ---
 name: "Rootly Services"
 description: >
-  Use this skill when working with the Rootly service catalog -- listing services,
-  managing dependencies, ownership, service health, and understanding how services
-  relate to incidents and alerts.
+  The Rootly service catalog: tier classification by business criticality, the
+  ownership attributes attached to each service (team, Slack channel, escalation
+  policy, runbooks), upstream/downstream dependency modeling for blast-radius
+  analysis, service CRUD, and how services link back to incidents and alerts.
 when_to_use: >-
-  When listing services, managing dependencies, ownership, service health, and understanding how
-  services relate to incidents and alerts. Use when: rootly service, service catalog, service
+  When browsing or maintaining the Rootly service catalog, or assessing which services an
+  incident affects. Use when: rootly service, service catalog, service
   dependency, service ownership, service health, service status, or service tier.
 ---
 
@@ -161,10 +162,8 @@ Parameters:
 
 ## Best Practices
 
-- Keep the service catalog up to date as infrastructure evolves
 - Assign clear ownership for every service
 - Map dependencies accurately for blast radius analysis
-- Use consistent naming conventions for services
 - Link services to monitoring dashboards and runbooks
 - Review service tiers quarterly as business priorities change
 - Tag services with environments for accurate incident scoping

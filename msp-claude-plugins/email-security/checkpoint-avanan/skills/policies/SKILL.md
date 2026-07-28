@@ -1,17 +1,16 @@
 ---
 name: "Checkpoint Avanan Policies"
 description: >
-  Use this skill when working with Checkpoint Harmony Email security policies -
-  DLP policies, anti-phishing rules, anti-malware settings, quarantine policies,
-  allow/block lists, and policy configuration. Covers policy types, enable/disable
-  workflows, policy effects, and policy tuning best practices.
-  Essential for MSP administrators managing email security policies across
-  customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
+  Checkpoint Harmony Email & Collaboration (Avanan) policy management: policy
+  types (DLP, anti-phishing, anti-malware, anti-BEC, ATO protection),
+  actions and scope, allow/block list administration, and policy tuning
+  across managed customer tenants.
 when_to_use: >-
-  When working with DLP policies, anti-phishing rules, anti-malware settings, quarantine policies,
-  allow/block lists. Use when: checkpoint policy, avanan policy, email security policy, dlp
-  policy, anti-phishing policy, anti-malware policy, quarantine policy, allow list, block list,
-  email policy management, policy configuration, policy enable, policy disable, or email rules.
+  When configuring, auditing, or tuning Checkpoint Harmony Email security policies
+  or allow/block lists. Use when: checkpoint policy, avanan policy, email security
+  policy, dlp policy, anti-phishing policy, anti-malware policy, quarantine policy,
+  allow list, block list, email policy management, policy configuration, policy
+  enable, policy disable, or email rules.
 ---
 
 # Checkpoint Harmony Email Policy Management
@@ -255,13 +254,12 @@ Policies can be scoped to different levels:
 1. **Layer policies by severity** - Use BLOCK for critical threats, QUARANTINE for high, DELIVER_WARN for medium
 2. **Start permissive, tighten gradually** - Begin with LOG, move to DELIVER_WARN, then QUARANTINE
 3. **Document every policy change** - Who, what, when, why
-4. **Use narrow exceptions** - Prefer specific sender addresses over wildcard domains
-5. **Review policies quarterly** - Threat landscape evolves; policies should too
-6. **Test before deploying** - Use LOG mode to validate new policies
-7. **Separate executive policies** - C-level and finance users warrant stricter BEC rules
-8. **Monitor policy effectiveness** - Track detection rates, false positive rates, and miss rates
-9. **Coordinate across tenants** - For MSPs, maintain consistent baseline policies across customers
-10. **Version control policy changes** - Track changes for audit and rollback purposes
+4. **Review policies quarterly** - Threat landscape evolves; policies should too
+5. **Test before deploying** - Use LOG mode to validate new policies
+6. **Separate executive policies** - C-level and finance users warrant stricter BEC rules
+7. **Monitor policy effectiveness** - Track detection rates, false positive rates, and miss rates
+8. **Coordinate across tenants** - For MSPs, maintain consistent baseline policies across customers
+9. **Version control policy changes** - Track changes for audit and rollback purposes
 
 ## Related Skills
 

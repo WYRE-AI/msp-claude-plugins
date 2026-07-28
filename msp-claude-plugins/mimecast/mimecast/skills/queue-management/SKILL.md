@@ -1,13 +1,13 @@
 ---
 name: "Mimecast Queue Management"
 description: >
-  Use this skill when checking Mimecast email delivery queue status —
-  identifying stuck messages, delivery delays, and backlog conditions.
+  Mimecast email delivery queues: inbound and outbound queue types, queue
+  message states, retry behavior, and the signals that identify stuck
+  messages, delivery delays, and backlog conditions.
 when_to_use: >-
-  When checking Mimecast email delivery queue status — identifying stuck messages, delivery
-  delays, and backlog conditions. Use when: mimecast queue, email queue, delivery queue, mimecast
-  backlog, mimecast delivery delay, stuck email, mimecast outbound queue, or mimecast inbound
-  queue.
+  When checking Mimecast delivery queue health or diagnosing delayed or stuck mail. Use when:
+  mimecast queue, email queue, delivery queue, mimecast backlog, mimecast delivery delay, stuck
+  email, mimecast outbound queue, or mimecast inbound queue.
 ---
 
 # Mimecast Queue Management

@@ -1,11 +1,12 @@
 ---
 name: "Margin Analysis"
 description: >
-  Use this skill when computing per-client or per-service-line margin for an
-  MSP: revenue from PSA billing/accounting invoices minus cost from
-  Pax8/Sherweb wholesale pricing plus estimated labor from PSA time entries
-  where available. Handles missing cost data by flagging it rather than
-  guessing.
+  Per-client and per-service-line margin computation for an MSP: revenue from
+  PSA billing or accounting invoices, cost of goods from Pax8/Sherweb
+  wholesale pricing, and estimated labor from PSA time entries × a loaded
+  technician rate. Covers the full-margin / gross-margin-only /
+  cost-data-unavailable reporting tiers and why a missing cost input is
+  flagged rather than interpolated from portfolio averages.
 when_to_use: >-
   When ranking clients or service lines by profitability, or investigating
   whether a client is profitable at all. Use when: margin analysis, client

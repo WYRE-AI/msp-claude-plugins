@@ -1,10 +1,10 @@
 ---
 name: "Microsoft 365 Users"
 description: >
-  Use this skill when working with Microsoft 365 users - listing, searching,
-  creating, disabling, or checking user properties. Covers account status,
-  MFA enrollment, license assignment, group membership, and manager hierarchy.
-  Essential for MSP technicians handling M365 user administration.
+  The Entra ID user object as M365's central identity: key properties and their
+  MSP relevance, account status values, the license assignment model, Graph
+  patterns for listing/searching/creating/disabling users, MFA status checking,
+  and the onboarding and offboarding sequences.
 when_to_use: >-
   When listing, searching, creating, disabling, or checking user properties. Use when: m365 user,
   microsoft 365 user, entra user, azure ad user, create user m365, disable user m365, user license

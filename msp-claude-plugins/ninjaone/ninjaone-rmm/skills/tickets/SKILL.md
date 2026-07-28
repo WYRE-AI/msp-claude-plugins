@@ -1,14 +1,14 @@
 ---
 name: "NinjaOne Tickets"
 description: >
-  Use this skill when working with NinjaOne tickets - creating, updating,
-  searching, and managing ticketing operations. NinjaOne's built-in ticketing
-  integrates with device monitoring for streamlined MSP workflows.
+  NinjaOne's built-in ticketing system, which integrates with device monitoring:
+  ticket creation and updates, core/status/metadata fields, status and priority
+  values with SLA targets, log entry types, device linkage, tagging patterns, and
+  error codes.
 when_to_use: >-
-  When creating, updating, searching, and managing ticketing operations. NinjaOne's built-in
-  ticketing integrates with device monitoring for streamlined MSP workflows. Use when: ninjaone
-  ticket, ninjarmm ticket, ninja ticket create, ninja ticket search, ticket status ninja, or ninja
-  service ticket.
+  When creating, updating, searching, or working the NinjaOne ticket queue. Use when:
+  ninjaone ticket, ninjarmm ticket, ninja ticket create, ninja ticket search, ticket
+  status ninja, or ninja service ticket.
 ---
 
 # NinjaOne Ticket Management
@@ -207,12 +207,9 @@ Common tag patterns:
 
 ## Best Practices
 
-1. **Link to devices** - Provides context and quick actions
-2. **Use descriptive subjects** - Include who, what, where
-3. **Log all work** - Essential for billing and knowledge
-4. **Update status promptly** - Keeps queues accurate
-5. **Use tags consistently** - Enables better reporting
-6. **Document resolution** - Helps with future issues
+1. **Use descriptive subjects** - Include who, what, where
+2. **Log all work** - Essential for billing and knowledge
+3. **Update status promptly** - Keeps queues accurate
 
 ## Error Handling
 

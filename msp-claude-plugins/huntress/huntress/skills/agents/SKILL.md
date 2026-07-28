@@ -1,12 +1,12 @@
 ---
 name: "Huntress Agents"
 description: >
-  Use this skill when managing Huntress endpoint agents — listing agents,
-  filtering by organization or platform, checking agent health and status,
-  and investigating specific agent details.
+  Huntress endpoint agents: the agent lifecycle, organization and platform
+  filters, health signals such as `last_seen_at` and version, fleet-audit
+  workflows, and the errors returned for missing or empty agent results.
 when_to_use: >-
-  When managing Huntress endpoint agents — listing agents, filtering by organization or platform,
-  checking agent health and status, and investigating specific agent details. Use when: huntress
+  When listing, filtering, or investigating Huntress endpoint agents, or auditing fleet
+  health and coverage. Use when: huntress
   agent, huntress endpoint, agent health, agent status, agent inventory, agent list, or endpoint
   management.
 ---

@@ -1,14 +1,14 @@
 ---
 name: "Better Stack Incidents"
 description: >
-  Use this skill when working with Better Stack incidents --
-  listing, triaging, acknowledging, and resolving incidents
-  triggered by uptime monitors or manual reports.
+  Better Stack incidents: incident records raised by uptime monitors or
+  reported manually, and the triage, acknowledgment, and resolution
+  lifecycle.
 when_to_use: >-
-  When listing, triaging, acknowledging, and resolving incidents triggered by uptime monitors or
-  manual reports. Use when: betterstack incident, incident triage, incident acknowledgment,
-  incident resolution, acknowledge incident, resolve incident, downtime incident, or better stack
-  incident.
+  When listing, triaging, acknowledging, or resolving Better Stack
+  incidents. Use when: betterstack incident, incident triage, incident
+  acknowledgment, incident resolution, acknowledge incident, resolve
+  incident, downtime incident, or better stack incident.
 ---
 
 # Better Stack Incidents
