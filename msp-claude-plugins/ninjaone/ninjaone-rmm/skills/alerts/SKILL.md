@@ -1,15 +1,15 @@
 ---
 name: "NinjaOne Alerts"
 description: >
-  Use this skill when working with NinjaOne alerts - viewing active conditions,
-  dismissing alerts, and understanding alert severity levels. Alerts indicate
-  device issues that require technician attention.
+  NinjaOne alerts and the conditions behind them: retrieving device alerts,
+  dismissing individual alerts and bulk resets, alert summaries, severity and
+  priority levels, common hardware/service/security/connectivity alert types and
+  thresholds, alert webhooks, and triage workflows.
 when_to_use: >-
-  When viewing active conditions, dismissing alerts, and understanding alert severity levels.
-  Alerts indicate device issues that require technician attention. Use when: ninjaone alert,
-  ninjarmm alert, ninja condition, device alert ninja, dismiss alert ninja, clear alert ninja,
-  critical alert ninja, bulk dismiss alerts ninja, alert summary ninja, ninjaone alert count, or
-  alerts by severity ninja.
+  When reviewing, triaging, or clearing NinjaOne device alerts and conditions. Use when:
+  ninjaone alert, ninjarmm alert, ninja condition, device alert ninja, dismiss alert
+  ninja, clear alert ninja, critical alert ninja, bulk dismiss alerts ninja, alert
+  summary ninja, ninjaone alert count, or alerts by severity ninja.
 ---
 
 # NinjaOne Alert Management
@@ -215,8 +215,7 @@ After scheduled maintenance:
 1. **Don't ignore alerts** - Address or dismiss, never leave stale
 2. **Set appropriate thresholds** - Avoid alert fatigue
 3. **Document dismissals** - Note why alert was cleared
-4. **Use webhooks** - Get real-time notifications
-5. **Review periodically** - Audit alert policies quarterly
+4. **Review periodically** - Audit alert policies quarterly
 
 ## Error Handling
 

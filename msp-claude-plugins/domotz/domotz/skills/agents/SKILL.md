@@ -1,12 +1,13 @@
 ---
 name: "Domotz Agents"
 description: >
-  Use this skill when managing Domotz agents (collectors), sites,
-  and network probes -- listing agents, checking agent health,
-  viewing site details, and monitoring collector connectivity.
+  Domotz agents (collectors/probes) as the per-site entry point for all device
+  and network operations: agent types, lifecycle, ONLINE/OFFLINE status, the
+  list/get tools and their license and last-seen fields, and fleet health,
+  site inventory, and capacity-planning workflows.
 when_to_use: >-
-  When managing Domotz agents (collectors), sites, and network probes -- listing agents, checking
-  agent health, viewing site details, and monitoring collector connectivity. Use when: domotz
+  When listing agents, checking collector health, or working with Domotz sites.
+  Use when: domotz
   agent, domotz collector, domotz site, domotz probe, agent health, agent status, agent list,
   collector management, or site management.
 ---

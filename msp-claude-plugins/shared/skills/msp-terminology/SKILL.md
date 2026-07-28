@@ -1,13 +1,14 @@
 ---
 name: "MSP Terminology"
 description: >
-  Use this skill when interpreting MSP-specific terminology, acronyms,
-  and concepts. Essential for understanding MSP workflows, tool discussions,
-  and industry-specific language across all vendor platforms.
+  MSP industry terminology: acronyms, roles, contract and billing concepts,
+  and the vocabulary used across PSA, RMM, documentation, and security
+  platforms.
 when_to_use: >-
-  When interpreting MSP-specific terminology, acronyms, and concepts. Use when: msp terminology,
-  msp acronyms, what is psa, what is rmm, msp definitions, managed services terms, it service
-  management, or msp vocabulary.
+  When an MSP-specific term, acronym, or concept needs interpreting. Use
+  when: msp terminology, msp acronyms, what is psa, what is rmm, msp
+  definitions, managed services terms, it service management, or msp
+  vocabulary.
 ---
 
 # MSP Terminology & Concepts

@@ -1,14 +1,13 @@
 ---
 name: "Syncro Invoices"
 description: >
-  Use this skill when working with Syncro MSP invoices - creating, managing,
-  and tracking invoices and payments. Covers invoice fields, line items,
-  payment processing, and billing workflows. Essential for MSP billing
-  operations through Syncro.
+  Syncro MSP invoices: invoice fields, line items, payment processing, and
+  billing workflows.
 when_to_use: >-
-  When creating, managing, and tracking invoices and payments. Use when: syncro invoice, syncro
-  billing, syncro payment, invoice management syncro, line item syncro, syncro accounting,
-  customer billing syncro, payment processing syncro, or invoice search syncro.
+  When creating, managing, or tracking Syncro invoices and payments. Use
+  when: syncro invoice, syncro billing, syncro payment, invoice management
+  syncro, line item syncro, syncro accounting, customer billing syncro,
+  payment processing syncro, or invoice search syncro.
 ---
 
 # Syncro MSP Invoice Management

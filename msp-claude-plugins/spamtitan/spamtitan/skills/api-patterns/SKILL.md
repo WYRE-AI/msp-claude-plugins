@@ -1,14 +1,14 @@
 ---
 name: "SpamTitan API Patterns"
 description: >
-  Use this skill when working with the SpamTitan MCP tools —
-  available tools, authentication via API key header, API structure,
-  pagination, rate limiting, error handling, and best practices.
+  SpamTitan MCP fundamentals: the available tool catalog, API-key header
+  authentication, API structure, pagination, rate limiting, and error
+  handling.
 when_to_use: >-
-  When working with available tools, authentication via API key header, API structure, pagination,
-  rate limiting, error handling, and best practices in the SpamTitan MCP tools. Use when:
-  spamtitan, spamtitan api, spam filter, titanhq, SpamTitan API, SpamTitan tools, spamtitan
-  authentication, spamtitan mcp, spamtitan rate limit, or spamtitan error.
+  When authenticating to SpamTitan, navigating its MCP tools, paging results, or interpreting a
+  SpamTitan API error. Use when: spamtitan, spamtitan api, spam filter, titanhq, SpamTitan API,
+  SpamTitan tools, spamtitan authentication, spamtitan mcp, spamtitan rate limit, or spamtitan
+  error.
 ---
 
 # SpamTitan MCP Tools & API Patterns
@@ -116,7 +116,6 @@ SpamTitan enforces API rate limits per API key:
 - Use domain filters to scope queries to specific customer domains in multi-tenant deployments
 - Use bulk actions (release or delete) rather than individual calls when processing multiple messages
 - Always confirm before bulk-deleting quarantined messages — deletion is irreversible
-- Handle rate limits gracefully with exponential backoff
 - Log all list management changes (allowlist/blocklist) for audit trail purposes
 
 ## Related Skills

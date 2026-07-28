@@ -1,5 +1,12 @@
 ---
 name: "Restore-Test Verification"
+description: >
+  Whether a backup is actually recoverable rather than merely present: the
+  ranked hierarchy of restore evidence (actual restore performed, full
+  boot/virtualization verification, screenshot verification, spot-check
+  restore drill, no evidence at all), adequate test cadence per
+  data-criticality tier, and why a never-tested backup is the
+  highest-priority finding — outranking even an actively failing job.
 when_to_use: >-
   When determining whether a backup is actually recoverable, not just present
   — tracking restore/DR test history, screenshot or boot-verification status,
@@ -7,13 +14,6 @@ when_to_use: >-
   actually restore this, backup verification, has this ever been restored,
   restore drill, boot verification, screenshot verification, untested
   backups.
-description: >
-  Use this skill to track and verify whether backups are recoverable rather
-  than merely present: the difference between "a backup exists" and "a
-  backup is recoverable," how to use screenshot/boot-verification features
-  and spot-check restore drills as evidence, what counts as an adequate
-  testing cadence for different data-criticality tiers, and how to flag
-  backups that have never been restore-tested.
 ---
 
 # Restore-Test Verification
@@ -132,13 +132,6 @@ Do not fabricate test dates or pass/fail status.
 
 ## Best Practices
 
-- Treat "never tested" as a first-class, always-reported finding — not a null value
-  that gets dropped from output.
-- Always check screenshot/boot-verification status alongside job-success status for
-  image-based appliance backups; a green job with a red screenshot is a recovery
-  risk.
-- State the cadence table (or the org-specific policy used instead) explicitly in
-  every report — it's a judgment call the reader needs visibility into.
 - Recommend, don't schedule or execute, an actual restore drill — this skill flags
   the gap; performing the drill is a human/scheduled action with its own change-
   control considerations.

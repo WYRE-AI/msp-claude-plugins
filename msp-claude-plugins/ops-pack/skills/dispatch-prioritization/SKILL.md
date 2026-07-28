@@ -1,18 +1,17 @@
 ---
 name: "Dispatch Prioritization"
+description: >
+  Priority scoring and assignment for an unassigned PSA ticket queue: the
+  scoring factors (SLA proximity, client tier, ticket age, technician load,
+  skill/category match), how to combine them into an explainable ranked order
+  rather than a black-box formula, and the tool-discovery pattern for finding
+  which PSA and RMM connectors are actually live before calling any vendor's
+  tools.
 when_to_use: >-
   When triaging or assigning an unassigned ticket queue and deciding what
   order tickets should be worked in or who should take them. Use when:
   dispatch, triage the queue, assign tickets, who should take this ticket,
   unassigned queue, balance technician load, prioritize tickets.
-description: >
-  Use this skill when scoring and assigning an unassigned ticket queue across
-  whatever PSA (and, where useful, RMM) is connected through the gateway.
-  Covers the priority-scoring factors (SLA proximity, client tier, ticket
-  age, technician load), and — critically — how to use conduit__search_tools
-  to discover which PSA/RMM tools are actually available before assuming a
-  specific vendor's tool names. Do not hardcode a vendor's tool surface;
-  discover it first.
 ---
 
 # Dispatch Prioritization
@@ -126,10 +125,6 @@ Ask which PSA/board to scope to rather than silently picking one.
 
 ## Best Practices
 
-- Always discover tools before calling them — never hardcode a vendor's tool name.
-- Keep the scoring rationale visible in the output; a black-box ranking isn't useful
-  to a dispatcher who has to defend the call.
-- Default to proposing assignments, not writing them, unless asked.
 - Treat missing data (no technician workload, no formal SLA) as a stated gap, not a
   reason to skip the whole factor silently.
 

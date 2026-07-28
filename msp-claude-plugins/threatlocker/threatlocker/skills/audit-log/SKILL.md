@@ -1,16 +1,15 @@
 ---
 name: "ThreatLocker Audit Log"
 description: >
-  Use this skill when investigating events in the ThreatLocker Action Log
-  (the API name is "audit") — building incident timelines, tracing a file's
-  history across endpoints, identifying repeated denials, and correlating
-  policy bypasses or audit-only matches with user/computer context.
+  The ThreatLocker Action Log (the API name is "audit"): incident timelines, tracing a
+  file's history across endpoints, repeated-denial detection, and correlating policy
+  bypasses or audit-only matches with user and computer context.
 when_to_use: >-
-  When investigating a security event timeline, tracing a file path or hash across endpoints,
-  looking up repeated denials, or correlating policy bypasses to specific actions. Use when:
-  threatlocker audit log, threatlocker action log, threatlocker investigate, threatlocker file
-  history, threatlocker timeline, threatlocker denied execution, what happened on, threatlocker
-  policy bypass, or threatlocker forensics.
+  When investigating a security event timeline, tracing a file path or hash across
+  endpoints, looking up repeated denials, or correlating policy bypasses to specific
+  actions. Use when: threatlocker audit log, threatlocker action log, threatlocker
+  investigate, threatlocker file history, threatlocker timeline, threatlocker denied
+  execution, what happened on, threatlocker policy bypass, or threatlocker forensics.
 ---
 
 # ThreatLocker Audit Log

@@ -1,12 +1,12 @@
 ---
 name: "Blumira API Patterns"
 description: >
-  Use this skill when working with Blumira API authentication, understanding
-  the dual path structure (org vs MSP), constructing filtered queries, handling
-  pagination, or troubleshooting API errors.
+  Blumira REST API fundamentals: JWT authentication, the dual `/org/*` vs `/msp/*`
+  path structure, suffix-based filter operators, pagination parameters and response
+  metadata, the stateful MCP navigation tools, and HTTP error causes.
 when_to_use: >-
-  When working with Blumira API authentication, understanding the dual path structure (org vs
-  MSP), constructing filtered queries, handling pagination, or troubleshooting API errors. Use
+  When authenticating to or constructing queries against the Blumira API, directly or
+  through MCP tools. Use
   when: blumira api, blumira auth, jwt token, blumira filtering, blumira pagination, or api error.
 ---
 

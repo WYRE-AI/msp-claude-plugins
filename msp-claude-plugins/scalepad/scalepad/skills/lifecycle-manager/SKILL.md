@@ -1,16 +1,14 @@
 ---
 name: "ScalePad Lifecycle Manager"
 description: >
-  Use this skill when working with ScalePad Lifecycle Manager — the
-  engagement and roadmap workflow product: initiatives, goals,
-  meetings, action items, assessments, deliverables, budget
-  forecasting, contracts, notes, hardware lifecycle records, and
-  warranty pricing.
+  ScalePad Lifecycle Manager, the engagement and roadmap workflow product: initiatives,
+  goals, meetings, action items, assessments, deliverables, budget forecasting,
+  contracts, notes, hardware lifecycle records, and warranty pricing.
 when_to_use: >-
-  When managing Lifecycle Manager initiatives, goals, meetings, action items, assessments, 
-  deliverables, budgets, contracts, hardware lifecycles, or warranty pricing. Use when: lifecycle 
-  manager, scalepad initiative, scalepad roadmap, scalepad warranty, scalepad goals, scalepad 
-  meetings, scalepad qbr.
+  When managing Lifecycle Manager initiatives, goals, meetings, action items,
+  assessments, deliverables, budgets, contracts, hardware lifecycles, or warranty
+  pricing. Use when: lifecycle manager, scalepad initiative, scalepad roadmap, scalepad
+  warranty, scalepad goals, scalepad meetings, scalepad qbr.
 ---
 
 # ScalePad Lifecycle Manager

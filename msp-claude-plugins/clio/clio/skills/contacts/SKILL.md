@@ -1,11 +1,9 @@
 ---
 name: "Clio Contacts"
 description: >
-  Use this skill when creating, updating, searching, or reasoning about
-  Clio contacts — the people and companies connected to matters. Covers
-  person vs. company contacts and the relationship between a contact and
-  the matters they're party to (client, opposing party, witness, and
-  other roles).
+  Clio contacts -- the people and companies connected to matters: person
+  vs. company contact types, and how a contact relates to the matters they
+  are party to (client, opposing party, witness, and other roles).
 when_to_use: >-
   When creating, updating, or searching for a Clio contact, or when
   figuring out how a contact relates to a matter. Use when: clio contact,

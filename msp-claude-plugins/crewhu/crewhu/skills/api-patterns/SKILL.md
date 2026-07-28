@@ -1,13 +1,14 @@
 ---
 name: "Crewhu API Patterns"
+description: >
+  Crewhu MCP fundamentals: token authentication via the `X-Crewhu-Api-Token`
+  header and its gateway env-var mapping, the flat 18-tool surface across the
+  surveys, users, badges, and prizes domains (only `crewhu_badges_update_contest`
+  writes), pagination, and error codes.
 when_to_use: >-
   When working with Crewhu authentication headers, pagination, or error handling for the Crewhu
   MCP server. Use when: crewhu api, crewhu authentication, crewhu pagination, crewhu mcp, or
   crewhu token.
-description: >
-  Use this skill when working with the Crewhu MCP tools — token-based
-  authentication via the `X-Crewhu-Api-Token` header, read-heavy tool
-  surface, pagination, and error handling.
 ---
 
 # Crewhu MCP Tools & API Patterns
@@ -44,9 +45,6 @@ across four domains:
 - **badges** (5): list, get, history_list, user_recognition, update_contest
 - **prizes** (5): list, get, history_list, user_redemptions, pending_redemptions
 
-Only `crewhu_badges_update_contest` performs writes; everything else
-is read-only.
-
 ## Pagination
 
 Crewhu list endpoints typically accept page/limit-style parameters.
@@ -65,11 +63,8 @@ stable denominator.
 
 ## Best Practices
 
-- Treat almost every Crewhu tool as read-only — only
-  `crewhu_badges_update_contest` mutates data; flag it explicitly
-  before invoking.
-- For CSAT trend analysis, pull a wide enough window
-  (last 90 days minimum) to avoid sampling noise.
+- Flag `crewhu_badges_update_contest` explicitly before invoking it — it is
+  the only tool in the surface that mutates data.
 - For multi-team MSPs, group survey results by user/team after fetching.
 
 ## Related Skills

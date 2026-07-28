@@ -1,13 +1,12 @@
 ---
 name: "Microsoft 365 Teams"
 description: >
-  Use this skill when working with Microsoft Teams - listing teams and channels,
-  managing team membership, finding meetings, checking Teams usage, or
-  troubleshooting Teams access issues. Covers MSP support tasks for Teams-heavy
-  customer environments.
+  Microsoft Teams through Microsoft Graph: the Team/Channel/Member/Meeting/Tab
+  object model, team and channel enumeration, membership and ownership changes,
+  online meetings, usage reporting, and the causes behind Teams access failures.
 when_to_use: >-
-  When listing teams and channels, managing team membership, finding meetings, checking Teams
-  usage, or troubleshooting Teams access issues. Use when: microsoft teams, m365 teams, teams
+  When enumerating or administering Teams, channels, and membership, or troubleshooting a
+  Teams access problem. Use when: microsoft teams, m365 teams, teams
   channel, teams membership, teams meeting, teams access, teams troubleshoot, list teams m365,
   teams usage, or teams admin.
 ---

@@ -1,10 +1,10 @@
 ---
 name: "IT Glue Passwords"
 description: >
-  Use this skill when working with IT Glue passwords - secure credential storage,
-  password categories, folders, embedded passwords, and access patterns. Covers
-  security best practices, audit logging, password retrieval, and proper handling
-  of sensitive credentials in documentation.
+  IT Glue passwords: secure, organization-scoped credential storage with
+  categories, folders, restricted-access flags, OTP secrets, and embedding
+  into documents and flexible assets. Covers access-control and rotation
+  practices for handling sensitive credentials.
 when_to_use: >-
   When working with secure credential storage, password categories, folders, embedded passwords,
   and access patterns in IT Glue passwords. Use when: it glue password, credential lookup,
@@ -55,363 +55,29 @@ Organization: Acme Corporation
 
 ### Embedded Passwords
 
-Passwords can be embedded directly within documents and flexible assets, providing contextual credential access alongside documentation.
+Passwords can be embedded directly within documents and flexible assets (`<div data-embedded-password-id="12345"></div>`), providing contextual credential access alongside documentation.
 
-## Field Reference
-
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `organization-id` | integer | Yes | Parent organization |
-| `name` | string | Yes | Password display name |
-| `username` | string | No | Account username |
-| `password` | string | No | The actual password (encrypted) |
-| `url` | string | No | Related URL/login page |
-| `password-category-id` | integer | No | Category classification |
-| `password-folder-id` | integer | No | Folder location |
-
-### Documentation Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `notes` | string | Additional notes (HTML) |
-| `otp-secret` | string | TOTP/2FA secret |
-
-### Relationship Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `resource-id` | integer | Related resource ID |
-| `resource-type` | string | Related resource type |
-
-### Access Control Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `restricted` | boolean | Restricted access flag |
-| `autofill-selectors` | string | Browser autofill selectors |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `created-at` | datetime | Creation timestamp |
-| `updated-at` | datetime | Last update timestamp |
-| `password-updated-at` | datetime | Password last changed |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Passwords
+- **The password value is not returned by default.** Retrieving the actual credential requires `GET /passwords/:id?show_password=true` — this is logged in the IT Glue audit trail.
+- **List endpoints omit the `password` field entirely** — it's only present when fetching a single password with `show_password=true`.
+- Passwords can be filtered by organization, category, or folder in combination (`filter[organization-id]`, `filter[password-category-id]`, `filter[password-folder-id]`).
 
-```http
-GET /passwords
-x-api-key: YOUR_API_KEY
-Content-Type: application/vnd.api+json
-```
-
-**By Organization:**
-```http
-GET /organizations/123/relationships/passwords
-```
-
-**With Filters:**
-```http
-GET /passwords?filter[organization-id]=123&filter[password-category-id]=456
-```
-
-### Get Single Password
-
-```http
-GET /passwords/789
-x-api-key: YOUR_API_KEY
-```
-
-**With Includes:**
-```http
-GET /passwords/789?include=organization,password-category,password-folder
-```
-
-**Note:** The password field is returned only when explicitly retrieving a single password.
-
-### Show Password Value
-
-To retrieve the actual password value, you must request with the `show_password` parameter:
-
-```http
-GET /passwords/789?show_password=true
-x-api-key: YOUR_API_KEY
-```
-
-**Security Note:** This action is logged in the IT Glue audit trail.
-
-### Create Password
-
-```http
-POST /passwords
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "data": {
-    "type": "passwords",
-    "attributes": {
-      "organization-id": 123456,
-      "name": "Domain Admin - ACME",
-      "username": "administrator@acme.local",
-      "password": "SecureP@ssw0rd!",
-      "url": "https://dc01.acme.local",
-      "password-category-id": 12,
-      "notes": "<p>Primary domain administrator account</p>"
-    }
-  }
-}
-```
-
-### Update Password
-
-```http
-PATCH /passwords/789
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "data": {
-    "type": "passwords",
-    "attributes": {
-      "password": "NewSecureP@ssw0rd!",
-      "notes": "<p>Password updated on 2024-02-15</p>"
-    }
-  }
-}
-```
-
-### Delete Password
-
-```http
-DELETE /passwords/789
-x-api-key: YOUR_API_KEY
-```
-
-**Warning:** Consider archiving instead of deleting for audit purposes.
-
-### Search Passwords
-
-**By Name:**
-```http
-GET /passwords?filter[name]=Domain Admin
-```
-
-**By Category:**
-```http
-GET /passwords?filter[password-category-id]=12
-```
-
-**By Folder:**
-```http
-GET /passwords?filter[password-folder-id]=34
-```
-
-## Password Folders
-
-### List Folders
-
-```http
-GET /password-folders
-x-api-key: YOUR_API_KEY
-```
-
-**By Organization:**
-```http
-GET /organizations/123/relationships/password-folders
-```
-
-### Create Folder
-
-```http
-POST /password-folders
-Content-Type: application/vnd.api+json
-```
-
-```json
-{
-  "data": {
-    "type": "password-folders",
-    "attributes": {
-      "organization-id": 123456,
-      "name": "Infrastructure",
-      "parent-id": null
-    }
-  }
-}
-```
-
-### Nested Folders
-
-```json
-{
-  "data": {
-    "type": "password-folders",
-    "attributes": {
-      "organization-id": 123456,
-      "name": "Domain Controllers",
-      "parent-id": 789
-    }
-  }
-}
-```
-
-## Embedded Passwords
-
-### In Documents
-
-Passwords can be embedded in documents using IT Glue's embedded password syntax:
-
-```html
-<p>Login credentials:</p>
-<div data-embedded-password-id="12345"></div>
-```
-
-### In Flexible Assets
-
-Flexible asset types can include password fields that reference or store passwords directly.
+See [references/api.md](references/api.md) for the complete endpoint catalog: password and password-folder CRUD, search, and embedding syntax.
 
 ## Common Workflows
 
 ### Secure Password Creation
 
-```javascript
-async function createSecurePassword(orgId, data) {
-  // Create or get appropriate folder
-  const folder = await ensureFolder(orgId, data.folderPath);
+Resolve or create the target folder, then create the password with a category and a notes field documenting purpose — and log the creation to your own audit system in addition to IT Glue's built-in logging.
 
-  // Create password with category
-  const password = await createPassword({
-    'organization-id': orgId,
-    name: data.name,
-    username: data.username,
-    password: data.password,
-    url: data.url,
-    'password-category-id': data.categoryId,
-    'password-folder-id': folder?.id,
-    notes: `<p>Created: ${new Date().toLocaleDateString()}</p>
-            <p>Purpose: ${data.purpose}</p>`
-  });
+### Password Rotation
 
-  // Log the creation (your audit system)
-  await logPasswordAction({
-    action: 'created',
-    passwordId: password.id,
-    passwordName: data.name,
-    organizationId: orgId,
-    timestamp: new Date()
-  });
+Update the password value and append a rotation note (timestamp + reason) to the existing notes rather than overwriting them, so the credential's change history stays visible in IT Glue.
 
-  return password;
-}
-```
-
-### Password Rotation Workflow
-
-```javascript
-async function rotatePassword(passwordId, newPassword, reason) {
-  // Get current password info
-  const current = await getPassword(passwordId);
-
-  // Update with new password
-  const updated = await updatePassword(passwordId, {
-    password: newPassword,
-    notes: `${current.attributes.notes || ''}
-            <p><strong>Rotated:</strong> ${new Date().toLocaleDateString()}</p>
-            <p><strong>Reason:</strong> ${reason}</p>`
-  });
-
-  // Log rotation
-  await logPasswordAction({
-    action: 'rotated',
-    passwordId: passwordId,
-    passwordName: current.attributes.name,
-    reason: reason,
-    timestamp: new Date()
-  });
-
-  return updated;
-}
-```
-
-### Password Search by Context
-
-```javascript
-async function findPasswordForServer(orgId, serverName) {
-  // Search for passwords mentioning this server
-  const passwords = await fetchPasswords({
-    filter: { 'organization-id': orgId }
-  });
-
-  // Filter by server name in name or notes
-  return passwords.filter(p =>
-    p.attributes.name.toLowerCase().includes(serverName.toLowerCase()) ||
-    p.attributes.notes?.toLowerCase().includes(serverName.toLowerCase())
-  );
-}
-```
-
-### Password Category Report
-
-```javascript
-async function generatePasswordReport(orgId) {
-  const passwords = await fetchPasswords({
-    filter: { 'organization-id': orgId },
-    include: 'password-category,password-folder'
-  });
-
-  const byCategory = {};
-  passwords.forEach(p => {
-    const category = p.relationships['password-category']?.data?.id || 'Uncategorized';
-    if (!byCategory[category]) byCategory[category] = [];
-    byCategory[category].push({
-      name: p.attributes.name,
-      username: p.attributes.username,
-      url: p.attributes.url,
-      lastUpdated: p.attributes['password-updated-at']
-    });
-  });
-
-  return byCategory;
-}
-```
-
-### Find Stale Passwords
-
-```javascript
-async function findStalePasswords(orgId, daysOld = 90) {
-  const cutoffDate = new Date();
-  cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-
-  const passwords = await fetchPasswords({
-    filter: { 'organization-id': orgId }
-  });
-
-  return passwords
-    .filter(p => {
-      const updated = p.attributes['password-updated-at'];
-      return !updated || new Date(updated) < cutoffDate;
-    })
-    .map(p => ({
-      id: p.id,
-      name: p.attributes.name,
-      lastUpdated: p.attributes['password-updated-at'] || 'Never',
-      daysSinceUpdate: p.attributes['password-updated-at']
-        ? Math.floor((new Date() - new Date(p.attributes['password-updated-at'])) / (1000 * 60 * 60 * 24))
-        : 'Unknown'
-    }));
-}
-```
+See [references/examples.md](references/examples.md) for the full `createSecurePassword` and `rotatePassword` implementations, plus context search, category reporting, and stale-password detection workflows.
 
 ## Security Best Practices
 
@@ -432,74 +98,15 @@ async function findStalePasswords(orgId, daysOld = 90) {
 
 ### Audit Logging
 
-IT Glue logs all password access. Additionally:
+IT Glue logs all password access automatically. Layer your own audit logging on top for actions IT Glue doesn't track natively (e.g. who copied a value in a downstream tool) — see [references/errors.md](references/errors.md) for a secure error-handling pattern that logs unexpected access failures without leaking whether a password exists.
 
-```javascript
-// Your own audit logging
-async function logPasswordAccess(passwordId, action, user) {
-  await auditLog.create({
-    resource: 'password',
-    resourceId: passwordId,
-    action: action, // 'viewed', 'copied', 'updated', 'created', 'deleted'
-    user: user,
-    timestamp: new Date(),
-    ipAddress: getCurrentIp()
-  });
-}
-```
+## Gotchas
 
-## Error Handling
+- **`show_password=true` is required** to get the actual credential — omitting it silently returns the password record without the `password` field, which looks like a missing-data bug rather than an intentional security gate.
+- **Every retrieval with `show_password=true` is audit-logged** — avoid calling it in loops or bulk scripts unless you actually need the plaintext value for each record, since it generates one audit entry per call.
+- **Deleting removes audit history** — archive or otherwise preserve the record instead of deleting when a credential is retired, so past access can still be reviewed.
 
-### Common API Errors
-
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Name can't be blank | Provide password name |
-| 400 | Organization required | Include organization-id |
-| 401 | Invalid API key | Check IT_GLUE_API_KEY |
-| 403 | Access denied | User lacks permission |
-| 404 | Password not found | Verify password ID |
-| 422 | Invalid category | Query valid category IDs |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Name required | Missing name | Add name to request |
-| Organization required | No org ID | Include organization-id |
-| Invalid category | Bad category ID | Query /password-categories |
-| Invalid folder | Bad folder ID | Query /password-folders |
-
-### Secure Error Handling
-
-```javascript
-async function safeGetPassword(passwordId) {
-  try {
-    return await getPassword(passwordId, { show_password: true });
-  } catch (error) {
-    if (error.status === 403) {
-      // Don't leak that the password exists
-      console.log('Password access denied or not found');
-      return null;
-    }
-
-    if (error.status === 404) {
-      console.log('Password not found');
-      return null;
-    }
-
-    // Log security event for unexpected errors
-    await logSecurityEvent({
-      event: 'password_access_error',
-      passwordId: passwordId,
-      error: error.status,
-      timestamp: new Date()
-    });
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the complete error-code and validation-error tables.
 
 ## Best Practices
 
@@ -507,12 +114,8 @@ async function safeGetPassword(passwordId) {
 2. **Organize with folders** - Create logical folder hierarchy
 3. **Document purpose** - Include notes explaining what the password is for
 4. **Track URLs** - Always include login URL when applicable
-5. **Regular rotation** - Establish password rotation schedules
-6. **Monitor access** - Review password access logs regularly
-7. **Use restricted** - Mark high-security passwords as restricted
-8. **Embed contextually** - Place passwords in related documents
-9. **Avoid deletion** - Archive instead of delete for audit trails
-10. **Include 2FA** - Store TOTP secrets with otp-secret field
+5. **Embed contextually** - Place passwords in related documents
+6. **Include 2FA** - Store TOTP secrets with otp-secret field
 
 ## Related Skills
 

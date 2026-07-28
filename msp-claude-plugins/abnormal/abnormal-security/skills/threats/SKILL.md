@@ -1,18 +1,17 @@
 ---
 name: "Abnormal Security Threats"
 description: >
-  Use this skill when working with Abnormal Security threat detection
-  and analysis - BEC, phishing, malware, socially-engineered attacks,
-  spam, graymail, and credential theft. Covers threat types, attack
+  Abnormal Security threat detection: threat types (BEC, phishing, malware,
+  socially-engineered attacks, spam, graymail, credential theft), attack
   vectors, severity assessment, remediation actions, and investigation
-  workflows. Essential for MSP security analysts investigating email-borne
-  threats detected by Abnormal Security's AI-powered behavioral engine.
+  workflows.
 when_to_use: >-
-  When working with BEC, phishing, malware, socially-engineered attacks, spam, graymail, and
-  credential theft in Abnormal Security threat detection and analysis. Use when: abnormal threat,
-  abnormal security threat, email threat, bec detection, business email compromise, phishing
-  detection, credential phishing, malware email, socially engineered attack, threat analysis
-  abnormal, email attack, threat severity, or abnormal threat investigation.
+  When investigating an email-borne threat detected by Abnormal Security's
+  behavioral engine. Use when: abnormal threat, abnormal security threat,
+  email threat, bec detection, business email compromise, phishing
+  detection, credential phishing, malware email, socially engineered attack,
+  threat analysis abnormal, email attack, threat severity, or abnormal
+  threat investigation.
 ---
 
 # Abnormal Security Threat Detection & Analysis

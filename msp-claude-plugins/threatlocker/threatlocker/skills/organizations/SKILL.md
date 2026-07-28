@@ -1,15 +1,14 @@
 ---
 name: "ThreatLocker Organizations"
 description: >
-  Use this skill when working with the ThreatLocker MSP multi-tenant
-  model — enumerating child organizations, retrieving per-org auth
-  keys, and identifying valid move targets when relocating computers
+  The ThreatLocker MSP multi-tenant model: enumerating child organizations, retrieving
+  per-org auth keys, and identifying valid move targets when relocating computers
   between tenants.
 when_to_use: >-
-  When fanning out reports across child orgs, retrieving an org's auth key, or moving computers
-  between organizations. Use when: threatlocker organization, threatlocker tenant, threatlocker
-  child orgs, threatlocker partner, threatlocker auth key, move computer threatlocker,
-  threatlocker multi-tenant, or threatlocker mssp.
+  When fanning out reports across child orgs, retrieving an org's auth key, or moving
+  computers between organizations. Use when: threatlocker organization, threatlocker
+  tenant, threatlocker child orgs, threatlocker partner, threatlocker auth key, move
+  computer threatlocker, threatlocker multi-tenant, or threatlocker mssp.
 ---
 
 # ThreatLocker Organizations

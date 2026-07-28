@@ -1,16 +1,16 @@
 ---
 name: "Incident Correlation"
 description: >
-  Use this skill when correlating data across multiple vendor tools during
-  incident investigation. Combines PSA tickets, RMM device state, documentation
-  platform assets, and configuration monitoring changes into a unified incident
-  summary. Vendor-agnostic workflow applicable to Kaseya, ConnectWise, HaloPSA,
-  Syncro, Atera, and other MSP stacks.
+  Vendor-agnostic cross-tool incident correlation: combining PSA tickets,
+  RMM device state, documentation-platform assets, and configuration-
+  monitoring changes into a unified incident summary across Kaseya,
+  ConnectWise, HaloPSA, Syncro, Atera, and similar MSP stacks.
 when_to_use: >-
-  When correlating data across multiple vendor tools during incident investigation. Use when:
-  incident correlation, cross-vendor investigation, correlate ticket, unified incident summary,
-  incident context, device investigation, cross-platform lookup, ticket device correlation,
-  incident timeline, or multi-vendor incident.
+  When an investigation needs data pulled together from more than one vendor
+  platform. Use when: incident correlation, cross-vendor investigation,
+  correlate ticket, unified incident summary, incident context, device
+  investigation, cross-platform lookup, ticket device correlation, incident
+  timeline, or multi-vendor incident.
 ---
 
 # Cross-Vendor Incident Correlation

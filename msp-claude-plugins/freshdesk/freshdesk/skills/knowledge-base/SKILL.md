@@ -1,16 +1,15 @@
 ---
 name: "Freshdesk Knowledge Base"
+description: >
+  Freshdesk Solutions knowledge base: the three-level categories -> folders ->
+  articles hierarchy, article fields and draft/published status, solution
+  search, and the MSP workflow of suggesting relevant KB articles to deflect or
+  resolve a ticket, through the Freshdesk REST API v2.
 when_to_use: >-
   When navigating the Freshdesk solutions knowledge base — categories, folders, and articles — or
   suggesting relevant KB articles for a ticket. Use when: freshdesk knowledge base, freshdesk
   solutions, freshdesk article, freshdesk kb, solution category freshdesk, solution folder
   freshdesk, suggest article freshdesk, or deflect ticket freshdesk.
-description: >
-  Use this skill when working with the Freshdesk solutions knowledge base — the
-  nested three-level hierarchy of categories -> folders -> articles. Covers
-  listing the hierarchy, retrieving and searching articles, and the MSP
-  workflow of suggesting relevant KB articles to deflect or resolve a ticket,
-  through the Freshdesk REST API v2.
 ---
 
 # Freshdesk Knowledge Base (Solutions)
@@ -137,11 +136,8 @@ Ticket: "Outlook shows Disconnected since this morning"
 
 ## Best Practices
 
-- **Suggest published articles only** — never surface drafts to customers.
 - **Respect folder visibility** — a folder restricted to agents or specific
   companies should not be shared more broadly.
-- **Use search first for symptoms, hierarchy for browsing** — they complement
-  each other.
 - **Cache the hierarchy** — categories and folders change rarely; cache the
   tree within a session to reduce request volume.
 - **Track deflection** — note when a suggested article resolved a ticket; it

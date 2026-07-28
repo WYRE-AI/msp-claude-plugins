@@ -1,12 +1,13 @@
 ---
 name: "Rootly Alerts"
 description: >
-  Use this skill when working with Rootly alerts -- alert routing, escalation
-  policies, integration with monitoring tools (Datadog, PagerDuty, etc.),
-  alert-to-incident creation, and managing alert rules.
+  Rootly's alerting layer between monitoring tools and incident management: alert
+  sources and integrations (Datadog, PagerDuty, New Relic, Grafana), routing rules,
+  escalation policies and their acknowledgement windows, suppression, and the
+  conditions under which an alert auto-creates an incident.
 when_to_use: >-
-  When working with alert routing, escalation policies, integration with monitoring tools
-  (Datadog, PagerDuty, etc.), alert-to-incident creation. Use when: rootly alert, alert routing,
+  When configuring alert routing, escalation policies, or monitoring-tool integrations in
+  Rootly, or tracing how an alert became an incident. Use when: rootly alert, alert routing,
   escalation policy, monitoring integration, alert rule, pagerduty, datadog alert, alert
   escalation, or on-call.
 ---

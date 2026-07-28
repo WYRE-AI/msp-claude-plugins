@@ -1,16 +1,17 @@
 ---
 name: WYRE MCP Gateway Troubleshooting
 description: >
-  Diagnose and resolve common issues with the WYRE MCP Gateway — missing
-  vendor tools, OAuth failures, "Failed to update tool access" errors,
-  expired credentials, and the request flow through mcp-remote → gateway →
-  vendor container → external API.
+  WYRE MCP Gateway diagnostics: missing vendor tools, OAuth failures,
+  "Failed to update tool access" errors, expired credentials, and the
+  request flow through mcp-remote to gateway to vendor container to external
+  API.
 when_to_use: >-
-  When a user reports that vendor tools are missing in Claude, Tool Allowlists changes won't save,
-  OAuth is failing on the WYRE gateway, or a tool call returns an unexpected error. Use when: wyre
-  gateway not working, mcp gateway troubleshooting, tools missing in claude, failed to update tool
-  access, vendor tools not appearing, mcp.wyre.ai issues, claude not seeing tools, oauth
-  invalid_token gateway, or gateway 403.
+  When a user reports that vendor tools are missing in Claude, Tool
+  Allowlists changes won't save, OAuth is failing on the WYRE gateway, or a
+  tool call returns an unexpected error. Use when: wyre gateway not working,
+  mcp gateway troubleshooting, tools missing in claude, failed to update
+  tool access, vendor tools not appearing, mcp.wyre.ai issues, claude not
+  seeing tools, oauth invalid_token gateway, or gateway 403.
 ---
 
 # WYRE MCP Gateway Troubleshooting

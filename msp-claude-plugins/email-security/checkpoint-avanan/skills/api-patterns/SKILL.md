@@ -1,17 +1,15 @@
 ---
 name: "Checkpoint Avanan API Patterns"
 description: >
-  Use this skill when working with the Checkpoint Harmony Email API -
-  OAuth2 client credentials authentication, base URLs, rate limiting,
-  pagination, error handling, and common API patterns. Covers token
-  management, request/response formats, and integration best practices.
-  Essential for developers and MSP administrators integrating with the
-  Checkpoint Harmony Email & Collaboration (Avanan) API.
+  Checkpoint Harmony Email & Collaboration (Avanan) API fundamentals:
+  OAuth2 client-credentials authentication, regional base URLs, request
+  and pagination patterns, rate limiting, error handling, and performance
+  optimization for the Harmony Email API.
 when_to_use: >-
-  When working with OAuth2 client credentials authentication, base URLs, rate limiting,
-  pagination, error handling, and common API patterns in the Checkpoint Harmony Email API. Use
-  when: checkpoint api, avanan api, checkpoint authentication, checkpoint oauth, avanan oauth,
-  checkpoint rate limit, checkpoint pagination, avanan api error, checkpoint rest api, or infinity
+  When authenticating to or calling the Checkpoint Harmony Email API directly
+  or through MCP tools. Use when: checkpoint api, avanan api, checkpoint
+  authentication, checkpoint oauth, avanan oauth, checkpoint rate limit,
+  checkpoint pagination, avanan api error, checkpoint rest api, or infinity
   portal api.
 ---
 
@@ -66,42 +64,7 @@ Content-Type: application/json
 | `expiresIn` | Token lifetime in seconds (typically 3600 = 1 hour) |
 | `csrfToken` | CSRF token for state-changing operations |
 
-**Token Refresh Pattern:**
-
-```javascript
-class CheckpointAuth {
-  constructor(clientId, clientSecret) {
-    this.clientId = clientId;
-    this.clientSecret = clientSecret;
-    this.token = null;
-    this.expiresAt = 0;
-  }
-
-  async getToken() {
-    // Refresh 5 minutes before expiry
-    if (this.token && Date.now() < this.expiresAt - 300000) {
-      return this.token;
-    }
-
-    const response = await fetch(
-      'https://cloudinfra-gw.portal.checkpoint.com/auth/external',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          clientId: this.clientId,
-          accessKey: this.clientSecret
-        })
-      }
-    );
-
-    const data = await response.json();
-    this.token = data.data.token;
-    this.expiresAt = Date.now() + (data.data.expiresIn * 1000);
-    return this.token;
-  }
-}
-```
+Refresh the token proactively — 5 minutes before `expiresIn` elapses — rather than waiting for a 401. See [references/client-examples.md](references/client-examples.md) for a token-refresh client implementation.
 
 ### Environment Variables
 
@@ -198,34 +161,7 @@ GET /app/hec-api/v1.0/threats?startDate=2024-02-01&endDate=2024-02-15&limit=50&o
 }
 ```
 
-### Pagination Pattern
-
-```javascript
-async function fetchAllPages(endpoint, params) {
-  const allItems = [];
-  let offset = 0;
-  const limit = 100;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(`${endpoint}?${new URLSearchParams({
-      ...params,
-      limit: limit.toString(),
-      offset: offset.toString()
-    })}`, {
-      headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    const data = await response.json();
-    allItems.push(...data.data);
-
-    hasMore = data.pagination.hasMore;
-    offset += limit;
-  }
-
-  return allItems;
-}
-```
+Loop on `pagination.hasMore`, incrementing `offset` by `limit` each pass, until the API reports no more pages. See [references/client-examples.md](references/client-examples.md) for a full pagination helper.
 
 ### Pagination Limits
 
@@ -278,36 +214,7 @@ X-RateLimit-Reset: 1708012800
 
 ### Retry Strategy
 
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        const retryAfter = parseInt(response.headers.get('Retry-After') || '30');
-        const jitter = Math.random() * 2000;
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      if (response.status === 401) {
-        // Token expired - refresh and retry
-        options.headers['Authorization'] = `Bearer ${await auth.getToken()}`;
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      // Exponential backoff with jitter
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await sleep(delay);
-    }
-  }
-}
-```
+On 429, wait `Retry-After` seconds plus jitter before retrying. On 401, refresh the token and retry once. On other failures, use exponential backoff with jitter. See [references/client-examples.md](references/client-examples.md) for a full retry-wrapper implementation.
 
 ## Error Handling
 
@@ -330,64 +237,17 @@ async function requestWithRetry(url, options, maxRetries = 5) {
 
 ### Error Response Format
 
-```json
-{
-  "error": {
-    "code": "INVALID_REQUEST",
-    "message": "The field 'startDate' is required for list operations.",
-    "details": [
-      {
-        "field": "startDate",
-        "message": "This field is required"
-      }
-    ]
-  }
-}
-```
-
-### Common Error Scenarios
-
-| Error Code | Scenario | Resolution |
-|------------|----------|------------|
-| `INVALID_TOKEN` | Token expired or malformed | Re-authenticate and obtain new token |
-| `INVALID_REQUEST` | Missing or invalid parameters | Check request against API docs |
-| `ENTITY_NOT_FOUND` | Quarantine/threat/incident not found | Verify entity ID |
-| `ALREADY_PROCESSED` | Email already released/deleted | No action needed |
-| `PERMISSION_DENIED` | API key lacks required scope | Update API key permissions |
-| `RATE_LIMIT_EXCEEDED` | Too many requests | Implement backoff strategy |
-| `DATE_RANGE_EXCEEDED` | Date range exceeds 90 days | Narrow the date range |
+Errors return an `error` object with `code`, `message`, and (for validation failures) a `details` array naming the offending fields. See [references/errors.md](references/errors.md) for the full response example and the common error-code table.
 
 ## Performance Optimization
 
 ### Minimize API Calls
 
-```javascript
-// Good: Fetch related data in one request with includes
-const threat = await client.threats.get('threat-abc123', {
-  include: ['iocs', 'timeline', 'relatedEmails']
-});
-
-// Avoid: Multiple separate requests
-const threat = await client.threats.get('threat-abc123');
-const iocs = await client.threats.getIOCs('threat-abc123');
-const timeline = await client.threats.getTimeline('threat-abc123');
-```
+Fetch related data in one request using the `include` parameter (e.g., `include: ['iocs', 'timeline', 'relatedEmails']`) instead of issuing separate calls per related resource.
 
 ### Parallelize Independent Requests
 
-```javascript
-// Good: Independent endpoints in parallel
-const [quarantine, threats, incidents] = await Promise.all([
-  client.quarantine.list({ startDate, endDate }),
-  client.threats.list({ startDate, endDate }),
-  client.incidents.list({ startDate, endDate })
-]);
-
-// Avoid: Sequential requests for independent data
-const quarantine = await client.quarantine.list({ startDate, endDate });
-const threats = await client.threats.list({ startDate, endDate });
-const incidents = await client.incidents.list({ startDate, endDate });
-```
+Issue independent list calls (quarantine, threats, incidents) concurrently rather than sequentially. See [references/client-examples.md](references/client-examples.md) for both patterns as code.
 
 ### Use Appropriate Page Sizes
 
@@ -411,9 +271,8 @@ Cache slowly-changing data to reduce API calls:
 5. **Use bulk operations** - Batch quarantine release/delete instead of individual calls
 6. **Paginate large results** - Never fetch unbounded result sets
 7. **Cache reference data** - Reduce calls for policies, lists, and settings
-8. **Log API calls** - Enable debugging and audit trails
-9. **Validate before sending** - Check required fields and date ranges client-side
-10. **Handle token expiry gracefully** - 401 errors should trigger automatic re-auth
+8. **Validate before sending** - Check required fields and date ranges client-side
+9. **Handle token expiry gracefully** - 401 errors should trigger automatic re-auth
 
 ## Related Skills
 

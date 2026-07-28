@@ -1,13 +1,15 @@
 ---
 name: "Liongard Overview"
 description: >
-  Use this skill when Claude needs context about the Liongard platform,
-  terminology, capabilities, authentication patterns, or API structure.
-  Covers environments, agents, inspectors, launchpoints, systems, detections,
-  and common MSP workflows for automated IT documentation.
+  Liongard platform fundamentals: the entity model (environments, agents,
+  inspectors, launchpoints, systems, detections, metrics, timeline,
+  dataprints, asset inventory), X-ROAR-API-KEY authentication against
+  instance-scoped URLs, the split between the v1 and v2 APIs, and the
+  shared pagination, filtering, and rate-limit conventions.
 when_to_use: >-
-  When claude needs context about the Liongard platform, terminology, capabilities, authentication
-  patterns, or API structure. Use when: liongard, liongard overview, liongard platform, liongard
+  When orienting in the Liongard/ROAR API for the first time, resolving Liongard
+  terminology, setting up credentials, or deciding which API version and shared
+  request conventions apply. Use when: liongard, liongard overview, liongard platform, liongard
   api, roar api, liongard terminology, liongard authentication, or liongard capabilities.
 ---
 
@@ -29,18 +31,7 @@ Liongard replaces manual documentation processes with automated, scheduled inspe
 
 ### Environments
 
-Environments represent customer organizations or sites being monitored. Each environment contains agents, launchpoints, systems, and detections. Environments can be organized into groups and tiers for logical management.
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `ID` | int | Unique environment identifier |
-| `Name` | string | Environment display name |
-| `Description` | string | Optional description |
-| `Status` | string | Active or Inactive |
-| `Visible` | boolean | Visibility in UI |
-| `Tier` | string | Service tier classification |
-| `CreatedOn` | datetime | Creation timestamp |
-| `UpdatedOn` | datetime | Last update timestamp |
+Environments represent customer organizations or sites being monitored. Each environment contains agents, launchpoints, systems, and detections, and can be organized into groups and tiers for logical management. See [references/api.md](references/api.md) for the environment core field table.
 
 ### Agents
 
@@ -107,8 +98,6 @@ Asset Inventory (v2) provides identity and device profile management across all 
 
 ## Authentication
 
-### API Key Authentication
-
 Liongard uses API key authentication via the `X-ROAR-API-KEY` header:
 
 ```http
@@ -157,290 +146,21 @@ export LIONGARD_API_KEY="your-api-key-here"
 
 1. **Never commit API keys** - Use environment variables or secret managers
 2. **Rotate keys periodically** - Generate new keys on a regular schedule
-3. **Use HTTPS only** - All Liongard API calls require HTTPS
-4. **Limit key access** - Only share with necessary services
-5. **Monitor usage** - Watch for unauthorized access patterns
+3. **Monitor usage** - Watch for unauthorized access patterns
 
-## Dual API Versions
+## API Patterns
 
-Liongard provides two API versions with different entity coverage:
+The complete v1 and v2 endpoint catalogs, pagination parameter table, and full
+filter-operator table live in [references/api.md](references/api.md). The
+conventions worth knowing up front:
 
-### v1 Endpoints
+- **Two API versions coexist, split by entity rather than by recency.** Environment/agent/launchpoint/system CRUD and detection queries are v1; environment groups, agent installer generation, metric evaluation, timeline queries, asset inventory, dataprints, and webhooks are v2-only. Some entities (environments, agents, detections, metrics) exist in both, where v2 adds filtering and field selection.
+- **Pagination style depends on HTTP method.** GET endpoints take lowercase `page` / `pageSize` query params; POST-based query endpoints take a nested PascalCase `Pagination: {Page, PageSize}` object in the body. Default `pageSize` is 50, max is 2000.
+- **Response envelopes are always PascalCase** — `Data`, `TotalRows`, `HasMoreRows`, `CurrentPage`, `TotalPages`, `PageSize`. Loop on `HasMoreRows` rather than computing page counts.
+- **POST endpoints filter with `conditions: [{path, op, value}]`** and support `fields[]` for field selection plus `orderBy: [{path, direction}]` for sorting. Operators: `eq`, `ne`, `gt`, `lt`, `gte`, `lte`, `contains`, `in`.
+- **Rate limits are undocumented; 300 requests/minute is the safe working ceiling.** Honor `Retry-After` on 429 and add jitter to backoff.
 
-Most entities are accessed through v1:
-
-| Endpoint | Methods | Description |
-|----------|---------|-------------|
-| `/api/v1/environments` | GET, POST, PUT, DELETE | Environment management |
-| `/api/v1/environments/count` | GET | Environment count |
-| `/api/v1/agents` | GET, DELETE | Agent management |
-| `/api/v1/inspectors` | GET | Inspector templates |
-| `/api/v1/launchpoints` | GET, POST, PUT, DELETE | Configured inspections |
-| `/api/v1/launchpoints/{id}/run` | POST | Trigger inspection |
-| `/api/v1/systems` | GET | Discovered systems |
-| `/api/v1/systems/{id}/detail` | GET | System detail data |
-| `/api/v1/detections` | POST | Query detections |
-| `/api/v1/alerts` | GET, POST, PUT, DELETE | Alert rules |
-| `/api/v1/alerts/triggered` | GET | Triggered alerts |
-| `/api/v1/metrics` | GET, POST, PUT, DELETE | Custom metrics |
-| `/api/v1/timeline` | GET | Timeline events |
-| `/api/v1/users` | GET | User management |
-| `/api/v1/groups` | GET | Group management |
-| `/api/v1/accesskeys` | GET, POST, DELETE | API key management |
-
-### v2 Endpoints
-
-Newer and enhanced endpoints are available through v2:
-
-| Endpoint | Methods | Description |
-|----------|---------|-------------|
-| `/api/v2/environments` | GET, POST, PUT, DELETE | Enhanced environment management |
-| `/api/v2/environment-groups` | GET, POST, PUT, DELETE | Environment grouping |
-| `/api/v2/agents` | GET, DELETE | Enhanced agent management |
-| `/api/v2/agents/installer` | POST | Dynamic installer generation |
-| `/api/v2/detections` | POST | Enhanced detection queries |
-| `/api/v2/metrics` | GET, POST, PUT, DELETE | Enhanced metrics |
-| `/api/v2/metrics/evaluate` | POST | Metric evaluation |
-| `/api/v2/metrics/evaluate-systems` | POST | Per-system metric evaluation |
-| `/api/v2/timelines-query` | POST | Enhanced timeline queries |
-| `/api/v2/inventory/identities` | GET | Identity profiles |
-| `/api/v2/inventory/devices` | GET | Device profiles |
-| `/api/v2/dataprints-evaluate-systemdetailid` | POST | JMESPath data extraction |
-| `/api/v2/webhooks` | GET, POST, PUT, DELETE | Webhook management |
-
-## Pagination
-
-### GET Request Pagination
-
-For GET requests, use `page` and `pageSize` query parameters:
-
-```http
-GET /api/v1/environments?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-### POST Request Pagination
-
-For POST-based queries (detections, timelines), include a `Pagination` object in the request body:
-
-```json
-{
-  "Pagination": {
-    "Page": 1,
-    "PageSize": 100
-  },
-  "conditions": []
-}
-```
-
-### Pagination Parameters
-
-| Parameter | Type | Default | Max | Description |
-|-----------|------|---------|-----|-------------|
-| `page` / `Page` | int | 1 | - | Page number (1-indexed) |
-| `pageSize` / `PageSize` | int | 50 | 2000 | Items per page |
-
-### Pagination Response
-
-```json
-{
-  "Data": [...],
-  "TotalRows": 1500,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 15,
-  "PageSize": 100
-}
-```
-
-### Efficient Pagination Pattern
-
-```javascript
-async function fetchAllItems(endpoint) {
-  const allItems = [];
-  let page = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(
-      `https://${instance}.app.liongard.com/api/v1/${endpoint}?page=${page}&pageSize=500`,
-      {
-        headers: {
-          'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY
-        }
-      }
-    );
-
-    const data = await response.json();
-    allItems.push(...data.Data);
-
-    hasMore = data.HasMoreRows;
-    page++;
-
-    // Respect rate limits
-    if (hasMore) {
-      await sleep(200);
-    }
-  }
-
-  return allItems;
-}
-```
-
-## Filtering
-
-### Condition-Based Filtering
-
-For POST-based endpoints, Liongard supports JSON condition filters:
-
-```json
-{
-  "conditions": [
-    {
-      "path": "Status",
-      "op": "eq",
-      "value": "Active"
-    },
-    {
-      "path": "Tier",
-      "op": "eq",
-      "value": "Premium"
-    }
-  ]
-}
-```
-
-### Filter Operators
-
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `eq` | Equals | `{"op": "eq", "value": "Active"}` |
-| `ne` | Not equals | `{"op": "ne", "value": "Inactive"}` |
-| `gt` | Greater than | `{"op": "gt", "value": 100}` |
-| `lt` | Less than | `{"op": "lt", "value": 50}` |
-| `gte` | Greater than or equal | `{"op": "gte", "value": 10}` |
-| `lte` | Less than or equal | `{"op": "lte", "value": 100}` |
-| `contains` | String contains | `{"op": "contains", "value": "Acme"}` |
-| `in` | Value in list | `{"op": "in", "value": [1, 2, 3]}` |
-
-### Field Selection
-
-Use `fields[]` to limit returned fields:
-
-```json
-{
-  "fields": ["ID", "Name", "Status"],
-  "conditions": []
-}
-```
-
-### Sorting
-
-Use `orderBy[]` to control result ordering:
-
-```json
-{
-  "orderBy": [
-    {
-      "path": "Name",
-      "direction": "asc"
-    }
-  ]
-}
-```
-
-## Rate Limiting
-
-### Conservative Default: 300 Requests per Minute
-
-Liongard does not publicly document specific rate limits. A conservative default of **300 requests per minute** is recommended to avoid throttling.
-
-### Retry Strategy with Exponential Backoff
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        const retryAfter = parseInt(response.headers.get('Retry-After')) || 30;
-        const jitter = Math.random() * 1000;
-        console.log(`Rate limited. Waiting ${retryAfter}s...`);
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-
-      return await response.json();
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      console.log(`Attempt ${attempt + 1} failed. Retrying in ${delay}ms...`);
-      await sleep(delay);
-    }
-  }
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-```
-
-## Error Handling
-
-### HTTP Status Codes
-
-| Code | Meaning | Action |
-|------|---------|--------|
-| 200 | Success | Process response |
-| 201 | Created | Entity created successfully |
-| 400 | Bad Request | Check request format/values |
-| 401 | Unauthorized | Verify API key |
-| 403 | Forbidden | Check permissions |
-| 404 | Not Found | Entity doesn't exist |
-| 429 | Rate Limited | Implement backoff |
-| 500 | Server Error | Retry with backoff |
-
-### Error Handling Pattern
-
-```javascript
-async function handleLiongardRequest(endpoint, options = {}) {
-  const baseUrl = `https://${process.env.LIONGARD_INSTANCE}.app.liongard.com/api/v1`;
-
-  const response = await fetch(`${baseUrl}/${endpoint}`, {
-    ...options,
-    headers: {
-      'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY,
-      'Content-Type': 'application/json',
-      ...options.headers
-    }
-  });
-
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({}));
-
-    switch (response.status) {
-      case 401:
-        throw new Error('Invalid API key. Check LIONGARD_API_KEY.');
-      case 403:
-        throw new Error('Permission denied. Check API key permissions.');
-      case 404:
-        throw new Error(`Resource not found: ${endpoint}`);
-      case 429:
-        throw new Error('Rate limit exceeded. Implement backoff.');
-      default:
-        throw new Error(error.Message || `API error: ${response.status}`);
-    }
-  }
-
-  return response.json();
-}
-```
+See [references/examples.md](references/examples.md) for reusable pagination, retry-with-backoff, and error-handling client implementations, and [references/errors.md](references/errors.md) for the HTTP status code table.
 
 ## Common MSP Workflows
 

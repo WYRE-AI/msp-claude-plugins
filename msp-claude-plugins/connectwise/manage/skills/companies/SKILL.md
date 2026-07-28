@@ -1,8 +1,7 @@
 ---
 name: "ConnectWise Manage Companies"
 description: >
-  Use this skill when working with ConnectWise PSA companies - creating, updating,
-  searching, or managing company/account records. Covers company types, statuses,
+  ConnectWise PSA company/account management: company types, statuses,
   sites/locations, custom fields, and company relationships. Essential for MSP
   account management and CRM operations in ConnectWise PSA.
 when_to_use: >-
@@ -333,8 +332,7 @@ GET /company/companies/{id}/managedDevicesIntegrations
 4. **Add default contact** - Primary point of contact for communications
 5. **Configure sites** - Multiple locations need separate sites
 6. **Use custom fields** - Store industry-specific data
-7. **Keep status current** - Inactive companies should be marked as such
-8. **Link to accounting** - Set accountNumber for integration
+7. **Link to accounting** - Set accountNumber for integration
 
 ## Error Handling
 

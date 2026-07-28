@@ -1,6 +1,6 @@
 {
   "name": "auvik",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Claude plugins for Auvik - network monitoring, device inventory, alert triage, configuration audit, and capacity planning for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"

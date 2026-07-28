@@ -1,15 +1,15 @@
 ---
 name: Cross-Vendor Billing Reconciliation
 description: >
-  Reconcile cloud marketplace subscriptions (Pax8) against accounting invoices
-  (Xero, QuickBooks Online) to identify billing gaps, unbilled subscriptions,
-  and margin discrepancies
+  Reconciling cloud marketplace subscriptions (Pax8) against accounting
+  invoices (Xero, QuickBooks Online): the matching strategy, billing gaps,
+  unbilled subscriptions, and margin discrepancy analysis.
 when_to_use: >-
-  When reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero,
-  QuickBooks Online) to identify billing gaps, unbilled subscriptions. Use when: billing
-  reconciliation, reconcile subscriptions, unbilled subscriptions, billing gap analysis, margin
-  analysis, subscription vs invoice comparison, pax8 xero reconciliation, or pax8 quickbooks
-  reconciliation.
+  When comparing marketplace subscription data against issued invoices to
+  find revenue leakage. Use when: billing reconciliation, reconcile
+  subscriptions, unbilled subscriptions, billing gap analysis, margin
+  analysis, subscription vs invoice comparison, pax8 xero reconciliation, or
+  pax8 quickbooks reconciliation.
 ---
 
 # Cross-Vendor Billing Reconciliation
@@ -197,33 +197,11 @@ Quantity should match exactly between Pax8 subscription and invoice line item:
 
 ## Vendor Field Mappings
 
-| Concept | Pax8 Field | Xero Field | QBO Field |
-|---------|-----------|------------|-----------|
-| Customer | `companyName` (via `/companies/{id}`) | `Contact.Name` | `Customer.DisplayName` |
-| Product | `productName` (via `/products/{id}`) | `LineItem.Description` | `Line.Description` |
-| Quantity | `quantity` | `LineItem.Quantity` | `Line.SalesItemLineDetail.Qty` |
-| Unit Price (cost) | `price` | N/A (this is sell price) | N/A (this is sell price) |
-| Unit Price (sell) | N/A (calculated) | `LineItem.UnitAmount` | `Line.SalesItemLineDetail.UnitPrice` |
-| Line Total | `price x quantity` | `LineItem.LineAmount` | `Line.Amount` |
-| Status | `status` (Active, Cancelled, ...) | `Invoice.Status` (AUTHORISED, PAID, ...) | `Invoice.Balance` (0 = paid) |
-| Period Start | `startDate` | `Invoice.Date` | `Invoice.TxnDate` |
-| Period End | `commitmentTermEnd` / `endDate` | `Invoice.DueDate` | `Invoice.DueDate` |
-| Billing Term | `billingTerm` (Monthly, Annual) | Inferred from invoice frequency | Inferred from invoice frequency |
-| Invoice Number | N/A | `Invoice.InvoiceNumber` | `Invoice.DocNumber` |
-| Invoice ID | N/A | `Invoice.InvoiceID` | `Invoice.Id` |
+The company name is the cross-vendor correlation key; `price` on a Pax8
+subscription is your **cost**, while the accounting platforms' unit price is the
+**sell** price — the two are never the same field.
 
-### API Tool Mapping Per Step
-
-| Step | Data Source | API / Tool |
-|------|-----------|-----------|
-| 1 - Subscriptions | Pax8 | `GET /v1/subscriptions?status=Active` |
-| 1 - Company names | Pax8 | `GET /v1/companies/{id}` |
-| 1 - Product names | Pax8 | `GET /v1/products/{id}` |
-| 2 - Invoices (Xero) | Xero | `GET /api.xro/2.0/Invoices?where=Type=="ACCREC"` |
-| 2 - Contacts (Xero) | Xero | `GET /api.xro/2.0/Contacts` |
-| 2 - Invoices (QBO) | QuickBooks | `GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice` |
-| 2 - Customers (QBO) | QuickBooks | `GET /v3/company/{realmId}/query?query=SELECT * FROM Customer` |
-| 3-5 - Matching | Local | In-memory comparison logic |
+See [references/field-mappings.md](references/field-mappings.md) for the complete Pax8/Xero/QBO field correspondence table and the API call to use at each reconciliation step.
 
 ## Gap Categories
 
@@ -249,113 +227,11 @@ Each finding is assigned a severity level to help MSPs prioritize action:
 
 ## Report Format
 
-Present the reconciliation results in this structured format:
+Group findings by severity, lead with the CRITICAL total in estimated monthly
+revenue leakage, and cite the invoice number and line number for every matched
+discrepancy so the fix is actionable without a second lookup.
 
-```
-═══════════════════════════════════════════════════════════════════
-BILLING RECONCILIATION REPORT
-Period: February 2026
-Accounting Platform: Xero
-Generated: 2026-02-23
-═══════════════════════════════════════════════════════════════════
-
-SUMMARY
-  Companies Checked:    12
-  Subscriptions Matched: 45 of 52
-  Gaps Found:            7
-    CRITICAL:  2  (estimated $512.50/month revenue leakage)
-    HIGH:      2  (estimated $185.00/month discrepancy)
-    MEDIUM:    1
-    LOW:       1
-    INFO:      1
-
-───────────────────────────────────────────────────────────────────
-CRITICAL GAPS (Unbilled Subscriptions)
-───────────────────────────────────────────────────────────────────
-
-  [CRITICAL] Acme Corporation
-    Pax8 Subscription:  Microsoft 365 Business Premium
-    Quantity:           25 seats @ $17.10 (Pax8 cost)
-    Expected Invoice:   25 seats @ $22.00 (sell price) = $550.00
-    Invoice Found:      NONE
-    Revenue Leakage:    $550.00/month
-    Action:             Add line item to next invoice
-
-  [CRITICAL] Gamma Industries
-    Pax8 Subscription:  Acronis Cyber Protect Cloud (500GB)
-    Quantity:           1 @ $85.00 (Pax8 cost)
-    Expected Invoice:   1 @ $110.00 (sell price) = $110.00
-    Invoice Found:      NONE
-    Revenue Leakage:    $110.00/month
-    Action:             Add line item to next invoice
-
-───────────────────────────────────────────────────────────────────
-HIGH DISCREPANCIES (Quantity Mismatches)
-───────────────────────────────────────────────────────────────────
-
-  [HIGH] Acme Corporation
-    Product:            SentinelOne Singularity Complete
-    Pax8 Quantity:      25 seats
-    Invoice Quantity:   20 seats
-    Difference:         5 seats unbilled (20% mismatch)
-    Invoice:            INV-0247 (line 3)
-    Revenue Impact:     5 x $6.00 = $30.00/month
-    Action:             Update invoice line to 25 seats
-
-  [HIGH] Delta Corp
-    Product:            Microsoft 365 Business Basic
-    Pax8 Quantity:      15 seats
-    Invoice Quantity:   10 seats
-    Difference:         5 seats unbilled (33% mismatch)
-    Invoice:            INV-0251 (line 1)
-    Revenue Impact:     5 x $9.00 = $45.00/month
-    Action:             Update invoice line to 15 seats
-
-───────────────────────────────────────────────────────────────────
-MEDIUM DISCREPANCIES (Price / Margin Issues)
-───────────────────────────────────────────────────────────────────
-
-  [MEDIUM] Beta LLC
-    Product:            Microsoft 365 Business Premium
-    Pax8 Cost:          $17.10/seat
-    Invoice Price:      $18.00/seat
-    Current Margin:     5.0%
-    Target Margin:      25.0%
-    Suggested Price:    $22.80/seat
-    Invoice:            INV-0249 (line 2)
-    Action:             Review and adjust pricing
-
-───────────────────────────────────────────────────────────────────
-LOW (Naming Mismatches)
-───────────────────────────────────────────────────────────────────
-
-  [LOW] Epsilon Inc
-    Pax8 Product:       Microsoft Azure AD P1
-    Invoice Description: Cloud Identity Licenses
-    Match Confidence:   Amount and quantity match, name differs
-    Invoice:            INV-0253 (line 4)
-    Action:             Confirm mapping, update mapping table
-
-───────────────────────────────────────────────────────────────────
-INFO (Cancelled Still Billed)
-───────────────────────────────────────────────────────────────────
-
-  [INFO] Acme Corporation
-    Product:            Datto SaaS Protection
-    Pax8 Status:        Cancelled (2026-02-10)
-    Invoice:            INV-0247 (line 5) -- still present
-    Amount Billed:      $75.00/month
-    Action:             Remove from next invoice
-
-───────────────────────────────────────────────────────────────────
-MATCHED (No Issues)
-───────────────────────────────────────────────────────────────────
-
-  45 subscription-to-invoice matches confirmed with no discrepancies.
-  See detailed match log for full list.
-
-═══════════════════════════════════════════════════════════════════
-```
+See [references/report-format.md](references/report-format.md) for the full report template.
 
 ## Common MSP Billing Patterns
 

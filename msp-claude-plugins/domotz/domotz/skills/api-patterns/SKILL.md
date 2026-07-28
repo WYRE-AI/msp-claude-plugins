@@ -1,13 +1,12 @@
 ---
 name: "Domotz API Patterns"
 description: >
-  Use this skill when working with the Domotz MCP tools --
-  available tools, authentication via API key, API structure,
-  pagination, rate limiting, region selection, error handling,
-  and best practices.
+  Domotz API and MCP fundamentals: API-key header authentication, region-specific
+  endpoints (us-east-1 / eu-central-1), the full MCP tool catalog by domain,
+  offset-based pagination, rate limiting, and HTTP error codes.
 when_to_use: >-
-  When working with available tools, authentication via API key, API structure, pagination, rate
-  limiting, region selection, error handling. Use when: domotz api, domotz authentication, domotz
+  When authenticating to or calling the Domotz API directly or through the MCP
+  tools, or when discovering which Domotz tool to use. Use when: domotz api, domotz authentication, domotz
   pagination, domotz rate limit, domotz mcp, domotz tools, domotz request, domotz error, domotz
   connection, or domotz region.
 ---
@@ -141,11 +140,9 @@ Domotz enforces API rate limits per API key.
 
 ## Best Practices
 
-- Always specify the correct region to avoid authentication errors
 - Paginate through full result sets for complete device inventories
 - Use agent ID filters to scope queries to specific sites
 - Cache agent and device info to reduce API calls
-- Handle rate limits gracefully with backoff
 - Monitor `last_seen` timestamps to detect offline agents/devices
 
 ## Related Skills

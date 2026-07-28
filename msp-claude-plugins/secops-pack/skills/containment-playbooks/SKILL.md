@@ -1,6 +1,12 @@
 ---
 name: "Containment Playbooks"
-description: "Use this skill when a security incident has been confirmed or is highly suspected and immediate first-response containment steps are needed. Covers standard containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including what to do first, the correct order of operations, and which connected tool family (RMM, EDR, CIPP/Entra, PSA) handles each step."
+description: >
+  Ordered first-response containment sequences for the most common MSP
+  incident classes — compromised account, malware/ransomware detection,
+  business email compromise, and exposed credential — including why the
+  order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA,
+  documentation) handles each step, and the evidence-preservation principles
+  that apply across all of them.
 when_to_use: >-
   When an incident is confirmed or strongly suspected and immediate
   first-response action is needed. Use when: contain this incident, isolate
@@ -105,10 +111,7 @@ for evidence of use.
 2. **Preserve evidence.** Prefer network isolation over shutdown, disable
    over delete, and log every action taken with a timestamp — this becomes
    the incident timeline.
-3. **Never silently skip a step because a tool isn't connected.** Say so,
-   and name what should happen instead (manual console action, ticket
-   escalation, client-side action).
-4. **Notify only after containment is underway**, not before — a premature
+3. **Notify only after containment is underway**, not before — a premature
    notification without a stated containment status creates client anxiety
    without giving them anything actionable.
 

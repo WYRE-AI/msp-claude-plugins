@@ -1,15 +1,13 @@
 ---
 name: "ScalePad API Patterns"
 description: >
-  Use this skill when working with the ScalePad MCP tools — API-key
-  authentication via the `X-ScalePad-Api-Key` header, tool discovery
-  across the five product domains, cursor pagination, the
-  50-requests-per-5-seconds rate limit, and 402 subscription
-  errors.
+  ScalePad MCP fundamentals: API-key authentication via the `X-ScalePad-Api-Key` header,
+  tool discovery across the five product domains, cursor pagination, the
+  50-requests-per-5-seconds rate limit, and 402 subscription errors.
 when_to_use: >-
-  When working with ScalePad authentication headers, navigation, pagination, rate limits, or 
-  error handling for the ScalePad MCP server. Use when: scalepad api, scalepad authentication, 
-  scalepad pagination, scalepad mcp, scalepad rate limit, scalepad navigate.
+  When authenticating to, navigating, paginating, or troubleshooting errors from the
+  ScalePad MCP server. Use when: scalepad api, scalepad authentication, scalepad
+  pagination, scalepad mcp, scalepad rate limit, scalepad navigate.
 ---
 
 # ScalePad MCP Tools & API Patterns

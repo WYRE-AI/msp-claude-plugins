@@ -1,12 +1,12 @@
 ---
 name: "ScalePad Backup Radar"
 description: >
-  Use this skill when working with ScalePad Backup Radar — the
-  read-only backup monitoring surface: per-client backup health
-  records and backup device inventory, in regions us and eu.
+  ScalePad Backup Radar, the read-only backup monitoring surface: per-client backup
+  health records and backup device inventory, in regions us and eu.
 when_to_use: >-
-  When checking backup health, failed or stale backups, or backup device inventory in Backup 
-  Radar. Use when: backup radar, scalepad backup, backup health, failed backups scalepad.
+  When checking backup health, failed or stale backups, or backup device inventory in
+  Backup Radar. Use when: backup radar, scalepad backup, backup health, failed backups
+  scalepad.
 ---
 
 # ScalePad Backup Radar

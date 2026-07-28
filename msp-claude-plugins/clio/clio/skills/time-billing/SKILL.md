@@ -1,10 +1,9 @@
 ---
 name: "Clio Time & Billing"
 description: >
-  Use this skill when logging time or expense activities against a Clio
-  matter, or when reading (not writing) bills. Covers the activities
-  domain's create-only lifecycle, the billing-read/time-entry-write split,
-  and why billing mutations are out of scope for v1.
+  Clio time and expense activities logged against a matter: the activities
+  domain's create-only lifecycle, the billing-read / time-entry-write
+  split, and why billing mutations are out of scope for v1.
 when_to_use: >-
   When logging a time entry, logging an expense, or looking up bill status
   in Clio. Use when: clio time entry, clio activity, clio billable hours,

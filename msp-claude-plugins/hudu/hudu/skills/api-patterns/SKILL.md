@@ -1,13 +1,13 @@
 ---
 name: "Hudu API Patterns"
 description: >
-  Use this skill when working with the Hudu API - authentication,
-  REST structure, filtering, pagination, rate limiting, error handling,
-  and best practices. Covers x-api-key authentication, base URL patterns,
-  API naming differences (UI vs API), and API key permission levels.
+  Hudu REST API fundamentals: x-api-key authentication, base URL and
+  /api/v1/ structure, granular API key permission levels, UI-vs-API
+  resource naming differences, query-parameter filtering, page-based
+  pagination, the 300 req/min rate limit, and HTTP status/error semantics.
 when_to_use: >-
-  When working with authentication, REST structure, filtering, pagination, rate limiting, error
-  handling, and best practices in the Hudu API. Use when: hudu api, hudu query, hudu filter, hudu
+  When authenticating to or calling any Hudu endpoint directly, or when debugging a Hudu
+  request that returns an unexpected status. Use when: hudu api, hudu query, hudu filter, hudu
   pagination, hudu rate limit, hudu authentication, hudu rest, hudu endpoint, or hudu request.
 ---
 
@@ -92,59 +92,13 @@ Hudu's UI names differ from API endpoint names in several cases. This is critica
 | Network | `/api/v1/networks` | `network` |
 | Relation | `/api/v1/relations` | `relation` |
 
-## Request Format
+## Request and Response Envelope
 
-### Standard JSON Request
+Hudu uses standard JSON (not JSON:API). Request and single-resource response bodies are wrapped
+in the **singular** resource key (`{ "company": { ... } }`); collections are wrapped in the
+**plural** key (`{ "companies": [ ... ] }`).
 
-Hudu uses standard JSON (not JSON:API) for request and response bodies:
-
-```json
-{
-  "company": {
-    "name": "Acme Corporation",
-    "nickname": "ACME",
-    "address_line_1": "123 Main St",
-    "city": "Springfield",
-    "state": "IL"
-  }
-}
-```
-
-### Response Format
-
-**Single Resource:**
-```json
-{
-  "company": {
-    "id": 1,
-    "name": "Acme Corporation",
-    "nickname": "ACME",
-    "address_line_1": "123 Main St",
-    "city": "Springfield",
-    "state": "IL",
-    "created_at": "2024-01-15T10:30:00.000Z",
-    "updated_at": "2024-02-15T14:22:00.000Z"
-  }
-}
-```
-
-**Collection:**
-```json
-{
-  "companies": [
-    {
-      "id": 1,
-      "name": "Acme Corporation",
-      "nickname": "ACME"
-    },
-    {
-      "id": 2,
-      "name": "TechStart Inc",
-      "nickname": "TSI"
-    }
-  ]
-}
-```
+See [references/examples.md](references/examples.md) for full CRUD request/response examples.
 
 ## Filtering
 
@@ -275,82 +229,24 @@ async function requestWithRetry(url, options, maxRetries = 5) {
 }
 ```
 
-## CRUD Operations
+## CRUD and Company Scoping
 
-### Create (POST)
+Standard REST verbs: `POST` to the collection, `GET` on collection or `/:id`, `PUT /:id` for
+updates (send only the fields you're changing), `DELETE /:id`. DELETE requires explicit API key
+permission — not all keys can delete records. Several resources also expose `/:id/archive` and
+`/:id/unarchive` as PUT verbs rather than an `archived` field.
 
-```http
-POST /api/v1/companies
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "company": {
-    "name": "New Client Inc",
-    "nickname": "NCI",
-    "address_line_1": "456 Oak Ave",
-    "city": "Portland",
-    "state": "OR"
-  }
-}
-```
-
-### Read (GET)
-
-**Single resource:**
-```http
-GET /api/v1/companies/123
-```
-
-**Collection with filters:**
-```http
-GET /api/v1/companies?name=Acme&page=1
-```
-
-### Update (PUT)
-
-```http
-PUT /api/v1/companies/123
-Content-Type: application/json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "company": {
-    "nickname": "ACME-UPDATED",
-    "notes": "Updated contact information"
-  }
-}
-```
-
-### Delete (DELETE)
-
-```http
-DELETE /api/v1/companies/123
-x-api-key: YOUR_API_KEY
-```
-
-**Note:** DELETE operations require explicit API key permission. Not all API keys can delete records.
-
-## Nested / Company-Scoped Patterns
-
-Many resources can be filtered by company:
+Most child resources are filtered by company rather than nested under it:
 
 ```http
 GET /api/v1/assets?company_id=123
 GET /api/v1/asset_passwords?company_id=123
 GET /api/v1/articles?company_id=123
 GET /api/v1/websites?company_id=123
-```
-
-For assets specifically, you can also scope by asset layout:
-
-```http
 GET /api/v1/assets?company_id=123&asset_layout_id=5
 ```
+
+See [references/examples.md](references/examples.md) for full request/response bodies per verb.
 
 ## Error Handling
 
@@ -371,54 +267,27 @@ GET /api/v1/assets?company_id=123&asset_layout_id=5
 
 ### Error Response Format
 
-```json
-{
-  "error": "Validation failed: Name can't be blank"
-}
-```
+Errors come back as either a single `error` string or an `errors` array of strings — handle both.
+See [references/examples.md](references/examples.md) for the exact shapes and a status-code
+dispatch helper.
 
-Or for multiple errors:
+## Gotchas
 
-```json
-{
-  "errors": [
-    "Name can't be blank",
-    "Company is required"
-  ]
-}
-```
-
-### Error Handling Pattern
-
-```javascript
-function handleApiError(response, body) {
-  if (response.status === 401) {
-    console.log('API key invalid or expired. Check HUDU_API_KEY.');
-  } else if (response.status === 403) {
-    console.log('Permission denied. Check API key permissions.');
-    console.log('If accessing passwords, verify password access is enabled.');
-  } else if (response.status === 404) {
-    console.log('Resource not found. Check HUDU_BASE_URL and resource ID.');
-  } else if (response.status === 422) {
-    console.log('Validation error:', body.error || body.errors);
-  } else if (response.status === 429) {
-    console.log('Rate limited. Wait 60 seconds before retrying.');
-  }
-}
-```
+- **403 is about key scope, not key validity.** Password access, DELETE, IP whitelist, and
+  company scope are all per-key toggles; a working key can still 403 on one resource.
+- **404 often means a wrong `HUDU_BASE_URL` or a missing `/api/v1/` prefix**, not a missing record.
+- **The UI name is not the API name.** Passwords are `asset_passwords`; Processes are `procedures`.
+- **Page size is fixed at 25 and there is no total count** — you only know you've finished when a
+  page returns fewer than 25 items.
 
 ## Best Practices
 
-1. **Use the correct base URL** - Include `/api/v1/` in all requests
-2. **Paginate large results** - Loop through pages until fewer than 25 results returned
-3. **Implement retry logic** - Handle rate limits (429) and transient errors (500)
-4. **Cache reference data** - Asset layouts rarely change; cache them
-5. **Use filters** - Narrow results server-side rather than client-side filtering
-6. **Monitor rate limits** - Stay under 300 requests per minute
-7. **Remember naming differences** - Passwords are `asset_passwords`, Processes are `procedures`
-8. **Scope by company** - Always filter by `company_id` when possible
-9. **Log API calls** - Enable debugging and audit trails
-10. **Validate before sending** - Check required fields client-side to avoid 422 errors
+1. **Paginate large results** - Loop through pages until fewer than 25 results returned
+2. **Implement retry logic** - Handle rate limits (429) and transient errors (500)
+3. **Cache reference data** - Asset layouts rarely change; cache them
+4. **Use filters** - Narrow results server-side rather than client-side filtering
+5. **Monitor rate limits** - Stay under 300 requests per minute
+6. **Scope by company** - Always filter by `company_id` when possible
 
 ## Related Skills
 

@@ -1,16 +1,16 @@
 ---
 name: "SuperOps Assets"
 description: >
-  Use this skill when working with SuperOps.ai assets - querying inventory,
-  viewing asset details, running scripts, monitoring patches, and managing
-  client/site associations. Covers asset fields, statuses, software inventory,
-  disk usage, and activity tracking through the RMM integration.
-  Essential for MSP technicians managing endpoints through SuperOps.ai.
+  SuperOps.ai RMM asset inventory: asset status and platform enums, hardware,
+  network, OS and association fields, software inventory, disk usage, patch
+  status, activity history, and the GraphQL queries and script-execution
+  mutations behind them. Includes health-check, patch-compliance, and
+  software-audit workflows plus remote-action readiness checks.
 when_to_use: >-
-  When querying inventory, viewing asset details, running scripts, monitoring patches, and
-  managing client/site associations. Use when: superops asset, asset inventory, list assets
-  superops, asset status, asset details, run script asset, patch status, software inventory, disk
-  usage, asset activity, rmm superops, or endpoint management.
+  When querying inventory, viewing asset details, running scripts, monitoring patches, or
+  managing client/site associations in SuperOps.ai. Use when: superops asset, asset inventory,
+  list assets superops, asset status, asset details, run script asset, patch status, software
+  inventory, disk usage, asset activity, rmm superops, or endpoint management.
 ---
 
 # SuperOps.ai Asset Management
@@ -37,463 +37,61 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
 
 ## Key Asset Fields
 
-### Core Fields
+Identity and state: `assetId`, `name`, `status`, `platform`, `lastSeen`,
+`agentVersion`. Network: `ipAddress`, `macAddress`, `publicIp`, `hostname`.
+Hardware: `manufacturer`, `model`, `serialNumber`, `processorName`,
+`processorCores`, `totalMemory`, `totalDiskSpace`, `freeDiskSpace`. OS:
+`osName`, `osVersion`, `osBuild`, `architecture`. Associations: `client`,
+`site`, `tags`, `customFields`.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `assetId` | ID | Unique identifier |
-| `name` | String | Computer/device name |
-| `status` | Enum | Online, Offline, Maintenance |
-| `platform` | Enum | Windows, macOS, Linux |
-| `lastSeen` | DateTime | Last check-in time |
-| `agentVersion` | String | RMM agent version |
+Memory and disk fields are `Long` values **in bytes** — convert before
+displaying or comparing against percentage thresholds.
 
-### Network Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `ipAddress` | String | Primary IP address |
-| `macAddress` | String | MAC address |
-| `publicIp` | String | External IP |
-| `hostname` | String | Network hostname |
-
-### Hardware Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `manufacturer` | String | Hardware manufacturer |
-| `model` | String | Device model |
-| `serialNumber` | String | Serial number |
-| `processorName` | String | CPU model |
-| `processorCores` | Int | CPU core count |
-| `totalMemory` | Long | RAM in bytes |
-| `totalDiskSpace` | Long | Total disk space |
-| `freeDiskSpace` | Long | Available disk space |
-
-### Operating System Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `osName` | String | Operating system name |
-| `osVersion` | String | OS version |
-| `osBuild` | String | OS build number |
-| `architecture` | String | 32-bit or 64-bit |
-
-### Association Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `client` | Client | Associated client |
-| `site` | Site | Associated site |
-| `tags` | [String] | Asset tags |
-| `customFields` | [CustomField] | Custom field values |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## GraphQL Operations
 
-### List Assets
+| Operation | Type | Purpose |
+|-----------|------|---------|
+| `getAssetList` | query | List/filter assets; includes a `patchStatus` rollup per asset |
+| `getAsset` | query | Full detail for one asset (hardware, OS, network, associations) |
+| `getAssetSoftwareList` | query | Installed software, filterable by `name` substring |
+| `getAssetDiskDetails` | query | Per-volume space and `usedPercentage` |
+| `getAssetPatchDetails` | query | Patch list plus a `summary` counts block |
+| `getAssetActivity` | query | Audit history of actions performed on the asset |
+| `runScriptOnAsset` | mutation | Run a script on one asset with `arguments` and `runAs` |
+| `runScriptOnAssets` | mutation | Bulk run across an `assetIds` array; returns a `batchId` |
 
-```graphql
-query getAssetList($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      status
-      platform
-      lastSeen
-      ipAddress
-      osName
-      osVersion
-      client {
-        accountId
-        name
-      }
-      site {
-        id
-        name
-      }
-      patchStatus {
-        pendingCount
-        installedCount
-        failedCount
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
+List queries return a `listInfo` block (`totalCount`, `hasNextPage`,
+`endCursor`) for cursor pagination; `first` sets the page size.
 
-**Variables - All Online Assets:**
-```json
-{
-  "input": {
-    "first": 100,
-    "filter": {
-      "status": "Online"
-    },
-    "orderBy": {
-      "field": "name",
-      "direction": "ASC"
-    }
-  }
-}
-```
+Filters support nested comparison objects, not just equality — e.g.
+`"diskSpacePercentFree": { "lt": 10 }` and `"patchStatus": { "hasPending": true }`.
 
-**Variables - Filter by Client and Platform:**
-```json
-{
-  "input": {
-    "first": 50,
-    "filter": {
-      "client": {
-        "accountId": "client-uuid"
-      },
-      "platform": "Windows",
-      "status": "Online"
-    }
-  }
-}
-```
-
-### Get Asset Details
-
-```graphql
-query getAsset($input: AssetIdentifierInput!) {
-  getAsset(input: $input) {
-    assetId
-    name
-    status
-    platform
-    lastSeen
-
-    # Network
-    ipAddress
-    macAddress
-    publicIp
-    hostname
-
-    # Hardware
-    manufacturer
-    model
-    serialNumber
-    processorName
-    processorCores
-    totalMemory
-
-    # OS
-    osName
-    osVersion
-    osBuild
-    architecture
-
-    # Disk
-    totalDiskSpace
-    freeDiskSpace
-
-    # Associations
-    client {
-      accountId
-      name
-    }
-    site {
-      id
-      name
-      address
-    }
-    tags
-    customFields {
-      name
-      value
-    }
-
-    # Agent
-    agentVersion
-    agentInstallDate
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid-here"
-  }
-}
-```
-
-### Get Asset Software List
-
-```graphql
-query getAssetSoftwareList($input: AssetSoftwareListInput!) {
-  getAssetSoftwareList(input: $input) {
-    software {
-      name
-      version
-      publisher
-      installDate
-      size
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "first": 100,
-    "filter": {
-      "name": "Microsoft"
-    }
-  }
-}
-```
-
-### Get Asset Disk Details
-
-```graphql
-query getAssetDiskDetails($input: AssetIdentifierInput!) {
-  getAssetDiskDetails(input: $input) {
-    disks {
-      driveLetter
-      volumeName
-      fileSystem
-      totalSpace
-      freeSpace
-      usedPercentage
-    }
-  }
-}
-```
-
-### Get Asset Patch Details
-
-```graphql
-query getAssetPatchDetails($input: AssetPatchInput!) {
-  getAssetPatchDetails(input: $input) {
-    patches {
-      patchId
-      title
-      severity
-      status
-      releaseDate
-      kbNumber
-      category
-    }
-    summary {
-      pendingCount
-      installedCount
-      failedCount
-      lastScanDate
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "filter": {
-      "status": "Pending",
-      "severity": ["Critical", "Important"]
-    }
-  }
-}
-```
-
-### Get Asset Activity
-
-```graphql
-query getAssetActivity($input: AssetActivityInput!) {
-  getAssetActivity(input: $input) {
-    activities {
-      activityId
-      type
-      description
-      timestamp
-      performedBy {
-        id
-        name
-      }
-      result
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-    }
-  }
-}
-```
-
-### Run Script on Asset
-
-```graphql
-mutation runScriptOnAsset($input: RunScriptInput!) {
-  runScriptOnAsset(input: $input) {
-    actionConfigId
-    script {
-      scriptId
-      name
-    }
-    arguments {
-      name
-      value
-    }
-    status
-    scheduledTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "param1",
-        "value": "value1"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
-```
-
-### Bulk Script Execution
-
-```graphql
-mutation runScriptOnAssets($input: RunScriptOnAssetsInput!) {
-  runScriptOnAssets(input: $input) {
-    batchId
-    assetsCount
-    status
-    scheduledTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-1", "asset-2", "asset-3"],
-    "scriptId": "script-uuid",
-    "runAs": "System"
-  }
-}
-```
+See [references/api.md](references/api.md) for the full operation catalog with
+request shapes and variable examples.
 
 ## Common Workflows
 
 ### Asset Health Check
 
-```graphql
-# Query assets with low disk space
-query getLowDiskAssets($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      freeDiskSpace
-      totalDiskSpace
-      client { name }
-    }
-  }
-}
-```
-
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "status": "Online",
-      "diskSpacePercentFree": {
-        "lt": 10
-      }
-    }
-  }
-}
-```
+Query `getAssetList` filtered to `status: "Online"` with
+`diskSpacePercentFree: { lt: 10 }` to surface endpoints running out of disk,
+returning `freeDiskSpace`/`totalDiskSpace` alongside the client name.
 
 ### Patch Compliance Report
 
-```graphql
-query getPatchCompliance($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      client { name }
-      patchStatus {
-        pendingCount
-        installedCount
-        failedCount
-        lastScanDate
-      }
-    }
-  }
-}
-```
-
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "patchStatus": {
-        "hasPending": true,
-        "severity": ["Critical"]
-      }
-    }
-  }
-}
-```
+Query `getAssetList` filtered on `patchStatus: { hasPending: true, severity: ["Critical"] }`
+and read the per-asset `patchStatus` rollup (`pendingCount`, `installedCount`,
+`failedCount`, `lastScanDate`).
 
 ### Software Audit
 
-```graphql
-# Find assets with specific software
-query findAssetsWithSoftware($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      client { name }
-    }
-  }
-}
-```
+Query `getAssetList` filtered on `software: { name: "..." }` to find every asset
+with a given application installed — useful for license reconciliation and
+removing unsanctioned remote-access tools.
 
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "software": {
-        "name": "TeamViewer"
-      }
-    }
-  }
-}
-```
+See [references/api.md](references/api.md) for all three workflow queries.
 
 ## Error Handling
 
@@ -508,6 +106,9 @@ Variables:
 | Rate limit exceeded | Over 800 req/min | Implement backoff |
 
 ### Asset Status Checks
+
+A `status` of `Online` alone is not sufficient — the status field can lag a
+dropped agent. Also check `lastSeen` freshness before dispatching a remote action:
 
 ```javascript
 // Check if asset is available for remote actions
@@ -539,7 +140,6 @@ function canRunRemoteAction(asset) {
 4. **Cache static data** - Cache client/site associations locally
 5. **Monitor execution** - Track script execution results
 6. **Set appropriate timeouts** - Long-running scripts need adequate timeouts
-7. **Log activities** - Document remote actions for audit trails
 
 ## Related Skills
 

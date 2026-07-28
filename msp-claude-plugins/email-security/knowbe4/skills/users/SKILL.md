@@ -1,15 +1,13 @@
 ---
 name: "KnowBe4 Users"
 description: >
-  Use this skill when working with KnowBe4 users and groups - user lifecycle management,
-  group creation and membership, risk scores, risk score history, user event tracking,
-  and user status management. Covers user provisioning, group-based targeting for
-  campaigns, individual and organizational risk assessment.
+  KnowBe4 user and group management: user lifecycle and status, group creation
+  and membership, risk scores and risk score history, user event tracking,
+  provisioning, and group-based targeting for campaigns.
 when_to_use: >-
-  When working with user lifecycle management, group creation and membership, risk scores, risk
-  score history, user event tracking. Use when: knowbe4 user, knowbe4 users, knowbe4 group, user
-  risk score, risk score history, user management knowbe4, group management, user provisioning,
-  user status, employee risk, security risk score, or user event.
+  When working with KnowBe4 users, groups, or risk scores. Use when: knowbe4 user, knowbe4
+  users, knowbe4 group, user risk score, risk score history, user management knowbe4, group
+  management, user provisioning, user status, employee risk, security risk score, or user event.
 ---
 
 # KnowBe4 User and Group Management

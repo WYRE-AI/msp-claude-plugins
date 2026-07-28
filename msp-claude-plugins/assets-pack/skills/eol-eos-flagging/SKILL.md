@@ -1,22 +1,17 @@
 ---
 name: "EOL/EOS Flagging"
+description: >
+  End-of-life versus end-of-support risk for devices, OS versions, and firmware:
+  combining RMM inventory (make, model, OS version, firmware) with general
+  lifecycle knowledge, the mandatory verify-against-vendor-lifecycle caveat, what
+  qualifies as a finding versus merely "old", and criticality-first
+  prioritization of the resulting risk list.
 when_to_use: >-
   When identifying devices, OS versions, or firmware approaching or past
   end-of-life or end-of-support, or prioritizing that risk by device
   criticality. Use when: EOL risk, end of life devices, unsupported
   hardware, EOS flagging, is this OS still supported, end of support,
   unsupported OS, legacy hardware risk.
-description: >
-  Use this skill when identifying devices, operating system versions, or
-  firmware approaching or past end-of-life (EOL) or end-of-support (EOS),
-  combining device inventory data (make/model/OS version) pulled from
-  whatever RMM platforms are connected with general knowledge of common
-  EOL/EOS dates for widely-deployed OS and hardware, and prioritizing the
-  resulting risk list by device criticality. Always use
-  conduit__search_tools to discover which RMM(s) are actually connected
-  before assuming a specific vendor, and always caveat EOL/EOS dates as
-  needing verification against current vendor lifecycle pages since they
-  can change.
 ---
 
 # EOL/EOS Flagging
@@ -169,18 +164,6 @@ If general knowledge is ambiguous about a specific date (e.g., a
 less-common OS build or a hardware model with a non-standard support
 timeline), say so plainly and recommend direct verification against the
 vendor's lifecycle page rather than presenting a guessed date as fact.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's
-  tool name.
-- Every EOL/EOS date cited from general knowledge carries a "verify against
-  current vendor lifecycle page" caveat — no exceptions.
-- Keep OS-level and hardware/firmware-level EOL findings distinct in the
-  output; don't merge them into one undifferentiated "old" label.
-- Criticality drives ranking, not just how far past the date a device is.
-- Treat "insufficient data to assess" as its own visible bucket, not a
-  silent omission.
 
 ## Related Skills
 

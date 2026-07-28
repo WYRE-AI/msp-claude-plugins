@@ -1,10 +1,9 @@
 ---
 name: "IT Glue Contacts"
 description: >
-  Use this skill when working with IT Glue contacts - managing client contacts,
-  contact types, locations, and communication details. Covers contact creation,
-  organization relationships, contact notes, PSA sync, and lookup patterns for
-  effective client communication management.
+  IT Glue contacts — the people (clients, vendors, partners) associated with
+  an organization. Covers contact types, the emails/phones array structure,
+  location linkage, PSA sync, and lookup patterns.
 when_to_use: >-
   When managing client contacts, contact types, locations, and communication details. Use when: it
   glue contact, client contact, technical contact, contact lookup, contact management, it glue
@@ -47,232 +46,13 @@ Organization: Acme Corporation
     └── Diana Evans (HR)
 ```
 
-## Field Reference
+### Field Reference
 
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `organization-id` | integer | Yes | Parent organization |
-| `first-name` | string | No | First name |
-| `last-name` | string | No | Last name |
-| `name` | string | System | Full name (auto-generated) |
-| `title` | string | No | Job title |
-| `contact-type-id` | integer | No | Type classification |
-
-### Communication Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `contact-emails` | array | Email addresses |
-| `contact-phones` | array | Phone numbers |
-
-### Location Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `location-id` | integer | Associated location |
-
-### Documentation Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `notes` | string | Contact notes (HTML) |
-| `important` | boolean | VIP/important flag |
-
-### PSA Integration Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `psa-id` | string | PSA contact ID |
-| `psa-integration-type` | string | PSA platform type |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `created-at` | datetime | Creation timestamp |
-| `updated-at` | datetime | Last update timestamp |
+Core identification, communication (`contact-emails`, `contact-phones`), location, documentation, PSA, and metadata fields. See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Contacts
-
-```http
-GET /contacts
-x-api-key: YOUR_API_KEY
-Content-Type: application/vnd.api+json
-```
-
-**By Organization:**
-```http
-GET /organizations/123/relationships/contacts
-```
-
-**With Filters:**
-```http
-GET /contacts?filter[organization-id]=123&filter[contact-type-id]=456
-```
-
-**With Pagination:**
-```http
-GET /contacts?page[size]=100&page[number]=1&sort=name
-```
-
-### Get Single Contact
-
-```http
-GET /contacts/789
-x-api-key: YOUR_API_KEY
-```
-
-**With Includes:**
-```http
-GET /contacts/789?include=organization,location,contact-type
-```
-
-### Create Contact
-
-```http
-POST /contacts
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "data": {
-    "type": "contacts",
-    "attributes": {
-      "organization-id": 123456,
-      "first-name": "John",
-      "last-name": "Smith",
-      "title": "IT Manager",
-      "contact-type-id": 12,
-      "contact-emails": [
-        {
-          "value": "john.smith@acme.com",
-          "label-name": "Work",
-          "primary": true
-        },
-        {
-          "value": "john.smith@gmail.com",
-          "label-name": "Personal",
-          "primary": false
-        }
-      ],
-      "contact-phones": [
-        {
-          "value": "555-123-4567",
-          "label-name": "Office",
-          "primary": true
-        },
-        {
-          "value": "555-987-6543",
-          "label-name": "Mobile",
-          "primary": false
-        }
-      ],
-      "notes": "<p>Primary technical contact. Available M-F 9-5.</p>",
-      "important": true
-    }
-  }
-}
-```
-
-### Update Contact
-
-```http
-PATCH /contacts/789
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "data": {
-    "type": "contacts",
-    "attributes": {
-      "title": "Senior IT Manager",
-      "notes": "<p>Promoted to Senior IT Manager. Still primary contact.</p>"
-    }
-  }
-}
-```
-
-### Delete Contact
-
-```http
-DELETE /contacts/789
-x-api-key: YOUR_API_KEY
-```
-
-### Search by Various Fields
-
-**By Name:**
-```http
-GET /contacts?filter[name]=John Smith
-```
-
-**By Organization:**
-```http
-GET /contacts?filter[organization-id]=123
-```
-
-**By PSA ID:**
-```http
-GET /contacts?filter[psa-id]=54321
-```
-
-## Contact Emails
-
-### Email Structure
-
-```json
-{
-  "contact-emails": [
-    {
-      "value": "user@example.com",
-      "label-name": "Work",
-      "primary": true
-    }
-  ]
-}
-```
-
-**Label Names:**
-- Work
-- Personal
-- Other
-
-### Update Email
-
-To update emails, include the full array in your PATCH request.
-
-## Contact Phones
-
-### Phone Structure
-
-```json
-{
-  "contact-phones": [
-    {
-      "value": "555-123-4567",
-      "label-name": "Office",
-      "primary": true,
-      "extension": "123"
-    }
-  ]
-}
-```
-
-**Label Names:**
-- Office
-- Mobile
-- Home
-- Fax
-- Other
+Contacts support the standard list/get/create/update/delete verbs, plus organization-scoped listing (`/organizations/:id/relationships/contacts`) and search by name/organization-id/psa-id. `contact-emails` and `contact-phones` are arrays of `{value, label-name, primary}` objects — a PATCH replaces the whole array rather than merging, so always resend the full list including entries you aren't changing. See [references/api.md](references/api.md) for full request/response examples and the email/phone label-name values.
 
 ## Common Workflows
 
@@ -424,57 +204,13 @@ async function getVipContacts() {
 }
 ```
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- `contact-emails` and `contact-phones` PATCH updates replace the entire array — omitting an existing entry deletes it, so always send the full set.
+- `name` is system-generated from `first-name`/`last-name`; it cannot be set directly.
+- `contact-type-id` references an org-specific lookup table, not a fixed enum — an unrecognized ID returns a 422, not a descriptive "invalid type" error.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Organization required | Include organization-id |
-| 401 | Invalid API key | Check IT_GLUE_API_KEY |
-| 404 | Contact not found | Verify contact ID |
-| 422 | Invalid contact type | Query valid type IDs first |
-| 422 | Invalid email format | Check email syntax |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Organization required | No org ID | Include organization-id |
-| Invalid type | Bad type ID | Query /contact-types |
-| Invalid email | Malformed email | Use valid email format |
-| Name required | No first or last name | Provide at least one name |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateContact(data) {
-  try {
-    return await createContact(data);
-  } catch (error) {
-    if (error.status === 422) {
-      const errors = error.errors || [];
-
-      // Handle invalid email
-      if (errors.some(e => e.detail?.includes('email'))) {
-        console.log('Invalid email format. Removing invalid emails.');
-        data['contact-emails'] = data['contact-emails']?.filter(
-          e => isValidEmail(e.value)
-        );
-        return await createContact(data);
-      }
-
-      // Handle missing contact type
-      if (errors.some(e => e.detail?.includes('contact-type'))) {
-        const types = await getContactTypes();
-        console.log('Valid contact types:', types);
-      }
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the common error/validation tables and an error-recovery pattern that filters invalid emails and looks up valid contact types on 422.
 
 ## Best Practices
 
@@ -482,12 +218,8 @@ async function safeCreateContact(data) {
 2. **Set primary contact** - Each organization should have a primary contact
 3. **Include multiple methods** - Add both email and phone when available
 4. **Mark VIPs** - Use important flag for key stakeholders
-5. **Document notes** - Include availability, preferences, special instructions
-6. **Link to PSA** - Set psa-id for cross-platform lookups
-7. **Verify emails** - Ensure email addresses are current
-8. **Associate locations** - Link contacts to their physical location
-9. **Regular cleanup** - Remove departed employees promptly
-10. **Maintain titles** - Keep job titles current for proper escalation
+5. **Link to PSA** - Set psa-id for cross-platform lookups
+6. **Associate locations** - Link contacts to their physical location
 
 ## Related Skills
 

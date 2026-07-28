@@ -1,14 +1,14 @@
 ---
 name: "SentinelOne Inventory"
 description: >
-  Use this skill when working with SentinelOne unified asset inventory -
-  endpoints, cloud resources, identities, and network-discovered devices.
-  Covers inventory tools, surface types, REST API with offset-based
-  pagination, filter types, asset fields, and inventory audit workflows
-  for MSP client environments.
+  SentinelOne's unified asset inventory across four surface types — agent-managed
+  endpoints, AWS/Azure/GCP cloud resources, AD/Entra identities, and
+  Ranger-discovered network devices. Covers the read-only inventory tools, the REST
+  (not GraphQL) offset-pagination and filter model, asset field reference, and
+  agent-coverage audit workflows.
 when_to_use: >-
-  When working with endpoints, cloud resources, identities, and network-discovered devices in
-  SentinelOne unified asset inventory. Use when: sentinelone inventory, sentinelone asset,
+  When auditing asset coverage, agent health, or unmanaged devices in a SentinelOne
+  environment. Use when: sentinelone inventory, sentinelone asset,
   sentinelone endpoint, sentinelone agent, sentinelone device, sentinelone workstation,
   sentinelone server, asset inventory, endpoint health, sentinelone cloud resource, sentinelone
   identity, sentinelone ranger, or network discovery.

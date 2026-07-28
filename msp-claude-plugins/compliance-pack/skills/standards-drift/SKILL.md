@@ -1,12 +1,12 @@
 ---
 name: "Standards Drift Detection"
 description: >
-  Use this skill when a client's live configuration needs to be compared against a
-  previously established baseline or standard to detect drift. Covers CIPP standards
-  checks and Best Practice Analyser results, Liongard change detection and inspection
-  timelines, what qualifies as drift versus normal operational change, how to
-  distinguish intentional/authorized change from unauthorized or risky drift, and how
-  to prioritize which drift findings matter most when several surface at once.
+  Detecting configuration drift against an established baseline: CIPP standards
+  checks and Best Practice Analyser results, Liongard change detections and
+  inspection timelines, the three conditions that make a diff real drift rather
+  than noise, the signals that separate intentional or authorized change from
+  unauthorized weakening (ticket correlation, reversion pattern, direction of
+  change), and the priority order for ranking several drift findings at once.
 when_to_use: >-
   When comparing current tenant or infrastructure state against a known-good baseline,
   when a standards check or inspection shows something changed, or when deciding which

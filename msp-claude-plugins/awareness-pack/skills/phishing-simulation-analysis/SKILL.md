@@ -1,12 +1,11 @@
 ---
 name: "Phishing Simulation Analysis"
 description: >
-  Use this skill when analyzing phishing-simulation campaign results: click-rate
-  trends over time, repeat-clicker identification, and — where a technical
-  threat-response tool is also connected — correlating simulated-phishing
-  performance with real-world phishing incidents as a compounding risk
-  signal. Covers how to surface that correlation as optional enrichment
-  without assuming secops-pack or any incident-response tool is installed.
+  Phishing-simulation campaign analysis: click-rate trend direction across
+  campaigns, repeat-clicker identification with remedial-training
+  cross-reference, and optional enrichment that correlates simulated failures
+  with real-world phishing incidents from a connected email-security tool as a
+  compounding risk signal.
 when_to_use: >-
   When reviewing phishing simulation results, click-rate trends, or
   identifying repeat clickers. Use when: phishing simulation results, click
@@ -132,17 +131,6 @@ Proceed with the core simulation analysis in full. Note explicitly that
 real-world incident correlation wasn't performed because no
 email-security/incident-response connector was found — this is an
 unavailable enrichment, not a failed check.
-
-## Best Practices
-
-- Always discover tools via `conduit__search_tools` before calling a
-  vendor-specific tool name.
-- Keep simulated-click data and real-click data clearly labeled and never
-  merged into a single unlabeled number.
-- Lead with repeat clickers and worsening trends — they carry more
-  actionable signal than a single blended click-rate snapshot.
-- Treat real-incident correlation as valuable optional enrichment, never a
-  blocking dependency for this skill's core output.
 
 ## Related Skills
 

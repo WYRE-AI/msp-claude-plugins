@@ -1,15 +1,14 @@
 ---
 name: "SalesBuildr Opportunities"
 description: >
-  Use this skill when managing sales opportunities in Salesbuildr -
-  searching the pipeline, creating new opportunities, updating stages,
-  and tracking deal values. Opportunities link companies and contacts
-  to potential revenue.
+  Salesbuildr opportunities: pipeline search, opportunity creation, stage
+  updates, and deal values, plus how opportunities link companies and
+  contacts to potential revenue.
 when_to_use: >-
-  When managing sales opportunities in Salesbuildr - searching the pipeline, creating new
-  opportunities, updating stages, and tracking deal values. Use when: salesbuildr opportunity,
-  salesbuildr opportunities, salesbuildr pipeline, salesbuildr deal, sales pipeline, create
-  opportunity salesbuildr, or opportunity stage.
+  When managing the Salesbuildr sales pipeline. Use when: salesbuildr
+  opportunity, salesbuildr opportunities, salesbuildr pipeline, salesbuildr
+  deal, sales pipeline, create opportunity salesbuildr, or opportunity
+  stage.
 ---
 
 # Salesbuildr Opportunities

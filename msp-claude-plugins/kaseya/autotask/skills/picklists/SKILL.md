@@ -1,11 +1,15 @@
 ---
+name: "Autotask Picklists"
 description: >-
-  Use this skill when working with Autotask picklist and reference data — listing queues, ticket
-  statuses, ticket priorities, and phases. These tools return the configured lookup values for
-  your specific Autotask instance, which are required when creating or filtering tickets and other
-  entities. Use when: autotask queues, autotask ticket statuses, autotask ticket priorities,
-  autotask picklist, list queues autotask, autotask priority values, autotask status values,
-  autotask reference data, autotask lookup values, or autotask phases list.
+  Autotask picklist and reference-data lookups — queues, ticket statuses, ticket priorities, and
+  project phases — the instance-specific configured values required before creating or filtering
+  tickets and other entities.
+when_to_use: >-
+  When you need instance-specific queue, ticket status, ticket priority, or phase values before
+  creating or filtering Autotask tickets and other entities. Use when: autotask queues, autotask
+  ticket statuses, autotask ticket priorities, autotask picklist, list queues autotask, autotask
+  priority values, autotask status values, autotask reference data, autotask lookup values, or
+  autotask phases list.
 ---
 
 # Autotask Picklists and Reference Data

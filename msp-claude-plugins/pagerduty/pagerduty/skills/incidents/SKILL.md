@@ -1,13 +1,13 @@
 ---
 name: "PagerDuty Incidents"
 description: >
-  Use this skill when working with PagerDuty incidents - listing, triaging,
-  creating, updating, resolving, and investigating incidents. Covers incident
-  lifecycle (triggered/acknowledged/resolved), urgency levels, alert grouping,
-  incident notes, log entries, past incidents pattern matching, and
-  cross-vendor PSA ticket correlation workflows for MSPs.
+  PagerDuty incident lifecycle (triggered/acknowledged/resolved), urgency vs.
+  priority, alerts-to-incident grouping, the 14 incident MCP tools, incident
+  fields, notes, log entries, past-incident similarity search, merge and
+  snooze semantics, and cross-vendor PSA ticket correlation for MSPs.
 when_to_use: >-
-  When listing, triaging, creating, updating, resolving, and investigating incidents. Use when:
+  When listing, triaging, creating, updating, resolving, or investigating PagerDuty
+  incidents. Use when:
   pagerduty incident, pagerduty outage, pagerduty triggered, pagerduty acknowledged, pagerduty
   resolved, pagerduty alert, pagerduty triage, pagerduty urgency, pagerduty severity, pagerduty
   priority, pagerduty create incident, pagerduty merge, pagerduty snooze, or pagerduty log entry.

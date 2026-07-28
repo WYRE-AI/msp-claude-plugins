@@ -1,6 +1,6 @@
 ---
 name: "cipp-tenants"
-description: "Use this skill when working with CIPP tenants — listing managed M365 tenants, checking tenant details, identifying tenant ID/domain, and scoping operations to a specific tenant. The starting point for almost every CIPP workflow since most other tools require a tenant filter."
+description: "The top-level CIPP scope: enumerating managed M365 tenants, retrieving tenant detail, and the accepted `tenantFilter` identifier formats (default domain, custom domain, GUID, `allTenants`). Also covers stale-cache detection and the two common tenant-resolution failure modes."
 when_to_use: >-
   When listing managed M365 tenants, looking up tenant IDs/domains, or scoping operations across
   the MSP portfolio. Use when: cipp tenant, list tenants, m365 tenant, tenant details, which

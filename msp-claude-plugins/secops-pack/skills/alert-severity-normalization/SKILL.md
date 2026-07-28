@@ -1,6 +1,13 @@
 ---
 name: "Alert Severity Normalization"
-description: "Use this skill when triaging security alerts, incidents, or findings that come from more than one connected EDR/MDR/SIEM vendor and a single, comparable severity ranking is needed. Covers a common Critical/High/Medium/Low normalized model, how to map each vendor's native severity terminology (Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level, and others) into it, and how to discover which vendors are actually connected before assuming any one of them is present."
+description: >
+  A common Critical/High/Medium/Low normalized severity model for security
+  alerts, incidents, and findings, with the judgment axes (confidence,
+  mitigation state, blast radius) that place a record in a tier and the
+  mapping from each vendor's native terminology — Huntress incident status,
+  SentinelOne threat confidence, Blumira finding priority, CIPP alert queue
+  severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how
+  to discover which security vendors are actually connected.
 when_to_use: >-
   When normalizing, comparing, or ranking security alerts, incidents, or
   findings across more than one connected security vendor. Use when: alert

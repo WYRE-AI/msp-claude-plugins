@@ -1,16 +1,14 @@
 ---
 name: "ScalePad ControlMap"
 description: >
-  Use this skill when working with ScalePad ControlMap — per-client
-  compliance management: risk registers, control libraries, evidence
-  collection, policies and procedures, framework objectives,
-  assessments, and remediation action items across regions us, eu,
-  ca, and au.
+  ScalePad ControlMap per-client compliance management: risk registers, control
+  libraries, evidence collection, policies and procedures, framework objectives,
+  assessments, and remediation action items across regions us, eu, ca, and au.
 when_to_use: >-
-  When managing compliance in ControlMap — risks, controls, evidence, policies, procedures, 
-  governance, framework objectives, assessments, or compliance action items. Use when: 
-  controlmap, scalepad compliance, scalepad risks, scalepad controls, scalepad evidence, scalepad 
-  policies.
+  When managing compliance in ControlMap — risks, controls, evidence, policies,
+  procedures, governance, framework objectives, assessments, or compliance action items.
+  Use when: controlmap, scalepad compliance, scalepad risks, scalepad controls, scalepad
+  evidence, scalepad policies.
 ---
 
 # ScalePad ControlMap (Compliance)

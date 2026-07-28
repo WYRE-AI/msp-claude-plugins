@@ -1,17 +1,15 @@
 ---
 name: "Inforcer Assessments"
+description: >
+  Inforcer assessments: listing a tenant's assessments (read-only) and
+  triggering an assessment run — the one mutating action in the entire
+  Inforcer surface. Covers what a run refreshes (the data behind alignment,
+  secure score, and drift), its tenant-scoping, and the confirmation
+  discipline it requires.
 when_to_use: >-
-  When listing Inforcer assessments for a tenant, or triggering an assessment run — the single
-  write action in the Inforcer surface, which requires explicit confirmation before it executes.
+  When listing Inforcer assessments for a tenant, or triggering an assessment run.
   Use when: inforcer assessment, list assessments, run assessment, trigger assessment, assessment
   run, refresh alignment data, inforcer assessment status, or re-run assessment inforcer.
-description: >
-  Use this skill when listing Inforcer assessments or triggering an
-  assessment run. Listing is read-only; running an assessment is the
-  ONE mutating action in the entire Inforcer surface and must be
-  confirmed before it executes. Covers what an assessment run does
-  (refreshes the data behind alignment / secure score / drift), its
-  tenant-scoping, and the confirmation discipline it requires.
 ---
 
 # Inforcer Assessments

@@ -1,11 +1,10 @@
 ---
 name: "Meraki Troubleshooting"
 description: >
-  Use this skill for hands-on Cisco Meraki troubleshooting -- running
-  live tools (ping, cable test, throughput, wake-on-LAN) via
-  meraki_raw_request, rebooting devices, and checking uplink/connectivity
-  status. Explains that live tools ride the meraki_raw_request passthrough
-  because they are not curated tools.
+  Hands-on Cisco Meraki diagnostics: the async live-tools pattern (ping,
+  cable test, throughput, wake-on-LAN, ARP/MAC tables) that rides the
+  meraki_raw_request passthrough because live tools are not curated tools,
+  plus device reboots and uplink/connectivity checks.
 when_to_use: >-
   When troubleshooting Meraki connectivity -- running live tools like ping and cable test via
   raw_request, rebooting devices, and checking uplinks. Use when: meraki troubleshoot, meraki

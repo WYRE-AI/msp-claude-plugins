@@ -1,11 +1,10 @@
 ---
 name: "Alternative Payments Payments & Payouts"
 description: >
-  Use this skill when reading Alternative Payments transactions and payouts -
-  listing and filtering transactions by type, status, customer, invoice, and
-  payment method; retrieving a single transaction; and listing or retrieving
-  payouts and the transactions that compose them for reconciliation. This is a
-  read-only surface - there is no create-payment or direct-charge operation.
+  Alternative Payments transactions and payouts: transaction types,
+  statuses, and the customer/invoice/payment-method filters; payout objects
+  and the transactions that compose them for reconciliation. A read-only
+  surface -- there is no create-payment or direct-charge operation.
 when_to_use: >-
   When listing or filtering transactions, retrieving a transaction, or listing and reconciling
   payouts and the transactions inside them. Use when: alternative payments transaction, list
@@ -202,7 +201,6 @@ the deposit can be tied to specific receivables.
 3. **Paginate with cursors** — loop on `has_more` / `next_cursor` (pass `cursor=`).
 4. **Reconcile by summing** — a payout's transaction amounts should equal the payout total.
 5. **Stay under 5 req/sec** — pace reconciliation loops over large payouts.
-6. **Read bodies as text then parse** — avoids "body already read" errors.
 
 ## Endpoint Reference
 

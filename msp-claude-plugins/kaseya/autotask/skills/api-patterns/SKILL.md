@@ -1,10 +1,10 @@
 ---
 name: "Autotask API Patterns"
 description: >
-  Use this skill when working with the Autotask REST API - authentication,
-  query building, pagination, includes, rate limiting, and error handling.
-  Covers all 14 query operators, zone detection, header authentication,
-  retry strategies, and best practices for API integration.
+  Autotask REST API fundamentals: header-based authentication, zone
+  detection, the query/filter DSL (14 operators, logical grouping,
+  includes), pagination, rate limits, and CRUD conventions across the
+  215+ entity PSA.
 when_to_use: >-
   When working with authentication, query building, pagination, includes, rate limiting, and error
   handling in the Autotask REST API. Use when: autotask api, autotask query, autotask
@@ -153,21 +153,12 @@ Content-Type: application/json
 
 ### Complex Queries with Logical Grouping
 
-**AND conditions (default):**
+Filters combine with implicit AND. Use `"op": "or"` / `"op": "and"` with an `items` array to group or nest conditions:
+
 ```json
 {
   "filter": [
     {"field": "companyID", "op": "eq", "value": 12345},
-    {"field": "priority", "op": "lte", "value": 2},
-    {"field": "status", "op": "in", "value": [1, 2, 5]}
-  ]
-}
-```
-
-**OR conditions with items array:**
-```json
-{
-  "filter": [
     {
       "op": "or",
       "items": [
@@ -179,27 +170,7 @@ Content-Type: application/json
 }
 ```
 
-**Nested AND/OR:**
-```json
-{
-  "filter": [
-    {"field": "companyID", "op": "eq", "value": 12345},
-    {
-      "op": "or",
-      "items": [
-        {"field": "priority", "op": "in", "value": [3, 4]},
-        {
-          "op": "and",
-          "items": [
-            {"field": "status", "op": "eq", "value": 1},
-            {"field": "estimatedHours", "op": "gt", "value": 10}
-          ]
-        }
-      ]
-    }
-  ]
-}
-```
+See [references/api.md](references/api.md) for an AND-only example and a nested AND/OR example.
 
 ### Field Includes
 
@@ -210,30 +181,13 @@ Retrieve related entity fields in a single request:
   "filter": [{"field": "id", "op": "gt", "value": 0}],
   "includeFields": [
     "Company.companyName",
-    "Company.phone",
     "AssignedResource.firstName",
-    "AssignedResource.lastName",
-    "Contact.emailAddress"
+    "AssignedResource.lastName"
   ]
 }
 ```
 
-**Response with includes:**
-```json
-{
-  "items": [
-    {
-      "id": 54321,
-      "title": "Email issue",
-      "companyID": 12345,
-      "companyName": "Acme Corporation",
-      "companyPhone": "555-123-4567",
-      "assignedResourceFirstName": "Jane",
-      "assignedResourceLastName": "Tech"
-    }
-  ]
-}
-```
+See [references/api.md](references/api.md) for the response shape returned when includes are used.
 
 ## Pagination
 
@@ -267,34 +221,7 @@ Retrieve related entity fields in a single request:
 }
 ```
 
-### Efficient Pagination Pattern
-
-```javascript
-async function fetchAllTickets(filter) {
-  const allItems = [];
-  let pageNumber = 1;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch('/v1.0/Tickets/query', {
-      method: 'POST',
-      body: JSON.stringify({
-        filter,
-        maxRecords: 500,
-        pageNumber
-      })
-    });
-
-    const data = await response.json();
-    allItems.push(...data.items);
-
-    hasMore = data.pageDetails.nextPageUrl !== null;
-    pageNumber++;
-  }
-
-  return allItems;
-}
-```
+Page through results by looping while `pageDetails.nextPageUrl` is non-null. See [references/examples.md](references/examples.md) for a full pagination loop implementation.
 
 ## Rate Limiting
 
@@ -332,77 +259,13 @@ When the concurrent thread limit or hourly request limit is exceeded (HTTP 429):
 }
 ```
 
-### Retry Strategy
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || 30;
-        const jitter = Math.random() * 1000;
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      // Exponential backoff with jitter
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await sleep(delay);
-    }
-  }
-}
-```
+Implement exponential backoff with jitter on 429 responses, honoring `Retry-After` when present. See [references/examples.md](references/examples.md) for a retry-with-backoff implementation.
 
 ### Query Different Entity Types in Parallel
 
-To maximize throughput without hitting the per-endpoint thread limit, query **different endpoints in parallel** rather than the same endpoint multiple times:
+To maximize throughput without hitting the per-endpoint thread limit, query **different endpoints in parallel** rather than the same endpoint multiple times — parallel requests to Tickets + Companies + Contacts each get their own 3-thread budget, while parallel requests to multiple pages of the same endpoint share one budget and queue.
 
-```javascript
-// Good: parallel requests to different endpoints — each has its own 3-thread budget
-const [tickets, companies, contacts] = await Promise.all([
-  client.tickets.query().where('status', 'in', [1, 5]).execute(),
-  client.companies.query().where('companyType', 'eq', 1).execute(),
-  client.contacts.query().where('isActive', 'eq', true).execute(),
-]);
-
-// Avoid: parallel requests to the SAME endpoint — they share 3 threads
-// (will queue automatically, but adds latency)
-const [page1, page2, page3] = await Promise.all([
-  client.tickets.query().pageNumber(1).execute(),  // ← same endpoint
-  client.tickets.query().pageNumber(2).execute(),  // ← same endpoint
-  client.tickets.query().pageNumber(3).execute(),  // ← same endpoint
-]);
-```
-
-### Batch Processing
-
-For bulk operations, batch requests to avoid the hourly limit:
-
-```javascript
-async function batchProcess(items, batchSize = 50, delayMs = 1000) {
-  const results = [];
-
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-    const batchResults = await Promise.all(
-      batch.map(item => processItem(item))
-    );
-    results.push(...batchResults);
-
-    if (i + batchSize < items.length) {
-      await sleep(delayMs);
-    }
-  }
-
-  return results;
-}
-```
+For bulk write operations, batch requests in groups (e.g. 50 at a time) with a short delay between batches to avoid the hourly limit. See [references/examples.md](references/examples.md) for parallel-query and batch-processing code.
 
 ## Error Handling
 
@@ -434,128 +297,18 @@ async function batchProcess(items, batchSize = 50, delayMs = 1000) {
 }
 ```
 
-### Validation Error Handling
-
-```javascript
-function handleApiError(response) {
-  if (!response.errors) return;
-
-  response.errors.forEach(error => {
-    console.log(`Error: ${error.message}`);
-
-    if (error.field) {
-      console.log(`  Field: ${error.field}`);
-      console.log(`  Invalid Value: ${error.value}`);
-
-      // Suggest fix based on field
-      if (error.field === 'status') {
-        console.log('  Suggestion: Query /v1.0/Tickets/entityInformation/fields for valid status IDs');
-      } else if (error.field === 'queueID') {
-        console.log('  Suggestion: Query /v1.0/Queues for valid queue IDs');
-      }
-    }
-  });
-}
-```
+When a field-level error is returned, cross-reference the field against `/v1.0/<Entity>/entityInformation/fields` (or `/v1.0/Queues` for queue IDs) to find valid values. See [references/examples.md](references/examples.md) for a full validation-error handler.
 
 ## Entity Information
 
-### Get Field Definitions
+Query field definitions and picklist values before writing to an unfamiliar entity:
 
 ```http
 GET /v1.0/Tickets/entityInformation/fields
-```
-
-**Response:**
-```json
-{
-  "fields": [
-    {
-      "name": "status",
-      "dataType": "Integer",
-      "isRequired": true,
-      "isPickList": true,
-      "picklistValues": [
-        {"value": 1, "label": "New"},
-        {"value": 2, "label": "In Progress"},
-        {"value": 5, "label": "Complete"}
-      ]
-    }
-  ]
-}
-```
-
-### Get User-Defined Fields
-
-```http
 GET /v1.0/Tickets/entityInformation/userDefinedFields
 ```
 
-## CRUD Operations
-
-### Create (POST)
-
-```http
-POST /v1.0/Tickets
-Content-Type: application/json
-
-{
-  "companyID": 12345,
-  "title": "New ticket",
-  "status": 1,
-  "priority": 2,
-  "queueID": 8
-}
-```
-
-### Read (GET)
-
-**Single entity:**
-```http
-GET /v1.0/Tickets/54321
-```
-
-**Query:**
-```http
-POST /v1.0/Tickets/query
-```
-
-### Update (PATCH)
-
-```http
-PATCH /v1.0/Tickets
-Content-Type: application/json
-
-{
-  "id": 54321,
-  "status": 2,
-  "assignedResourceID": 29744150
-}
-```
-
-### Replace (PUT)
-
-```http
-PUT /v1.0/Tickets/54321
-Content-Type: application/json
-
-{
-  "id": 54321,
-  "companyID": 12345,
-  "title": "Updated ticket",
-  "status": 2,
-  "priority": 2,
-  "queueID": 8
-}
-```
-
-### Delete (DELETE)
-
-```http
-DELETE /v1.0/Tickets/54321
-```
-
-**Note:** Not all entities support DELETE. Check entity documentation.
+See [references/api.md](references/api.md) for the full response shape and CRUD (create/read/update/replace/delete) request examples.
 
 ## Performance Optimization
 
@@ -582,27 +335,7 @@ DELETE /v1.0/Tickets/54321
 
 ### Cache Reference Data
 
-Cache slowly-changing data:
-- Queues
-- Resources
-- Issue Types
-- Priorities
-- Company lists
-
-```javascript
-const cache = new Map();
-
-async function getQueues() {
-  if (!cache.has('queues') || cache.get('queues').expires < Date.now()) {
-    const queues = await fetchQueues();
-    cache.set('queues', {
-      data: queues,
-      expires: Date.now() + 5 * 60 * 1000 // 5 minutes
-    });
-  }
-  return cache.get('queues').data;
-}
-```
+Cache slowly-changing data — Queues, Resources, Issue Types, Priorities, Company lists — rather than re-fetching per request. See [references/examples.md](references/examples.md) for a TTL-based cache pattern.
 
 ## Best Practices
 
@@ -613,11 +346,8 @@ async function getQueues() {
 5. **Cache reference data** - Reduce API calls for static lookups
 6. **Select specific fields** - Only request fields you need
 7. **Use batch operations** - Group related operations together
-8. **Monitor rate limits** - Track remaining requests
-9. **Log API calls** - Enable debugging and audit trails
-10. **Validate before sending** - Check required fields client-side
-11. **One API key per team** - Autotask limits 3 concurrent threads per `integrationCode`. Each team using the integration should have their own API user so they don't compete for the same thread budget
-12. **Parallelize across endpoints, not within** - To maximize throughput, query Tickets + Companies + Contacts simultaneously (different endpoints, independent thread budgets) rather than fetching multiple pages of the same endpoint in parallel
+8. **One API key per team** - Autotask limits 3 concurrent threads per `integrationCode`. Each team using the integration should have their own API user so they don't compete for the same thread budget
+9. **Parallelize across endpoints, not within** - To maximize throughput, query Tickets + Companies + Contacts simultaneously (different endpoints, independent thread budgets) rather than fetching multiple pages of the same endpoint in parallel
 
 ## Related Skills
 

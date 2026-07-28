@@ -1,15 +1,14 @@
 ---
 name: "Mimecast Threat Intelligence"
 description: >
-  Use this skill when investigating Mimecast threat activity — TTP logs for
-  URL clicks, malicious attachment analysis, impersonation attempts, threat
-  remediation incidents, and audit events.
+  Mimecast threat data: Targeted Threat Protection logs for URL clicks,
+  attachment analysis, and impersonation attempts; threat remediation
+  incidents; and audit events.
 when_to_use: >-
-  When investigating Mimecast threat activity — TTP logs for URL clicks, malicious attachment
-  analysis, impersonation attempts, threat remediation incidents, and audit events. Use when:
-  mimecast threat, TTP, mimecast URL protection, mimecast attachment protection, mimecast
-  impersonation, mimecast incident, mimecast threat remediation, mimecast targeted threat
-  protection, mimecast phishing, or mimecast malware.
+  When investigating Mimecast threat activity, reviewing TTP detections, or auditing admin
+  actions. Use when: mimecast threat, TTP, mimecast URL protection, mimecast attachment
+  protection, mimecast impersonation, mimecast incident, mimecast threat remediation, mimecast
+  targeted threat protection, mimecast phishing, or mimecast malware.
 ---
 
 # Mimecast Threat Intelligence

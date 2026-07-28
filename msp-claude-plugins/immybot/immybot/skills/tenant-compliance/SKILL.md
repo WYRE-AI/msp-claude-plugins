@@ -1,16 +1,15 @@
 ---
 name: "ImmyBot Tenant & Compliance Reporting"
+description: >
+  ImmyBot tenants (client organizations) and fleet-wide reporting: the tenant
+  and background-task tool surfaces, the per-tenant compliance scorecard and
+  fleet task-queue audit procedures, and how to assemble a client QBR report
+  from stats, compliance, software inventory, and failed-task history.
 when_to_use: >-
   When working with ImmyBot tenants (client organizations), reviewing per-tenant compliance
   dashboards, software inventory rollups, or auditing background task queues across the fleet. Use
   when: immybot tenant, immybot client organization, immybot compliance report, immybot tenant
   stats, immybot task queue, immybot failed tasks, or immybot fleet report.
-description: >
-  Use this skill when working with ImmyBot tenants and fleet-wide
-  reporting — listing and searching client organizations, pulling
-  per-tenant compliance dashboards and software-inventory rollups,
-  and auditing background task queues (running, queued, failed) to
-  produce client-facing or operational status reports.
 ---
 
 # ImmyBot Tenant & Compliance Reporting

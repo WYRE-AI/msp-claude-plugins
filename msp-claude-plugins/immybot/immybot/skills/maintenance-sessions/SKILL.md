@@ -1,16 +1,16 @@
 ---
 name: "ImmyBot Maintenance Sessions"
+description: >
+  ImmyBot maintenance sessions — the reconciliation engine that brings endpoints
+  into their desired state: the session tool surface, start parameters (computer
+  vs tenant scope, type, priority, reboot flag), pause/resume/cancel semantics,
+  polling to a terminal state, failure investigation, and reboot-spanning and
+  queued-vs-running edge cases.
 when_to_use: >-
   When starting, monitoring, pausing, resuming, or cancelling ImmyBot maintenance sessions, or
   investigating session logs and results to diagnose a failed reconciliation. Use when: immybot
   maintenance session, immybot reconcile, immybot session logs, immybot session status, immybot
   run maintenance, cancel maintenance immybot, or immybot session failed.
-description: >
-  Use this skill when working with ImmyBot maintenance sessions — the
-  reconciliation engine that brings endpoints into their desired
-  state. Covers starting and controlling sessions, polling running
-  sessions, and reading session logs and results to diagnose a
-  failed deployment or remediation.
 ---
 
 # ImmyBot Maintenance Sessions

@@ -1,14 +1,13 @@
 ---
 name: "Autotask Projects"
 description: >
-  Use this skill when working with Autotask projects - creating projects,
-  managing tasks, phases, milestones, and resource assignments. Essential
-  for MSP project managers handling client implementations, migrations,
-  and scheduled work in Autotask PSA.
+  Autotask project structure - projects, phases, tasks, and milestones - including project
+  and task fields, status values, resource assignment, and how project work links to
+  contract billing for MSP project managers.
 when_to_use: >-
-  When creating projects, managing tasks, phases, milestones, and resource assignments. Use when:
-  autotask project, autotask task, project management, project phase, project milestone, resource
-  assignment, project billing, or project timeline.
+  When creating projects, managing tasks, phases, milestones, or resource assignments in
+  Autotask. Use when: autotask project, autotask task, project management, project phase,
+  project milestone, resource assignment, project billing, or project timeline.
 ---
 
 # Autotask Projects Management

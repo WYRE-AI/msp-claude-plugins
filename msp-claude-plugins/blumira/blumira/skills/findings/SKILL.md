@@ -1,12 +1,11 @@
 ---
 name: "Blumira Findings"
 description: >
-  Use this skill when working with Blumira findings (security alerts/detections),
-  including listing, filtering, investigating, resolving, assigning, and commenting
-  on findings.
+  The Blumira finding lifecycle: status and severity codes, resolution types, list
+  filtering, enriched detail retrieval, assignment, and comment threads.
 when_to_use: >-
-  When working with Blumira findings (security alerts/detections), including listing, filtering,
-  investigating, resolving, assigning, and commenting on findings. Use when: blumira finding,
+  When triaging, investigating, assigning, commenting on, or resolving Blumira
+  security detections. Use when: blumira finding,
   blumira alert, blumira detection, security finding, triage finding, resolve finding, or finding
   status.
 ---

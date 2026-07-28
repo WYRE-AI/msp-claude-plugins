@@ -1,14 +1,13 @@
 ---
 name: "PandaDoc Recipients"
 description: >
-  Use this skill when working with PandaDoc recipients and signatures -
-  adding recipients to documents, setting signing order, tracking who
-  has signed, managing multi-party agreements, and understanding
-  recipient roles. Covers e-signature workflows, completion tracking,
-  and multi-signer scenarios common in MSP contracts.
+  PandaDoc recipients and e-signature mechanics: recipient roles (signer,
+  approver, viewer, CC), signing-order behavior, multi-party MSP signing
+  scenarios, completion tracking via `has_completed`, recipient fields, and
+  the document statuses that restrict adding or changing recipients.
 when_to_use: >-
-  When adding recipients to documents, setting signing order, tracking who has signed, managing
-  multi-party agreements, and understanding recipient roles. Use when: pandadoc recipient,
+  When adding recipients to a document, setting signing order, checking who has signed, or
+  planning a multi-party agreement. Use when: pandadoc recipient,
   pandadoc signer, pandadoc signing, pandadoc signature, signing order, who signed, signature
   status, recipient role, multi-signer, e-sign, or esignature.
 ---
@@ -256,13 +255,10 @@ Track the progress of document signing across all recipients:
 1. **Add all recipients during creation** - Include recipients in `pandadoc-create-document` rather than adding after
 2. **Use signing order** - Always set signing order for multi-party agreements
 3. **Match template roles** - Ensure recipient roles match the roles defined in the template
-4. **Verify emails** - Double-check recipient email addresses before sending
-5. **Track completion actively** - Check recipient completion status regularly for sent documents
-6. **Follow up promptly** - Contact recipients who haven't signed within 3-5 business days
-7. **Use viewer role for CC** - Add stakeholders as viewers rather than signers when they don't need to sign
-8. **Plan signing flow** - For complex agreements, map out the signing order before creating the document
-9. **Handle declines gracefully** - When documents are declined, address concerns and create new documents
-10. **Document recipient changes** - Note any changes to recipients in your PSA or CRM
+4. **Track completion actively** - Check recipient completion status regularly for sent documents
+5. **Use viewer role for CC** - Add stakeholders as viewers rather than signers when they don't need to sign
+6. **Plan signing flow** - For complex agreements, map out the signing order before creating the document
+7. **Document recipient changes** - Note any changes to recipients in your PSA or CRM
 
 ## Related Skills
 

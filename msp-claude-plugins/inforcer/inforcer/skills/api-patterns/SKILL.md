@@ -1,17 +1,17 @@
 ---
 name: "Inforcer API Patterns"
-when_to_use: >-
-  When working with Inforcer authentication headers, region selection, the base URL, pagination,
-  the envelope shape, or error handling for the Inforcer MCP server. Use when: inforcer api,
-  inforcer authentication, inforcer region, inforcer pagination, inforcer mcp, inforcer api key,
-  client tenant id, or inf-api-key.
 description: >
-  Use this skill when working with the Inforcer MCP tools — the gateway
-  X-Inforcer-Region / X-Inforcer-Api-Key headers, the region-based base
-  URL and upstream Inf-Api-Key header, the /beta/ route prefix, the
+  Inforcer MCP fundamentals: the gateway X-Inforcer-Region /
+  X-Inforcer-Api-Key headers, the region-based base URL and upstream
+  Inf-Api-Key header, the /beta/ route prefix, the
   {success,message,errors,data} response envelope, continuationToken
   pagination, and the integer Client Tenant ID vs Azure AD GUID gotcha.
-  Read this first — every other Inforcer skill assumes these patterns.
+  Every other Inforcer skill assumes these patterns.
+when_to_use: >-
+  When authenticating to or calling Inforcer through the MCP tools, or diagnosing a failed
+  Inforcer request. Use when: inforcer api,
+  inforcer authentication, inforcer region, inforcer pagination, inforcer mcp, inforcer api key,
+  client tenant id, or inf-api-key.
 ---
 
 # Inforcer MCP Tools & API Patterns

@@ -1,5 +1,11 @@
 ---
 name: "Pipeline Health"
+description: >
+  CRM pipeline health assessment against whatever CRM is discovered through
+  the gateway: stage-velocity norms derived from closed-won deals,
+  activity-based stalled-deal detection, raw and quality-adjusted pipeline
+  coverage against a revenue target, and the CRM-less degradation rule
+  (report nothing rather than fabricate figures).
 when_to_use: >-
   When assessing the health of an open sales pipeline in a connected CRM —
   whether deals are moving at a healthy pace, which ones have stalled, and
@@ -7,14 +13,6 @@ when_to_use: >-
   pipeline health, pipeline review, stalled deals, deal velocity, pipeline
   coverage, is our pipeline healthy, which deals are stuck, sales pipeline
   audit.
-description: >
-  Use this skill when assessing CRM pipeline health across whatever CRM is
-  actually connected through the gateway (typically HubSpot for this pack's
-  target vendor set, but discovered rather than assumed). Covers stage-velocity
-  norms, stalled-deal detection (no stage change in N days), pipeline coverage
-  ratio against a quota/target where one is available, and how to degrade
-  gracefully — reporting a partial or CRM-less result rather than fabricating
-  figures — when no CRM is connected at all.
 ---
 
 # Pipeline Health
@@ -161,15 +159,10 @@ picking one.
 
 ## Best Practices
 
-- Always discover the CRM before calling any of its tools — never hardcode
-  `hubspot__*` tool names as if HubSpot is guaranteed to be connected.
 - Treat "no activity" and "long time in stage" as related but distinct
   signals — report both, don't collapse them into one number.
 - Always show the threshold or baseline actually used, so a sales manager can
   sanity-check or override the read.
-- Quality-adjust coverage rather than reporting only the raw multiple —
-  raw-only coverage is the single most common way a pipeline report
-  overstates health.
 
 ## Related Skills
 

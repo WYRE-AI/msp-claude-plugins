@@ -1,14 +1,14 @@
 ---
 name: "Mimecast API Patterns"
 description: >
-  Use this skill when working with Mimecast MCP tools — available tools,
-  OAuth 2.0 client credentials authentication, regional API endpoints,
-  pagination, rate limiting, and error handling.
+  Mimecast MCP fundamentals: the available tool catalog, OAuth 2.0
+  client-credentials authentication, regional API endpoints, pagination,
+  rate limiting, and error handling.
 when_to_use: >-
-  When working with available tools, OAuth 2.0 client credentials authentication, regional API
-  endpoints, pagination, rate limiting, and error handling in Mimecast MCP tools. Use when:
-  mimecast, mimecast api, mimecast authentication, mimecast tools, mimecast mcp, mimecast request,
-  mimecast error, mimecast region, or mimecast pagination.
+  When authenticating to Mimecast, choosing a regional endpoint, paging results, or interpreting
+  a Mimecast API error. Use when: mimecast, mimecast api, mimecast authentication, mimecast
+  tools, mimecast mcp, mimecast request, mimecast error, mimecast region, or mimecast
+  pagination.
 ---
 
 # Mimecast MCP Tools & API Patterns
@@ -165,8 +165,6 @@ If requests succeed but return empty `data` arrays when results are expected, th
 - Always specify date ranges when searching messages — open-ended queries are slow and may be rate limited
 - Use sender and recipient filters together to narrow results quickly
 - Check the `meta.status` field in every response — Mimecast sometimes returns HTTP 200 with error status in the body
-- Prefer targeted searches over paginating through all messages
-- Store the OAuth token and reuse it until near expiry rather than fetching a new one per call
 - Log the `requestId` from response headers for support escalations
 
 ## Related Skills

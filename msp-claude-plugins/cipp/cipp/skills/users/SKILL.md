@@ -1,6 +1,6 @@
 ---
 name: "cipp-users"
-description: "Use this skill when working with CIPP-managed M365 users — creating accounts, editing properties, disabling, resetting passwords, resetting MFA, revoking sessions, full offboarding, BEC investigation, MFA status reporting, and listing user devices/groups. Covers the complete user lifecycle across multi-tenant M365 environments."
+description: "The full multi-tenant M365 user lifecycle in CIPP: create/edit/disable, password and MFA resets, session revocation, the bundled offboarding call, BEC investigation reports, MFA gap reporting, and device/group lookups — plus the ordering constraints that make each sequence correct."
 when_to_use: >-
   When creating, editing, disabling, offboarding, or auditing M365 users via CIPP — including
   password resets, MFA resets, session revocation, BEC checks, and MFA enrollment reports. Use

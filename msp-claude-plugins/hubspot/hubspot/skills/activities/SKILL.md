@@ -1,13 +1,12 @@
 ---
 name: "HubSpot Activities"
 description: >
-  Use this skill when working with HubSpot activities - creating tasks,
-  logging notes, managing associations between CRM objects, and tracking
-  engagement history. Covers task creation, note logging, association
-  types, and linking contacts, companies, deals, and tickets together.
+  HubSpot tasks, notes, and associations: task priority and status values,
+  notes-vs-tasks semantics, the association type matrix linking contacts,
+  companies, deals, and tickets, and engagement-history workflows.
 when_to_use: >-
-  When creating tasks, logging notes, managing associations between CRM objects, and tracking
-  engagement history. Use when: hubspot task, hubspot note, hubspot activity, hubspot association,
+  When logging notes, creating follow-up tasks, or linking CRM objects together in HubSpot.
+  Use when: hubspot task, hubspot note, hubspot activity, hubspot association,
   hubspot engagement, hubspot log, hubspot follow-up, hubspot link objects, hubspot relationship,
   activity management hubspot, or task creation hubspot.
 ---
@@ -286,10 +285,8 @@ Tasks track completion status:
 4. **Set realistic due dates** - Task due dates should be achievable to maintain trust in the system
 5. **Use priority levels meaningfully** - Reserve HIGH priority for truly time-sensitive tasks
 6. **Log service activities** - Document every client interaction for continuity when team members change
-7. **Build complete association graphs** - Ensure contacts are linked to companies, deals to both contacts and companies
-8. **Review open tasks regularly** - Check for overdue tasks weekly and follow up
-9. **Use timestamps accurately** - Set `hs_timestamp` to the actual time of the activity, not when it was logged
-10. **Create tasks from meeting notes** - After logging a meeting, immediately create tasks for all action items
+7. **Review open tasks regularly** - Check for overdue tasks weekly and follow up
+8. **Use timestamps accurately** - Set `hs_timestamp` to the actual time of the activity, not when it was logged
 
 ## Related Skills
 

@@ -1,13 +1,14 @@
 ---
 name: "Kaseya Quote Manager Purchasing"
+description: >
+  Kaseya Quote Manager procurement data: purchase orders with their lines and
+  costs, the suppliers they are placed with, and product-supplier records
+  mapping catalog products to supplier SKUs and pricing. Read-only tool
+  surface.
 when_to_use: >-
   When viewing or analyzing purchase orders, suppliers, or product-supplier pricing in Kaseya
   Quote Manager. Use when: kaseya quote manager purchasing, kqm purchase order, kqm supplier,
   quote manager procurement, kqm product supplier, or kqm purchasing.
-description: >
-  Use this skill when navigating Kaseya Quote Manager procurement data —
-  purchase orders, their lines and costs, suppliers, and product-supplier
-  relationships. The tool surface is read-only.
 ---
 
 # Kaseya Quote Manager — Purchasing

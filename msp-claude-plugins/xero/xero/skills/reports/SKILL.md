@@ -1,13 +1,12 @@
 ---
 name: "Xero Reports"
 description: >
-  Use this skill when working with Xero financial reports - Profit and Loss,
-  Balance Sheet, Aged Receivables, Aged Payables, Trial Balance, and other
-  management reports. Covers report parameters, date ranges, tracking
-  categories, and interpreting results for MSP financial operations.
+  Xero Reports API: Profit and Loss, Balance Sheet, Aged Receivables and
+  Payables, Trial Balance, Bank Summary and other management reports. Covers
+  report parameters, date ranges, tracking-category filtering, the shared
+  Rows/Cells response shape, and parsing results for MSP financial operations.
 when_to_use: >-
-  When working with profit and Loss, Balance Sheet, Aged Receivables, Aged Payables, Trial
-  Balance, and other management reports in Xero financial reports. Use when: xero report, xero
+  When generating, filtering, or parsing a Xero financial report. Use when: xero report, xero
   profit and loss, xero p&l, xero balance sheet, xero aged receivables, xero aged payables, xero
   trial balance, xero financial report, xero reporting, or msp financial report.
 ---
@@ -16,7 +15,7 @@ when_to_use: >-
 
 ## Overview
 
-Xero provides a comprehensive set of financial reports through the API. For MSPs, these reports are essential for tracking profitability by service line, monitoring client payment behavior, managing cash flow, and producing financial statements for stakeholders. The Reports API returns structured data that can be programmatically analyzed.
+Xero exposes its financial reports through the API as structured, programmatically parseable data. For MSPs, these reports drive profitability tracking by service line, client payment-behavior monitoring, cash flow management, and financial statements for stakeholders.
 
 ## Core Concepts
 
@@ -35,7 +34,7 @@ Xero provides a comprehensive set of financial reports through the API. For MSPs
 
 ### Report Response Structure
 
-All Xero reports follow a consistent structure:
+All Xero reports share one nested `Rows`/`Cells` shape. Values arrive as strings and must be parsed to numbers:
 
 ```json
 {
@@ -91,317 +90,45 @@ All Xero reports follow a consistent structure:
 
 ## API Patterns
 
-### Profit and Loss Report
+Reports are GET-only and take their parameters in the query string. Period reports (P&L, Bank Summary) use `fromDate`/`toDate`; point-in-time reports (Balance Sheet, Aged Receivables/Payables, Trial Balance) use a single `date`. All dates are `YYYY-MM-DD`.
 
 ```bash
-# Current month P&L
 curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/ProfitAndLoss?fromDate=2026-03-01&toDate=2026-03-31" \
   -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "xero-tenant-id: ${XERO_TENANT_ID}" \
   -H "Accept: application/json"
-
-# Year-to-date P&L
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/ProfitAndLoss?fromDate=2026-01-01&toDate=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# P&L with tracking category filter
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/ProfitAndLoss?fromDate=2026-03-01&toDate=2026-03-31&trackingCategoryID=${TRACKING_ID}&trackingOptionID=${OPTION_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# P&L with monthly periods
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/ProfitAndLoss?fromDate=2026-01-01&toDate=2026-03-31&periods=3&timeframe=MONTH" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
 ```
 
-**P&L Parameters:**
+Parameters worth knowing across reports:
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `fromDate` | string | Start date (YYYY-MM-DD) |
-| `toDate` | string | End date (YYYY-MM-DD) |
-| `periods` | integer | Number of comparison periods |
-| `timeframe` | string | MONTH, QUARTER, or YEAR |
-| `trackingCategoryID` | string | Filter by tracking category |
-| `trackingOptionID` | string | Filter by tracking option |
-| `standardLayout` | boolean | Use standard layout (true/false) |
-| `paymentsOnly` | boolean | Cash basis (true) or accrual (false) |
+| Parameter | Applies to | Description |
+|-----------|-----------|-------------|
+| `periods` + `timeframe` | P&L, Balance Sheet | Adds comparison columns (MONTH, QUARTER, YEAR) |
+| `trackingCategoryID` / `trackingOptionID` | P&L, Balance Sheet | Filter to a service line or department |
+| `paymentsOnly` | P&L, Balance Sheet, Trial Balance | `true` = cash basis, `false` = accrual |
+| `contactID` | Aged Receivables/Payables | Restrict the report to one contact |
 
-### Balance Sheet Report
-
-```bash
-# Balance Sheet as of today
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/BalanceSheet?date=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Balance Sheet with comparison periods
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/BalanceSheet?date=2026-03-31&periods=3&timeframe=MONTH" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-**Balance Sheet Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | string | Report date (YYYY-MM-DD) |
-| `periods` | integer | Number of comparison periods |
-| `timeframe` | string | MONTH, QUARTER, or YEAR |
-| `trackingCategoryID` | string | Filter by tracking category |
-| `standardLayout` | boolean | Use standard layout |
-| `paymentsOnly` | boolean | Cash basis reporting |
-
-### Aged Receivables Report
-
-```bash
-# Aged Receivables as of today
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/AgedReceivablesByContact?date=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Aged Receivables for a specific contact
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/AgedReceivablesByContact?date=2026-03-31&contactID=${CONTACT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Aged Receivables with custom aging periods
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/AgedReceivablesByContact?date=2026-03-31&fromDate=2025-01-01&toDate=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-**Aged Receivables Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | string | Report date (YYYY-MM-DD) |
-| `contactID` | string | Filter to specific contact |
-| `fromDate` | string | Start of aging period |
-| `toDate` | string | End of aging period |
-
-### Aged Payables Report
-
-```bash
-# Aged Payables as of today
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/AgedPayablesByContact?date=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-### Trial Balance Report
-
-```bash
-# Trial Balance as of end of quarter
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/TrialBalance?date=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Trial Balance with payments only (cash basis)
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/TrialBalance?date=2026-03-31&paymentsOnly=true" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-**Trial Balance Parameters:**
-
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `date` | string | Report date (YYYY-MM-DD) |
-| `paymentsOnly` | boolean | Cash basis (true) or accrual (false) |
-
-### Bank Summary Report
-
-```bash
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Reports/BankSummary?fromDate=2026-03-01&toDate=2026-03-31" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
+See [references/api.md](references/api.md) for the full request catalog, per-report parameter tables, and the complete endpoint reference.
 
 ## Common Workflows
 
 ### MSP Monthly Financial Review
 
-```javascript
-async function monthlyFinancialReview(month) {
-  const fromDate = `${month}-01`;
-  const lastDay = new Date(parseInt(month.split('-')[0]), parseInt(month.split('-')[1]), 0).getDate();
-  const toDate = `${month}-${lastDay}`;
+Fetch P&L, Balance Sheet, Aged Receivables, and Aged Payables for the closing month in parallel, then parse each into a summary. Reports are independent requests, so parallelizing is safe and materially faster.
 
-  const token = await auth.getToken();
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'xero-tenant-id': process.env.XERO_TENANT_ID,
-    'Accept': 'application/json'
-  };
+### Revenue and Margin Analysis
 
-  // Fetch all reports in parallel
-  const [pnl, balanceSheet, agedReceivables, agedPayables] = await Promise.all([
-    fetch(`https://api.xero.com/api.xro/2.0/Reports/ProfitAndLoss?fromDate=${fromDate}&toDate=${toDate}`, { headers }),
-    fetch(`https://api.xero.com/api.xro/2.0/Reports/BalanceSheet?date=${toDate}`, { headers }),
-    fetch(`https://api.xero.com/api.xro/2.0/Reports/AgedReceivablesByContact?date=${toDate}`, { headers }),
-    fetch(`https://api.xero.com/api.xro/2.0/Reports/AgedPayablesByContact?date=${toDate}`, { headers })
-  ]);
+Walk the P&L `Rows` tree, matching `Section` titles (`Revenue`/`Income`, `Less Cost of Sales`/`Direct Costs`) and reading the `SummaryRow` totals. Section titles vary by chart-of-accounts layout — match on more than one candidate title.
 
-  return {
-    profitAndLoss: await pnl.json(),
-    balanceSheet: await balanceSheet.json(),
-    agedReceivables: await agedReceivables.json(),
-    agedPayables: await agedPayables.json()
-  };
-}
-```
+### Overdue Client Review
 
-### Parse P&L for Revenue Breakdown
-
-```javascript
-function parseRevenueFromPnL(reportData) {
-  const report = reportData.Reports[0];
-  const revenue = { total: 0, accounts: [] };
-
-  for (const row of report.Rows) {
-    if (row.RowType === 'Section' && row.Title === 'Revenue') {
-      for (const subRow of row.Rows || []) {
-        if (subRow.RowType === 'Row') {
-          const name = subRow.Cells[0]?.Value;
-          const amount = parseFloat(subRow.Cells[1]?.Value) || 0;
-          revenue.accounts.push({ name, amount });
-          revenue.total += amount;
-        }
-        if (subRow.RowType === 'SummaryRow') {
-          revenue.total = parseFloat(subRow.Cells[1]?.Value) || revenue.total;
-        }
-      }
-    }
-  }
-
-  return revenue;
-}
-```
-
-### Parse Aged Receivables for Overdue Clients
-
-```javascript
-function parseAgedReceivables(reportData) {
-  const report = reportData.Reports[0];
-  const clients = [];
-
-  for (const row of report.Rows) {
-    if (row.RowType === 'Section') {
-      for (const subRow of row.Rows || []) {
-        if (subRow.RowType === 'Row') {
-          const cells = subRow.Cells;
-          const client = {
-            name: cells[0]?.Value,
-            current: parseFloat(cells[1]?.Value) || 0,
-            thirtyDays: parseFloat(cells[2]?.Value) || 0,
-            sixtyDays: parseFloat(cells[3]?.Value) || 0,
-            ninetyDays: parseFloat(cells[4]?.Value) || 0,
-            older: parseFloat(cells[5]?.Value) || 0,
-            total: parseFloat(cells[6]?.Value) || 0
-          };
-
-          client.totalOverdue = client.thirtyDays + client.sixtyDays +
-            client.ninetyDays + client.older;
-
-          if (client.total > 0) {
-            clients.push(client);
-          }
-        }
-      }
-    }
-  }
-
-  return clients.sort((a, b) => b.totalOverdue - a.totalOverdue);
-}
-```
-
-### Gross Margin Calculation
-
-```javascript
-function calculateGrossMargin(reportData) {
-  const report = reportData.Reports[0];
-  let totalRevenue = 0;
-  let totalCOGS = 0;
-
-  for (const row of report.Rows) {
-    if (row.RowType === 'Section') {
-      if (row.Title === 'Revenue' || row.Title === 'Income') {
-        for (const subRow of row.Rows || []) {
-          if (subRow.RowType === 'SummaryRow') {
-            totalRevenue = parseFloat(subRow.Cells[1]?.Value) || 0;
-          }
-        }
-      }
-      if (row.Title === 'Less Cost of Sales' || row.Title === 'Direct Costs') {
-        for (const subRow of row.Rows || []) {
-          if (subRow.RowType === 'SummaryRow') {
-            totalCOGS = parseFloat(subRow.Cells[1]?.Value) || 0;
-          }
-        }
-      }
-    }
-  }
-
-  const grossProfit = totalRevenue - totalCOGS;
-  const grossMargin = totalRevenue > 0 ? (grossProfit / totalRevenue * 100) : 0;
-
-  return {
-    revenue: totalRevenue,
-    costOfSales: totalCOGS,
-    grossProfit,
-    grossMarginPercent: grossMargin.toFixed(1)
-  };
-}
-```
+Parse the Aged Receivables sections into per-contact aging buckets (current, 30, 60, 90, older) and sort by total overdue. Cells are positional, so index by column order rather than by name.
 
 ### Year-over-Year Comparison
 
-```javascript
-async function yearOverYearComparison(month) {
-  const year = parseInt(month.split('-')[0]);
-  const mon = month.split('-')[1];
+Request the same P&L period for the current and prior year, then compare parsed revenue totals.
 
-  const currentFrom = `${year}-${mon}-01`;
-  const currentTo = `${year}-${mon}-28`;
-  const priorFrom = `${year - 1}-${mon}-01`;
-  const priorTo = `${year - 1}-${mon}-28`;
-
-  const [current, prior] = await Promise.all([
-    fetchReport('ProfitAndLoss', { fromDate: currentFrom, toDate: currentTo }),
-    fetchReport('ProfitAndLoss', { fromDate: priorFrom, toDate: priorTo })
-  ]);
-
-  const currentRevenue = parseRevenueFromPnL(current);
-  const priorRevenue = parseRevenueFromPnL(prior);
-
-  const growth = priorRevenue.total > 0
-    ? ((currentRevenue.total - priorRevenue.total) / priorRevenue.total * 100)
-    : 0;
-
-  return {
-    currentPeriod: `${year}-${mon}`,
-    priorPeriod: `${year - 1}-${mon}`,
-    currentRevenue: currentRevenue.total,
-    priorRevenue: priorRevenue.total,
-    growthPercent: growth.toFixed(1)
-  };
-}
-```
+See [references/examples.md](references/examples.md) for working JavaScript implementations of each workflow.
 
 ## Error Handling
 
@@ -424,32 +151,13 @@ async function yearOverYearComparison(month) {
 | Missing sections | No revenue or expenses | Normal for new organizations |
 | Null cell values | Account has no balance | Default to 0 when parsing |
 
-## Endpoint Reference
+## Gotchas
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/Reports/ProfitAndLoss` | GET | Profit and Loss statement |
-| `/Reports/BalanceSheet` | GET | Balance Sheet |
-| `/Reports/AgedReceivablesByContact` | GET | Aged Receivables by contact |
-| `/Reports/AgedPayablesByContact` | GET | Aged Payables by contact |
-| `/Reports/TrialBalance` | GET | Trial Balance |
-| `/Reports/BankSummary` | GET | Bank account summary |
-| `/Reports/BudgetSummary` | GET | Budget vs actual |
-| `/Reports/ExecutiveSummary` | GET | Executive overview |
-| `/Reports/TenNinetyNine` | GET | 1099 report (US) |
-
-## Best Practices
-
-1. **Cache report data** - Reports are expensive; cache results for the same parameters
-2. **Use date ranges** - Always specify fromDate and toDate explicitly
-3. **Parse defensively** - Handle null/missing cell values gracefully
-4. **Fetch in parallel** - Request multiple reports simultaneously to save time
-5. **Use tracking categories** - Filter P&L by service line for MSP insights
-6. **Compare periods** - Use the `periods` parameter for trend analysis
-7. **Monitor aged receivables** - Set up alerts for clients over 60 days overdue
-8. **Review gross margin** - Track managed services margin monthly
-9. **Use cash basis when needed** - Set `paymentsOnly=true` for cash flow analysis
-10. **Document report schedules** - Standardize which reports run when (monthly, quarterly)
+- **Reports are expensive** - Cache results keyed on the report name plus its parameters; repeated identical requests burn rate limit for identical data.
+- **Always specify dates explicitly** - Omitting `fromDate`/`toDate` or `date` yields Xero's default period, which is rarely the one you meant.
+- **Parse defensively** - Cells can be absent or empty strings; coerce to 0 rather than assuming a numeric value.
+- **Tracking categories are the MSP lever** - Filtering P&L by tracking category is the only way to get per-service-line profitability out of the standard reports.
+- **Cash vs accrual changes the answer** - `paymentsOnly=true` reports cash movements only; use it for cash flow analysis, not for revenue recognition.
 
 ## Related Skills
 

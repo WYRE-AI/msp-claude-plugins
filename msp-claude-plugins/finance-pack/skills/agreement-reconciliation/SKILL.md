@@ -1,11 +1,13 @@
 ---
 name: "Agreement Reconciliation"
 description: >
-  Use this skill when reconciling a PSA contract or agreement against what an MSP
-  is actually invoicing in its accounting system, across any combination of PSA
-  (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks
-  Online, Xero). Detects under-billing, over-billing, and lapsed agreements still
-  being invoiced.
+  Reconciling PSA contract/agreement entitlements (seats, hours, recurring
+  services) against invoiced reality in an accounting platform, across any
+  combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting
+  platform (QuickBooks Online, Xero). Covers building the entitlement ledger,
+  the cross-system matching priority, and the gap classes — under-billing,
+  over-billing, lapsed agreements still invoiced, active agreements never
+  billed, and price drift.
 when_to_use: >-
   When checking whether a client's PSA contract terms (seats, hours, recurring
   services) match what is actually being invoiced. Use when: billing drift,
@@ -63,12 +65,6 @@ invoice line."
 |--------|------|-----------|
 | PSA — Autotask / HaloPSA / ConnectWise / Syncro | Source of contract/agreement entitlements (seats, hours, recurring service lines, status, term dates) | Yes (at least one) |
 | Accounting — QuickBooks Online / Xero | Source of invoiced reality (line items, quantities, amounts, invoice status) | Yes (at least one) |
-
-If no PSA is connected, this skill cannot run — there is no entitlement to
-reconcile against, only invoices. Say so plainly rather than falling back to
-guessing what "should" be billed. If no accounting platform is connected, the
-same applies in reverse: report the PSA contract ledger as a standalone
-entitlement list and stop there.
 
 ## Reconciliation Workflow
 

@@ -1,11 +1,10 @@
 ---
 name: "Meraki Security Appliance"
 description: >
-  Use this skill when working with the Cisco Meraki MX security
-  appliance -- reviewing and updating L3 outbound firewall rules
-  (meraki_appliance_firewall_l3_get/update) and checking site-to-site
-  VPN status (meraki_appliance_vpn_status_get). Firewall updates replace
-  the entire ruleset and are high-impact.
+  Cisco Meraki MX security appliance: the L3 outbound firewall rule model
+  and the full-ruleset replacement semantics of
+  meraki_appliance_firewall_l3_update, plus Auto VPN site-to-site peer
+  status via meraki_appliance_vpn_status_get.
 when_to_use: >-
   When working with the Meraki MX appliance -- reviewing/updating L3 firewall rules and checking
   site-to-site VPN status. Use when: meraki firewall, meraki mx, l3 firewall, firewall rules,

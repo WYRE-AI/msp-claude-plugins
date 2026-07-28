@@ -1,14 +1,14 @@
 ---
 name: "SpamTitan Lists"
 description: >
-  Use this skill when managing SpamTitan sender allowlists and blocklists —
-  adding trusted senders to prevent false positives, blocking unwanted senders
-  and domains, and reviewing existing list entries.
+  SpamTitan sender allowlists and blocklists: entry types, per-domain vs.
+  global list scope, allowlisting trusted senders to prevent false
+  positives, and blocking unwanted senders and domains.
 when_to_use: >-
-  When managing SpamTitan sender allowlists and blocklists — adding trusted senders to prevent
-  false positives, blocking unwanted senders and domains. Use when: allowlist, blocklist,
-  whitelist, blacklist, sender policy, spamtitan allow, spamtitan block, trusted sender, block
-  sender, spamtitan allowlist, spamtitan blocklist, allow sender, or block domain.
+  When adding, removing, or reviewing SpamTitan allowlist or blocklist entries. Use when:
+  allowlist, blocklist, whitelist, blacklist, sender policy, spamtitan allow, spamtitan block,
+  trusted sender, block sender, spamtitan allowlist, spamtitan blocklist, allow sender, or block
+  domain.
 ---
 
 # SpamTitan Sender List Management

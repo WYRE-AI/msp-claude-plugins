@@ -1,12 +1,11 @@
 ---
 name: "Blumira Resolutions"
 description: >
-  Use this skill when resolving Blumira findings, choosing the correct
-  resolution type, or understanding resolution workflows and their impact
-  on security metrics.
+  Blumira resolution types (Valid, Not Applicable, False Positive): how to choose
+  between them, their effect on security metrics and detection tuning, and the
+  org- and MSP-level resolve calls.
 when_to_use: >-
-  When resolving Blumira findings, choosing the correct resolution type, or understanding
-  resolution workflows and their impact on security metrics. Use when: resolution type, resolve
+  When closing a Blumira finding and deciding its disposition. Use when: resolution type, resolve
   finding, false positive, valid finding, not applicable, or close finding.
 ---
 
@@ -94,7 +93,6 @@ blumira_msp_findings_resolve
 
 ## Best Practices
 
-- Always provide detailed notes — they're the audit trail for compliance
 - Track false positive rates by detection rule to identify tuning opportunities
 - Use "Not Applicable" instead of "False Positive" when the detection is correct but the policy doesn't apply
 - Review resolution statistics regularly to improve detection quality

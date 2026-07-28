@@ -1,15 +1,14 @@
 ---
 name: "Proofpoint API Patterns"
 description: >
-  Use this skill when working with the Proofpoint API - authentication using HTTP
-  Basic Auth with service principal and secret, base URLs, rate limits, pagination,
-  error codes, and common integration patterns. Covers TAP SIEM API, quarantine API,
-  people API, and URL Defense API authentication and usage patterns.
+  Proofpoint API fundamentals: HTTP Basic Auth with service principal and secret,
+  base URLs and versioning across TAP SIEM, People, Quarantine, Forensics, and URL
+  Defense APIs, rate limits, pagination patterns, and error handling.
 when_to_use: >-
-  When working with authentication using HTTP Basic Auth with service principal and secret, base
-  URLs, rate limits, pagination, error codes. Use when: proofpoint api, proofpoint authentication,
-  proofpoint auth, proofpoint rate limit, proofpoint pagination, proofpoint error, proofpoint base
-  url, proofpoint service principal, proofpoint api key, proofpoint rest api, or proofpoint
+  When authenticating to or calling any Proofpoint API (TAP SIEM, quarantine, people, URL Defense)
+  directly or through MCP tools. Use when: proofpoint api, proofpoint authentication, proofpoint
+  auth, proofpoint rate limit, proofpoint pagination, proofpoint error, proofpoint base url,
+  proofpoint service principal, proofpoint api key, proofpoint rest api, or proofpoint
   credentials.
 ---
 
@@ -360,16 +359,14 @@ Cache data that changes infrequently:
 
 ## Best Practices
 
-1. **Store credentials securely** - Use environment variables or a secrets manager, never commit to code
-2. **One credential set per client** - Each MSP client needs their own service principal
-3. **Monitor rate limit headers** - Track `X-RateLimit-Remaining` to avoid hitting limits
-4. **Implement exponential backoff** - Always retry with increasing delays on 429 and 5xx
-5. **Use time-based polling** - Track your last poll time and only fetch new events
-6. **Handle 204 gracefully** - No content is normal when there are no events
-7. **Validate timestamps** - Ensure `sinceTime` is within the 24-hour maximum window
-8. **Log API calls** - Maintain audit logs of all API calls for troubleshooting
-9. **Test with small windows** - Start with `sinceSeconds=300` (5 minutes) when testing
-10. **Parallelize across APIs** - TAP, People, and Quarantine have independent rate limits
+1. **Monitor rate limit headers** - Track `X-RateLimit-Remaining` to avoid hitting limits
+2. **Implement exponential backoff** - Always retry with increasing delays on 429 and 5xx
+3. **Use time-based polling** - Track your last poll time and only fetch new events
+4. **Handle 204 gracefully** - No content is normal when there are no events
+5. **Validate timestamps** - Ensure `sinceTime` is within the 24-hour maximum window
+6. **Log API calls** - Maintain audit logs of all API calls for troubleshooting
+7. **Test with small windows** - Start with `sinceSeconds=300` (5 minutes) when testing
+8. **Parallelize across APIs** - TAP, People, and Quarantine have independent rate limits
 
 ## Related Skills
 

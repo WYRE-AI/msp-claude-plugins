@@ -1,17 +1,15 @@
 ---
 name: "KnowBe4 Phishing"
 description: >
-  Use this skill when working with KnowBe4 phishing simulations - creating campaigns,
-  managing security tests, tracking recipient interactions (sent, opened, clicked, reported),
-  calculating phish-prone percentages, and analyzing phishing simulation results.
-  Covers campaign lifecycle, template selection, landing pages, and click tracking.
-  Essential for MSP security teams running phishing awareness programs.
+  KnowBe4 phishing simulations: campaign creation and lifecycle, security test
+  management, recipient interaction tracking (sent, opened, clicked, reported),
+  phish-prone percentage calculation, template selection, landing pages, and
+  click tracking.
 when_to_use: >-
-  When creating campaigns, managing security tests, tracking recipient interactions (sent, opened,
-  clicked, reported), calculating phish-prone percentages. Use when: knowbe4 phishing, phishing
-  campaign, phishing simulation, phish-prone percentage, security test knowbe4, phishing template,
-  click tracking, phishing results, simulated phishing, phishing report, recipient tracking,
-  phishing landing page, or phishing test.
+  When creating, managing, or analyzing KnowBe4 phishing simulation campaigns. Use when:
+  knowbe4 phishing, phishing campaign, phishing simulation, phish-prone percentage, security test
+  knowbe4, phishing template, click tracking, phishing results, simulated phishing, phishing
+  report, recipient tracking, phishing landing page, or phishing test.
 ---
 
 # KnowBe4 Phishing Simulation Management

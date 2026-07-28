@@ -1,13 +1,12 @@
 ---
 name: "Huntress API Patterns"
 description: >
-  Use this skill when working with the Huntress MCP tools —
-  available tools, authentication via HTTP Basic Auth, API structure,
-  pagination with page tokens, rate limiting (60 req/min), error handling,
-  and best practices.
+  Huntress MCP fundamentals: HTTP Basic Auth via API key/secret headers, the
+  full MCP tool catalog, token-based pagination, the 60 req/min rate limit,
+  and the common HTTP error codes with their causes.
 when_to_use: >-
-  When working with available tools, authentication via HTTP Basic Auth, API structure, pagination
-  with page tokens, rate limiting (60 req/min), error handling. Use when: huntress api, huntress
+  When authenticating to or calling Huntress through the MCP tools, or diagnosing a failed
+  Huntress request. Use when: huntress api, huntress
   authentication, huntress pagination, huntress rate limit, huntress mcp, huntress tools, huntress
   request, huntress error, or huntress connection.
 ---
@@ -37,8 +36,6 @@ Generate credentials at: **Huntress Dashboard > Settings > API Credentials**
 export HUNTRESS_API_KEY="your-api-key"
 export HUNTRESS_API_SECRET="your-api-secret"
 ```
-
-> **IMPORTANT:** Never hardcode credentials. Always use environment variables.
 
 ## Available MCP Tools
 
@@ -168,11 +165,8 @@ Huntress enforces **60 requests per minute**.
 
 ## Best Practices
 
-- Always paginate through full result sets for completeness
 - Use organization filters to scope queries to specific clients
 - Cache account/org info to reduce API calls
-- Handle rate limits gracefully with backoff
-- Log API errors with request context for debugging
 - Use the navigation tools (`huntress_navigate`, `huntress_status`, `huntress_back`) to manage stateful workflows
 
 ## Related Skills

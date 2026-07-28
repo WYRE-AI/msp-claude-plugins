@@ -1,16 +1,17 @@
 ---
 name: "Freshdesk API Patterns"
+description: >
+  Freshdesk MCP tool surface and REST API v2 fundamentals: header-based
+  authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the
+  MCP server translates into upstream HTTP Basic `apikey:X` auth), the
+  `/api/v2` base URL, `page`/`per_page` pagination and the `link` header,
+  per-minute rate limits, the search query language and its 300-result cap, and
+  the status/priority/source integer encodings.
 when_to_use: >-
   When working with Freshdesk authentication headers, base URL, pagination, rate limits, or the
   search query language for the Freshdesk MCP server. Use when: freshdesk api, freshdesk
   authentication, freshdesk pagination, freshdesk mcp, freshdesk search query, freshdesk rate
   limit, or freshdesk query language.
-description: >
-  Use this skill when working with the Freshdesk MCP tools — header-based
-  authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the
-  MCP server translates into upstream HTTP Basic `apikey:X` auth), the
-  `/api/v2` base URL, `page`/`per_page` pagination, per-minute rate limits, and
-  the Freshdesk search query language with its status/priority encodings.
 ---
 
 # Freshdesk MCP Tools & API Patterns
@@ -217,11 +218,8 @@ channels; 1-3 are the most common in MSP workflows.)
   them to labels only for human-readable output.
 - Prefer the search endpoints over client-side filtering of large `list`
   pulls; respect the 300-result search cap by narrowing queries.
-- Follow the `link` response header for pagination instead of incrementing
-  `page` blindly.
 - Keep `per_page` at 100 for bulk reads to minimize request count against the
   per-minute rate limit.
-- Always check rate-limit headers during bulk operations and pace accordingly.
 
 ## Related Skills
 

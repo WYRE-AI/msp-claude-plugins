@@ -1,12 +1,11 @@
 ---
 name: "HubSpot Contacts"
 description: >
-  Use this skill when working with HubSpot contacts - searching, creating,
-  updating, and managing contact records in HubSpot CRM. Covers contact
-  fields, lifecycle stages, lead status, search patterns, and associating
-  contacts with companies and deals.
+  HubSpot contact records: core and MSP-relevant custom fields, lifecycle
+  stages, lead status values, contact ownership, CRM search filter patterns,
+  and associations to companies and deals.
 when_to_use: >-
-  When searching, creating, updating, and managing contact records in HubSpot CRM. Use when:
+  When searching, creating, updating, or auditing contact records in HubSpot CRM. Use when:
   hubspot contact, hubspot lead, hubspot person, hubspot email lookup, contact search hubspot,
   contact management hubspot, hubspot prospect, client contact hubspot, hubspot lifecycle, or lead
   management hubspot.
@@ -311,16 +310,14 @@ Many MSPs add custom properties for contacts. Common examples:
 
 ## Best Practices
 
-1. **Always search before creating** - Check for existing contacts by email to avoid duplicates
-2. **Use lifecycle stages consistently** - Define clear criteria for each stage in your MSP's process
-3. **Associate contacts with companies** - Always link contacts to their company record for full context
-4. **Track lead status** - Update lead status as sales conversations progress
-5. **Assign owners** - Set `hubspot_owner_id` so team members know who manages each relationship
-6. **Log activities** - Create notes and tasks on contacts to maintain a complete activity history
-7. **Use email domain search** - Find all contacts at a client by searching for the email domain
-8. **Audit regularly** - Review contacts quarterly for stale records and missing information
-9. **Standardize job titles** - Use consistent job title formats for better reporting
-10. **Respect data privacy** - PHI properties are excluded from MCP responses by design
+1. **Use lifecycle stages consistently** - Define clear criteria for each stage in your MSP's process
+2. **Associate contacts with companies** - Always link contacts to their company record for full context
+3. **Track lead status** - Update lead status as sales conversations progress
+4. **Assign owners** - Set `hubspot_owner_id` so team members know who manages each relationship
+5. **Log activities** - Create notes and tasks on contacts to maintain a complete activity history
+6. **Audit regularly** - Review contacts quarterly for stale records and missing information
+7. **Standardize job titles** - Use consistent job title formats for better reporting
+8. **Respect data privacy** - PHI properties are excluded from MCP responses by design
 
 ## Related Skills
 

@@ -1,12 +1,13 @@
 ---
 name: "Domotz Alerts"
 description: >
-  Use this skill when working with Domotz alerts -- viewing active alerts,
-  configuring alert profiles, managing alert triggers, and handling
-  notifications for device and network events.
+  Domotz alerting: the alert types (device status, SNMP threshold, port, Eyes,
+  agent, speed test, new device), how alert profiles define triggers, severity,
+  notification channels and scope, the triggered/active/resolved lifecycle, and
+  the tools for listing alerts and profiles.
 when_to_use: >-
-  When viewing active alerts, configuring alert profiles, managing alert triggers, and handling
-  notifications for device and network events. Use when: domotz alert, alert profile, alert
+  When reviewing, triaging, or reasoning about Domotz alerts and alert profile
+  coverage. Use when: domotz alert, alert profile, alert
   status, alert trigger, alert notification, device alert, network alert, or monitoring alert.
 ---
 
@@ -140,7 +141,6 @@ Parameters:
 - Route critical alerts to PSA for automatic ticket creation
 - Review and tune alert profiles periodically to reduce noise
 - Monitor agent offline alerts to detect site connectivity issues
-- Group alerts by site when triaging to identify root causes
 
 ## Related Skills
 

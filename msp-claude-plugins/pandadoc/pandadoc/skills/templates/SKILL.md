@@ -1,14 +1,13 @@
 ---
 name: "PandaDoc Templates"
 description: >
-  Use this skill when working with PandaDoc templates - browsing the
-  template library, finding the right template for a document type,
-  understanding template fields and tokens, and using templates to
-  create new documents. Covers MSP-specific templates for MSAs, SOWs,
-  proposals, quotes, and contracts.
+  PandaDoc template library and structure: layout, content blocks, tokens,
+  interactive fields, signature fields, pricing tables, and recipient roles,
+  plus the MSP template set (MSAs, SOWs, proposals, quotes, NDAs, change
+  orders, QBRs), template versioning, tags, and the template field reference.
 when_to_use: >-
-  When browsing the template library, finding the right template for a document type,
-  understanding template fields and tokens, and using templates to create new documents. Use when:
+  When browsing the template library, choosing a template for a document type, inspecting
+  a template's fields and tokens, or using a template to create a new document. Use when:
   pandadoc template, pandadoc blueprint, pandadoc library, document template, template search,
   template list, msa template, sow template, proposal template, or quote template.
 ---
@@ -230,7 +229,6 @@ Use tags to organize templates by category:
 7. **Define roles** - Set up recipient roles (Client, MSP, Approver) in templates for consistent workflows
 8. **Version templates** - Update templates when terms change rather than creating new ones
 9. **Review regularly** - Audit template usage quarterly and archive unused templates
-10. **Test before using** - Create a test document from any new or updated template before using with real clients
 
 ## Related Skills
 

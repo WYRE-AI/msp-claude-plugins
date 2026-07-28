@@ -1,13 +1,14 @@
 ---
 name: "Liongard Inspections"
 description: >
-  Use this skill when working with Liongard inspectors, launchpoints,
-  inspection scheduling, or triggering inspections on demand. Covers
-  inspector templates, launchpoint configuration, cron schedules,
-  running inspections, and troubleshooting failed runs.
+  Liongard's inspection pipeline: inspector templates and their credential
+  and agent requirements, launchpoint configuration that binds inspector +
+  environment + agent + credentials + cron schedule, on-demand inspection
+  runs and their status lifecycle, and the failure modes behind failed runs.
 when_to_use: >-
-  When working with Liongard inspectors, launchpoints, inspection scheduling, or triggering
-  inspections on demand. Use when: liongard inspection, liongard inspector, launchpoint,
+  When configuring or scheduling what Liongard inspects, triggering a run by hand,
+  migrating inspections between agents, or diagnosing an inspection that failed.
+  Use when: liongard inspection, liongard inspector, launchpoint,
   inspection schedule, run inspection, liongard launchpoint, trigger inspection, inspection
   template, or liongard cron.
 ---
@@ -16,117 +17,21 @@ when_to_use: >-
 
 ## Overview
 
-Inspections are the core mechanism by which Liongard captures IT documentation. The inspection system consists of three key components:
+Inspections are the core mechanism by which Liongard captures IT documentation. The system has three parts: **inspectors** (templates defining what to inspect), **launchpoints** (configured instances tying an inspector to an environment, agent, credentials, and schedule), and **inspections** (individual execution runs that produce system data and potentially trigger detections). The relationship flows: **Inspector** (template) -> **Launchpoint** (configuration) -> **Inspection** (execution) -> **System** (discovered data).
 
-- **Inspectors** - Templates defining what to inspect (e.g., Active Directory, Office 365, Meraki)
-- **Launchpoints** - Configured instances tying an inspector to an environment, agent, credentials, and schedule
-- **Inspections** - Individual execution runs that produce system data and potentially trigger detections
+## Key Concepts
 
-The relationship flows: **Inspector** (template) -> **Launchpoint** (configuration) -> **Inspection** (execution) -> **System** (discovered data)
+### Inspectors
 
-## Inspectors
+Inspectors are pre-built templates provided by Liongard that define what technology platform to inspect and what data to collect. There are hundreds, spanning identity, email/collaboration, networking, virtualization, backup/DR, security, cloud, and core infrastructure.
 
-### What Are Inspectors?
+Two inspector fields drive launchpoint design: `RequiresAgent` (whether a locally deployed agent must run it, or Liongard can reach the target directly — Active Directory needs an agent, Microsoft 365 does not) and `CredentialType` (what kind of authentication the target expects, e.g. Domain Admin vs App Registration). `DataPoints` — the list of what the inspector collects — is returned only on the single-inspector GET, not in the list response.
 
-Inspectors are pre-built templates provided by Liongard that define what technology platform to inspect and what data to collect. Liongard provides hundreds of built-in inspectors covering:
+See [references/fields.md](references/fields.md) for the complete inspector and launchpoint field references, the full inspector category table, and the entity relationship map.
 
-| Category | Examples |
-|----------|---------|
-| **Identity & Access** | Active Directory, Azure AD, Duo Security, Okta |
-| **Email & Collaboration** | Microsoft 365, Google Workspace, Exchange |
-| **Networking** | Cisco Meraki, Fortinet, SonicWall, Ubiquiti |
-| **Virtualization** | VMware vSphere, Hyper-V, Nutanix |
-| **Backup & DR** | Datto, Veeam, Acronis, StorageCraft |
-| **Security** | SentinelOne, Sophos, Bitdefender, Huntress |
-| **Cloud** | AWS, Azure, GCP |
-| **Infrastructure** | Windows Server, Linux, DNS, DHCP, Certificates |
+### Launchpoints
 
-### List Inspectors
-
-```http
-GET /api/v1/inspectors?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "Data": [
-    {
-      "ID": 100,
-      "Name": "Active Directory",
-      "Description": "Inspects Active Directory domain controllers, users, groups, GPOs",
-      "Category": "Identity & Access",
-      "Version": "3.2.1",
-      "RequiresAgent": true,
-      "CredentialType": "Domain Admin"
-    },
-    {
-      "ID": 101,
-      "Name": "Microsoft 365",
-      "Description": "Inspects M365 tenant configuration, users, licenses, security",
-      "Category": "Email & Collaboration",
-      "Version": "4.1.0",
-      "RequiresAgent": false,
-      "CredentialType": "App Registration"
-    }
-  ],
-  "TotalRows": 250,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 3,
-  "PageSize": 100
-}
-```
-
-### Get Inspector by ID
-
-```http
-GET /api/v1/inspectors/{inspectorId}
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "ID": 100,
-  "Name": "Active Directory",
-  "Description": "Inspects Active Directory domain controllers, users, groups, GPOs",
-  "Category": "Identity & Access",
-  "Version": "3.2.1",
-  "RequiresAgent": true,
-  "CredentialType": "Domain Admin",
-  "DataPoints": [
-    "Users",
-    "Groups",
-    "Group Policy Objects",
-    "Domain Controllers",
-    "Organizational Units",
-    "DNS Zones",
-    "DHCP Scopes",
-    "Certificate Authorities"
-  ]
-}
-```
-
-### Inspector Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `ID` | int | Unique inspector identifier |
-| `Name` | string | Inspector display name |
-| `Description` | string | What the inspector checks |
-| `Category` | string | Technology category |
-| `Version` | string | Inspector version |
-| `RequiresAgent` | boolean | Whether a local agent is needed |
-| `CredentialType` | string | Type of credentials required |
-| `DataPoints` | array | List of data points collected |
-
-## Launchpoints
-
-### What Are Launchpoints?
-
-Launchpoints are the configured instances that bring together all components needed to run an inspection:
+A launchpoint brings together everything needed to run an inspection:
 
 | Component | Purpose |
 |-----------|---------|
@@ -137,129 +42,17 @@ Launchpoints are the configured instances that bring together all components nee
 | **Schedule** | When to run inspections |
 | **Configuration** | Inspector-specific settings |
 
-### Launchpoint Fields
+`InspectorID`, `EnvironmentID`, and `Name` are required; `AgentID` is required only when the inspector's `RequiresAgent` is true. Inspector-specific settings and credentials go in a nested `Configuration` object whose keys vary per inspector. `LastInspection` and `NextInspection` are read-only and are the fastest way to spot a launchpoint that has silently stopped running.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `ID` | int | System | Unique launchpoint identifier |
-| `InspectorID` | int | Yes | Associated inspector template |
-| `EnvironmentID` | int | Yes | Target environment |
-| `AgentID` | int | Conditional | Agent to use (if inspector requires) |
-| `Name` | string | Yes | Launchpoint display name |
-| `Status` | string | No | Active, Inactive, Error |
-| `Schedule` | string | No | Cron expression for scheduling |
-| `LastInspection` | datetime | System | Last successful inspection |
-| `NextInspection` | datetime | System | Next scheduled inspection |
-| `CreatedOn` | datetime | System | Creation timestamp |
-| `UpdatedOn` | datetime | System | Last update timestamp |
+### Inspection Status Values
 
-### List Launchpoints
-
-```http
-GET /api/v1/launchpoints?page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "Data": [
-    {
-      "ID": 5001,
-      "InspectorID": 100,
-      "EnvironmentID": 1234,
-      "AgentID": 501,
-      "Name": "Acme Corp - Active Directory",
-      "Status": "Active",
-      "Schedule": "0 2 * * *",
-      "LastInspection": "2024-02-15T02:00:00Z",
-      "NextInspection": "2024-02-16T02:00:00Z",
-      "CreatedOn": "2023-06-01T10:00:00Z",
-      "UpdatedOn": "2024-02-15T02:15:00Z"
-    }
-  ],
-  "TotalRows": 500,
-  "HasMoreRows": true,
-  "CurrentPage": 1,
-  "TotalPages": 5,
-  "PageSize": 100
-}
-```
-
-### Filter Launchpoints by Environment
-
-```http
-GET /api/v1/launchpoints?environmentId={environmentId}&page=1&pageSize=100
-X-ROAR-API-KEY: {api_key}
-```
-
-### Get Launchpoint by ID
-
-```http
-GET /api/v1/launchpoints/{launchpointId}
-X-ROAR-API-KEY: {api_key}
-```
-
-### Create Launchpoint
-
-```http
-POST /api/v1/launchpoints
-X-ROAR-API-KEY: {api_key}
-Content-Type: application/json
-```
-
-```json
-{
-  "InspectorID": 100,
-  "EnvironmentID": 1234,
-  "AgentID": 501,
-  "Name": "Acme Corp - Active Directory",
-  "Schedule": "0 2 * * *",
-  "Configuration": {
-    "DomainController": "dc01.acme.local",
-    "Username": "admin@acme.local",
-    "Password": "encrypted-credential-reference"
-  }
-}
-```
-
-**Response:**
-```json
-{
-  "ID": 5002,
-  "InspectorID": 100,
-  "EnvironmentID": 1234,
-  "AgentID": 501,
-  "Name": "Acme Corp - Active Directory",
-  "Status": "Active",
-  "Schedule": "0 2 * * *",
-  "CreatedOn": "2024-02-15T09:00:00Z"
-}
-```
-
-### Update Launchpoint
-
-```http
-PUT /api/v1/launchpoints/{launchpointId}
-X-ROAR-API-KEY: {api_key}
-Content-Type: application/json
-```
-
-```json
-{
-  "Schedule": "0 3 * * *",
-  "Name": "Acme Corp - Active Directory (Updated)"
-}
-```
-
-### Delete Launchpoint
-
-```http
-DELETE /api/v1/launchpoints/{launchpointId}
-X-ROAR-API-KEY: {api_key}
-```
-
-**Warning:** Deleting a launchpoint removes all associated systems and historical inspection data.
+| Status | Description |
+|--------|-------------|
+| `Queued` | Inspection is waiting to be picked up by agent |
+| `Running` | Inspection is currently executing |
+| `Completed` | Inspection finished successfully |
+| `Failed` | Inspection encountered an error |
+| `Timeout` | Inspection exceeded maximum runtime |
 
 ## Scheduling
 
@@ -296,76 +89,14 @@ Launchpoints use standard cron expressions for scheduling:
 4. **Consider agent load** - Don't overload agents with concurrent inspections
 5. **Account for time zones** - Schedule based on the client's local time
 
-## Running Inspections On Demand
+## API Patterns
 
-### Trigger Immediate Inspection
+The full endpoint catalog with request/response bodies lives in [references/api.md](references/api.md). The non-obvious parts:
 
-```http
-POST /api/v1/launchpoints/{launchpointId}/run
-X-ROAR-API-KEY: {api_key}
-```
-
-**Response:**
-```json
-{
-  "InspectionID": 99001,
-  "LaunchpointID": 5001,
-  "Status": "Queued",
-  "QueuedAt": "2024-02-15T14:30:00Z"
-}
-```
-
-### Inspection Status Values
-
-| Status | Description |
-|--------|-------------|
-| `Queued` | Inspection is waiting to be picked up by agent |
-| `Running` | Inspection is currently executing |
-| `Completed` | Inspection finished successfully |
-| `Failed` | Inspection encountered an error |
-| `Timeout` | Inspection exceeded maximum runtime |
-
-### Batch Run Inspections
-
-To trigger multiple inspections for an environment:
-
-```javascript
-async function runAllInspections(environmentId) {
-  // Get all launchpoints for the environment
-  const response = await fetch(
-    `https://${instance}.app.liongard.com/api/v1/launchpoints?environmentId=${environmentId}&pageSize=500`,
-    {
-      headers: { 'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY }
-    }
-  );
-
-  const data = await response.json();
-  const results = [];
-
-  for (const lp of data.Data) {
-    if (lp.Status !== 'Active') continue;
-
-    const runResult = await fetch(
-      `https://${instance}.app.liongard.com/api/v1/launchpoints/${lp.ID}/run`,
-      {
-        method: 'POST',
-        headers: { 'X-ROAR-API-KEY': process.env.LIONGARD_API_KEY }
-      }
-    );
-
-    results.push({
-      launchpointId: lp.ID,
-      name: lp.Name,
-      success: runResult.ok
-    });
-
-    // Stagger requests
-    await sleep(500);
-  }
-
-  return results;
-}
-```
+- **Inspectors are read-only** (`GET /api/v1/inspectors`) — they are Liongard-supplied templates, not something you create. Launchpoints are full CRUD at `/api/v1/launchpoints`.
+- **On-demand runs are an action sub-resource**: `POST /api/v1/launchpoints/{id}/run` with no body. It returns immediately with an `InspectionID` and `Status: "Queued"` — it does not wait for the inspection to finish, so poll or check the timeline for the outcome.
+- **Launchpoint filtering uses the camelCase `environmentId` query param** while response bodies are PascalCase (`Data`, `TotalRows`, `HasMoreRows`, `CurrentPage`, `TotalPages`, `PageSize`).
+- **There is no batch-run endpoint** — trigger each launchpoint individually and stagger the calls. See [references/examples.md](references/examples.md) for a worked batch-run implementation.
 
 ## Common Workflows
 
@@ -399,62 +130,24 @@ async function runAllInspections(environmentId) {
 4. **Test inspections** - Trigger manual runs on updated launchpoints
 5. **Decommission old agent** - Remove once migration is verified
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- **Deleting a launchpoint removes all associated systems and historical inspection data.** Set `Status` to `Inactive` to stop scheduled runs while keeping the history.
+- **Launchpoint names must be unique per environment** — a collision returns 409, not a validation body.
+- **A malformed cron expression returns 422 at write time**, so a launchpoint that saved successfully has a valid schedule; a launchpoint that never runs is an agent or credential problem, not a syntax one.
+- **Credential rotation on the target silently breaks inspections.** The launchpoint stays `Active` and runs fail with an authentication error, so failures surface in the timeline rather than in the launchpoint's own status.
+- **Rate limit is 300 requests/minute.** Batch-triggering an environment's launchpoints needs pacing (roughly 500 ms between runs) to stay clear of it and to avoid swamping a single agent.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Invalid launchpoint data | Check required fields |
-| 401 | Unauthorized | Verify API key |
-| 404 | Launchpoint not found | Confirm launchpoint ID |
-| 404 | Inspector not found | Verify inspector ID exists |
-| 409 | Duplicate launchpoint | Name must be unique per environment |
-| 422 | Invalid schedule | Check cron expression syntax |
-| 429 | Rate limited | Wait and retry (300 req/min) |
-
-### Inspection Run Errors
-
-| Error | Cause | Resolution |
-|-------|-------|------------|
-| Agent offline | Agent not reporting | Check agent host connectivity |
-| Authentication failed | Bad credentials | Update launchpoint credentials |
-| Target unreachable | Network issue | Verify firewall rules and DNS |
-| Timeout | Inspection took too long | Check target system performance |
-| Inspector error | Bug in inspector | Update inspector or contact support |
+See [references/errors.md](references/errors.md) for the complete API and inspection-run error tables.
 
 ## Best Practices
 
 1. **Name launchpoints clearly** - Use format: "ClientName - InspectorName"
-2. **Stagger schedules** - Distribute inspections across time windows
-3. **Monitor inspection health** - Regularly review failed inspections
-4. **Keep credentials current** - Update when passwords change
-5. **Use appropriate frequency** - Daily for dynamic, weekly for static
-6. **Test before production** - Run manual inspections before scheduling
-7. **Document configurations** - Note any inspector-specific settings
-8. **Group by environment** - Keep related inspections organized
-
-## Data Relationships
-
-```
-Inspector (InspectorID)
-    |
-    +-- Launchpoint (LaunchpointID)
-            |
-            +-- Environment (EnvironmentID)
-            +-- Agent (AgentID)
-            +-- Schedule (Cron Expression)
-            +-- Configuration (Credentials, Settings)
-            |
-            +-- Inspections (InspectionID)
-            |       +-- Status (Queued/Running/Completed/Failed)
-            |       +-- Duration
-            |       +-- Timestamp
-            |
-            +-- Systems (SystemID)
-                    +-- System Details
-                    +-- Dataprints
-```
+2. **Monitor inspection health** - Regularly review failed inspections
+3. **Keep credentials current** - Update when passwords change
+4. **Test before production** - Run manual inspections before scheduling
+5. **Document configurations** - Note any inspector-specific settings
+6. **Group by environment** - Keep related inspections organized
 
 ## Related Skills
 

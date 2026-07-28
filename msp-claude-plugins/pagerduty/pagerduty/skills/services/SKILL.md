@@ -1,12 +1,12 @@
 ---
 name: "PagerDuty Services"
 description: >
-  Use this skill when working with PagerDuty services -- service catalog,
-  service configuration, integrations, dependencies, maintenance windows,
-  and service health monitoring.
+  PagerDuty service catalog: service statuses, integrations and integration
+  keys as event sources, alert grouping modes, upstream/downstream service
+  dependencies, and maintenance windows.
 when_to_use: >-
-  When working with service catalog, service configuration, integrations, dependencies,
-  maintenance windows, and service health monitoring in PagerDuty services. Use when: pagerduty
+  When inspecting, creating, or configuring PagerDuty services, or scheduling maintenance
+  on them. Use when: pagerduty
   service, service catalog, service dependencies, service integrations, maintenance window,
   service health, or service status.
 ---
@@ -245,7 +245,6 @@ Parameters:
 - Map service dependencies for faster incident triage
 - Schedule maintenance windows for planned changes to suppress false alerts
 - Assign each service to a team for clear ownership
-- Review service configuration periodically as infrastructure evolves
 - Use `include[]=integrations` to verify monitoring sources are connected
 
 ## Related Skills

@@ -1,15 +1,14 @@
 ---
 name: "Proofpoint URL Defense"
 description: >
-  Use this skill when working with Proofpoint URL Defense - URL rewriting, URL
-  decoding, real-time URL analysis, click-time protection, and URL investigation.
-  Covers how Proofpoint rewrites URLs, how to decode rewritten URLs back to originals,
-  and how click-time analysis works to protect users.
+  Proofpoint URL Defense fundamentals: URL rewriting (v2/v3 formats), click-time
+  analysis and verdicts, and manual/API decoding of rewritten URLs back to their
+  originals.
 when_to_use: >-
-  When working with URL rewriting, URL decoding, real-time URL analysis, click-time protection,
-  and URL investigation in Proofpoint URL Defense. Use when: proofpoint url defense, url rewrite,
-  proofpoint url, decode proofpoint url, url defense, click-time protection, proofpoint rewritten
-  url, urldefense.proofpoint.com, url analysis, proofpoint link, rewritten link, or proofpoint
+  When working with URL rewriting, decoding, click-time protection, or investigating rewritten or
+  clicked URLs in Proofpoint URL Defense. Use when: proofpoint url defense, url rewrite, proofpoint
+  url, decode proofpoint url, url defense, click-time protection, proofpoint rewritten url,
+  urldefense.proofpoint.com, url analysis, proofpoint link, rewritten link, or proofpoint
   decode.
 ---
 
@@ -216,16 +215,15 @@ Output: https://example.com/path
 
 ## Best Practices
 
-1. **Always use the API to decode** - Manual decoding is error-prone; use `proofpoint_url_decode`
-2. **Check verdicts at click time** - A URL clean at delivery may be malicious when clicked
-3. **Monitor click activity** - Track which users are clicking rewritten URLs
-4. **Train users on rewritten URLs** - Users should recognize Proofpoint-rewritten URLs as a security feature
-5. **Don't bypass URL Defense** - Never instruct users to work around URL rewriting
-6. **Use browser isolation for risky clicks** - Configure isolation for suspicious-but-not-confirmed URLs
-7. **Audit redirect chains** - Multi-hop redirects are a common evasion technique
-8. **Batch decode for efficiency** - When processing multiple URLs, use `proofpoint_url_batch_decode`
-9. **Retain decoded URLs** - Log the original URLs for threat intelligence and IOC tracking
-10. **Combine with TAP data** - Cross-reference URL analysis with TAP events for full visibility
+1. **Check verdicts at click time** - A URL clean at delivery may be malicious when clicked
+2. **Monitor click activity** - Track which users are clicking rewritten URLs
+3. **Train users on rewritten URLs** - Users should recognize Proofpoint-rewritten URLs as a security feature
+4. **Don't bypass URL Defense** - Never instruct users to work around URL rewriting
+5. **Use browser isolation for risky clicks** - Configure isolation for suspicious-but-not-confirmed URLs
+6. **Audit redirect chains** - Multi-hop redirects are a common evasion technique
+7. **Batch decode for efficiency** - When processing multiple URLs, use `proofpoint_url_batch_decode`
+8. **Retain decoded URLs** - Log the original URLs for threat intelligence and IOC tracking
+9. **Combine with TAP data** - Cross-reference URL analysis with TAP events for full visibility
 
 ## Related Skills
 

@@ -1,16 +1,14 @@
 ---
 name: "ImmyBot Script Execution"
+description: >
+  ImmyBot's PowerShell script library and its SYSTEM-context execution model:
+  the script tool surface, the find → validate → confirm target → approve →
+  execute → review workflow, parameter/timeout/execution-context options, and
+  the safety rules governing this destructive, highly privileged operation.
 when_to_use: >-
   When browsing, validating, or running ImmyBot PowerShell scripts on endpoints, or reviewing
   script execution history and results. Use when: immybot script, immybot powershell, run script
   immybot, immybot script execution, immybot script history, or immybot remediation script.
-description: >
-  Use this skill when working with ImmyBot's PowerShell script
-  library — searching scripts by name or category, validating script
-  syntax, executing a script in SYSTEM context on a target computer,
-  and reviewing execution history and results. Script execution is a
-  destructive, highly privileged operation that requires explicit
-  confirmation.
 ---
 
 # ImmyBot Script Execution

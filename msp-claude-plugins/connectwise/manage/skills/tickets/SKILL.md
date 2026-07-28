@@ -1,6 +1,9 @@
 ---
 name: "connectwise-manage-tickets"
-description: "Use this skill when working with ConnectWise PSA tickets - creating, updating, searching, or managing service desk operations. Covers ticket fields, service boards, statuses, priorities, SLAs, ticket notes, and workflow automation. Essential for MSP technicians handling service delivery through ConnectWise PSA."
+description: >
+  ConnectWise PSA ticket management: ticket fields, service boards, statuses,
+  priorities, SLAs, ticket notes, and workflow automation. Essential for MSP
+  technicians handling service delivery through ConnectWise PSA.
 when_to_use: >-
   When creating, updating, searching, or managing service desk operations. Use when: connectwise
   ticket, connectwise psa ticket, service ticket connectwise, create ticket connectwise, ticket

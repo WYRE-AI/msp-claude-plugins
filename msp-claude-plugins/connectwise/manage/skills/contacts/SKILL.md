@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Manage Contacts"
 description: >
-  Use this skill when working with ConnectWise PSA contacts - creating, updating,
-  searching, or managing contact records. Covers contact types, communication items
-  (email, phone), portal access, and relationships to companies. Essential for
-  MSP customer relationship management in ConnectWise PSA.
+  ConnectWise PSA contact management: contact records, contact types, communication
+  items (email, phone), portal access, and relationships to companies. Essential
+  for MSP customer relationship management in ConnectWise PSA.
 when_to_use: >-
   When creating, updating, searching, or managing contact records. Use when: connectwise contact,
   contact management, create contact connectwise, contact email, contact phone, customer portal,
@@ -338,9 +337,8 @@ Note Fields:
 2. **Add communication items** - Email/phone essential for notifications
 3. **Set contact type** - Helps identify primary contacts
 4. **Use portal access wisely** - Grant minimum necessary access
-5. **Keep contacts active** - Mark inactive rather than delete
-6. **Link to site** - Important for multi-site companies
-7. **Avoid duplicates** - Search before creating new contacts
+5. **Link to site** - Important for multi-site companies
+6. **Avoid duplicates** - Search before creating new contacts
 
 ## Error Handling
 

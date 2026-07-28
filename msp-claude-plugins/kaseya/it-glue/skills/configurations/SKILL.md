@@ -1,10 +1,10 @@
 ---
 name: "IT Glue Configurations"
 description: >
-  Use this skill when working with IT Glue configurations (assets) - servers,
-  workstations, network devices, and other infrastructure. Covers configuration
-  types, statuses, network interfaces, related items, asset tracking, warranty
-  management, and PSA integration for comprehensive asset documentation.
+  IT Glue configurations (assets) — servers, workstations, network devices,
+  and other infrastructure: configuration types and statuses, network
+  interfaces, related items, warranty/lifecycle fields, and PSA/RMM
+  integration fields.
 when_to_use: >-
   When working with servers, workstations, network devices, and other infrastructure in IT Glue
   configurations (assets). Use when: it glue configuration, it glue asset, server documentation,
@@ -57,253 +57,13 @@ Configuration: DC-01 (Server)
 └── Interface: iLO (192.168.100.10, AA:BB:CC:DD:EE:03)
 ```
 
-## Field Reference
+### Field Reference
 
-### Core Identification Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated unique identifier |
-| `organization-id` | integer | Yes | Parent organization |
-| `name` | string | Yes | Display name |
-| `hostname` | string | No | Network hostname |
-| `configuration-type-id` | integer | No | Type classification |
-| `configuration-status-id` | integer | No | Status classification |
-
-### Hardware Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `manufacturer-id` | integer | Manufacturer reference |
-| `model-id` | integer | Model reference |
-| `serial-number` | string | Serial number |
-| `asset-tag` | string | Internal asset tag |
-
-### Network Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `primary-ip` | string | Primary IP address |
-| `mac-address` | string | Primary MAC address |
-| `default-gateway` | string | Default gateway |
-| `installed-by` | string | Installer name |
-
-### Lifecycle Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `purchased-at` | date | Purchase date |
-| `installed-at` | date | Installation date |
-| `warranty-expires-at` | date | Warranty expiration |
-
-### Documentation Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `notes` | string | Detailed notes (HTML) |
-| `operating-system-notes` | string | OS-specific notes |
-
-### PSA Integration Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `psa-id` | string | PSA configuration item ID |
-| `psa-integration-type` | string | PSA platform type |
-| `rmm-id` | string | RMM agent/device ID |
-| `rmm-integration-type` | string | RMM platform type |
+Fields cover identification, hardware, network, lifecycle, documentation, and PSA/RMM integration. See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
-### List Configurations
-
-```http
-GET /configurations
-x-api-key: YOUR_API_KEY
-Content-Type: application/vnd.api+json
-```
-
-**By Organization:**
-```http
-GET /organizations/123/relationships/configurations
-```
-
-**With Filters:**
-```http
-GET /configurations?filter[organization-id]=123&filter[configuration-type-id]=456&filter[configuration-status-id]=1
-```
-
-**With Pagination:**
-```http
-GET /configurations?page[size]=100&page[number]=1&sort=name
-```
-
-### Get Single Configuration
-
-```http
-GET /configurations/789
-x-api-key: YOUR_API_KEY
-```
-
-**With Includes:**
-```http
-GET /configurations/789?include=organization,configuration-interfaces,related-items
-```
-
-### Create Configuration
-
-```http
-POST /configurations
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-**Server Example:**
-```json
-{
-  "data": {
-    "type": "configurations",
-    "attributes": {
-      "organization-id": 123456,
-      "name": "DC-01",
-      "hostname": "dc-01.acme.local",
-      "configuration-type-id": 12,
-      "configuration-status-id": 1,
-      "primary-ip": "192.168.1.10",
-      "serial-number": "ABC123456789",
-      "notes": "<p>Primary domain controller for Acme Corporation</p>"
-    }
-  }
-}
-```
-
-**Workstation Example:**
-```json
-{
-  "data": {
-    "type": "configurations",
-    "attributes": {
-      "organization-id": 123456,
-      "name": "WS-JSMITH",
-      "hostname": "ws-jsmith.acme.local",
-      "configuration-type-id": 15,
-      "configuration-status-id": 1,
-      "primary-ip": "192.168.1.150",
-      "asset-tag": "ACME-WS-0042",
-      "notes": "<p>User: John Smith (Sales)</p>"
-    }
-  }
-}
-```
-
-### Update Configuration
-
-```http
-PATCH /configurations/789
-Content-Type: application/vnd.api+json
-x-api-key: YOUR_API_KEY
-```
-
-```json
-{
-  "data": {
-    "type": "configurations",
-    "attributes": {
-      "primary-ip": "192.168.1.20",
-      "notes": "<p>Updated IP after network migration</p>"
-    }
-  }
-}
-```
-
-### Delete Configuration
-
-```http
-DELETE /configurations/789
-x-api-key: YOUR_API_KEY
-```
-
-### Search by Various Fields
-
-**By Hostname:**
-```http
-GET /configurations?filter[hostname]=dc-01
-```
-
-**By Serial Number:**
-```http
-GET /configurations?filter[serial-number]=ABC123
-```
-
-**By IP Address:**
-```http
-GET /configurations?filter[primary-ip]=192.168.1.10
-```
-
-**By PSA ID:**
-```http
-GET /configurations?filter[psa-id]=54321
-```
-
-## Configuration Interfaces
-
-### List Interfaces
-
-```http
-GET /configurations/789/relationships/configuration-interfaces
-```
-
-### Create Interface
-
-```http
-POST /configuration-interfaces
-Content-Type: application/vnd.api+json
-```
-
-```json
-{
-  "data": {
-    "type": "configuration-interfaces",
-    "attributes": {
-      "configuration-id": 789,
-      "name": "Ethernet0",
-      "ip-address": "192.168.1.10",
-      "mac-address": "AA:BB:CC:DD:EE:FF",
-      "primary": true,
-      "notes": "Primary LAN interface"
-    }
-  }
-}
-```
-
-## Related Items
-
-### List Related Items
-
-```http
-GET /configurations/789/relationships/related-items
-```
-
-### Create Relationship
-
-```http
-POST /related-items
-Content-Type: application/vnd.api+json
-```
-
-```json
-{
-  "data": {
-    "type": "related-items",
-    "attributes": {
-      "resource-id": 789,
-      "resource-type": "Configuration",
-      "destination-id": 456,
-      "destination-type": "Configuration",
-      "notes": "VM hosted on this hypervisor"
-    }
-  }
-}
-```
+Configurations support the standard list/get/create/update/delete verbs, plus organization-scoped listing (`/organizations/:id/relationships/configurations`), search by hostname/serial-number/primary-ip/psa-id, nested configuration-interfaces, and related-items relationships for linking assets to each other (e.g. VM to host). See [references/api.md](references/api.md) for full request/response examples of every operation.
 
 ## Common Workflows
 
@@ -354,6 +114,8 @@ async function onboardAsset(orgId, assetData) {
 
 ### Warranty Tracking
 
+IT Glue doesn't support date-range filters directly, so warranty lookups fetch active configurations and filter client-side:
+
 ```javascript
 async function getExpiringWarranties(daysAhead = 90) {
   const futureDate = new Date();
@@ -361,8 +123,6 @@ async function getExpiringWarranties(daysAhead = 90) {
   const today = new Date().toISOString().split('T')[0];
   const future = futureDate.toISOString().split('T')[0];
 
-  // Note: IT Glue doesn't support date range filters directly
-  // Fetch all and filter client-side
   const configs = await fetchConfigurations({
     filter: { 'configuration-status-id': ACTIVE_STATUS }
   });
@@ -426,54 +186,12 @@ async function generateNetworkInventory(orgId) {
 }
 ```
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- IT Glue has no server-side date-range filter, so warranty/expiration reporting must fetch and filter client-side (see Warranty Tracking above).
+- `configuration-type-id` and `configuration-status-id` are references to org-specific lookup tables, not fixed enums — query `/configuration-types` and `/configuration-statuses` before creating, since an unrecognized ID returns a 422 rather than a clear "invalid type" message.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Name can't be blank | Provide configuration name |
-| 400 | Organization required | Include organization-id |
-| 401 | Invalid API key | Check IT_GLUE_API_KEY |
-| 404 | Configuration not found | Verify configuration ID |
-| 422 | Invalid type ID | Query valid type IDs first |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Name required | Missing name | Add name to request |
-| Organization required | No org ID | Include organization-id |
-| Invalid type | Bad type ID | Query /configuration-types |
-| Invalid status | Bad status ID | Query /configuration-statuses |
-| Invalid IP format | Malformed IP | Use valid IPv4/IPv6 format |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateConfiguration(data) {
-  try {
-    return await createConfiguration(data);
-  } catch (error) {
-    if (error.status === 422) {
-      const errors = error.errors || [];
-
-      // Handle missing type
-      if (errors.some(e => e.detail?.includes('configuration-type'))) {
-        const types = await getConfigurationTypes();
-        console.log('Valid configuration types:', types);
-      }
-
-      // Handle duplicate
-      if (errors.some(e => e.detail?.includes('already been taken'))) {
-        return await findConfigurationByName(data['organization-id'], data.name);
-      }
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the common error/validation tables and an error-recovery pattern that queries valid types on 422.
 
 ## Best Practices
 
@@ -484,9 +202,7 @@ async function safeCreateConfiguration(data) {
 5. **Use interfaces** - Document all network interfaces, not just primary
 6. **Create relationships** - Link VMs to hosts, apps to servers
 7. **Set warranty dates** - Enable proactive renewal planning
-8. **Include notes** - Document purpose, users, special configurations
-9. **Link to PSA** - Set psa-id for cross-platform lookups
-10. **Regular audits** - Verify configuration accuracy quarterly
+8. **Link to PSA** - Set psa-id for cross-platform lookups
 
 ## Related Skills
 

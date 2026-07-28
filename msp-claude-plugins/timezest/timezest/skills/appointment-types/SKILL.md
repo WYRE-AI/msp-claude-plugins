@@ -1,15 +1,13 @@
 ---
 name: "TimeZest Appointment Types"
+description: >
+  TimeZest appointment types: the types configured for a tenant, each
+  type's duration, and how to match a type to the work described on a
+  ConnectWise / Autotask / Halo ticket.
 when_to_use: >-
-  When choosing which TimeZest appointment type to use for a booking — listing the configured
-  types, reading their durations, and matching the type to the kind of work on a PSA ticket. Use
+  When choosing which TimeZest appointment type a booking should use. Use
   when: timezest appointment type, which appointment type, timezest onsite vs remote, appointment
   duration, list appointment types, or timezest service type.
-description: >
-  Use this skill to pick the correct TimeZest appointment type for a
-  scheduling request — listing the appointment types configured for
-  the tenant, reading each type's duration, and matching the type to
-  the work described on a ConnectWise / Autotask / Halo ticket.
 ---
 
 # TimeZest Appointment Types

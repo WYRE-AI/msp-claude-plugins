@@ -1,15 +1,16 @@
 ---
 name: "Freshdesk Contacts & Companies"
+description: >
+  Freshdesk contacts and companies: contact fields and the required
+  contact-channel rule, contact CRUD plus merge and make_agent, company fields
+  and domain-based auto-association, search and autocomplete lookups, and the
+  MSP workflow of resolving a ticket requester to a contact and then to its
+  parent company through the Freshdesk REST API v2.
 when_to_use: >-
   When working with Freshdesk contacts and companies — looking up, creating, updating, merging, or
   converting them, and resolving a ticket requester to a contact and company. Use when: freshdesk
   contact, freshdesk company, freshdesk requester, merge contact freshdesk, make agent freshdesk,
   search contacts freshdesk, resolve requester freshdesk, or freshdesk customer.
-description: >
-  Use this skill when working with Freshdesk contacts and companies — contact
-  CRUD, merge, make_agent, and search; company CRUD and search; and the common
-  MSP workflow of resolving a ticket requester to a contact and then to its
-  parent company through the Freshdesk REST API v2.
 ---
 
 # Freshdesk Contacts & Companies
@@ -174,11 +175,6 @@ Ticket #4821
   first; let ticket creation auto-create only when intentional.
 - **Maintain company domains** — accurate `domains` let Freshdesk
   auto-associate new contacts to the right company.
-- **Confirm the primary on merge** — merges re-point history and are hard to
-  undo.
-- **Treat make_agent as privileged** — it affects licensing; flag it before
-  running.
-- **Cache company lookups** — they rarely change and reduce request volume.
 
 ## Related Skills
 

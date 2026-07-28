@@ -1,14 +1,14 @@
 ---
 name: "SentinelOne Misconfigurations"
 description: >
-  Use this skill when working with SentinelOne XSPM misconfigurations -
-  cloud security posture management across AWS, Azure, GCP, Kubernetes,
-  identity, and infrastructure-as-code. Covers misconfiguration detection,
-  compliance standards, MITRE ATT&CK mappings, remediation steps,
-  evidence details, and posture review workflows for MSP clients.
+  Cloud security posture findings from SentinelOne's XSPM module across AWS, Azure,
+  GCP, Kubernetes, identity providers, and infrastructure-as-code. Covers the
+  read-only misconfiguration tools, view types, severity and status values,
+  compliance-standard and MITRE ATT&CK mappings, evidence fields, and remediation
+  guidance.
 when_to_use: >-
-  When working with cloud security posture management across AWS, Azure, GCP, Kubernetes,
-  identity, and infrastructure-as-code in SentinelOne XSPM misconfigurations. Use when:
+  When reviewing or reporting on a client's cloud security posture and open
+  misconfigurations. Use when:
   sentinelone misconfiguration, sentinelone posture, sentinelone compliance, sentinelone cspm,
   cloud security posture, sentinelone cloud security, sentinelone kubernetes security, sentinelone
   identity security, sentinelone iac, misconfiguration review, compliance audit, or security

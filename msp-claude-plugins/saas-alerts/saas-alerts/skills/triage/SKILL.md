@@ -1,13 +1,15 @@
 ---
 name: "SaaS Alerts Triage"
+description: >
+  Triaging the SaaS Alerts queue across managed M365 / Google Workspace tenants:
+  the triage tool surface, the critical-first sweep, per-customer summary and
+  cross-tenant pattern workflows, the low/medium/critical severity model and its
+  default dispositions, and the edge cases — legitimately empty results,
+  time-window sensitivity, whitelist suppression, and per-partner rate limits.
 when_to_use: >-
   When sweeping and prioritizing the SaaS Alerts queue across tenants and deciding what to
   escalate. Use when: triage saas alerts, saas alerts queue, prioritize saas alerts, or m365
   security alerts.
-description: >
-  Use this skill to triage SaaS Alerts security alerts across managed M365 /
-  Google Workspace tenants — ranking by severity and tenant impact, separating
-  true positives from noise, and producing a shift-ready response plan.
 ---
 
 # SaaS Alerts Triage

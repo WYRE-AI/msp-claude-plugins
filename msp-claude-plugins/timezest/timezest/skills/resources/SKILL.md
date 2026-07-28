@@ -1,15 +1,13 @@
 ---
 name: "TimeZest Resources"
-when_to_use: >-
-  When you need the combined pool of TimeZest bookable resources — listing agents and teams
-  together, filtering by resource type, and surveying everything available before resolving a
-  specific technician or team. Use when: timezest resources, list all resources, what can i book,
-  timezest resource pool, all agents and teams, or timezest availability survey.
 description: >
-  Use this skill to query TimeZest's combined resource pool — the
-  unified list of agents and teams available for scheduling — when you
-  want a survey of everything bookable before drilling into a specific
-  agent or team, or when the dispatcher has not named a resource.
+  TimeZest's combined resource pool — the unified list of agents and teams
+  available for scheduling — including filtering by resource type and
+  surveying what is bookable before drilling into a specific agent or team.
+when_to_use: >-
+  When you need the combined pool of TimeZest bookable resources, or the dispatcher has not
+  named a specific resource. Use when: timezest resources, list all resources, what can i book,
+  timezest resource pool, all agents and teams, or timezest availability survey.
 ---
 
 # TimeZest Resources

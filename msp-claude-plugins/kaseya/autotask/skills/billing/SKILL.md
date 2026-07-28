@@ -1,10 +1,14 @@
 ---
+name: "Autotask Billing"
 description: >-
-  Use this skill when working with Autotask billing — retrieving billing items, checking approval
-  levels, and searching invoices. Essential for MSP finance teams and account managers reconciling
-  billable work, approving charges, and exporting data for invoicing. Use when: autotask billing,
-  autotask invoice, billing item autotask, billing approval, autotask billing item, autotask
-  invoices, invoice search autotask, billable items autotask, or billing approval level.
+  Autotask billing item retrieval, approval-level workflows, and invoice search — covering
+  billing item types, approval status filtering, and reconciliation of billable work against
+  invoices for MSP finance teams.
+when_to_use: >-
+  When retrieving billing items, checking approval levels, or searching invoices in Autotask.
+  Use when: autotask billing, autotask invoice, billing item autotask, billing approval, autotask
+  billing item, autotask invoices, invoice search autotask, billable items autotask, or billing
+  approval level.
 ---
 
 # Autotask Billing

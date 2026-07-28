@@ -1,15 +1,13 @@
 ---
 name: "ScalePad Quoter"
 description: >
-  Use this skill when working with Quoter through ScalePad — building
-  and publishing quotes, managing the catalog (items, item groups,
-  tiers, options, manufacturers), quote contacts, suppliers and
-  datafeeds, and the OAuth helpers for the standalone api.quoter.com
-  path.
+  Quoter through ScalePad: building and publishing quotes, managing the catalog (items,
+  item groups, tiers, options, manufacturers), quote contacts, suppliers and datafeeds,
+  and the OAuth helpers for the standalone api.quoter.com path.
 when_to_use: >-
-  When creating or publishing quotes, managing the Quoter catalog (items, groups, tiers, 
-  options), contacts, suppliers, or Quoter OAuth. Use when: quoter, scalepad quote, create quote, 
-  quoter catalog, quoter items, publish quote.
+  When creating or publishing quotes, managing the Quoter catalog (items, groups, tiers,
+  options), contacts, suppliers, or Quoter OAuth. Use when: quoter, scalepad quote,
+  create quote, quoter catalog, quoter items, publish quote.
 ---
 
 # ScalePad Quoter

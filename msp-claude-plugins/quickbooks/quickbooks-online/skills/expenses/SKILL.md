@@ -1,11 +1,11 @@
 ---
 name: "QuickBooks Online Expenses"
 description: >
-  Use this skill when working with QuickBooks Online expenses and purchases -
-  creating, searching, and managing expense records, bills, and vendor payments.
-  Covers the Purchase entity (checks, credit cards, cash), Bill entity for
-  accounts payable, per-client cost tracking, vendor management, and MSP
-  expense categorization for profitability analysis.
+  QuickBooks Online expense entities: Purchase (check, cash, credit card),
+  Bill for accounts payable, BillPayment, and Vendor. Covers account-based vs
+  item-based expense lines, per-client cost allocation via CustomerRef and
+  BillableStatus, expense categorization, query syntax, error codes, and MSP
+  profitability analysis patterns.
 when_to_use: >-
   When creating, searching, and managing expense records, bills, and vendor payments. Use when:
   quickbooks expense, qbo expense, quickbooks purchase, qbo purchase, quickbooks bill, qbo bill,
@@ -52,62 +52,17 @@ The Purchase entity covers direct expenses paid immediately or via credit card:
 
 QBO supports assigning expenses to customers, enabling per-client profitability analysis. Use the `CustomerRef` field on line items to allocate costs to specific MSP clients.
 
-## Field Reference
+### Key Fields
 
-### Purchase Core Fields
+A Purchase requires `PaymentType`, `AccountRef.value` (the bank or credit card
+account it was paid from), and at least one `Line`. A Bill requires
+`VendorRef.value` and `Line`. Per-client allocation lives on the line detail, not
+the header: `AccountBasedExpenseLineDetail.CustomerRef.value` plus
+`BillableStatus` ("Billable", "NotBillable", "HasBeenBilled"). `TotalAmt` and
+`Balance` are read-only; `SyncToken` is required on updates.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Id` | string | System | Auto-generated unique identifier |
-| `PaymentType` | string | Yes | "Cash", "Check", or "CreditCard" |
-| `AccountRef.value` | string | Yes | Bank or credit card account ID |
-| `EntityRef.value` | string | No | Vendor ID |
-| `TxnDate` | date | No | Transaction date (default: today) |
-| `TotalAmt` | decimal | Read-only | Total expense amount |
-| `DocNumber` | string | No | Reference number |
-| `PrivateNote` | string | No | Internal memo |
-| `Line` | array | Yes | Array of expense line items |
-| `SyncToken` | string | Required for updates | Optimistic locking token |
-
-### Purchase Line Item Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Line.Amount` | decimal | Yes | Line amount |
-| `Line.Description` | string | No | Line description |
-| `Line.DetailType` | string | Yes | "AccountBasedExpenseLineDetail" or "ItemBasedExpenseLineDetail" |
-| `Line.AccountBasedExpenseLineDetail.AccountRef.value` | string | Yes (account-based) | Expense account ID |
-| `Line.AccountBasedExpenseLineDetail.CustomerRef.value` | string | No | Customer to allocate cost to |
-| `Line.AccountBasedExpenseLineDetail.BillableStatus` | string | No | "Billable", "NotBillable", "HasBeenBilled" |
-| `Line.ItemBasedExpenseLineDetail.ItemRef.value` | string | Yes (item-based) | Item ID |
-| `Line.ItemBasedExpenseLineDetail.Qty` | decimal | No | Quantity |
-| `Line.ItemBasedExpenseLineDetail.UnitPrice` | decimal | No | Unit price |
-
-### Bill Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Id` | string | System | Auto-generated unique identifier |
-| `VendorRef.value` | string | Yes | Vendor ID |
-| `APAccountRef.value` | string | No | Accounts payable account ID |
-| `TxnDate` | date | No | Bill date |
-| `DueDate` | date | No | Payment due date |
-| `TotalAmt` | decimal | Read-only | Total bill amount |
-| `Balance` | decimal | Read-only | Remaining unpaid balance |
-| `Line` | array | Yes | Array of line items |
-| `SyncToken` | string | Required for updates | Optimistic locking token |
-
-### Vendor Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Id` | string | System | Auto-generated unique identifier |
-| `DisplayName` | string | Yes | Vendor name |
-| `CompanyName` | string | No | Legal company name |
-| `PrimaryPhone.FreeFormNumber` | string | No | Phone number |
-| `PrimaryEmailAddr.Address` | string | No | Email address |
-| `Balance` | decimal | Read-only | Outstanding balance owed |
-| `Active` | boolean | No | Whether vendor is active |
+See [references/fields.md](references/fields.md) for the complete Purchase, Bill,
+and Vendor field reference.
 
 ## API Patterns
 
@@ -149,67 +104,32 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 ```
 
-**Software license expense allocated to a client:**
+Software license expense allocated to a client — note `AccountRef` on the header
+is the funding account (credit card), while `AccountRef` inside the line detail
+is the expense account:
 
 ```json
 {
   "PaymentType": "CreditCard",
-  "AccountRef": {
-    "value": "41"
-  },
-  "EntityRef": {
-    "value": "42",
-    "type": "Vendor"
-  },
+  "AccountRef": { "value": "41" },
+  "EntityRef": { "value": "42", "type": "Vendor" },
   "TxnDate": "2026-02-15",
-  "Line": [
-    {
-      "Amount": 450.00,
-      "Description": "Microsoft 365 Business Premium - 30 seats - Acme Corp - February 2026",
-      "DetailType": "AccountBasedExpenseLineDetail",
-      "AccountBasedExpenseLineDetail": {
-        "AccountRef": { "value": "60" },
-        "CustomerRef": { "value": "123" },
-        "BillableStatus": "Billable"
-      }
-    },
-    {
-      "Amount": 120.00,
-      "Description": "SentinelOne Endpoint Protection - 30 seats - Acme Corp - February 2026",
-      "DetailType": "AccountBasedExpenseLineDetail",
-      "AccountBasedExpenseLineDetail": {
-        "AccountRef": { "value": "60" },
-        "CustomerRef": { "value": "123" },
-        "BillableStatus": "Billable"
-      }
+  "Line": [{
+    "Amount": 450.00,
+    "Description": "Microsoft 365 Business Premium - 30 seats - Acme Corp - February 2026",
+    "DetailType": "AccountBasedExpenseLineDetail",
+    "AccountBasedExpenseLineDetail": {
+      "AccountRef": { "value": "60" },
+      "CustomerRef": { "value": "123" },
+      "BillableStatus": "Billable"
     }
-  ],
+  }],
   "PrivateNote": "Monthly software licenses for Acme Corp"
 }
 ```
 
-```bash
-curl -s -X POST \
-  -H "Authorization: Bearer $QBO_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  "https://quickbooks.api.intuit.com/v3/company/$QBO_REALM_ID/purchase?minorversion=73" \
-  -d '{
-    "PaymentType": "CreditCard",
-    "AccountRef": { "value": "41" },
-    "EntityRef": { "value": "42", "type": "Vendor" },
-    "Line": [{
-      "Amount": 450.00,
-      "Description": "Microsoft 365 - Acme Corp - Feb 2026",
-      "DetailType": "AccountBasedExpenseLineDetail",
-      "AccountBasedExpenseLineDetail": {
-        "AccountRef": { "value": "60" },
-        "CustomerRef": { "value": "123" },
-        "BillableStatus": "Billable"
-      }
-    }]
-  }'
-```
+See [references/examples.md](references/examples.md) for the multi-line request
+body, the curl equivalent, and a Create Vendor payload.
 
 ### Create Bill (Vendor Invoice)
 
@@ -233,23 +153,6 @@ curl -s -X POST \
     }
   ],
   "PrivateNote": "Subcontractor cabling for Acme Corp office expansion"
-}
-```
-
-### Create Vendor
-
-```json
-{
-  "DisplayName": "TechDistributor Inc",
-  "CompanyName": "TechDistributor Inc",
-  "PrimaryPhone": { "FreeFormNumber": "800-555-1234" },
-  "PrimaryEmailAddr": { "Address": "orders@techdist.com" },
-  "BillAddr": {
-    "Line1": "100 Distribution Way",
-    "City": "Dallas",
-    "CountrySubDivisionCode": "TX",
-    "PostalCode": "75201"
-  }
 }
 ```
 
@@ -401,49 +304,18 @@ async function getOutstandingBills() {
 
 ## Error Handling
 
-### Common API Errors
+- **Customer allocation is per line, not per transaction.** There is no
+  header-level `CustomerRef` on Purchase or Bill — a report that reads only the
+  header will show zero client cost.
+- **610 Object Not Found** on a Purchase create is usually a stale or inactive
+  `AccountRef`/`EntityRef`; the fault Detail names the field, the message does not.
+- **Inactive references fail silently in intent.** Deactivating a vendor or
+  account leaves existing transactions intact but rejects new ones referencing it.
+- **6240 Duplicate Name** applies to Vendor `DisplayName`, which shares a
+  namespace with Customer and Employee names in QBO.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 6000 | Business Validation | Check account refs and line amounts |
-| 610 | Object Not Found | Verify AccountRef, VendorRef, or CustomerRef |
-| 5010 | Stale Object | Re-fetch SyncToken and retry |
-| 6240 | Duplicate Name | Use unique vendor DisplayName |
-| 2050 | Invalid Reference | Check referenced entity IDs |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| PaymentType required | Missing payment type | Add "Cash", "Check", or "CreditCard" |
-| AccountRef required | Missing bank/CC account | Add AccountRef.value |
-| Line required | No line items | Add at least one Line item |
-| Invalid AccountRef | Bad account ID | Query Account for valid IDs |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreatePurchase(data) {
-  try {
-    return await createPurchase(data);
-  } catch (error) {
-    const fault = error.Fault;
-    if (!fault) throw error;
-
-    const detail = fault.Error?.[0]?.Detail || '';
-
-    if (detail.includes('inactive')) {
-      console.log('Referenced account or vendor is inactive. Reactivate or use a different reference.');
-    }
-
-    if (detail.includes('AccountRef')) {
-      console.log('Invalid account reference. Query Accounts to find valid IDs.');
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the full error-code and
+validation tables plus a recovery pattern.
 
 ## Best Practices
 
@@ -451,26 +323,12 @@ async function safeCreatePurchase(data) {
 2. **Mark billable expenses** - Use BillableStatus "Billable" for costs to re-invoice to clients
 3. **Use consistent accounts** - Map expense categories to standard QBO accounts
 4. **Track by vendor** - Create Vendor records for all suppliers and service providers
-5. **Include descriptions** - Detailed descriptions help with reconciliation and auditing
-6. **Use Bills for deferred payment** - Record vendor invoices as Bills, then pay with BillPayment
-7. **Record software licenses monthly** - Track per-seat costs monthly for accurate reporting
-8. **Tag with PrivateNote** - Store PSA references and internal project codes
-9. **Review billable expenses** - Regularly check for uninvoiced billable expenses
-10. **Automate recurring expenses** - Script monthly license and subscription recording
+5. **Use Bills for deferred payment** - Record vendor invoices as Bills, then pay with BillPayment
+6. **Record software licenses monthly** - Track per-seat costs monthly for accurate reporting
+7. **Tag with PrivateNote** - Store PSA references and internal project codes
+8. **Review billable expenses** - Regularly check for uninvoiced billable expenses
 
-## Endpoint Reference
-
-| Operation | Method | Endpoint |
-|-----------|--------|----------|
-| Create Purchase | POST | `/v3/company/{realmId}/purchase` |
-| Read Purchase | GET | `/v3/company/{realmId}/purchase/{id}` |
-| Update Purchase | POST | `/v3/company/{realmId}/purchase` |
-| Delete Purchase | POST | `/v3/company/{realmId}/purchase?operation=delete` |
-| Create Bill | POST | `/v3/company/{realmId}/bill` |
-| Read Bill | GET | `/v3/company/{realmId}/bill/{id}` |
-| Create BillPayment | POST | `/v3/company/{realmId}/billpayment` |
-| Create Vendor | POST | `/v3/company/{realmId}/vendor` |
-| Query | GET | `/v3/company/{realmId}/query?query=...` |
+See [references/api.md](references/api.md) for the complete endpoint reference.
 
 ## Related Skills
 

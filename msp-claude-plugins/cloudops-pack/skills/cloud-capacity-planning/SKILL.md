@@ -1,20 +1,18 @@
 ---
 name: "Cloud Capacity Planning"
+description: >
+  Right-sizing and capacity forecasting for cloud resources on whatever
+  platforms (Azure, DigitalOcean) are connected: the per-platform
+  over-provisioned and under-provisioned signals, growth-trend-based
+  forecasting toward a projected exhaustion window, and the discipline that
+  separates a genuine capacity risk from normal variance — require a trend
+  not a spike, distinguish burst-tolerant from sustained-critical resources,
+  and always state the observation window behind a forecast.
 when_to_use: >-
   When right-sizing cloud resources or forecasting whether current capacity
   will hold up under growth. Use when: capacity planning, are we running out
   of capacity, resource forecast, growth planning, right-size this resource,
   over-provisioned, under-provisioned, quota check.
-description: >
-  Use this skill when right-sizing or forecasting capacity for cloud
-  resources across whatever cloud platforms (Azure, DigitalOcean) are
-  connected through the gateway. Covers identifying over-provisioned and
-  under-utilized resources (Azure resource groups/quotas, DigitalOcean
-  Droplets/Kubernetes/Databases), building a growth-trend-based capacity
-  forecast, and — critically — the difference between a genuine capacity risk
-  and normal variance that doesn't warrant action. Always use
-  conduit__search_tools to discover which cloud platforms are actually
-  connected before assuming a specific vendor.
 ---
 
 # Cloud Capacity Planning
@@ -139,18 +137,6 @@ If asked to scope to a resource type that doesn't map cleanly onto what's
 connected (e.g., "database" requested but only compute platforms are
 connected), say so and report what is available instead of silently
 returning an empty result.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
-- Never call a metric blip a capacity risk — require a sustained trend across
-  multiple observation windows.
-- State the observation window and data source behind every forecast.
-- Separate "needs action soon" from "worth tracking, not urgent" explicitly
-  rather than presenting one undifferentiated risk list.
-- Capacity and cost are related but distinct — this skill doesn't make
-  spend judgments; hand those to `cloud-cost-management`.
 
 ## Related Skills
 

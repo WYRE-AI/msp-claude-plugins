@@ -1,5 +1,13 @@
 ---
 name: "Quote-to-Close Tracking"
+description: >
+  The quote-to-close handoff chain — a Pax8/Sherweb/Kaseya Quote Manager
+  quote or SalesBuildr proposal, through a PandaDoc document's
+  sent/viewed/signed status, to a closed-won CRM deal — and the four distinct
+  stall points along it (quote built with no proposal document, proposal sent
+  but not opened, viewed but not signed, signed but the CRM deal never marked
+  closed-won), including cross-system record matching and what to report when
+  only part of the chain is connected.
 when_to_use: >-
   When connecting the dots across the full quote lifecycle — from a
   distributor quote or SalesBuildr proposal, through a PandaDoc document, to
@@ -7,15 +15,6 @@ when_to_use: >-
   handoff chain. Use when: quote to close, where is this deal stuck, proposal
   status, quote status, deal not closing, follow up on quote, follow up on
   proposal, PandaDoc status, quote sent but no proposal.
-description: >
-  Use this skill when tracing a deal's progress across the quote-to-close
-  chain — a Pax8/Sherweb/Kaseya Quote Manager quote or a SalesBuildr
-  proposal, through a PandaDoc document's sent/viewed/signed status, to a
-  closed-won deal in the CRM. Detects and names exactly which handoff point a
-  deal is stuck at (quote sent but no proposal document yet, proposal sent
-  but not opened, proposal viewed but not signed, or signed but the CRM deal
-  was never marked closed-won), across whichever combination of these tools
-  is actually connected.
 ---
 
 # Quote-to-Close Tracking
@@ -159,18 +158,10 @@ similarly-named companies).
 
 ## Best Practices
 
-- Always name the specific stall point, not just "this deal looks stale" —
-  the recommended action depends entirely on which of the four points a deal
-  is stuck at.
 - Report the date of the most recent chain event alongside the stall point,
   so staleness within that stall point is visible (a proposal viewed
   yesterday and one viewed three weeks ago are both "viewed, not signed,"
   but very different urgency).
-- Be explicit about match confidence when correlating across systems by
-  name rather than an explicit ID — never present a fuzzy match as certain.
-- Signed-but-not-closed-won is a pure data-hygiene finding — call it out
-  distinctly, since fixing it is a one-field CRM update, not a client
-  follow-up.
 
 ## Related Skills
 

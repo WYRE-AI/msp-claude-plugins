@@ -1,6 +1,6 @@
 ---
 name: "cipp-standards"
-description: "Use this skill when working with CIPP Standards, Best Practice Analyser (BPA), and domain health checks — listing configured standards per tenant, triggering on-demand compliance checks, retrieving BPA results, checking SPF/DKIM/DMARC. The core surface for CIPP's tenant-baseline enforcement model."
+description: "CIPP's tenant-baseline enforcement model: the Report/Alert/Remediate standards modes and how to roll them out, on-demand standards evaluation, Best Practice Analyser reports, and SPF/DKIM/DMARC domain health results with their remediation actions."
 when_to_use: >-
   When auditing standards compliance, running BPA reports, checking domain authentication health,
   or detecting tenants drifting from configured baselines. Use when: cipp standards, bpa, best

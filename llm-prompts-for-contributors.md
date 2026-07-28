@@ -140,23 +140,31 @@ Generate a complete SKILL.md file following this structure:
 ```markdown
 ---
 name: "[Vendor] [Topic]"
+description: >
+  [1-2 sentences describing what this skill covers - the product,
+  feature area, and types of tasks it enables. State coverage only;
+  trigger conditions belong in when_to_use. Do NOT add a separate
+  triggers: list or vendor/product/api_version keys - only name,
+  description, and when_to_use are recognized.]
 when_to_use: >-
   When [specific action or scenario]. Use when: [keyword phrase 1],
   [keyword phrase 2], or [keyword phrase 3 - fold in 5-10 realistic
   trigger phrases MSP techs would use].
-description: >
-  [2-3 sentences describing when Claude should use this skill. Be specific 
-  about the product, feature, and types of tasks this enables. Do NOT add
-  a separate triggers: list or vendor/product/api_version keys - only
-  name, description, and when_to_use are recognized.]
 ---
 
 # [Skill Title]
 
+Keep SKILL.md under ~350 lines. If the data model, endpoint catalog, or
+error tables run long, move them into `references/*.md` files in the
+skill directory and link them from the relevant section — SKILL.md keeps
+concepts, workflows, and gotchas. Skip any section that would only hold
+generic filler, and state each instruction once (no repetition for
+emphasis).
+
 ## Overview
 
-[2-3 paragraphs explaining what this skill covers, why it matters for MSPs, 
-and how it fits into typical MSP workflows.]
+[One short paragraph explaining what this skill covers and why it
+matters for MSPs.]
 
 ## Key Concepts
 
@@ -222,9 +230,9 @@ and how it fits into typical MSP workflows.]
 
 ## Best Practices
 
-- [Practice 1 specific to this product/feature]
-- [Practice 2]
-- [Practice 3]
+- [Only practices specific to this product/feature. If a bullet would
+  apply to every vendor ("test before deploying"), cut it — omit the
+  whole section if nothing product-specific remains.]
 
 ## Gotchas & Edge Cases
 

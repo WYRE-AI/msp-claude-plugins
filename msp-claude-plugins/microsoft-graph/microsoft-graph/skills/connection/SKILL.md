@@ -1,6 +1,12 @@
 ---
 name: "microsoft-graph-connection"
-description: "Use this skill when connecting the Microsoft Graph MCP Server for Enterprise to the Wyre MCP Gateway — registering the BYOC multi-tenant Entra app, supplying tenantId/clientId/clientSecret, and (the part everyone misses) granting per-tenant admin consent for the MCP.* delegated permissions out of band. Also covers the preview status and the 100 calls/min/user rate limit."
+description: >
+  Connecting the Microsoft Graph MCP Server for Enterprise (public preview) through
+  the Wyre gateway: BYOC multi-tenant Entra app registration, the
+  tenantId/clientId/clientSecret triple, the delegated MCP.* permissions and the
+  per-tenant admin consent that must be granted out of band, plus the read-only
+  design, the 100 calls/min/user limit, licensing implications, and a
+  symptom-to-cause troubleshooting table.
 when_to_use: >-
   When setting up, troubleshooting, or explaining the microsoft-graph connection — Entra app
   registration, redirect URI, client secret, admin consent failures, or 'why is the tenant

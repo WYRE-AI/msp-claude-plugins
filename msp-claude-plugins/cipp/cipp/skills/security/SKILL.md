@@ -1,6 +1,6 @@
 ---
 name: "cipp-security"
-description: "Use this skill when reviewing M365 conditional access policies and named locations through CIPP — auditing CA coverage, finding policies that exclude critical apps, listing trusted IP ranges, identifying tenants without baseline conditional access. Read-only surface focused on security posture review."
+description: "Read-only access to a tenant's Conditional Access policy graph and named locations through CIPP: policy state semantics, the findings that matter in a CA review, portfolio drift detection, and why CA writes are absent from the MCP surface."
 when_to_use: >-
   When auditing conditional access policies or named locations across managed tenants for security
   posture review. Use when: conditional access, ca policy, named locations, trusted ips, cipp

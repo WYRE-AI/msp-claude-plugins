@@ -1,13 +1,13 @@
 ---
 name: "Microsoft 365 Files"
 description: >
-  Use this skill when working with Microsoft 365 files - OneDrive personal storage,
-  SharePoint document libraries, file sharing permissions, storage quotas, or
-  searching across a user's files. Covers OneDrive and SharePoint via Microsoft
-  Graph for MSP technicians handling file access issues.
+  OneDrive personal storage and SharePoint document libraries, both reached through
+  the shared Microsoft Graph `/drives` endpoint: drive and item addressing, sharing
+  permissions, storage quotas, file search, and the offboarding file-transfer
+  workflow.
 when_to_use: >-
-  When working with oneDrive personal storage, SharePoint document libraries, file sharing
-  permissions, storage quotas, or searching across a user's files in Microsoft 365 files. Use
+  When investigating M365 file access, sharing, storage-quota, or file-search issues across
+  OneDrive and SharePoint. Use
   when: onedrive, m365 files, sharepoint files, onedrive quota, file sharing m365, onedrive
   permissions, m365 storage, find file m365, onedrive access, or sharepoint document library.
 ---

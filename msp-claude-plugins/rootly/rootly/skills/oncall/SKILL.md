@@ -1,14 +1,13 @@
 ---
 name: "Rootly On-Call"
 description: >
-  Use this skill when working with Rootly on-call management - viewing shift
-  metrics, generating handoff summaries, reviewing shift incidents, detecting
-  on-call health risk, and understanding schedule coverage. Covers the
-  get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents,
-  and check_oncall_health_risk MCP tools.
+  Rootly on-call visibility built on the get_oncall_handoff_summary,
+  get_oncall_shift_metrics, get_shift_incidents, and check_oncall_health_risk
+  tools: schedule and rotation coverage, structured shift handoffs, per-shift
+  incident scoping, shift metric fields, and the burnout risk signals.
 when_to_use: >-
-  When working with call management - viewing shift metrics, generating handoff summaries,
-  reviewing shift incidents, detecting on-call health risk. Use when: rootly oncall, rootly
+  When handing off or reviewing an on-call shift, checking schedule coverage, or assessing
+  responder burnout risk. Use when: rootly oncall, rootly
   on-call, rootly handoff, rootly shift, rootly schedule, rootly rotation, rootly escalation,
   on-call health, oncall burnout, shift metrics rootly, rootly paging, or rootly responder.
 ---

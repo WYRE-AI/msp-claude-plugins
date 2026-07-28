@@ -1,12 +1,11 @@
 ---
 name: "HubSpot Deals"
 description: >
-  Use this skill when working with HubSpot deals - searching, creating,
-  updating, and managing deal records and pipelines in HubSpot CRM.
-  Covers deal fields, pipeline stages, forecasting, revenue tracking,
-  and associating deals with contacts and companies.
+  HubSpot deal records and sales pipelines: deal fields, default and custom
+  pipeline stages, deal amount conventions (MRR vs. TCV), forecast categories
+  and weighted forecasting, and associating deals with contacts and companies.
 when_to_use: >-
-  When searching, creating, updating, and managing deal records and pipelines in HubSpot CRM. Use
+  When searching, creating, updating, or reporting on deal records and pipelines in HubSpot CRM. Use
   when: hubspot deal, hubspot pipeline, hubspot opportunity, hubspot sale, hubspot revenue, deal
   search hubspot, deal management hubspot, hubspot forecast, hubspot deal stage, sales pipeline
   hubspot, or hubspot close date.
@@ -362,11 +361,9 @@ Deals can be categorized for forecasting:
 3. **Associate with company and contact** - Every deal should be linked to both for full context
 4. **Update stages promptly** - Move deals through stages as conversations progress
 5. **Track deal type** - Distinguish new business from existing business for accurate reporting
-6. **Use weighted forecasting** - Multiply deal amount by stage probability for realistic forecasts
-7. **Review stale deals** - Regularly check for deals that have not been updated recently
-8. **Assign owners** - Every deal should have a `hubspot_owner_id` for accountability
-9. **Log stage changes** - Create a note when moving deals to a new stage explaining why
-10. **Separate pipelines** - Use distinct pipelines for different deal types (new sales, renewals, projects)
+6. **Review stale deals** - Regularly check for deals that have not been updated recently
+7. **Assign owners** - Every deal should have a `hubspot_owner_id` for accountability
+8. **Separate pipelines** - Use distinct pipelines for different deal types (new sales, renewals, projects)
 
 ## Related Skills
 

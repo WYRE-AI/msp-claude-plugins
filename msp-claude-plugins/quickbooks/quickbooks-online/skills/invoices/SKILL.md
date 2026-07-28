@@ -1,11 +1,11 @@
 ---
 name: "QuickBooks Online Invoices"
 description: >
-  Use this skill when working with QuickBooks Online invoices -
-  creating, sending, voiding, and managing invoices for MSP clients.
-  Covers line items, service items, recurring invoices, payment terms,
-  email delivery, invoice numbering, and MSP billing patterns like
-  monthly managed services and project-based billing.
+  QuickBooks Online Invoice entity: invoice lifecycle and statuses, line item
+  detail types, service items, payment terms, email delivery and PDF retrieval,
+  invoice numbering, void vs delete semantics, query syntax, error codes, and
+  MSP billing patterns such as monthly managed services, project, and
+  time-and-materials invoicing.
 when_to_use: >-
   When creating, sending, voiding, and managing invoices for MSP clients. Use when: quickbooks
   invoice, qbo invoice, quickbooks billing, qbo billing, create invoice, send invoice, invoice
@@ -52,60 +52,14 @@ Each invoice contains one or more line items. Line items reference Items (produc
 | Time & Materials | As incurred | Break-fix support, consulting hours |
 | Hardware | One-time | Equipment procurement and markup |
 
-## Field Reference
+### Key Fields
 
-### Core Fields
+`CustomerRef.value` and `Line` are the only required fields on create. `TotalAmt`
+and `Balance` are read-only. `SyncToken` is required on every update, void, and
+delete. `EmailStatus` ("NotSet", "NeedToSend", "EmailSent") drives email queuing,
+and `SalesTermRef.value` drives automatic `DueDate` calculation.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Id` | string | System | Auto-generated unique identifier |
-| `DocNumber` | string | No | Invoice number (auto-generated if blank) |
-| `TxnDate` | date | No | Invoice date (default: today) |
-| `DueDate` | date | No | Payment due date (calculated from terms) |
-| `CustomerRef.value` | string | Yes | Customer ID |
-| `Line` | array | Yes | Array of line items |
-| `TotalAmt` | decimal | Read-only | Total invoice amount |
-| `Balance` | decimal | Read-only | Remaining unpaid balance |
-| `SyncToken` | string | Required for updates | Optimistic locking token |
-
-### Billing Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `SalesTermRef.value` | string | Payment terms ID |
-| `BillEmail.Address` | string | Email to send invoice to |
-| `BillAddr` | object | Billing address |
-| `ShipAddr` | object | Shipping address |
-| `CustomerMemo.value` | string | Memo visible to customer |
-| `PrivateNote` | string | Internal note (not visible to customer) |
-| `EmailStatus` | string | "NotSet", "NeedToSend", "EmailSent" |
-
-### Line Item Fields (SalesItemLineDetail)
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `Line.Amount` | decimal | Yes | Line total (Qty x Rate) |
-| `Line.Description` | string | No | Line item description |
-| `Line.DetailType` | string | Yes | "SalesItemLineDetail" |
-| `Line.SalesItemLineDetail.ItemRef.value` | string | Yes | Item ID |
-| `Line.SalesItemLineDetail.Qty` | decimal | No | Quantity |
-| `Line.SalesItemLineDetail.UnitPrice` | decimal | No | Unit price |
-| `Line.SalesItemLineDetail.ServiceDate` | date | No | Service date |
-
-### Tax Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `TxnTaxDetail.TotalTax` | decimal | Total tax amount |
-| `TxnTaxDetail.TxnTaxCodeRef.value` | string | Tax code ID |
-| `GlobalTaxCalculation` | string | "TaxExcluded", "TaxInclusive", "NotApplicable" |
-
-### Metadata Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `MetaData.CreateTime` | datetime | Creation timestamp |
-| `MetaData.LastUpdatedTime` | datetime | Last update timestamp |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## API Patterns
 
@@ -143,12 +97,6 @@ GET /v3/company/{realmId}/invoice/456?minorversion=73
 Authorization: Bearer {access_token}
 ```
 
-```bash
-curl -s -H "Authorization: Bearer $QBO_ACCESS_TOKEN" \
-  -H "Accept: application/json" \
-  "https://quickbooks.api.intuit.com/v3/company/$QBO_REALM_ID/invoice/456?minorversion=73"
-```
-
 ### Create Invoice
 
 ```http
@@ -157,96 +105,34 @@ Content-Type: application/json
 Authorization: Bearer {access_token}
 ```
 
-**Monthly Managed Services Invoice:**
+Minimal body — one line item, QBO assigns `DocNumber` and computes `TotalAmt`:
 
 ```json
 {
-  "CustomerRef": {
-    "value": "123"
-  },
-  "TxnDate": "2026-02-01",
-  "SalesTermRef": {
-    "value": "3"
-  },
-  "BillEmail": {
-    "Address": "billing@acmecorp.com"
-  },
-  "EmailStatus": "NeedToSend",
-  "Line": [
-    {
-      "Amount": 2500.00,
-      "Description": "Monthly Managed IT Services - February 2026\nIncludes: 24/7 monitoring, patch management, help desk support (unlimited)",
-      "DetailType": "SalesItemLineDetail",
-      "SalesItemLineDetail": {
-        "ItemRef": { "value": "1" },
-        "Qty": 1,
-        "UnitPrice": 2500.00,
-        "ServiceDate": "2026-02-01"
-      }
-    },
-    {
-      "Amount": 150.00,
-      "Description": "Cloud Backup Service - 500GB - February 2026",
-      "DetailType": "SalesItemLineDetail",
-      "SalesItemLineDetail": {
-        "ItemRef": { "value": "2" },
-        "Qty": 1,
-        "UnitPrice": 150.00,
-        "ServiceDate": "2026-02-01"
-      }
-    },
-    {
-      "Amount": 200.00,
-      "Description": "Email Security Filtering - 50 mailboxes - February 2026",
-      "DetailType": "SalesItemLineDetail",
-      "SalesItemLineDetail": {
-        "ItemRef": { "value": "3" },
-        "Qty": 50,
-        "UnitPrice": 4.00,
-        "ServiceDate": "2026-02-01"
-      }
+  "CustomerRef": { "value": "123" },
+  "Line": [{
+    "Amount": 2500.00,
+    "Description": "Monthly Managed IT Services - February 2026",
+    "DetailType": "SalesItemLineDetail",
+    "SalesItemLineDetail": {
+      "ItemRef": { "value": "1" },
+      "Qty": 1,
+      "UnitPrice": 2500.00,
+      "ServiceDate": "2026-02-01"
     }
-  ],
-  "CustomerMemo": {
-    "value": "Thank you for choosing our managed IT services."
-  },
-  "PrivateNote": "Monthly recurring invoice - auto-generated"
+  }]
 }
 ```
 
-```bash
-curl -s -X POST \
-  -H "Authorization: Bearer $QBO_ACCESS_TOKEN" \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json" \
-  "https://quickbooks.api.intuit.com/v3/company/$QBO_REALM_ID/invoice?minorversion=73" \
-  -d '{
-    "CustomerRef": { "value": "123" },
-    "Line": [{
-      "Amount": 2500.00,
-      "Description": "Monthly Managed IT Services - February 2026",
-      "DetailType": "SalesItemLineDetail",
-      "SalesItemLineDetail": {
-        "ItemRef": { "value": "1" },
-        "Qty": 1,
-        "UnitPrice": 2500.00
-      }
-    }]
-  }'
-```
+See [references/examples.md](references/examples.md) for the full multi-line
+managed-services request body and curl equivalents.
 
 ### Send Invoice via Email
 
 ```http
-POST /v3/company/{realmId}/invoice/456/send?minorversion=73
+POST /v3/company/{realmId}/invoice/456/send?sendTo=billing@acmecorp.com&minorversion=73
+Content-Type: application/octet-stream
 Authorization: Bearer {access_token}
-```
-
-```bash
-curl -s -X POST \
-  -H "Authorization: Bearer $QBO_ACCESS_TOKEN" \
-  -H "Content-Type: application/octet-stream" \
-  "https://quickbooks.api.intuit.com/v3/company/$QBO_REALM_ID/invoice/456/send?sendTo=billing@acmecorp.com&minorversion=73"
 ```
 
 ### Update Invoice (Sparse)
@@ -418,53 +304,17 @@ async function getOverdueInvoices() {
 
 ## Error Handling
 
-### Common API Errors
+- **Amount must equal Qty x UnitPrice.** QBO rejects the line otherwise rather
+  than recalculating it.
+- **6140 Duplicate DocNumber.** Drop `DocNumber` from the payload and let QBO
+  auto-assign rather than guessing the next number.
+- **5010 Stale Object.** `SyncToken` is per-record and increments on every write;
+  re-fetch the invoice and retry with the fresh token.
+- **610 Object Not Found** on create usually means a bad `ItemRef` or
+  `CustomerRef`, not a bad invoice ID — the message does not say which.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 6000 | Business Validation | Check line item amounts and required fields |
-| 6140 | Duplicate DocNumber | Use a different invoice number or let QBO auto-assign |
-| 610 | Object Not Found | Verify CustomerRef, ItemRef, or Invoice ID |
-| 5010 | Stale Object | Re-fetch SyncToken and retry |
-| 2050 | Invalid Reference | Check CustomerRef, ItemRef, SalesTermRef values |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| CustomerRef required | Missing customer | Add CustomerRef.value to request |
-| Line required | No line items | Add at least one Line item |
-| Invalid ItemRef | Bad item ID | Query Items for valid IDs |
-| Amount mismatch | Qty x UnitPrice != Amount | Ensure Amount = Qty * UnitPrice |
-
-### Error Recovery Pattern
-
-```javascript
-async function safeCreateInvoice(data) {
-  try {
-    return await createInvoice(data);
-  } catch (error) {
-    const fault = error.Fault;
-    if (!fault) throw error;
-
-    const errorCode = fault.Error?.[0]?.code;
-
-    if (errorCode === '6140') {
-      // Duplicate DocNumber -- remove and let QBO auto-assign
-      delete data.DocNumber;
-      return await createInvoice(data);
-    }
-
-    if (errorCode === '610') {
-      // Invalid reference -- log details for debugging
-      console.log('Invalid reference. Verify CustomerRef and ItemRef values.');
-      console.log('Detail:', fault.Error[0].Detail);
-    }
-
-    throw error;
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the full error-code and
+validation tables plus a recovery pattern.
 
 ## Best Practices
 
@@ -479,18 +329,7 @@ async function safeCreateInvoice(data) {
 9. **Void instead of delete** - Voiding preserves audit trail
 10. **Batch monthly invoicing** - Generate all monthly invoices in a single workflow
 
-## Endpoint Reference
-
-| Operation | Method | Endpoint |
-|-----------|--------|----------|
-| Create | POST | `/v3/company/{realmId}/invoice` |
-| Read | GET | `/v3/company/{realmId}/invoice/{id}` |
-| Update | POST | `/v3/company/{realmId}/invoice` |
-| Delete | POST | `/v3/company/{realmId}/invoice?operation=delete` |
-| Void | POST | `/v3/company/{realmId}/invoice?operation=void` |
-| Send | POST | `/v3/company/{realmId}/invoice/{id}/send` |
-| PDF | GET | `/v3/company/{realmId}/invoice/{id}/pdf` |
-| Query | GET | `/v3/company/{realmId}/query?query=...` |
+See [references/api.md](references/api.md) for the complete endpoint reference.
 
 ## Related Skills
 

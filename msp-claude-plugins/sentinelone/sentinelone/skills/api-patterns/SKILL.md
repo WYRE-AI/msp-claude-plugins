@@ -1,14 +1,13 @@
 ---
 name: "SentinelOne API Patterns"
 description: >
-  Use this skill when working with the SentinelOne Purple MCP tools -
-  available tools, connection setup, uvx-based installation, Service User
-  token authentication, transport modes, dual API architecture (GraphQL
-  and REST), rate limits, error handling, and best practices. Covers all
-  23 Purple MCP tools organized by domain.
+  The SentinelOne Purple MCP server and the APIs behind it: uvx installation and
+  transport modes, Service User token levels, the 23 read-only tools organized by
+  domain, and the dual GraphQL (cursor pagination) / REST (offset pagination)
+  architecture with its differing filter syntaxes, rate limits, and error causes.
 when_to_use: >-
-  When working with available tools, connection setup, uvx-based installation, Service User token
-  authentication, transport modes, dual API architecture (GraphQL and REST). Use when: sentinelone
+  When connecting to the Purple MCP server, choosing a SentinelOne tool, or debugging its
+  auth, filters, pagination, or errors. Use when: sentinelone
   api, sentinelone query, sentinelone filter, sentinelone pagination, sentinelone rate limit,
   sentinelone authentication, sentinelone mcp, sentinelone endpoint, sentinelone request,
   sentinelone token, sentinelone tools, purple mcp, sentinelone connection, or sentinelone service
@@ -256,14 +255,12 @@ SentinelOne enforces rate limits on API calls. The Purple MCP server does not ex
 
 1. **Use Account/Site tokens** - Never use Global-level tokens; they will be rejected
 2. **Start with Purple AI** - Use `purple_ai` for investigation before diving into specific tools
-3. **Filter server-side** - Always use tool parameters to narrow results rather than fetching everything
-4. **Use cursor pagination** - For GraphQL tools, use the cursor from each response to fetch subsequent pages
-5. **Scope to clients** - When reviewing a specific client's security, filter by site or account
-6. **Generate PowerQuery via Purple AI** - Do not write PowerQuery manually; describe what you want in natural language
-7. **Time-bound queries** - Always set time ranges for PowerQuery to avoid scanning the entire Data Lake
-8. **Cache inventory data** - Endpoint and asset data changes less frequently than alerts
-9. **Triage by severity** - Always start with CRITICAL and HIGH severity items
-10. **Document findings** - Use alert notes and history to build investigation timelines
+3. **Use cursor pagination** - For GraphQL tools, use the cursor from each response to fetch subsequent pages
+4. **Scope to clients** - When reviewing a specific client's security, filter by site or account
+5. **Time-bound queries** - Always set time ranges for PowerQuery to avoid scanning the entire Data Lake
+6. **Cache inventory data** - Endpoint and asset data changes less frequently than alerts
+7. **Triage by severity** - Always start with CRITICAL and HIGH severity items
+8. **Document findings** - Use alert notes and history to build investigation timelines
 
 ## Related Skills
 

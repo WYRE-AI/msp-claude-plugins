@@ -1,6 +1,6 @@
 {
   "name": "ironscales",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Claude plugins for IRONSCALES - AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -1,6 +1,6 @@
 ---
 name: "cipp-ops"
-description: "Use this skill when working with CIPP operational tooling — GDAP role and invite management, scheduled tasks, server health checks, version reporting, and CIPP application logs. Covers the meta-layer: keeping CIPP itself healthy and properly delegated to managed tenants."
+description: "CIPP's own operational layer rather than the tenants it manages: GDAP role definitions and pending invites, the CIPP scheduler, and the ping/version/log endpoints used to diagnose why other CIPP tools fail silently."
 when_to_use: >-
   When checking GDAP delegation status, managing scheduled CIPP tasks, verifying CIPP server
   health, or reading CIPP application logs. Use when: gdap, granular delegated admin, delegated

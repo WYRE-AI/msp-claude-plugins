@@ -1,6 +1,13 @@
 ---
 name: "BEC Response"
-description: "Use this skill when Business Email Compromise (BEC) is suspected or confirmed for a client. Covers how to detect the signs from CIPP/M365 audit logs and connected email security vendor alerts, the immediate response sequence (session revocation, forwarding-rule audit, mailbox rule cleanup, password reset, MFA re-enrollment), and how to document the incident timeline for a client-facing report."
+description: >
+  Business Email Compromise detection and first response: the signals that
+  reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and
+  connected email security vendor alerts; the order-dependent response
+  sequence (session revocation, forwarding-rule audit, mailbox rule and
+  delegate cleanup, password reset, MFA re-enrollment, lateral-spread check,
+  recipient notification); and what a defensible incident timeline must
+  capture for insurance or bank-fraud claims.
 when_to_use: >-
   When Business Email Compromise is suspected or confirmed, or when signs of
   it need to be checked for proactively. Use when: BEC, business email

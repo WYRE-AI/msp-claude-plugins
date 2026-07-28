@@ -1,16 +1,16 @@
 ---
 name: "Checkpoint Avanan Quarantine"
 description: >
-  Use this skill when working with Checkpoint Harmony Email quarantine -
-  listing, searching, releasing, deleting quarantined emails. Covers quarantine
-  reasons, release workflows, bulk operations, and quarantine policies.
-  Essential for MSP security analysts managing email quarantine across
-  customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
+  Checkpoint Harmony Email & Collaboration (Avanan) quarantine management:
+  quarantine reasons and severity mapping, the quarantine field reference,
+  release and bulk-operation workflows, and quarantine expiry/retention
+  behavior for held emails.
 when_to_use: >-
-  When listing, searching, releasing, deleting quarantined emails. Use when: checkpoint
-  quarantine, avanan quarantine, quarantined email, release quarantine, delete quarantine,
-  quarantine search, email blocked, email held, quarantine review, bulk release, quarantine
-  policy, false positive email, email restore, or quarantine management.
+  When listing, searching, releasing, or deleting quarantined emails in Checkpoint
+  Harmony Email. Use when: checkpoint quarantine, avanan quarantine, quarantined
+  email, release quarantine, delete quarantine, quarantine search, email blocked,
+  email held, quarantine review, bulk release, quarantine policy, false positive
+  email, email restore, or quarantine management.
 ---
 
 # Checkpoint Harmony Email Quarantine Management
@@ -205,13 +205,11 @@ Day 30+:   Email permanently deleted
 ## Best Practices
 
 1. **Review quarantine daily** - Prevents legitimate emails from expiring undelivered
-2. **Start with low-severity items** - SPAM/BULK have highest false positive rates
-3. **Never release MALWARE without investigation** - Even if the user requests it
-4. **Use allow lists judiciously** - Over-broad allow lists weaken security posture
-5. **Document release decisions** - Helps tune policies and track patterns
-6. **Monitor quarantine volume trends** - Sudden spikes may indicate a targeted attack
-7. **Batch operations for efficiency** - Use bulk release/delete for large review sets
-8. **Check sender display name vs address** - Mismatches are a strong BEC indicator
+2. **Never release MALWARE without investigation** - Even if the user requests it
+3. **Use allow lists judiciously** - Over-broad allow lists weaken security posture
+4. **Document release decisions** - Helps tune policies and track patterns
+5. **Monitor quarantine volume trends** - Sudden spikes may indicate a targeted attack
+6. **Batch operations for efficiency** - Use bulk release/delete for large review sets
 
 ## Related Skills
 

@@ -2,7 +2,7 @@
   "name": "ops-pack",
   "displayName": "MSP Operations",
   "description": "Cross-vendor service-desk operations — board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

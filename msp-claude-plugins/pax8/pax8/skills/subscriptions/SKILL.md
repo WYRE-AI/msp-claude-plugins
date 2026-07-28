@@ -1,16 +1,14 @@
 ---
 name: "Pax8 Subscriptions"
 description: >
-  Use this skill when working with Pax8 subscriptions - checking license
-  status, reviewing seat counts, filtering by company or product,
-  tracking subscription states, reviewing change history, and optimizing
-  license usage across MSP clients. Covers the full subscription
-  lifecycle including all subscription states and quantity management.
+  Pax8 subscriptions: license and seat counts, the full subscription lifecycle and its
+  states, change history, filtering by company or product, and quantity management for
+  license optimization.
 when_to_use: >-
-  When checking license status, reviewing seat counts, filtering by company or product, tracking
-  subscription states, reviewing change history. Use when: pax8 subscription, pax8 license, pax8
-  seat, pax8 provision, pax8 cancel, subscription management, license management, seat count, pax8
-  activate, license optimization, subscription lifecycle, or subscription status.
+  When checking license status, seat counts, subscription state, or change history for a
+  client's Pax8 subscriptions. Use when: pax8 subscription, pax8 license, pax8 seat,
+  pax8 provision, pax8 cancel, subscription management, license management, seat count,
+  pax8 activate, license optimization, subscription lifecycle, or subscription status.
 ---
 
 # Pax8 Subscription Lifecycle Management
@@ -217,8 +215,7 @@ For usage-based products (e.g., Azure):
 6. **Plan renewals** - Track end dates and plan renewal conversations with clients
 7. **Batch operations carefully** - When checking multiple companies, respect rate limits (1000/min)
 8. **Document changes** - Note why quantities were changed in your PSA or documentation
-9. **Verify after modification** - Re-fetch the subscription after changes to confirm they took effect
-10. **Use billing term filter** - Filter by `billingTerm=monthly` to quickly find candidates for annual commitment savings
+9. **Use billing term filter** - Filter by `billingTerm=monthly` to quickly find candidates for annual commitment savings
 
 ## Related Skills
 

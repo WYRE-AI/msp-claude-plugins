@@ -1,15 +1,14 @@
 ---
 name: "ScalePad Core"
 description: >
-  Use this skill when working with the ScalePad Core API — the
-  read-only, US-only unified data layer over clients, contacts,
-  members, sites, opportunities, hardware and SaaS assets, the
-  product catalog, service contracts, tickets, and integration
-  configurations.
+  The ScalePad Core API — the read-only, US-only unified data layer over clients,
+  contacts, members, sites, opportunities, hardware and SaaS assets, the product
+  catalog, service contracts, tickets, and integration configurations.
 when_to_use: >-
-  When reading unified ScalePad platform data — clients, contacts, members, sites, opportunities, 
-  hardware/SaaS assets, product catalog, contracts, or tickets. Use when: scalepad clients, 
-  scalepad core, scalepad assets, scalepad contacts, scalepad tickets, scalepad contracts.
+  When reading unified ScalePad platform data — clients, contacts, members, sites,
+  opportunities, hardware/SaaS assets, product catalog, contracts, or tickets. Use when:
+  scalepad clients, scalepad core, scalepad assets, scalepad contacts, scalepad tickets,
+  scalepad contracts.
 ---
 
 # ScalePad Core (Unified Platform Data)

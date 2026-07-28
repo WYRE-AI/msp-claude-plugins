@@ -1,14 +1,12 @@
 ---
 name: "runZero Assets"
 description: >
-  Use this skill when working with RunZero assets — searching and browsing
-  the asset inventory, inspecting asset attributes, OS fingerprinting,
-  hardware details, and network interfaces.
+  The runZero asset inventory: searching and browsing assets, asset attributes, OS
+  fingerprinting, hardware details, and network interfaces.
 when_to_use: >-
-  When searching and browsing the asset inventory, inspecting asset attributes, OS fingerprinting,
-  hardware details, and network interfaces. Use when: runzero asset, runzero inventory, asset
-  search, asset discovery, os fingerprint, asset attributes, asset list, network inventory, device
-  inventory, or endpoint discovery.
+  When searching, browsing, or inspecting assets in the runZero inventory. Use when:
+  runzero asset, runzero inventory, asset search, asset discovery, os fingerprint, asset
+  attributes, asset list, network inventory, device inventory, or endpoint discovery.
 ---
 
 # RunZero Assets

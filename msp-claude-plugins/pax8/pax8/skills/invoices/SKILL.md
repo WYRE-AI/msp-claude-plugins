@@ -1,16 +1,13 @@
 ---
 name: "Pax8 Invoices"
 description: >
-  Use this skill when working with Pax8 invoices and billing - retrieving
-  invoices, analyzing billing data, reconciling costs with client charges,
-  reviewing usage summaries, and understanding the MSP billing cycle.
-  Covers invoice retrieval, usage-based billing, and billing
-  reconciliation workflows.
+  Pax8 invoices and billing: invoice retrieval, invoice line items, usage-based billing
+  summaries, the MSP billing cycle, and reconciling Pax8 costs against client charges.
 when_to_use: >-
-  When retrieving invoices, analyzing billing data, reconciling costs with client charges,
-  reviewing usage summaries, and understanding the MSP billing cycle. Use when: pax8 invoice, pax8
-  billing, pax8 cost, pax8 charge, pax8 usage, billing reconciliation, invoice items, pax8
-  payment, cost analysis, billing report, or usage summary.
+  When retrieving invoices, analyzing billing data, reviewing usage summaries, or
+  reconciling Pax8 costs with client charges. Use when: pax8 invoice, pax8 billing, pax8
+  cost, pax8 charge, pax8 usage, billing reconciliation, invoice items, pax8 payment,
+  cost analysis, billing report, or usage summary.
 ---
 
 # Pax8 Invoices & Billing
@@ -213,12 +210,11 @@ For usage-based products like Azure:
 2. **Break down by client** - Use `companyId` to attribute costs per company
 3. **Track margins** - Compare partner buy price to what you charge clients
 4. **Monitor trends** - Track month-over-month billing changes
-5. **Catch discrepancies early** - Regular reconciliation catches billing errors
-6. **Watch for prorated charges** - Mid-cycle subscription changes create prorated line items
-7. **Usage-based products** - Azure and similar products have variable billing; monitor usage summaries regularly
-8. **Use date range filters** - Filter by `invoiceDateRangeStart`/`invoiceDateRangeEnd` to scope queries
-9. **Automate alerts** - Set up notifications for unpaid invoices using `status=unpaid` filter
-10. **Cross-reference with PSA** - Match Pax8 invoice data to PSA agreement line items
+5. **Watch for prorated charges** - Mid-cycle subscription changes create prorated line items
+6. **Usage-based products** - Azure and similar products have variable billing; monitor usage summaries regularly
+7. **Use date range filters** - Filter by `invoiceDateRangeStart`/`invoiceDateRangeEnd` to scope queries
+8. **Automate alerts** - Set up notifications for unpaid invoices using `status=unpaid` filter
+9. **Cross-reference with PSA** - Match Pax8 invoice data to PSA agreement line items
 
 ## Related Skills
 

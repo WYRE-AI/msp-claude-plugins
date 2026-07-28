@@ -1,14 +1,13 @@
 ---
 name: "SaaS Alerts API Patterns"
+description: >
+  SaaS Alerts MCP fundamentals: API-key authentication via the gateway header,
+  the MSP → customer → account → user hierarchy, navigation and functional tool
+  naming, event filter parameters, cursor pagination, and HTTP error codes.
 when_to_use: >-
   When working with SaaS Alerts authentication, the MSP/customer/account hierarchy, or paging
   through alerts and events. Use when: saas alerts api, saas alerts authentication, saas alerts
   mcp, or m365 alert triage.
-description: >
-  Use this skill when working with the SaaS Alerts MCP tools — API-key
-  authentication via the gateway header, the MSP/customer/account hierarchy,
-  navigation tools, and paging through events, recommended actions, devices,
-  and billing.
 ---
 
 # SaaS Alerts MCP Tools & API Patterns
@@ -110,7 +109,6 @@ results complete. Large tenants can return thousands of events in a
 
 ## Best Practices
 
-- Always confirm `saas_alerts_status` before a multi-step triage pass.
 - Scope queries to a customer or time window before listing events — an
   unscoped query against all customers in a large MSP account can be slow.
 - Pair events with `saas_alerts_recommended_actions` for the same alert

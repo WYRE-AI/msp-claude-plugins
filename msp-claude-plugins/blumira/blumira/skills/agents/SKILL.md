@@ -1,12 +1,11 @@
 ---
 name: "Blumira Agents"
 description: >
-  Use this skill when working with Blumira agents, devices, and agent keys,
-  including listing devices, checking agent health, and managing agent
-  deployment keys.
+  Blumira agents (sensors) and the devices they run on: device inventory and
+  filtering, agent health via last-seen timestamps, and agent deployment keys.
 when_to_use: >-
-  When working with Blumira agents, devices, and agent keys, including listing devices, checking
-  agent health, and managing agent deployment keys. Use when: blumira agent, blumira device, agent
+  When inventorying Blumira devices, checking agent health, or working with agent
+  deployment keys. Use when: blumira agent, blumira device, agent
   key, device inventory, agent health, or sensor status.
 ---
 

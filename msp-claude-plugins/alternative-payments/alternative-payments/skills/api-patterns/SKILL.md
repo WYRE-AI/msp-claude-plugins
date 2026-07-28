@@ -1,11 +1,11 @@
 ---
 name: "Alternative Payments API Patterns"
 description: >
-  Use this skill when working with the Alternative Payments API - OAuth2
-  client-credentials authentication, REST structure, cursor pagination,
-  rate limiting (5 req/sec), error handling, and the read + safe-write
-  capability posture. Covers token minting, bearer auth, idempotency, and
-  the deliberate exclusion of direct payment creation.
+  Alternative Payments API fundamentals: OAuth2 client-credentials token
+  minting and bearer auth, scopes, REST endpoint structure, cursor
+  pagination, the 5 req/sec rate limit, idempotency, error handling, and
+  the read + safe-write capability posture that deliberately excludes
+  direct payment creation.
 when_to_use: >-
   When working with authentication, pagination, rate limiting, error handling, or endpoint
   structure in the Alternative Payments API. Use when: alternative payments api,

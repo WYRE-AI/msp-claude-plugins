@@ -1,5 +1,14 @@
 ---
 name: "Incident Postmortem"
+description: >
+  Assembling a blameless postmortem grounded in systems of record: timeline
+  reconstruction merging the incident tool's event log with correlated
+  observability anomalies (Sentry error spikes, Datadog/Grafana metric
+  anomalies, including precursor signal that predates formal detection) and
+  deploy history from connected platform connectors, all normalized to one
+  stated timezone; the root-cause versus contributing-factor distinction and
+  the test for telling them apart; and how to label a root cause that is
+  still only a hypothesis.
 when_to_use: >-
   When assembling a blameless postmortem or post-incident review from a
   resolved (or resolving) incident — reconstructing the timeline, separating
@@ -8,16 +17,6 @@ when_to_use: >-
   postmortem, incident retro, incident retrospective, what happened during
   the outage, post-incident review, blameless postmortem, root cause
   analysis.
-description: >
-  Use this skill when assembling a blameless postmortem from an incident
-  across whatever incident-management and observability tools are connected
-  through the gateway. Covers timeline reconstruction from the incident
-  tool's event log plus correlated observability data (Sentry error spikes,
-  Datadog/Grafana metric anomalies, GitHub deploy history around the
-  incident window), a root-cause hypothesis structure, and the difference
-  between contributing factors and root cause. Discover connected tools via
-  conduit__search_tools before assuming a specific vendor; never hardcode a
-  tool surface.
 ---
 
 # Incident Postmortem
@@ -168,20 +167,6 @@ report should say so rather than presenting a thinner timeline as complete.
 
 Ask which incident to draft, or state clearly which one was selected by
 default (highest severity / longest duration) and why.
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's tool
-  name.
-- Keep root cause and contributing factors visually and structurally
-  distinct — never merge them into one paragraph.
-- Label unconfirmed root-cause hypotheses explicitly as hypotheses.
-- State the evidence gap explicitly whenever a normally-useful connector
-  (observability, deploy history) isn't connected, rather than presenting a
-  thinner timeline as if it were complete.
-- Tie action items to contributing factors as often as to the root cause —
-  a postmortem with only a root-cause fix and no systemic action items hasn't
-  done the durable prevention work.
 
 ## Related Skills
 

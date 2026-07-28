@@ -1,17 +1,15 @@
 ---
 name: "Autotask Product Catalog"
 description: >
-  Use this skill when working with Autotask product catalog operations - searching
-  products, checking pricing, managing inventory, and understanding the relationship
-  between products, services, bundles, and price lists. Covers product types,
-  pricing models, inventory tracking, and billing code associations. Essential for
-  MSP operations involving quoting, procurement, and cost analysis through Autotask PSA.
+  Autotask product catalog structure - Products, Services, and Service Bundles - and how
+  Price Lists override default unit pricing. Covers product/service fields, inventory
+  tracking, and cost-vs-billing margin analysis for MSP quoting and procurement.
 when_to_use: >-
-  When searching products, checking pricing, managing inventory, and understanding the
-  relationship between products, services, bundles, and price lists. Use when: autotask product,
-  autotask products, product catalog, product pricing, price list, inventory items, autotask
-  services, service bundles, product search, check pricing, cost analysis, billing rates, markup,
-  or autotask inventory.
+  When searching products, checking pricing, managing inventory, or working with the relationship
+  between products, services, bundles, and price lists. Use when: autotask product, autotask
+  products, product catalog, product pricing, price list, inventory items, autotask services,
+  service bundles, product search, check pricing, cost analysis, billing rates, markup, or autotask
+  inventory.
 ---
 
 # Autotask Product Catalog

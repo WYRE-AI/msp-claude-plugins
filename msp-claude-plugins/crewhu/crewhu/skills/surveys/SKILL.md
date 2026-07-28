@@ -1,14 +1,15 @@
 ---
 name: "Crewhu Surveys"
+description: >
+  Crewhu CSAT/NPS survey data: the list/search/get tools and the
+  detractor/promoter sentiment slices, the trend, detractor-follow-up,
+  promoter-recognition and per-tech roll-up workflows, and the edge cases that
+  skew scores — sparse response counts, comment-only feedback, and tenant-local
+  timestamps.
 when_to_use: >-
   When analyzing CSAT/NPS surveys, drilling into detractors and promoters, or pulling per-user /
   per-team satisfaction trends from Crewhu. Use when: crewhu csat, crewhu nps, crewhu survey,
   crewhu detractor, crewhu promoter, csat trend, customer satisfaction crewhu, or nps score.
-description: >
-  Use this skill when working with Crewhu CSAT/NPS surveys — listing
-  recent responses, drilling into a specific survey, isolating
-  detractors and promoters for follow-up, and rolling responses up by
-  user.
 ---
 
 # Crewhu Surveys (CSAT / NPS)

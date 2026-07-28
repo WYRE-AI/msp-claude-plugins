@@ -2,7 +2,7 @@
   "name": "devops-pack",
   "displayName": "DevOps & Reliability",
   "description": "Cross-vendor engineering reliability operations — on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management, observability, and platform tools you have connected.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

@@ -1,13 +1,12 @@
 ---
 name: "SalesBuildr Products"
 description: >
-  Use this skill when searching for products in the Salesbuildr catalog,
-  looking up pricing, or browsing by category. Products are items that
-  can be added to quotes as line items.
+  Salesbuildr product catalog: product search, pricing lookup, category
+  browsing, and how products become quote line items.
 when_to_use: >-
-  When searching for products in the Salesbuildr catalog, looking up pricing, or browsing by
-  category. Use when: salesbuildr product, salesbuildr products, salesbuildr catalog, salesbuildr
-  pricing, or product search salesbuildr.
+  When searching the Salesbuildr catalog or looking up product pricing. Use
+  when: salesbuildr product, salesbuildr products, salesbuildr catalog,
+  salesbuildr pricing, or product search salesbuildr.
 ---
 
 # Salesbuildr Products

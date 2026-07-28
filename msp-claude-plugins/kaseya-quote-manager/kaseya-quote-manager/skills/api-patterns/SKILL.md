@@ -1,13 +1,14 @@
 ---
 name: "Kaseya Quote Manager API Patterns"
+description: >
+  Kaseya Quote Manager (Datto Commerce) API fundamentals: API-key auth and
+  the gateway's header translation, the read-only `kqm_<entity>_list`/`_get`
+  tool surface across the sales, procurement, catalog, CRM, and org domains,
+  page/pageSize/modifiedAfter pagination, rate limits, and error codes.
 when_to_use: >-
   When working with Kaseya Quote Manager authentication, pagination, rate limits, or error
   handling for the Kaseya Quote Manager MCP server. Use when: kaseya quote manager api, kqm
   authentication, kqm pagination, kqm rate limit, quote manager api, or datto commerce api.
-description: >
-  Use this skill when working with the Kaseya Quote Manager (Datto Commerce)
-  MCP tools — API-key authentication, the read-only tool surface, page/pageSize
-  pagination with modifiedAfter, rate limits, and error handling.
 ---
 
 # Kaseya Quote Manager MCP Tools & API Patterns

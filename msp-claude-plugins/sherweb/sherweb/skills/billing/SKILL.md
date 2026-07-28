@@ -1,17 +1,15 @@
 ---
 name: "Sherweb Billing"
 description: >
-  Use this skill when working with Sherweb distributor billing - payable
-  charges, billing periods, charge types, pricing breakdown, deductions,
-  fees, taxes, invoices, and MSP margin calculations. Covers Setup,
-  Recurring, and Usage charge types, billing cycles (OneTime, Monthly,
-  Yearly), and pricing fields (listPrice, netPrice, prorated, subTotal).
+  Sherweb distributor billing: billing periods, Setup/Recurring/Usage charge types,
+  billing cycles (OneTime, Monthly, Yearly), the pricing breakdown (listPrice,
+  netPrice, prorated, subTotal), promotional and performance deductions, fees,
+  taxes, invoices, and MSP margin calculation.
 when_to_use: >-
-  When working with payable charges, billing periods, charge types, pricing breakdown, deductions,
-  fees, taxes, invoices, and MSP margin calculations in Sherweb distributor billing. Use when:
-  sherweb billing, sherweb invoice, sherweb charges, sherweb payable, sherweb pricing, sherweb
-  deductions, sherweb fees, sherweb taxes, sherweb margin, sherweb cost, sherweb billing period,
-  sherweb recurring, or sherweb prorated.
+  When reviewing Sherweb payable charges, invoices, costs, or MSP margins. Use when:
+  sherweb billing, sherweb invoice, sherweb charges, sherweb payable, sherweb pricing,
+  sherweb deductions, sherweb fees, sherweb taxes, sherweb margin, sherweb cost,
+  sherweb billing period, sherweb recurring, or sherweb prorated.
 ---
 
 # Sherweb Distributor Billing
@@ -266,16 +264,13 @@ Margin %     = (Margin / Client Price) * 100
 
 ## Best Practices
 
-1. **Reconcile monthly** - Compare Sherweb charges against your PSA billing every month to catch discrepancies early
-2. **Track deductions** - Monitor promotional and performance deductions to ensure you receive expected discounts
-3. **Watch for proration** - Prorated charges indicate mid-cycle changes; verify they match subscription modifications
-4. **Separate charge types** - Analyze Setup, Recurring, and Usage charges independently for accurate cost modeling
-5. **Calculate true margin** - Include fees and taxes in margin calculations, not just netPrice vs listPrice
-6. **Archive billing data** - Export billing period data for historical analysis and audit trails
-7. **Monitor usage charges** - Usage-based charges (Azure, etc.) can spike unexpectedly; set up alerts
-8. **Verify invoice totals** - Always cross-reference invoices against payable charge totals
-9. **Plan for billing cycles** - Annual charges create cash flow events; plan for yearly renewal months
-10. **Use performance rebates strategically** - Consolidate purchasing through Sherweb to maximize performance percentage deductions
+1. **Track deductions** - Monitor promotional and performance deductions to ensure you receive expected discounts
+2. **Watch for proration** - Prorated charges indicate mid-cycle changes; verify they match subscription modifications
+3. **Separate charge types** - Analyze Setup, Recurring, and Usage charges independently for accurate cost modeling
+4. **Calculate true margin** - Include fees and taxes in margin calculations, not just netPrice vs listPrice
+5. **Monitor usage charges** - Usage-based charges (Azure, etc.) can spike unexpectedly; set up alerts
+6. **Plan for billing cycles** - Annual charges create cash flow events; plan for yearly renewal months
+7. **Use performance rebates strategically** - Consolidate purchasing through Sherweb to maximize performance percentage deductions
 
 ## Related Skills
 

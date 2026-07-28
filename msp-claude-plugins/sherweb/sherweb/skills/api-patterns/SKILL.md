@@ -1,16 +1,15 @@
 ---
 name: "Sherweb API Patterns"
 description: >
-  Use this skill when working with the Sherweb API and MCP tools -
-  OAuth 2.0 client credentials authentication, token management, API
-  endpoints, subscription key header, rate limits, error codes, scopes,
-  Accept-Language support, and best practices.
+  Sherweb Partner API fundamentals: OAuth 2.0 client-credentials auth, token
+  caching, subscription-key header, scopes and base URLs, endpoint and MCP tool
+  catalog, page-based pagination, Accept-Language localization, rate limits, and
+  error codes.
 when_to_use: >-
-  When working with OAuth 2.0 client credentials authentication, token management, API endpoints,
-  subscription key header, rate limits, error codes, scopes, Accept-Language support. Use when:
-  sherweb api, sherweb authentication, sherweb oauth, sherweb token, sherweb endpoint, sherweb
-  rate limit, sherweb mcp, sherweb request, sherweb scope, sherweb subscription key, sherweb
-  error, or sherweb connection.
+  When authenticating to or calling the Sherweb API directly or through MCP tools.
+  Use when: sherweb api, sherweb authentication, sherweb oauth, sherweb token, sherweb
+  endpoint, sherweb rate limit, sherweb mcp, sherweb request, sherweb scope, sherweb
+  subscription key, sherweb error, or sherweb connection.
 ---
 
 # Sherweb API Patterns & MCP Tools
@@ -300,16 +299,8 @@ When rate limited, the API returns a `429 Too Many Requests` response with:
 
 ## Best Practices
 
-1. **Cache tokens** - Reuse OAuth tokens for their full 1-hour lifetime; never request a new token per call
-2. **Use maximum page size** - Set `pageSize=100` to minimize total API calls when fetching all records
-3. **Filter server-side** - Use query parameters to narrow results rather than fetching everything
-4. **Handle rate limits gracefully** - Implement exponential backoff with jitter on 429 responses
-5. **Use the correct scope** - Most MSPs should use `service-provider` scope, not `distributor`
-6. **Include subscription key** - Every request needs the `Ocp-Apim-Subscription-Key` header
-7. **Set Accept-Language** - Include `Accept-Language: en` (or `fr`) for consistent response language
-8. **Monitor token expiry** - Proactively refresh tokens before they expire to avoid 401 errors
-9. **Log API errors** - Capture error responses for debugging and support cases
-10. **Use HTTPS only** - All Sherweb API endpoints require TLS; never use HTTP
+1. **Filter server-side** - Use query parameters to narrow results rather than fetching everything
+2. **Set Accept-Language** - Include `Accept-Language: en` (or `fr`) for consistent response language
 
 ## Related Skills
 

@@ -1,14 +1,13 @@
 ---
 name: "SentinelOne Purple AI"
 description: >
-  Use this skill when working with SentinelOne Purple AI - natural language
-  cybersecurity investigation, threat hunting, behavioral anomaly analysis,
-  MITRE ATT&CK TTP mapping, and PowerQuery generation. Covers the purple_ai
-  tool, best practices for prompting, common investigation queries, and
-  integration with PowerQuery execution.
+  The `purple_ai` tool — SentinelOne's natural language investigation assistant over
+  the full Singularity telemetry model. Covers how to phrase investigative prompts,
+  behavioral anomaly and MITRE ATT&CK TTP analysis, PowerQuery generation, and
+  handing generated queries to the `powerquery` tool for execution.
 when_to_use: >-
-  When working with natural language cybersecurity investigation, threat hunting, behavioral
-  anomaly analysis, MITRE ATT&CK TTP mapping. Use when: sentinelone purple ai, purple ai, threat
+  When starting a SentinelOne investigation from a natural-language question, or generating
+  PowerQuery rather than writing it by hand. Use when: sentinelone purple ai, purple ai, threat
   investigation, threat hunting sentinelone, sentinelone investigate, sentinelone natural
   language, sentinelone mitre, sentinelone ttp, powerquery generation, sentinelone behavioral,
   sentinelone anomaly, or purple ai query.

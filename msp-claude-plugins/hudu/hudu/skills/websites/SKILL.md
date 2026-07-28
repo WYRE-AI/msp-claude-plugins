@@ -1,13 +1,12 @@
 ---
 name: "Hudu Websites"
 description: >
-  Use this skill when working with Hudu website records - website monitoring,
-  SSL/TLS tracking, email security (DMARC, DKIM, SPF), DNS records, and
-  linking websites to companies. Covers website CRUD, monitoring fields,
-  and email security verification patterns.
+  Hudu website records: CRUD via /api/v1/websites, monitoring and pause/disable
+  fields, SSL/TLS certificate tracking, email security status (DMARC, DKIM, SPF),
+  DNS record fields, company linkage, and website validation errors.
 when_to_use: >-
-  When working with website monitoring, SSL/TLS tracking, email security (DMARC, DKIM, SPF), DNS
-  records, and linking websites to companies in Hudu website records. Use when: hudu website,
+  When creating, querying, or auditing Hudu website records, or checking SSL and email
+  authentication status for client domains. Use when: hudu website,
   website monitoring, ssl certificate, email security, dmarc check, dkim check, spf record,
   website management, hudu dns, or website tracking.
 ---
@@ -381,12 +380,11 @@ async function safeCreateWebsite(data) {
 2. **Monitor SSL certificates** - Set up alerts for expiring certificates
 3. **Verify email security** - Check SPF, DKIM, DMARC for all domains
 4. **Document hosting info** - Use notes to record hosting provider and account details
-5. **Regular audits** - Verify website records match actual client domains quarterly
-6. **Don't pause monitoring** - Keep monitoring active unless there is a specific reason to pause
-7. **Track secondary domains** - Include marketing sites, client portals, subdomains
-8. **DMARC enforcement** - Work toward "reject" policy for all client domains
-9. **Link to credentials** - Cross-reference with Hudu passwords for domain registrar and hosting credentials
-10. **Record DNS providers** - Note which DNS provider each domain uses
+5. **Don't pause monitoring** - Keep monitoring active unless there is a specific reason to pause
+6. **Track secondary domains** - Include marketing sites, client portals, subdomains
+7. **DMARC enforcement** - Work toward "reject" policy for all client domains
+8. **Link to credentials** - Cross-reference with Hudu passwords for domain registrar and hosting credentials
+9. **Record DNS providers** - Note which DNS provider each domain uses
 
 ## Related Skills
 

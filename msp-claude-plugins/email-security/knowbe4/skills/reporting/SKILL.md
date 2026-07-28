@@ -1,14 +1,12 @@
 ---
 name: "KnowBe4 Reporting"
 description: >
-  Use this skill when generating KnowBe4 security awareness reports - phishing
-  summary statistics, training completion rates, risk score overviews, trend analysis,
-  organizational benchmarks, and executive dashboards. Covers how to interpret
-  KnowBe4 metrics, build meaningful reports, and communicate security awareness
-  posture to stakeholders.
+  KnowBe4 security awareness reporting: phishing summary statistics, training
+  completion rates, risk score overviews, trend analysis, organizational
+  benchmarks, and executive dashboards, including how to interpret metrics and
+  communicate posture to stakeholders.
 when_to_use: >-
-  When generating KnowBe4 security awareness reports - phishing summary statistics, training
-  completion rates, risk score overviews, trend analysis, organizational benchmarks. Use when:
+  When generating or interpreting KnowBe4 security awareness reports. Use when:
   knowbe4 report, knowbe4 reporting, security awareness report, phishing summary, training
   completion rate, risk overview, trend analysis, knowbe4 metrics, knowbe4 dashboard, security
   posture report, awareness metrics, executive report knowbe4, or compliance report.

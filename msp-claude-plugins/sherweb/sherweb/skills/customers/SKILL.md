@@ -1,16 +1,15 @@
 ---
 name: "Sherweb Customers"
 description: >
-  Use this skill when working with Sherweb customers - listing customers,
-  retrieving customer details, accounts receivable, and understanding the
-  distributor > service provider > customer hierarchy. Covers customer
-  lifecycle, customer fields, and cross-referencing with subscriptions
-  and billing data.
+  Sherweb customer records: the distributor > service provider > customer
+  hierarchy and its API scoping consequences, customer lifecycle stages, core
+  address and contact fields, accounts-receivable data with aging buckets, and
+  cross-referencing customers with PSA, subscription, and billing data.
 when_to_use: >-
-  When listing customers, retrieving customer details, accounts receivable, and understanding the
-  distributor > service provider > customer hierarchy. Use when: sherweb customer, sherweb client,
-  sherweb organization, sherweb account, sherweb customer list, sherweb customer details, sherweb
-  accounts receivable, sherweb hierarchy, sherweb service provider, or sherweb distributor.
+  When looking up Sherweb customers, their details, or their accounts-receivable
+  standing. Use when: sherweb customer, sherweb client, sherweb organization, sherweb
+  account, sherweb customer list, sherweb customer details, sherweb accounts
+  receivable, sherweb hierarchy, sherweb service provider, or sherweb distributor.
 ---
 
 # Sherweb Customer Management
@@ -251,15 +250,13 @@ Accounts receivable data shows the financial relationship between the service pr
 ## Best Practices
 
 1. **Set external IDs** - Link Sherweb customers to your PSA records for easy cross-referencing
-2. **Verify hierarchy** - Remember all API calls are scoped to your service provider; you cannot see other MSPs' customers
-3. **Monitor accounts receivable** - Review aging buckets monthly to catch overdue payments early
-4. **Audit customer list** - Quarterly review inactive customers for cleanup or reactivation
-5. **Standardize naming** - Use consistent naming conventions across Sherweb and your PSA
-6. **Track customer status** - Monitor for suspended customers that may need intervention
-7. **Paginate all list calls** - Never assume a small number of customers; always handle pagination
-8. **Cache customer data** - Customer details change infrequently; cache for short periods to reduce API calls
-9. **Verify contact info** - Keep primary contact information current for billing and support communication
-10. **Use search for lookups** - The `search` parameter is more efficient than fetching all customers and filtering locally
+2. **Monitor accounts receivable** - Review aging buckets monthly to catch overdue payments early
+3. **Audit customer list** - Quarterly review inactive customers for cleanup or reactivation
+4. **Standardize naming** - Use consistent naming conventions across Sherweb and your PSA
+5. **Track customer status** - Monitor for suspended customers that may need intervention
+6. **Cache customer data** - Customer details change infrequently; cache for short periods to reduce API calls
+7. **Verify contact info** - Keep primary contact information current for billing and support communication
+8. **Use search for lookups** - The `search` parameter is more efficient than fetching all customers and filtering locally
 
 ## Related Skills
 

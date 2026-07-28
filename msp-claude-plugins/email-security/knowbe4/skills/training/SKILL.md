@@ -1,17 +1,14 @@
 ---
 name: "KnowBe4 Training"
 description: >
-  Use this skill when working with KnowBe4 training campaigns - creating and managing
-  training assignments, tracking enrollment and completion, browsing training modules
-  and content library, managing store purchases, and monitoring compliance deadlines.
-  Covers training campaign lifecycle, enrollment workflows, completion tracking, and
-  content management for security awareness programs.
+  KnowBe4 training campaign management: campaign lifecycle, enrollment workflows,
+  completion tracking, training module and content library browsing, store
+  purchases, and compliance deadline monitoring.
 when_to_use: >-
-  When creating and managing training assignments, tracking enrollment and completion, browsing
-  training modules and content library, managing store purchases. Use when: knowbe4 training,
-  training campaign, security awareness training, training enrollment, training completion,
-  training module, knowbe4 course, training assignment, training status, compliance training,
-  training content, store purchase, or training deadline.
+  When creating or managing KnowBe4 training campaigns, enrollments, or content. Use when:
+  knowbe4 training, training campaign, security awareness training, training enrollment,
+  training completion, training module, knowbe4 course, training assignment, training status,
+  compliance training, training content, store purchase, or training deadline.
 ---
 
 # KnowBe4 Training Campaign Management

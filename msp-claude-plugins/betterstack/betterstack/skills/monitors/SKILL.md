@@ -1,14 +1,13 @@
 ---
 name: "Better Stack Monitors"
 description: >
-  Use this skill when working with Better Stack uptime monitors --
-  listing, creating, updating, pausing, and deleting monitors,
-  heartbeat monitors, monitor groups, and check types.
+  Better Stack uptime monitors: check types, monitor fields, heartbeat
+  monitors, monitor groups, and create/update/pause/delete operations.
 when_to_use: >-
-  When listing, creating, updating, pausing, and deleting monitors, heartbeat monitors, monitor
-  groups, and check types. Use when: betterstack monitor, uptime monitor, heartbeat monitor,
-  monitor group, check type, monitor status, monitor downtime, betterstack uptime, or better
-  uptime.
+  When listing, creating, updating, pausing, or deleting Better Stack
+  monitors. Use when: betterstack monitor, uptime monitor, heartbeat
+  monitor, monitor group, check type, monitor status, monitor downtime,
+  betterstack uptime, or better uptime.
 ---
 
 # Better Stack Uptime Monitors

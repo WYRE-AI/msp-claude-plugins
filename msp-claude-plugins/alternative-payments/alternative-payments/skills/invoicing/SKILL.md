@@ -1,11 +1,11 @@
 ---
 name: "Alternative Payments Invoicing"
 description: >
-  Use this skill when working with Alternative Payments invoices and hosted
-  payment requests - listing, retrieving, and creating invoices with line items,
-  fetching a hosted payment link or PDF link, archiving an invoice, and creating
-  or retrieving hosted payment requests. Hosted links let the customer choose to
-  pay; the integration never moves money on the customer's behalf.
+  Alternative Payments invoices and hosted payment requests: invoice status
+  and line-item fields, hosted payment links and signed PDF links,
+  archiving, and payment-request creation and retrieval. Hosted links let
+  the customer choose to pay; the integration never moves money on the
+  customer's behalf.
 when_to_use: >-
   When creating, listing, retrieving, or archiving Alternative Payments invoices, or generating
   hosted payment links and payment requests. Use when: alternative payments invoice, create
@@ -252,7 +252,6 @@ Common validation causes: empty `line_items[]`, missing `due_date`, an unknown
 3. **Send hosted links, not charges** — let the customer pay via the payment link.
 4. **Set a `reference_id` on payment requests** — makes reconciliation clean.
 5. **Confirm before archiving** — `DELETE` is destructive.
-6. **Read bodies as text then parse** — avoids "body already read" errors.
 
 ## Endpoint Reference
 

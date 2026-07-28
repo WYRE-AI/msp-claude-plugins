@@ -1,12 +1,11 @@
 ---
 name: "HubSpot Tickets"
 description: >
-  Use this skill when working with HubSpot tickets - creating, searching,
-  updating, and managing support tickets in HubSpot CRM. Covers ticket
-  fields, pipeline stages, priority levels, and associating tickets
-  with contacts, companies, and deals.
+  HubSpot support tickets: core fields, default pipeline stages, priority
+  levels, MSP ticket categories, SLA timestamp properties, and associating
+  tickets with contacts, companies, and deals.
 when_to_use: >-
-  When creating, searching, updating, and managing support tickets in HubSpot CRM. Use when:
+  When creating, retrieving, updating, or reporting on support tickets in HubSpot CRM. Use when:
   hubspot ticket, hubspot support, hubspot service, hubspot issue, ticket search hubspot, ticket
   management hubspot, hubspot help desk, hubspot case, support ticket hubspot, or service ticket
   hubspot.

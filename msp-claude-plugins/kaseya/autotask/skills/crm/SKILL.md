@@ -1,11 +1,11 @@
 ---
 name: "Autotask CRM"
 description: >
-  Use this skill when working with Autotask CRM - companies, contacts,
-  sites/locations, and opportunities. Essential for MSP account management,
-  client onboarding, and relationship tracking in Autotask PSA.
+  Autotask CRM entities - companies (accounts), contacts, and sites/locations -
+  including field references, company type classifications, and how these
+  records underpin tickets, contracts, and projects for MSP account management.
 when_to_use: >-
-  When working with companies, contacts, sites/locations, and opportunities in Autotask CRM. Use
+  When working with companies, contacts, sites/locations, or opportunities in Autotask CRM. Use
   when: autotask company, autotask contact, autotask account, autotask crm, company management,
   contact management, client onboarding, autotask site, or autotask location.
 ---
@@ -289,12 +289,10 @@ For MSPs managing parent/child company relationships:
 ## Best Practices
 
 1. **Standardize naming** - Use consistent company name formats
-2. **Verify before creating** - Always search first to prevent duplicates
-3. **Maintain data quality** - Regular audits of contact information
-4. **Use classifications** - Categorize companies for reporting
-5. **Track account managers** - Assign ownerResourceID for accountability
-6. **Keep contacts current** - Inactive former employees
-7. **Document relationships** - Use notes for key account information
+2. **Maintain data quality** - Regular audits of contact information
+3. **Use classifications** - Categorize companies for reporting
+4. **Track account managers** - Assign ownerResourceID for accountability
+5. **Document relationships** - Use notes for key account information
 
 ## Related Skills
 

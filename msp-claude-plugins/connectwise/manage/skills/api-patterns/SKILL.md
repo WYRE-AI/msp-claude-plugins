@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Manage API Patterns"
 description: >
-  Use this skill when working with the ConnectWise PSA REST API - authentication
-  using public/private keys and clientId, pagination with page/pageSize, conditions
-  query syntax, rate limiting (60/min), and error handling. Covers all common
-  API patterns for ConnectWise PSA integration.
+  ConnectWise PSA REST API fundamentals: public/private key + clientId
+  authentication, page/pageSize pagination, the conditions query syntax,
+  rate limiting (60/min), and error-response handling.
 when_to_use: >-
   When working with authentication using public/private keys and clientId, pagination with
   page/pageSize, conditions query syntax, rate limiting (60/min). Use when: connectwise api,
@@ -80,23 +79,7 @@ clientId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
 Content-Type: application/json
 ```
 
-### JavaScript Authentication Example
-
-```javascript
-const companyId = process.env.CONNECTWISE_COMPANY_ID;
-const publicKey = process.env.CONNECTWISE_PUBLIC_KEY;
-const privateKey = process.env.CONNECTWISE_PRIVATE_KEY;
-const clientId = process.env.CONNECTWISE_CLIENT_ID;
-
-const credentials = `${companyId}+${publicKey}:${privateKey}`;
-const base64Credentials = Buffer.from(credentials).toString('base64');
-
-const headers = {
-  'Authorization': `Basic ${base64Credentials}`,
-  'clientId': clientId,
-  'Content-Type': 'application/json'
-};
-```
+See [references/examples.md](references/examples.md) for a JavaScript authentication example and recommended environment variable setup.
 
 ### Obtaining Credentials
 
@@ -227,31 +210,9 @@ GET /service/tickets?page=1&pageSize=100
 | `Link` | Contains next/prev page URLs |
 | `X-Total-Count` | Total record count (if requested) |
 
-### Pagination Example
-
-```javascript
-async function fetchAllTickets(conditions) {
-  const allTickets = [];
-  let page = 1;
-  const pageSize = 250;
-  let hasMore = true;
-
-  while (hasMore) {
-    const response = await fetch(
-      `${baseUrl}/service/tickets?conditions=${conditions}&page=${page}&pageSize=${pageSize}`,
-      { headers }
-    );
-
-    const tickets = await response.json();
-    allTickets.push(...tickets);
-
-    hasMore = tickets.length === pageSize;
-    page++;
-  }
-
-  return allTickets;
-}
-```
+Paginate by incrementing `page` until the response has fewer records than
+`pageSize`. See [references/examples.md](references/examples.md) for a
+full fetch-all-pages implementation.
 
 ### Getting Total Count
 
@@ -293,77 +254,23 @@ When rate limited, you receive HTTP 429:
 }
 ```
 
-### Retry Strategy
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const response = await fetch(url, options);
-
-    if (response.status === 429) {
-      const retryAfter = response.headers.get('Retry-After') || 30;
-      const jitter = Math.random() * 1000;
-      await sleep(retryAfter * 1000 + jitter);
-      continue;
-    }
-
-    return response;
-  }
-  throw new Error('Max retries exceeded');
-}
-```
+Implement exponential backoff with jitter on 429s using the `Retry-After`
+header. See [references/examples.md](references/examples.md) for a retry
+strategy implementation.
 
 ### Best Practices for Rate Limits
 
 1. **Implement exponential backoff** - Don't hammer the API
 2. **Check headers** - Monitor remaining requests
 3. **Batch operations** - Reduce total requests
-4. **Cache reference data** - Queues, statuses, members
-5. **Use webhooks** - Instead of polling for changes
+4. **Use webhooks** - Instead of polling for changes
 
 ## Error Handling
 
-### HTTP Status Codes
-
-| Code | Meaning | Action |
-|------|---------|--------|
-| 200 | Success | Process response |
-| 201 | Created | Entity created |
-| 204 | No Content | Delete successful |
-| 400 | Bad Request | Check request format |
-| 401 | Unauthorized | Verify credentials |
-| 403 | Forbidden | Check permissions |
-| 404 | Not Found | Entity doesn't exist |
-| 409 | Conflict | Record locked/modified |
-| 429 | Rate Limited | Implement backoff |
-| 500 | Server Error | Retry with backoff |
-
-### Error Response Format
-
-```json
-{
-  "code": "InvalidArgument",
-  "message": "The value 'invalid' is not valid for field 'status/id'.",
-  "errors": [
-    {
-      "code": "InvalidArgument",
-      "message": "status/id must be a valid integer",
-      "field": "status/id"
-    }
-  ]
-}
-```
-
-### Common Errors
-
-| Error | Cause | Resolution |
-|-------|-------|------------|
-| `InvalidCredentials` | Bad auth | Verify company ID, keys |
-| `MissingClientId` | No clientId header | Add clientId header |
-| `InvalidArgument` | Bad field value | Check field type/values |
-| `RequiredFieldMissing` | Missing required field | Add required fields |
-| `RecordNotFound` | Entity doesn't exist | Verify ID exists |
-| `RecordLocked` | Being edited | Retry after delay |
+Errors return the relevant HTTP status code plus a JSON body with `code`
+and `message` fields, and per-field detail in `errors[]`. See
+[references/errors.md](references/errors.md) for the complete HTTP status
+code table, error response format, and common error codes.
 
 ## Common API Patterns
 
@@ -397,75 +304,18 @@ GET /service/tickets?customFieldConditions=customField1 contains "value"
 
 ## Webhook Configuration
 
-### Webhook Callback
-
-ConnectWise can POST to your endpoint on entity changes:
-
-```json
-{
-  "Action": "updated",
-  "ID": 54321,
-  "Type": "ticket",
-  "MemberID": 123,
-  "Callback": {
-    "ID": 54321,
-    "Type": "ticket"
-  }
-}
-```
-
-### Registering Callbacks
-
-```http
-POST /system/callbacks
-Content-Type: application/json
-
-{
-  "url": "https://your-server.com/webhook",
-  "objectId": 0,
-  "type": "ticket",
-  "level": "owner",
-  "description": "Ticket updates webhook"
-}
-```
-
-## Environment Configuration
-
-### Recommended Environment Variables
-
-```bash
-export CONNECTWISE_COMPANY_ID="your-company-id"
-export CONNECTWISE_PUBLIC_KEY="your-public-key"
-export CONNECTWISE_PRIVATE_KEY="your-private-key"
-export CONNECTWISE_CLIENT_ID="your-client-id"
-export CONNECTWISE_SITE="api-na.myconnectwise.net"
-```
-
-### Configuration Object
-
-```javascript
-const config = {
-  companyId: process.env.CONNECTWISE_COMPANY_ID,
-  publicKey: process.env.CONNECTWISE_PUBLIC_KEY,
-  privateKey: process.env.CONNECTWISE_PRIVATE_KEY,
-  clientId: process.env.CONNECTWISE_CLIENT_ID,
-  site: process.env.CONNECTWISE_SITE || 'api-na.myconnectwise.net',
-  apiPath: '/apis/3.0'
-};
-```
+ConnectWise can POST entity-change events to a registered callback URL.
+See [references/webhooks.md](references/webhooks.md) for the callback
+payload shape and the registration request.
 
 ## Best Practices
 
 1. **Store credentials securely** - Never commit to source control
-2. **Use environment variables** - For configuration
-3. **Implement rate limit handling** - Don't get blocked
-4. **Cache reference data** - Reduce API calls
-5. **Handle errors gracefully** - Retry transient failures
-6. **Use pagination** - Don't fetch unbounded results
-7. **Select needed fields** - Reduce payload size
-8. **Log API calls** - For debugging and audit
-9. **Test in sandbox** - Before production changes
-10. **Monitor usage** - Track API call patterns
+2. **Handle errors gracefully** - Retry transient failures
+3. **Use pagination** - Don't fetch unbounded results
+4. **Select needed fields** - Reduce payload size
+5. **Log API calls** - For debugging and audit
+6. **Monitor usage** - Track API call patterns
 
 ## API Documentation
 

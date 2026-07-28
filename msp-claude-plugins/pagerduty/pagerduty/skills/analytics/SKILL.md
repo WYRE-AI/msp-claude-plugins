@@ -1,12 +1,13 @@
 ---
 name: "PagerDuty Analytics"
 description: >
-  Use this skill when working with PagerDuty analytics -- incident analytics,
-  MTTA and MTTR metrics, service-level performance, team workload reporting,
-  and operational maturity assessment.
+  PagerDuty Analytics: MTTA/MTTR/MTTE/MTTS definitions, incident and
+  interruption counts, aggregation levels (account, service, team, escalation
+  policy), time-range constraints, and benchmark tables for interpreting the
+  numbers.
 when_to_use: >-
-  When working with incident analytics, MTTA and MTTR metrics, service-level performance, team
-  workload reporting, and operational maturity assessment in PagerDuty analytics. Use when:
+  When reporting on incident response performance, SLA compliance, or on-call
+  workload from PagerDuty data. Use when:
   pagerduty analytics, mtta, mttr, incident metrics, pagerduty reporting, service performance,
   incident frequency, on-call load, or operational metrics.
 ---
@@ -209,7 +210,6 @@ Parameters:
 - Monitor interruption counts to protect on-call responder wellbeing
 - Set SLA targets for MTTA and MTTR and measure compliance
 - Include analytics in client-facing reports to demonstrate operational maturity
-- Correlate metric changes with process or tooling changes
 
 ## Related Skills
 

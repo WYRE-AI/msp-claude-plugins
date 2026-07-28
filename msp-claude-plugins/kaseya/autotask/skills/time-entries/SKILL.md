@@ -1,11 +1,10 @@
 ---
 name: "Autotask Time Entries"
 description: >
-  Use this skill when working with Autotask time entries - logging work hours,
-  billing calculations, approval workflows, utilization tracking, and budget
-  validation. Covers time entry fields, billing rates, approval statuses,
-  contract limits, and integration with tickets and projects.
-  Essential for MSP technicians tracking billable and non-billable work.
+  Autotask time entry structure: approval status codes and workflow, the time
+  entry field schema, the billing rate hierarchy, budget and contract-limit
+  validation, utilization analytics, and the MSP business rules for rounding
+  and minimum billing increments.
 when_to_use: >-
   When logging work hours, billing calculations, approval workflows, utilization tracking, and
   budget validation. Use when: autotask time entry, log time, time tracking, billable hours, time
@@ -50,64 +49,23 @@ DRAFT (0) ────────────────> SUBMITTED (1)
 - APPROVED entries are included in next billing cycle
 - Only designated approvers can change status from SUBMITTED
 
-## Complete Time Entry Field Reference
+## Time Entry Field Reference
 
-### Core Fields
+The fields you touch on nearly every call:
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | int | System | Auto-generated unique identifier |
-| `ticketID` | int | Conditional | Associated ticket (required if no projectID) |
-| `projectID` | int | Conditional | Associated project (required if no ticketID) |
-| `taskID` | int | No | Associated project task |
-| `resourceID` | int | Yes | Technician logging time |
-| `dateWorked` | date | Yes | Date work was performed |
+| Group | Key fields |
+|-------|-----------|
+| Core | `id`, `resourceID`, `ticketID`, `projectID`, `taskID`, `contractID` |
+| Time | `dateWorked` (YYYY-MM-DD), `hoursWorked`, `startDateTime`, `endDateTime` |
+| Billing | `isBillable`, `billingCodeID`, `contractID` |
+| Rate | `hourlyRate`, `roleID`, `internalBillingCodeID` |
+| Approval | `approveAndPostDate`, `approvalStatus` |
+| Description | `summaryNotes` (client-visible), `internalNotes` |
 
-### Time Fields
+A time entry requires either a `ticketID` or a `projectID` — never neither, and
+never both.
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `hoursWorked` | decimal | Yes | Total hours (rounded to quarter-hour) |
-| `hoursToBill` | decimal | No | Billable hours (may differ from worked) |
-| `startDateTime` | datetime | No | Work start time |
-| `endDateTime` | datetime | No | Work end time |
-| `offsetHours` | decimal | No | Offset from actual time |
-
-### Billing Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `isBillable` | boolean | No | Whether time is billable |
-| `billingCodeID` | int | No | Billing category code |
-| `contractID` | int | No | Associated contract |
-| `contractServiceID` | int | No | Specific service on contract |
-| `contractServiceBundleID` | int | No | Service bundle reference |
-| `roleID` | int | No | Role for rate determination |
-
-### Rate Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `billingRate` | decimal | No | Hourly billing rate |
-| `internalCost` | decimal | No | Internal cost rate |
-| `billingAmount` | decimal | System | Calculated billing total |
-| `costAmount` | decimal | System | Calculated cost total |
-
-### Approval Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `approvalStatus` | int | No | Current approval state (0-3) |
-| `approvedByResourceID` | int | System | Who approved the entry |
-| `approvedDateTime` | datetime | System | When entry was approved |
-
-### Description Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `summaryNotes` | text | Recommended | Work summary for client |
-| `internalNotes` | text | No | Internal notes (not billed) |
-| `nonBillableReason` | text | Conditional | Required if marking non-billable |
+See [references/fields.md](references/fields.md) for the complete field reference.
 
 ## Billing Calculations
 
@@ -119,99 +77,11 @@ Billing rates are determined in this order:
 3. **Role Rate** - Rate based on assigned role
 4. **Default Rate** - System default rate
 
-```javascript
-function getBillingRate(timeEntry, context) {
-  // Priority 1: Contract rate
-  if (context.contractInfo?.hourlyRate) {
-    return context.contractInfo.hourlyRate;
-  }
+The first match wins; a contract rate silently overrides a resource's own rate,
+which is a common source of "wrong invoice amount" reports.
 
-  // Priority 2: Resource-specific rate
-  if (context.billingRates?.[timeEntry.resourceID]) {
-    return context.billingRates[timeEntry.resourceID];
-  }
-
-  // Priority 3: Role-based rate
-  if (context.billingRates?.[`role_${timeEntry.roleID}`]) {
-    return context.billingRates[`role_${timeEntry.roleID}`];
-  }
-
-  // Priority 4: Default rate
-  return context.defaultRate || 0;
-}
-```
-
-### Billing Amount Calculation
-
-```javascript
-function calculateBilling(timeEntry, context) {
-  const hours = timeEntry.hoursWorked || 0;
-  const isBillable = determineBillability(timeEntry, context);
-
-  if (!isBillable) {
-    return { isBillable: false, billingAmount: 0 };
-  }
-
-  const billingRate = getBillingRate(timeEntry, context);
-  const billingAmount = hours * billingRate;
-
-  // Calculate internal cost
-  const costRate = getInternalCostRate(timeEntry, context);
-  const costAmount = hours * costRate;
-
-  // Calculate profit metrics
-  const markup = costRate > 0 ? ((billingRate - costRate) / costRate) * 100 : 0;
-  const profitAmount = billingAmount - costAmount;
-
-  return {
-    isBillable,
-    billingRate,
-    billingAmount: Math.round(billingAmount * 100) / 100,
-    costRate,
-    costAmount: Math.round(costAmount * 100) / 100,
-    markup: Math.round(markup * 100) / 100,
-    profitAmount: Math.round(profitAmount * 100) / 100
-  };
-}
-```
-
-### Billability Determination
-
-Time entries are evaluated for billability based on:
-
-| Condition | Billable? | Reason |
-|-----------|-----------|--------|
-| Explicit `isBillable: true` | Yes | Manually marked billable |
-| Explicit `isBillable: false` | No | Manually marked non-billable |
-| Billing code marked non-billable | No | Billing code override |
-| Contract excludes T&M | No | Contract terms |
-| Ticket or project work | Yes | Default for client work |
-| Internal work (no ticket/project) | No | Default for internal work |
-
-```javascript
-function determineBillability(timeEntry, context) {
-  // Explicit setting takes precedence
-  if (timeEntry.isBillable !== undefined) {
-    return timeEntry.isBillable;
-  }
-
-  // Check billing code
-  if (timeEntry.billingCodeID && context.billingCodes) {
-    const billingCode = context.billingCodes[timeEntry.billingCodeID];
-    if (billingCode && !billingCode.isBillable) {
-      return false;
-    }
-  }
-
-  // Check contract terms
-  if (context.contractInfo?.includesTimeAndMaterials === false) {
-    return false;
-  }
-
-  // Default: billable for client work
-  return !!(timeEntry.ticketID || timeEntry.projectID);
-}
-```
+See [references/examples.md](references/examples.md) for the rate-resolution,
+billing-amount, and billability-determination implementations.
 
 ## Approval Requirements
 
@@ -226,112 +96,20 @@ Certain conditions automatically require manager approval:
 | Weekend work | Yes | Policy compliance |
 | Holiday work | Yes | Policy compliance |
 | Exceeds budget | Yes | Cost control |
-
-```javascript
-function requiresApproval(timeEntry, context) {
-  // Billable time always requires approval
-  if (timeEntry.isBillable) return true;
-
-  // Overtime requires approval
-  if (timeEntry.hoursWorked > 8) return true;
-
-  // Weekend work requires approval
-  if (timeEntry.dateWorked) {
-    const dayOfWeek = new Date(timeEntry.dateWorked).getDay();
-    if (dayOfWeek === 0 || dayOfWeek === 6) return true;
-  }
-
-  // Budget threshold exceeded
-  if (context.projectBudget) {
-    const newTotal = context.projectBudget.usedHours + timeEntry.hoursWorked;
-    if (newTotal > context.projectBudget.totalHours * 0.9) return true;
-  }
-
-  return false;
-}
-```
+See [references/examples.md](references/examples.md) for the `requiresApproval`
+implementation.
 
 ## Budget Validation
 
-### Project Budget Checks
+Before posting time, check both the project's hour budget and the contract's
+block-hour or retainer limit — they are tracked separately and either can be
+exceeded independently. Crossing 90% of a project budget flips the entry into
+requiring manager approval.
 
-```javascript
-function validateProjectBudget(timeEntry, projectBudget) {
-  const warnings = [];
-  const violations = [];
-
-  const newTotalHours = projectBudget.usedHours + timeEntry.hoursWorked;
-  const percentUsed = (newTotalHours / projectBudget.totalHours) * 100;
-
-  // Warning at 90% threshold
-  if (percentUsed > 90 && percentUsed <= 100) {
-    warnings.push(`Project at ${Math.round(percentUsed)}% of hour budget`);
-  }
-
-  // Violation when exceeding budget
-  if (percentUsed > 100) {
-    violations.push('Time entry exceeds project hour budget');
-  }
-
-  return { warnings, violations, percentUsed };
-}
-```
-
-### Contract Limit Checks
-
-```javascript
-function validateContractLimits(timeEntry, contractLimits) {
-  const warnings = [];
-  const violations = [];
-
-  // Check monthly limit
-  const newMonthlyHours = contractLimits.usedMonthlyHours + timeEntry.hoursWorked;
-  if (newMonthlyHours > contractLimits.monthlyHours) {
-    violations.push('Exceeds contract monthly hour limit');
-  } else if (newMonthlyHours > contractLimits.monthlyHours * 0.9) {
-    warnings.push(`Contract at ${Math.round((newMonthlyHours / contractLimits.monthlyHours) * 100)}% of monthly limit`);
-  }
-
-  // Check total contract limit
-  const newTotalHours = contractLimits.usedTotalHours + timeEntry.hoursWorked;
-  if (newTotalHours > contractLimits.totalHours) {
-    violations.push('Exceeds contract total hour limit');
-  }
-
-  return { warnings, violations };
-}
-```
+See [references/examples.md](references/examples.md) for the project-budget and
+contract-limit check implementations.
 
 ## Time Analytics & KPIs
-
-### Utilization Rate Calculation
-
-```javascript
-function calculateUtilization(timeEntries) {
-  let totalHours = 0;
-  let billableHours = 0;
-
-  timeEntries.forEach(entry => {
-    const hours = entry.hoursWorked || 0;
-    totalHours += hours;
-
-    if (entry.isBillable) {
-      billableHours += hours;
-    }
-  });
-
-  const utilizationRate = totalHours > 0
-    ? (billableHours / totalHours) * 100
-    : 0;
-
-  return {
-    totalHours: Math.round(totalHours * 100) / 100,
-    billableHours: Math.round(billableHours * 100) / 100,
-    nonBillableHours: Math.round((totalHours - billableHours) * 100) / 100,
-    utilizationRate: Math.round(utilizationRate * 100) / 100
-  };
-}
-```
 
 ### Industry Benchmarks
 
@@ -342,122 +120,20 @@ function calculateUtilization(timeEntries) {
 | Approval Turnaround | 24h | 8h | 4h |
 | Entry Accuracy | 95% | 98% | 99%+ |
 
+See [references/examples.md](references/examples.md) for the utilization-rate
+calculation.
+
 ## API Patterns
 
-### Creating a Time Entry
+| Purpose | Call |
+|---------|------|
+| Create entry | `POST /TimeEntries` |
+| Query entries | `POST /TimeEntries/query` with a `filter` array |
+| Submit for approval | `PATCH /TimeEntries/{id}` setting the approval field |
+| Approve / reject | `PATCH /TimeEntries/{id}` (approver credentials required) |
 
-```http
-POST /v1.0/TimeEntries
-Content-Type: application/json
-```
-
-**Ticket Time Entry:**
-```json
-{
-  "ticketID": 54321,
-  "resourceID": 29744150,
-  "dateWorked": "2024-02-15",
-  "hoursWorked": 1.5,
-  "summaryNotes": "Troubleshot email delivery issues. Identified DNS misconfiguration.",
-  "billingCodeID": 12,
-  "roleID": 5,
-  "isBillable": true
-}
-```
-
-**Project Time Entry:**
-```json
-{
-  "projectID": 12345,
-  "taskID": 67890,
-  "resourceID": 29744150,
-  "dateWorked": "2024-02-15",
-  "hoursWorked": 4.0,
-  "summaryNotes": "Network infrastructure design - Phase 2 planning",
-  "internalNotes": "Need to follow up on VLAN configuration",
-  "billingCodeID": 8,
-  "isBillable": true
-}
-```
-
-### Query Patterns
-
-**Time entries for a ticket:**
-```json
-{
-  "filter": [
-    {"field": "ticketID", "op": "eq", "value": 54321}
-  ],
-  "includeFields": ["Resource.firstName", "Resource.lastName"]
-}
-```
-
-**Unapproved time entries for a date range:**
-```json
-{
-  "filter": [
-    {"field": "dateWorked", "op": "between", "value": ["2024-02-01", "2024-02-15"]},
-    {"field": "approvalStatus", "op": "in", "value": [0, 1]}
-  ]
-}
-```
-
-**Time entries logged today:**
-```json
-{
-  "filter": [
-    {"field": "dateWorked", "op": "gte", "value": "2026-04-13"},
-    {"field": "dateWorked", "op": "lt", "value": "2026-04-14"}
-  ]
-}
-```
-
-> **Warning:** Using only today's date returns **zero results**. You MUST use a range: `gte` today AND `lt` tomorrow. See the api-patterns skill for the full explanation.
-
-**Billable time by resource (date range):**
-```json
-{
-  "filter": [
-    {"field": "resourceID", "op": "eq", "value": 29744150},
-    {"field": "isBillable", "op": "eq", "value": true},
-    {"field": "dateWorked", "op": "gte", "value": "2024-02-01"},
-    {"field": "dateWorked", "op": "lt", "value": "2024-03-01"}
-  ]
-}
-```
-
-### Submitting for Approval
-
-```http
-PATCH /v1.0/TimeEntries
-Content-Type: application/json
-```
-
-```json
-{
-  "id": 98765,
-  "approvalStatus": 1
-}
-```
-
-### Approving Time Entry
-
-```json
-{
-  "id": 98765,
-  "approvalStatus": 2
-}
-```
-
-### Rejecting Time Entry
-
-```json
-{
-  "id": 98765,
-  "approvalStatus": 3,
-  "internalNotes": "Please add more detail about the work performed"
-}
-```
+See [references/api.md](references/api.md) for the full create/query request
+bodies and the submit, approve, and reject patterns.
 
 ## Business Rules
 
@@ -568,13 +244,12 @@ const pendingApprovals = await queryTimeEntries({
 1. **Log time immediately** - Don't batch at end of day; details get lost
 2. **Use descriptive summaries** - Clients see these on invoices
 3. **Round appropriately** - Follow minimum billing rules
-4. **Validate before submitting** - Check accuracy before approval
-5. **Link to tickets/projects** - Always associate with work items
-6. **Monitor utilization** - Track billable vs non-billable ratio
-7. **Review budget warnings** - Address before exceeding limits
-8. **Use billing codes** - Categorize time for reporting
-9. **Keep internal notes separate** - Don't bill clients for non-value work
-10. **Approve promptly** - Long approval queues delay billing
+4. **Link to tickets/projects** - Always associate with work items
+5. **Monitor utilization** - Track billable vs non-billable ratio
+6. **Review budget warnings** - Address before exceeding limits
+7. **Use billing codes** - Categorize time for reporting
+8. **Keep internal notes separate** - Don't bill clients for non-value work
+9. **Approve promptly** - Long approval queues delay billing
 
 ## Related Skills
 

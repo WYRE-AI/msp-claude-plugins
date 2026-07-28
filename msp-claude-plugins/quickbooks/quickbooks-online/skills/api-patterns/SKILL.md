@@ -1,14 +1,13 @@
 ---
 name: "QuickBooks Online API Patterns"
 description: >
-  Use this skill when working with the QuickBooks Online API - OAuth2
-  authentication, REST structure, Intuit query language, pagination,
-  rate limiting, error handling, minor version headers, and best
-  practices. Covers base URL patterns, sandbox vs production, and
-  the Fault error object format.
+  QuickBooks Online API fundamentals: OAuth2 authentication and token
+  lifecycle, REST structure and base URLs, the Intuit query language,
+  pagination, minor version headers, SyncToken optimistic locking,
+  rate limits, webhooks, and the Fault error object format.
 when_to_use: >-
-  When working with OAuth2 authentication, REST structure, Intuit query language, pagination, rate
-  limiting, error handling, minor version headers. Use when: quickbooks api, qbo api, quickbooks
+  When authenticating to or calling the QuickBooks Online API directly or through
+  MCP tools. Use when: quickbooks api, qbo api, quickbooks
   query, quickbooks authentication, quickbooks oauth, intuit api, quickbooks rate limit,
   quickbooks pagination, quickbooks endpoint, or qbo request.
 ---
@@ -39,17 +38,6 @@ Content-Type: application/json
 | `Authorization` | `Bearer {access_token}` | OAuth2 access token |
 | `Accept` | `application/json` | Response format |
 | `Content-Type` | `application/json` | Request body format |
-
-### Environment Variables
-
-```bash
-export QBO_CLIENT_ID="your-client-id"
-export QBO_CLIENT_SECRET="your-client-secret"
-export QBO_REALM_ID="your-company-id"
-export QBO_ACCESS_TOKEN="your-access-token"
-export QBO_REFRESH_TOKEN="your-refresh-token"
-export QBO_ENVIRONMENT="production"  # or "sandbox"
-```
 
 ### Base URL Pattern
 
@@ -89,60 +77,11 @@ If omitted, the API defaults to the earliest supported minor version, which may 
 | Access Token | 60 minutes | Use refresh token |
 | Refresh Token | 100 days | Re-authorize if expired |
 
-### Token Refresh Flow
-
-```javascript
-const OAuthClient = require('intuit-oauth');
-
-const oauthClient = new OAuthClient({
-  clientId: process.env.QBO_CLIENT_ID,
-  clientSecret: process.env.QBO_CLIENT_SECRET,
-  environment: process.env.QBO_ENVIRONMENT || 'production',
-  redirectUri: 'http://localhost:3000/callback'
-});
-
-async function refreshAccessToken() {
-  oauthClient.setToken({
-    access_token: process.env.QBO_ACCESS_TOKEN,
-    refresh_token: process.env.QBO_REFRESH_TOKEN,
-    token_type: 'bearer'
-  });
-
-  const authResponse = await oauthClient.refresh();
-  const newTokens = authResponse.getJson();
-
-  // Store new tokens securely
-  process.env.QBO_ACCESS_TOKEN = newTokens.access_token;
-  process.env.QBO_REFRESH_TOKEN = newTokens.refresh_token;
-
-  return newTokens;
-}
-```
-
-### Using node-quickbooks SDK
-
-The `node-quickbooks` SDK (61k weekly downloads) simplifies authentication and API calls:
-
-```javascript
-const QuickBooks = require('node-quickbooks');
-
-const qbo = new QuickBooks(
-  process.env.QBO_CLIENT_ID,
-  process.env.QBO_CLIENT_SECRET,
-  process.env.QBO_ACCESS_TOKEN,
-  false, // no token secret (OAuth2)
-  process.env.QBO_REALM_ID,
-  process.env.QBO_ENVIRONMENT === 'sandbox',
-  true,  // enable debug
-  null,  // minor version (null = latest)
-  '2.0', // OAuth version
-  process.env.QBO_REFRESH_TOKEN
-);
-```
+See [references/auth.md](references/auth.md) for environment variables, the token refresh implementation, and node-quickbooks SDK setup.
 
 ## Intuit Query Language
 
-QuickBooks Online uses a SQL-like query language for searching and filtering entities. Queries are sent via GET request to the `/query` endpoint.
+QuickBooks Online uses a SQL-like query language for searching and filtering entities. Queries are sent via GET request to the `/query` endpoint, and the query parameter value must be URL-encoded.
 
 ### Query Syntax
 
@@ -150,32 +89,11 @@ QuickBooks Online uses a SQL-like query language for searching and filtering ent
 SELECT * FROM EntityName WHERE condition [AND condition] [ORDERBY field [ASC|DESC]] [STARTPOSITION n] [MAXRESULTS n]
 ```
 
-### Query Examples
-
-**Find customers by name:**
-```http
-GET /v3/company/{realmId}/query?query=SELECT * FROM Customer WHERE DisplayName LIKE '%Acme%'&minorversion=73
-```
-
-**Find unpaid invoices for a customer:**
 ```http
 GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice WHERE CustomerRef = '123' AND Balance > '0'&minorversion=73
 ```
 
-**Find recent invoices:**
-```http
-GET /v3/company/{realmId}/query?query=SELECT * FROM Invoice WHERE TxnDate > '2026-01-01' ORDERBY TxnDate DESC&minorversion=73
-```
-
-**Find active items:**
-```http
-GET /v3/company/{realmId}/query?query=SELECT * FROM Item WHERE Active = true&minorversion=73
-```
-
-**Count customers:**
-```http
-GET /v3/company/{realmId}/query?query=SELECT COUNT(*) FROM Customer&minorversion=73
-```
+Note that numeric comparison values are quoted as strings (`Balance > '0'`).
 
 ### Query Operators
 
@@ -201,96 +119,24 @@ SELECT * FROM Customer STARTPOSITION 101 MAXRESULTS 100
 SELECT * FROM Customer STARTPOSITION 201 MAXRESULTS 100
 ```
 
-**Pagination Details:**
-
 | Parameter | Description | Default | Maximum |
 |-----------|-------------|---------|---------|
 | `STARTPOSITION` | 1-based offset | 1 | - |
 | `MAXRESULTS` | Results per page | 100 | 1000 |
 
-### Iterating All Results
+See [references/api.md](references/api.md) for more query examples and a full pagination loop implementation.
 
-```javascript
-async function queryAll(entityName, whereClause = '') {
-  const allResults = [];
-  let startPosition = 1;
-  const maxResults = 1000;
-  let hasMore = true;
+## CRUD Operations
 
-  while (hasMore) {
-    let query = `SELECT * FROM ${entityName}`;
-    if (whereClause) query += ` WHERE ${whereClause}`;
-    query += ` STARTPOSITION ${startPosition} MAXRESULTS ${maxResults}`;
+| Operation | Method | Notes |
+|-----------|--------|-------|
+| Create | POST `/{resource}` | No `Id` in body |
+| Read | GET `/{resource}/{id}` | Or use `/query` for collections |
+| Update | POST `/{resource}` | POST, not PUT; requires `Id` + `SyncToken` |
+| Sparse update | POST `/{resource}` | Add `"sparse": true` to update only supplied fields |
+| Delete | POST `/{resource}?operation=delete` | Not supported by all entities |
 
-    const response = await fetch(
-      `${baseUrl}/v3/company/${realmId}/query?query=${encodeURIComponent(query)}&minorversion=73`,
-      { headers: { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' } }
-    );
-
-    const data = await response.json();
-    const entities = data.QueryResponse[entityName] || [];
-    allResults.push(...entities);
-
-    hasMore = entities.length === maxResults;
-    startPosition += maxResults;
-  }
-
-  return allResults;
-}
-```
-
-## Request Format
-
-### Standard JSON Request
-
-QuickBooks Online uses standard JSON for request and response bodies:
-
-```json
-{
-  "DisplayName": "Acme Corporation",
-  "PrimaryPhone": {
-    "FreeFormNumber": "555-123-4567"
-  },
-  "PrimaryEmailAddr": {
-    "Address": "billing@acmecorp.com"
-  }
-}
-```
-
-### Response Format
-
-**Single Resource (Read/Create/Update):**
-```json
-{
-  "Customer": {
-    "Id": "123",
-    "DisplayName": "Acme Corporation",
-    "Balance": 5000.00,
-    "SyncToken": "2",
-    "MetaData": {
-      "CreateTime": "2025-06-15T10:30:00-07:00",
-      "LastUpdatedTime": "2026-01-20T14:22:00-07:00"
-    }
-  },
-  "time": "2026-02-23T10:00:00.000-07:00"
-}
-```
-
-**Query Response (Collection):**
-```json
-{
-  "QueryResponse": {
-    "Customer": [
-      { "Id": "1", "DisplayName": "Acme Corporation", "Balance": 5000.00 },
-      { "Id": "2", "DisplayName": "TechStart Inc", "Balance": 1200.00 }
-    ],
-    "startPosition": 1,
-    "maxResults": 2,
-    "totalCount": 2
-  },
-  "time": "2026-02-23T10:00:00.000-07:00"
-}
-```
+Most entities support deactivation (set `Active: false`) instead of hard delete.
 
 ### SyncToken (Optimistic Locking)
 
@@ -306,92 +152,9 @@ Every entity has a `SyncToken` field that must be included in update requests. T
 
 If the `SyncToken` does not match the current value on the server, the update returns a `5010` stale object error.
 
-## CRUD Operations
-
-### Create (POST)
-
-```http
-POST /v3/company/{realmId}/customer?minorversion=73
-Content-Type: application/json
-Authorization: Bearer {access_token}
-```
-
-```json
-{
-  "DisplayName": "New MSP Client LLC",
-  "CompanyName": "New MSP Client LLC",
-  "PrimaryPhone": { "FreeFormNumber": "555-867-5309" },
-  "PrimaryEmailAddr": { "Address": "billing@newclient.com" }
-}
-```
-
-### Read (GET)
-
-**Single resource by ID:**
-```http
-GET /v3/company/{realmId}/customer/123?minorversion=73
-Authorization: Bearer {access_token}
-```
-
-**Query for collection:**
-```http
-GET /v3/company/{realmId}/query?query=SELECT * FROM Customer WHERE Active = true&minorversion=73
-Authorization: Bearer {access_token}
-```
-
-### Update (POST with full object)
-
-QuickBooks Online uses POST (not PUT) for updates. You must include `Id` and `SyncToken`, plus the `sparse` flag for partial updates:
-
-**Full update:**
-```http
-POST /v3/company/{realmId}/customer?minorversion=73
-Content-Type: application/json
-Authorization: Bearer {access_token}
-```
-
-```json
-{
-  "Id": "123",
-  "SyncToken": "2",
-  "DisplayName": "Acme Corporation - Updated",
-  "CompanyName": "Acme Corporation",
-  "PrimaryPhone": { "FreeFormNumber": "555-123-9999" }
-}
-```
-
-**Sparse update (partial):**
-```json
-{
-  "Id": "123",
-  "SyncToken": "2",
-  "sparse": true,
-  "PrimaryPhone": { "FreeFormNumber": "555-123-9999" }
-}
-```
-
-### Delete (POST)
-
-Not all entities support delete. For those that do, use the delete operation:
-
-```http
-POST /v3/company/{realmId}/customer?operation=delete&minorversion=73
-Content-Type: application/json
-Authorization: Bearer {access_token}
-```
-
-```json
-{
-  "Id": "123",
-  "SyncToken": "2"
-}
-```
-
-Most entities support deactivation (set `Active: false`) instead of hard delete.
+See [references/api.md](references/api.md) for the full request/response formats and complete CRUD examples.
 
 ## Rate Limiting
-
-### Rate Limit Details
 
 | Metric | Limit |
 |--------|-------|
@@ -399,177 +162,39 @@ Most entities support deactivation (set `Active: false`) instead of hard delete.
 | Concurrent requests | 40 |
 | Requests per second per user | 10 |
 
-### Rate Limit Response
-
-When rate limited, QBO returns HTTP 429:
-
-```json
-{
-  "Fault": {
-    "Error": [
-      {
-        "Message": "Request throttled",
-        "Detail": "Rate limit reached. Please retry later.",
-        "code": "3001"
-      }
-    ],
-    "type": "THROTTLE"
-  },
-  "time": "2026-02-23T10:00:00.000-07:00"
-}
-```
-
-### Retry Strategy
-
-```javascript
-async function requestWithRetry(url, options, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await fetch(url, options);
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After') || 60;
-        const jitter = Math.random() * 5000;
-        await new Promise(r => setTimeout(r, retryAfter * 1000 + jitter));
-        continue;
-      }
-
-      if (response.status === 401) {
-        // Token may have expired -- attempt refresh
-        await refreshAccessToken();
-        options.headers.Authorization = `Bearer ${process.env.QBO_ACCESS_TOKEN}`;
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await new Promise(r => setTimeout(r, delay));
-    }
-  }
-}
-```
+When rate limited, QBO returns HTTP 429 with a `THROTTLE` fault (code `3001`). Honor the `Retry-After` header and add jitter before retrying. See [references/api.md](references/api.md) for a retry implementation that also handles 401 token refresh.
 
 ## Error Handling
 
-### HTTP Status Codes
+QBO returns errors in a structured `Fault` object with a `type` (`AuthenticationFault`, `AuthorizationFault`, `ValidationFault`, `THROTTLE`) and an `Error` array carrying `Message`, `Detail`, and a numeric `code`. Route on `Fault.type` first, then the error `code`.
 
-| Code | Meaning | Action |
-|------|---------|--------|
-| 200 | Success | Process response |
-| 401 | Unauthorized | Refresh access token |
-| 403 | Forbidden | Check OAuth scopes |
-| 404 | Not Found | Check realmId and entity ID |
-| 429 | Rate Limited | Back off and retry |
-| 400 | Bad Request | Check request format |
-| 500 | Server Error | Retry with backoff |
-| 503 | Service Unavailable | Retry with backoff |
+Most frequently hit codes:
 
-### Fault Object Format
+| Code | Type | Resolution |
+|------|------|------------|
+| 610 | ValidationFault | Check entity ID or referenced objects |
+| 6240 | ValidationFault | Duplicate name — use a unique DisplayName |
+| 5010 | ValidationFault | Stale object — re-fetch SyncToken and retry |
+| 3001 | THROTTLE | Implement backoff |
+| 3200 | AuthenticationFault | Refresh access token |
 
-QBO returns errors in a structured `Fault` object:
-
-```json
-{
-  "Fault": {
-    "Error": [
-      {
-        "Message": "Object Not Found",
-        "Detail": "Object Not Found : Something you're trying to use has been made inactive. Check the fields with accounts, customers, items, vendors or employees.",
-        "code": "610",
-        "element": ""
-      }
-    ],
-    "type": "ValidationFault"
-  },
-  "time": "2026-02-23T10:00:00.000-07:00"
-}
-```
-
-### Common Error Codes
-
-| Code | Type | Message | Resolution |
-|------|------|---------|------------|
-| 610 | ValidationFault | Object Not Found | Check entity ID or referenced objects |
-| 6240 | ValidationFault | Duplicate Name | Use a unique DisplayName |
-| 5010 | ValidationFault | Stale Object | Re-fetch SyncToken and retry |
-| 3001 | THROTTLE | Request throttled | Implement backoff |
-| 3200 | AuthenticationFault | Auth failed | Refresh access token |
-
-### Error Handling Pattern
-
-```javascript
-function handleQboError(response, body) {
-  if (!body.Fault) return;
-
-  const fault = body.Fault;
-  const errors = fault.Error || [];
-  const firstError = errors[0] || {};
-
-  switch (fault.type) {
-    case 'AuthenticationFault':
-      console.log('Authentication failed. Refresh your access token.');
-      break;
-    case 'AuthorizationFault':
-      console.log('Insufficient permissions. Check OAuth scopes.');
-      break;
-    case 'ValidationFault':
-      if (firstError.code === '5010') {
-        console.log('Stale object. Re-fetch the entity and retry with updated SyncToken.');
-      } else if (firstError.code === '6240') {
-        console.log('Duplicate name. Use a unique DisplayName.');
-      } else {
-        console.log(`Validation error: ${firstError.Message} - ${firstError.Detail}`);
-      }
-      break;
-    case 'THROTTLE':
-      console.log('Rate limited. Wait before retrying.');
-      break;
-    default:
-      console.log(`Unknown error: ${JSON.stringify(fault)}`);
-  }
-}
-```
+See [references/errors.md](references/errors.md) for the complete HTTP status table, Fault object samples, and an error dispatch implementation.
 
 ## Webhooks
 
-QuickBooks Online supports webhooks for real-time notifications when entities change:
+QuickBooks Online supports webhooks for real-time notifications when entities change. The payload carries a `realmId` plus a `dataChangeEvent.entities` array of `{ name, id, operation, lastUpdated }`. Configure webhooks in the Intuit Developer Portal under your app's settings.
 
-```json
-{
-  "eventNotifications": [
-    {
-      "realmId": "1234567890",
-      "dataChangeEvent": {
-        "entities": [
-          {
-            "name": "Invoice",
-            "id": "456",
-            "operation": "Create",
-            "lastUpdated": "2026-02-23T10:00:00.000-07:00"
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-Configure webhooks in the Intuit Developer Portal under your app's settings.
+See [references/api.md](references/api.md) for a full webhook payload example.
 
 ## Best Practices
 
-1. **Always include `minorversion`** - Specify the latest version (73) in every request
+1. **Always include `minorversion`** - Specify the latest version (73) in every request; omitting it silently falls back to the oldest supported version
 2. **Use the query endpoint** - Batch lookups with queries instead of individual GETs
-3. **Implement token refresh** - Automatically refresh tokens before they expire
-4. **Include SyncToken on updates** - Required for all update operations
-5. **Use sparse updates** - Set `sparse: true` to update only changed fields
-6. **Handle rate limits** - Stay under 500 requests/minute with exponential backoff
-7. **Encode query strings** - URL-encode the query parameter value
-8. **Cache reference data** - Items, accounts, and tax codes change infrequently
-9. **Use sandbox for testing** - Test against sandbox before production
-10. **Monitor token expiry** - Access tokens expire after 60 minutes; refresh proactively
+3. **Include SyncToken on updates** - Required for all update operations, or you get a 5010 stale object error
+4. **Use sparse updates** - Without `sparse: true`, omitted fields are cleared
+5. **Encode query strings** - URL-encode the query parameter value
+6. **Cache reference data** - Items, accounts, and tax codes change infrequently
+7. **Monitor token expiry** - Access tokens expire after 60 minutes; refresh proactively
 
 ## Related Skills
 

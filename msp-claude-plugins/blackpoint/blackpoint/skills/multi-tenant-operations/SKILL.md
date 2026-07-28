@@ -1,15 +1,15 @@
 ---
 name: "Blackpoint Multi-Tenant Operations"
+description: >
+  Partner-level Blackpoint Cyber (CompassOne) operations: the
+  partner-tenant hierarchy, enumerating customer tenants, sweeping
+  detections and vulnerabilities across all of them, spotting volume
+  anomalies, and building per-tenant scorecards.
 when_to_use: >-
   When running partner-level Blackpoint Cyber / CompassOne work across many customer tenants —
   detection sweeps, exposure rollups, and per-tenant scorecards for MSP SOC operations and QBRs.
   Use when: blackpoint multi-tenant, blackpoint partner, compassone tenants, blackpoint all
   tenants, blackpoint msp sweep, blackpoint tenant rollup, or blackpoint qbr.
-description: >
-  Use this skill when operating Blackpoint Cyber (CompassOne) at the
-  MSP partner level — enumerating customer tenants, sweeping
-  detections and vulnerabilities across all of them, spotting volume
-  anomalies, and building per-tenant scorecards.
 ---
 
 # Blackpoint Multi-Tenant Operations
@@ -88,9 +88,6 @@ on every row.
 
 - Always start with `blackpoint_tenants_list` — never hard-code a
   tenant set.
-- Carry tenant name on every output row; partner work is meaningless
-  without attribution.
-- Treat per-tenant volume as a signal, not just the raw detections.
 - For QBRs, combine detection and exposure rollups into one
   per-tenant scorecard.
 

@@ -1,22 +1,17 @@
 ---
 name: "Warranty Tracking"
+description: >
+  Endpoint hardware warranty status across whatever RMM platforms (Datto RMM,
+  NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro,
+  Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected: the
+  reliability spread between OEM-resolved and hand-entered warranty fields,
+  serial/asset-tag cross-referencing when RMM data is missing or stale, and the
+  expired / expiring-soon / covered / unknown bucketing.
 when_to_use: >-
   When pulling, normalizing, or auditing hardware warranty status across
   connected RMM platforms and documentation tools. Use when: warranty
   status, warranty audit, expired warranty, warranty expiring, is this
   device under warranty, warranty check, out of warranty devices.
-description: >
-  Use this skill when pulling and normalizing warranty status across
-  whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA,
-  ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and
-  documentation tools (IT Glue, Hudu) are connected through the gateway.
-  Covers the reliability spread between RMM warranty fields (some pull
-  directly from OEM APIs, some rely on manually-entered fields that go
-  stale), cross-referencing documentation platforms when RMM warranty data
-  is missing or stale, and flagging devices with expired or soon-expiring
-  warranty. Always use conduit__search_tools to discover which RMM and
-  documentation tools are actually connected before assuming a specific
-  vendor.
 ---
 
 # Warranty Tracking
@@ -152,20 +147,6 @@ interpolate an expiry date.
 
 Report the device as "warranty unknown" rather than silently skipping the
 cross-reference step or treating the absence as "out of warranty."
-
-## Best Practices
-
-- Always discover tools before calling them — never hardcode a vendor's
-  tool name.
-- Never equate "field is empty" with "warranty has expired" — they are
-  different findings with different urgency.
-- State the data source (RMM vs. documentation platform) behind every
-  warranty date in the output, especially when it came from a fallback.
-- Keep "unknown" as its own bucket, always visible, never folded into
-  either "expired" or "covered."
-- Warranty status alone is not a refresh decision — pair with
-  `eol-eos-flagging` and hand the combined picture to
-  `refresh-cycle-planning` before recommending replacement.
 
 ## Related Skills
 

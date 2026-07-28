@@ -1,18 +1,16 @@
 ---
 name: "Checkpoint Avanan Incidents"
 description: >
-  Use this skill when working with Checkpoint Harmony Email security incidents -
-  incident lifecycle, status transitions, investigation workflows, notes and
-  evidence collection, remediation tracking. Covers incident creation, triage,
-  escalation, and closure workflows for email security events.
-  Essential for MSP security analysts managing incident response across
-  customer tenants in Checkpoint Harmony Email & Collaboration (Avanan).
+  Checkpoint Harmony Email & Collaboration (Avanan) incident management:
+  incident lifecycle and status transitions, severity levels, investigation
+  and remediation workflows, notes and evidence collection, and the incident
+  field reference for email security events.
 when_to_use: >-
-  When working with incident lifecycle, status transitions, investigation workflows, notes and
-  evidence collection. Use when: checkpoint incident, avanan incident, email security incident,
-  incident investigation, incident response, incident triage, incident status, incident
-  escalation, incident notes, incident evidence, incident remediation, security incident email,
-  incident closure, or incident timeline.
+  When investigating, triaging, or managing the lifecycle of a Checkpoint Harmony
+  Email security incident. Use when: checkpoint incident, avanan incident, email
+  security incident, incident investigation, incident response, incident triage,
+  incident status, incident escalation, incident notes, incident evidence, incident
+  remediation, security incident email, incident closure, or incident timeline.
 ---
 
 # Checkpoint Harmony Email Incident Investigation

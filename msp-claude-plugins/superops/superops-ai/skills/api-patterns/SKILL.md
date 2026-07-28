@@ -1,10 +1,9 @@
 ---
 name: "SuperOps API Patterns"
 description: >
-  Use this skill when working with the SuperOps.ai GraphQL API - authentication,
-  query building, mutations, pagination, rate limiting, and error handling.
-  Covers Bearer token auth, cursor pagination, variable usage, and best practices
-  for GraphQL integration with SuperOps.ai.
+  SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth,
+  region-specific endpoints, request/variable structure, cursor pagination, the 800 req/min
+  rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.
 when_to_use: >-
   When working with authentication, query building, mutations, pagination, rate limiting, and
   error handling in the SuperOps.ai GraphQL API. Use when: superops api, superops graphql,
@@ -20,9 +19,7 @@ SuperOps.ai uses a GraphQL API for all integrations. Unlike REST APIs, GraphQL a
 
 ## Authentication
 
-### Bearer Token Authentication
-
-SuperOps.ai uses Bearer token authentication. You need:
+SuperOps.ai uses Bearer token authentication plus a subdomain header. You need:
 
 1. **API Token** - Generated from your profile settings
 2. **Customer Subdomain** - Your SuperOps.ai subdomain
@@ -35,6 +32,9 @@ Content-Type: application/json
 Authorization: Bearer YOUR_API_TOKEN
 CustomerSubDomain: yourcompany
 ```
+
+The `CustomerSubDomain` header is non-standard and mandatory — omitting it returns an
+authentication failure even with a valid token.
 
 ### Generating an API Token
 
@@ -56,7 +56,7 @@ export SUPEROPS_REGION="us"  # or "eu"
 
 ## API Endpoints
 
-SuperOps.ai provides region-specific endpoints:
+Endpoints are region-specific; using the wrong region fails auth rather than redirecting.
 
 | Platform | Region | Endpoint |
 |----------|--------|----------|
@@ -77,6 +77,9 @@ SuperOps.ai provides region-specific endpoints:
   }
 }
 ```
+
+Nearly every list query takes a single `input` argument of type `ListInfoInput!`, and
+mutations take a single `input` of a per-entity input type.
 
 ### Query Example
 
@@ -137,8 +140,6 @@ Variables:
 
 ## Cursor-Based Pagination
 
-SuperOps.ai uses cursor-based pagination for large result sets.
-
 ### Pagination Parameters
 
 | Parameter | Type | Description |
@@ -148,42 +149,14 @@ SuperOps.ai uses cursor-based pagination for large result sets.
 | `before` | String | Cursor for previous page |
 | `last` | Int | Number of items from end |
 
-### Pagination Response
-
-```json
-{
-  "data": {
-    "getAssetList": {
-      "assets": [...],
-      "listInfo": {
-        "totalCount": 1250,
-        "hasNextPage": true,
-        "hasPreviousPage": false,
-        "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
-        "endCursor": "YXJyYXljb25uZWN0aW9uOjQ5"
-      }
-    }
-  }
-}
-```
-
 ### Pagination Pattern
 
-```graphql
-query getAssetListPaginated($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
+Every list result carries a `listInfo` object with `totalCount`, `hasNextPage`,
+`hasPreviousPage`, `startCursor`, and `endCursor` (see
+[references/examples.md](references/examples.md) for a full response body).
+
+Request `listInfo { hasNextPage endCursor }`, then pass `endCursor` as `after` on the next
+call. Loop while `hasNextPage` is true.
 
 First page:
 ```json
@@ -204,38 +177,10 @@ Next page:
 }
 ```
 
-### Complete Pagination Implementation
-
-```javascript
-async function fetchAllAssets(filter = {}) {
-  const allAssets = [];
-  let hasNextPage = true;
-  let cursor = null;
-
-  while (hasNextPage) {
-    const variables = {
-      input: {
-        first: 100,
-        filter,
-        ...(cursor && { after: cursor })
-      }
-    };
-
-    const response = await graphqlRequest(GET_ASSETS_QUERY, variables);
-    const { assets, listInfo } = response.data.getAssetList;
-
-    allAssets.push(...assets);
-    hasNextPage = listInfo.hasNextPage;
-    cursor = listInfo.endCursor;
-  }
-
-  return allAssets;
-}
-```
+See [references/examples.md](references/examples.md) for a complete fetch-all-pages
+implementation.
 
 ## Rate Limiting
-
-### Rate Limit Details
 
 - **Limit:** 800 requests per minute
 - **Scope:** Per API token
@@ -265,32 +210,8 @@ X-RateLimit-Reset: 1708012345
 }
 ```
 
-### Retry Strategy
-
-```javascript
-async function requestWithRetry(query, variables, maxRetries = 5) {
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    try {
-      const response = await graphqlRequest(query, variables);
-
-      if (response.errors?.some(e => e.extensions?.code === 'RATE_LIMITED')) {
-        const retryAfter = response.errors[0].extensions.retryAfter || 30;
-        const jitter = Math.random() * 1000;
-        await sleep(retryAfter * 1000 + jitter);
-        continue;
-      }
-
-      return response;
-    } catch (error) {
-      if (attempt === maxRetries - 1) throw error;
-
-      // Exponential backoff with jitter
-      const delay = Math.pow(2, attempt) * 1000 + Math.random() * 1000;
-      await sleep(delay);
-    }
-  }
-}
-```
+Honor `extensions.retryAfter` and add jitter. See
+[references/examples.md](references/examples.md) for a retry-with-backoff implementation.
 
 ## Query Filtering
 
@@ -307,6 +228,9 @@ async function requestWithRetry(query, variables, maxRetries = 5) {
 | `gte` | Greater than or equal | `{ "priority": { "gte": "HIGH" } }` |
 | `lt` | Less than | `{ "createdTime": { "lt": "2024-02-01" } }` |
 | `lte` | Less than or equal | `{ "count": { "lte": 10 } }` |
+
+Equality is implicit — `{ "status": "Active" }` is the `eq` form; a bare array is the
+`in` form.
 
 ### Complex Filter Example
 
@@ -344,8 +268,6 @@ async function requestWithRetry(query, variables, maxRetries = 5) {
 
 ## Date/Time Handling
 
-### Format Requirements
-
 All dates and times must be in **UTC** with **ISO 8601** format:
 
 ```
@@ -365,27 +287,12 @@ All dates and times must be in **UTC** with **ISO 8601** format:
 }
 ```
 
-### Relative Date Calculation
-
-```javascript
-// Get tickets from last 7 days
-const sevenDaysAgo = new Date();
-sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-const variables = {
-  input: {
-    filter: {
-      createdTime: {
-        gte: sevenDaysAgo.toISOString()
-      }
-    }
-  }
-};
-```
-
 ## Error Handling
 
-### GraphQL Error Response
+### Errors return HTTP 200
+
+GraphQL errors arrive in an `errors` array with `data: null` — check `response.errors`
+rather than relying on the HTTP status.
 
 ```json
 {
@@ -404,8 +311,6 @@ const variables = {
 }
 ```
 
-### Common Error Codes
-
 | Code | Description | Resolution |
 |------|-------------|------------|
 | `UNAUTHENTICATED` | Invalid/missing token | Check API token |
@@ -415,44 +320,9 @@ const variables = {
 | `RATE_LIMITED` | Too many requests | Implement backoff |
 | `INTERNAL_ERROR` | Server error | Retry with backoff |
 
-### Error Handling Pattern
+See [references/examples.md](references/examples.md) for an error-dispatch wrapper.
 
-```javascript
-async function safeGraphQLRequest(query, variables) {
-  try {
-    const response = await graphqlRequest(query, variables);
-
-    if (response.errors) {
-      for (const error of response.errors) {
-        switch (error.extensions?.code) {
-          case 'UNAUTHENTICATED':
-            throw new AuthenticationError(error.message);
-          case 'FORBIDDEN':
-            throw new PermissionError(error.message);
-          case 'NOT_FOUND':
-            throw new NotFoundError(error.message, error.path);
-          case 'RATE_LIMITED':
-            throw new RateLimitError(error.message, error.extensions.retryAfter);
-          default:
-            throw new APIError(error.message, error.extensions?.code);
-        }
-      }
-    }
-
-    return response.data;
-  } catch (error) {
-    // Handle network errors
-    if (error.code === 'ECONNREFUSED') {
-      throw new NetworkError('Unable to connect to SuperOps.ai API');
-    }
-    throw error;
-  }
-}
-```
-
-## Null Value Handling
-
-In SuperOps.ai GraphQL:
+### Null resets a field
 
 - Empty values are represented as `null`
 - Passing `null` as input can **reset** a field
@@ -468,152 +338,13 @@ In SuperOps.ai GraphQL:
 
 ## Request Best Practices
 
-### 1. Request Only Needed Fields
+1. **Request only needed fields** - GraphQL returns exactly what you ask for; over-selecting costs latency
+2. **Use variables** - Reusable queries and no injection of raw values into query strings
+3. **Batch related queries** - One request with aliases beats several round-trips against the rate limit
+4. **Cache reference data** - Client and technician lists change rarely; a short TTL cache saves quota
 
-```graphql
-# Good - specific fields
-query {
-  getClientList(input: { first: 50 }) {
-    clients {
-      accountId
-      name
-      status
-    }
-  }
-}
-
-# Avoid - requesting everything
-query {
-  getClientList(input: { first: 50 }) {
-    clients {
-      accountId
-      name
-      status
-      emailDomains
-      website
-      phone
-      industry
-      # ... many more fields
-    }
-  }
-}
-```
-
-### 2. Use Variables
-
-```graphql
-# Good - reusable with variables
-query getClient($id: ID!) {
-  getClient(input: { accountId: $id }) {
-    name
-    status
-  }
-}
-
-# Avoid - hardcoded values
-query {
-  getClient(input: { accountId: "abc123" }) {
-    name
-    status
-  }
-}
-```
-
-### 3. Batch Related Queries
-
-```graphql
-# Good - single request for related data
-query getDashboard($clientId: ID!) {
-  client: getClient(input: { accountId: $clientId }) {
-    name
-  }
-  tickets: getTicketList(input: {
-    filter: { client: { accountId: $clientId }, status: "Open" }
-  }) {
-    listInfo { totalCount }
-  }
-  assets: getAssetList(input: {
-    filter: { client: { accountId: $clientId }, status: "Online" }
-  }) {
-    listInfo { totalCount }
-  }
-}
-```
-
-### 4. Cache Reference Data
-
-```javascript
-const cache = new Map();
-
-async function getClientList() {
-  const cacheKey = 'clients';
-  const cached = cache.get(cacheKey);
-
-  if (cached && cached.expires > Date.now()) {
-    return cached.data;
-  }
-
-  const data = await fetchAllClients();
-  cache.set(cacheKey, {
-    data,
-    expires: Date.now() + 5 * 60 * 1000 // 5 minutes
-  });
-
-  return data;
-}
-```
-
-## Complete Client Example
-
-```javascript
-const SUPEROPS_API = process.env.SUPEROPS_REGION === 'eu'
-  ? 'https://euapi.superops.ai/msp'
-  : 'https://api.superops.ai/msp';
-
-async function graphqlRequest(query, variables = {}) {
-  const response = await fetch(SUPEROPS_API, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.SUPEROPS_API_KEY}`,
-      'CustomerSubDomain': process.env.SUPEROPS_SUBDOMAIN
-    },
-    body: JSON.stringify({ query, variables })
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error: ${response.status}`);
-  }
-
-  return response.json();
-}
-
-// Usage
-const GET_TICKETS = `
-  query getTicketList($input: ListInfoInput!) {
-    getTicketList(input: $input) {
-      tickets {
-        ticketId
-        ticketNumber
-        subject
-        status
-        priority
-      }
-      listInfo {
-        totalCount
-        hasNextPage
-      }
-    }
-  }
-`;
-
-const result = await graphqlRequest(GET_TICKETS, {
-  input: {
-    first: 50,
-    filter: { status: ["Open", "In Progress"] }
-  }
-});
-```
+See [references/examples.md](references/examples.md) for worked good/avoid examples of
+each and a complete GraphQL client implementation.
 
 ## Related Skills
 

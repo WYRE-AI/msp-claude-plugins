@@ -1,15 +1,14 @@
 ---
 name: "Xero Accounts"
 description: >
-  Use this skill when working with Xero chart of accounts - navigating
-  account codes, creating accounts, understanding account types and classes,
-  tax settings, and mapping MSP revenue and expense categories to the
-  general ledger.
+  Xero chart of accounts: account classes and types, account codes, tax
+  settings, system accounts, and how MSP revenue, cost-of-sales, and expense
+  categories map to the general ledger.
 when_to_use: >-
-  When navigating account codes, creating accounts, understanding account types and classes, tax
-  settings, and mapping MSP revenue and expense categories to the general ledger. Use when: xero
-  account, xero chart of accounts, xero gl, xero general ledger, account code, xero coa, xero
-  account type, xero bank account, xero revenue account, or xero expense account.
+  When navigating, creating, or mapping Xero account codes and the general ledger.
+  Use when: xero account, xero chart of accounts, xero gl, xero general ledger,
+  account code, xero coa, xero account type, xero bank account, xero revenue
+  account, or xero expense account.
 ---
 
 # Xero Chart of Accounts
@@ -32,26 +31,12 @@ Xero organizes accounts into five standard accounting classes:
 | `LIABILITY` | Things you owe | Accounts payable, loans, tax liabilities |
 | `REVENUE` | Income earned | Managed services, project revenue, hardware sales |
 
-### Account Types
+Each class contains specific account types. The ones that matter most for MSP
+work: `BANK` (the only type payments can be applied to), `REVENUE`/`SALES`,
+`DIRECTCOSTS` (cost of goods sold), and `OVERHEADS`/`EXPENSE`.
 
-Each class contains specific account types:
-
-| Class | Type | Code | Description |
-|-------|------|------|-------------|
-| ASSET | `BANK` | BANK | Bank accounts (used for payments) |
-| ASSET | `CURRENT` | CURRENT | Current assets (AR, inventory) |
-| ASSET | `FIXED` | FIXED | Fixed assets (equipment) |
-| ASSET | `PREPAYMENT` | PREPAYMENT | Prepaid expenses |
-| EQUITY | `EQUITY` | EQUITY | Equity accounts |
-| EXPENSE | `EXPENSE` | EXPENSE | Operating expenses |
-| EXPENSE | `DIRECTCOSTS` | DIRECTCOSTS | Cost of goods sold |
-| EXPENSE | `OVERHEADS` | OVERHEADS | Overhead expenses |
-| LIABILITY | `CURRLIAB` | CURRLIAB | Current liabilities |
-| LIABILITY | `LIABILITY` | LIABILITY | Long-term liabilities |
-| LIABILITY | `TERMLIAB` | TERMLIAB | Term liabilities |
-| REVENUE | `REVENUE` | REVENUE | Revenue accounts |
-| REVENUE | `OTHERINCOME` | OTHERINCOME | Other income |
-| REVENUE | `SALES` | SALES | Sales revenue |
+See [references/fields.md](references/fields.md) for the complete field reference,
+the full account-type table, and the list of Xero-managed system accounts.
 
 ### MSP Chart of Accounts Structure
 
@@ -83,59 +68,16 @@ Expenses (500-699)
   560 - Tools & Subscriptions
 ```
 
-## Field Reference
-
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `AccountID` | string (UUID) | System | Auto-generated unique identifier |
-| `Code` | string | Yes | Account code (e.g., "200", "400") |
-| `Name` | string | Yes | Account name |
-| `Type` | string | Yes | Account type (REVENUE, EXPENSE, BANK, etc.) |
-| `Status` | string | No | ACTIVE or ARCHIVED |
-| `Description` | string | No | Account description |
-| `TaxType` | string | No | Default tax type for this account |
-| `EnablePaymentsToAccount` | boolean | No | Whether payments can be made to this account |
-| `ShowInExpenseClaims` | boolean | No | Show in expense claims |
-| `Class` | string | Read-only | Account class (ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE) |
-| `BankAccountNumber` | string | No | Bank account number (BANK type only) |
-| `BankAccountType` | string | No | BANK or CREDITCARD (BANK type only) |
-| `CurrencyCode` | string | No | Currency for bank accounts |
-| `ReportingCode` | string | No | Reporting code for financial statements |
-| `ReportingCodeName` | string | Read-only | Reporting code name |
-
-### System Accounts (Read-Only)
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `SystemAccount` | string | System account type (e.g., DEBTORS, CREDITORS) |
-
-Xero creates these system accounts automatically:
-
-| System Account | Description |
-|----------------|-------------|
-| `DEBTORS` | Accounts Receivable |
-| `CREDITORS` | Accounts Payable |
-| `GST` | Tax collected/paid |
-| `GSTONIMPORTS` | Tax on imports |
-| `HISTORICAL` | Historical adjustment |
-| `REALISEDCURRENCYGAIN` | Realized currency gains |
-| `UNREALISEDCURRENCYGAIN` | Unrealized currency gains |
-| `ROUNDING` | Rounding adjustments |
-
 ## API Patterns
 
-### List All Accounts
+Every request needs both `Authorization: Bearer ${ACCESS_TOKEN}` and
+`xero-tenant-id: ${XERO_TENANT_ID}`. Two Xero-specific quirks apply here:
 
-```bash
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-**With Filters:**
+- **`/Accounts` is not paginated** — a single GET returns the whole COA.
+- **Updates and archives use POST, not PUT**, against
+  `/Accounts/{AccountID}`, and the body must repeat the `AccountID`.
+- **Filters go in a URL-encoded `where` clause** with doubled quotes around
+  string literals:
 
 ```bash
 # Revenue accounts only
@@ -143,87 +85,10 @@ curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts?where=Class==%22REVENU
   -H "Authorization: Bearer ${ACCESS_TOKEN}" \
   -H "xero-tenant-id: ${XERO_TENANT_ID}" \
   -H "Accept: application/json"
-
-# Bank accounts only
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts?where=Type==%22BANK%22" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Active accounts only
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts?where=Status==%22ACTIVE%22" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-
-# Expense accounts
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts?where=Class==%22EXPENSE%22" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
 ```
 
-### Get Single Account
-
-```bash
-curl -s -X GET "https://api.xero.com/api.xro/2.0/Accounts/${ACCOUNT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Accept: application/json"
-```
-
-### Create Account
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Accounts" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "Code": "245",
-    "Name": "Cloud Services Revenue",
-    "Type": "REVENUE",
-    "Description": "Revenue from cloud hosting and Azure/AWS resale",
-    "TaxType": "OUTPUT"
-  }'
-```
-
-### Update Account
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Accounts/${ACCOUNT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "AccountID": "'${ACCOUNT_ID}'",
-    "Name": "Cloud & Hosting Revenue",
-    "Description": "Revenue from cloud hosting, Azure, AWS, and SaaS resale"
-  }'
-```
-
-### Archive Account
-
-```bash
-curl -s -X POST "https://api.xero.com/api.xro/2.0/Accounts/${ACCOUNT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "AccountID": "'${ACCOUNT_ID}'",
-    "Status": "ARCHIVED"
-  }'
-```
-
-### Delete Account
-
-```bash
-curl -s -X DELETE "https://api.xero.com/api.xro/2.0/Accounts/${ACCOUNT_ID}" \
-  -H "Authorization: Bearer ${ACCESS_TOKEN}" \
-  -H "xero-tenant-id: ${XERO_TENANT_ID}"
-```
-
-**Note:** Accounts with transactions cannot be deleted. Archive them instead.
+See [references/api.md](references/api.md) for the full endpoint catalog and
+create/update/archive/delete examples.
 
 ## Common Workflows
 
@@ -329,29 +194,17 @@ async function getBankAccounts() {
 }
 ```
 
-## Error Handling
+## Gotchas
 
-### Common API Errors
+- **Accounts with transactions cannot be deleted.** The DELETE call fails;
+  archive the account instead (`Status: "ARCHIVED"`).
+- **System accounts are read-only.** `DEBTORS`, `CREDITORS`, `GST`, `ROUNDING`
+  and friends are Xero-managed and reject modification.
+- **Account codes must be unique** across the whole COA, including archived
+  accounts, so a "code already exists" error may point at an archived record.
+- **`Class` is derived from `Type`** and cannot be set directly.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Account code already exists | Use a different code |
-| 400 | Account code is required | Provide Code field |
-| 400 | Account name is required | Provide Name field |
-| 400 | Invalid account type | Use valid Type value |
-| 400 | Cannot delete account with transactions | Archive instead |
-| 400 | System accounts cannot be modified | These are Xero-managed |
-| 401 | Unauthorized | Refresh access token |
-
-### Validation Errors
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Code already exists | Duplicate account code | Choose unique code |
-| Code is required | Missing Code field | Add Code to request |
-| Invalid type | Wrong Type value | Use valid account type |
-| Cannot delete | Account has transactions | Archive account instead |
-| System account | Modifying system account | System accounts are read-only |
+See [references/errors.md](references/errors.md) for the complete error-code table.
 
 ### Error Recovery Pattern
 
@@ -371,17 +224,6 @@ async function safeCreateAccount(data) {
 }
 ```
 
-## Endpoint Reference
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/Accounts` | GET | List all accounts (not paginated) |
-| `/Accounts` | POST | Create an account |
-| `/Accounts/{AccountID}` | GET | Get single account |
-| `/Accounts/{AccountID}` | POST | Update an account |
-| `/Accounts/{AccountID}` | DELETE | Delete an account |
-| `/Accounts/{AccountID}/Attachments` | GET | List account attachments |
-
 ## Best Practices
 
 1. **Use consistent code ranges** - Revenue 200-299, COGS 400-499, Expenses 500-699
@@ -391,9 +233,7 @@ async function safeCreateAccount(data) {
 5. **Archive, don't delete** - Preserve historical data for accounts with transactions
 6. **Separate revenue streams** - Track managed services, projects, and hardware separately
 7. **Map to PSA categories** - Align account codes with PSA service categories
-8. **Review quarterly** - Clean up unused accounts and verify mappings
-9. **Document your COA** - Maintain a reference guide for account code usage
-10. **Use DIRECTCOSTS for COGS** - Separate direct vendor costs from overhead expenses
+8. **Use DIRECTCOSTS for COGS** - Separate direct vendor costs from overhead expenses
 
 ## Related Skills
 

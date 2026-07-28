@@ -1,10 +1,9 @@
 ---
 name: "ConnectWise Manage Time Entries"
 description: >
-  Use this skill when working with ConnectWise PSA time entries - creating,
-  updating, searching, or managing time tracking. Covers billable vs non-billable
-  time, work types, work roles, time approval, and time sheet operations.
-  Essential for MSPs tracking technician time and billing in ConnectWise PSA.
+  ConnectWise PSA time entry management: charge-to types (tickets, projects,
+  charge codes), billable vs non-billable time, work types and work roles,
+  time sheets, and the time entry approval workflow.
 when_to_use: >-
   When creating, updating, searching, or managing time tracking. Use when: connectwise time entry,
   time tracking connectwise, log time connectwise, billable time, non-billable time, work type,
@@ -34,62 +33,11 @@ Time can be logged against different record types:
 | `ChargeCode` | Time against charge codes (internal) |
 | `Activity` | Time against activities |
 
-## Complete Time Entry Field Reference
-
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | int | System | Auto-generated unique identifier |
-| `company` | object | Yes* | `{id: companyId}` - Required for ChargeCode |
-| `chargeToId` | int | Yes | ID of ticket/project/activity |
-| `chargeToType` | string | Yes | ServiceTicket, ProjectTicket, etc. |
-| `member` | object | Yes | `{id: memberId}` - Who logged time |
-| `timeStart` | datetime | Yes | Start time |
-| `timeEnd` | datetime | Yes | End time |
-
-### Alternative Time Entry
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `actualHours` | decimal | Alt | Hours worked (instead of start/end) |
-| `hoursDeduct` | decimal | No | Hours to deduct (break time) |
-
-### Billing Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `billableOption` | string | No | Billable, DoNotBill, NoCharge, NoDefault |
-| `workType` | object | No | `{id: workTypeId}` |
-| `workRole` | object | No | `{id: workRoleId}` |
-| `hourlyRate` | decimal | System | Calculated rate |
-| `agreement` | object | No | `{id: agreementId}` |
-
-### Description Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `notes` | string | No | Time entry notes |
-| `internalNotes` | string | No | Internal notes (not on invoice) |
-| `addToDetailDescriptionFlag` | boolean | No | Add notes to ticket description |
-| `addToInternalAnalysisFlag` | boolean | No | Add to internal analysis |
-| `addToResolutionFlag` | boolean | No | Add to resolution |
-
-### Status Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `status` | string | System | Open, Rejected, Approved, Billed |
-| `emailResourceFlag` | boolean | No | Email resource on approval |
-| `emailContactFlag` | boolean | No | Email contact |
-| `emailCcFlag` | boolean | No | Email CC recipients |
-| `emailCc` | string | No | CC email addresses |
+See [references/fields.md](references/fields.md) for the complete time entry field reference.
 
 ## Work Types
 
 Work types categorize the nature of work performed.
-
-### Common Work Types
 
 | Type | Description | Typical Billing |
 |------|-------------|-----------------|
@@ -101,17 +49,11 @@ Work types categorize the nature of work performed.
 | On-site | On-site work | Billable |
 | Administrative | Admin tasks | Non-billable |
 
-### Get Work Types
-
-```http
-GET /time/workTypes
-```
+Query `GET /time/workTypes` for the configured list.
 
 ## Work Roles
 
 Work roles determine billing rates based on skill level.
-
-### Common Work Roles
 
 | Role | Description | Typical Rate |
 |------|-------------|--------------|
@@ -122,15 +64,9 @@ Work roles determine billing rates based on skill level.
 | Consultant | Expert consultant | $200-250/hr |
 | Project Manager | PM work | $125-175/hr |
 
-### Get Work Roles
-
-```http
-GET /time/workRoles
-```
+Query `GET /time/workRoles` for the configured list.
 
 ## Billing Options
-
-### Billable Option Values
 
 | Option | Description |
 |--------|-------------|
@@ -139,16 +75,18 @@ GET /time/workRoles
 | `NoCharge` | Time shows on invoice at $0 |
 | `NoDefault` | Use ticket/agreement default |
 
-### How Billing is Determined
+### How Billing Is Determined
+
+Precedence order, first match wins:
 
 1. Time entry `billableOption` (if set)
 2. Ticket `billTime` setting
 3. Agreement billing rules
 4. Company default
 
-## API Operations
+## Common Workflows
 
-### Create Time Entry (Start/End)
+### Log time against a ticket
 
 ```http
 POST /time/entries
@@ -168,77 +106,25 @@ Content-Type: application/json
 }
 ```
 
-### Create Time Entry (Actual Hours)
+`actualHours` can be used instead of `timeStart`/`timeEnd`. Logging against
+a `ChargeCode` requires the `company` field explicitly, since there's no
+ticket to infer it from. See [references/api.md](references/api.md) for
+the actual-hours and charge-code variants plus get/update/delete/search
+examples.
 
-```http
-POST /time/entries
-Content-Type: application/json
+### Approval workflow
 
-{
-  "chargeToId": 54321,
-  "chargeToType": "ServiceTicket",
-  "member": {"id": 123},
-  "timeStart": "2024-02-15T09:00:00Z",
-  "actualHours": 1.5,
-  "workType": {"id": 1},
-  "workRole": {"id": 2},
-  "billableOption": "Billable",
-  "notes": "Configured DNS records and tested mail flow."
-}
-```
+1. Time entry created — `Open`
+2. Time sheet submitted — `Submitted`
+3. Manager approves or rejects — `Approved` or `Rejected` (with `internalNotes` explaining what to fix)
+4. Approved time is invoiced — `Billed`
 
-### Create Time Entry Against Charge Code
+Approve/reject and bulk-approval requests, plus time sheet get/submit
+requests, are in [references/api.md](references/api.md).
 
-```http
-POST /time/entries
-Content-Type: application/json
+## API Patterns
 
-{
-  "chargeToId": 10,
-  "chargeToType": "ChargeCode",
-  "company": {"id": 12345},
-  "member": {"id": 123},
-  "timeStart": "2024-02-15T08:00:00Z",
-  "actualHours": 0.5,
-  "workType": {"id": 3},
-  "billableOption": "DoNotBill",
-  "notes": "Weekly team meeting"
-}
-```
-
-### Get Time Entry
-
-```http
-GET /time/entries/{id}
-```
-
-### Update Time Entry
-
-```http
-PATCH /time/entries/{id}
-Content-Type: application/json
-
-{
-  "notes": "Updated notes with additional details.",
-  "actualHours": 2.0
-}
-```
-
-### Delete Time Entry
-
-```http
-DELETE /time/entries/{id}
-```
-
-**Note:** Cannot delete billed time entries.
-
-### Search Time Entries
-
-```http
-GET /time/entries?conditions=member/id=123 and timeStart>=[2024-02-01]
-```
-
-## Common Query Patterns
+Common query conditions for time entries:
 
 **Time entries for a ticket:**
 ```
@@ -260,114 +146,15 @@ conditions=timeStart>=[2024-02-01] and timeStart<[2024-03-01]
 conditions=status="Open" and billableOption="Billable"
 ```
 
-**Time entries for company:**
-```
-conditions=company/id=12345
-```
-
 **Approved time waiting for billing:**
 ```
 conditions=status="Approved" and billableOption="Billable"
 ```
 
-**My time this week:**
-```
-conditions=member/id=123 and timeStart>=[2024-02-12] and timeStart<[2024-02-19]
-```
-
-## Time Sheet Operations
-
-### Time Sheet Endpoint
-
-```
-/time/sheets
-```
-
-### Get Time Sheets
-
-```http
-GET /time/sheets?conditions=member/id=123 and year=2024 and period=7
-```
-
-### Time Sheet Status Values
-
-| Status | Description |
-|--------|-------------|
-| Open | Time sheet open for editing |
-| Submitted | Submitted for approval |
-| Approved | Approved by manager |
-| Rejected | Returned for correction |
-
-### Submit Time Sheet
-
-```http
-PATCH /time/sheets/{id}
-Content-Type: application/json
-
-{
-  "status": "Submitted"
-}
-```
-
-## Approval Workflow
-
-### Approval Status Values
-
-| Status | Description |
-|--------|-------------|
-| Open | Pending approval |
-| Approved | Approved for billing |
-| Rejected | Rejected, needs correction |
-| Billed | Already invoiced |
-
-### Approve Time Entry
-
-```http
-PATCH /time/entries/{id}
-Content-Type: application/json
-
-{
-  "status": "Approved"
-}
-```
-
-### Reject Time Entry
-
-```http
-PATCH /time/entries/{id}
-Content-Type: application/json
-
-{
-  "status": "Rejected",
-  "internalNotes": "Please add more detail about work performed."
-}
-```
-
-### Bulk Approval
-
-```http
-POST /time/entries/bulk
-Content-Type: application/json
-
-{
-  "ids": [1001, 1002, 1003],
-  "operation": {
-    "status": "Approved"
-  }
-}
-```
-
 ## Charge Codes
 
-Charge codes are used for non-ticket time (meetings, training, etc.).
-
-### Get Charge Codes
-
-```http
-GET /time/chargeCodes
-```
-
-### Common Charge Codes
+Charge codes are used for non-ticket time (meetings, training, etc.). Query
+`GET /time/chargeCodes` for the configured list.
 
 | Code | Description | Billable |
 |------|-------------|----------|
@@ -378,27 +165,22 @@ GET /time/chargeCodes
 | PROJ | Project work | Yes |
 | ONCALL | On-call time | Varies |
 
+## Gotchas
+
+- **Billed time entries cannot be deleted.** `DELETE /time/entries/{id}` fails once `status` is `Billed`; you must adjust the invoice instead.
+- **`company` is required for `ChargeCode` entries only.** `ServiceTicket`/`ProjectTicket` entries infer the company from the ticket.
+- **`billableOption` on the time entry wins over ticket/agreement defaults** — see billing precedence above. A blank or `NoDefault` value falls through to the ticket, then the agreement, then the company.
+- Time sheets and time entries use different status vocabularies. Time sheets go `Open -> Submitted -> Approved/Rejected`; time entries go `Open -> Approved/Rejected -> Billed` (no `Submitted` state). Approving a time sheet does not retroactively change the `status` of every entry inside it. See [references/api.md](references/api.md) for both status tables.
+
 ## Best Practices
 
-1. **Log time promptly** - Enter time daily, not at end of week
-2. **Be specific in notes** - Document what was done for invoice clarity
-3. **Use correct work type** - Important for accurate billing rates
-4. **Set appropriate work role** - Affects billing rate
-5. **Mark non-billable correctly** - Don't inflate billable hours
-6. **Use charge codes** - For internal time tracking
-7. **Submit time sheets** - Follow approval workflow
-8. **Review before approval** - Verify accuracy before submitting
+1. **Be specific in notes** - Document what was done for invoice clarity
+2. **Use correct work type** - Important for accurate billing rates
+3. **Set appropriate work role** - Affects billing rate
+4. **Mark non-billable correctly** - Don't inflate billable hours
+5. **Use charge codes** - For internal time tracking
 
-## Error Handling
-
-| Error | Cause | Resolution |
-|-------|-------|------------|
-| chargeToId required | Missing ticket/project ID | Include chargeToId |
-| member required | Missing member reference | Include `member: {id: x}` |
-| timeStart required | Missing start time | Include timeStart field |
-| Invalid work type | Work type doesn't exist | Query workTypes endpoint |
-| Cannot delete | Time already billed | Cannot delete billed entries |
-| Invalid status | Invalid status value | Use Open, Approved, Rejected |
+See [references/errors.md](references/errors.md) for the complete error reference.
 
 ## Related Skills
 

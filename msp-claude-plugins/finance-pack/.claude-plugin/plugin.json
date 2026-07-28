@@ -2,7 +2,7 @@
   "name": "finance-pack",
   "displayName": "Finance & Billing",
   "description": "Cross-vendor billing and agreement reconciliation — matches PSA contracts against accounting invoices and cloud-marketplace subscriptions, catches license true-up gaps, and ranks client profitability.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
