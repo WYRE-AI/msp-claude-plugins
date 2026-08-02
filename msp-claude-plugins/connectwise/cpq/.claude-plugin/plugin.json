@@ -1,0 +1,11 @@
+{
+  "name": "connectwise-cpq",
+  "version": "1.0.0",
+  "description": "Claude Code plugin for ConnectWise CPQ (formerly Sell / Quosal) - quotes, line items, templates, quote customers, and payment terms",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://developer.connectwise.com/Products/ConnectWise_CPQ",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "MIT"
+}

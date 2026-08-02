@@ -112,6 +112,7 @@ function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: 
     'halopsa': 'HaloPSA',
     'connectwise-psa': 'ConnectWise PSA',
     'connectwise-automate': 'ConnectWise Automate',
+    'connectwise-cpq': 'ConnectWise CPQ',
     'ninjaone-rmm': 'NinjaOne (NinjaRMM)',
     'liongard': 'Liongard',
     'salesbuildr': 'SalesBuildr',
