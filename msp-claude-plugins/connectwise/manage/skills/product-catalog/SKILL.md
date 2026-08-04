@@ -22,6 +22,18 @@ The ConnectWise Manage product catalog is the master list of everything an MSP s
 
 This skill covers the full catalog item schema, the supporting lookup entities (categories, subcategories, manufacturers, product types, unit of measure), and the workflows for the most common MSP scenarios.
 
+## Anti-triggers
+
+- **Pricing a deal for a customer** — catalog items are the SKU master
+  list; the priced, versioned document a customer actually receives is a
+  ConnectWise CPQ quote. Use `connectwise-cpq-quotes`.
+- **Line items on an existing quote** — adding, repricing or removing a
+  line happens on the quote, not the catalog; use
+  `connectwise-cpq-quote-items`.
+- **Another vendor's catalog** — Autotask products and Kaseya Quote
+  Manager SKUs share this vocabulary; use `autotask-product-catalog` or
+  `kaseya-quote-manager-quotes`.
+
 ## API Endpoints
 
 ```

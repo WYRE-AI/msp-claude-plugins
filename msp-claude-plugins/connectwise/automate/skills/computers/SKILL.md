@@ -17,6 +17,21 @@ when_to_use: >-
 
 Computers are the core managed entities in ConnectWise Automate. Each computer represents an endpoint with the Automate agent installed - workstations, servers, or network devices. This skill covers computer identification, status monitoring, inventory, patch management, and antivirus status.
 
+## Anti-triggers
+
+- **Claude subagents** — "automate agent" here means the Automate
+  endpoint agent, never an AI subagent definition under `agents/*.md`.
+- **The PSA record of the same machine** — ConnectWise PSA holds a
+  parallel configuration record with its own ID; an Automate `ComputerID`
+  is not a PSA `configuration/id`. Reach configurations through
+  `connectwise-manage-api-patterns` (`/company/configurations`).
+- **Which automation to run and what it returned** — inventory, status and
+  health live here; finding the right script, validating its parameters
+  and reading execution results are `connectwise-automate-scripts`.
+- **Another RMM's device list** — Datto RMM, NinjaOne and Atera all speak
+  of devices and endpoints; use `datto-rmm-devices`,
+  `ninjaone-rmm-devices` or `atera-devices`.
+
 ## Key Concepts
 
 ### Computer Identifiers

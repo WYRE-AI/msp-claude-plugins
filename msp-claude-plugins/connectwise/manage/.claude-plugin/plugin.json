@@ -1,6 +1,6 @@
 {
   "name": "connectwise-psa",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Claude Code plugin for ConnectWise PSA (Manage) - tickets, companies, contacts, projects, and time tracking",
   "author": {
     "name": "MSP Claude Plugins Community"
