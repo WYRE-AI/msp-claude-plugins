@@ -12,6 +12,9 @@ workflow, or document a gotcha.
 - [ ] `description` states what the skill covers; `when_to_use` states
       trigger conditions and keywords — no duplicated content between them
 - [ ] No `triggers:` array (trigger phrases belong in `when_to_use`)
+- [ ] `## Anti-triggers` present where a sibling or adjacent-vendor skill
+      is genuinely confusable, and absent where it would only negate
+      `when_to_use`; every bullet names the skill to load instead
 - [ ] SKILL.md is under ~350 lines; exhaustive reference material
       (full field tables, complete error catalogs, long request/response
       examples) lives in `references/*.md` and is linked from the

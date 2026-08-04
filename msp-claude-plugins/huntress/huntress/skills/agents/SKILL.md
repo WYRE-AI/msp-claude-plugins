@@ -17,6 +17,16 @@ when_to_use: >-
 
 Huntress agents are lightweight endpoint monitors deployed across MSP client organizations. They collect telemetry and enable Huntress's managed detection and response capabilities. This skill covers listing, filtering, and inspecting agents across your managed fleet.
 
+## Anti-triggers
+
+- **Claude subagents** — "agent" here means a Huntress endpoint sensor,
+  never an AI subagent definition under `agents/*.md`.
+- **What an agent detected** — this skill covers the sensor's own health
+  and deployment state; its detections are `huntress-signals` and its
+  confirmed threats are `huntress-incidents`.
+- **Seat counts for invoicing** — deployed-agent counts and invoiced
+  seats diverge; use `huntress-billing`.
+
 ## Key Concepts
 
 ### Agent Lifecycle
