@@ -28,6 +28,22 @@ CPQ is not ConnectWise PSA. It has its own host, its own auth scheme (no `client
 and a much narrower surface — pair it with the `connectwise-psa` plugin when a workflow
 needs opportunities, products, or agreements.
 
+## Anti-triggers
+
+"ConnectWise" brands three products with three unrelated APIs, and their credentials are
+not interchangeable. PSA's and CPQ's Basic tokens are the trap: both are
+`base64(<something>+<publicKey>:<privateKey>)`, so a company ID and an access key look
+identical in the same slot. Authenticating against the wrong product fails as a `401` —
+or a `500` when a header is absent entirely — which reads like a permissions problem on
+an account that is in fact fine.
+
+- **ConnectWise PSA (Manage)** — regional `api-{na,eu,au}.myconnectwise.net` hosts, a
+  `companyId` in the Basic string, and a mandatory `clientId` header CPQ does not use.
+  Use `connectwise-manage-api-patterns`.
+- **ConnectWise Automate** — on-premise RMM server, `/cwa/api/v1/` base path,
+  Bearer-token auth, singular `condition=` filters. Use
+  `connectwise-automate-api-patterns`.
+
 ## Connection & Authentication
 
 Upstream CPQ uses HTTP Basic with a **three-part** credential:
