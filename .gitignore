@@ -24,3 +24,6 @@ node_modules/
 # OS specific
 .DS_Store
 .azure/
+
+# Claude Code agent worktrees (live inside the repo; never commit them)
+.claude/worktrees/
