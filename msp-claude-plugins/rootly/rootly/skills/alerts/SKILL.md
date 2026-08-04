@@ -18,6 +18,24 @@ when_to_use: >-
 
 Rootly's alerting system connects monitoring tools (Datadog, PagerDuty, New Relic, Grafana, etc.) to the incident management workflow. Alerts are routed through configurable rules to the right teams, and can automatically create incidents based on conditions. Escalation policies ensure alerts are acknowledged within SLA windows.
 
+## Anti-triggers
+
+PagerDuty appears here as an *upstream alert source and paging target*.
+Questions about PagerDuty's own objects are not this skill.
+
+- **Managing the PagerDuty side** — PagerDuty's own incidents, schedules,
+  and escalation policies are `pagerduty-incidents`, `pagerduty-oncall`,
+  and `pagerduty-alerts`. This skill only covers how a PagerDuty signal
+  enters Rootly and how Rootly pages back out to it.
+- **The incident an alert became** — once an alert creates or attaches to
+  an incident, lifecycle, severity, and response coordination are
+  `rootly-incidents`.
+- **Alerts raised by another product** — RMM device alerts are
+  `datto-rmm-alerts`, network alerts are `auvik-alerts`, EDR detections
+  are `sentinelone-alerts`.
+- **The automation that runs when an alert lands** — trigger, condition,
+  and action definitions are `rootly-workflows`.
+
 ## Key Concepts
 
 ### Alert Sources

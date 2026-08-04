@@ -17,6 +17,23 @@ when_to_use: >-
 
 The Rootly service catalog provides a centralized registry of all services in your infrastructure. Each service has ownership, tier classification, dependencies, and is linked to incidents and alerts. This enables rapid identification of affected components during incidents and accurate impact assessment.
 
+## Anti-triggers
+
+A Rootly service is a technical component with an owning team. It is not
+a commercial service, not a service ticket, and not a device record.
+
+- **A managed service you sell and bill for** — service lines, coverage
+  scope, and rates live in the contract; use `halopsa-contracts` or
+  `autotask-contracts`.
+- **A service request from a customer** — that is a ticket type in a
+  helpdesk or PSA; use `freshdesk-ticketing`, `halopsa-tickets`, or
+  `connectwise-manage-tickets`.
+- **PagerDuty's service catalog** — a different vendor's model, keyed on
+  integrations and escalation policies rather than tiers; use
+  `pagerduty-services`.
+- **The physical or virtual device behind a service** — asset and CI
+  records are `halopsa-assets` or the RMM's device skills.
+
 ## Key Concepts
 
 ### Service Tiers

@@ -23,6 +23,26 @@ Together they compute each ticket's `fr_due_by` (first-response deadline) and
 calendars and reasoning about deadlines and breaches through tools named
 `freshdesk_sla_policies_list` and `freshdesk_business_hours_list`.
 
+## Anti-triggers
+
+A Freshdesk SLA policy is helpdesk configuration that computes ticket
+deadlines. It is not the commercial SLA in a signed agreement, and not an
+on-call response target.
+
+- **The SLA a contract commits you to** — coverage hours, response
+  credits, and the agreement the customer signed are `halopsa-contracts`
+  or `autotask-contracts`. Freshdesk's policy is how the
+  helpdesk approximates that commitment; the two can legitimately
+  disagree.
+- **MTTA/MTTR for on-call responders** — those measure how fast a page
+  was answered, not helpdesk SLA attainment; use `pagerduty-analytics`.
+- **Escalation rotas and who is on-call after hours** — coverage windows
+  here only pause a clock; they do not page anyone. Use
+  `pagerduty-oncall`.
+- **Acting on a breached ticket** — re-prioritising, reassigning, or
+  replying is `freshdesk-ticketing`; this skill explains the deadline,
+  it does not change it.
+
 ## SLA Policies
 
 ### List SLA Policies

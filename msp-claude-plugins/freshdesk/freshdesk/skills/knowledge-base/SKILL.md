@@ -23,6 +23,23 @@ questions and speeds resolution. This skill covers navigating the hierarchy,
 reading and searching articles, and suggesting articles for tickets through
 tools named `freshdesk_solutions_<action>`.
 
+## Anti-triggers
+
+Freshdesk Solutions is a **customer-facing** knowledge base published to
+the support portal. Writing internal MSP documentation here exposes it to
+customers.
+
+- **Internal runbooks, network diagrams, and client documentation** —
+  those belong in an MSP documentation platform; use `hudu-articles` or
+  `it-glue-documents`. Never draft an internal procedure into a
+  Solutions article.
+- **Credentials or secrets referenced by a procedure** — use
+  `hudu-passwords` or `it-glue-passwords`; nothing in the
+  Solutions hierarchy is a safe place for them.
+- **Attaching the article to a ticket or replying with it** — ticket
+  replies and notes are `freshdesk-ticketing`; this skill finds the
+  article, it does not send it.
+
 ## The Three-Level Hierarchy
 
 ```

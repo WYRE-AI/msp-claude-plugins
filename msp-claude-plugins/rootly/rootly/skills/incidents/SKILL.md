@@ -28,6 +28,32 @@ The incident system supports:
 
 All read and write operations on incidents are available through the Rootly MCP tools.
 
+## Anti-triggers
+
+"Incident" names three different objects across this marketplace, and the
+routing test is what the operator does next: coordinate a response and
+write it up (this skill), approve a remediation on a compromised
+endpoint, or answer a customer under an SLA clock.
+
+- **A confirmed security incident** — malware, intrusion, a host to
+  contain. That object carries a SOC-recommended remediation to approve,
+  not a response team to assemble; use `huntress-incidents`, or
+  `sentinelone-alerts` for raw EDR detections.
+- **A customer ticket typed "Incident"** — ITIL ticket classification
+  inside a PSA or helpdesk, where the deliverable is an SLA-timed
+  response and a billable time entry rather than a war room; use
+  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-manage-tickets`,
+  or `autotask-tickets`.
+- **A PagerDuty incident** — a different vendor with a different
+  lifecycle (`triggered → acknowledged → resolved`, not
+  `detected → in_triage → mitigated → resolved → closed`); use
+  `pagerduty-incidents`.
+- **The retrospective written after resolution** — postmortem content
+  and its action items are `rootly-postmortems`; this skill covers
+  action items only as live response tasks.
+- **What fired and who it routed to** — alert sources, routing rules,
+  and escalation policies are `rootly-alerts`.
+
 ## MCP Tools
 
 ### Core Incident Tools

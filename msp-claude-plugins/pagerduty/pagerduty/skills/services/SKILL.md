@@ -17,6 +17,24 @@ when_to_use: >-
 
 Services in PagerDuty represent the applications, components, or infrastructure that your team is responsible for. Each service has an escalation policy, integrations (event sources), and configuration for how incidents are created and grouped. Services are the primary organizational unit for routing alerts to the right responders.
 
+## Anti-triggers
+
+A PagerDuty service is a technical component with an escalation policy
+attached. It is not a commercial service, and not a service ticket.
+
+- **A managed service you sell and bill for** — service lines, coverage
+  scope, and rates live in the contract; use `halopsa-contracts` or
+  `autotask-contracts`.
+- **A service request from a customer** — that is a ticket type in a
+  helpdesk or PSA; use `freshdesk-ticketing`, `halopsa-tickets`, or
+  `connectwise-manage-tickets`.
+- **Rootly's service catalog** — a different vendor's model, with tiers
+  and ownership metadata rather than integration keys; use
+  `rootly-services`.
+- **A maintenance window's effect on customer SLA** — suppressing alerts
+  here does not pause a PSA's SLA clock; use
+  `freshdesk-sla-business-hours` or `halopsa-contracts` for that side.
+
 ## Key Concepts
 
 ### Service Status

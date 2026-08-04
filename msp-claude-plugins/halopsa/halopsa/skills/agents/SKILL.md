@@ -17,6 +17,22 @@ when_to_use: >-
 
 Agents in HaloPSA are the technicians who handle tickets and service delivery. Teams are groupings of agents that tickets can be assigned to. Use these tools to discover agent IDs and team structures before assigning tickets or filtering work queues.
 
+## Anti-triggers
+
+"Agent" is the most overloaded word in this marketplace. Here it means a
+human technician.
+
+- **Claude subagents** — definitions under `agents/*.md` are plugin
+  authoring, not HaloPSA records. Nothing here configures Claude.
+- **Endpoint software agents** — the sensor installed on a customer
+  device is `huntress-agents` or the RMM's device skills such as
+  `datto-rmm-devices`. A HaloPSA agent is never installed on anything.
+- **Client-side people** — end users who raise tickets are HaloPSA
+  *Users* under a client, a different entity entirely; use
+  `halopsa-clients`.
+- **Assigning or reassigning a ticket** — this skill resolves the
+  `agent_id`; performing the assignment is `halopsa-tickets`.
+
 ## API Patterns
 
 ### List Agents

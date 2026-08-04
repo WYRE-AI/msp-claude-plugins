@@ -18,6 +18,22 @@ when_to_use: >-
 
 Postmortems in Rootly are structured retrospectives created after incidents are resolved. They document what happened, why it happened, and what will be done to prevent recurrence. Rootly supports templates, automatic timeline import, action item tracking, and integration with project management tools for follow-through.
 
+## Anti-triggers
+
+- **The resolution note a customer reads** — a PSA ticket's resolution
+  field is a customer-facing summary written to close the ticket, not a
+  blameless internal retrospective. Use `halopsa-tickets`,
+  `freshdesk-ticketing`, or `connectwise-manage-tickets`.
+- **A security incident write-up** — Huntress ships its own SOC
+  investigation detail on the incident record; use `huntress-incidents`.
+- **The live incident** — status, severity, and response coordination
+  while it is still open are `rootly-incidents`. This skill starts after
+  resolution.
+- **Automating postmortem creation** — the trigger that fires on
+  `incident_resolved` is a workflow; use `rootly-workflows`.
+- **Publishing the retrospective as customer documentation** — MSP
+  knowledge bases are `hudu-articles` or `it-glue-documents`.
+
 ## Key Concepts
 
 ### Postmortem Lifecycle

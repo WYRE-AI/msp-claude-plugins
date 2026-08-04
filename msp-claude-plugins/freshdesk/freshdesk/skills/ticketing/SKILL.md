@@ -23,6 +23,30 @@ covers listing, getting, searching, creating, updating, replying, adding
 notes, and reading conversation threads via the Freshdesk REST API v2,
 surfaced through tools named `freshdesk_tickets_<action>`.
 
+## Anti-triggers
+
+A Freshdesk ticket may carry `type: "Incident"`, which collides with two
+other meanings of the word. The routing test is what the operator does
+next: answer a customer under an SLA clock (this skill), page a
+responder, or approve a remediation on a compromised endpoint.
+
+- **An on-call service incident** — something is broken and a human must
+  be woken up; the deliverable is acknowledgement and restoration, not a
+  customer reply. Use `pagerduty-incidents` or `rootly-incidents`.
+- **A confirmed security incident** — malware or intrusion with a
+  remediation to approve. Use `huntress-incidents`, or
+  `sentinelone-alerts` for raw EDR detections. Never draft a customer
+  reply about containment from this skill's data alone.
+- **Tickets in another helpdesk or PSA** — the vocabulary is nearly
+  identical but the field models are not (Freshdesk encodes status and
+  priority as integers; the PSAs use instance-configurable IDs). Use
+  `halopsa-tickets`, `connectwise-manage-tickets`, or `autotask-tickets`.
+- **Why `due_by` or `fr_due_by` has the value it does** — deadline
+  computation, business-hours calendars, and breach detection are
+  `freshdesk-sla-business-hours`; this skill only reads the timestamps.
+- **Resolving the requester to a person or company** — contact lookup,
+  creation, and merge are `freshdesk-contacts-companies`.
+
 ## Status, Priority & Source Encodings
 
 Freshdesk encodes these fields as integers in both the API payloads and the
