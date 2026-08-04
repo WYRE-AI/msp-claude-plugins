@@ -33,6 +33,16 @@ how to fetch a ticket and its SLA fields via the connected vendor's tools (or vi
 adds is the cross-vendor decision logic for what to do with that data once you have
 it.
 
+## Anti-triggers
+
+- **A platform's SLA policy configuration** — policy fields, business-hours
+  calendars, and how a vendor computes its own due dates are that
+  connector's surface; use `freshdesk-sla-business-hours`, `autotask-tickets`,
+  or `halopsa-tickets`.
+- **Engineering error budgets** — SLO burn rate against an uptime or
+  error-rate target is a different measurement from a contractual response
+  time; use `error-budget-tracking` in devops-pack.
+
 ## Key Concepts
 
 ### How each PSA family models SLA state

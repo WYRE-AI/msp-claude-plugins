@@ -30,6 +30,19 @@ triage (see `ops-pack`) and it is not application-layer reliability (see
 `devops-pack`, if connected) — this skill only answers whether the wires,
 switches, firewalls, and access points a client depends on are functioning.
 
+## Anti-triggers
+
+- **One vendor's device, alert, or interface data** — use `auvik-devices`,
+  `auvik-alerts`, `meraki-devices`, or `domotz-devices` when the question is
+  what that platform returns, rather than how to rank findings across all of
+  them.
+- **Hands-on diagnostics against a specific device** — ping, cable test,
+  throughput, and reboots are live tools, not a sweep; use
+  `meraki-troubleshooting`.
+- **Collector health as its own subject** — use `domotz-agents`; this skill
+  checks agent status only to decide whether "down" or "unknown" applies to
+  the devices behind it.
+
 ## Discovering available tools first
 
 Because this pack is cross-vendor, never assume which network-monitoring tool

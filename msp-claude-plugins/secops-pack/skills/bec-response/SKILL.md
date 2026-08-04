@@ -29,6 +29,19 @@ skill covers how to detect BEC from the connected M365 tenant and any
 connected email security vendor, and the response sequence once it's
 confirmed or strongly suspected.
 
+## Anti-triggers
+
+- **A vendor's own account-takeover case** — Abnormal models ATO as a case
+  type with its own investigation and remediation actions; use
+  `abnormal-security-account-takeover` when working inside it.
+- **The inbound phishing message itself** — quarantine, release, and
+  message-level forensics are the email-security connector's surface; use
+  `checkpoint-avanan-quarantine`, `ironscales-incidents`,
+  `proofpoint-forensics`, or `mimecast-message-tracking`.
+- **The individual CIPP calls behind each step** — session revocation,
+  mailbox rules, and user state are `cipp-users`, `cipp-mailboxes`, and
+  `cipp-security`; what this skill supplies is the order they must run in.
+
 ## Step Zero: Confirm What's Connected
 
 Call `conduit__search_tools` to confirm which of CIPP, the M365/Entra

@@ -36,6 +36,17 @@ contracted requirement (see `retention-rpo-compliance`). Treat this as the first
 most frequent layer of the DR assurance stack: if jobs aren't running, nothing
 downstream matters yet.
 
+## Anti-triggers
+
+- **Backup Radar's own health records** — ScalePad already aggregates and
+  scores backup results across vendors; use `scalepad-backup-radar` when the
+  question is what that API returns. This skill normalizes across every
+  connected backup tool, including orgs that have no Backup Radar at all.
+- **One platform's job, alert, or storage data** — use
+  `datto-bcdr-api-patterns`, `datto-saas-protection-api-patterns`,
+  `spanning-api-patterns`, or `unitrends-api-patterns` for a single vendor's
+  request shapes and field names.
+
 ## Key Concepts
 
 ### Two fundamentally different job models

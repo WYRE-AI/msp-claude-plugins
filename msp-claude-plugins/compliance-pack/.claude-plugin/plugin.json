@@ -1,8 +1,8 @@
 {
   "name": "compliance-pack",
   "displayName": "Compliance",
-  "description": "Cross-vendor compliance evidence collection and control drift detection — maps live tenant configuration and documentation to CIS/SOC 2/HIPAA controls and cyber-insurance questionnaire line items.",
-  "version": "0.1.1",
+  "description": "Cross-vendor compliance evidence collection and control drift detection \u2014 maps live tenant configuration and documentation to CIS/SOC 2/HIPAA controls and cyber-insurance questionnaire line items.",
+  "version": "0.1.2",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

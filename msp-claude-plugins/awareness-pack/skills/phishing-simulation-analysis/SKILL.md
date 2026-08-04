@@ -26,6 +26,16 @@ whatever simulation platform is connected, and how to optionally enrich it
 with real-world phishing-incident data when a technical security tool is
 also available — treating that enrichment as a bonus, never a requirement.
 
+## Anti-triggers
+
+- **Building or sending a simulated campaign** — templates, landing pages,
+  recipient tracking, and phish-prone percentage are the vendor's surface;
+  use `knowbe4-phishing`.
+- **Real-world attack targeting rather than simulated tests** — Very
+  Attacked People reports and attack-index scoring describe genuine inbound
+  campaigns; use `proofpoint-people`. This skill reasons about controlled
+  tests, and never merges the two into one click rate.
+
 ## Step Zero: Confirm What's Connected
 
 Call `conduit__search_tools` for phishing-simulation and click-data tools

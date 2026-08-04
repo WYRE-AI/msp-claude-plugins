@@ -41,6 +41,16 @@ Cost    = marketplace wholesale cost (Pax8/Sherweb) + estimated labor cost
           (PSA time entries × loaded technician rate, when available)
 ```
 
+## Anti-triggers
+
+- **Accounting-platform financial reports** — Profit and Loss, Balance
+  Sheet, and Aged Receivables are prebuilt reports with their own parameters
+  and response shape; use `xero-reports` or `quickbooks-online-reports`.
+  Neither produces per-client or per-service-line margin, which is what this
+  skill assembles.
+- **Time entries or billing items as records** — use
+  `autotask-time-entries` or `autotask-billing`.
+
 ## Connected Systems
 
 | System | Role | Required? |

@@ -59,6 +59,15 @@ tolerance bands, severity tiers) rather than re-deriving one — the logic
 transfers directly from "subscription line vs invoice line" to "contract term vs
 invoice line."
 
+## Anti-triggers
+
+- **Working a contract record itself** — contract types, service and service-
+  bundle associations, block hours, and renewals are the PSA's surface; use
+  `autotask-contracts` or `halopsa-contracts`.
+- **Working an invoice itself** — creating, sending, or querying invoices is
+  the accounting connector's surface; use `xero-invoices` or
+  `quickbooks-online-invoices`.
+
 ## Connected Systems
 
 | System | Role | Required? |

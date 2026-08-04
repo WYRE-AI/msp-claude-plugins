@@ -39,6 +39,17 @@ confidence, mitigation state, classification) and place it into the
 normalized tier using the criteria below, not by naively copying the
 vendor's label across.
 
+## Anti-triggers
+
+- **One vendor's queue on its own** — triaging, filtering, or dispositioning
+  inside a single tool is that connector's surface; use
+  `huntress-incidents`, `sentinelone-alerts`, `blumira-findings`,
+  `cipp-alerts`, `saas-alerts-triage`, or `blackpoint-incident-response`.
+  This skill only earns its tokens when two or more of them have to be
+  ranked against each other.
+- **Pulling non-security context around an alert** — ticket, device, and
+  asset correlation is `shared-skills-incident-correlation`.
+
 ## Step Zero: Discover What's Actually Connected
 
 Never assume a vendor is connected. Before running any severity sweep, call

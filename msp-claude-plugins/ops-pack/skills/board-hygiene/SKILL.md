@@ -23,6 +23,16 @@ becomes a place tickets go to be forgotten, and workload quietly piles onto whoe
 answers fastest. None of this shows up in a single-ticket view — it only shows up
 when you look at the board as a whole. This skill is that recurring sweep.
 
+## Anti-triggers
+
+- **Working an individual ticket** — searching, updating, adding notes, or
+  closing one ticket is the PSA's surface; use `autotask-tickets`,
+  `halopsa-tickets`, or `connectwise-psa-tickets`.
+- **Correlating a ticket with device, asset, or change data** — pulling
+  cross-vendor context for one investigation is
+  `shared-skills-incident-correlation`; this sweep reads the board's shape,
+  not any single ticket's story.
+
 ## Key Concepts
 
 ### Stale-ticket detection

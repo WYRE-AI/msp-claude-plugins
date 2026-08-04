@@ -23,6 +23,15 @@ This skill scores each unassigned ticket on a small set of factors and turns tha
 score into a defensible assignment order — the same judgment a good dispatcher
 applies, made explicit and repeatable.
 
+## Anti-triggers
+
+- **Triaging one incoming ticket** — setting a single ticket's priority,
+  category, owner, and first response is `shared-skills-ticket-triage`; this
+  skill orders and staffs a whole unassigned queue.
+- **Searching, creating, or updating tickets** — use `autotask-tickets`,
+  `halopsa-tickets`, or `connectwise-psa-tickets` for the PSA's own ticket
+  surface.
+
 ## Discovering available tools first
 
 Because this pack is cross-vendor, never assume which PSA or RMM is connected, or

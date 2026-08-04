@@ -32,6 +32,15 @@ managed databases, networking). It is not PSA/contract billing
 reconciliation (see `finance-pack`) — this skill is about what the cloud
 platform itself is charging, not what the MSP bills the client for it.
 
+## Anti-triggers
+
+- **Azure retail pricing and inventory lookups** — meter rates, quota
+  headroom, and subscription/resource-group listings are the connector's own
+  read-only surface; use `azure-mcp-cost-and-capacity`. This skill consumes
+  those numbers to find anomalies and reclaimable spend.
+- **The raw metric or log query behind a spend signal** — use
+  `azure-mcp-observability` for the monitor and log surface itself.
+
 ## Discovering available tools first
 
 Never assume which cloud platform is connected:

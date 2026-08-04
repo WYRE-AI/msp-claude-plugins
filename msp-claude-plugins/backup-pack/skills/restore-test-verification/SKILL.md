@@ -34,6 +34,17 @@ This skill assumes backup jobs are already running (see `backup-job-health` for 
 layer) and asks the next question: if this needed to be restored today, is there any
 evidence it actually could be?
 
+## Anti-triggers
+
+- **Fetching a screenshot or boot-verification record** — the screenshot,
+  activity, and asset endpoints are the appliance's own API surface; use
+  `datto-bcdr-api-patterns`. This skill weighs what that evidence proves and
+  flags where none exists.
+- **Answering "are backups tested?" on an insurance or audit form** — the
+  evidence-labelling discipline for that context lives in
+  `insurance-questionnaires` (compliance-pack), which draws on this skill's
+  finding rather than reproducing it.
+
 ## Key Concepts
 
 ### "Exists" vs. "recoverable" evidence, ranked

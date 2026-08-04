@@ -34,6 +34,15 @@ sent/viewed/signed → deal marked closed-won), use the
 [`quote-to-close-tracking`](../quote-to-close-tracking/SKILL.md) skill, which
 builds on top of this one's stalled-deal detection.
 
+## Anti-triggers
+
+- **Working deal records** — searching, creating, updating, or reporting on
+  deals, stages, amounts, and forecast categories is the CRM's own surface;
+  use `hubspot-deals` or `salesbuildr-opportunities`. This skill judges
+  whether the pipeline those records describe is actually moving.
+- **Contact and company records behind a deal** — use `hubspot-contacts` or
+  `hubspot-companies`.
+
 ## Discovering available tools first
 
 Never assume HubSpot (or any specific CRM) is connected just because it is

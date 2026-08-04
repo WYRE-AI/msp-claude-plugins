@@ -24,6 +24,16 @@ in secops-pack prioritizes technical exposure. The design goal here is the
 same discipline that pack applies: an explainable ranked comparison with
 visible inputs, never an opaque score a reviewer has to take on faith.
 
+## Anti-triggers
+
+- **A vendor's own user risk score** — KnowBe4 and Proofpoint each compute
+  one from their own data alone; use `knowbe4-reporting` or
+  `proofpoint-people`. This skill blends inputs across tools and keeps the
+  factor table visible.
+- **Technical exposure ranking** — ranking tenants or endpoints by threat
+  and configuration posture is a different axis from human risk; use
+  `alert-severity-normalization` in secops-pack.
+
 ## Step Zero: Confirm What's Connected
 
 Call `conduit__search_tools` to determine which inputs are actually

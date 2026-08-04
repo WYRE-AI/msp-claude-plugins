@@ -35,6 +35,17 @@ a deeper investigation or a formal incident report is built (see
 [Incident Timeline Builder](../../agents/incident-timeline-builder.md) for
 that phase).
 
+## Anti-triggers
+
+- **Executing the action in one vendor** — approving a Huntress remediation,
+  isolating a SentinelOne endpoint, or disabling a CIPP user is that
+  connector's surface; use `huntress-incidents`, `sentinelone-alerts`,
+  `threatlocker-computers`, or `cipp-users`. This skill supplies the ordering
+  and the tool-family map, not the call.
+- **Investigating a detection rather than stopping it** — drill-down across
+  assets, detections, and vulnerabilities is `blackpoint-incident-response`
+  or `sentinelone-threat-hunting`.
+
 ## Step Zero: Confirm What's Connected
 
 Call `conduit__search_tools` before assuming which tool handles which step

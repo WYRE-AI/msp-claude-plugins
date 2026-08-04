@@ -27,6 +27,16 @@ from whatever observability data is actually available, and — just as
 importantly — knows when there isn't enough to compute a formal burn rate at
 all, and falls back to something honest instead of a fabricated number.
 
+## Anti-triggers
+
+- **Contractual SLAs on service-desk tickets** — a response or resolution
+  target on a client agreement is a different measurement from an SLO burn
+  rate; use `sla-escalation-playbooks` in ops-pack.
+- **Vendor-computed response metrics** — MTTA, MTTR, and incident counts are
+  already calculated by the platform; use `pagerduty-analytics`.
+- **Configuring the checks behind the SLI** — check types, heartbeats, and
+  monitor groups are `betterstack-monitors`.
+
 ## Discovering available tools first
 
 This pack is cross-vendor. Before pulling any observability data:
