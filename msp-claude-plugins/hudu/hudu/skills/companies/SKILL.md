@@ -28,10 +28,10 @@ Companies are the foundational entity in Hudu, representing clients, vendors, or
 - **The same client in IT Glue** — IT Glue calls these Organizations; use
   `it-glue-api-patterns` for its equivalent surface.
 - **The monitored client container** — an RMM organization or site is a
-  monitoring scope, not documentation; use `ninjaone-organizations`,
+  monitoring scope, not documentation; use `ninjaone-rmm-organizations`,
   `atera-customers`, or `datto-rmm-sites`.
 - **The client's licence or billing entity** — use `pax8-companies`,
-  `sherweb-customers`, or `quickbooks-customers`.
+  `sherweb-customers`, or `quickbooks-online-customers`.
 
 ## Key Concepts
 

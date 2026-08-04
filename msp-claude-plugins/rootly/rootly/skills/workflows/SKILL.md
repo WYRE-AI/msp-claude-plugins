@@ -27,7 +27,7 @@ Several neighbouring things share the word.
   commands under `commands/*.md` are plugin authoring concerns, not
   Rootly resources. Nothing in this skill configures Claude.
 - **PSA workflow rules** — ticket routing, board automation, and
-  notification rules inside a PSA are `connectwise-manage-tickets`,
+  notification rules inside a PSA are `connectwise-psa-tickets`,
   `halopsa-tickets`, or `autotask-tickets`.
 - **PagerDuty's automation** — event orchestrations and incident
   workflows are a separate product surface; use `pagerduty-incidents`

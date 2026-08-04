@@ -26,13 +26,13 @@ which carries the real status values, priority enums, and queue IDs.
 
 - **Reading, creating, or updating a ticket** — use `autotask-tickets`,
   `connectwise-psa-tickets`, `halopsa-tickets`, `syncro-tickets`,
-  `atera-tickets`, `freshdesk-ticketing`, or `ninjaone-tickets`.
+  `atera-tickets`, `freshdesk-ticketing`, or `ninjaone-rmm-tickets`.
 - **What a specific platform's priority or status values mean** — those
   are vendor enums, not general practice; use that vendor's ticket skill.
 - **Pulling device, asset, and change context onto the ticket** — use
-  `shared-incident-correlation`.
+  `shared-skills-incident-correlation`.
 - **A monitoring alert that has not become a ticket yet** — use the RMM's
-  alerts skill, such as `ninjaone-alerts` or `datto-rmm-alerts`.
+  alerts skill, such as `ninjaone-rmm-alerts` or `datto-rmm-alerts`.
 
 ## The Triage Process
 

@@ -27,7 +27,7 @@ like permission problems:
   `api-*.myconnectwise.net/{codebase}/apis/3.0/`, authenticated with
   public/private key plus a `clientId` header, and filtered with plural
   `conditions=`. An Automate bearer token will not authenticate against
-  it. Use `connectwise-manage-api-patterns`.
+  it. Use `connectwise-psa-api-patterns`.
 - **ConnectWise CPQ (Sell/Quosal)** — its own host and credential set
   again; use `connectwise-cpq-api-patterns`.
 

@@ -28,7 +28,7 @@ The Hudu API is a RESTful JSON API that provides access to companies, assets, as
   everywhere else. Use `hudu-passwords`.
 - **Hudu tools missing from the client entirely, or a 401 before any call
   succeeds** — that is a gateway-connection problem; use
-  `shared-wyre-gateway-troubleshooting`.
+  `shared-skills-wyre-gateway-troubleshooting`.
 
 ## Authentication
 

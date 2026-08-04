@@ -42,7 +42,7 @@ endpoint, or answer a customer under an SLA clock.
 - **A customer ticket typed "Incident"** — ITIL ticket classification
   inside a PSA or helpdesk, where the deliverable is an SLA-timed
   response and a billable time entry rather than a war room; use
-  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-manage-tickets`,
+  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-psa-tickets`,
   or `autotask-tickets`.
 - **A PagerDuty incident** — a different vendor with a different
   lifecycle (`triggered → acknowledged → resolved`, not

@@ -23,7 +23,7 @@ Monitors in ConnectWise Automate continuously evaluate conditions on managed end
   `connectwise-automate-alerts`.
 - **Response and resolution targets** — SLA clocks and escalation rules
   are ConnectWise PSA ticket behaviour, not Automate thresholds; use
-  `connectwise-manage-tickets`.
+  `connectwise-psa-tickets`.
 - **Mapping the network itself** — Automate SNMP monitors evaluate a
   threshold on a device you point them at; discovering topology and
   watching links between devices is `auvik-networks`.

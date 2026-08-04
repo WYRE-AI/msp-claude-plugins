@@ -23,7 +23,7 @@ Assets in Hudu represent documented items such as servers, workstations, network
 - **The live state of a machine** — a Hudu asset is a documentation
   record. It does not know whether the server is online, patched, or
   alerting, and it goes stale silently. For the running endpoint use
-  `ninjaone-devices`, `atera-devices`, `datto-rmm-devices`,
+  `ninjaone-rmm-devices`, `atera-devices`, `datto-rmm-devices`,
   `ncentral-devices`, or `connectwise-automate-computers`.
 - **The same record in IT Glue** — IT Glue calls these Configurations and
   Flexible Assets; use `it-glue-configurations` or

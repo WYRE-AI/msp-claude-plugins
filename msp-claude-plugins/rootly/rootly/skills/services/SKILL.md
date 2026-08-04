@@ -27,7 +27,7 @@ a commercial service, not a service ticket, and not a device record.
   `autotask-contracts`.
 - **A service request from a customer** — that is a ticket type in a
   helpdesk or PSA; use `freshdesk-ticketing`, `halopsa-tickets`, or
-  `connectwise-manage-tickets`.
+  `connectwise-psa-tickets`.
 - **PagerDuty's service catalog** — a different vendor's model, keyed on
   integrations and escalation policies rather than tiers; use
   `pagerduty-services`.

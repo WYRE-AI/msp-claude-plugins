@@ -40,7 +40,7 @@ responder, or approve a remediation on a compromised endpoint.
 - **Tickets in another helpdesk or PSA** — the vocabulary is nearly
   identical but the field models are not (Freshdesk encodes status and
   priority as integers; the PSAs use instance-configurable IDs). Use
-  `halopsa-tickets`, `connectwise-manage-tickets`, or `autotask-tickets`.
+  `halopsa-tickets`, `connectwise-psa-tickets`, or `autotask-tickets`.
 - **Why `due_by` or `fr_due_by` has the value it does** — deadline
   computation, business-hours calendars, and breach detection are
   `freshdesk-sla-business-hours`; this skill only reads the timestamps.

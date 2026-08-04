@@ -35,7 +35,7 @@ only tool in the stack that holds something called a quote.
 
 - **The priced SKU master list rather than this deal's document** — catalog items,
   costs, categories and manufacturers live in ConnectWise PSA; use
-  `connectwise-manage-product-catalog`.
+  `connectwise-psa-product-catalog`.
 - **"Send the customer the quote", e-signature, or signed-document status** — CPQ's API
   has no publish, send or e-sign verb. `isSent` and the `orderPorter*` fields are
   state you can read (and patch), not actions you can trigger. Delivery and signature

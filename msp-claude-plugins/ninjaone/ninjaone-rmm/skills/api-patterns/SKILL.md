@@ -26,10 +26,10 @@ The NinjaOne Public API uses OAuth 2.0 for authentication and provides RESTful e
   `connectwise-automate-api-patterns`.
 - **NinjaOne tools missing from the client entirely, or a 401 before any
   call succeeds** — that is a gateway-connection problem rather than a
-  NinjaOne API problem; use `shared-wyre-gateway-troubleshooting`.
+  NinjaOne API problem; use `shared-skills-wyre-gateway-troubleshooting`.
 - **Which entity to call** — this skill covers request mechanics. For the
-  entities themselves use `ninjaone-devices`, `ninjaone-organizations`,
-  `ninjaone-alerts`, or `ninjaone-tickets`.
+  entities themselves use `ninjaone-rmm-devices`, `ninjaone-rmm-organizations`,
+  `ninjaone-rmm-alerts`, or `ninjaone-rmm-tickets`.
 
 ## Regional Endpoints
 

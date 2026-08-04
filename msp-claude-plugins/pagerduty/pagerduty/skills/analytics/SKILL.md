@@ -29,7 +29,7 @@ reporting one as the other misstates compliance to a client.
   `freshdesk-sla-business-hours` or `halopsa-contracts`.
 - **Ticket volume, backlog, or technician utilisation** — those come from
   the PSA, not PagerDuty; use `halopsa-tickets` or
-  `connectwise-manage-tickets`.
+  `connectwise-psa-tickets`.
 - **Per-shift incident load and burnout risk** — Rootly models on-call
   health directly; use `rootly-oncall`.
 

@@ -27,7 +27,7 @@ Customers are the foundational entity in QuickBooks Online for MSP billing workf
 - **The books are in Xero, not QuickBooks** — Xero calls the same thing a
   Contact; use `xero-contacts`.
 - **A supplier** — vendors are a separate entity here; use
-  `quickbooks-expenses`.
+  `quickbooks-online-expenses`.
 - **A sales prospect** — pre-sale relationships live in the CRM; use
   `hubspot-companies`.
 - **The client's documentation or monitoring record** — use

@@ -29,7 +29,7 @@ HaloPSA login, and it does not mean a technician.
 - **The same customer in another system** — a Freshdesk company, a
   ConnectWise company, or an Autotask company is a different record with
   different required fields; use `freshdesk-contacts-companies`,
-  `connectwise-manage-companies`, or `autotask-crm`. Do not assume IDs or
+  `connectwise-psa-companies`, or `autotask-crm`. Do not assume IDs or
   domains map across.
 - **Microsoft 365 or Entra user accounts** — mailbox, licence, and
   identity questions are `cipp-users` or `cipp-mailboxes`; a HaloPSA User

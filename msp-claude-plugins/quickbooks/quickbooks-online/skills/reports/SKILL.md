@@ -24,12 +24,12 @@ QuickBooks Online provides a comprehensive set of financial reports accessible v
 - **A specific transaction** — reports are aggregates with their own
   nested row structure and their own rounding. Pulling one invoice,
   payment, or bill out of a report is the wrong path; use
-  `quickbooks-invoices`, `quickbooks-payments`, or `quickbooks-expenses`.
+  `quickbooks-online-invoices`, `quickbooks-online-payments`, or `quickbooks-online-expenses`.
 - **The books are in Xero, not QuickBooks** — use `xero-reports`. Both
   produce "P&L" and "aged receivables" under those exact names.
 - **Margin on resold cloud licences** — the cost side sits with the
   distributor and the revenue side in QBO; reconciling them is
-  `shared-billing-reconciliation`, not a single report.
+  `shared-skills-billing-reconciliation`, not a single report.
 - **Service-delivery metrics** — ticket volume, SLA attainment, and
   utilisation are PSA reporting, not accounting; use the PSA's skills.
 

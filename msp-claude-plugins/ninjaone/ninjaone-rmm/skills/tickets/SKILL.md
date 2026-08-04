@@ -28,10 +28,10 @@ NinjaOne includes a built-in ticketing system that integrates with device monito
   before assuming this one.
 - **How to prioritise, categorise, and route an incoming ticket** — this
   skill covers the NinjaOne ticket API; the triage practice itself is
-  vendor-agnostic, so use `shared-ticket-triage`.
+  vendor-agnostic, so use `shared-skills-ticket-triage`.
 - **Pulling device and alert context onto a ticket** — that is a
-  cross-tool lookup; use `shared-incident-correlation`.
-- **The alert that would become a ticket** — use `ninjaone-alerts`.
+  cross-tool lookup; use `shared-skills-incident-correlation`.
+- **The alert that would become a ticket** — use `ninjaone-rmm-alerts`.
 
 ## API Endpoints
 

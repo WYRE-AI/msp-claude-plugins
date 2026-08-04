@@ -27,10 +27,10 @@ Payments in QuickBooks Online record money received from customers. For MSPs, pa
 - **The books are in Xero, not QuickBooks** — use `xero-payments`. The
   concepts are near-identical, so only the vendor name disambiguates.
 - **Money going out** — vendor payments are accounts payable, a different
-  entity; use `quickbooks-expenses`.
+  entity; use `quickbooks-online-expenses`.
 - **What is still outstanding** — an aged-receivables view is a report,
-  not a payment query; use `quickbooks-reports`.
-- **The invoice being paid against** — use `quickbooks-invoices`.
+  not a payment query; use `quickbooks-online-reports`.
+- **The invoice being paid against** — use `quickbooks-online-invoices`.
 
 ## Key Concepts
 

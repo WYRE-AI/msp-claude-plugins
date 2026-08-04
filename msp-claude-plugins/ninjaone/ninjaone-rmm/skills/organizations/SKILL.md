@@ -28,7 +28,7 @@ Organizations in NinjaOne represent your MSP clients. Each organization contains
   All of them call this container something different (customer, site,
   org unit) and none of them share IDs with NinjaOne.
 - **The documentation record for a client** — use `hudu-companies`.
-- **A single endpoint's detail** — use `ninjaone-devices`; this skill
+- **A single endpoint's detail** — use `ninjaone-rmm-devices`; this skill
   covers the container and its locations and policy mappings.
 
 ## API Endpoints
