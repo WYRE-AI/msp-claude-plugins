@@ -11,6 +11,21 @@ when_to_use: >-
 
 Read-only access to a tenant's Conditional Access policy graph and named-location list. Use as input to security posture reviews and to detect tenants drifting from MSP baseline policies. CIPP doesn't expose CA write operations through MCP — apply policy changes via CIPP standards or the CIPP UI.
 
+## Anti-triggers
+
+- **Creating, editing, or deploying a CA policy** — there is no CA
+  write tool here; policy rollout goes through `cipp-standards` or the
+  CIPP UI.
+- **Who has actually registered MFA** — CA tells you what is *required*,
+  not what users have *enrolled*; `cipp_list_mfa_users` in `cipp-users`
+  answers the enrolment question.
+- **Defender, secure score, or threat policies for one tenant you hold
+  credentials for** — that is the `m365` plugin's
+  `Microsoft 365 Security`; this skill is CSP-delegated and CA-only.
+- **Portfolio-wide posture scoring** — comparing tenants against a
+  baseline template is `cipp-standards` or
+  `inforcer-compliance-reporting`.
+
 ## Tools
 
 ### `cipp_list_conditional_access_policies`

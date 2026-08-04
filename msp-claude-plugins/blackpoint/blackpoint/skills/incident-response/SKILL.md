@@ -20,6 +20,24 @@ on detections and the assets they fire against. This skill walks the
 investigation flow: tenant → asset → detections → vulnerabilities,
 plus dark-web and external-vulnerability cross-references.
 
+## Anti-triggers
+
+- **Responding, acknowledging, isolating, or closing** — despite the
+  skill name there is no incident *object* and no write tool here. The
+  MCP surface cannot mutate CompassOne state; response happens in the
+  portal. If the intent is an actionable incident lifecycle, the
+  operator is probably thinking of `huntress-incidents` or
+  `sentinelone-alerts`.
+- **`blackpoint_alerts_*` and `blackpoint_tickets_*`** — those domains
+  are stubs, not an alternative alerting surface. Detections are the
+  only detection object Blackpoint exposes.
+- **Exposure work in its own right** — CVE filtering, scan history,
+  dark-web, and external exposure have their own skill:
+  `blackpoint-vulnerability-management`. Use this one only when a
+  detection is the starting point.
+- **Sweeping every customer rather than investigating one** — use
+  `blackpoint-multi-tenant-operations`.
+
 ## API Tools
 
 ### Tenants

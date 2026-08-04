@@ -16,6 +16,19 @@ when_to_use: >-
 
 Blumira's MSP path group (`/msp/*`) enables managed service providers to operate across multiple client organizations from a single set of credentials. This skill covers account management, cross-account queries, and per-account operations.
 
+## Anti-triggers
+
+- **Working inside a single organization with org-level credentials** —
+  the `/msp/*` tools need an MSP-scoped JWT and an `account_id` on
+  every call. Use `blumira-findings`, `blumira-agents`, or
+  `blumira-users`.
+- **"MSP" meaning the multi-tenant view of another vendor** — an
+  M365-tenant portfolio is `cipp-tenants` or
+  `inforcer-tenant-management`; a CompassOne partner sweep is
+  `blackpoint-multi-tenant-operations`.
+- **Resolution-type semantics** — the codes behave identically at MSP
+  and org level and are documented once, in `blumira-resolutions`.
+
 ## Key Concepts
 
 ### MSP vs Org Paths

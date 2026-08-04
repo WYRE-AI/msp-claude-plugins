@@ -18,6 +18,19 @@ The CompassOne partner account sees every customer tenant. This
 skill covers the partner-level operating loop: enumerate tenants,
 sweep across them, and roll up into a portfolio view.
 
+## Anti-triggers
+
+- **`blackpoint_partners_*`** — the partners domain is a stub. Partner
+  scope comes from the token itself; `blackpoint_tenants_list` is the
+  only enumeration that works.
+- **Investigating one detection** — the drill-down flow is
+  `blackpoint-incident-response`; this skill is the sweep across
+  tenants, not the deep dive within one.
+- **A tenant portfolio in another product** — M365 tenants are
+  `cipp-tenants` or `inforcer-tenant-management`; Blumira client
+  accounts are `blumira-msp`. A CompassOne tenant maps to none of them
+  automatically.
+
 ## The Partner-Tenant Model
 
 ```

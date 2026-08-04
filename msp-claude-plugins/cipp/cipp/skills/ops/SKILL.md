@@ -11,6 +11,20 @@ when_to_use: >-
 
 The meta-layer — tools for managing CIPP itself rather than the tenants it manages. GDAP for the delegation chain, scheduler for recurring jobs, and health/version/log endpoints for verifying CIPP is reachable and functioning.
 
+## Anti-triggers
+
+- **"Who did what" inside a customer tenant** — `cipp_list_logs` here
+  is CIPP's own application log, not the M365 unified audit log. The
+  near-identically named `cipp_list_audit_logs` lives in `cipp-alerts`;
+  loading the wrong one is the most common CIPP mis-route.
+- **Entra role assignments inside a tenant** — GDAP roles are what the
+  *partner* may delegate, a different object from the roles a tenant's
+  own users hold; use `inforcer-identity-governance` or the `m365`
+  plugin.
+- **Forcing a standards evaluation now** — the CIPP scheduler runs it
+  on a recurrence, but the on-demand call is
+  `cipp_run_standards_check` in `cipp-standards`.
+
 ## GDAP
 
 ### `cipp_list_gdap_roles`

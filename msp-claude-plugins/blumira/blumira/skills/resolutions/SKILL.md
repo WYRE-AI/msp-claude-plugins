@@ -15,6 +15,19 @@ when_to_use: >-
 
 Resolutions are the final disposition applied to findings when closing them. Choosing the correct resolution type is critical for accurate security metrics, detection tuning, and compliance reporting.
 
+## Anti-triggers
+
+- **Triaging, investigating, assigning, or commenting** — this skill
+  covers only the disposition decision at close. The rest of the
+  lifecycle is `blumira-findings` (or `blumira-msp` for a client
+  account).
+- **`blumira_resolutions_list`** — that tool enumerates the resolution
+  catalogue and is unrelated to remediation actions; Blumira cannot
+  isolate, block, or kill anything.
+- **Huntress remediation approve/reject** — superficially similar
+  close-out language, entirely different mechanics (Huntress acts on
+  the endpoint). Use `huntress-incidents`.
+
 ## Key Concepts
 
 ### Resolution Types

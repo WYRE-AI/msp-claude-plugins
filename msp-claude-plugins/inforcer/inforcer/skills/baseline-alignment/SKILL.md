@@ -26,6 +26,22 @@ envelope, and pagination, and [tenant-management](../tenant-management/SKILL.md)
 for resolving a tenant to its integer Client Tenant ID. Every
 alignment/policy call is tenant-scoped by that integer id.
 
+## Anti-triggers
+
+- **Fixing the drift** — Inforcer's API cannot deploy a policy,
+  remediate, or restore configuration; those exist only in the Inforcer
+  UI. The M365 changes themselves are `cipp-users`, `cipp-security`, or
+  `cipp-standards`, and CIPP's `Remediate`-mode standards are the
+  auto-fix mechanism Inforcer lacks.
+- **CIPP's version of "baseline" and "drift"** — CIPP standards and
+  BPA measure a different template with different findings; the two
+  scores are not comparable. Use `cipp-standards`.
+- **The threshold that turns a score into aligned / semi-aligned /
+  drifted** — that classification lives in
+  `inforcer-compliance-reporting`.
+- **What change caused a drift** — the alignment surface shows state,
+  not history; use `inforcer-audit-events`.
+
 ## Tools
 
 ### `inforcer_baselines_list`

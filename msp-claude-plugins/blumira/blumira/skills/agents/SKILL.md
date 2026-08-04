@@ -15,6 +15,19 @@ when_to_use: >-
 
 Blumira agents (sensors) are deployed on devices to collect log data and detect threats. This skill covers device inventory management, agent health monitoring, and agent key management for deployments.
 
+## Anti-triggers
+
+- **Claude subagents** — "agent" here is a Blumira log sensor, never an
+  AI subagent definition under `agents/*.md`.
+- **An EDR agent** — a Blumira agent ships logs; it does not detect or
+  remediate on the endpoint. Endpoint sensors are `huntress-agents`,
+  `sentinelone-inventory`, or `blackpoint-asset-inventory`.
+- **What the agent detected** — telemetry becomes a finding; use
+  `blumira-findings`.
+- **Devices in another client account** — these are `/org/*` calls;
+  per-account device lists are `blumira_msp_devices_list` in
+  `blumira-msp`.
+
 ## Key Concepts
 
 ### Devices

@@ -16,6 +16,23 @@ when_to_use: >-
 
 Findings are Blumira's primary security detection unit — they represent threats, suspicious activity, or policy violations detected across your environment. This skill covers the full finding lifecycle from discovery through resolution.
 
+## Anti-triggers
+
+- **Any client account other than your own org** — every tool here is
+  an `/org/*` call scoped to the credential's own organization. With
+  MSP credentials these return 403 or an empty set; use `blumira-msp`
+  and its `blumira_msp_findings_*` equivalents.
+- **Choosing between Valid / Not Applicable / False Positive** — the
+  resolve *call* is here, but the disposition semantics and their effect
+  on detection tuning are `blumira-resolutions`.
+- **A detection from another security product** — "finding", "alert",
+  and "detection" are shared vocabulary. Use `huntress-incidents`,
+  `sentinelone-alerts`, `blackpoint-incident-response`, or
+  `cipp-alerts` depending on which platform raised it.
+- **Containing or remediating the threat** — Blumira has no isolate,
+  kill, or block action; resolving a finding is a bookkeeping change
+  only. Response happens in the EDR or firewall.
+
 ## Key Concepts
 
 ### Finding Statuses

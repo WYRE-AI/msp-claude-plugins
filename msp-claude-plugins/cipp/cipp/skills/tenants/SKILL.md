@@ -11,6 +11,18 @@ when_to_use: >-
 
 Tenants are the top-level scope in CIPP. Every operational tool — users, mailboxes, standards, security — takes a `tenantFilter` parameter that scopes the call to one tenant or to `allTenants`. Knowing how to enumerate tenants and resolve a friendly name to its tenant ID is the first step in almost every CIPP workflow.
 
+## Anti-triggers
+
+- **Inforcer's tenant list** — Inforcer manages the same M365 tenants
+  but keys them by an *integer* Client Tenant ID, not a domain or GUID.
+  A `tenantFilter` value from here will not work there; use
+  `inforcer-tenant-management`.
+- **Why a tenant is missing, stale, or failing** — that is usually the
+  GDAP delegation chain, not the tenant record; use `cipp-ops`.
+- **A tenant's licence, standards, or CA posture** — this skill only
+  resolves and describes the tenant itself; use `cipp-licenses`,
+  `cipp-standards`, or `cipp-security`.
+
 ## Tools
 
 ### `cipp_list_tenants`
