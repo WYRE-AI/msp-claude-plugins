@@ -152,8 +152,10 @@ those; renaming or setting a forecast date is routine.
 
 ### Delete
 
-`cpq_delete_quote` removes the quote **and every tab, line item and term on it**, and
-asks for confirmation first. `cpq_delete_quote_version` removes a single version by
+`cpq_delete_quote` removes the quote **and every tab, line item and term on it**.
+Confirmation depends on how you are connected: an interactive client is prompted, while
+a non-interactive one — the gateway included — is refused until the call is re-invoked
+with `confirm_destructive_action: true`. `cpq_delete_quote_version` removes a single version by
 `quoteNumber` + `quoteVersion`. Neither is recoverable — archive (`isArchive: True`) is
 almost always the right move for a dead deal instead.
 

@@ -126,8 +126,10 @@ extended figures; writing `extendedPrice` directly fights the calculation engine
 
 ### Remove a line
 
-`cpq_delete_quote_item` with the item GUID. It confirms first, echoing the line's
-description or part number, and the delete is permanent. Setting `isPrinted: false` or
+`cpq_delete_quote_item` with the item GUID, and the delete is permanent. An interactive
+client is prompted first, echoing the line's description or part number; a non-interactive
+one — the gateway included — is refused until the call is re-invoked with
+`confirm_destructive_action: true`. Setting `isPrinted: false` or
 `isOptional: true` is the non-destructive way to take a line off a proposal.
 
 ## Gotchas
