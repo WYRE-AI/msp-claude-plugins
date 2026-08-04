@@ -27,6 +27,16 @@ whatever security-awareness platform is connected, turn it into a per-org
 completion rate, and flag clients falling behind their contracted cadence —
 without assuming a specific vendor's data model.
 
+## Anti-triggers
+
+- **Running a KnowBe4 campaign** — creating campaigns, enrolling users,
+  browsing the content library, or buying store modules is the vendor's API
+  surface; use `knowbe4-training`.
+- **KnowBe4's own completion reports and benchmarks** — the platform
+  computes those natively per account; use `knowbe4-reporting`. This skill
+  exists for the portfolio rollup and the cadence judgment across whatever
+  platform is connected.
+
 ## Step Zero: Confirm What's Connected
 
 Call `conduit__search_tools` with a query like `"training campaign"` or

@@ -30,6 +30,17 @@ Evidence in an MSP's toolchain comes from three vendor families, each proving a 
 
 Treat these as different evidentiary weights, not interchangeable sources.
 
+## Anti-triggers
+
+- **ControlMap's own control library and evidence store** — ScalePad already
+  models risks, controls, evidence, policies, and framework objectives per
+  client; use `scalepad-controlmap` when working inside that product. This
+  skill maps a control statement onto live queries across whatever happens
+  to be connected.
+- **Reading a single evidence source** — pulling standards results,
+  inspection state, or a document is that connector's surface; use
+  `cipp-standards`, `liongard-systems`, or `it-glue-documents`.
+
 ## Key Concept: Configured vs. Documented Evidence
 
 This is the single most important judgment call in evidence mapping, and getting it wrong is what turns an evidence package into a liability during an actual audit.

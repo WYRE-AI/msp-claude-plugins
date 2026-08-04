@@ -37,6 +37,17 @@ a device can be fully healthy and in active use while still being three
 weeks from warranty expiration, which is exactly the case this skill exists
 to catch before it becomes a support problem.
 
+## Anti-triggers
+
+- **One platform's own warranty or lifecycle field** — "what does Auvik
+  return for warranty," "read N-central's lifecycle record" is that
+  connector's API surface; use `auvik-devices` or `ncentral-devices`.
+- **ScalePad Lifecycle Manager's warranty product** — LM holds its own
+  hardware lifecycle records and warranty pricing; use
+  `scalepad-lifecycle-manager` for anything scoped to that tool.
+- **Looking up one asset's record** — use `it-glue-configurations` or
+  `hudu-assets`; this skill sweeps warranty state across a fleet.
+
 ## Discovering available tools first
 
 Never assume which RMM or documentation platform is connected:

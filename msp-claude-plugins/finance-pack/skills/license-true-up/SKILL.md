@@ -42,6 +42,15 @@ invoice, and tenant in agreement" without needing the full contract-entitlement
 layer; pair it with `agreement-reconciliation` when the contract layer matters
 too.
 
+## Anti-triggers
+
+- **One system's seat count on its own** — "how many Pax8 seats does this
+  client have," "which M365 licenses are unassigned" is a single-axis read;
+  use `pax8-subscriptions`, `cipp-licenses`, or `m365-licensing`. This skill
+  exists for the disagreement *between* those numbers.
+- **Assigning or removing a license** — use `m365-licensing`; this skill
+  reports the gap and its dollar impact, it does not remediate.
+
 ## Connected Systems
 
 | System | Role | Required? |

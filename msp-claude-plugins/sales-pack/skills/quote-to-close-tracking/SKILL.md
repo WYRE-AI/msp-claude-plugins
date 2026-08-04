@@ -37,6 +37,16 @@ stale." That distinction matters because the fix is different at every stage
 — chasing a rep to build a proposal is a different action than following up
 with a client who hasn't opened their inbox.
 
+## Anti-triggers
+
+- **Building or sending the artifact** — creating a quote, generating a
+  proposal from a template, or sending a document for signature is each
+  tool's own surface; use `pandadoc-documents`, `connectwise-cpq-quotes`,
+  `kaseya-quote-manager-quotes`, `salesbuildr-quotes`, or `scalepad-quoter`.
+- **One document's status in isolation** — the full status enum and its
+  transition errors live in `pandadoc-documents`; this skill uses that status
+  only to locate a stall in the chain.
+
 ## The quote-to-close chain
 
 ```

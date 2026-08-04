@@ -43,6 +43,16 @@ and still fully supported (an older desktop on a current, supported OS with
 no active vendor patching risk). Both signals feed `refresh-cycle-planning`,
 but they are not the same finding and should not be conflated in a report.
 
+## Anti-triggers
+
+- **Unsupported software as a scored patch/CVE finding** — an out-of-support
+  OS surfaced with an EPSS score and exploit maturity is vulnerability
+  management; use `sentinelone-vulnerabilities`.
+- **A vendor's own end-of-life field** — Auvik and ScalePad both record
+  lifecycle/EOL data natively; use `auvik-devices` or
+  `scalepad-lifecycle-manager` when the question is what that tool holds
+  rather than how to rank the risk across a fleet.
+
 ## Discovering available tools first
 
 Never assume which RMM is connected:

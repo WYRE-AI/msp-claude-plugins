@@ -26,6 +26,18 @@ Drift detection has two distinct data sources in this pack's grounding:
 - **CIPP standards checks** (`cipp__list_standards`, `cipp__run_standards_check`, `cipp__list_bpa`) — these represent MSP-defined or CIS-aligned configuration standards applied to a tenant. A standard that previously passed and now fails is drift. `cipp__list_standards` shows which standards are assigned to a tenant and their last-known state; `cipp__run_standards_check` re-evaluates live.
 - **Liongard change detection** (`liongard__detections_list`, `liongard__detections_get`, `liongard__timeline_list`) — Liongard inspects systems on a schedule and diffs each inspection against the prior one, surfacing detections when tracked properties change. The timeline is the authoritative "what changed and when" record for anything Liongard inspects (network gear, servers, cloud tenants, and whatever else an org has connected inspectors for).
 
+## Anti-triggers
+
+- **Running or reading a CIPP standards check** — the Report/Alert/Remediate
+  modes, BPA reports, and domain-health results are the connector's own
+  surface; use `cipp-standards`. This skill decides whether a delta is real
+  drift, whether it was authorized, and how it ranks against other findings.
+- **Liongard detection and alert-rule configuration** — detection types,
+  severities, alert rules, and custom metrics live in `liongard-detections`.
+- **Inforcer baseline alignment scores** — Inforcer computes tenant-versus-
+  baseline drift natively with its own alignment model; use
+  `inforcer-baseline-alignment`.
+
 ## What Counts as Drift
 
 Drift is any observed difference between the current state of a tracked control or configuration item and its last known-good (i.e., previously verified-compliant) state. Three things are required to call something drift rather than noise:

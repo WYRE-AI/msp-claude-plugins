@@ -33,6 +33,15 @@ precise the scoring, but a CRM alone (no Warmly, no Calendly) still produces
 a usable, if coarser, read. Never treat missing intent tools as a reason to
 skip lead scoring entirely — degrade the signal set, not the output.
 
+## Anti-triggers
+
+- **Warmly's own visitor and account surface** — choosing between the
+  visitor and account lists, ICP filtering, and credit-burn checks belong to
+  `warmly-visitor-intelligence`. This skill blends that signal with CRM
+  activity into one warmth tier and a routing proposal.
+- **Contact records and email engagement as data** — use `hubspot-contacts`
+  or `hubspot-activities`.
+
 ## Signal sources and what they contribute
 
 | Signal source | Signal | Weight (relative) |

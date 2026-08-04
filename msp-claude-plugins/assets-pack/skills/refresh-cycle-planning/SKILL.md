@@ -50,6 +50,15 @@ to a quoting/sales workflow (e.g. `sales-pack`) or a PSA opportunity is a
 separate, deliberate next step, not something this skill does
 automatically.
 
+## Anti-triggers
+
+- **ScalePad Lifecycle Manager roadmaps** — LM has its own initiatives,
+  goals, QBR meetings, and budget forecasting; use
+  `scalepad-lifecycle-manager` rather than rebuilding its calendar here.
+- **Pricing the replacements** — use `scalepad-quoter`,
+  `connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes`; this skill
+  produces a tiered calendar and device counts, never a dollar figure.
+
 ## Discovering available tools first
 
 Never assume which RMM or documentation platform is connected:

@@ -33,6 +33,15 @@ spend (see the `cloud-cost-management` skill, a related but separate
 concern: a resource can be correctly sized and still be a cost problem, or
 be under-provisioned and cheap).
 
+## Anti-triggers
+
+- **A one-off quota or usage-limit lookup** — "what's my quota, how much is
+  used" is a direct read against the connector; use
+  `azure-mcp-cost-and-capacity`. This skill turns repeated readings into a
+  trend and a forecast.
+- **The metric and log queries behind the utilization numbers** — use
+  `azure-mcp-observability`.
+
 ## Discovering available tools first
 
 Never assume which cloud platform is connected:

@@ -37,6 +37,15 @@ This skill assembles that reconstruction from the systems of record, and
 structures the analysis so contributing factors don't get collapsed into a
 single "root cause" that oversimplifies what actually happened.
 
+## Anti-triggers
+
+- **Creating or editing a postmortem record in the vendor** — templates,
+  action-item tracking, and Rootly's automatic timeline import are its own
+  surface; use `rootly-postmortems`. This skill reconstructs the timeline
+  from every connected system, including tools the incident record never saw.
+- **The incident record itself while it is still live** — use
+  `rootly-incidents`, `pagerduty-incidents`, or `betterstack-incidents`.
+
 ## Discovering available tools first
 
 This pack is cross-vendor. Before pulling any incident or observability data:

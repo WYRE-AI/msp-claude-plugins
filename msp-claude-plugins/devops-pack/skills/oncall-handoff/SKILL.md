@@ -33,6 +33,15 @@ This skill produces that handoff from whatever incident-management tool is
 actually connected, plus whatever corroborating alert/monitor state is
 available, rather than from the outgoing responder's memory alone.
 
+## Anti-triggers
+
+- **Reading or editing a schedule, rotation, or escalation policy** — who is
+  on call and when is the vendor's own surface; use `rootly-oncall`,
+  `pagerduty-oncall`, or `betterstack-oncall`. This skill assembles the
+  state transfer between two shifts, not the roster behind it.
+- **An MSP service-desk shift handover** — ticket-board state belongs to
+  `board-hygiene` in ops-pack; this skill covers the engineering pager.
+
 ## Discovering available tools first
 
 This pack is cross-vendor. Never assume which incident-management tool is

@@ -32,6 +32,15 @@ what's promised against what's configured — not to audit whether backups are r
 (`backup-job-health`) or recoverable (`restore-test-verification`), both of which are
 prerequisites to this check actually meaning anything.
 
+## Anti-triggers
+
+- **Framework or control compliance** — "compliance" here means a contracted
+  retention window and RPO target, not CIS/SOC 2/HIPAA control evidence; for
+  that use `evidence-mapping` in compliance-pack.
+- **Reading the agreement itself** — pulling a client's contract terms,
+  services, or renewal dates is the PSA's surface; use `autotask-contracts`
+  or `halopsa-contracts`.
+
 ## Key Concepts
 
 ### Retention: contracted vs. configured
