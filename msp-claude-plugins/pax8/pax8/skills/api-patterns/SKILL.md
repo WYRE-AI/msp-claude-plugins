@@ -17,6 +17,21 @@ when_to_use: >-
 
 Pax8 provides a first-party hosted MCP server at `https://mcp.pax8.com/v1/mcp` for AI tool integration. The MCP server exposes 15 tools covering companies, products, subscriptions, orders, invoices, usage, and quotes. This skill covers MCP server connection, the complete tool reference, pagination patterns, sorting, error handling, and best practices.
 
+## Anti-triggers
+
+- **Sherweb's request model** — the other CSP marketplace here uses OAuth
+  client-credentials plus a subscription-key header, underscored tool
+  names, and 1-based pagination, against Pax8's single token, hyphenated
+  tool names, and 0-based pagination. Use `sherweb-api-patterns`. Copying
+  a paging pattern between the two silently changes which records you get.
+- **Pax8 tools missing from the client entirely, or a 401 before any call
+  succeeds** — that is a gateway-connection problem; use
+  `shared-wyre-gateway-troubleshooting`.
+- **How to change something** — nothing in this surface writes. All 15
+  tools are list or fetch; orders, quantity changes, and cancellations
+  happen in the Pax8 portal. That is a scope fact, not a missing
+  permission, and no other skill in this plugin works around it.
+
 ## Connection & Authentication
 
 ### MCP Server

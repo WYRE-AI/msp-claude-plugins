@@ -18,6 +18,22 @@ when_to_use: >-
 
 The Sherweb Partner API provides programmatic access to distributor-level operations including customer management, subscription lifecycle, and billing data. The API uses OAuth 2.0 client credentials flow for authentication, requires a subscription key header for API management, and exposes two main scopes: distributor and service-provider. This skill covers authentication, endpoints, MCP tool usage, error handling, and best practices.
 
+## Anti-triggers
+
+- **Pax8's request model** — the other CSP marketplace here authenticates
+  with a single hosted-MCP token, names tools with hyphens, and paginates
+  from page 0, against Sherweb's OAuth client-credentials plus
+  subscription-key header, underscored tool names, and 1-based paging.
+  Use `pax8-api-patterns`. Copying a paging pattern between the two
+  silently changes which records you get.
+- **Sherweb tools missing from the client entirely, or a 401 before any
+  call succeeds** — that is a gateway-connection problem; use
+  `shared-wyre-gateway-troubleshooting`.
+- **A tool that seems not to exist** — this server uses progressive
+  disclosure, so domain tools are only visible after `sherweb_navigate`
+  or `sherweb_list_categories`. Check discovery before concluding a
+  capability is missing.
+
 ## Authentication
 
 ### OAuth 2.0 Client Credentials Flow

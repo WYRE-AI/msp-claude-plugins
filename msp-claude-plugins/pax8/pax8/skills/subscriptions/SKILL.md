@@ -17,6 +17,24 @@ when_to_use: >-
 
 Subscriptions in Pax8 represent active cloud product licenses assigned to a client company. When an order is placed and provisioned, it creates a subscription. Subscriptions are the core ongoing entity that MSPs manage -- adjusting seat counts as clients hire or leave, upgrading plans, or cancelling when a product is no longer needed. Every subscription is tied to a company and a product, with a quantity (seat count), billing term, and status.
 
+## Anti-triggers
+
+- **Licences bought through Sherweb** — the other CSP marketplace in this
+  marketplace. Same concepts, different account, no shared IDs; use
+  `sherweb-subscriptions`. A client's licences may sit in either, or
+  split across both, so establish which distributor holds the product
+  before reasoning about seat counts.
+- **A licence assigned to a named user** — Pax8 tracks what the MSP
+  *purchased*; who it is *assigned to* lives in the tenant. Use
+  `m365-licensing` or `cipp-licenses`. Purchased seats and assigned seats
+  legitimately differ, and reconciling them is a cross-tool comparison.
+- **Changing a seat count** — no tool here does it. This surface is
+  read-only; quantity changes and cancellations happen in the Pax8 portal.
+  See `pax8-api-patterns` for the full read-only scope.
+- **The purchase event rather than the resulting licence** — use
+  `pax8-orders`; an order is the transaction, a subscription is what it
+  created.
+
 ## MCP Tools
 
 ### Available Tools

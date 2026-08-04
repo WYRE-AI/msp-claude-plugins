@@ -18,6 +18,19 @@ when_to_use: >-
 
 Customers in Sherweb represent the end-client organizations managed by a service provider (MSP) through the Sherweb distribution platform. Sherweb uses a three-tier hierarchy: **Distributor** (Sherweb) > **Service Provider** (your MSP) > **Customer** (your clients). Every subscription, billing charge, and provisioning action is scoped to a specific customer. Understanding this hierarchy is essential for correct API usage and data interpretation.
 
+## Anti-triggers
+
+- **The same client in the other CSP marketplace** — use
+  `pax8-companies`; Sherweb and Pax8 customer IDs are unrelated, so
+  matching is by name or domain, never by ID.
+- **The client record of record** — a Sherweb customer exists to hang
+  licence purchases off. Contracts, contacts, and service history live in
+  the PSA; use `autotask-crm`, `connectwise-psa-companies`, or
+  `halopsa-clients`.
+- **The Microsoft tenant behind the licences** — a Sherweb customer is a
+  billing entity, not a tenant. Use `cipp-tenants` or `m365-users`.
+- **The client's documentation record** — use `hudu-companies`.
+
 ## MCP Tools
 
 ### Available Tools

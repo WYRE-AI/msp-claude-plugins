@@ -18,6 +18,23 @@ when_to_use: >-
 
 Expenses in QuickBooks Online are tracked through two primary entities: **Purchase** (for direct expenses like checks, credit card charges, and cash payments) and **Bill** (for accounts payable -- vendor invoices you owe). For MSPs, expense tracking is critical for per-client profitability analysis: tracking software licenses, hardware costs, subcontractor fees, and third-party service costs against the revenue each client generates.
 
+## Anti-triggers
+
+- **Money coming in** — this skill is accounts payable. Client billing and
+  cash receipts are `quickbooks-invoices` and `quickbooks-payments`.
+  "Bill" is the trap: a QBO Bill is something the MSP owes, while a PSA
+  "bill" is usually something a client owes.
+- **The books are in Xero, not QuickBooks** — use `xero-accounts` and
+  `xero-invoices`.
+- **The distributor's own charge detail** — Pax8 and Sherweb hold the
+  line-level cost of cloud licences before it is entered as a bill here.
+  Use `pax8-invoices` or `sherweb-billing`.
+- **Technician time as a cost** — labour cost is not a Purchase or Bill;
+  time originates in the PSA (`autotask-time-entries`,
+  `connectwise-psa-time-entries`) and lands here only as payroll.
+- **The profitability answer itself** — per-client margin is a report over
+  these records, not a query against them; use `quickbooks-reports`.
+
 ## Key Concepts
 
 ### Expense Types (Purchase Entity)

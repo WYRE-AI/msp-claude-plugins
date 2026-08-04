@@ -17,6 +17,22 @@ when_to_use: >-
 
 Customers are the foundational entity in QuickBooks Online for MSP billing workflows. Each managed services client maps to a QBO Customer record. Customers hold billing addresses, payment terms, outstanding balances, and serve as the parent reference for invoices, payments, and estimates. MSPs commonly use sub-customers to break down billing by service line (e.g., "Acme Corp:Managed Services", "Acme Corp:Project Work").
 
+## Anti-triggers
+
+- **The client record of record** — a QBO Customer is a billing entity.
+  Contracts, contacts, service history, and SLAs live in the PSA; use
+  `autotask-crm`, `connectwise-psa-companies`, or `halopsa-clients`.
+  A QBO Customer and a PSA company share a name and nothing else — the
+  match is by name or a stored cross-reference, never by ID.
+- **The books are in Xero, not QuickBooks** — Xero calls the same thing a
+  Contact; use `xero-contacts`.
+- **A supplier** — vendors are a separate entity here; use
+  `quickbooks-expenses`.
+- **A sales prospect** — pre-sale relationships live in the CRM; use
+  `hubspot-companies`.
+- **The client's documentation or monitoring record** — use
+  `hudu-companies` or the relevant RMM's client skill.
+
 ## Key Concepts
 
 ### Customer Hierarchy

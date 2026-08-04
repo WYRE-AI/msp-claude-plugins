@@ -25,6 +25,20 @@ one matter, opposing counsel on another, and a witness on a third. Tools:
 this integration (see [api-patterns](../api-patterns/SKILL.md)). A contact
 that's no longer relevant doesn't get removed through this integration.
 
+## Anti-triggers
+
+- **An MSP client, its billing entity, or a service-desk contact** — every
+  other plugin here says "contact", "client", and "company" too, and none
+  of them mean a party to a legal matter. Use `autotask-crm`,
+  `connectwise-psa-contacts`, `halopsa-clients`, `hubspot-contacts`, or
+  `quickbooks-customers`.
+- **Everyone connected to a case** — a contact is a party record, not the
+  case file. The relationship (client, opposing party, witness) is carried
+  on the matter; use `clio-matters` to resolve the matter first.
+- **Removing someone's data on request** — no delete tool exists here, and
+  legal retention obligations are exactly why. That request goes to the
+  firm, in Clio, with a human deciding.
+
 ## People vs. Company Contacts
 
 Clio contacts come in two shapes:

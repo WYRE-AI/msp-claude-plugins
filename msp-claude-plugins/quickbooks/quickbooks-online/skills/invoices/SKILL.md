@@ -18,6 +18,25 @@ when_to_use: >-
 
 Invoices are the primary billing mechanism in QuickBooks Online. For MSPs, invoices typically represent monthly managed services fees, project work, hardware procurement, or ad-hoc support. QBO supports line items with service/product references, automatic tax calculation, email delivery, payment links, and integration with online payment processing. Invoices track due dates via payment terms and automatically contribute to the customer's outstanding balance.
 
+## Anti-triggers
+
+- **The books are in Xero, not QuickBooks** — an MSP runs one accounting
+  system. Use `xero-invoices`. "Invoice", "customer", "line item", and
+  "payment terms" mean the same thing in both, so the vendor name is the
+  only signal; confirm it before constructing a call.
+- **An invoice the MSP receives** — a supplier bill is accounts payable,
+  a different entity with different tools; use `quickbooks-expenses`.
+  A distributor invoice from Pax8 or Sherweb is not in QBO at all until
+  it is entered as a bill (`pax8-invoices`, `sherweb-billing`).
+- **Recording that an invoice was paid** — use `quickbooks-payments`.
+  Creating an invoice and applying cash to it are separate entities;
+  the invoice is never edited to mark it paid.
+- **Assembling the invoice from time and contracts** — the billable work
+  originates in the PSA; use `autotask-billing`,
+  `connectwise-psa-time-entries`, or `halopsa-invoices`.
+- **Collecting the money** — payment capture and dunning live in the
+  payments platform; use `alternative-payments-invoicing`.
+
 ## Key Concepts
 
 ### Invoice Lifecycle

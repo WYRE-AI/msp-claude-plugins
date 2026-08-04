@@ -17,6 +17,20 @@ when_to_use: >-
 
 Organizations in NinjaOne represent your MSP clients. Each organization contains devices, locations, and has policy mappings that determine how devices are monitored and managed.
 
+## Anti-triggers
+
+- **The client record of record** — a NinjaOne organization is a
+  monitoring container, not the billing or contract entity. Contracts,
+  billing addresses, and contacts live in the PSA; use
+  `autotask-crm`, `connectwise-psa-companies`, or `halopsa-clients`.
+- **The same client in another RMM** — use `atera-customers`,
+  `ncentral-organizations`, `datto-rmm-sites`, or `syncro-customers`.
+  All of them call this container something different (customer, site,
+  org unit) and none of them share IDs with NinjaOne.
+- **The documentation record for a client** — use `hudu-companies`.
+- **A single endpoint's detail** — use `ninjaone-devices`; this skill
+  covers the container and its locations and policy mappings.
+
 ## API Endpoints
 
 ### List Organizations

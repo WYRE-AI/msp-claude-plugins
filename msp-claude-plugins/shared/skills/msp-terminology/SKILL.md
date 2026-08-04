@@ -17,6 +17,25 @@ when_to_use: >-
 
 Managed Service Providers (MSPs) use a specialized vocabulary that can be confusing for newcomers. This skill covers common terminology, acronyms, and concepts used across the MSP industry and its tooling ecosystem.
 
+## Anti-triggers
+
+This skill is a glossary. It shares its entire vocabulary — ticket, agent,
+asset, seat, contract, SLA — with every vendor skill in this marketplace,
+which is exactly why it gets loaded by mistake. It defines those words; it
+cannot look any of them up.
+
+- **Any question about a real record** — "how many seats does Acme have",
+  "what is the SLA on this ticket", "which agent is on that server" are
+  data questions. Load the vendor's skill: `pax8-subscriptions`,
+  `autotask-contracts`, `ninjaone-devices`, and so on.
+- **What a term means inside one platform** — vendor status values,
+  priority enums, and entity names are that vendor's own vocabulary and
+  frequently contradict the generic definition here. Use that vendor's
+  skill.
+- **How to act on the concept** — triage practice is
+  `shared-ticket-triage`; cross-tool investigation is
+  `shared-incident-correlation`.
+
 ## Core Platforms
 
 ### PSA - Professional Services Automation

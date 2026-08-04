@@ -15,6 +15,21 @@ when_to_use: >-
 
 Manage NinjaRMM-enrolled endpoints: query details, control Windows services, schedule maintenance, and reboot devices safely.
 
+## Anti-triggers
+
+- **A device managed by a different RMM** — the endpoint has to be running
+  the NinjaRMM agent. Use `atera-devices`, `ncentral-devices`,
+  `datto-rmm-devices`, `syncro-assets`, or
+  `connectwise-automate-computers` for those fleets. "Device", "endpoint",
+  and "agent" mean the same thing in all six; only the enrolment differs.
+- **What a device is alerting on** — this skill covers the endpoint's own
+  state; the alert queue and its severity model are `ninjaone-alerts`.
+- **Every device belonging to a client** — that is an organization-scoped
+  query; use `ninjaone-organizations`.
+- **The documented record of a machine rather than the live one** — an
+  asset record in a documentation platform is not the RMM's view of the
+  endpoint; use `hudu-assets` or `it-glue-configurations`.
+
 ## Core API Operations
 
 ### Get Device Details

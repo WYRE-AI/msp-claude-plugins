@@ -17,6 +17,22 @@ when_to_use: >-
 
 NinjaOne includes a built-in ticketing system that integrates with device monitoring. Tickets can be manually created or auto-generated from alerts, providing a complete service desk solution.
 
+## Anti-triggers
+
+- **The MSP's real service desk** — most MSPs running NinjaOne keep their
+  ticket queue in a PSA and use NinjaOne ticketing only for
+  monitoring-generated work, or not at all. If the ticket has a contract,
+  an SLA, and billable time against it, it is in the PSA: use
+  `autotask-tickets`, `connectwise-psa-tickets`, `halopsa-tickets`,
+  `syncro-tickets`, or `atera-tickets`. Check which system holds the queue
+  before assuming this one.
+- **How to prioritise, categorise, and route an incoming ticket** — this
+  skill covers the NinjaOne ticket API; the triage practice itself is
+  vendor-agnostic, so use `shared-ticket-triage`.
+- **Pulling device and alert context onto a ticket** — that is a
+  cross-tool lookup; use `shared-incident-correlation`.
+- **The alert that would become a ticket** — use `ninjaone-alerts`.
+
 ## API Endpoints
 
 ### Create Ticket

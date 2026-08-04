@@ -21,6 +21,25 @@ Passwords in Hudu (called "asset passwords" in the API) provide secure credentia
 
 **Critical API naming note:** The Hudu UI calls these "Passwords," but the API endpoint is `/api/v1/asset_passwords`. Always use `asset_passwords` in API calls.
 
+## Anti-triggers
+
+- **A credential needed to authenticate a tool call** — Hudu passwords
+  document *the customer's* credentials. They are never the connector's
+  own auth: gateway credentials are brokered centrally and are not
+  readable from anywhere in this plugin. An agent that reaches here to
+  "find the API key" has taken a wrong turn.
+- **A credential stored on an asset rather than as a password record** —
+  many MSPs put licence keys and service accounts in asset custom fields.
+  Those are not `asset_passwords`; use `hudu-assets`.
+- **The same credential in IT Glue** — the other documentation platform in
+  this marketplace stores passwords too, with its own permission model.
+  Start from `it-glue-api-patterns`.
+- **Resetting or rotating the credential on the actual system** — this
+  skill updates the documented value only. Changing the real password is a
+  tenant or directory operation; use `cipp-users` or `m365-users`. Editing
+  the record without changing the system leaves documentation that is
+  confidently wrong.
+
 ## Key Concepts
 
 ### Password Organization
