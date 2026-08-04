@@ -17,6 +17,21 @@ when_to_use: >-
 
 Meraki devices are cloud-managed hardware identified by an immutable **serial number** (format `Q2XX-XXXX-XXXX`). Devices are claimed into an organization's inventory, then assigned to a network. This skill covers listing, inspecting, rebooting, and removing devices, plus reading device and uplink status through the `meraki_raw_request` passthrough.
 
+## Anti-triggers
+
+- **Hardware that is not Meraki** — every tool here keys off a Meraki
+  serial and the Dashboard API. Mixed-vendor network inventory is
+  `auvik-devices`; per-site LAN discovery is `domotz-devices`.
+- **Power-cycling something the Dashboard does not manage** —
+  `meraki_devices_reboot` reboots Meraki hardware only. Cutting power
+  to anything else at the site needs a switched PDU, which the Domotz
+  plugin controls; start from `domotz-devices` to find it.
+- **Firewall rules, VPN peers, or MX uplink policy** — use
+  `meraki-security-appliance`.
+- **Proving a device is genuinely unreachable** — status fields are
+  point-in-time and go stale; run live diagnostics with
+  `meraki-troubleshooting`.
+
 ## Key Concepts
 
 ### The Serial Is the Identity

@@ -16,6 +16,16 @@ when_to_use: >-
 
 Status pages in Better Stack provide a public-facing view of your service health. They automatically reflect monitor statuses and allow manual incident and maintenance updates. MSPs use status pages to communicate service availability to clients without exposing internal monitoring details.
 
+## Anti-triggers
+
+- **"Is this service up right now?"** — a status page is outbound
+  communication, not the source of truth for health. Use
+  `betterstack-monitors` for the check and `betterstack-incidents` for
+  the event.
+- **Better Stack's own availability** — that is status.betterstack.com,
+  not a page you manage; for connection failures use
+  `betterstack-api-patterns`.
+
 ## Key Concepts
 
 ### Status Page Components

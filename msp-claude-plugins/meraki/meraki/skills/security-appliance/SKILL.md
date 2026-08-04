@@ -17,6 +17,23 @@ when_to_use: >-
 
 The Meraki **MX** is a cloud-managed security appliance combining routing, stateful firewall, SD-WAN, and Auto VPN. This skill covers the two curated MX capabilities: reviewing and updating the **Layer 3 outbound firewall** ruleset, and checking **site-to-site VPN** status. Firewall changes are high-impact -- the update tool replaces the entire ruleset, so read before you write.
 
+## Anti-triggers
+
+- **A firewall that is not a Meraki MX** — these rules are MX L3
+  outbound only. A Fortinet, SonicWall, or Palo Alto ruleset is not
+  reachable from this plugin at all; `auvik-devices` can tell you what
+  the firewall is, not change it.
+- **Inbound port forwarding, content filtering, or L7 rules** — the
+  curated tools cover the L3 outbound list alone; everything else on
+  the MX goes through `meraki_raw_request`, documented in
+  `meraki-api-patterns`.
+- **Client VPN or a remote-access VPN user** —
+  `meraki_appliance_vpn_status_get` reports site-to-site Auto VPN peers
+  only.
+- **A tunnel that is down because the appliance is** — check the MX and
+  its uplinks before diagnosing VPN config; use
+  `meraki-troubleshooting`.
+
 ## L3 Outbound Firewall
 
 ### Rule Model

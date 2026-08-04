@@ -1,6 +1,6 @@
 {
   "name": "auvik",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Claude plugins for Auvik - network monitoring, device inventory, alert triage, configuration audit, and capacity planning for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
@@ -8,5 +8,11 @@
   "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
   "repository": "https://github.com/wyre-technology/msp-claude-plugins",
   "license": "Apache-2.0",
-  "keywords": ["auvik", "msp", "network-monitoring", "mcp", "rmm"]
+  "keywords": [
+    "auvik",
+    "msp",
+    "network-monitoring",
+    "mcp",
+    "rmm"
+  ]
 }

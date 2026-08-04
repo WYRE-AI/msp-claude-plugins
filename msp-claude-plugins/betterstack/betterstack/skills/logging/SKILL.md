@@ -15,6 +15,15 @@ when_to_use: >-
 
 Better Stack Logs (formerly Logtail) provides centralized log management with structured log ingestion, real-time search, and log-based alerting. MSPs use it to aggregate logs from client infrastructure, investigate incidents, and set up proactive alerting on error patterns.
 
+## Anti-triggers
+
+- **Azure Log Analytics and KQL** — different store, different query
+  language; use `azure-mcp-observability`.
+- **Threat hunting or security event analysis** — these are
+  application logs, not a SIEM; use `huntress-signals` or `blumira`.
+- **Uptime history for a monitor** — check results are not log records;
+  use `betterstack-monitors`.
+
 ## Key Concepts
 
 ### Log Sources

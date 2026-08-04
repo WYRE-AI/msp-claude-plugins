@@ -17,6 +17,16 @@ when_to_use: >-
 
 The `azure-mcp` vendor runs Microsoft's official Azure MCP Server (`mcr.microsoft.com/azure-sdk/azure-mcp`) as a WYRE-built sidecar inside the MCP gateway. Each connecting MSP supplies its own Azure **service principal**; the gateway isolates credentials per tenant and scopes every request to the principal you registered.
 
+## Anti-triggers
+
+- **Microsoft 365 or Entra ID tenant work** — in MSP conversation
+  "Azure tenant" almost always means the M365 tenant. This connector
+  reaches Azure Resource Manager only. Tenant onboarding, GDAP, and CSP
+  relationships are `cipp-tenants`; Graph app registrations are
+  `microsoft-graph-connection`.
+- **What to actually query once connected** — use
+  `azure-mcp-observability` or `azure-mcp-cost-and-capacity`.
+
 ## Read-only deployment — read this first
 
 The gateway runs the Azure MCP Server with the `--read-only` flag and a deliberately constrained namespace allowlist. Day-one the connector exposes exactly eight read-leaning namespaces:

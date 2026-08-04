@@ -18,6 +18,20 @@ when_to_use: >-
 
 Domotz automatically discovers and monitors devices on networks where agents are deployed. Devices include servers, workstations, network equipment, IoT devices, printers, and any IP-connected hardware. Each device is associated with a specific agent (site).
 
+## Anti-triggers
+
+- **A managed endpoint with software installed on it** — a Domotz
+  device is anything that answered a LAN scan, including unmanaged
+  phones, printers, and IoT gear. Managed-endpoint inventory is
+  `atera` or `ncentral`.
+- **Infrastructure across every client at once** — Domotz queries are
+  scoped to a single agent, so fleet-wide network inventory means
+  fanning out site by site; `auvik-devices` answers it directly.
+- **Meraki hardware you intend to act on** — reading it here is fine,
+  but reboot, removal, and config key off the Dashboard serial; use
+  `meraki-devices`.
+- **Attack-surface or rogue-asset discovery** — use `runzero`.
+
 ## Key Concepts
 
 ### Device Discovery

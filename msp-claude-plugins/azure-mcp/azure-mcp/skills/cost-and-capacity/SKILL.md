@@ -18,6 +18,15 @@ This skill covers the cost, capacity, and inventory side of the `azure-mcp` conn
 
 Tool names follow the Azure MCP Server's namespace convention (`azmcp` / `azure_mcp` prefixes, grouped under `pricing`, `quota`, `subscription`, `group`). Invoke them by capability.
 
+## Anti-triggers
+
+- **What the customer was actually billed** — `pricing` returns public
+  retail rates, never invoiced consumption. CSP invoices and margin sit
+  in `pax8` or `sherweb`.
+- **Where the money is being wasted** — cost *optimisation* findings
+  come from Azure Advisor; use `azure-mcp-observability`.
+- **M365 seat counts and licence costs** — use `cipp-licenses`.
+
 ## Namespace surface
 
 ### `subscription` — subscription inventory

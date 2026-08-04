@@ -17,6 +17,17 @@ when_to_use: >-
 
 Domotz Eyes are synthetic monitoring sensors that run from Domotz agents to actively test service availability and performance. Unlike passive SNMP monitoring, Eyes actively probe endpoints with TCP connections, HTTP requests, and custom checks to verify services are responding correctly.
 
+## Anti-triggers
+
+- **Checking a public URL from the internet** — Eyes probe from inside
+  the customer LAN, which is what makes them right for internal
+  targets and wrong for proving a public service is reachable. Use
+  `betterstack-monitors`.
+- **Passive polling of a device's own metrics** — Eyes actively probe a
+  service; SNMP counters and thresholds are `domotz-network`.
+- **The notification a failed check produced** — this skill covers the
+  sensor and its results; the alert lifecycle is `domotz-alerts`.
+
 ## Key Concepts
 
 ### Eye Types

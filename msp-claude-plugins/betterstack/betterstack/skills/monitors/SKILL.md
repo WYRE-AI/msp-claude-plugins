@@ -16,6 +16,19 @@ when_to_use: >-
 
 Uptime monitors are the core of Better Stack's monitoring platform. They periodically check URLs, ports, or heartbeats to detect downtime and performance degradation. Monitors can be grouped, paused, and configured with custom check intervals, expected status codes, and alerting thresholds.
 
+## Anti-triggers
+
+- **An internal or RFC1918 target** — checks run from Better Stack's
+  public regions and cannot reach a private LAN. Internal service
+  checks run from a collector inside the site; use `domotz-eyes`.
+- **Azure Monitor** — same word, different product. Azure metrics, KQL,
+  and alert rules are `azure-mcp-observability`.
+- **Whether a piece of infrastructure is up** — SNMP and ICMP polling
+  of switches, firewalls, and APs is `auvik-devices`; a workstation or
+  server under RMM is `atera` or `ncentral`.
+- **Who gets woken when a check fails** — the monitor holds the check;
+  the routing and rotation are `betterstack-oncall`.
+
 ## Key Concepts
 
 ### Monitor Types

@@ -18,6 +18,19 @@ when_to_use: >-
 
 Meraki's **live tools** run diagnostics on demand from a device against a target -- ping, cable test, throughput test, wake-on-LAN, ARP table, and more. These are **not curated MCP tools**; they ride the `meraki_raw_request` passthrough because they map to dozens of endpoints under `/devices/{serial}/liveTools/...`. This skill covers the async live-tools pattern, plus reboots (`meraki_devices_reboot`) and uplink checks for a complete connectivity-triage toolkit.
 
+## Anti-triggers
+
+- **"Is the customer's website up?"** — live tools probe outward from a
+  Meraki device on the customer LAN, which cannot tell you what the
+  internet sees. External uptime checking is `betterstack-monitors`.
+- **A workstation or server problem that is not a network problem** —
+  use `atera` or `ncentral`.
+- **Historical trend data** — a live tool returns one point-in-time
+  result; interface history and utilisation over time are
+  `auvik-networks`.
+- **Deciding whether a firewall rule is what is blocking the traffic**
+  — use `meraki-security-appliance`.
+
 ## Why Live Tools Use `meraki_raw_request`
 
 The 27 curated tools cover inventory, config, and status. Live tools are transient diagnostics with an async job lifecycle and a long tail of endpoint variants -- wrapping each one individually adds little value. Instead, invoke them through `meraki_raw_request`, which reaches any Dashboard API v1 path directly.

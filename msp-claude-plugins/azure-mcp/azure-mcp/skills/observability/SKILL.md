@@ -18,6 +18,20 @@ This skill covers the monitoring, diagnostics, and health side of the `azure-mcp
 
 Tool names follow the Azure MCP Server's namespace convention (`azmcp` / `azure_mcp` prefixes, e.g. tools grouped under `monitor`, `resourcehealth`, `applens`, `advisor`). Describe and invoke them by capability — the connector exposes one or more tools per namespace.
 
+## Anti-triggers
+
+- **Estimating a price or checking quota headroom** — use
+  `azure-mcp-cost-and-capacity`. Advisor's *Cost* recommendations do
+  belong here; a meter rate or a usage limit does not.
+- **Application logs held outside Azure** — KQL reaches Log Analytics
+  workspaces only. Better Stack log search is `betterstack-logging`.
+- **Microsoft 365 sign-in, mailbox, or licensing signals** — unless
+  they are ingested into a workspace, use `microsoft-graph-querying` or
+  `cipp-security`.
+- **Alerting an MSP NOC rather than Azure** — an Azure Monitor alert
+  rule is not the RMM alert queue (`atera`, `ncentral`) or an uptime
+  incident (`betterstack-incidents`).
+
 ## Namespace surface
 
 ### `monitor` — Azure Monitor

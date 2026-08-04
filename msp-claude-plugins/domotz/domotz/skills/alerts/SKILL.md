@@ -17,6 +17,18 @@ when_to_use: >-
 
 Domotz provides a comprehensive alerting system that monitors device status, network conditions, and sensor results. Alerts are generated when monitored conditions meet configured thresholds and can be routed to various notification channels including email, webhooks, and PSA integrations.
 
+## Anti-triggers
+
+- **A security detection** — Domotz alerts are availability and
+  threshold conditions, never threat findings; use
+  `huntress-incidents`.
+- **An incident record with acknowledgement, escalation, and MTTR** —
+  Domotz alerts have no responder lifecycle; use
+  `betterstack-incidents`, `pagerduty-incidents`, or
+  `rootly-incidents`.
+- **The same condition seen across every client** — if the question
+  spans tenants rather than one site, use `auvik-alerts`.
+
 ## Key Concepts
 
 ### Alert Types
