@@ -59,12 +59,12 @@ export const plugins: Plugin[] = [
       'Vendors'
     ],
     skills: [
-      { name: 'account-takeover', description: 'Use this skill when working with Abnormal Security account takeover (ATO) detection - suspicious sign-ins, impossible travel, compromised accounts, mailbox rule changes, and lateral movement indicators.' },
-      { name: 'cases', description: 'Use this skill when working with Abnormal Security abuse mailbox cases - user-reported emails, case triage, remediation actions, case lifecycle, and phishing simulation management.' },
-      { name: 'messages', description: 'Use this skill when working with Abnormal Security message analysis - email headers, attachments, sender reputation, delivery context, authentication results (SPF/DKIM/DMARC), and message metadata.' },
-      { name: 'threats', description: 'Use this skill when working with Abnormal Security threat detection and analysis - BEC, phishing, malware, socially-engineered attacks, spam, graymail, and credential theft.' },
-      { name: 'vendors', description: 'Use this skill when working with Abnormal Security VendorBase vendor risk assessment - vendor risk scores, compromised vendor detection, vendor domain analysis, and supply chain email threat monitoring.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Abnormal Security REST API - Bearer token authentication, base URLs, rate limiting, pagination, OData filtering, error handling, and common API patterns.' }
+      { name: 'account-takeover', description: 'Abnormal Security account takeover (ATO) detection: suspicious sign-in signals, impossible travel, mailbox rule changes, lateral-movement indicators, ATO case structure, investigation workflows, and remediation actions.' },
+      { name: 'cases', description: 'Abnormal Security abuse mailbox cases: user-reported email submissions, case statuses and judgments, the case lifecycle, bulk and remediation actions, and phishing simulation handling.' },
+      { name: 'messages', description: 'Abnormal Security message analysis: message retrieval, email header inspection, attachments, sender reputation, delivery context, and SPF/DKIM/DMARC authentication results.' },
+      { name: 'threats', description: 'Abnormal Security threat detection: threat types (BEC, phishing, malware, socially-engineered attacks, spam, graymail, credential theft), attack vectors, severity assessment, remediation actions, and investigation workflows.' },
+      { name: 'vendors', description: 'Abnormal Security VendorBase vendor risk: vendor risk scores and levels, risk factors, compromised-vendor detection, vendor domain analysis, and supply-chain email threat workflows.' },
+      { name: 'api-patterns', description: 'Abnormal Security REST API fundamentals: Bearer token authentication, base URLs, rate limiting, pagination, OData filtering, request/response formats, and error handling.' }
     ],
     agents: [
       { name: 'email-threat-analyst', description: 'Use this agent when investigating email threats detected by Abnormal Security, analyzing attack chains, assessing user exposure, or managing remediation across client tenants.' },
@@ -101,12 +101,12 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'agents', description: 'Use this skill when working with Atera RMM agents - listing, searching, monitoring, or executing commands on managed devices.' },
-      { name: 'alerts', description: 'Use this skill when working with Atera alerts - viewing, acknowledging, resolving, or managing alerts from monitored devices.' },
-      { name: 'customers', description: 'Use this skill when working with Atera customers and contacts - creating, updating, searching, or managing customer records.' },
-      { name: 'devices', description: 'Use this skill when working with Atera device monitors - HTTP, SNMP, and TCP monitors for network devices, services, and applications.' },
-      { name: 'tickets', description: 'Use this skill when working with Atera tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Atera REST API - authentication, pagination, rate limiting, and error handling.' }
+      { name: 'agents', description: 'Atera RMM agents: agent records and fields, online/offline status, endpoint search and monitoring, PowerShell and script execution, and agent lifecycle.' },
+      { name: 'alerts', description: 'Atera alerts: alert types, severity levels, alert sources, the acknowledge/resolve lifecycle, and alert-to-ticket conversion.' },
+      { name: 'customers', description: 'Atera customers and contacts: customer records and fields, contact management, custom fields, and customer lifecycle operations.' },
+      { name: 'devices', description: 'Atera device monitors: HTTP, SNMP, and TCP monitor types for network devices, services, and applications, plus monitor configuration, thresholds, and polling behavior.' },
+      { name: 'tickets', description: 'Atera service desk tickets: ticket fields, statuses, priorities, comments, work hours, and billing duration.' },
+      { name: 'api-patterns', description: 'Atera REST API fundamentals: X-API-KEY header authentication, OData-style pagination, the 700 requests/minute rate limit, endpoint conventions, and error handling.' }
     ],
     agents: [
       { name: 'customer-health-scorer', description: 'Use this agent when an MSP account manager, service manager, or owner needs to score and rank client health across the Atera portfolio — not live operations management, but a structured assessment of each client based on device health trends, ticket velocity, recurring issues, patch compliance, and alert frequency.' },
@@ -146,10 +146,10 @@ export const plugins: Plugin[] = [
       'Networks'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with Auvik alerts - severity tiers, status lifecycle, dismissal semantics, and the common alertName patterns that show up in MSP NOC queues.' },
-      { name: 'devices', description: 'Use this skill when working with Auvik device records - identifying device types, interpreting manageStatus, reading lifecycle and warranty fields, and choosing between the v1 list endpoint and the detailed device endpoints.' },
-      { name: 'networks', description: 'Use this skill when working with Auvik network and interface entities - the network entity model, IP-range scoping, interface-to-device relationships, and admin vs oper status.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Auvik MCP tools - JSON:API envelope shape, basic-auth credential model, region routing, cursor-based pagination, rate-limit handling, and the v1 vs v2 device API distinction.' }
+      { name: 'alerts', description: 'Auvik alerts: severity tiers, status lifecycle, dismissal semantics, and the common alertName patterns that show up in MSP NOC queues.' },
+      { name: 'devices', description: 'Auvik device records: device types, manageStatus and onlineStatus, lifecycle and warranty fields, and choosing between the v1 list endpoint and the detailed device endpoints.' },
+      { name: 'networks', description: 'Auvik network and interface entities: the network entity model, IP-range scoping, interface-to-device relationships, and adminStatus vs operStatus.' },
+      { name: 'api-patterns', description: 'Auvik MCP fundamentals: the JSON:API envelope shape, basic-auth credential model, region routing, cursor-based pagination, rate-limit handling, and the v1 vs v2 device API distinction.' }
     ],
     agents: [
       { name: 'alert-responder', description: 'Use this agent for Auvik alert-related questions - what\'s open, what matters, what to dismiss, what to escalate.' },
@@ -195,21 +195,21 @@ export const plugins: Plugin[] = [
       'Time Entry Tracking'
     ],
     skills: [
-      { name: 'billing', description: 'Use this skill when working with Autotask billing — retrieving billing items, checking approval levels, and searching invoices.' },
-      { name: 'configuration-items', description: 'Use this skill when working with Autotask Configuration Items (CIs) - asset management, inventory tracking, warranty monitoring, lifecycle management, and relationship mapping.' },
-      { name: 'contracts', description: 'Use this skill when working with Autotask contracts and service agreements - recurring services, block hours, time & materials, and contract billing.' },
-      { name: 'crm', description: 'Use this skill when working with Autotask CRM - companies, contacts, sites/locations, and opportunities.' },
-      { name: 'expenses', description: 'Use this skill when working with Autotask expense reports and expense items - creating expense reports, adding line items, searching reports by status or submitter, tracking reimbursable vs billable expenses, and managing expense approval workflows.' },
-      { name: 'picklists', description: 'Use this skill when working with Autotask picklist and reference data — listing queues, ticket statuses, ticket priorities, and phases.' },
-      { name: 'product-catalog', description: 'Use this skill when working with Autotask product catalog operations - searching products, checking pricing, managing inventory, and understanding the relationship between products, services, bundles, and price lists.' },
-      { name: 'projects', description: 'Use this skill when working with Autotask projects - creating projects, managing tasks, phases, milestones, and resource assignments.' },
-      { name: 'quotes', description: 'Use this skill when working with Autotask quotes and quote line items - creating quotes for customers, adding products/services/bundles as line items, managing pricing and discounts, linking quotes to opportunities, and building proposals.' },
-      { name: 'service-calls', description: 'Use this skill when working with Autotask Service Calls - creating, scheduling, updating, or completing service calls linked to tickets.' },
-      { name: 'ticket-notes-attachments', description: 'Use this skill when working with Autotask ticket notes, ticket attachments, and ticket charges — retrieving individual notes, downloading attachments, managing labor charges on tickets.' },
-      { name: 'tickets', description: 'Use this skill when working with Autotask tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'time-entries', description: 'Use this skill when working with Autotask time entries - logging work hours, billing calculations, approval workflows, utilization tracking, and budget validation.' },
-      { name: 'tool-discovery', description: 'Use this skill when Autotask MCP tools aren\'t loading, when you can\'t find the right Autotask tool to call, or when working with a lazy-loaded MCP connection where only meta-tools are available.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Autotask REST API - authentication, query building, pagination, includes, rate limiting, and error handling.' }
+      { name: 'billing', description: 'Autotask billing item retrieval, approval-level workflows, and invoice search — covering billing item types, approval status filtering, and reconciliation of billable work against invoices for MSP finance teams.' },
+      { name: 'configuration-items', description: 'Autotask Configuration Item (CI) asset management: CI types and categories, lifecycle status codes, the CI field schema, related-item relationships, DNS records, notes, and contract/billing associations for MSP infrastructure tracking.' },
+      { name: 'contracts', description: 'Autotask contract and service agreement management - contract types (recurring services, block hours, time & materials, fixed price, retainer), service/service bundle associations, SLAs, and how contracts drive billing for MSP account managers.' },
+      { name: 'crm', description: 'Autotask CRM entities - companies (accounts), contacts, and sites/locations - including field references, company type classifications, and how these records underpin tickets, contracts, and projects for MSP account management.' },
+      { name: 'expenses', description: 'Autotask expense report and expense item structure - the report/item parent-child relationship, approval status workflow, expense categories, payment types, and the billable vs reimbursable distinction for MSP operational expenses.' },
+      { name: 'picklists', description: 'Autotask picklist and reference-data lookups — queues, ticket statuses, ticket priorities, and project phases — the instance-specific configured values required before creating or filtering tickets and other entities.' },
+      { name: 'product-catalog', description: 'Autotask product catalog structure - Products, Services, and Service Bundles - and how Price Lists override default unit pricing.' },
+      { name: 'projects', description: 'Autotask project structure - projects, phases, tasks, and milestones - including project and task fields, status values, resource assignment, and how project work links to contract billing for MSP project managers.' },
+      { name: 'quotes', description: 'Autotask quote structure and line items - quote item types (product, service, service bundle, labor, expense, shipping), the mutually-exclusive catalog reference rules, and the three discount mechanisms (unit, line, percentage) used to build customer proposals.' },
+      { name: 'service-calls', description: 'Autotask Service Call data model - the ServiceCall / ServiceCallTicket / ServiceCallTicketResource three-layer structure - covering fields, status codes, and how tickets and technicians (resources) are linked to scheduled work.' },
+      { name: 'ticket-notes-attachments', description: 'Autotask ticket notes, attachments, and charges — the secondary entities attached to tickets: retrieving/searching notes and attachments, and creating, updating, or searching ticket charges for labor and expenses billed directly to a ticket.' },
+      { name: 'tickets', description: 'Autotask ticket lifecycle: status/priority codes and transition rules, the ticket field schema, SLA calculation and clock behavior, escalation rules, ticket metrics, and the MCP tool surface (create, update, search, history, notes) for MSP service desk operations.' },
+      { name: 'time-entries', description: 'Autotask time entry structure: approval status codes and workflow, the time entry field schema, the billing rate hierarchy, budget and contract-limit validation, utilization analytics, and the MSP business rules for rounding and minimum billing increments.' },
+      { name: 'tool-discovery', description: 'The Autotask MCP lazy-loading pattern - four meta-tools (list_categories, list_category_tools, execute_tool, router) that expose the full 39+ tool catalog progressively instead of loading every tool schema upfront, plus the natural-language router for intent-based tool lookup.' },
+      { name: 'api-patterns', description: 'Autotask REST API fundamentals: header-based authentication, zone detection, the query/filter DSL (14 operators, logical grouping, includes), pagination, rate limits, and CRUD conventions across the 215+ entity PSA.' }
     ],
     agents: [
       { name: 'contract-renewal-tracker', description: 'Use this agent when an MSP account manager, service manager, or operations lead needs to track and manage contract renewals in Autotask PSA — surfacing expiring contracts, identifying auto-renewal gaps, tracking MRR/ARR trends, and flagging clients who are still receiving service on expired contracts.' },
@@ -253,9 +253,9 @@ export const plugins: Plugin[] = [
       'Quote Generation'
     ],
     skills: [
-      { name: 'purchasing', description: 'Use this skill when navigating Kaseya Quote Manager procurement data — purchase orders, their lines and costs, suppliers, and product-supplier relationships.' },
-      { name: 'quotes', description: 'Use this skill when navigating Kaseya Quote Manager quotes — drilling from a quote into its sections and line items, and following quotes through to sales orders, order lines, and payments.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Kaseya Quote Manager (Datto Commerce) MCP tools — API-key authentication, the read-only tool surface, page/pageSize pagination with modifiedAfter, rate limits, and error handling.' }
+      { name: 'purchasing', description: 'Kaseya Quote Manager procurement data: purchase orders with their lines and costs, the suppliers they are placed with, and product-supplier records mapping catalog products to supplier SKUs and pricing.' },
+      { name: 'quotes', description: 'Kaseya Quote Manager quoting data: the quote → section → line item hierarchy, and the sales orders, order lines, and payments a quote becomes once accepted.' },
+      { name: 'api-patterns', description: 'Kaseya Quote Manager (Datto Commerce) API fundamentals: API-key auth and the gateway\'s header translation, the read-only `kqm_<entity>_list`/`_get` tool surface across the sales, procurement, catalog, CRM, and org domains, page/pageSize/modifiedAfter pagination, rate limits, and error codes.' }
     ],
     agents: [],
     commands: [
@@ -287,12 +287,12 @@ export const plugins: Plugin[] = [
       'Status Pages'
     ],
     skills: [
-      { name: 'incidents', description: 'Use this skill when working with Better Stack incidents -- listing, triaging, acknowledging, and resolving incidents triggered by uptime monitors or manual reports.' },
-      { name: 'logging', description: 'Use this skill when working with Better Stack log management (Logtail) -- querying logs, managing log sources, structured log search, log-based alerting, and log analysis workflows.' },
-      { name: 'monitors', description: 'Use this skill when working with Better Stack uptime monitors -- listing, creating, updating, pausing, and deleting monitors, heartbeat monitors, monitor groups, and check types.' },
-      { name: 'oncall', description: 'Use this skill when working with Better Stack on-call schedules -- on-call calendars, escalation/notification policies, rotation management, understanding who is currently on-call, and responding to active incidents via the on-call flow.' },
-      { name: 'status-pages', description: 'Use this skill when working with Better Stack status pages -- managing status pages, adding resources/components, posting maintenance windows, and communicating service status to end users.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Better Stack MCP tools -- available tools, authentication via Bearer token, API structure, cursor-based pagination, rate limiting, error handling, and best practices.' }
+      { name: 'incidents', description: 'Better Stack incidents: incident records raised by uptime monitors or reported manually, and the triage, acknowledgment, and resolution lifecycle.' },
+      { name: 'logging', description: 'Better Stack log management (Logtail): log sources, structured log search and query syntax, log-based alerting, and log analysis workflows.' },
+      { name: 'monitors', description: 'Better Stack uptime monitors: check types, monitor fields, heartbeat monitors, monitor groups, and create/update/pause/delete operations.' },
+      { name: 'oncall', description: 'Better Stack on-call: on-call calendars and rotations, escalation and notification policies, alert routing, and determining who is currently on call.' },
+      { name: 'status-pages', description: 'Better Stack status pages: status page configuration, resources and components, maintenance windows, and public service-status communication.' },
+      { name: 'api-patterns', description: 'Better Stack MCP and API surface across Uptime, Telemetry (Logtail), and Error Tracking: available tools, Bearer token authentication, API structure, cursor-based pagination, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'sla-uptime-reporter', description: 'Use this agent when an MSP needs to generate SLA-focused uptime reports for clients, calculate SLA achievement percentages, identify chronic underperforming monitors, or produce client-facing availability summaries.' },
@@ -329,12 +329,12 @@ export const plugins: Plugin[] = [
       'User Management'
     ],
     skills: [
-      { name: 'agents', description: 'Use this skill when working with Blumira agents, devices, and agent keys, including listing devices, checking agent health, and managing agent deployment keys.' },
-      { name: 'findings', description: 'Use this skill when working with Blumira findings (security alerts/detections), including listing, filtering, investigating, resolving, assigning, and commenting on findings.' },
-      { name: 'msp', description: 'Use this skill when working with Blumira MSP (Managed Service Provider) multi-tenant operations, including managing multiple client accounts, cross-account finding queries, and per-account device/user management.' },
-      { name: 'resolutions', description: 'Use this skill when resolving Blumira findings, choosing the correct resolution type, or understanding resolution workflows and their impact on security metrics.' },
-      { name: 'users', description: 'Use this skill when listing or looking up Blumira users, finding user IDs for finding assignment, or auditing user access.' },
-      { name: 'api-patterns', description: 'Use this skill when working with Blumira API authentication, understanding the dual path structure (org vs MSP), constructing filtered queries, handling pagination, or troubleshooting API errors.' }
+      { name: 'agents', description: 'Blumira agents (sensors) and the devices they run on: device inventory and filtering, agent health via last-seen timestamps, and agent deployment keys.' },
+      { name: 'findings', description: 'The Blumira finding lifecycle: status and severity codes, resolution types, list filtering, enriched detail retrieval, assignment, and comment threads.' },
+      { name: 'msp', description: 'Blumira\'s MSP path group (`/msp/*`): managed-account enumeration, cross-account and per-account finding queries, per-account device, agent-key and user management, and how MSP paths differ from org paths.' },
+      { name: 'resolutions', description: 'Blumira resolution types (Valid, Not Applicable, False Positive): how to choose between them, their effect on security metrics and detection tuning, and the org- and MSP-level resolve calls.' },
+      { name: 'users', description: 'Blumira organization users: listing and filtering users, user roles, and looking up the user IDs required for finding assignment and access audits.' },
+      { name: 'api-patterns', description: 'Blumira REST API fundamentals: JWT authentication, the dual `/org/*` vs `/msp/*` path structure, suffix-based filter operators, pagination parameters and response metadata, the stateful MCP navigation tools, and HTTP error causes.' }
     ],
     agents: [
       { name: 'compliance-reporter', description: 'Use this agent when generating compliance-oriented security reports from Blumira SIEM data — not for live incident investigation, but for producing evidence packages, coverage gap assessments, and log source health summaries for frameworks like SOC 2, HIPAA, and CIS.' },
@@ -371,11 +371,11 @@ export const plugins: Plugin[] = [
       'Threats'
     ],
     skills: [
-      { name: 'incidents', description: 'Use this skill when working with Checkpoint Harmony Email security incidents - incident lifecycle, status transitions, investigation workflows, notes and evidence collection, remediation tracking.' },
-      { name: 'policies', description: 'Use this skill when working with Checkpoint Harmony Email security policies - DLP policies, anti-phishing rules, anti-malware settings, quarantine policies, allow/block lists, and policy configuration.' },
-      { name: 'quarantine', description: 'Use this skill when working with Checkpoint Harmony Email quarantine - listing, searching, releasing, deleting quarantined emails.' },
-      { name: 'threats', description: 'Use this skill when working with Checkpoint Harmony Email threat detection and analysis - phishing, malware, BEC, account takeover, IOC extraction, threat timelines, and severity assessment.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Checkpoint Harmony Email API - OAuth2 client credentials authentication, base URLs, rate limiting, pagination, error handling, and common API patterns.' }
+      { name: 'incidents', description: 'Checkpoint Harmony Email & Collaboration (Avanan) incident management: incident lifecycle and status transitions, severity levels, investigation and remediation workflows, notes and evidence collection, and the incident field reference for email security events.' },
+      { name: 'policies', description: 'Checkpoint Harmony Email & Collaboration (Avanan) policy management: policy types (DLP, anti-phishing, anti-malware, anti-BEC, ATO protection), actions and scope, allow/block list administration, and policy tuning across managed customer tenants.' },
+      { name: 'quarantine', description: 'Checkpoint Harmony Email & Collaboration (Avanan) quarantine management: quarantine reasons and severity mapping, the quarantine field reference, release and bulk-operation workflows, and quarantine expiry/retention behavior for held emails.' },
+      { name: 'threats', description: 'Checkpoint Harmony Email & Collaboration (Avanan) threat detection and analysis: threat types and detection engines, IOC extraction, timeline and severity assessment, and investigation workflows for phishing, malware, BEC, and account-takeover threats.' },
+      { name: 'api-patterns', description: 'Checkpoint Harmony Email & Collaboration (Avanan) API fundamentals: OAuth2 client-credentials authentication, regional base URLs, request and pagination patterns, rate limiting, error handling, and performance optimization for the Harmony Email API.' }
     ],
     agents: [
       { name: 'cloud-email-defender', description: 'Use this agent when investigating quarantined threats, managing email security events, auditing Avanan tenant configuration, or performing cross-tenant threat sweeps in Check Point Avanan (Harmony Email & Collaboration).' },
@@ -416,15 +416,15 @@ export const plugins: Plugin[] = [
       'User Management'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with CIPP alerts and audit logs — reviewing the queued alert backlog across tenants, investigating sign-in or admin activity in audit logs, correlating alerts with tenants.' },
-      { name: 'groups', description: 'Use this skill when listing or creating M365 groups in CIPP — security groups, distribution lists, M365 groups, mail-enabled security groups.' },
-      { name: 'licenses', description: 'Use this skill when working with M365 license assignments and CSP license inventory through CIPP — listing license usage per tenant, identifying unused licenses, surfacing license SKUs available for assignment, and reviewing CSP-level license commitments.' },
-      { name: 'mailboxes', description: 'Use this skill when working with Exchange Online mailboxes through CIPP — listing mailboxes, auditing mailbox permissions, configuring out-of-office auto-replies, and setting email forwarding.' },
-      { name: 'ops', description: 'Use this skill when working with CIPP operational tooling — GDAP role and invite management, scheduled tasks, server health checks, version reporting, and CIPP application logs.' },
-      { name: 'security', description: 'Use this skill when reviewing M365 conditional access policies and named locations through CIPP — auditing CA coverage, finding policies that exclude critical apps, listing trusted IP ranges, identifying tenants without baseline conditional access.' },
-      { name: 'standards', description: 'Use this skill when working with CIPP Standards, Best Practice Analyser (BPA), and domain health checks — listing configured standards per tenant, triggering on-demand compliance checks, retrieving BPA results, checking SPF/DKIM/DMARC.' },
-      { name: 'tenants', description: 'Use this skill when working with CIPP tenants — listing managed M365 tenants, checking tenant details, identifying tenant ID/domain, and scoping operations to a specific tenant.' },
-      { name: 'users', description: 'Use this skill when working with CIPP-managed M365 users — creating accounts, editing properties, disabling, resetting passwords, resetting MFA, revoking sessions, full offboarding, BEC investigation, MFA status reporting, and listing user devices/groups.' }
+      { name: 'alerts', description: 'CIPP\'s read-only alerting and audit surface: the cross-tenant alert queue, tenant-scoped M365 unified audit log queries, the audit operations worth filtering on during a compromise investigation, and audit lag/retention behavior.' },
+      { name: 'groups', description: 'Tenant-scoped Entra/M365 group enumeration and creation in CIPP, the four group types (Security, Microsoft 365, Distribution, Mail-Enabled Security) and when to pick each, and the boundary where CIPP\'s group surface ends and Graph/M365 takes over.' },
+      { name: 'licenses', description: 'Read-only M365 license visibility through CIPP: per-tenant SKU purchase vs. consumption, portfolio-wide CSP license commitments, common SKU part numbers and their friendly names, and the license-mix red flags that drive rightsizing and billing reconciliation.' },
+      { name: 'mailboxes', description: 'The four Exchange Online mailbox operations CIPP exposes — mailbox inventory, delegate/full-access permission audit, out-of-office, and email forwarding — plus the BEC-remediation, offboarding, and leave-coverage sequences built from them.' },
+      { name: 'ops', description: 'CIPP\'s own operational layer rather than the tenants it manages: GDAP role definitions and pending invites, the CIPP scheduler, and the ping/version/log endpoints used to diagnose why other CIPP tools fail silently.' },
+      { name: 'security', description: 'Read-only access to a tenant\'s Conditional Access policy graph and named locations through CIPP: policy state semantics, the findings that matter in a CA review, portfolio drift detection, and why CA writes are absent from the MCP surface.' },
+      { name: 'standards', description: 'CIPP\'s tenant-baseline enforcement model: the Report/Alert/Remediate standards modes and how to roll them out, on-demand standards evaluation, Best Practice Analyser reports, and SPF/DKIM/DMARC domain health results with their remediation actions.' },
+      { name: 'tenants', description: 'The top-level CIPP scope: enumerating managed M365 tenants, retrieving tenant detail, and the accepted `tenantFilter` identifier formats (default domain, custom domain, GUID, `allTenants`).' },
+      { name: 'users', description: 'The full multi-tenant M365 user lifecycle in CIPP: create/edit/disable, password and MFA resets, session revocation, the bundled offboarding call, BEC investigation reports, MFA gap reporting, and device/group lookups — plus the ordering constraints that make each sequence correct.' }
     ],
     agents: [
       { name: 'security-posture-reviewer', description: 'Use this agent when an MSP security lead, vCISO, or service manager needs to sweep the M365 portfolio for security posture issues — Secure Score regressions, MFA enrollment gaps, conditional access drift, BPA failures, and broken domain authentication.' },
@@ -459,11 +459,11 @@ export const plugins: Plugin[] = [
       'Ticketing'
     ],
     skills: [
-      { name: 'contacts-companies', description: 'Use this skill when working with Freshdesk contacts and companies — contact CRUD, merge, make_agent, and search; company CRUD and search; and the common MSP workflow of resolving a ticket requester to a contact and then to its parent company through the Freshdesk REST API v2.' },
-      { name: 'knowledge-base', description: 'Use this skill when working with the Freshdesk solutions knowledge base — the nested three-level hierarchy of categories -> folders -> articles.' },
-      { name: 'sla-business-hours', description: 'Use this skill when working with Freshdesk SLA policies and business hours — listing the policies and calendars, understanding how SLA targets combined with business hours compute a ticket\'s due_by and fr_due_by deadlines, and detecting breached or at-risk tickets through the Freshdesk REST API v2.' },
-      { name: 'ticketing', description: 'Use this skill when working with Freshdesk tickets — creating, updating, searching, replying, and adding notes, plus pulling full conversation threads.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Freshdesk MCP tools — header-based authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the MCP server translates into upstream HTTP Basic `apikey:X` auth), the `/api/v2` base URL, `page`/`per_page` pagination, per-minute rate limits, and the Freshdesk search query language with its status/priority encodings.' }
+      { name: 'contacts-companies', description: 'Freshdesk contacts and companies: contact fields and the required contact-channel rule, contact CRUD plus merge and make_agent, company fields and domain-based auto-association, search and autocomplete lookups, and the MSP workflow of resolving a ticket requester to a contact and then to its parent company through the Freshdesk REST API v2.' },
+      { name: 'knowledge-base', description: 'Freshdesk Solutions knowledge base: the three-level categories -> folders -> articles hierarchy, article fields and draft/published status, solution search, and the MSP workflow of suggesting relevant KB articles to deflect or resolve a ticket, through the Freshdesk REST API v2.' },
+      { name: 'sla-business-hours', description: 'Freshdesk SLA policies and business-hours calendars: policy and calendar fields, per-priority respond_within / resolve_within targets, how the business-hours vs 24x7 clock computes a ticket\'s fr_due_by and due_by, and breach / at-risk detection through the Freshdesk REST API v2.' },
+      { name: 'ticketing', description: 'Freshdesk ticket operations: list, get, search, create, update, reply, notes, and conversation threads.' },
+      { name: 'api-patterns', description: 'Freshdesk MCP tool surface and REST API v2 fundamentals: header-based authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the MCP server translates into upstream HTTP Basic `apikey:X` auth), the `/api/v2` base URL, `page`/`per_page` pagination and the `link` header, per-minute rate limits, the search query language and its 300-result cap, and the status/priority/source integer encodings.' }
     ],
     agents: [
       { name: 'freshdesk-triage', description: 'Use this agent when an MSP dispatcher, service coordinator, or help-desk lead needs to sweep the Freshdesk open ticket queue, summarize what is waiting, and recommend routing and priority.' }
@@ -497,13 +497,13 @@ export const plugins: Plugin[] = [
       'Tenant Management'
     ],
     skills: [
-      { name: 'assessments', description: 'Use this skill when listing Inforcer assessments or triggering an assessment run.' },
-      { name: 'audit-events', description: 'Use this skill when searching Inforcer audit events and listing the available event types — the read-only history of changes and activity Inforcer has recorded.' },
-      { name: 'baseline-alignment', description: 'Use this skill when working with Inforcer baselines and alignment — listing baseline templates, reading alignment scores, and pulling alignment details (the per-policy drift breakdown of a tenant against its assigned baseline).' },
-      { name: 'compliance-reporting', description: 'Use this skill when building Inforcer compliance and posture reports — reading per-tenant Microsoft 365 secure scores, combining them with alignment scores, and applying the alignedThreshold / semiAlignedThreshold settings that classify each tenant or policy as aligned, semi-aligned, or drifted.' },
-      { name: 'identity-governance', description: 'Use this skill when reading a tenant\'s identity inventory through Inforcer — listing users, groups, and role assignments for a scoped managed Microsoft 365 tenant.' },
-      { name: 'tenant-management', description: 'Use this skill when working with Inforcer tenants — listing managed Microsoft 365 tenants, resolving a friendly name, DNS domain, or Azure AD GUID to the integer Client Tenant ID, and scoping every other Inforcer operation to the right tenant.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Inforcer MCP tools — the gateway X-Inforcer-Region / X-Inforcer-Api-Key headers, the region-based base URL and upstream Inf-Api-Key header, the /beta/ route prefix, the {success,message,errors,data} response envelope, continuationToken pagination, and the integer Client Tenant ID vs Azure AD GUID gotcha.' }
+      { name: 'assessments', description: 'Inforcer assessments: listing a tenant\'s assessments (read-only) and triggering an assessment run — the one mutating action in the entire Inforcer surface.' },
+      { name: 'audit-events', description: 'Inforcer\'s read-only record of changes and activity: searching and filtering auditEvents, enumerating the event-type catalog to build valid filters, and the continuationToken paging audit searches require.' },
+      { name: 'baseline-alignment', description: 'Inforcer\'s core drift-detection surface: baseline templates, tenant alignment scores, alignment details (the per-policy breakdown of a tenant against its assigned baseline), and reading deployed tenant policy state.' },
+      { name: 'compliance-reporting', description: 'Inforcer compliance and posture reporting: per-tenant Microsoft 365 secure scores, combining them with alignment scores, and the alignedThreshold / semiAlignedThreshold settings that classify each tenant or policy as aligned, semi-aligned, or drifted.' },
+      { name: 'identity-governance', description: 'Inforcer\'s read-only identity inventory for a managed Microsoft 365 tenant: users, groups, and role assignments.' },
+      { name: 'tenant-management', description: 'Inforcer\'s managed Microsoft 365 tenant list and the resolution step that turns a friendly name, DNS domain, or Azure AD GUID into the integer Client Tenant ID.' },
+      { name: 'api-patterns', description: 'Inforcer MCP fundamentals: the gateway X-Inforcer-Region / X-Inforcer-Api-Key headers, the region-based base URL and upstream Inf-Api-Key header, the /beta/ route prefix, the {success,message,errors,data} response envelope, continuationToken pagination, and the integer Client Tenant ID vs Azure AD GUID gotcha.' }
     ],
     agents: [
       { name: 'inforcer-drift-reporter', description: 'Use this agent when an MSP security lead, vCISO, or service manager needs to sweep the managed Microsoft 365 portfolio for baseline drift and posture using Inforcer — pulling alignment scores, per-policy drift detail, and secure scores across tenants and summarizing them into a prioritized picture.' }
@@ -536,12 +536,12 @@ export const plugins: Plugin[] = [
       'Script Execution'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with ConnectWise Automate alerts - listing active alerts, acknowledging alerts, viewing alert history, and creating tickets from alerts.' },
-      { name: 'clients', description: 'Use this skill when working with ConnectWise Automate clients - creating, reading, updating, and deleting client organizations.' },
-      { name: 'computers', description: 'Use this skill when working with ConnectWise Automate computers/endpoints - listing, searching, managing, and monitoring devices.' },
-      { name: 'monitors', description: 'Use this skill when working with ConnectWise Automate monitors - configuring thresholds, creating templates, and assigning to computers.' },
-      { name: 'scripts', description: 'Use this skill when working with ConnectWise Automate scripts - listing, executing, passing parameters, and retrieving results.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the ConnectWise Automate REST API - authentication methods, token management, pagination, filtering with OData syntax, rate limiting, and error handling.' }
+      { name: 'alerts', description: 'ConnectWise Automate alert management: alert sources (monitors, scripts, events), severity levels, lifecycle states, acknowledgment, resolution, history tracking, and PSA ticket creation from alerts.' },
+      { name: 'clients', description: 'ConnectWise Automate client management: client CRUD, client identifiers, locations, client hierarchy, groups, extra data fields (EDFs), and client-level settings.' },
+      { name: 'computers', description: 'ConnectWise Automate computer/endpoint management: computer identifiers (ComputerID, Name, ComputerGUID, MAC), status values, OS types, hardware/software inventory, disk, patch, and antivirus status, plus remote management operations.' },
+      { name: 'monitors', description: 'ConnectWise Automate monitor management: monitor types (internal, remote, agent, SNMP, script), categories, threshold configuration, templates, assignment methods (computer/group/client), and status evaluation.' },
+      { name: 'scripts', description: 'ConnectWise Automate script management: script types (PowerShell, batch, VBScript, Shell), script folders, script execution on computers, parameter handling and validation, execution status polling, and result/history retrieval.' },
+      { name: 'api-patterns', description: 'ConnectWise Automate REST API fundamentals: integrator and user+2FA authentication, token lifecycle, pagination, OData-style filtering, rate limiting, and error handling patterns for API integration.' }
     ],
     agents: [
       { name: 'automation-health-checker', description: 'Use this agent when an MSP technician or engineer needs to audit the health of their ConnectWise Automate RMM environment.' }
@@ -560,6 +560,38 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'connectwise-cpq',
+    name: 'ConnectWise CPQ',
+    vendor: 'ConnectWise',
+    description: 'ConnectWise CPQ (Sell/Quosal) - quotes, line items, templates, quote customers, payment terms',
+    category: 'sales',
+    maturity: 'beta',
+    features: [
+      'Quote Items',
+      'Quote Generation'
+    ],
+    skills: [
+      { name: 'quote-items', description: 'ConnectWise CPQ line items and the tabs that hold them: searching items by quote or tab, the tab requirement on every create, the pricing and margin fields, bundle and optional-line flags, recurring-revenue and PSA mapping fields, JSON Patch updates, and why there is no product catalog to search.' },
+      { name: 'quotes', description: 'The ConnectWise CPQ quote lifecycle over the real tool surface: searching quotes, the GUID-vs-quoteNumber dual addressing, versions, creating quotes by copying a template (the API\'s only create path), patching quote fields, the per-quote customer records and payment/financing terms, tabs as the section structure, and the deletes that cascade.' },
+      { name: 'api-patterns', description: 'ConnectWise CPQ (Sell/Quosal) API fundamentals: three-part Basic auth built from an access key plus an API key pair, the versioned content type, the flat 25-tool `cpq_*` surface, Manage-style `conditions` filtering, `includeFields` trimming of the 200+ property views, page/pageSize paging over bare arrays, RFC 6902 JSON Patch updates, and the endpoints CPQ deliberately does not expose.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/create-quote', description: 'Create a ConnectWise CPQ quote by copying a template or an existing quote' },
+      { name: '/get-quote', description: 'Get a ConnectWise CPQ quote with its tabs, line items, customers, and terms' },
+      { name: '/list-templates', description: 'List ConnectWise CPQ quote templates available to copy' },
+      { name: '/search-quotes', description: 'Search ConnectWise CPQ quotes by account, status, or date range' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'connectwise/cpq',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'connectwise-psa',
     name: 'ConnectWise PSA',
     vendor: 'ConnectWise',
@@ -575,13 +607,13 @@ export const plugins: Plugin[] = [
       'Time Entry Tracking'
     ],
     skills: [
-      { name: 'companies', description: 'Use this skill when working with ConnectWise PSA companies - creating, updating, searching, or managing company/account records.' },
-      { name: 'contacts', description: 'Use this skill when working with ConnectWise PSA contacts - creating, updating, searching, or managing contact records.' },
-      { name: 'product-catalog', description: 'Use this skill when working with the ConnectWise PSA product catalog — searching, creating, or updating catalog items (SKUs), managing categories, subcategories, manufacturers, or using catalog items on quotes, opportunities, agreements, and tickets.' },
-      { name: 'projects', description: 'Use this skill when working with ConnectWise PSA projects - creating, updating, managing project phases, templates, and resource allocation.' },
-      { name: 'tickets', description: 'Use this skill when working with ConnectWise PSA tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'time-entries', description: 'Use this skill when working with ConnectWise PSA time entries - creating, updating, searching, or managing time tracking.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the ConnectWise PSA REST API - authentication using public/private keys and clientId, pagination with page/pageSize, conditions query syntax, rate limiting (60/min), and error handling.' }
+      { name: 'companies', description: 'ConnectWise PSA company/account management: company types, statuses, sites/locations, custom fields, and company relationships.' },
+      { name: 'contacts', description: 'ConnectWise PSA contact management: contact records, contact types, communication items (email, phone), portal access, and relationships to companies.' },
+      { name: 'product-catalog', description: 'ConnectWise PSA product catalog: catalog items (SKUs), categories, subcategories, manufacturers, and their use on quotes, opportunities, agreements, and tickets.' },
+      { name: 'projects', description: 'ConnectWise PSA project management: project lifecycle and status/type values, phases, templates, resource/team allocation, budgeting, billing methods, and project tickets.' },
+      { name: 'tickets', description: 'ConnectWise PSA ticket management: ticket fields, service boards, statuses, priorities, SLAs, ticket notes, and workflow automation.' },
+      { name: 'time-entries', description: 'ConnectWise PSA time entry management: charge-to types (tickets, projects, charge codes), billable vs non-billable time, work types and work roles, time sheets, and the time entry approval workflow.' },
+      { name: 'api-patterns', description: 'ConnectWise PSA REST API fundamentals: public/private key + clientId authentication, page/pageSize pagination, the conditions query syntax, rate limiting (60/min), and error-response handling.' }
     ],
     agents: [
       { name: 'procurement-specialist', description: 'Use this agent when an MSP procurement lead, sales engineer, service manager, or owner needs to work against the ConnectWise Manage product catalog and the procurement/quoting workflows it feeds.' },
@@ -625,13 +657,13 @@ export const plugins: Plugin[] = [
       'Variable Management'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with Datto RMM alerts - viewing, resolving, and managing monitoring alerts.' },
-      { name: 'audit', description: 'Use this skill when working with Datto RMM audit data - hardware inventory, software inventory, network interfaces, and system information.' },
-      { name: 'devices', description: 'Use this skill when working with Datto RMM devices - listing, searching, managing, and monitoring endpoints.' },
-      { name: 'jobs', description: 'Use this skill when working with Datto RMM jobs - running quick jobs, scheduling jobs, monitoring job status, and viewing results.' },
-      { name: 'sites', description: 'Use this skill when working with Datto RMM sites - listing, managing, and configuring client locations.' },
-      { name: 'variables', description: 'Use this skill when working with Datto RMM variables - account-level and site-level variables for storing configuration data.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Datto RMM API - authentication, OAuth 2.0 flow, platform selection, pagination, rate limiting, and error handling.' }
+      { name: 'alerts', description: 'Datto RMM alert structure, priorities, and the 25+ alert context types (antivirus_ctx, eventlog_ctx, perf_disk_usage_ctx, ransomware_ctx, and more), each with its own type-specific fields.' },
+      { name: 'audit', description: 'Datto RMM audit data structure covering hardware inventory (CPU, RAM, disks, motherboard, BIOS), software inventory, network interfaces, and ESXi/printer audits, along with audit collection cadence and data freshness semantics.' },
+      { name: 'devices', description: 'Datto RMM device management: identifiers (UID, hostname, MAC), device types and statuses, user-defined fields (UDF1-30), warranty data, and device lookup/update/delete operations.' },
+      { name: 'jobs', description: 'Datto RMM job execution: quick jobs vs. scheduled vs. policy jobs, the job status lifecycle, component scripts and their variables, and stdout/stderr/exit-code result handling.' },
+      { name: 'sites', description: 'Datto RMM site management: site hierarchy and identifiers, proxy and patch-window settings, site-scoped device/alert queries, and create/update/delete operations for client locations.' },
+      { name: 'variables', description: 'Datto RMM account-level and site-level variables: scoping and inheritance (site overrides account), naming conventions and reserved prefixes, CRUD operations, and referencing variables from component scripts.' },
+      { name: 'api-patterns', description: 'Datto RMM REST API v2 fundamentals: OAuth 2.0 client-credentials-style authentication, the 6 regional platforms (Pinotage, Merlot, Concord, Vidal, Zinfandel, Syrah), token lifecycle, cursor-based pagination, rate limiting, Unix-millisecond timestamps, and error handling.' }
     ],
     agents: [
       { name: 'backup-health-monitor', description: 'Use this agent when an MSP needs to audit backup and BC/DR health across their Datto RMM managed client portfolio — not a general fleet health check, but a focused review of backup job success rates, last successful backups per device, retention policy compliance, offsite replication status, and restore test records.' },
@@ -667,12 +699,12 @@ export const plugins: Plugin[] = [
       'Network'
     ],
     skills: [
-      { name: 'agents', description: 'Use this skill when managing Domotz agents (collectors), sites, and network probes -- listing agents, checking agent health, viewing site details, and monitoring collector connectivity.' },
-      { name: 'alerts', description: 'Use this skill when working with Domotz alerts -- viewing active alerts, configuring alert profiles, managing alert triggers, and handling notifications for device and network events.' },
-      { name: 'devices', description: 'Use this skill when working with Domotz device inventory -- listing devices, searching by name/IP/MAC, checking device status, viewing device details, and understanding network topology.' },
-      { name: 'eyes', description: 'Use this skill when working with Domotz Eyes -- TCP and HTTP sensors, custom monitoring checks, synthetic tests, latency tracking, and service availability monitoring.' },
-      { name: 'network', description: 'Use this skill when working with Domotz network operations -- network scanning, SNMP polling, port monitoring, speed tests, and network topology discovery.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Domotz MCP tools -- available tools, authentication via API key, API structure, pagination, rate limiting, region selection, error handling, and best practices.' }
+      { name: 'agents', description: 'Domotz agents (collectors/probes) as the per-site entry point for all device and network operations: agent types, lifecycle, ONLINE/OFFLINE status, the list/get tools and their license and last-seen fields, and fleet health, site inventory, and capacity-planning workflows.' },
+      { name: 'alerts', description: 'Domotz alerting: the alert types (device status, SNMP threshold, port, Eyes, agent, speed test, new device), how alert profiles define triggers, severity, notification channels and scope, the triggered/active/resolved lifecycle, and the tools for listing alerts and profiles.' },
+      { name: 'devices', description: 'Domotz device inventory: how agents discover and classify devices, the identification attributes (IP, MAC, hostname, display name, vendor), the ONLINE/OFFLINE/UNKNOWN status model, and the list/get/search tools plus inventory and topology workflows built on them.' },
+      { name: 'eyes', description: 'Domotz Eyes, the agent-run synthetic monitoring sensors: TCP, HTTP, and custom Eye types, their UP/DOWN/WARNING status model, listing sensors and historical results, and diagnosing failed or high-latency checks.' },
+      { name: 'network', description: 'Domotz network operations: agent-driven network scanning and discovery (ARP, SNMP, DNS, MAC OUI), SNMP polling of interface and system metrics, TCP port monitoring, speed tests, and the tools and error modes for each.' },
+      { name: 'api-patterns', description: 'Domotz API and MCP fundamentals: API-key header authentication, region-specific endpoints (us-east-1 / eu-central-1), the full MCP tool catalog by domain, offset-based pagination, rate limiting, and HTTP error codes.' }
     ],
     agents: [],
     commands: [
@@ -707,13 +739,13 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'agents', description: 'Use this skill when working with HaloPSA agents (technicians) and teams — listing technicians, retrieving agent details, and listing team structures.' },
-      { name: 'assets', description: 'Use this skill when working with HaloPSA assets - tracking devices, managing configuration items, hardware lifecycle, and asset relationships.' },
-      { name: 'clients', description: 'Use this skill when working with HaloPSA clients - creating, updating, searching, or managing customer relationships.' },
-      { name: 'contracts', description: 'Use this skill when working with HaloPSA contracts - managing service agreements, recurring billing, prepaid hours, and contract renewals.' },
-      { name: 'invoices', description: 'Use this skill when working with HaloPSA invoices — listing invoices by client or date range, filtering by payment and send status, and retrieving individual invoice details.' },
-      { name: 'tickets', description: 'Use this skill when working with HaloPSA tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the HaloPSA REST API - OAuth 2.0 Client Credentials authentication, tenant-aware URLs, query building, pagination, rate limiting, and error handling.' }
+      { name: 'agents', description: 'HaloPSA agents (technicians) and teams as a read-only MCP surface: listing technicians, retrieving agent detail, listing team structures, and the inactive-agent filter.' },
+      { name: 'assets', description: 'HaloPSA asset/CMDB data model: asset (configuration item) fields, device types and statuses, links to clients, sites, users, tickets, and contracts, plus parent-child asset relationships.' },
+      { name: 'clients', description: 'HaloPSA CRM data model: client records and their billing/contact fields, sites (locations), contacts (Users), client classification, and parent-child client hierarchy.' },
+      { name: 'contracts', description: 'HaloPSA contract management: contract types (recurring, prepaid hours, ad-hoc, project, warranty), statuses, billing and coverage fields, recurring invoice items, prepaid hour balances and deduction, SLA association, renewal and billing-reconciliation workflows.' },
+      { name: 'invoices', description: 'HaloPSA invoices as a read-only MCP surface: listing by client or date range, filtering by payment and send status, retrieving line-item detail on a single invoice, and the reporting and reconciliation workflows built on them.' },
+      { name: 'tickets', description: 'HaloPSA service desk tickets: ticket fields, statuses, priorities and ticket types, actions (notes and time entries), attachments, SLA behaviour, and the creation and status-transition workflows with their validation rules.' },
+      { name: 'api-patterns', description: 'HaloPSA REST API fundamentals: OAuth 2.0 client-credentials authentication, authorization vs. resource server URLs, the tenant query parameter, filtering and pagination conventions, array-wrapped POST bodies, rate-limit behavior, scopes, and error codes.' }
     ],
     agents: [
       { name: 'service-desk-ops', description: 'Use this agent when an MSP dispatcher, team lead, or service manager needs to triage and manage the HaloPSA ticket queue.' },
@@ -755,12 +787,12 @@ export const plugins: Plugin[] = [
       'Website Monitoring'
     ],
     skills: [
-      { name: 'articles', description: 'Use this skill when working with Hudu articles (knowledge base) - creating, searching, updating, and managing documentation articles.' },
-      { name: 'assets', description: 'Use this skill when working with Hudu assets and asset layouts - servers, workstations, network devices, and other documented items.' },
-      { name: 'companies', description: 'Use this skill when working with Hudu companies (clients/organizations) - creating, searching, updating, archiving, and managing client documentation.' },
-      { name: 'passwords', description: 'Use this skill when working with Hudu passwords (asset passwords) - secure credential storage, retrieval, folders, and access patterns.' },
-      { name: 'websites', description: 'Use this skill when working with Hudu website records - website monitoring, SSL/TLS tracking, email security (DMARC, DKIM, SPF), DNS records, and linking websites to companies.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Hudu API - authentication, REST structure, filtering, pagination, rate limiting, error handling, and best practices.' }
+      { name: 'articles', description: 'Hudu knowledge base articles: HTML content format, company-scoped vs global articles, article folders (including nesting), drafts vs published, the /api/v1/articles endpoint surface, and search, templating, and documentation-health patterns.' },
+      { name: 'assets', description: 'Hudu assets and asset layouts: the layout-as-template model, custom field types, the `custom_fields` key/value array shape, archiving vs deletion, company scoping, and filter patterns across /api/v1/assets and /api/v1/asset_layouts.' },
+      { name: 'companies', description: 'Hudu companies (clients/organizations): company field reference, parent/child hierarchy, PSA integration matching via id_in_integration, the /api/v1/companies CRUD plus archive/unarchive endpoints, onboarding and offboarding workflows, and how companies scope assets, passwords, articles, and websites.' },
+      { name: 'passwords', description: 'Hudu secure credential storage: the /api/v1/asset_passwords endpoint (the UI calls these "Passwords"), company scoping and password folders, TOTP secrets, per-API-key password permissions, activity-log auditing, rotation workflows, and output-safety rules for handling plaintext credential values.' },
+      { name: 'websites', description: 'Hudu website records: CRUD via /api/v1/websites, monitoring and pause/disable fields, SSL/TLS certificate tracking, email security status (DMARC, DKIM, SPF), DNS record fields, company linkage, and website validation errors.' },
+      { name: 'api-patterns', description: 'Hudu REST API fundamentals: x-api-key authentication, base URL and /api/v1/ structure, granular API key permission levels, UI-vs-API resource naming differences, query-parameter filtering, page-based pagination, the 300 req/min rate limit, and HTTP status/error semantics.' }
     ],
     agents: [
       { name: 'documentation-auditor', description: 'Use this agent when an MSP technician or vCIO needs to find and fix documentation debt in Hudu.' },
@@ -797,13 +829,13 @@ export const plugins: Plugin[] = [
       'Signals'
     ],
     skills: [
-      { name: 'agents', description: 'Use this skill when managing Huntress endpoint agents — listing agents, filtering by organization or platform, checking agent health and status, and investigating specific agent details.' },
-      { name: 'billing', description: 'Use this skill when generating Huntress billing and summary reports — listing available reports, retrieving billing details, and creating client-facing summaries for MSP invoicing.' },
-      { name: 'escalations', description: 'Use this skill when working with Huntress escalations — listing, reviewing, and resolving escalations from the Huntress SOC team.' },
-      { name: 'incidents', description: 'Use this skill when working with Huntress incidents - querying incidents by organization and status, reviewing SOC-recommended remediation details, approving or rejecting remediations individually or in bulk, checking remediation execution status, and resolving incidents after all remediations are processed.' },
-      { name: 'organizations', description: 'Use this skill when managing Huntress organizations — creating, listing, updating, deleting organizations, and managing client org structure for MSP multi-tenancy.' },
-      { name: 'signals', description: 'Use this skill when working with Huntress security signals — monitoring, listing, filtering, and investigating signals across managed endpoints.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Huntress MCP tools — available tools, authentication via HTTP Basic Auth, API structure, pagination with page tokens, rate limiting (60 req/min), error handling, and best practices.' }
+      { name: 'agents', description: 'Huntress endpoint agents: the agent lifecycle, organization and platform filters, health signals such as `last_seen_at` and version, fleet-audit workflows, and the errors returned for missing or empty agent results.' },
+      { name: 'billing', description: 'Huntress billing and summary reports: what each report type contains, the list/get tools for both, and the monthly reconciliation, QBR security summary, and cost-analysis workflows an MSP builds from them.' },
+      { name: 'escalations', description: 'Huntress SOC escalations: how an escalation differs from an incident, escalation priority levels, the list/get/resolve tools, escalation-to-incident correlation, and the already-resolved and not-found error cases.' },
+      { name: 'incidents', description: 'Huntress incidents and the remediation lifecycle: querying incidents by organization and status, SOC-recommended remediation details, individual and bulk approve/reject, remediation execution status, and the ordering constraint that incidents resolve only after all remediations are processed.' },
+      { name: 'organizations', description: 'Huntress organizations as the multi-tenant boundary: org structure, the organization key used for agent deployment, full CRUD operations, client onboarding and offboarding workflows, and the duplicate-key and active-agent deletion errors.' },
+      { name: 'signals', description: 'Huntress security signals: how signals differ from incidents, the signal types, listing and filtering by organization, and the threat-hunting and pattern-analysis workflows built on signal data.' },
+      { name: 'api-patterns', description: 'Huntress MCP fundamentals: HTTP Basic Auth via API key/secret headers, the full MCP tool catalog, token-based pagination, the 60 req/min rate limit, and the common HTTP error codes with their causes.' }
     ],
     agents: [
       { name: 'client-onboarding-validator', description: 'Use this agent when validating a newly onboarded client in Huntress — checking that agents are deployed and reporting, confirming SOC coverage is active, identifying any endpoints missing agents, and surfacing initial detections that fired during or after deployment.' },
@@ -842,13 +874,13 @@ export const plugins: Plugin[] = [
       'Password Management'
     ],
     skills: [
-      { name: 'configurations', description: 'Use this skill when working with IT Glue configurations (assets) - servers, workstations, network devices, and other infrastructure.' },
-      { name: 'contacts', description: 'Use this skill when working with IT Glue contacts - managing client contacts, contact types, locations, and communication details.' },
-      { name: 'documents', description: 'Use this skill when working with IT Glue documents - creating, organizing, and managing documentation.' },
-      { name: 'flexible-assets', description: 'Use this skill when working with IT Glue flexible assets - custom asset types for structured documentation.' },
-      { name: 'organizations', description: 'Use this skill when working with IT Glue organizations (companies/clients) - creating, searching, updating, and managing client documentation.' },
-      { name: 'passwords', description: 'Use this skill when working with IT Glue passwords - secure credential storage, password categories, folders, embedded passwords, and access patterns.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the IT Glue API - authentication, JSON:API structure, filtering, sorting, pagination, rate limiting, sideloading with includes, and error handling.' }
+      { name: 'configurations', description: 'IT Glue configurations (assets) — servers, workstations, network devices, and other infrastructure: configuration types and statuses, network interfaces, related items, warranty/lifecycle fields, and PSA/RMM integration fields.' },
+      { name: 'contacts', description: 'IT Glue contacts — the people (clients, vendors, partners) associated with an organization.' },
+      { name: 'documents', description: 'IT Glue documents: rich-HTML documentation records scoped to an organization, including document folders, multi-section content via the Document Sections API, embedded passwords/configurations/images, and related-item links to other IT Glue resources.' },
+      { name: 'flexible-assets', description: 'IT Glue flexible assets: custom, instance-specific asset types with defined field schemas (text, tag, password, upload, etc.), traits-based instances, and tag fields that cross-link to configurations, contacts, and other IT Glue resources for structured, filterable documentation.' },
+      { name: 'organizations', description: 'IT Glue organizations (companies/clients): the foundational entity all documentation, configurations, contacts, passwords, and flexible assets attach to.' },
+      { name: 'passwords', description: 'IT Glue passwords: secure, organization-scoped credential storage with categories, folders, restricted-access flags, OTP secrets, and embedding into documents and flexible assets.' },
+      { name: 'api-patterns', description: 'IT Glue REST API fundamentals: JSON:API request/response structure, x-api-key authentication across regional endpoints (US/EU/AU), filter and sort syntax, pagination, sideloading with includes, rate limits, CRUD operations, and error handling.' }
     ],
     agents: [
       { name: 'asset-documentation-linker', description: 'Use this agent when an MSP needs to find and fix broken or missing linkages between IT Glue objects — configurations without passwords, devices without runbooks, organizations without network diagrams, contacts unlinked from assets.' },
@@ -884,11 +916,11 @@ export const plugins: Plugin[] = [
       'User Management'
     ],
     skills: [
-      { name: 'phishing', description: 'Use this skill when working with KnowBe4 phishing simulations - creating campaigns, managing security tests, tracking recipient interactions (sent, opened, clicked, reported), calculating phish-prone percentages, and analyzing phishing simulation results.' },
-      { name: 'reporting', description: 'Use this skill when generating KnowBe4 security awareness reports - phishing summary statistics, training completion rates, risk score overviews, trend analysis, organizational benchmarks, and executive dashboards.' },
-      { name: 'training', description: 'Use this skill when working with KnowBe4 training campaigns - creating and managing training assignments, tracking enrollment and completion, browsing training modules and content library, managing store purchases, and monitoring compliance deadlines.' },
-      { name: 'users', description: 'Use this skill when working with KnowBe4 users and groups - user lifecycle management, group creation and membership, risk scores, risk score history, user event tracking, and user status management.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the KnowBe4 REST API - Bearer token authentication, multi-region base URLs, pagination, rate limiting, error handling, and common request patterns.' }
+      { name: 'phishing', description: 'KnowBe4 phishing simulations: campaign creation and lifecycle, security test management, recipient interaction tracking (sent, opened, clicked, reported), phish-prone percentage calculation, template selection, landing pages, and click tracking.' },
+      { name: 'reporting', description: 'KnowBe4 security awareness reporting: phishing summary statistics, training completion rates, risk score overviews, trend analysis, organizational benchmarks, and executive dashboards, including how to interpret metrics and communicate posture to stakeholders.' },
+      { name: 'training', description: 'KnowBe4 training campaign management: campaign lifecycle, enrollment workflows, completion tracking, training module and content library browsing, store purchases, and compliance deadline monitoring.' },
+      { name: 'users', description: 'KnowBe4 user and group management: user lifecycle and status, group creation and membership, risk scores and risk score history, user event tracking, provisioning, and group-based targeting for campaigns.' },
+      { name: 'api-patterns', description: 'KnowBe4 REST API fundamentals: Bearer token authentication, multi-region base URLs (US, EU, CA, UK, DE), pagination, rate limiting, error handling, and response formats.' }
     ],
     agents: [
       { name: 'security-awareness-analyst', description: 'Use this agent when analyzing phishing simulation results, identifying high-risk users, tracking training completion, recommending targeted security awareness programs, or responding to user-reported phishing through KnowBe4 PhishER for MSP clients.' },
@@ -924,11 +956,11 @@ export const plugins: Plugin[] = [
       'System Configuration'
     ],
     skills: [
-      { name: 'detections', description: 'Use this skill when working with Liongard detections, change monitoring, alerts, metrics, or timeline events.' },
-      { name: 'environments', description: 'Use this skill when working with Liongard environments (customer organizations), environment groups, or related entities.' },
-      { name: 'inspections', description: 'Use this skill when working with Liongard inspectors, launchpoints, inspection scheduling, or triggering inspections on demand.' },
-      { name: 'overview', description: 'Use this skill when Claude needs context about the Liongard platform, terminology, capabilities, authentication patterns, or API structure.' },
-      { name: 'systems', description: 'Use this skill when working with Liongard systems, system details, dataprints for JMESPath evaluation, or asset inventory.' }
+      { name: 'detections', description: 'Liongard\'s change and anomaly detection layer: detections generated by inspection-to-inspection comparison, detection types/severities/status lifecycle, configurable alert rules and notification channels, custom metrics with JMESPath expressions and threshold evaluation, and the platform timeline audit trail.' },
+      { name: 'environments', description: 'Liongard environments — the per-customer containers that own all agents, launchpoints, systems, detections, and metrics.' },
+      { name: 'inspections', description: 'Liongard\'s inspection pipeline: inspector templates and their credential and agent requirements, launchpoint configuration that binds inspector + environment + agent + credentials + cron schedule, on-demand inspection runs and their status lifecycle, and the failure modes behind failed runs.' },
+      { name: 'overview', description: 'Liongard platform fundamentals: the entity model (environments, agents, inspectors, launchpoints, systems, detections, metrics, timeline, dataprints, asset inventory), X-ROAR-API-KEY authentication against instance-scoped URLs, the split between the v1 and v2 APIs, and the shared pagination, filtering, and rate-limit conventions.' },
+      { name: 'systems', description: 'Liongard systems — the assets discovered by inspections — plus their detail data (raw configuration JSON with historical snapshots), dataprint extraction via JMESPath expressions, and the v2 Asset Inventory identity and device profiles that correlate one entity across multiple inspectors.' }
     ],
     agents: [
       { name: 'change-detective', description: 'Use this agent when an MSP needs to detect unauthorized or unexpected configuration changes, audit compliance drift, or surface undocumented systems across their client environments.' },
@@ -964,14 +996,14 @@ export const plugins: Plugin[] = [
       'User Management'
     ],
     skills: [
-      { name: 'calendar', description: 'Use this skill when working with Microsoft 365 calendars - viewing events, finding free/busy times, creating meetings, managing room bookings, or checking a user\'s schedule.' },
-      { name: 'files', description: 'Use this skill when working with Microsoft 365 files - OneDrive personal storage, SharePoint document libraries, file sharing permissions, storage quotas, or searching across a user\'s files.' },
-      { name: 'licensing', description: 'Use this skill when managing Microsoft 365 licenses - checking available seats, assigning or removing licenses, auditing license usage, finding unused licenses, or planning license optimization for a customer tenant.' },
-      { name: 'mailboxes', description: 'Use this skill when working with Microsoft 365 mailboxes - reading email, searching messages, managing shared mailboxes, setting out-of-office replies, checking mailbox size, or diagnosing mail flow issues.' },
-      { name: 'security', description: 'Use this skill for Microsoft 365 security posture checks - MFA enrollment status, conditional access policies, risky sign-ins, suspicious inbox rules, compromised account indicators, and security audit tasks.' },
-      { name: 'teams', description: 'Use this skill when working with Microsoft Teams - listing teams and channels, managing team membership, finding meetings, checking Teams usage, or troubleshooting Teams access issues.' },
-      { name: 'users', description: 'Use this skill when working with Microsoft 365 users - listing, searching, creating, disabling, or checking user properties.' },
-      { name: 'api-patterns', description: 'Use this skill for Microsoft Graph API fundamentals - authentication patterns, OData query operators, pagination, throttling/retry, batch requests, and delta queries.' }
+      { name: 'calendar', description: 'Exchange Online calendars through Microsoft Graph: event retrieval and date-range queries, free/busy and availability lookup, meeting and Teams-meeting creation, room and equipment resource bookings, calendar permissions, and the Graph scopes and error causes involved.' },
+      { name: 'files', description: 'OneDrive personal storage and SharePoint document libraries, both reached through the shared Microsoft Graph `/drives` endpoint: drive and item addressing, sharing permissions, storage quotas, file search, and the offboarding file-transfer workflow.' },
+      { name: 'licensing', description: 'The M365 subscription → SKU → service-plan model, seat availability versus consumption, assigning and removing licenses through Graph, the audit workflow for finding unused or misallocated seats, common SKU GUIDs, and licensing error causes.' },
+      { name: 'mailboxes', description: 'Exchange Online mailboxes through Microsoft Graph: the four mailbox types and how they differ, message listing and search, inbox rules, out-of-office and forwarding, mailbox size and quota, shared-mailbox access management, and mail flow diagnostics.' },
+      { name: 'security', description: 'The M365 tenant security checks that distinguish a secure tenant from a vulnerable one: per-user authentication-method inspection for real MFA enrollment, sign-in risk and risky users, suspicious inbox rules, legacy authentication exposure, conditional access coverage, Secure Score, and the indicator set for a compromised account.' },
+      { name: 'teams', description: 'Microsoft Teams through Microsoft Graph: the Team/Channel/Member/Meeting/Tab object model, team and channel enumeration, membership and ownership changes, online meetings, usage reporting, and the causes behind Teams access failures.' },
+      { name: 'users', description: 'The Entra ID user object as M365\'s central identity: key properties and their MSP relevance, account status values, the license assignment model, Graph patterns for listing/searching/creating/disabling users, MFA status checking, and the onboarding and offboarding sequences.' },
+      { name: 'api-patterns', description: 'Microsoft Graph fundamentals shared by every M365 skill: Entra token scopes and the per-request Bearer model, OData query operators and filter syntax, @odata.nextLink pagination, delta queries for incremental sync, 429 throttling and retry behavior, JSON batching, and the common Graph error codes.' }
     ],
     agents: [
       { name: 'identity-auditor', description: 'Use this agent when an MSP needs to perform a comprehensive Microsoft 365 tenant security audit.' },
@@ -1006,11 +1038,11 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with NinjaOne alerts - viewing active conditions, dismissing alerts, and understanding alert severity levels.' },
-      { name: 'devices', description: 'Use this skill when working with NinjaOne devices - listing, searching, managing services, viewing inventory, scheduling maintenance, and monitoring device health.' },
-      { name: 'organizations', description: 'Use this skill when working with NinjaOne organizations - creating, listing, managing locations, and configuring policies.' },
-      { name: 'tickets', description: 'Use this skill when working with NinjaOne tickets - creating, updating, searching, and managing ticketing operations.' },
-      { name: 'api-patterns', description: 'Use this skill for NinjaOne API authentication, pagination, rate limiting, and error handling patterns.' }
+      { name: 'alerts', description: 'NinjaOne alerts and the conditions behind them: retrieving device alerts, dismissing individual alerts and bulk resets, alert summaries, severity and priority levels, common hardware/service/security/connectivity alert types and thresholds, alert webhooks, and triage workflows.' },
+      { name: 'devices', description: 'NinjaOne device management: device details and updates, Windows service control, inventory, maintenance windows, reboot modes, and health-check workflows for Windows, Mac, and Linux endpoints running the NinjaRMM agent.' },
+      { name: 'organizations', description: 'NinjaOne organizations — the top-level container for devices, representing MSP clients: creation and listing, locations, node approval modes, policy mappings and node role IDs, custom fields, tags, cursor pagination, and error codes.' },
+      { name: 'tickets', description: 'NinjaOne\'s built-in ticketing system, which integrates with device monitoring: ticket creation and updates, core/status/metadata fields, status and priority values with SLA targets, log entry types, device linkage, tagging patterns, and error codes.' },
+      { name: 'api-patterns', description: 'NinjaOne Public API fundamentals shared by every other NinjaOne skill: regional base URLs, OAuth 2.0 client-credentials auth and scopes, request shapes, cursor-based pagination, rate-limit headers and 429 handling, HTTP status codes and error response format, and webhook configuration.' }
     ],
     agents: [
       { name: 'device-health-auditor', description: 'Use this agent when an MSP needs a comprehensive device health audit across their NinjaOne-managed organization portfolio.' },
@@ -1046,12 +1078,12 @@ export const plugins: Plugin[] = [
       'Services'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with PagerDuty alerts -- alert management, alert grouping, suppression, event routing, and the Events API v2 for sending trigger, acknowledge, and resolve events.' },
-      { name: 'analytics', description: 'Use this skill when working with PagerDuty analytics -- incident analytics, MTTA and MTTR metrics, service-level performance, team workload reporting, and operational maturity assessment.' },
-      { name: 'incidents', description: 'Use this skill when working with PagerDuty incidents - listing, triaging, creating, updating, resolving, and investigating incidents.' },
-      { name: 'oncall', description: 'Use this skill when working with PagerDuty on-call management - viewing who is currently on-call, managing schedules and rotation layers, configuring escalation policies, creating temporary overrides, and adding or removing team members.' },
-      { name: 'services', description: 'Use this skill when working with PagerDuty services -- service catalog, service configuration, integrations, dependencies, maintenance windows, and service health monitoring.' },
-      { name: 'api-patterns', description: 'Use this skill when working with PagerDuty MCP tools - authentication setup, complete 66-tool reference, REST API pagination, token format (Token token=), rate limits, error handling, and hosted MCP connection details.' }
+      { name: 'alerts', description: 'PagerDuty alerts: the alert-vs-incident model, alert statuses, grouping modes, event rules for routing and suppression, dedup_key deduplication, and the Events API v2 trigger/acknowledge/resolve payloads.' },
+      { name: 'analytics', description: 'PagerDuty Analytics: MTTA/MTTR/MTTE/MTTS definitions, incident and interruption counts, aggregation levels (account, service, team, escalation policy), time-range constraints, and benchmark tables for interpreting the numbers.' },
+      { name: 'incidents', description: 'PagerDuty incident lifecycle (triggered/acknowledged/resolved), urgency vs. priority, alerts-to-incident grouping, the 14 incident MCP tools, incident fields, notes, log entries, past-incident similarity search, merge and snooze semantics, and cross-vendor PSA ticket correlation for MSPs.' },
+      { name: 'oncall', description: 'PagerDuty on-call model: schedules with rotation layers, restrictions, the computed final schedule, and overrides; escalation policy tiers and timeouts; on-call entry fields; and the schedule, escalation policy, and team MCP tools.' },
+      { name: 'services', description: 'PagerDuty service catalog: service statuses, integrations and integration keys as event sources, alert grouping modes, upstream/downstream service dependencies, and maintenance windows.' },
+      { name: 'api-patterns', description: 'PagerDuty API and hosted MCP fundamentals: US/EU MCP endpoints, the `Token token=` auth header and token types, the complete 66-tool reference across 13 categories (incidents, on-call, schedules, escalation policies, services, event orchestrations, status pages, teams, users, and more), offset pagination, common filter parameters, rate limits, and error codes.' }
     ],
     agents: [
       { name: 'incident-commander', description: 'Use this agent when an MSP engineer, SRE, or incident manager needs to command an active incident or review the state of open PagerDuty incidents.' },
@@ -1087,11 +1119,11 @@ export const plugins: Plugin[] = [
       'Template Management'
     ],
     skills: [
-      { name: 'documents', description: 'Use this skill when working with PandaDoc documents - creating proposals, quotes, contracts, SOWs, and MSAs from templates, sending documents for signature, checking document status, downloading signed copies, and managing the full document lifecycle.' },
-      { name: 'proposals', description: 'Use this skill when working with MSP proposal workflows in PandaDoc - creating managed service agreements (MSAs), statements of work (SOWs), hardware quotes, project proposals, and tracking the MSP sales pipeline.' },
-      { name: 'recipients', description: 'Use this skill when working with PandaDoc recipients and signatures - adding recipients to documents, setting signing order, tracking who has signed, managing multi-party agreements, and understanding recipient roles.' },
-      { name: 'templates', description: 'Use this skill when working with PandaDoc templates - browsing the template library, finding the right template for a document type, understanding template fields and tokens, and using templates to create new documents.' },
-      { name: 'api-patterns', description: 'Use this skill when working with PandaDoc MCP tools - available tools, API key authentication, the hosted MCP server connection, documentation search, code generation assistance, rate limiting, error handling, and best practices for the PandaDoc API.' }
+      { name: 'documents', description: 'PandaDoc document lifecycle end to end: creating documents from templates, sending for e-signature, status checks and PDF downloads, the full document status enum, MSP document types, content tokens, pricing-table structure, document and recipient fields, and status-transition errors.' },
+      { name: 'proposals', description: 'MSP proposal workflows in PandaDoc: proposal types and typical values (MSA, SOW, hardware quote, project proposal, security assessment, cloud migration), the standard MSP content-token set, managed-services and hardware pricing-table structures, mapping document statuses to sales-pipeline stages, and pipeline and stale-proposal tracking.' },
+      { name: 'recipients', description: 'PandaDoc recipients and e-signature mechanics: recipient roles (signer, approver, viewer, CC), signing-order behavior, multi-party MSP signing scenarios, completion tracking via `has_completed`, recipient fields, and the document statuses that restrict adding or changing recipients.' },
+      { name: 'templates', description: 'PandaDoc template library and structure: layout, content blocks, tokens, interactive fields, signature fields, pricing tables, and recipient roles, plus the MSP template set (MSAs, SOWs, proposals, quotes, NDAs, change orders, QBRs), template versioning, tags, and the template field reference.' },
+      { name: 'api-patterns', description: 'PandaDoc hosted MCP server and API fundamentals: API-key authentication and which operations work without a key, the complete MCP tool catalog (documents, templates, recipients, docs search, code samples), page-based pagination, document and template filters, rate limits per plan, and error codes.' }
     ],
     agents: [
       { name: 'contract-tracker', description: 'Use this agent when an MSP sales coordinator or account manager needs to track the status of pending proposals and contracts in PandaDoc.' },
@@ -1124,8 +1156,8 @@ export const plugins: Plugin[] = [
       'Visitor Intelligence'
     ],
     skills: [
-      { name: 'visitor-intelligence', description: 'Use this skill when triaging or acting on identified website visitors and account-level engagement from Warmly - prioritizing warm accounts for outreach, filtering visitors by ICP fit, scoring engagement depth, matching visitors to CRM records, or watching identification credit burn.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Warmly MCP tools - available tools, WorkOS AuthKit OAuth 2.0 + PKCE authentication, organization scoping, Streamable HTTP transport, credit usage, error handling, and best practices.' }
+      { name: 'visitor-intelligence', description: 'Acting on Warmly\'s identified website visitors and account-level engagement: choosing between list_warm_visitors, list_warm_accounts, and get_credits_remaining; ICP filtering, engagement-depth scoring, CRM-intersection routing, credit-burn checks, MSP-specific outreach plays, and the limits of visitor identification as an intent signal.' },
+      { name: 'api-patterns', description: 'Warmly\'s remote MCP server: WorkOS AuthKit OAuth 2.0 + PKCE authentication, RFC 9728 protected-resource metadata, multi-organization scoping, the stateful Streamable HTTP session model, the three read-only visitor-intelligence tools and their fields, credit semantics, error codes, and rate-limit guidance.' }
     ],
     agents: [],
     commands: [],
@@ -1153,12 +1185,12 @@ export const plugins: Plugin[] = [
       'Subscription Lifecycle'
     ],
     skills: [
-      { name: 'companies', description: 'Use this skill when working with Pax8 companies (MSP clients) - searching, retrieving, and managing client records in the Pax8 marketplace.' },
-      { name: 'invoices', description: 'Use this skill when working with Pax8 invoices and billing - retrieving invoices, analyzing billing data, reconciling costs with client charges, reviewing usage summaries, and understanding the MSP billing cycle.' },
-      { name: 'orders', description: 'Use this skill when working with Pax8 orders - viewing orders, tracking provisioning status, understanding order line items, and managing the order-to-subscription workflow.' },
-      { name: 'products', description: 'Use this skill when working with the Pax8 product catalog - searching for cloud software, browsing vendors, checking pricing, reviewing provisioning details, and finding the right SKU for a client need.' },
-      { name: 'subscriptions', description: 'Use this skill when working with Pax8 subscriptions - checking license status, reviewing seat counts, filtering by company or product, tracking subscription states, reviewing change history, and optimizing license usage across MSP clients.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Pax8 MCP tools - available tools, parameters, pagination, sorting, filtering, rate limiting, error handling, and best practices.' }
+      { name: 'companies', description: 'Pax8 companies (MSP clients): company records and fields, contact management, billing and order-approval settings, and cross-referencing companies with subscriptions and orders.' },
+      { name: 'invoices', description: 'Pax8 invoices and billing: invoice retrieval, invoice line items, usage-based billing summaries, the MSP billing cycle, and reconciling Pax8 costs against client charges.' },
+      { name: 'orders', description: 'Pax8 orders: order retrieval, order line items, provisioning status and timelines, billing terms, and the order-to-subscription workflow.' },
+      { name: 'products', description: 'The Pax8 product catalog: cloud software SKUs, vendors, pricing tiers and margins, and provisioning details across Microsoft 365, Azure, security tools, and backup products.' },
+      { name: 'subscriptions', description: 'Pax8 subscriptions: license and seat counts, the full subscription lifecycle and its states, change history, filtering by company or product, and quantity management for license optimization.' },
+      { name: 'api-patterns', description: 'Pax8 MCP fundamentals: the official hosted MCP server connection, all 15 Pax8 MCP tools and their parameters, pagination, sorting, filtering, response shapes, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'license-optimizer', description: 'Use this agent when an MSP needs to analyze license utilization across their Pax8 marketplace subscriptions, identify unused or over-provisioned seats, optimize costs, or plan renewals.' },
@@ -1195,13 +1227,13 @@ export const plugins: Plugin[] = [
       'Url Defense'
     ],
     skills: [
-      { name: 'forensics', description: 'Use this skill when working with Proofpoint forensics and threat response - auto-pull, search and destroy, message trace, evidence collection, and remediation workflows.' },
-      { name: 'people', description: 'Use this skill when working with Proofpoint people-centric security - Very Attacked People (VAP) reports, top clickers, user risk scoring, attack index, and user-level threat analytics.' },
-      { name: 'quarantine', description: 'Use this skill when working with Proofpoint email quarantine - listing, searching, releasing, and deleting quarantined messages.' },
-      { name: 'tap', description: 'Use this skill when working with Proofpoint Targeted Attack Protection (TAP) - retrieving threat events, click tracking, message delivery and blocking data, SIEM integration feeds, and threat type analysis.' },
-      { name: 'threat-intel', description: 'Use this skill when working with Proofpoint threat intelligence - campaign tracking, threat families, indicators of compromise (IOCs), forensic evidence, and threat landscape analysis.' },
-      { name: 'url-defense', description: 'Use this skill when working with Proofpoint URL Defense - URL rewriting, URL decoding, real-time URL analysis, click-time protection, and URL investigation.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Proofpoint API - authentication using HTTP Basic Auth with service principal and secret, base URLs, rate limits, pagination, error codes, and common integration patterns.' }
+      { name: 'forensics', description: 'Proofpoint Forensics and Threat Response (TRAP) fundamentals: auto-pull and search-and-destroy remediation actions, evidence collection, message trace, and post-delivery incident response workflows for email-borne threats.' },
+      { name: 'people', description: 'Proofpoint People-Centric Security fundamentals: Very Attacked People (VAP) reports, attack index scoring, click susceptibility, top clickers, and user risk categorization for targeting security controls and training.' },
+      { name: 'quarantine', description: 'Proofpoint quarantine management fundamentals: quarantine reasons and folders, message states, search/filter parameters, and release/delete workflows for admin and end-user quarantine.' },
+      { name: 'tap', description: 'Proofpoint Targeted Attack Protection (TAP) fundamentals: threat events across URL, attachment, and message-level vectors, click tracking, message disposition, SIEM integration feeds, and campaign correlation.' },
+      { name: 'threat-intel', description: 'Proofpoint Threat Intelligence fundamentals: campaign tracking, threat families and actors, indicators of compromise (IOCs), and how campaign/IOC data enriches individual TAP threat events.' },
+      { name: 'url-defense', description: 'Proofpoint URL Defense fundamentals: URL rewriting (v2/v3 formats), click-time analysis and verdicts, and manual/API decoding of rewritten URLs back to their originals.' },
+      { name: 'api-patterns', description: 'Proofpoint API fundamentals: HTTP Basic Auth with service principal and secret, base URLs and versioning across TAP SIEM, People, Quarantine, Forensics, and URL Defense APIs, rate limits, pagination patterns, and error handling.' }
     ],
     agents: [
       { name: 'email-security-auditor', description: 'Use this agent when auditing email security posture across Proofpoint-protected organizations, investigating threats via TAP intelligence, tracing specific emails, analyzing Very Attacked Persons (VAPs), or generating per-org security reports for MSP clients.' },
@@ -1239,12 +1271,12 @@ export const plugins: Plugin[] = [
       'Financial Reporting'
     ],
     skills: [
-      { name: 'customers', description: 'Use this skill when working with QuickBooks Online customers (clients) - creating, searching, updating, and managing MSP client records.' },
-      { name: 'expenses', description: 'Use this skill when working with QuickBooks Online expenses and purchases - creating, searching, and managing expense records, bills, and vendor payments.' },
-      { name: 'invoices', description: 'Use this skill when working with QuickBooks Online invoices - creating, sending, voiding, and managing invoices for MSP clients.' },
-      { name: 'payments', description: 'Use this skill when working with QuickBooks Online payments - recording customer payments, applying payments to invoices, handling overpayments, refunds, credit memos, and payment reconciliation.' },
-      { name: 'reports', description: 'Use this skill when working with QuickBooks Online reports - generating Profit & Loss, Balance Sheet, Accounts Receivable Aging, Accounts Payable Aging, General Ledger, and other financial reports.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the QuickBooks Online API - OAuth2 authentication, REST structure, Intuit query language, pagination, rate limiting, error handling, minor version headers, and best practices.' }
+      { name: 'customers', description: 'QuickBooks Online Customer entity: the parent/sub-customer (job) hierarchy, contact, address, billing and hierarchy fields, payment terms, balance and BalanceWithJobs tracking, sparse updates, deactivation, query syntax, error codes, and PSA cross-referencing patterns for MSP client records.' },
+      { name: 'expenses', description: 'QuickBooks Online expense entities: Purchase (check, cash, credit card), Bill for accounts payable, BillPayment, and Vendor.' },
+      { name: 'invoices', description: 'QuickBooks Online Invoice entity: invoice lifecycle and statuses, line item detail types, service items, payment terms, email delivery and PDF retrieval, invoice numbering, void vs delete semantics, query syntax, error codes, and MSP billing patterns such as monthly managed services, project, and time-and-materials invoicing.' },
+      { name: 'payments', description: 'QuickBooks Online payment handling: recording customer payments and applying them to invoices, partial and multi-invoice application, unapplied amounts and overpayments, credit memos and refund receipts, payment methods, deposit accounts, voiding, and reconciliation.' },
+      { name: 'reports', description: 'QuickBooks Online financial reporting: the report catalog (Profit & Loss, Balance Sheet, A/R and A/P Aging, General Ledger, Customer Sales, Cash Flow, Tax Summary), report parameters, date macros, column customization, the nested row response structure, and MSP analysis patterns like client profitability and aged receivables for collections.' },
+      { name: 'api-patterns', description: 'QuickBooks Online API fundamentals: OAuth2 authentication and token lifecycle, REST structure and base URLs, the Intuit query language, pagination, minor version headers, SyncToken optimistic locking, rate limits, webhooks, and the Fault error object format.' }
     ],
     agents: [
       { name: 'billing-reconciler', description: 'Use this agent when an MSP needs to reconcile billing in QuickBooks Online — matching invoices to contracts, identifying unbilled work, flagging overdue accounts, or auditing revenue recognition.' },
@@ -1279,11 +1311,11 @@ export const plugins: Plugin[] = [
       'Incident Management'
     ],
     skills: [
-      { name: 'accounts', description: 'Use this skill when working with RocketCyber accounts - provider/customer hierarchy, account management, sub-account navigation, account settings, and security policy configuration.' },
-      { name: 'agents', description: 'Use this skill when working with RocketCyber agents (RocketAgent) - deployment, communication status, health monitoring, and troubleshooting.' },
-      { name: 'apps', description: 'Use this skill when working with RocketCyber application inventory - detecting, categorizing, and monitoring applications across managed endpoints.' },
-      { name: 'incidents', description: 'Use this skill when working with RocketCyber security incidents - searching, triaging, investigating, and resolving incidents.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the RocketCyber API - authentication, Bearer token flow, base URL selection, pagination, rate limiting, error handling, and account hierarchy.' }
+      { name: 'accounts', description: 'RocketCyber\'s provider/customer account hierarchy: sub-account navigation, account CRUD operations, account settings, security policy configuration, and multi-tenant MSP patterns.' },
+      { name: 'agents', description: 'RocketCyber agent (RocketAgent) deployment, communication status, health monitoring, and troubleshooting: agent installation, online/offline status, agent-to-account mapping, and platform support.' },
+      { name: 'apps', description: 'RocketCyber application inventory: detecting, categorizing, and monitoring applications across managed endpoints, including approved-vs-unapproved software, app-level threat detection, and software compliance reporting.' },
+      { name: 'incidents', description: 'RocketCyber security incident lifecycle: severity levels, verdicts (Malicious/Suspicious/Benign), status transitions, SOC analyst triage patterns, and cross-vendor PSA ticket correlation.' },
+      { name: 'api-patterns', description: 'RocketCyber REST API v3 fundamentals: Bearer token authentication, regional base URL selection, pagination, rate limiting, error handling, and account hierarchy navigation.' }
     ],
     agents: [
       { name: 'soc-alert-investigator', description: 'Use this agent when an MSP needs to investigate and triage RocketCyber SOC alerts and security incidents across their client portfolio.' },
@@ -1318,13 +1350,13 @@ export const plugins: Plugin[] = [
       'Workflows'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with Rootly alerts -- alert routing, escalation policies, integration with monitoring tools (Datadog, PagerDuty, etc.), alert-to-incident creation, and managing alert rules.' },
-      { name: 'incidents', description: 'Use this skill when working with Rootly incidents - creating, searching, triaging, updating, and resolving incidents.' },
-      { name: 'oncall', description: 'Use this skill when working with Rootly on-call management - viewing shift metrics, generating handoff summaries, reviewing shift incidents, detecting on-call health risk, and understanding schedule coverage.' },
-      { name: 'postmortems', description: 'Use this skill when working with Rootly postmortems -- creating retrospectives, managing action items, applying templates, and conducting blameless reviews after incidents are resolved.' },
-      { name: 'services', description: 'Use this skill when working with the Rootly service catalog -- listing services, managing dependencies, ownership, service health, and understanding how services relate to incidents and alerts.' },
-      { name: 'workflows', description: 'Use this skill when working with Rootly workflows -- creating automated incident response workflows, configuring triggers, actions, conditions, and managing workflow lifecycle.' },
-      { name: 'api-patterns', description: 'Use this skill when working with Rootly MCP tools - authentication setup, complete tool reference, JSON:API pagination, request patterns, rate limits, and error handling.' }
+      { name: 'alerts', description: 'Rootly\'s alerting layer between monitoring tools and incident management: alert sources and integrations (Datadog, PagerDuty, New Relic, Grafana), routing rules, escalation policies and their acknowledgement windows, suppression, and the conditions under which an alert auto-creates an incident.' },
+      { name: 'incidents', description: 'Incidents, Rootly\'s primary resource: the incident lifecycle and status transitions, severity levels, the incident field reference, AI-assisted analysis via find_related_incidents and suggest_solutions, action items, alert attachment, and cross-vendor PSA ticket correlation.' },
+      { name: 'oncall', description: 'Rootly on-call visibility built on the get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents, and check_oncall_health_risk tools: schedule and rotation coverage, structured shift handoffs, per-shift incident scoping, shift metric fields, and the burnout risk signals.' },
+      { name: 'postmortems', description: 'Rootly postmortems as structured post-incident retrospectives: the postmortem lifecycle, templates and automatic timeline import, action item creation and tracking through to project-management tools, and the blameless review practices Rootly\'s model assumes.' },
+      { name: 'services', description: 'The Rootly service catalog: tier classification by business criticality, the ownership attributes attached to each service (team, Slack channel, escalation policy, runbooks), upstream/downstream dependency modeling for blast-radius analysis, service CRUD, and how services link back to incidents and alerts.' },
+      { name: 'workflows', description: 'Rootly\'s incident-response automation model: the trigger / condition / action structure, the full catalog of trigger, action, and condition types, workflow CRUD and enable/disable, and the failure modes behind stale, over-firing, or circularly chained workflows.' },
+      { name: 'api-patterns', description: 'The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs.' }
     ],
     agents: [
       { name: 'incident-commander', description: 'Use this agent when an MSP engineer, SRE, or incident manager needs to command an active Rootly incident or review open incidents.' },
@@ -1361,12 +1393,12 @@ export const plugins: Plugin[] = [
       'Wireless'
     ],
     skills: [
-      { name: 'assets', description: 'Use this skill when working with RunZero assets — searching and browsing the asset inventory, inspecting asset attributes, OS fingerprinting, hardware details, and network interfaces.' },
-      { name: 'services', description: 'Use this skill when working with RunZero services — listing discovered services, filtering by port or protocol, identifying vulnerabilities, and auditing exposed services across sites.' },
-      { name: 'sites', description: 'Use this skill when working with RunZero sites — creating and managing organization sites, defining scan scope, deploying explorers, and organizing assets by location or client.' },
-      { name: 'tasks', description: 'Use this skill when working with RunZero scan tasks — creating scans, scheduling recurring scans, managing explorers, configuring scan parameters, and reviewing scan results.' },
-      { name: 'wireless', description: 'Use this skill when working with RunZero wireless network discovery — listing discovered wireless networks, identifying rogue access points, analyzing wireless security configurations, and auditing SSIDs.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the RunZero MCP tools — available tools, authentication via Bearer token, Export API, pagination, rate limiting, error handling, and best practices.' }
+      { name: 'assets', description: 'The runZero asset inventory: searching and browsing assets, asset attributes, OS fingerprinting, hardware details, and network interfaces.' },
+      { name: 'services', description: 'runZero discovered services: listing services, filtering by port or protocol, identifying vulnerabilities, and auditing exposed services across sites.' },
+      { name: 'sites', description: 'runZero sites: creating and managing organization sites, defining scan scope and exclusions, deploying explorers, and organizing assets by location or client.' },
+      { name: 'tasks', description: 'runZero scan tasks: creating scans, scheduling recurring scans, managing explorers, configuring scan parameters, and reviewing scan results.' },
+      { name: 'wireless', description: 'runZero wireless network discovery: discovered wireless networks, rogue access point identification, wireless security configuration analysis, and SSID auditing.' },
+      { name: 'api-patterns', description: 'runZero API fundamentals: the available MCP tools, Bearer-token authentication, the Export API for bulk retrieval, pagination, rate-limit headers, error codes, and the runZero query language.' }
     ],
     agents: [],
     commands: [
@@ -1399,11 +1431,11 @@ export const plugins: Plugin[] = [
       'Quote Generation'
     ],
     skills: [
-      { name: 'companies-contacts', description: 'Use this skill when searching for companies or contacts in Salesbuildr, looking up customer information, or creating new contacts.' },
-      { name: 'opportunities', description: 'Use this skill when managing sales opportunities in Salesbuildr - searching the pipeline, creating new opportunities, updating stages, and tracking deal values.' },
-      { name: 'products', description: 'Use this skill when searching for products in the Salesbuildr catalog, looking up pricing, or browsing by category.' },
-      { name: 'quotes', description: 'Use this skill when creating, searching, or viewing quotes in Salesbuildr.' },
-      { name: 'api-patterns', description: 'Use this skill when making API calls to Salesbuildr.' }
+      { name: 'companies-contacts', description: 'Salesbuildr companies and contacts: company search, contact filtering by company, and contact creation with its required fields.' },
+      { name: 'opportunities', description: 'Salesbuildr opportunities: pipeline search, opportunity creation, stage updates, and deal values, plus how opportunities link companies and contacts to potential revenue.' },
+      { name: 'products', description: 'Salesbuildr product catalog: product search, pricing lookup, category browsing, and how products become quote line items.' },
+      { name: 'quotes', description: 'Salesbuildr quotes: quote creation with product line items, quote search, and retrieving quote details, plus how quotes link to companies, contacts, and opportunities.' },
+      { name: 'api-patterns', description: 'Salesbuildr API fundamentals: api-key header authentication, offset-based from/size pagination, error handling, and the 500 requests per 10 minutes rate limit.' }
     ],
     agents: [
       { name: 'margin-analyzer', description: 'Use this agent when an MSP sales manager or finance lead needs to analyze quote margin health across recent quotes in Salesbuildr.' },
@@ -1446,13 +1478,13 @@ export const plugins: Plugin[] = [
       'Vulnerability Management'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with SentinelOne alerts - triaging new alerts, investigating specific alerts, searching by severity or status, reviewing alert timelines, and managing alert workflows across MSP client environments.' },
-      { name: 'inventory', description: 'Use this skill when working with SentinelOne unified asset inventory - endpoints, cloud resources, identities, and network-discovered devices.' },
-      { name: 'misconfigurations', description: 'Use this skill when working with SentinelOne XSPM misconfigurations - cloud security posture management across AWS, Azure, GCP, Kubernetes, identity, and infrastructure-as-code.' },
-      { name: 'purple-ai', description: 'Use this skill when working with SentinelOne Purple AI - natural language cybersecurity investigation, threat hunting, behavioral anomaly analysis, MITRE ATT&CK TTP mapping, and PowerQuery generation.' },
-      { name: 'threat-hunting', description: 'Use this skill when working with SentinelOne PowerQuery and the Singularity Data Lake - executing threat hunting queries, understanding PowerQuery pipeline syntax, managing time ranges, and analyzing query results.' },
-      { name: 'vulnerabilities', description: 'Use this skill when working with SentinelOne XSPM vulnerabilities - tracking CVEs, reviewing EPSS scores, assessing exploit maturity, managing vulnerability status, prioritizing patches, and generating vulnerability reports across MSP client environments.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the SentinelOne Purple MCP tools - available tools, connection setup, uvx-based installation, Service User token authentication, transport modes, dual API architecture (GraphQL and REST), rate limits, error handling, and best practices.' }
+      { name: 'alerts', description: 'SentinelOne\'s read-only unified alert surface: the list/search/get alert tools plus notes and history, severity levels, status values, view types, GraphQL filter syntax, and cursor-based pagination.' },
+      { name: 'inventory', description: 'SentinelOne\'s unified asset inventory across four surface types — agent-managed endpoints, AWS/Azure/GCP cloud resources, AD/Entra identities, and Ranger-discovered network devices.' },
+      { name: 'misconfigurations', description: 'Cloud security posture findings from SentinelOne\'s XSPM module across AWS, Azure, GCP, Kubernetes, identity providers, and infrastructure-as-code.' },
+      { name: 'purple-ai', description: 'The `purple_ai` tool — SentinelOne\'s natural language investigation assistant over the full Singularity telemetry model.' },
+      { name: 'threat-hunting', description: 'PowerQuery against the Singularity Data Lake: the Scalyr-based pipeline syntax (distinct from SPL, SQL, KQL, and Elasticsearch DSL), the powerquery, get_timestamp_range, and iso_to_unix_timestamp tools, time-range and row-limit handling, common hunting scenarios, and the Purple AI generation path.' },
+      { name: 'vulnerabilities', description: 'CVE tracking through SentinelOne\'s XSPM module: the read-only vulnerability tools, EPSS scores and exploit-maturity values and why they outrank raw CVSS severity for prioritization, status values and their transitions, the vulnerability field reference, and patch-prioritization and reporting workflows.' },
+      { name: 'api-patterns', description: 'The SentinelOne Purple MCP server and the APIs behind it: uvx installation and transport modes, Service User token levels, the 23 read-only tools organized by domain, and the dual GraphQL (cursor pagination) / REST (offset pagination) architecture with its differing filter syntaxes, rate limits, and error causes.' }
     ],
     agents: [
       { name: 'endpoint-hardening-auditor', description: 'Use this agent when an MSP needs to audit and harden SentinelOne endpoint configuration across client sites — not to investigate active threats, but to proactively identify gaps before attackers can exploit them.' },
@@ -1488,10 +1520,10 @@ export const plugins: Plugin[] = [
       'Subscription Lifecycle'
     ],
     skills: [
-      { name: 'billing', description: 'Use this skill when working with Sherweb distributor billing - payable charges, billing periods, charge types, pricing breakdown, deductions, fees, taxes, invoices, and MSP margin calculations.' },
-      { name: 'customers', description: 'Use this skill when working with Sherweb customers - listing customers, retrieving customer details, accounts receivable, and understanding the distributor > service provider > customer hierarchy.' },
-      { name: 'subscriptions', description: 'Use this skill when working with Sherweb subscriptions - viewing subscriptions, changing quantities, license management, subscription lifecycle, and quantity change workflows.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Sherweb API and MCP tools - OAuth 2.0 client credentials authentication, token management, API endpoints, subscription key header, rate limits, error codes, scopes, Accept-Language support, and best practices.' }
+      { name: 'billing', description: 'Sherweb distributor billing: billing periods, Setup/Recurring/Usage charge types, billing cycles (OneTime, Monthly, Yearly), the pricing breakdown (listPrice, netPrice, prorated, subTotal), promotional and performance deductions, fees, taxes, invoices, and MSP margin calculation.' },
+      { name: 'customers', description: 'Sherweb customer records: the distributor > service provider > customer hierarchy and its API scoping consequences, customer lifecycle stages, core address and contact fields, accounts-receivable data with aging buckets, and cross-referencing customers with PSA, subscription, and billing data.' },
+      { name: 'subscriptions', description: 'Sherweb subscription management: the subscription lifecycle and its states, seat/license quantity rules (absolute values, minimums, proration, commitment restrictions), the quantity-change workflow, subscription and change-response fields, and state-transition errors.' },
+      { name: 'api-patterns', description: 'Sherweb Partner API fundamentals: OAuth 2.0 client-credentials auth, token caching, subscription-key header, scopes and base URLs, endpoint and MCP tool catalog, page-based pagination, Accept-Language localization, rate limits, and error codes.' }
     ],
     agents: [
       { name: 'billing-reconciler', description: 'Use this agent when an MSP needs to reconcile Sherweb distributor billing — reviewing payable charges for a billing period, drilling into individual charge details, separating Setup/Recurring/Usage charge types, verifying that billed quantities match active subscriptions, and calculating MSP margin between Sherweb cost and customer price.' },
@@ -1528,12 +1560,12 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'alerts', description: 'Use this skill when working with SuperOps.ai alerts - listing, filtering, acknowledging, and resolving alerts from monitored assets.' },
-      { name: 'assets', description: 'Use this skill when working with SuperOps.ai assets - querying inventory, viewing asset details, running scripts, monitoring patches, and managing client/site associations.' },
-      { name: 'clients', description: 'Use this skill when working with SuperOps.ai clients - creating, updating, searching, and managing client accounts.' },
-      { name: 'runbooks', description: 'Use this skill when working with SuperOps.ai runbooks and scripts - listing, executing, monitoring, and managing automated scripts on assets.' },
-      { name: 'tickets', description: 'Use this skill when working with SuperOps.ai tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the SuperOps.ai GraphQL API - authentication, query building, mutations, pagination, rate limiting, and error handling.' }
+      { name: 'alerts', description: 'SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle and valid transitions, asset/client/monitor associations, and the GraphQL operations for listing, acknowledging, resolving, and converting alerts into tickets.' },
+      { name: 'assets', description: 'SuperOps.ai RMM asset inventory: asset status and platform enums, hardware, network, OS and association fields, software inventory, disk usage, patch status, activity history, and the GraphQL queries and script-execution mutations behind them.' },
+      { name: 'clients', description: 'SuperOps.ai client (account) management: stage and status enums, core/business/ address fields, client CRUD mutations, site and contact (requester) management, custom fields, soft vs. hard delete, and onboarding workflows.' },
+      { name: 'runbooks', description: 'SuperOps.ai RMM script automation: script types and OS targeting, run-as contexts, execution priority, parameterized arguments, single-asset and batch execution, recurring schedules, execution status polling, and exit-code interpretation.' },
+      { name: 'tickets', description: 'SuperOps.ai service desk ticketing: ticket fields, status and priority enums, client/site/requester/assignee associations, notes, time entries, and the GraphQL mutations and queries behind them.' },
+      { name: 'api-patterns', description: 'SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth, region-specific endpoints, request/variable structure, cursor pagination, the 800 req/min rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.' }
     ],
     agents: [
       { name: 'automation-opportunity-finder', description: 'Use this agent when an MSP operations lead, service manager, or technician wants to identify repetitive ticket patterns in SuperOps.ai that should be automated — not live operations management, but a retrospective analysis of ticket history to find recurring issues with the same client, same category, and same resolution, calculate the manual time cost, and recommend runbooks or automation scripts to eliminate the pattern.' },
@@ -1574,11 +1606,11 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'assets', description: 'Use this skill when working with Syncro MSP assets - tracking hardware, software, and devices for customers.' },
-      { name: 'customers', description: 'Use this skill when working with Syncro MSP customers - creating, updating, searching, or managing customer records.' },
-      { name: 'invoices', description: 'Use this skill when working with Syncro MSP invoices - creating, managing, and tracking invoices and payments.' },
-      { name: 'tickets', description: 'Use this skill when working with Syncro MSP tickets - creating, updating, searching, or managing service desk operations.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Syncro MSP API - authentication, pagination, rate limiting, and error handling.' }
+      { name: 'assets', description: 'Syncro MSP assets: asset records and fields for hardware, software, and devices, RMM integration, patch management data, and asset search and update operations.' },
+      { name: 'customers', description: 'Syncro MSP customers: customer fields, contacts, sites and locations, and customer create, update, and search operations.' },
+      { name: 'invoices', description: 'Syncro MSP invoices: invoice fields, line items, payment processing, and billing workflows.' },
+      { name: 'tickets', description: 'Syncro MSP tickets: ticket fields, statuses, priorities, problem types, timer operations, workflow automations, and the validation, time-tracking, and reporting logic around them.' },
+      { name: 'api-patterns', description: 'Syncro MSP REST API fundamentals: API key setup and authentication, request and response patterns, pagination, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'billing-auditor', description: 'Use this agent when an MSP owner, billing coordinator, or service manager needs a billing completeness and accuracy audit in Syncro — finding tickets that haven\'t been billed, identifying recurring billing discrepancies, checking invoice accuracy against contracts, and flagging draft invoices overdue for finalization.' },
@@ -1619,11 +1651,11 @@ export const plugins: Plugin[] = [
       'Vulnerability Management'
     ],
     skills: [
-      { name: 'asset-inventory', description: 'Use this skill when working with Blackpoint Cyber (CompassOne) asset data — listing assets by class for a tenant, searching across classes, pulling asset detail, and walking parent/child/sibling relationships to build a blast-radius or topology view.' },
-      { name: 'incident-response', description: 'Use this skill when investigating a Blackpoint Cyber detection — drilling from a tenant to its assets, walking the detection list, pulling vulnerability and dark-web context, and assembling an incident timeline.' },
-      { name: 'multi-tenant-operations', description: 'Use this skill when operating Blackpoint Cyber (CompassOne) at the MSP partner level — enumerating customer tenants, sweeping detections and vulnerabilities across all of them, spotting volume anomalies, and building per-tenant scorecards.' },
-      { name: 'vulnerability-management', description: 'Use this skill when analyzing Blackpoint Cyber (CompassOne) exposure data — host vulnerability findings filtered by CVE and exploitability, vulnerability scan history, dark-web credential and data leaks, and external internet-facing exposures.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Blackpoint Cyber (CompassOne) MCP tools — Bearer token authentication, the partner-tenant-asset hierarchy, navigation tools, and the read-only tool surface across tenants, assets, detections, and vulnerabilities.' }
+      { name: 'asset-inventory', description: 'Blackpoint Cyber (CompassOne) asset data: the six asset classes, listing and paginating assets per class, cross-class search, asset detail, and walking parent/child/sibling relationships to build a blast-radius or topology view.' },
+      { name: 'incident-response', description: 'Blackpoint Cyber (CompassOne) detection investigation: the read-only tool surface across tenants, assets, detections, and vulnerabilities, the tenant → asset → detection → vulnerability drill-down, asset relationship maps, dark-web and external-exposure cross-references, and which tool domains are stubs.' },
+      { name: 'multi-tenant-operations', description: 'Partner-level Blackpoint Cyber (CompassOne) operations: the partner-tenant hierarchy, enumerating customer tenants, sweeping detections and vulnerabilities across all of them, spotting volume anomalies, and building per-tenant scorecards.' },
+      { name: 'vulnerability-management', description: 'Blackpoint Cyber (CompassOne) exposure data across four lenses: host vulnerability findings and the filters that matter (CVE, severity, patch and exploit availability), scan history, dark-web credential and data leaks, and internet-facing external exposures — plus how to combine them into a prioritized remediation view.' },
+      { name: 'api-patterns', description: 'Blackpoint Cyber (CompassOne) MCP fundamentals: API-token header auth and its internal Bearer forwarding, the partner-tenant-asset hierarchy, navigation tools, which tool domains are functional versus stubbed, pagination, and HTTP error causes.' }
     ],
     agents: [
       { name: 'alert-response-coordinator', description: 'Use this agent when triaging the Blackpoint Cyber / CompassOne detection queue across one or many tenants — ranking open detections by severity and tenant impact, deciding what needs immediate escalation to the Blackpoint SOC versus routine follow-up, and producing a prioritized response plan.' },
@@ -1657,8 +1689,8 @@ export const plugins: Plugin[] = [
       'Triage'
     ],
     skills: [
-      { name: 'triage', description: 'Use this skill to triage SaaS Alerts security alerts across managed M365 / Google Workspace tenants — ranking by severity and tenant impact, separating true positives from noise, and producing a shift-ready response plan.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the SaaS Alerts MCP tools — API-key authentication via the gateway header, the MSP/customer/account hierarchy, navigation tools, and paging through events, recommended actions, devices, and billing.' }
+      { name: 'triage', description: 'Triaging the SaaS Alerts queue across managed M365 / Google Workspace tenants: the triage tool surface, the critical-first sweep, per-customer summary and cross-tenant pattern workflows, the low/medium/critical severity model and its default dispositions, and the edge cases — legitimately empty results, time-window sensitivity, whitelist suppression, and per-partner rate limits.' },
+      { name: 'api-patterns', description: 'SaaS Alerts MCP fundamentals: API-key authentication via the gateway header, the MSP → customer → account → user hierarchy, navigation and functional tool naming, event filter parameters, cursor pagination, and HTTP error codes.' }
     ],
     agents: [
       { name: 'saas-alerts-analyst', description: 'Use this agent when investigating and triaging SaaS Alerts security alerts across managed M365 / Google Workspace tenants — reconstructing what fired, attributing it to a user/tenant, judging severity, and recommending response.' }
@@ -1684,8 +1716,8 @@ export const plugins: Plugin[] = [
       'Surveys'
     ],
     skills: [
-      { name: 'surveys', description: 'Use this skill when working with Crewhu CSAT/NPS surveys — listing recent responses, drilling into a specific survey, isolating detractors and promoters for follow-up, and rolling responses up by user.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Crewhu MCP tools — token-based authentication via the `X-Crewhu-Api-Token` header, read-heavy tool surface, pagination, and error handling.' }
+      { name: 'surveys', description: 'Crewhu CSAT/NPS survey data: the list/search/get tools and the detractor/promoter sentiment slices, the trend, detractor-follow-up, promoter-recognition and per-tech roll-up workflows, and the edge cases that skew scores — sparse response counts, comment-only feedback, and tenant-local timestamps.' },
+      { name: 'api-patterns', description: 'Crewhu MCP fundamentals: token authentication via the `X-Crewhu-Api-Token` header and its gateway env-var mapping, the flat 18-tool surface across the surveys, users, badges, and prizes domains (only `crewhu_badges_update_contest` writes), pagination, and error codes.' }
     ],
     agents: [],
     commands: [
@@ -1715,12 +1747,12 @@ export const plugins: Plugin[] = [
       'Tenant Compliance'
     ],
     skills: [
-      { name: 'endpoint-management', description: 'Use this skill when working with ImmyBot computers/endpoints — listing and filtering the managed fleet, searching by name or serial, inspecting installed-software inventory, reviewing which deployments target a device, creating new computer records, and forcing an agent check-in.' },
-      { name: 'maintenance-sessions', description: 'Use this skill when working with ImmyBot maintenance sessions — the reconciliation engine that brings endpoints into their desired state.' },
-      { name: 'script-execution', description: 'Use this skill when working with ImmyBot\'s PowerShell script library — searching scripts by name or category, validating script syntax, executing a script in SYSTEM context on a target computer, and reviewing execution history and results.' },
-      { name: 'software-deployment', description: 'Use this skill when configuring desired-state software deployments in ImmyBot — picking the software, scoping the deployment to a tenant or computer, kicking off a maintenance session to reconcile, and checking compliance afterwards.' },
-      { name: 'tenant-compliance', description: 'Use this skill when working with ImmyBot tenants and fleet-wide reporting — listing and searching client organizations, pulling per-tenant compliance dashboards and software-inventory rollups, and auditing background task queues (running, queued, failed) to produce client-facing or operational status reports.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the ImmyBot MCP tools — Entra ID OAuth 2.0 client-credentials authentication (4 fields), the two-step desired-state deployment model, destructive operations that need explicit confirmation, and the task/session polling cadence.' }
+      { name: 'endpoint-management', description: 'ImmyBot computers/endpoints and their tenant grouping: the computer tool surface, workflows for surveying a tenant fleet, locating a device, auditing inventory against desired state, onboarding a new computer record, and forcing an agent check-in, plus the filtering caveats around online status and serials.' },
+      { name: 'maintenance-sessions', description: 'ImmyBot maintenance sessions — the reconciliation engine that brings endpoints into their desired state: the session tool surface, start parameters (computer vs tenant scope, type, priority, reboot flag), pause/resume/cancel semantics, polling to a terminal state, failure investigation, and reboot-spanning and queued-vs-running edge cases.' },
+      { name: 'script-execution', description: 'ImmyBot\'s PowerShell script library and its SYSTEM-context execution model: the script tool surface, the find → validate → confirm target → approve → execute → review workflow, parameter/timeout/execution-context options, and the safety rules governing this destructive, highly privileged operation.' },
+      { name: 'software-deployment', description: 'ImmyBot\'s desired-state software deployment model end-to-end: the software catalog, deployment, maintenance-session and computer tool surfaces; the canonical select → scope → assert → reconcile → verify workflow; and the pinned-vs-latest, conflicting-deployment, and reboot edge cases.' },
+      { name: 'tenant-compliance', description: 'ImmyBot tenants (client organizations) and fleet-wide reporting: the tenant and background-task tool surfaces, the per-tenant compliance scorecard and fleet task-queue audit procedures, and how to assemble a client QBR report from stats, compliance, software inventory, and failed-task history.' },
+      { name: 'api-patterns', description: 'ImmyBot MCP fundamentals: Entra ID OAuth 2.0 client-credentials auth (four fields), the `immybot_<domain>_<action>` tool naming and domain list, the two-step desired-state deployment model, the four destructive operations that need explicit confirmation, task/session polling cadence, and HTTP error codes.' }
     ],
     agents: [
       { name: 'compliance-auditor', description: 'Use this agent when an MSP needs a software-compliance audit across their ImmyBot-managed tenant portfolio — per-tenant compliance scorecards, failing-deployment analysis, software-inventory rollups, and task-queue health for QBR or operational reporting.' },
@@ -1759,12 +1791,12 @@ export const plugins: Plugin[] = [
       'Scheduling'
     ],
     skills: [
-      { name: 'agents-and-teams', description: 'Use this skill to resolve the right bookable resource in TimeZest before creating a scheduling request — listing agents (individual technicians) and teams (round-robin / shared availability pools), fetching detail for a named resource, and deciding when to book an agent versus a team.' },
-      { name: 'appointment-types', description: 'Use this skill to pick the correct TimeZest appointment type for a scheduling request — listing the appointment types configured for the tenant, reading each type\'s duration, and matching the type to the work described on a ConnectWise / Autotask / Halo ticket.' },
-      { name: 'psa-integration', description: 'Use this skill to wire a TimeZest scheduling request into a PSA — building correct associatedEntities entries for ConnectWise, Autotask, or Halo tickets, choosing between the pod and generate_url trigger modes, and diagnosing bookings that completed but never updated the PSA ticket.' },
-      { name: 'resources', description: 'Use this skill to query TimeZest\'s combined resource pool — the unified list of agents and teams available for scheduling — when you want a survey of everything bookable before drilling into a specific agent or team, or when the dispatcher has not named a resource.' },
-      { name: 'scheduling', description: 'Use this skill to book a technician against a ConnectWise / Autotask / Halo PSA ticket via TimeZest — resolving the right agent and appointment type, creating a scheduling request, polling its status, and canceling when needed.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the TimeZest MCP tools — Bearer token authentication, the navigation pattern, scheduling-request payloads that carry PSA associated_entities (ConnectWise / Autotask / Halo ticket IDs), and the polling-only update model (no webhooks).' }
+      { name: 'agents-and-teams', description: 'TimeZest agents (individual technicians) and teams (round-robin / shared availability pools): listing each, fetching detail for a named resource, and the criteria for booking an agent versus a team.' },
+      { name: 'appointment-types', description: 'TimeZest appointment types: the types configured for a tenant, each type\'s duration, and how to match a type to the work described on a ConnectWise / Autotask / Halo ticket.' },
+      { name: 'psa-integration', description: 'Wiring a TimeZest scheduling request into a PSA: the associatedEntities payload shapes for ConnectWise, Autotask, and Halo tickets, the difference between the pod and generate_url trigger modes, and the causes of bookings that complete but never update the PSA ticket.' },
+      { name: 'resources', description: 'TimeZest\'s combined resource pool — the unified list of agents and teams available for scheduling — including filtering by resource type and surveying what is bookable before drilling into a specific agent or team.' },
+      { name: 'scheduling', description: 'The TimeZest scheduling-request lifecycle: resolving the right agent and appointment type, creating a request against a ConnectWise / Autotask / Halo ticket, polling its status through to booking, and canceling.' },
+      { name: 'api-patterns', description: 'TimeZest MCP fundamentals: Bearer token authentication, the navigation pattern, scheduling-request payloads that carry PSA associated_entities (ConnectWise / Autotask / Halo ticket IDs), and the polling-only update model (no webhooks).' }
     ],
     agents: [
       { name: 'booking-pipeline-auditor', description: 'Use this agent when reporting on the TimeZest scheduling pipeline — grouping requests by lifecycle state, finding stale requests waiting on customers, measuring booking conversion, and producing a dispatch-queue view across agents and teams.' },
@@ -1802,12 +1834,12 @@ export const plugins: Plugin[] = [
       'Organization Management'
     ],
     skills: [
-      { name: 'approval-requests', description: 'Use this skill when triaging ThreatLocker application approval requests — the heart of day-to-day ThreatLocker operations.' },
-      { name: 'audit-log', description: 'Use this skill when investigating events in the ThreatLocker Action Log (the API name is "audit") — building incident timelines, tracing a file\'s history across endpoints, identifying repeated denials, and correlating policy bypasses or audit-only matches with user/computer context.' },
-      { name: 'computer-groups', description: 'Use this skill when working with ThreatLocker computer groups — the policy-scoping boundary that determines which allow/deny rules apply to which endpoints.' },
-      { name: 'computers', description: 'Use this skill when working with ThreatLocker-protected endpoints — fleet inventory, identifying offline agents, drilling into a single computer\'s check-in history, and correlating computers across organizations and groups.' },
-      { name: 'organizations', description: 'Use this skill when working with the ThreatLocker MSP multi-tenant model — enumerating child organizations, retrieving per-org auth keys, and identifying valid move targets when relocating computers between tenants.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the ThreatLocker MCP tools — raw-key authentication (NO Bearer prefix), multi-tenant routing via organizationId header, POST-heavy "GetByParameters" endpoints, pagination shape, and child-organization fan-out patterns.' }
+      { name: 'approval-requests', description: 'ThreatLocker application approval request triage: pulling the pending queue, grouping requests by application and hash, signed-publisher and path heuristics, and approve/deny recommendations with audit-friendly reasoning.' },
+      { name: 'audit-log', description: 'The ThreatLocker Action Log (the API name is "audit"): incident timelines, tracing a file\'s history across endpoints, repeated-denial detection, and correlating policy bypasses or audit-only matches with user and computer context.' },
+      { name: 'computer-groups', description: 'ThreatLocker computer groups — the policy-scoping boundary that determines which allow/deny rules apply to which endpoints.' },
+      { name: 'computers', description: 'ThreatLocker-protected endpoints: fleet inventory, identifying offline agents, a single computer\'s check-in history, and correlating computers across organizations and groups.' },
+      { name: 'organizations', description: 'The ThreatLocker MSP multi-tenant model: enumerating child organizations, retrieving per-org auth keys, and identifying valid move targets when relocating computers between tenants.' },
+      { name: 'api-patterns', description: 'ThreatLocker Portal API fundamentals: raw-key authentication (no Bearer prefix), multi-tenant routing via the organizationId header, POST-based "GetByParameters" list endpoints, pagination shape, and child-organization fan-out patterns.' }
     ],
     agents: [
       { name: 'approval-triage-analyst', description: 'Use this agent when reviewing the ThreatLocker pending approval queue, classifying application requests as high-confidence vs needs-review, recommending approve/deny decisions with documented reasoning, and escalating suspicious patterns.' },
@@ -1839,7 +1871,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when working with the Kaseya VSA REST API.' }
+      { name: 'api-patterns', description: 'Kaseya VSA REST API fundamentals: two-step token-based authentication, the /api/v1.0 surface, pagination ($skip/$top) and filtering ($filter), the request/response envelope, error codes, and Kaseya One SSO bearer-token auth for unified-login tenants.' }
     ],
     agents: [],
     commands: [],
@@ -1861,7 +1893,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when integrating with the Datto BCDR (Backup Portal) REST API.' }
+      { name: 'api-patterns', description: 'Datto BCDR (Backup Portal) REST API fundamentals: public/private key HMAC-SHA256 request signing, the /v1 endpoint surface, pagination, appliance/agent hierarchy, and screenshot verification retrieval.' }
     ],
     agents: [],
     commands: [],
@@ -1883,7 +1915,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when integrating with the Kaseya BMS PSA REST API v2.' }
+      { name: 'api-patterns', description: 'Kaseya BMS PSA REST API v2 fundamentals: tenant subdomain routing, API-token bearer auth, Kaseya One SSO bridging, ticket and account workflows, and OData-style pagination.' }
     ],
     agents: [],
     commands: [],
@@ -1905,7 +1937,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when integrating with Datto SaaS Protection (formerly Backupify).' }
+      { name: 'api-patterns', description: 'Datto SaaS Protection (formerly Backupify) REST API fundamentals: regional base URLs, bearer-token auth, the seat/tenant object model, backup status queries, and restore operations.' }
     ],
     agents: [],
     commands: [],
@@ -1927,7 +1959,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when integrating with the Unitrends Backup REST API.' }
+      { name: 'api-patterns', description: 'Unitrends Backup REST API fundamentals: session-token login exchange, the appliance-vs-asset hierarchy, backup job status queries, recovery point listing, and replication state.' }
     ],
     agents: [],
     commands: [],
@@ -1949,7 +1981,7 @@ export const plugins: Plugin[] = [
     maturity: 'alpha',
     features: [],
     skills: [
-      { name: 'api-patterns', description: 'Use this skill when integrating with Spanning Cloud Backup.' }
+      { name: 'api-patterns', description: 'Spanning Cloud Backup REST API fundamentals: admin-email + API-token auth, the per-platform endpoint surface (M365, Google Workspace, Salesforce), the user/license model, backup status queries, and restore operations.' }
     ],
     agents: [],
     commands: [],
@@ -1977,12 +2009,12 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'activities', description: 'Use this skill when working with HubSpot activities - creating tasks, logging notes, managing associations between CRM objects, and tracking engagement history.' },
-      { name: 'companies', description: 'Use this skill when working with HubSpot companies - searching, creating, updating, and auditing company records in HubSpot CRM.' },
-      { name: 'contacts', description: 'Use this skill when working with HubSpot contacts - searching, creating, updating, and managing contact records in HubSpot CRM.' },
-      { name: 'deals', description: 'Use this skill when working with HubSpot deals - searching, creating, updating, and managing deal records and pipelines in HubSpot CRM.' },
-      { name: 'tickets', description: 'Use this skill when working with HubSpot tickets - creating, searching, updating, and managing support tickets in HubSpot CRM.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the HubSpot MCP tools - available tools, OAuth 2.0 + PKCE authentication, scopes, Streamable HTTP transport, rate limiting, error handling, and best practices.' }
+      { name: 'activities', description: 'HubSpot tasks, notes, and associations: task priority and status values, notes-vs-tasks semantics, the association type matrix linking contacts, companies, deals, and tickets, and engagement-history workflows.' },
+      { name: 'companies', description: 'HubSpot company records: core fields, industry classification values, lifecycle stages, domain-based deduplication and automatic contact-company matching, and cross-referencing associated contacts, deals, and tickets.' },
+      { name: 'contacts', description: 'HubSpot contact records: core and MSP-relevant custom fields, lifecycle stages, lead status values, contact ownership, CRM search filter patterns, and associations to companies and deals.' },
+      { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs.' },
+      { name: 'tickets', description: 'HubSpot support tickets: core fields, default pipeline stages, priority levels, MSP ticket categories, SLA timestamp properties, and associating tickets with contacts, companies, and deals.' },
+      { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server and the CRM Search API behind it: the complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP, automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
     ],
     agents: [
       { name: 'client-relationship-manager', description: 'Use this agent when an MSP account manager or vCIO needs to review account health across the client portfolio in HubSpot.' },
@@ -2017,9 +2049,9 @@ export const plugins: Plugin[] = [
       'Quarantine'
     ],
     skills: [
-      { name: 'lists', description: 'Use this skill when managing SpamTitan sender allowlists and blocklists — adding trusted senders to prevent false positives, blocking unwanted senders and domains, and reviewing existing list entries.' },
-      { name: 'quarantine', description: 'Use this skill when managing the SpamTitan quarantine queue — listing held messages, releasing legitimate emails, deleting spam, reviewing email flow statistics, and performing bulk quarantine operations.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the SpamTitan MCP tools — available tools, authentication via API key header, API structure, pagination, rate limiting, error handling, and best practices.' }
+      { name: 'lists', description: 'SpamTitan sender allowlists and blocklists: entry types, per-domain vs. global list scope, allowlisting trusted senders to prevent false positives, and blocking unwanted senders and domains.' },
+      { name: 'quarantine', description: 'SpamTitan quarantine queue: quarantine types, release vs. delete semantics, message aging, multi-domain scoping, bulk quarantine operations, and email flow statistics.' },
+      { name: 'api-patterns', description: 'SpamTitan MCP fundamentals: the available tool catalog, API-key header authentication, API structure, pagination, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'quarantine-release-reviewer', description: 'Use this agent when an MSP technician or client needs to systematically review the SpamTitan quarantine queue for false positives, release legitimate messages, identify patterns of legitimate mail being blocked, or generate a quarantine digest for client review.' },
@@ -2053,12 +2085,12 @@ export const plugins: Plugin[] = [
       'Financial Reporting'
     ],
     skills: [
-      { name: 'accounts', description: 'Use this skill when working with Xero chart of accounts - navigating account codes, creating accounts, understanding account types and classes, tax settings, and mapping MSP revenue and expense categories to the general ledger.' },
-      { name: 'contacts', description: 'Use this skill when working with Xero contacts (customers/suppliers) - creating, searching, updating, and managing client organizations.' },
-      { name: 'invoices', description: 'Use this skill when working with Xero invoices - creating, searching, updating, voiding, and managing sales invoices (ACCREC) and supplier bills (ACCPAY).' },
-      { name: 'payments', description: 'Use this skill when working with Xero payments - recording payments, tracking outstanding balances, payment allocation, overpayments, prepayments, and batch payment operations.' },
-      { name: 'reports', description: 'Use this skill when working with Xero financial reports - Profit and Loss, Balance Sheet, Aged Receivables, Aged Payables, Trial Balance, and other management reports.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Xero API - OAuth2 authentication, REST structure, filtering, pagination, rate limiting, error handling, and best practices.' }
+      { name: 'accounts', description: 'Xero chart of accounts: account classes and types, account codes, tax settings, system accounts, and how MSP revenue, cost-of-sales, and expense categories map to the general ledger.' },
+      { name: 'contacts', description: 'Xero contacts (customers and suppliers): contact fields, addresses and phones, contact groups, status values and read-only balances, plus MSP client onboarding, offboarding, and PSA cross-referencing patterns.' },
+      { name: 'invoices', description: 'Xero sales invoices (ACCREC) and supplier bills (ACCPAY): status lifecycle, invoice numbering, line items and tracking categories, tax handling, credit notes, batch creation, validation-error shapes, and recurring managed-services billing for MSPs.' },
+      { name: 'payments', description: 'Xero payments: recording AR and AP payments, partial payments, payment allocation, overpayments and prepayments, batch payment creation, and outstanding-balance and aging tracking for MSP billing and reconciliation.' },
+      { name: 'reports', description: 'Xero Reports API: Profit and Loss, Balance Sheet, Aged Receivables and Payables, Trial Balance, Bank Summary and other management reports.' },
+      { name: 'api-patterns', description: 'Xero Accounting API fundamentals: OAuth2 Custom Connection (client credentials) auth and scopes, the xero-tenant-id header, where-clause filter syntax, page-based pagination, rate limits, the two date formats, validation-error shape, and batch operations.' }
     ],
     agents: [
       { name: 'billing-reconciler', description: 'Use this agent when an MSP needs to reconcile billing in Xero — matching invoices to contracts, tracking outstanding receivables, identifying billing discrepancies, or reviewing cash flow.' },
@@ -2092,10 +2124,10 @@ export const plugins: Plugin[] = [
       'Payment Tracking'
     ],
     skills: [
-      { name: 'customers', description: 'Use this skill when working with Alternative Payments customers and their users - listing, retrieving, and creating customers, adding users to a customer, and archiving customers.' },
-      { name: 'invoicing', description: 'Use this skill when working with Alternative Payments invoices and hosted payment requests - listing, retrieving, and creating invoices with line items, fetching a hosted payment link or PDF link, archiving an invoice, and creating or retrieving hosted payment requests.' },
-      { name: 'payments', description: 'Use this skill when reading Alternative Payments transactions and payouts - listing and filtering transactions by type, status, customer, invoice, and payment method; retrieving a single transaction; and listing or retrieving payouts and the transactions that compose them for reconciliation.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Alternative Payments API - OAuth2 client-credentials authentication, REST structure, cursor pagination, rate limiting (5 req/sec), error handling, and the read + safe-write capability posture.' }
+      { name: 'customers', description: 'Alternative Payments customers and their users: customer fields and status, the customer/user relationship, MSP client onboarding, and the destructive archive operation that requires confirmation.' },
+      { name: 'invoicing', description: 'Alternative Payments invoices and hosted payment requests: invoice status and line-item fields, hosted payment links and signed PDF links, archiving, and payment-request creation and retrieval.' },
+      { name: 'payments', description: 'Alternative Payments transactions and payouts: transaction types, statuses, and the customer/invoice/payment-method filters; payout objects and the transactions that compose them for reconciliation.' },
+      { name: 'api-patterns', description: 'Alternative Payments API fundamentals: OAuth2 client-credentials token minting and bearer auth, scopes, REST endpoint structure, cursor pagination, the 5 req/sec rate limit, idempotency, error handling, and the read + safe-write capability posture that deliberately excludes direct payment creation.' }
     ],
     agents: [
       { name: 'payment-reconciler', description: 'Use this agent when an MSP needs to reconcile Alternative Payments activity — matching transactions to invoices, surfacing unpaid and overdue invoices, summarizing payouts and the transactions that compose them, flagging failed or declined transactions, and tracking outstanding receivables via hosted payment requests.' }
@@ -2124,8 +2156,8 @@ export const plugins: Plugin[] = [
       'Incident Management'
     ],
     skills: [
-      { name: 'incidents', description: 'Use this skill when working with Ironscales phishing incidents — listing and triaging incidents, classifying emails as phishing/spam/legitimate, taking remediation actions, managing sender allowlists, and viewing company statistics.' },
-      { name: 'api-patterns', description: 'Use this skill when working with Ironscales MCP tools — available tools, API key and company ID authentication, pagination, rate limiting, and error handling.' }
+      { name: 'incidents', description: 'Ironscales phishing incidents end to end: incident sources and statuses, the phishing/spam/legitimate classification model and the remediation each one triggers, the response fields that drive triage decisions, daily-triage and campaign-blocking workflows, and the failure modes — already-closed incidents, partial remediation, and allowlist scope.' },
+      { name: 'api-patterns', description: 'Ironscales MCP fundamentals: API-key plus company-ID header authentication and the per-tenant scoping that follows from it, the tool surface across incidents, statistics, and allowlist management, offset/limit pagination, rate-limit behavior, and the HTTP error-code table.' }
     ],
     agents: [
       { name: 'crowdsourced-intel-harvester', description: 'Use this agent when harvesting and analyzing crowdsourced threat intelligence from IRONSCALES\' global network — identifying trending attack types, surfacing indicators seeing increased reports, comparing client threat profiles to industry peers, and generating intelligence briefings from the collective signal.' },
@@ -2157,10 +2189,10 @@ export const plugins: Plugin[] = [
       'Threat Intelligence'
     ],
     skills: [
-      { name: 'message-tracking', description: 'Use this skill when tracking or tracing Mimecast email messages — searching by sender/recipient/subject, retrieving message metadata, placing messages on hold, or releasing held messages.' },
-      { name: 'queue-management', description: 'Use this skill when checking Mimecast email delivery queue status — identifying stuck messages, delivery delays, and backlog conditions.' },
-      { name: 'threat-intelligence', description: 'Use this skill when investigating Mimecast threat activity — TTP logs for URL clicks, malicious attachment analysis, impersonation attempts, threat remediation incidents, and audit events.' },
-      { name: 'api-patterns', description: 'Use this skill when working with Mimecast MCP tools — available tools, OAuth 2.0 client credentials authentication, regional API endpoints, pagination, rate limiting, and error handling.' }
+      { name: 'message-tracking', description: 'Mimecast message tracing: searching by sender, recipient, or subject; message states and message IDs; retrieving message metadata and headers; and holding or releasing messages.' },
+      { name: 'queue-management', description: 'Mimecast email delivery queues: inbound and outbound queue types, queue message states, retry behavior, and the signals that identify stuck messages, delivery delays, and backlog conditions.' },
+      { name: 'threat-intelligence', description: 'Mimecast threat data: Targeted Threat Protection logs for URL clicks, attachment analysis, and impersonation attempts; threat remediation incidents; and audit events.' },
+      { name: 'api-patterns', description: 'Mimecast MCP fundamentals: the available tool catalog, OAuth 2.0 client-credentials authentication, regional API endpoints, pagination, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'email-continuity-checker', description: 'Use this agent when verifying Mimecast email continuity and archiving health — not for threat investigation, but for checking continuity mode status, verifying archiving is capturing expected mail volumes, auditing connector health, and confirming restore capability.' },
@@ -2234,8 +2266,8 @@ export const plugins: Plugin[] = [
       'Querying'
     ],
     skills: [
-      { name: 'connection', description: 'Use this skill when connecting the Microsoft Graph MCP Server for Enterprise to the Wyre MCP Gateway — registering the BYOC multi-tenant Entra app, supplying tenantId/clientId/clientSecret, and (the part everyone misses) granting per-tenant admin consent for the MCP.* delegated permissions out of band.' },
-      { name: 'querying', description: 'Use this skill when answering identity or directory questions against a client\'s Microsoft Entra tenant via the Microsoft Graph MCP Server for Enterprise.' }
+      { name: 'connection', description: 'Connecting the Microsoft Graph MCP Server for Enterprise (public preview) through the Wyre gateway: BYOC multi-tenant Entra app registration, the tenantId/clientId/clientSecret triple, the delegated MCP.* permissions and the per-tenant admin consent that must be granted out of band, plus the read-only design, the 100 calls/min/user limit, licensing implications, and a symptom-to-cause troubleshooting table.' },
+      { name: 'querying', description: 'The RAG query loop for the Microsoft Graph MCP Server for Enterprise — microsoft_graph_suggest_queries to retrieve vetted candidate Graph calls, microsoft_graph_get to execute them, microsoft_graph_list_properties for entity schema — with worked identity and directory examples, result-presentation guidance, and the read-only, RBAC-scoped, rate-limited constraints on what comes back.' }
     ],
     agents: [
       { name: 'entra-reporting-analyst', description: 'Use this agent when an MSP technician, service-desk analyst, account manager, or vCISO needs to answer questions about a client\'s Microsoft Entra (Azure AD) identity and directory data — user and license counts, MFA registration gaps, guest inventory, inactive accounts, app inventory, directory roles, sign-in activity.' }
@@ -2266,9 +2298,9 @@ export const plugins: Plugin[] = [
       'Observability'
     ],
     skills: [
-      { name: 'connection', description: 'Use this skill when connecting the azure-mcp vendor through the WYRE MCP Gateway — registering an Azure service principal, supplying tenantId/clientId/clientSecret, and granting least-privilege Reader-tier RBAC.' },
-      { name: 'cost-and-capacity', description: 'Use this skill for Azure cost, pricing, capacity, and inventory work through the azure-mcp connector — retail pricing lookups, subscription quota and usage-limit checks, and listing/inspecting subscriptions and resource groups.' },
-      { name: 'observability', description: 'Use this skill for Azure observability, diagnostics, and resource-health work through the azure-mcp connector — pulling Azure Monitor metrics, running Log Analytics KQL queries, checking alert state, reading Resource Health status, triaging AppLens diagnostics, and reviewing Azure Advisor recommendations.' }
+      { name: 'connection', description: 'Onboarding the azure-mcp connector in the WYRE MCP Gateway: Azure service-principal registration, the tenantId/clientId/clientSecret triple, least-privilege Reader-tier RBAC assignments, the gateway\'s read-only namespace allowlist, and connection verification and failure modes (expired secret, missing role assignment).' },
+      { name: 'cost-and-capacity', description: 'The read-only cost and capacity half of the azure-mcp connector — the pricing, quota, subscription, and group namespaces: retail meter-rate lookups, quota and usage headroom, subscription and resource-group inventory, and the retail-versus- actual-billing distinction that shapes every estimate.' },
+      { name: 'observability', description: 'The read-only observability half of the azure-mcp connector — the monitor, resourcehealth, applens, and advisor namespaces: Azure Monitor metrics, Log Analytics KQL, alert-rule state, platform health states, AppLens detectors, and Advisor recommendation categories, plus the degraded-resource investigation order.' }
     ],
     agents: [
       { name: 'azure-ops-analyst', description: 'Use this agent when an MSP engineer, service manager, or cloud lead needs a read-only Azure operations investigation — resource health triage, cost and Azure Advisor analysis, quota/capacity headroom checks, and observability-posture reporting across subscriptions.' }
@@ -2339,10 +2371,10 @@ export const plugins: Plugin[] = [
       'Troubleshooting'
     ],
     skills: [
-      { name: 'devices', description: 'Use this skill when working with Cisco Meraki device inventory and lifecycle -- listing devices in a network, getting a device by serial, rebooting, removing, and checking device/uplink status via meraki_raw_request across MX, MS, MR, MV, MG, and MT hardware.' },
-      { name: 'security-appliance', description: 'Use this skill when working with the Cisco Meraki MX security appliance -- reviewing and updating L3 outbound firewall rules (meraki_appliance_firewall_l3_get/update) and checking site-to-site VPN status (meraki_appliance_vpn_status_get).' },
-      { name: 'troubleshooting', description: 'Use this skill for hands-on Cisco Meraki troubleshooting -- running live tools (ping, cable test, throughput, wake-on-LAN) via meraki_raw_request, rebooting devices, and checking uplink/connectivity status.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Cisco Meraki MCP tools -- the full tool catalog, gateway header authentication, Dashboard API v1 structure, Link-header cursor pagination, per-org rate limiting, the read-only / confirm_destructive_action safety model, the meraki_raw_request escape hatch, error handling, and best practices.' }
+      { name: 'devices', description: 'Cisco Meraki device inventory and lifecycle: serial-based identity, the MX/MS/MR/MV/MG/MT product lines, org inventory vs network assignment, reboot and removal, and device/uplink status via meraki_raw_request.' },
+      { name: 'security-appliance', description: 'Cisco Meraki MX security appliance: the L3 outbound firewall rule model and the full-ruleset replacement semantics of meraki_appliance_firewall_l3_update, plus Auto VPN site-to-site peer status via meraki_appliance_vpn_status_get.' },
+      { name: 'troubleshooting', description: 'Hands-on Cisco Meraki diagnostics: the async live-tools pattern (ping, cable test, throughput, wake-on-LAN, ARP/MAC tables) that rides the meraki_raw_request passthrough because live tools are not curated tools, plus device reboots and uplink/connectivity checks.' },
+      { name: 'api-patterns', description: 'Cisco Meraki MCP fundamentals: the full tool catalog, gateway header authentication, Dashboard API v1 structure, Link-header cursor pagination, per-org rate limiting, the read-only / confirm_destructive_action safety model, the meraki_raw_request escape hatch, and error handling.' }
     ],
     agents: [
       { name: 'meraki-network-auditor', description: 'Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki organization — sweeping networks, devices, and appliances to surface offline or alerting hardware, appliances with site-to-site VPN peers down, overly-permissive firewall rules, and SSIDs configured with weak or open authentication.' }
@@ -2374,10 +2406,10 @@ export const plugins: Plugin[] = [
       'Organization Management'
     ],
     skills: [
-      { name: 'devices', description: 'Use this skill when working with N-central device records — listing with saved device filters (filterId), asset and warranty lookups, lifecycle reads and updates, and service-monitor status triage on a single device.' },
-      { name: 'monitoring-tasks', description: 'Use this skill when working with N-central monitoring and automation — active-issue triage per customer or site, job statuses, the scheduled task → status → per-device details drill-down, and the safety rules for direct-support task execution.' },
-      { name: 'organizations', description: 'Use this skill when working with N-central org units — the service organization → customer → site hierarchy, the org-unit vs customer distinction, agent registration tokens (credential-sensitive), and custom properties at both org and device level.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the N-central MCP tools — User-API Token (JWT) authentication through Conduit, 1-based pagination with the totalItems/totalPages envelope, rate-limit behavior, preview-endpoint caveats, and on-prem server specifics.' }
+      { name: 'devices', description: 'N-central device records: listing with saved device filters (filterId), asset and warranty lookups, lifecycle reads and updates, and service-monitor status triage on a single device.' },
+      { name: 'monitoring-tasks', description: 'N-central monitoring and automation: active-issue triage per customer or site, job statuses, the scheduled task -> status -> per-device details drill-down, and the safety rules for direct-support task execution.' },
+      { name: 'organizations', description: 'N-central org units: the service organization -> customer -> site hierarchy, the org-unit vs customer distinction, agent registration tokens (credential-sensitive), and custom properties at both org and device level.' },
+      { name: 'api-patterns', description: 'N-central MCP fundamentals: User-API Token (JWT) authentication through Conduit, 1-based pagination with the totalItems/totalPages envelope, rate-limit behavior, preview-endpoint caveats, and on-prem server specifics.' }
     ],
     agents: [
       { name: 'device-auditor', description: 'Use this agent when the user wants a device audit across N-central customers - inventory sweeps, missing asset data, expired or expiring warranties, untracked lifecycle records, or failed service monitors.' },
@@ -2410,9 +2442,9 @@ export const plugins: Plugin[] = [
       'Sla Escalation Playbooks'
     ],
     skills: [
-      { name: 'board-hygiene', description: 'Use this skill for recurring ticket-board maintenance across whatever PSA is connected: detecting stale tickets (no activity in N days), finding and linking duplicate or related tickets, catching status-transition problems (tickets stuck in Waiting-on-Client past a threshold), and checking queue balance across technicians.' },
-      { name: 'dispatch-prioritization', description: 'Use this skill when scoring and assigning an unassigned ticket queue across whatever PSA (and, where useful, RMM) is connected through the gateway.' },
-      { name: 'sla-escalation-playbooks', description: 'Use this skill when triaging SLA pressure on whatever PSA is connected through the gateway.' }
+      { name: 'board-hygiene', description: 'Board-wide ticket maintenance, distinct from working any single ticket: stale-ticket detection with per-status staleness thresholds, the Waiting-on-Client rot case and its three valid resolutions, duplicate/related-ticket detection signals and safe linking, and technician queue-balance assessment weighted by more than raw ticket count.' },
+      { name: 'dispatch-prioritization', description: 'Priority scoring and assignment for an unassigned PSA ticket queue: the scoring factors (SLA proximity, client tier, ticket age, technician load, skill/category match), how to combine them into an explainable ranked order rather than a black-box formula, and the tool-discovery pattern for finding which PSA and RMM connectors are actually live before calling any vendor\'s tools.' },
+      { name: 'sla-escalation-playbooks', description: 'A cross-PSA escalation framework for SLA pressure: how each PSA family (Autotask, HaloPSA, ConnectWise Manage, Syncro, Kaseya BMS) models SLA/priority state and where breach risk lives in each, a normalized breach-risk state model (healthy, at risk, breached-response, breached-resolution) with the default escalation action per state, how notification audience shifts by contract tier, and the evidence to gather before paging anyone.' }
     ],
     agents: [
       { name: 'board-health-auditor', description: 'Use this agent when a service manager, dispatcher, or team lead needs a full cross-board health read on the connected PSA — unassigned aging, SLA-at-risk count, technician load balance, stale/stuck tickets, and duplicate clusters, rolled into a single scored report.' },
@@ -2446,9 +2478,9 @@ export const plugins: Plugin[] = [
       'Containment Playbooks'
     ],
     skills: [
-      { name: 'alert-severity-normalization', description: 'Use this skill when triaging security alerts, incidents, or findings that come from more than one connected EDR/MDR/SIEM vendor and a single, comparable severity ranking is needed.' },
-      { name: 'bec-response', description: 'Use this skill when Business Email Compromise (BEC) is suspected or confirmed for a client.' },
-      { name: 'containment-playbooks', description: 'Use this skill when a security incident has been confirmed or is highly suspected and immediate first-response containment steps are needed.' }
+      { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
+      { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
+      { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' }
     ],
     agents: [
       { name: 'incident-timeline-builder', description: 'Use this agent when a security incident needs to be reconstructed into a single chronological timeline suitable for a client-facing incident report, pulling every relevant event across every connected security, PSA, and documentation tool for the client and time window in question.' },
@@ -2482,9 +2514,9 @@ export const plugins: Plugin[] = [
       'Margin Analysis'
     ],
     skills: [
-      { name: 'agreement-reconciliation', description: 'Use this skill when reconciling a PSA contract or agreement against what an MSP is actually invoicing in its accounting system, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
-      { name: 'license-true-up', description: 'Use this skill when matching cloud-marketplace subscription seat counts (Pax8, Sherweb) against what is actually being billed to the client and what is actually deployed/active in the tenant (M365/CIPP user counts where available).' },
-      { name: 'margin-analysis', description: 'Use this skill when computing per-client or per-service-line margin for an MSP: revenue from PSA billing/accounting invoices minus cost from Pax8/Sherweb wholesale pricing plus estimated labor from PSA time entries where available.' }
+      { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
+      { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
+      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' }
     ],
     agents: [
       { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },
@@ -2518,9 +2550,9 @@ export const plugins: Plugin[] = [
       'Standards Drift'
     ],
     skills: [
-      { name: 'evidence-mapping', description: 'Use this skill when a compliance control (CIS, SOC 2, HIPAA, or a cyber-insurance questionnaire line item) needs to be traced to concrete, retrievable evidence from connected MSP tooling rather than answered from memory or assumption.' },
-      { name: 'insurance-questionnaires', description: 'Use this skill when drafting answers to a cyber-insurance renewal or new-business questionnaire for an MSP client.' },
-      { name: 'standards-drift', description: 'Use this skill when a client\'s live configuration needs to be compared against a previously established baseline or standard to detect drift.' }
+      { name: 'evidence-mapping', description: 'Tracing a compliance control (CIS, SOC 2, HIPAA, or a cyber-insurance questionnaire line item) to concrete, retrievable tool evidence: which vendor family can observe what — CIPP for live M365/Entra configuration, Liongard for point-in-time infrastructure state, IT Glue/Hudu for documentation — a representative control-to-tool-call map, and the evidentiary weights that separate Configured from Documented, Contradicted, and Unable to Verify.' },
+      { name: 'insurance-questionnaires', description: 'Drafting tool-verified answers to cyber-insurance renewal, new-business, and underwriter security questionnaires: the standard recurring question set (MFA everywhere including privileged accounts, EDR coverage ratio, tested and immutable backups, documented and tested IR plan, security awareness training), which connected tools actually answer each one, and the evidence-backed / documented-only / unable-to-verify labeling discipline that keeps an answer defensible during a claim investigation.' },
+      { name: 'standards-drift', description: 'Detecting configuration drift against an established baseline: CIPP standards checks and Best Practice Analyser results, Liongard change detections and inspection timelines, the three conditions that make a diff real drift rather than noise, the signals that separate intentional or authorized change from unauthorized weakening (ticket correlation, reversion pattern, direction of change), and the priority order for ranking several drift findings at once.' }
     ],
     agents: [
       { name: 'control-drift-reporter', description: 'Use this agent when an MSP needs to know what has changed in a client\'s compliance posture since the last known-good baseline, prioritized by how much each change actually matters.' },
@@ -2554,9 +2586,9 @@ export const plugins: Plugin[] = [
       'Warm Lead Routing'
     ],
     skills: [
-      { name: 'pipeline-health', description: 'Use this skill when assessing CRM pipeline health across whatever CRM is actually connected through the gateway (typically HubSpot for this pack\'s target vendor set, but discovered rather than assumed).' },
-      { name: 'quote-to-close-tracking', description: 'Use this skill when tracing a deal\'s progress across the quote-to-close chain — a Pax8/Sherweb/Kaseya Quote Manager quote or a SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won deal in the CRM.' },
-      { name: 'warm-lead-routing', description: 'Use this skill when scoring lead warmth from intent and engagement signals — Warmly website-visitor identification, HubSpot form fills and email engagement, and Calendly booking activity — and proposing which rep a warm lead should be routed to.' }
+      { name: 'pipeline-health', description: 'CRM pipeline health assessment against whatever CRM is discovered through the gateway: stage-velocity norms derived from closed-won deals, activity-based stalled-deal detection, raw and quality-adjusted pipeline coverage against a revenue target, and the CRM-less degradation rule (report nothing rather than fabricate figures).' },
+      { name: 'quote-to-close-tracking', description: 'The quote-to-close handoff chain — a Pax8/Sherweb/Kaseya Quote Manager quote or SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won CRM deal — and the four distinct stall points along it (quote built with no proposal document, proposal sent but not opened, viewed but not signed, signed but the CRM deal never marked closed-won), including cross-system record matching and what to report when only part of the chain is connected.' },
+      { name: 'warm-lead-routing', description: 'Lead-warmth scoring from intent and engagement signals — Warmly website-visitor identification, CRM form fills and email engagement, and Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool tiering, plus routing recommendations based on owner continuity, CRM routing rules, or rep capacity, and the degradation path to CRM-only signals when intent tools aren\'t connected.' }
     ],
     agents: [
       { name: 'pipeline-auditor', description: 'Use this agent when a sales manager, deal desk owner, or MSP leadership needs a full cross-vendor sweep of the open sales pipeline — stalled and at-risk deals ranked by value and staleness, with each stall diagnosed against the full quote-to-close chain rather than CRM activity alone.' },
@@ -2590,9 +2622,9 @@ export const plugins: Plugin[] = [
       'Oncall Handoff'
     ],
     skills: [
-      { name: 'error-budget-tracking', description: 'Use this skill when computing or reporting error-budget status across whatever observability tools are connected through the gateway.' },
-      { name: 'incident-postmortem', description: 'Use this skill when assembling a blameless postmortem from an incident across whatever incident-management and observability tools are connected through the gateway.' },
-      { name: 'oncall-handoff', description: 'Use this skill when assembling a proper on-call handoff across whatever incident-management tool (Rootly, PagerDuty, BetterStack) is connected through the gateway.' }
+      { name: 'error-budget-tracking', description: 'Error-budget and burn-rate assessment from whatever observability tools (Sentry, Datadog, Grafana, BetterStack) are connected: SLI, SLO, error budget, and burn rate applied practically, how to compute burn rate from available SLI data and the thresholds that make it actionable, what separates a budget-threatening trend from noise, and the fallback to raw trend reporting against a trailing baseline when no formal SLO is defined.' },
+      { name: 'incident-postmortem', description: 'Assembling a blameless postmortem grounded in systems of record: timeline reconstruction merging the incident tool\'s event log with correlated observability anomalies (Sentry error spikes, Datadog/Grafana metric anomalies, including precursor signal that predates formal detection) and deploy history from connected platform connectors, all normalized to one stated timezone; the root-cause versus contributing-factor distinction and the test for telling them apart; and how to label a root cause that is still only a hypothesis.' },
+      { name: 'oncall-handoff', description: 'Assembling an on-call shift handoff from whatever incident-management tool (Rootly, PagerDuty, BetterStack) is connected, plus corroborating observability signal where available: the four handoff categories in priority order (currently paging, escalated without an owner, last-shift history, known-flaky watch list), why an empty open-incidents list is not an empty handoff, and the bar for calling an alert known-flaky rather than simply resolved.' }
     ],
     agents: [
       { name: 'oncall-handoff-builder', description: 'Use this agent when an on-call engineer needs a structured shift handoff brief — what\'s currently paging or unresolved, what happened during the last shift, known-flaky alerts to watch, and anything escalated but not yet actioned — assembled from whatever incident-management tool is connected.' },
@@ -2626,9 +2658,9 @@ export const plugins: Plugin[] = [
       'Network Health Sweep'
     ],
     skills: [
-      { name: 'cloud-capacity-planning', description: 'Use this skill when right-sizing or forecasting capacity for cloud resources across whatever cloud platforms (Azure, DigitalOcean) are connected through the gateway.' },
-      { name: 'cloud-cost-management', description: 'Use this skill when tracking and flagging cloud spend anomalies across whatever cloud platforms (Azure, DigitalOcean) are connected through the gateway.' },
-      { name: 'network-health-sweep', description: 'Use this skill when checking device and network health across whatever network-monitoring tools (Auvik, Meraki, Domotz) are connected through the gateway.' }
+      { name: 'cloud-capacity-planning', description: 'Right-sizing and capacity forecasting for cloud resources on whatever platforms (Azure, DigitalOcean) are connected: the per-platform over-provisioned and under-provisioned signals, growth-trend-based forecasting toward a projected exhaustion window, and the discipline that separates a genuine capacity risk from normal variance — require a trend not a spike, distinguish burst-tolerant from sustained-critical resources, and always state the observation window behind a forecast.' },
+      { name: 'cloud-cost-management', description: 'Cloud spend anomaly detection and reclaimable-spend hunting on whatever platforms (Azure, DigitalOcean) are connected: the signals that make a spend increase an anomaly rather than expected cost, the per-platform orphaned/idle resource catalog (unattached storage, idle load balancers, stopped-but-not-deallocated compute, idle managed databases, orphaned network resources), and how to build a monthly cost trend view — or a clearly labeled inventory-and-list-pricing estimate when a platform exposes no billing data.' },
+      { name: 'network-health-sweep', description: 'A normalized device and network health sweep across whatever network-monitoring tools (Auvik, Meraki, Domotz) are connected: each vendor family\'s data model and native status fields mapped into one Down/Degraded/Unknown/Healthy taxonomy, default interface error and utilization thresholds, topology-change detection, and why an offline Domotz collector renders its devices "unknown" rather than "down".' }
     ],
     agents: [
       { name: 'capacity-forecaster', description: 'Use this agent when an MSP needs to know whether current cloud resource capacity will hold up under growth, or which resources are already over- or under-provisioned.' },
@@ -2662,9 +2694,9 @@ export const plugins: Plugin[] = [
       'Training Completion Tracking'
     ],
     skills: [
-      { name: 'phishing-simulation-analysis', description: 'Use this skill when analyzing phishing-simulation campaign results: click-rate trends over time, repeat-clicker identification, and — where a technical threat-response tool is also connected — correlating simulated-phishing performance with real-world phishing incidents as a compounding risk signal.' },
-      { name: 'risk-scoring', description: 'Use this skill when building a per-user or per-org "human risk score" from training completion, phishing-simulation performance, and optionally real-world click-through data from connected email-security tools.' },
-      { name: 'training-completion-tracking', description: 'Use this skill when assessing security-awareness training completion for a single client or across the whole portfolio.' }
+      { name: 'phishing-simulation-analysis', description: 'Phishing-simulation campaign analysis: click-rate trend direction across campaigns, repeat-clicker identification with remedial-training cross-reference, and optional enrichment that correlates simulated failures with real-world phishing incidents from a connected email-security tool as a compounding risk signal.' },
+      { name: 'risk-scoring', description: 'Explainable per-user and per-org human risk scoring from training-completion status, phishing-simulation failure history, and optional real-world click/attack-targeting signal: the weighted factor table, three-tier bucketing, per-org rollup as a distribution rather than a blended number, and graceful degradation when only some inputs are connected.' },
+      { name: 'training-completion-tracking', description: 'Security-awareness training completion across whatever training/awareness platform is connected: assignment-overdue versus cadence-overdue detection, per-campaign and per-org completion-rate calculation, ranking clients that have fallen behind a contracted cadence, and the unmeasured-versus-0% distinction.' }
     ],
     agents: [
       { name: 'human-risk-scorer', description: 'Use this agent when the MSP needs a per-user or per-org "human risk score" built from training completion and phishing-simulation performance, to rank the riskiest users or clients on the human/culture layer of security.' },
@@ -2698,9 +2730,9 @@ export const plugins: Plugin[] = [
       'Retention Rpo Compliance'
     ],
     skills: [
-      { name: 'backup-job-health', description: 'Use this skill to assess portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: job success/failure rate, missed- backup detection, storage-consumption trending, and how to normalize very different vendor job models (image-based appliance backup vs.' },
-      { name: 'restore-test-verification', description: 'Use this skill to track and verify whether backups are recoverable rather than merely present: the difference between "a backup exists" and "a backup is recoverable," how to use screenshot/boot-verification features and spot-check restore drills as evidence, what counts as an adequate testing cadence for different data-criticality tiers, and how to flag backups that have never been restore-tested.' },
-      { name: 'retention-rpo-compliance', description: 'Use this skill to check actual retention configuration and backup cadence against contracted/required retention policy and RPO (recovery point objective) targets — detecting gaps where a client\'s contract specifies a retention window the appliance isn\'t actually configured for, or an RPO target the current backup frequency can\'t actually meet.' }
+      { name: 'backup-job-health', description: 'Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: the two structurally different job models (image-based appliance backup vs.' },
+      { name: 'restore-test-verification', description: 'Whether a backup is actually recoverable rather than merely present: the ranked hierarchy of restore evidence (actual restore performed, full boot/virtualization verification, screenshot verification, spot-check restore drill, no evidence at all), adequate test cadence per data-criticality tier, and why a never-tested backup is the highest-priority finding — outranking even an actively failing job.' },
+      { name: 'retention-rpo-compliance', description: 'Comparing configured backup retention and cadence against contracted retention windows and RPO (recovery point objective) targets: the two distinct retention gap types (configured-shorter-than-contracted vs. storage-forced truncation), why achievable RPO must be derived from actual job success history rather than the nominal schedule, where the contracted side of the comparison actually lives, and why "no documented requirement" is its own finding rather than an automatic pass.' }
     ],
     agents: [
       { name: 'backup-health-auditor', description: 'Use this agent when an MSP needs a portfolio-wide read on whether backup jobs are actually succeeding across whatever backup/BCDR tools are connected — missed backups, active failure streaks, and storage risk, ranked by severity.' },
@@ -2734,9 +2766,9 @@ export const plugins: Plugin[] = [
       'Warranty Tracking'
     ],
     skills: [
-      { name: 'eol-eos-flagging', description: 'Use this skill when identifying devices, operating system versions, or firmware approaching or past end-of-life (EOL) or end-of-support (EOS), combining device inventory data (make/model/OS version) pulled from whatever RMM platforms are connected with general knowledge of common EOL/EOS dates for widely-deployed OS and hardware, and prioritizing the resulting risk list by device criticality.' },
-      { name: 'refresh-cycle-planning', description: 'Use this skill when building a forward-looking hardware refresh calendar by combining warranty expiration, EOL/EOS timing, and device age across whatever RMM platforms and documentation tools are connected through the gateway.' },
-      { name: 'warranty-tracking', description: 'Use this skill when pulling and normalizing warranty status across whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected through the gateway.' }
+      { name: 'eol-eos-flagging', description: 'End-of-life versus end-of-support risk for devices, OS versions, and firmware: combining RMM inventory (make, model, OS version, firmware) with general lifecycle knowledge, the mandatory verify-against-vendor-lifecycle caveat, what qualifies as a finding versus merely "old", and criticality-first prioritization of the resulting risk list.' },
+      { name: 'refresh-cycle-planning', description: 'Forward-looking hardware refresh planning: combining warranty expiration, EOL/EOS timing, and device age from whatever RMM and documentation platforms are connected into replace-now / plan-this-year / monitor tiers, laying those tiers onto a dated calendar, surfacing replacement clusters, and keeping an explicit insufficient-data bucket.' },
+      { name: 'warranty-tracking', description: 'Endpoint hardware warranty status across whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected: the reliability spread between OEM-resolved and hand-entered warranty fields, serial/asset-tag cross-referencing when RMM data is missing or stale, and the expired / expiring-soon / covered / unknown bucketing.' }
     ],
     agents: [
       { name: 'eol-risk-assessor', description: 'Use this agent when someone needs to know which devices, OS versions, or firmware are approaching or past end-of-life/end-of-support, prioritized by how much it actually matters if left unaddressed.' },
@@ -2770,10 +2802,10 @@ export const plugins: Plugin[] = [
       'Time Billing'
     ],
     skills: [
-      { name: 'contacts', description: 'Use this skill when creating, updating, searching, or reasoning about Clio contacts — the people and companies connected to matters.' },
-      { name: 'matters', description: 'Use this skill when creating, updating, searching, or reasoning about Clio matters — the case/client-file object that almost everything else in Clio hangs off of.' },
-      { name: 'time-billing', description: 'Use this skill when logging time or expense activities against a Clio matter, or when reading (not writing) bills.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the Clio Manage MCP tools — OAuth 2.0 Authorization Code connection via Conduit, the matters-as-hub data model, decision-tree tool navigation, pagination, and the deliberate v1 scope limits (no delete anywhere, documents metadata-only, communications/ calendar/bills read-only).' }
+      { name: 'contacts', description: 'Clio contacts -- the people and companies connected to matters: person vs. company contact types, and how a contact relates to the matters they are party to (client, opposing party, witness, and other roles).' },
+      { name: 'matters', description: 'Clio matters -- the case/client-file object that almost everything else in Clio hangs off of: the matter status lifecycle, linking a matter to a client contact, practice areas, custom fields, and matter numbering.' },
+      { name: 'time-billing', description: 'Clio time and expense activities logged against a matter: the activities domain\'s create-only lifecycle, the billing-read / time-entry-write split, and why billing mutations are out of scope for v1.' },
+      { name: 'api-patterns', description: 'Clio Manage MCP fundamentals: OAuth 2.0 Authorization Code connection via Conduit, region selection, the matters-as-hub data model, decision-tree tool navigation, pagination, and the deliberate v1 scope limits (no delete anywhere, documents metadata-only, communications/calendar/bills read-only).' }
     ],
     agents: [],
     commands: [
@@ -2806,12 +2838,12 @@ export const plugins: Plugin[] = [
       'Quoter'
     ],
     skills: [
-      { name: 'backup-radar', description: 'Use this skill when working with ScalePad Backup Radar — the read-only backup monitoring surface: per-client backup health records and backup device inventory, in regions us and eu.' },
-      { name: 'controlmap', description: 'Use this skill when working with ScalePad ControlMap — per-client compliance management: risk registers, control libraries, evidence collection, policies and procedures, framework objectives, assessments, and remediation action items across regions us, eu, ca, and au.' },
-      { name: 'core', description: 'Use this skill when working with the ScalePad Core API — the read-only, US-only unified data layer over clients, contacts, members, sites, opportunities, hardware and SaaS assets, the product catalog, service contracts, tickets, and integration configurations.' },
-      { name: 'lifecycle-manager', description: 'Use this skill when working with ScalePad Lifecycle Manager — the engagement and roadmap workflow product: initiatives, goals, meetings, action items, assessments, deliverables, budget forecasting, contracts, notes, hardware lifecycle records, and warranty pricing.' },
-      { name: 'quoter', description: 'Use this skill when working with Quoter through ScalePad — building and publishing quotes, managing the catalog (items, item groups, tiers, options, manufacturers), quote contacts, suppliers and datafeeds, and the OAuth helpers for the standalone api.quoter.com path.' },
-      { name: 'api-patterns', description: 'Use this skill when working with the ScalePad MCP tools — API-key authentication via the `X-ScalePad-Api-Key` header, tool discovery across the five product domains, cursor pagination, the 50-requests-per-5-seconds rate limit, and 402 subscription errors.' }
+      { name: 'backup-radar', description: 'ScalePad Backup Radar, the read-only backup monitoring surface: per-client backup health records and backup device inventory, in regions us and eu.' },
+      { name: 'controlmap', description: 'ScalePad ControlMap per-client compliance management: risk registers, control libraries, evidence collection, policies and procedures, framework objectives, assessments, and remediation action items across regions us, eu, ca, and au.' },
+      { name: 'core', description: 'The ScalePad Core API — the read-only, US-only unified data layer over clients, contacts, members, sites, opportunities, hardware and SaaS assets, the product catalog, service contracts, tickets, and integration configurations.' },
+      { name: 'lifecycle-manager', description: 'ScalePad Lifecycle Manager, the engagement and roadmap workflow product: initiatives, goals, meetings, action items, assessments, deliverables, budget forecasting, contracts, notes, hardware lifecycle records, and warranty pricing.' },
+      { name: 'quoter', description: 'Quoter through ScalePad: building and publishing quotes, managing the catalog (items, item groups, tiers, options, manufacturers), quote contacts, suppliers and datafeeds, and the OAuth helpers for the standalone api.quoter.com path.' },
+      { name: 'api-patterns', description: 'ScalePad MCP fundamentals: API-key authentication via the `X-ScalePad-Api-Key` header, tool discovery across the five product domains, cursor pagination, the 50-requests-per-5-seconds rate limit, and 402 subscription errors.' }
     ],
     agents: [
       { name: 'compliance-auditor', description: 'Use this agent when auditing compliance posture in ControlMap — reviewing risks, control coverage, evidence freshness, assessments, or driving remediation action items across client tenants.' },
