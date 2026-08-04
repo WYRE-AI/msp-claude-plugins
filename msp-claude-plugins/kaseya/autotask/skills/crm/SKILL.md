@@ -16,6 +16,16 @@ when_to_use: >-
 
 Autotask CRM manages the core entities that define your client relationships: companies (accounts), contacts, and sites. Proper CRM data is foundational - tickets, contracts, projects, and billing all depend on accurate company and contact information.
 
+## Anti-triggers
+
+- **The same client as a documentation record** — use
+  `it-glue-organizations`, and `it-glue-contacts` for the people.
+- **The client's grouping in monitoring or SOC tooling** — Datto RMM
+  calls it a site (`datto-rmm-sites`), RocketCyber calls it an account
+  (`rocketcyber-accounts`). Neither shares IDs with an Autotask company.
+- **Kaseya BMS accounts and contacts** — a separate PSA with its own
+  client records; use `kaseya-bms-api-patterns`.
+
 ## Key Concepts
 
 ### Company (Account)

@@ -17,6 +17,15 @@ when_to_use: >-
 
 Beyond the core ticket record, Autotask tickets accumulate notes (internal/external communications), file attachments, and charges (labor and expenses billed directly to a ticket). This skill covers retrieval and management of these secondary ticket entities.
 
+## Anti-triggers
+
+- **The ticket record itself — status, priority, SLA, assignment** —
+  use `autotask-tickets`.
+- **Hours worked rather than a flat charge** — time entries and ticket
+  charges are separate billing paths; use `autotask-time-entries`.
+- **Reimbursing a technician's out-of-pocket cost** — that is an
+  expense item, not a ticket charge; use `autotask-expenses`.
+
 ## API Patterns
 
 ### Ticket Notes

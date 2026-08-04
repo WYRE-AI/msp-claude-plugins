@@ -16,6 +16,17 @@ when_to_use: >-
 
 Devices are the core managed entities in Datto RMM. Each device represents an endpoint with the Datto agent installed - workstations, servers, ESXi hosts, or network devices. This skill covers device identification, status monitoring, user-defined fields, and common device operations.
 
+## Anti-triggers
+
+- **The billable or contracted record for the same machine** — use
+  `autotask-configuration-items`.
+- **The documentation record for the same machine** — use
+  `it-glue-configurations`.
+- **Hardware specs or installed software** — those come from the
+  periodic audit, not the device record; use `datto-rmm-audit`.
+- **A security sensor rather than the RMM agent** — an endpoint
+  commonly runs both; use `rocketcyber-agents`.
+
 ## Key Concepts
 
 ### Device Identifiers

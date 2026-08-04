@@ -28,6 +28,16 @@ Reference: <https://continuity.datto.com/help/Content/kb/DBMA/KB400000010980.htm
 
 This is a **separate API from Datto RMM**. Different keys, different signing scheme, different endpoint surface.
 
+## Anti-triggers
+
+- **Datto RMM** — a separate product and API: different keys, OAuth
+  rather than HMAC signing, different endpoint surface; use
+  `datto-rmm-api-patterns`.
+- **Datto's Microsoft 365 / Google Workspace backup** — that is SaaS
+  Protection, not BCDR; use `datto-saas-protection-api-patterns`.
+- **Unitrends appliances** — Kaseya's other backup appliance line, with
+  its own session-token API; use `unitrends-api-patterns`.
+
 ## Authentication
 
 Datto BCDR uses **HMAC-SHA256 request signing** with a public + private key pair, not bearer tokens.

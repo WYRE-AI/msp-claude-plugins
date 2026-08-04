@@ -18,6 +18,16 @@ when_to_use: >-
 
 Audit data in Datto RMM provides detailed hardware and software inventory for managed devices. The agent periodically collects this information and reports it to the platform. This skill covers accessing audit data, understanding its structure, and common audit workflows.
 
+## Anti-triggers
+
+- **Software observed running rather than software installed** —
+  RocketCyber reports application telemetry from its own sensor; use
+  `rocketcyber-apps`.
+- **Whether the device is reachable right now** — audit data is a
+  periodic snapshot and goes stale; use `datto-rmm-devices`.
+- **Inventory as documentation of record** — use
+  `it-glue-configurations`.
+
 ## Key Concepts
 
 ### Audit Categories

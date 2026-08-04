@@ -17,6 +17,19 @@ when_to_use: >-
 
 Autotask billing tools give MSPs visibility into billable items, approval workflows, and invoices generated from time entries, charges, and contracts. Finance teams use these tools to review, approve, and export billing data.
 
+## Anti-triggers
+
+Billing items are derived records. When the question is about what
+produced one:
+
+- **The hours behind it** — use `autotask-time-entries`.
+- **A charge posted straight onto a ticket** — ticket charges are a
+  separate entity with their own approval path; use
+  `autotask-ticket-notes-attachments`.
+- **A technician's out-of-pocket cost** — use `autotask-expenses`.
+- **Why the client is billed a recurring amount at all** — the
+  agreement drives it; use `autotask-contracts`.
+
 ## API Patterns
 
 ### Get a Billing Item

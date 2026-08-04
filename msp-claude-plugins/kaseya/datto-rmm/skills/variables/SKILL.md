@@ -17,6 +17,15 @@ when_to_use: >-
 
 Variables in Datto RMM store key-value configuration data at account or site level. They're used to customize component scripts, store configuration values, and maintain environment-specific settings. This skill covers variable management, scoping, and usage patterns.
 
+## Anti-triggers
+
+- **Values passed into a single job run** — those are job variables
+  supplied at execution time, not stored variables; use
+  `datto-rmm-jobs`.
+- **User-defined fields on a device or asset** — UDFs are a different
+  store again; use `datto-rmm-devices` or
+  `autotask-configuration-items`.
+
 ## Key Concepts
 
 ### Variable Scopes

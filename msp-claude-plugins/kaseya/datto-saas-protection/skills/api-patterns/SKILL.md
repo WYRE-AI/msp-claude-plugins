@@ -31,6 +31,15 @@ https://api.eu.datto.com/api/v1         (EU)
 
 The MCP server takes a `region` credential field (`us` or `eu`); never hard-code.
 
+## Anti-triggers
+
+- **Spanning** — Kaseya's other cloud-to-cloud backup product covers
+  the same Microsoft 365 and Google Workspace workloads (plus
+  Salesforce) under separate credentials and a separate API; use
+  `spanning-api-patterns`.
+- **Datto's appliance backup** — SIRIS/Alto image backup is BCDR, a
+  different product and API; use `datto-bcdr-api-patterns`.
+
 ## Authentication
 
 API key issued from the SaaS Protection partner portal:

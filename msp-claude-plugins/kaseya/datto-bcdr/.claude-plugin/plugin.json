@@ -1,6 +1,6 @@
 {
   "name": "datto-bcdr",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Claude plugins for Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, virtualization, recovery point management",
   "author": {
     "name": "MSP Claude Plugins Community"

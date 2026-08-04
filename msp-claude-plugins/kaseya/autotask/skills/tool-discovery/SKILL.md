@@ -20,6 +20,15 @@ The Autotask MCP server can run in **lazy loading mode**, where only 4 meta-tool
 
 If you can see Autotask tools listed but can't call them, or if only a few Autotask tools appear — use this progressive discovery pattern.
 
+## Anti-triggers
+
+- **Authentication failures, zone errors, or malformed queries** —
+  these also present as "Autotask isn't working", but they are API
+  problems, not discovery problems; use `autotask-api-patterns`.
+- **A tool that runs and returns an empty result** — usually a filter
+  or a picklist ID that does not exist in the tenant; use
+  `autotask-api-patterns` or `autotask-picklists`.
+
 ## Available Meta-Tools
 
 When lazy loading is active, these 4 tools are always available:

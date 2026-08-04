@@ -23,6 +23,14 @@ Understanding the account hierarchy is essential for:
 - **Reporting** at both provider and customer levels
 - **Agent deployment** to the correct customer account
 
+## Anti-triggers
+
+- **The client as a billing entity** — use `autotask-crm`; as a
+  documentation entity, `it-glue-organizations`; as an RMM grouping,
+  `datto-rmm-sites`. RocketCyber account IDs are shared with none of
+  them.
+- **The endpoints inside an account** — use `rocketcyber-agents`.
+
 ## Key Concepts
 
 ### Account Hierarchy

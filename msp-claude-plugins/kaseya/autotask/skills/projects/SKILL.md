@@ -16,6 +16,15 @@ when_to_use: >-
 
 Autotask Projects extend beyond simple ticketing to handle structured work with defined phases, tasks, dependencies, and resource assignments. Projects are used for implementations, migrations, onboarding, and any work requiring planning and tracking.
 
+## Anti-triggers
+
+- **Reactive service desk work** — a project Task and a Ticket are
+  different entities with different tools (`autotask_create_task` vs
+  `autotask_create_ticket`); use `autotask-tickets`.
+- **Scheduling a technician's visit** — booked onsite blocks are
+  service calls; use `autotask-service-calls`.
+- **Hours logged against project tasks** — use `autotask-time-entries`.
+
 ## Key Concepts
 
 ### Project Structure

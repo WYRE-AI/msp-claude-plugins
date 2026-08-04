@@ -17,6 +17,15 @@ when_to_use: >-
 
 Service Calls in Autotask are used to schedule and plan work against tickets. They represent a planned visit or block of work — linking one or more tickets to a time slot and assigning technicians. This skill covers the full lifecycle: creating service calls, linking tickets, assigning resources, and completing/closing them.
 
+## Anti-triggers
+
+- **The underlying request being worked** — a service call schedules
+  tickets, it does not replace them; use `autotask-tickets`.
+- **Hours actually worked** — a service call is a plan; billable time
+  is logged separately with `autotask-time-entries`.
+- **Multi-phase planned work with dependencies** — use
+  `autotask-projects`.
+
 ## Service Call Status Codes
 
 | Status ID | Name | Description |

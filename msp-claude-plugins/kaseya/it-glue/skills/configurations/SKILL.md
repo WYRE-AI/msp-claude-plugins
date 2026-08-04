@@ -18,6 +18,17 @@ when_to_use: >-
 
 Configurations in IT Glue represent trackable assets such as servers, workstations, network devices, printers, and more. They serve as the central repository for asset documentation, enabling technicians to quickly find device information, network details, warranty status, and related documentation.
 
+## Anti-triggers
+
+- **Custom structured documentation** — anything with a per-tenant
+  field schema is a flexible asset, not a configuration; use
+  `it-glue-flexible-assets`.
+- **The asset as a billable or contracted item** — use
+  `autotask-configuration-items`.
+- **Live state — reachability, patch level, installed software** — IT
+  Glue stores what was documented, not what is true now; use
+  `datto-rmm-devices` and `datto-rmm-audit`.
+
 ## Key Concepts
 
 ### Configuration Types

@@ -19,6 +19,19 @@ when_to_use: >-
 
 Autotask tickets are the core unit of service delivery in the PSA. Every client request, incident, problem, and change flows through the ticketing system. This skill covers comprehensive ticket management including business logic, SLA calculations, escalation rules, and performance metrics.
 
+## Anti-triggers
+
+- **The status, priority, and queue IDs configured in your tenant** —
+  the tables below are Autotask defaults and are routinely customised;
+  fetch the real values with `autotask-picklists`.
+- **Note bodies, attachments, or charges hanging off a ticket** — use
+  `autotask-ticket-notes-attachments`.
+- **Structured multi-phase work** — project Tasks are a separate entity
+  from Tickets; use `autotask-projects`.
+- **Tickets in Kaseya's other PSAs** — BMS
+  (`kaseya-bms-api-patterns`) and VSA (`kaseya-vsa-api-patterns`) each
+  have their own ticket objects that do not sync with Autotask.
+
 ## Ticket Status Codes
 
 Based on the Autotask API, these are the standard ticket status values:

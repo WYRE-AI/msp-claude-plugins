@@ -17,6 +17,16 @@ when_to_use: >-
 
 Expense reports track out-of-pocket costs incurred by technicians and staff during service delivery. Unlike time entries (which track labor hours), expense reports capture material costs like mileage, meals, equipment purchases, and travel expenses. Each report contains one or more expense items, and follows an approval workflow before reimbursement or client billing.
 
+## Anti-triggers
+
+- **A cost charged to the customer on a ticket** — that is a ticket
+  charge, a different entity on a different approval path; use
+  `autotask-ticket-notes-attachments`.
+- **Labour hours rather than out-of-pocket cost** — use
+  `autotask-time-entries`.
+- **Whether an approved expense reached an invoice** — use
+  `autotask-billing`.
+
 ## Key Concepts
 
 ### Expense Report vs Expense Item

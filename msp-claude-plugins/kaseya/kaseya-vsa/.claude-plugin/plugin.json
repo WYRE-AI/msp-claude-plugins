@@ -1,6 +1,6 @@
 {
   "name": "kaseya-vsa",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Claude plugins for Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control",
   "author": {
     "name": "MSP Claude Plugins Community"

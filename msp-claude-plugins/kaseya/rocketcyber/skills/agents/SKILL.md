@@ -23,6 +23,17 @@ Key agent functions:
 - **Endpoint Visibility** - Provides the SOC with real-time endpoint status
 - **Detection Coverage** - Endpoints without healthy agents have no SOC coverage
 
+## Anti-triggers
+
+- **Claude subagents** — "agent" here is a RocketAgent endpoint sensor,
+  never an AI subagent definition under `agents/*.md`.
+- **What the sensor detected** — this skill covers agent health and
+  deployment; findings are `rocketcyber-incidents` and software
+  telemetry is `rocketcyber-apps`.
+- **The RMM agent on the same endpoint** — a machine usually runs both.
+  The managed-device record is `datto-rmm-devices`, and Kaseya VSA also
+  calls its endpoints "agents" (`kaseya-vsa-api-patterns`).
+
 ## Key Concepts
 
 ### Agent Lifecycle

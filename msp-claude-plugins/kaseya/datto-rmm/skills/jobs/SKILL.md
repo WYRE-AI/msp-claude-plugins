@@ -16,6 +16,15 @@ when_to_use: >-
 
 Jobs in Datto RMM execute component scripts on devices. Quick jobs run immediately; scheduled jobs run at specified times. Each job can accept variables, produces output (stdout/stderr), and has a status lifecycle. This skill covers job execution, monitoring, and results retrieval.
 
+## Anti-triggers
+
+- **Running something on a VSA-managed endpoint** — VSA calls these
+  agent procedures and exposes `kaseya_vsa_run_procedure`; use
+  `kaseya-vsa-api-patterns`.
+- **Stored configuration a script reads** — job variables are supplied
+  per run; account and site variables are a separate persistent store
+  in `datto-rmm-variables`.
+
 ## Key Concepts
 
 ### Job Types

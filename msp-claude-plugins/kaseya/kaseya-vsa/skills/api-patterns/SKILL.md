@@ -23,6 +23,17 @@ Kaseya VSA exposes a REST API at `/api/v1.0/` on every VSA tenant. Modern VSA 10
 
 Reference: <https://help.vsa10.kaseya.com/>
 
+## Anti-triggers
+
+- **Kaseya BMS** — the PSA half of Kaseya One. It is reached with the
+  same SSO identity but a different API, and its tickets are separate
+  objects; use `kaseya-bms-api-patterns`.
+- **Datto RMM** — Kaseya's other RMM, using OAuth against regional
+  platforms rather than VSA's token exchange; use
+  `datto-rmm-api-patterns`.
+- **Running a script on a Datto RMM endpoint** — the equivalent of an
+  agent procedure there is a quick job; use `datto-rmm-jobs`.
+
 ## Authentication
 
 VSA uses a **two-step token exchange** for API key auth:
