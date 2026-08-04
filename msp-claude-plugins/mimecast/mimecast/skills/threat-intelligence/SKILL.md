@@ -17,6 +17,18 @@ when_to_use: >-
 
 Mimecast's Targeted Threat Protection (TTP) is an advanced security layer that inspects URLs and attachments in real time and detects impersonation attempts. When TTP events occur — a user clicking a suspicious URL, a malicious attachment being sandboxed, or an impersonation attempt being identified — Mimecast logs these as TTP events that feed into threat remediation incidents. This skill covers reading TTP logs, reviewing threat remediation incidents, and using audit events to investigate security events.
 
+## Anti-triggers
+
+- **Tracing, holding, or releasing the message that carried the threat**
+  — TTP logs are read-only evidence and carry no disposition controls;
+  use `Mimecast Message Tracking`.
+- **Detection based on how a sender normally behaves** — TTP is
+  reputation, sandbox, and lookalike-domain driven. Behavioural BEC
+  modelling of established relationships is a different product; use
+  `Abnormal Security Threats`.
+- **Mail that is delayed rather than attacked** — use
+  `Mimecast Queue Management`.
+
 ## Key Concepts
 
 ### Targeted Threat Protection (TTP)

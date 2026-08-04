@@ -17,6 +17,19 @@ when_to_use: >-
 
 SpamTitan maintains two key sender policy lists that override the spam filtering engine: the allowlist (trusted senders whose mail is always delivered) and the blocklist (blocked senders whose mail is always rejected or quarantined). Proper list management is essential for MSPs to balance effective spam filtering against business continuity — preventing false positives from disrupting client workflows while blocking persistent unwanted senders.
 
+## Anti-triggers
+
+- **Deciding what to do with a message already sitting in quarantine** —
+  use `SpamTitan Quarantine`.
+- **Blocking a sender in another vendor's engine** — sender lists do not
+  federate. Ironscales keeps its own allowlist behind
+  `IRONSCALES Incidents`, and every other gateway keeps its own too;
+  allowlisting here changes nothing anywhere else.
+- **Mail-flow rules inside the tenant** — these lists live in the
+  SpamTitan gateway, upstream of Exchange Online. Forwarding, inbox
+  rules, and mailbox-level mail flow are `Microsoft 365 Mailboxes` or
+  `cipp-mailboxes`.
+
 ## Key Concepts
 
 ### Allowlist (Trusted Senders)
