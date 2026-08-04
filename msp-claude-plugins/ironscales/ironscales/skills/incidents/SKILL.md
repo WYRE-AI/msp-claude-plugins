@@ -35,6 +35,10 @@ Ironscales combines AI-powered threat detection with crowdsourced employee phish
 - **Resetting the credentials a phish harvested** — remediation here
   removes mail and blocks senders. The identity action happens in the
   tenant; use `cipp-users`.
+- **A phish caught by the other API-based platform on the tenant** —
+  Check Point Harmony Email (Avanan) inspects the same mailboxes and
+  raises its own incident objects with their own IDs; use
+  `checkpoint-avanan-incidents`.
 
 ## Key Concepts
 

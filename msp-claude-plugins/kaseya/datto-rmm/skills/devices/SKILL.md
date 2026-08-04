@@ -26,6 +26,11 @@ Devices are the core managed entities in Datto RMM. Each device represents an en
   periodic audit, not the device record; use `datto-rmm-audit`.
 - **A security sensor rather than the RMM agent** — an endpoint
   commonly runs both; use `rocketcyber-agents`.
+- **The same endpoint under a different RMM** — "device" means the
+  managed endpoint in most of them, so the wording never disambiguates;
+  confirm which agent is enrolled, then use `ncentral-devices`,
+  `ninjaone-rmm-devices`, or `atera-agents` (Atera reserves
+  "device" for agentless monitors).
 
 ## Key Concepts
 

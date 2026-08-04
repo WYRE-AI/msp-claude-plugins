@@ -22,6 +22,10 @@ Standards are CIPP's mechanism for declaring "this is what every tenant we manag
   standards and do not appear in BPA output; use `cipp-security`.
 - **Triaging what an `Alert`-mode standard actually raised** — the
   queue those alerts land in is `cipp-alerts`.
+- **Drift measured across more than the CIPP-managed estate** — the
+  cross-vendor method for comparing tenants to a baseline and deciding
+  what to remediate is `compliance-pack-standards-drift`; this skill
+  is the CIPP standards engine it reads.
 
 ## Tools
 

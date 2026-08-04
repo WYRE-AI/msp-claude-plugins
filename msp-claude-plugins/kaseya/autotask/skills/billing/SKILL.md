@@ -29,6 +29,12 @@ produced one:
 - **A technician's out-of-pocket cost** — use `autotask-expenses`.
 - **Why the client is billed a recurring amount at all** — the
   agreement drives it; use `autotask-contracts`.
+- **Cost the MSP owes rather than revenue it charges** — distributor
+  and CSP invoices run in the opposite direction and never appear in
+  Autotask; use `pax8-invoices` or `sherweb-billing`.
+- **The invoice as the accounting system holds it** — Autotask billing
+  items are the source for an invoice, not the posted ledger entry; use
+  `quickbooks-online-invoices` or `xero-invoices`.
 
 ## API Patterns
 

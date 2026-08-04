@@ -37,6 +37,10 @@ backups themselves:
 - **Assets with no backup at all** — a device missing from Backup Radar
   is invisible here by definition. Start from the asset inventory in
   `scalepad-core` or the RMM and compare inward.
+- **The vendor-agnostic "are backups healthy" method** — how to read
+  failure streaks, dedupe results across backup products, and decide
+  what to escalate is the `backup-pack` (`backup-job-health`); this
+  skill is the Backup Radar calls that feed it.
 
 ## API Tools
 

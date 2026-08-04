@@ -32,6 +32,9 @@ between groups changes which policy set applies to it. Groups can be
 - **Why a specific execution was blocked.** The group only says which
   policy set applied; the individual block and the resulting request are
   `threatlocker-audit-log` and `threatlocker-approval-requests`.
+- **A single machine's own record.** Hostname, agent version, install
+  date, and the maintenance-mode toggle sit on the computer rather than
+  the group; use `threatlocker-computers`.
 
 ## API Tools
 

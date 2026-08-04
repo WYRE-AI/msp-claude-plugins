@@ -24,6 +24,10 @@ Companies in ConnectWise PSA represent your clients, prospects, vendors, and oth
   Automate `ClientID`. Use `connectwise-automate-clients`.
 - **People at the company** — names, email addresses, phone numbers and
   portal logins are contact records; use `connectwise-manage-contacts`.
+- **The same client in a documentation or distributor platform** — a
+  Hudu company is a documentation container and a Pax8 company is the
+  billing account licences are bought against; neither shares an ID
+  with the PSA. Use `hudu-companies` or `pax8-companies`.
 
 ## API Endpoint
 

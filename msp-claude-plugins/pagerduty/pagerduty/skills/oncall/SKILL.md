@@ -34,6 +34,9 @@ PagerDuty's on-call system manages who receives pages for each service. Schedule
 - **Responder workload metrics and off-hours interruption counts** —
   those are `pagerduty-analytics`; this skill covers coverage, not
   measurement.
+- **A rotation kept in BetterStack** — BetterStack ships its own
+  schedules and escalation policies alongside its monitors, and they do
+  not mirror into PagerDuty; use `betterstack-oncall`.
 
 ## MCP Tools
 

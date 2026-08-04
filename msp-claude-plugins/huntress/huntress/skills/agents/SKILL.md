@@ -26,6 +26,10 @@ Huntress agents are lightweight endpoint monitors deployed across MSP client org
   confirmed threats are `huntress-incidents`.
 - **Seat counts for invoicing** — deployed-agent counts and invoiced
   seats diverge; use `huntress-billing`.
+- **An "agent" that is not an endpoint sensor** — a HaloPSA agent is a
+  human technician, and other security and network vendors ship their
+  own sensors under the same word; use `halopsa-agents`,
+  `blumira-agents`, or `domotz-agents`.
 
 ## Key Concepts
 
