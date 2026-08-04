@@ -21,6 +21,17 @@ services. Each item belongs to exactly one **tab** (a section of the quote), and
 belongs to one quote. Items carry both sell and cost figures, so margin is computed per
 line, per tab and per quote.
 
+## Anti-triggers
+
+- **Looking up a product, SKU, list price or manufacturer** — CPQ has no catalog to
+  search (see below). The priced SKU master list is ConnectWise PSA's; use
+  `connectwise-manage-product-catalog` and carry the values onto the line yourself.
+- **Quote-level fields — status, totals, expiry, versions, quote customers, payment
+  terms** — those hang off the quote header, not its lines; use `connectwise-cpq-quotes`.
+- **Line items on another vendor's quote** — Kaseya Quote Manager quote lines and
+  SalesBuildr quote products share this vocabulary exactly; use
+  `kaseya-quote-manager-quotes` or `salesbuildr-quotes`.
+
 ## Key Concepts
 
 ### Items live on tabs, and tabs are read-only

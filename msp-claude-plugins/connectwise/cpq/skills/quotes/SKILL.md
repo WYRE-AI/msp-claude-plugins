@@ -27,6 +27,26 @@ Everything an MSP does after the quote is built — publishing to Order Porter, 
 porting a won quote into the PSA as a sales order — happens in the CPQ web app. The API
 covers building and reading quotes, not delivering them.
 
+## Anti-triggers
+
+CPQ owns one stage of the quote funnel: **composing and pricing the quote document**.
+It does not source the SKUs that go into it, it cannot deliver it, and it is not the
+only tool in the stack that holds something called a quote.
+
+- **The priced SKU master list rather than this deal's document** — catalog items,
+  costs, categories and manufacturers live in ConnectWise PSA; use
+  `connectwise-manage-product-catalog`.
+- **"Send the customer the quote", e-signature, or signed-document status** — CPQ's API
+  has no publish, send or e-sign verb. `isSent` and the `orderPorter*` fields are
+  state you can read (and patch), not actions you can trigger. Delivery and signature
+  tracking are `pandadoc-documents`.
+- **A quote that was built in a different quoting product** — Kaseya Quote Manager and
+  SalesBuildr each keep their own quotes, numbering and APIs; use
+  `kaseya-quote-manager-quotes` or `salesbuildr-quotes`. Route on the product the quote
+  lives in, not on the word "quote".
+- **Adding, repricing or removing a line** — the quote header and its line items are
+  separate tool sets; use `connectwise-cpq-quote-items`.
+
 ## Key Concepts
 
 ### Two ways to address a quote
