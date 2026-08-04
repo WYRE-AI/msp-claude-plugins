@@ -16,6 +16,23 @@ when_to_use: >-
 
 Alerts in Atera are notifications generated when monitored systems exceed defined thresholds or encounter issues. They serve as the early warning system for MSPs, enabling proactive response to client issues before they become critical problems.
 
+## Anti-triggers
+
+- **The work the alert generated** — an alert promoted into a service
+  desk record is a ticket; use `atera-tickets`.
+- **What raises the alert** — thresholds and monitor configuration are
+  `atera-devices` for agentless monitors and `atera-agents` for
+  endpoint health.
+- **Alerts from a different RMM** — `superops-alerts`,
+  `ninjaone-rmm-alerts`, `datto-rmm-alerts`,
+  `connectwise-automate-alerts`, and N-central active issues
+  (`ncentral-monitoring-tasks`) are separate stores with their own
+  severity scales. Nothing here reads them, and the counts are not
+  comparable.
+- **A security detection** — endpoint threat findings come from the EDR,
+  not the RMM; use `huntress-incidents`, `sentinelone-alerts`, or
+  `rocketcyber-incidents`.
+
 ## Alert Severity Levels
 
 | Severity | Description | Typical Response |

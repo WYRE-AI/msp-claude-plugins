@@ -19,6 +19,22 @@ when_to_use: >-
 
 SuperOps.ai RMM provides comprehensive asset management capabilities. Assets represent managed endpoints (workstations, servers, network devices) with rich telemetry including hardware specs, software inventory, patch status, and activity history. This skill covers querying, managing, and automating actions on assets.
 
+## Anti-triggers
+
+- **Running or scheduling a script on an asset** — asset records tell
+  you whether a target is online and what is installed; execution,
+  batching, and exit codes are `superops-runbooks`.
+- **An "asset" that is a documentation record** — in `hudu-assets` and
+  `it-glue-configurations` an asset is a documented configuration item
+  with no agent behind it. SuperOps assets are live RMM endpoints.
+- **Endpoints under a different RMM** — `atera-agents`, `syncro-assets`,
+  `ncentral-devices`, `immybot-endpoint-management`,
+  `ninjaone-rmm-devices`, and `datto-rmm-devices` each see only their
+  own fleet. Patch and software inventory counts are not comparable
+  across them.
+- **Hardware refresh and warranty programmes** — asset lifecycle
+  planning is `scalepad-lifecycle-manager`.
+
 ## Asset Status Values
 
 | Status | Description | Indicator |

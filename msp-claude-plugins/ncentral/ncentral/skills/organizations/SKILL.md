@@ -19,6 +19,17 @@ units**. Almost every other object — devices, active issues, tasks, custom
 properties, access groups — is scoped to an org unit, so getting the
 hierarchy right is the first step of any workflow.
 
+## Anti-triggers
+
+- **The client's commercial record** — an N-central customer is a
+  monitoring scope, not a billing entity. The company of record is
+  `connectwise-psa-companies`, `autotask-crm`, `syncro-customers`, or
+  `superops-clients`.
+- **A Microsoft 365 tenant or an Entra OU** — an N-central org unit is
+  neither, despite the shared "organizational unit" wording; use
+  `cipp-tenants`.
+- **Devices inside an org unit** — use `ncentral-devices`.
+
 ## The Hierarchy
 
 ```

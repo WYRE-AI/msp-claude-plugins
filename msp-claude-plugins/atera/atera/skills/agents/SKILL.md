@@ -17,6 +17,27 @@ when_to_use: >-
 
 Atera agents are lightweight software installed on managed endpoints that provide remote monitoring and management capabilities. Agents report system information, health metrics, and enable remote execution of scripts and commands.
 
+## Anti-triggers
+
+- **Atera's own "devices"** — an Atera *device* is an agentless HTTP,
+  SNMP, or TCP monitor with no agent behind it; use `atera-devices`.
+  Atera is the odd one out: in `ncentral-devices`,
+  `ninjaone-rmm-devices`, and `datto-rmm-devices` "device" means the
+  managed endpoint, which here is an agent.
+- **Claude subagents** — "agent" here is an Atera endpoint sensor, never
+  an AI subagent definition under `agents/*.md`. In `halopsa-agents` it
+  is a human technician, and in `liongard-overview` it is one
+  inspection runner per customer site.
+- **Running a script on an endpoint managed by another RMM** — "run
+  PowerShell on this machine" matches every RMM in this marketplace
+  equally, and none of them reach Atera's agents. Confirm which RMM the
+  endpoint is enrolled in, then use `syncro-assets`,
+  `superops-runbooks`, `immybot-script-execution`,
+  `ncentral-monitoring-tasks`, `connectwise-automate-scripts`, or
+  `datto-rmm-jobs`.
+- **The alert an agent raised** — agent records carry health and
+  inventory, not monitoring output; use `atera-alerts`.
+
 ## Agent Information Fields
 
 ### Core Fields

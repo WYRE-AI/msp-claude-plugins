@@ -1,6 +1,6 @@
 {
   "name": "immybot",
-  "version": "1.1.3",
+  "version": "1.1.4",
   "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, and script execution for MSPs (Entra ID OAuth)",
   "author": {
     "name": "WYRE AI"

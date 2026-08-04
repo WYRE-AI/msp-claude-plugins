@@ -21,6 +21,18 @@ updating, or removing software and running remediation. Starting a
 session is **destructive**: it can install software and reboot
 machines.
 
+## Anti-triggers
+
+- **An N-central maintenance window** — a *window* is a scheduled alert
+  suppression period that executes nothing; an ImmyBot *session* is an
+  execution run that installs software and reboots machines. For
+  windows use `ncentral-monitoring-tasks`. SuperOps script schedules
+  (`superops-runbooks`) are likewise a calendar, not a session.
+- **What should be installed** — the desired state a session reconciles
+  is configured in `immybot-software-deployment`.
+- **Running one script now** — a session reconciles everything in scope;
+  for a single script use `immybot-script-execution`.
+
 ## API Tools
 
 | Tool | Purpose |

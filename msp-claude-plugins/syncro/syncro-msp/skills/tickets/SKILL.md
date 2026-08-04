@@ -18,6 +18,16 @@ when_to_use: >-
 
 Syncro tickets are the core unit of service delivery in the platform. Every client request, incident, and service task flows through the ticketing system. This skill covers comprehensive ticket management including creation, updates, timer operations, comments, and time tracking.
 
+## Anti-triggers
+
+- **Tickets in another PSA** — `connectwise-psa-tickets`,
+  `autotask-tickets`, `halopsa-tickets`, `superops-tickets`, and
+  `atera-tickets` are separate queues; Syncro shops that migrated often
+  still have both.
+- **Billing the time a timer recorded** — timers and time entries live
+  here, invoicing in `syncro-invoices`. Stopping a timer bills nothing.
+- **Fixing the endpoint the ticket is about** — use `syncro-assets`.
+
 ## Ticket Status Values
 
 Syncro provides configurable ticket statuses. These are the common default values:

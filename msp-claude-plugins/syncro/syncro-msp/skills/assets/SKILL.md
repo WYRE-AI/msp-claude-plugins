@@ -17,6 +17,21 @@ when_to_use: >-
 
 Syncro assets represent the hardware, software, and devices you manage for customers. Assets integrate with Syncro's built-in RMM capabilities for monitoring, patch management, and remote access. This skill covers asset tracking, RMM integration, and inventory management.
 
+## Anti-triggers
+
+- **Running a script on the asset** — the `run_script` endpoint is
+  documented here, but the routing decision matters more than the
+  request shape: "run a script on this machine" matches `atera-agents`,
+  `superops-runbooks`, `immybot-script-execution`,
+  `ncentral-monitoring-tasks`, `connectwise-automate-scripts`, and
+  `datto-rmm-jobs` equally well. Confirm the endpoint is Syncro-managed
+  before executing anything.
+- **An "asset" that is a documentation record** — in `hudu-assets` and
+  `it-glue-configurations` an asset is a documented CI with no agent.
+  Syncro assets are live RMM endpoints.
+- **Hardware refresh programmes** — Syncro stores `warranty_expires` but
+  does no lifecycle planning; use `scalepad-lifecycle-manager`.
+
 ## Key Concepts
 
 ### Asset

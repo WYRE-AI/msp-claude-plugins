@@ -18,6 +18,19 @@ when_to_use: >-
 
 Environments in Liongard represent customer organizations or sites being monitored. Each environment is the top-level container for all inspection activity, discovered systems, detections, and metrics associated with a particular client, so nearly every other Liongard query is scoped by `EnvironmentID`.
 
+## Anti-triggers
+
+- **A dev, staging, or production environment** — a Liongard environment
+  is a customer organization. It has nothing to do with deployment
+  tiers.
+- **The client's commercial record** — creating an environment does not
+  onboard a client; use `connectwise-psa-companies`, `autotask-crm`, or
+  `superops-clients`.
+- **A Microsoft 365 tenant** — an environment can hold an M365
+  inspection but is not a tenant; use `cipp-tenants`.
+- **What was discovered inside an environment** — `liongard-systems` for
+  the assets, `liongard-detections` for the changes.
+
 ## Key Concepts
 
 ### Environments
