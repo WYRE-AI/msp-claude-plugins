@@ -22,6 +22,20 @@ which has its own **order lines** and **payments**.
 All access here is **read-only** — these tools list and retrieve data; they
 never create or modify records.
 
+## Anti-triggers
+
+- **Creating, editing, or sending a quote** — this surface is read-only. Build
+  the quote in `salesbuildr-quotes` or `connectwise-cpq-quotes`, and send it
+  for signature with `pandadoc-documents`.
+- **Kaseya BMS, VSA, or Datto RMM** — different Kaseya products sharing the
+  vendor name. Quote Manager is the former Datto Commerce and holds no
+  tickets, agents, or devices.
+- **What was bought to fulfil the order** — purchase orders, suppliers, and
+  cost sit on the buy side in `kaseya-quote-manager-purchasing`.
+- **Recording the payment in the books** — `kqm_sales_order_payment_*` reports
+  what Quote Manager captured, not the accounting ledger; use `xero-payments`
+  or `quickbooks-online-payments`.
+
 ## Tools
 
 | Tool | Purpose |

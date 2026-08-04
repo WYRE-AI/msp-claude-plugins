@@ -16,6 +16,19 @@ when_to_use: >-
 
 Quotes are proposals sent to customers containing one or more products as line items. Each quote is linked to a company and contact, and can optionally be associated with an opportunity.
 
+## Anti-triggers
+
+- **Emailing the quote to the customer for signature** — Salesbuildr builds
+  and prices the quote; turning it into a sendable, signable document is
+  `pandadoc-documents`.
+- **Quotes in another quoting system** — Kaseya Quote Manager and ConnectWise
+  CPQ use identical vocabulary for their own records; use
+  `kaseya-quote-manager-quotes` or `connectwise-cpq-quotes`.
+- **Billing for a quote the customer accepted** — an accepted quote is not an
+  invoice; use `xero-invoices` or `quickbooks-online-invoices`.
+- **The pipeline record the quote hangs off** — stage, value, and close date
+  belong to the opportunity; use `salesbuildr-opportunities`.
+
 ## Search Quotes
 
 ```

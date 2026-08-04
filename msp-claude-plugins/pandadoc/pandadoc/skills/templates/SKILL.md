@@ -18,6 +18,12 @@ when_to_use: >-
 
 Templates in PandaDoc are reusable document blueprints that define the structure, layout, content, and fields of a document. MSPs use templates to standardize their business documents -- managed service agreements (MSAs), statements of work (SOWs), proposals, hardware quotes, and NDAs. Templates contain placeholders (tokens) for client-specific content, signature fields, and pricing tables that get populated when a document is created. A well-organized template library is the foundation of an efficient MSP sales process.
 
+## Anti-triggers
+
+- **A real document created from a template** — templates have no recipients,
+  status, or signatures; use `pandadoc-documents`.
+- **Which template suits a given MSP deal type** — use `pandadoc-proposals`.
+
 ## MCP Tools
 
 ### Available Tools

@@ -16,6 +16,17 @@ when_to_use: >-
 
 Contacts are the foundational entity in Xero, representing customers (clients you invoice), suppliers (vendors you pay), or both. Every invoice, payment, credit note, and bank transaction is linked to a contact. For MSPs, contacts typically represent managed services clients, hardware vendors, software suppliers, and subcontractors.
 
+## Anti-triggers
+
+- **The CRM view of the same organization** — Xero contacts carry AR/AP
+  balances but no pipeline, owner, or activity history; use
+  `hubspot-companies` or `salesbuildr-companies-contacts`.
+- **The billing target on the payment rail** — use
+  `alternative-payments-customers`.
+- **Chart-of-accounts entries** — a Xero "account" is a general ledger code,
+  not a customer account; use `xero-accounts`.
+- **The same operation in QuickBooks** — use `quickbooks-online-customers`.
+
 ## Core Concepts
 
 ### Contact Types

@@ -20,6 +20,14 @@ Warmly hosts a remote MCP server at `https://opps-api.getwarmly.com/api/mcp` tha
 
 Official docs: [docs.getwarmly.com/mcp](https://docs.getwarmly.com/mcp)
 
+## Anti-triggers
+
+- **Which of the three tools to call, and what to do with the result** — use
+  `warmly-visitor-intelligence`.
+- **A different hosted OAuth MCP server** — HubSpot and PandaDoc have their
+  own tenants, scopes, and session models; use `hubspot-api-patterns` or
+  `pandadoc-api-patterns`.
+
 ## Connection & Authentication
 
 ### MCP Server Endpoint

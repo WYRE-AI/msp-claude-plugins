@@ -18,6 +18,14 @@ when_to_use: >-
 
 Recipients in PandaDoc are the people who receive, view, and sign documents. In MSP engagements, documents typically involve multiple parties -- the client decision-maker who signs the agreement, sometimes a technical contact who reviews, and the MSP representative who countersigns. PandaDoc supports complex signing workflows with ordered signing, role-based assignments, and real-time completion tracking. Understanding recipient management is essential for smooth contract execution.
 
+## Anti-triggers
+
+- **Creating, sending, or downloading the document itself** — use
+  `pandadoc-documents`.
+- **A contact record in the CRM** — a PandaDoc recipient is an email address
+  attached to one document, not a stored contact; use `hubspot-contacts` or
+  `salesbuildr-companies-contacts`.
+
 ## MCP Tools
 
 ### Available Tools

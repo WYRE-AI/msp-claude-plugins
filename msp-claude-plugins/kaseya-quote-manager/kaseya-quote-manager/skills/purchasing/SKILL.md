@@ -22,6 +22,16 @@ to supplier SKUs and pricing.
 
 All access here is **read-only**.
 
+## Anti-triggers
+
+- **What the customer was quoted or charged** — this is the buy side; the sell
+  side is `kaseya-quote-manager-quotes`.
+- **Supplier bills as accounting entries** — a Quote Manager purchase order is
+  not an ACCPAY bill and never posts to a GL; use `xero-invoices` or
+  `quickbooks-online-expenses`.
+- **Sell price and catalog descriptions for quoting** — use
+  `salesbuildr-products`.
+
 ## Tools
 
 | Tool | Purpose |

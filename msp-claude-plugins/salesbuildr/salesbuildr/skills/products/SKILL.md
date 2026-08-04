@@ -15,6 +15,14 @@ when_to_use: >-
 
 The product catalog in Salesbuildr contains items that can be added to quotes. Products include hardware, software licenses, services, and any other billable items.
 
+## Anti-triggers
+
+- **What a product costs from the distributor** — this catalog holds sell
+  price; supplier SKUs and buy price are `kaseya-quote-manager-purchasing`.
+- **A product already placed on a quote** — line items are copies with their
+  own quantity and price and diverge from the catalog; use
+  `salesbuildr-quotes`.
+
 ## Search Products
 
 ```

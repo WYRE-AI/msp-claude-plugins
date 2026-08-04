@@ -28,6 +28,16 @@ or moves money (`POST /payments`, the direct charge, is excluded by design). To
 collect from a customer, generate a hosted payment link or payment request — see
 [Alternative Payments Invoicing](../invoicing/SKILL.md).
 
+## Anti-triggers
+
+- **Collecting money rather than reporting on it** — this surface is
+  read-only; hosted payment links and payment requests are
+  `alternative-payments-invoicing`.
+- **Recording a receipt against an invoice in the books** — use
+  `xero-payments` or `quickbooks-online-payments`.
+- **A payment captured against a Quote Manager sales order** — use
+  `kaseya-quote-manager-quotes`.
+
 ## Core Concepts
 
 ### Transactions

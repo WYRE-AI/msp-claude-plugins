@@ -17,6 +17,14 @@ when_to_use: >-
 
 The chart of accounts (COA) in Xero defines the general ledger structure for your organization. Every invoice line item, payment, and bank transaction references an account code. For MSPs, a well-structured COA enables tracking revenue by service line (managed services, projects, hardware sales), expenses by vendor category, and provides the foundation for meaningful financial reporting.
 
+## Anti-triggers
+
+- **A customer or supplier account** — "account" in Xero means a general
+  ledger code; the organization you bill is `xero-contacts`.
+- **Balances and movement on those codes** — the chart of accounts is
+  structure only and carries no figures; use `xero-reports`.
+- **A login, tenant, or API credential** — use `xero-api-patterns`.
+
 ## Core Concepts
 
 ### Account Classes

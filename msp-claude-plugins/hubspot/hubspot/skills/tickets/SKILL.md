@@ -17,6 +17,15 @@ when_to_use: >-
 
 Tickets in HubSpot represent support requests, service issues, or tasks that need resolution. For MSPs, tickets are the backbone of client service delivery -- tracking everything from break-fix requests and password resets to complex infrastructure projects. Tickets belong to a pipeline (e.g., "Support Pipeline") and progress through stages (e.g., "New", "In Progress", "Resolved"). They can be associated with contacts (the person who reported the issue), companies (the client organization), and deals (if the ticket relates to a service agreement).
 
+## Anti-triggers
+
+- **The MSP's service desk** — HubSpot tickets are a CRM-side service
+  pipeline with no SLA clock, time entries, or billing; the PSA owns those, so
+  use the ConnectWise Manage, Autotask, HaloPSA, or Freshdesk ticket skills.
+- **A follow-up you are setting yourself rather than an issue the customer
+  raised** — use `hubspot-activities`.
+- **Revenue attached to the same account** — use `hubspot-deals`.
+
 ## MCP Tools
 
 ### Available Tools

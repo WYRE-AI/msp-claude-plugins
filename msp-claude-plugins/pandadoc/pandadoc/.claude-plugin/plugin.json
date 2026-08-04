@@ -1,6 +1,6 @@
 {
   "name": "pandadoc",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Claude plugins for PandaDoc - documents, templates, e-signatures, and proposal management",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -29,6 +29,15 @@ five domains:
 - **crm**: `customer`, `customer_address`, `contact`
 - **org**: `employee`, `warehouse`
 
+## Anti-triggers
+
+- **Any other Kaseya product** — BMS, VSA, and Datto RMM share the vendor name
+  but not this API, this key, or these tools.
+- **Entity fields and the quote/sales-order hierarchy** — use
+  `kaseya-quote-manager-quotes` or `kaseya-quote-manager-purchasing`.
+- **Write scopes or permissions** — there is no write surface to authenticate
+  for; every tool is a `_list` or `_get`.
+
 ## Connection & Authentication
 
 Kaseya Quote Manager uses a single API key. Against the upstream API the

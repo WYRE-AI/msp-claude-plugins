@@ -17,6 +17,16 @@ when_to_use: >-
 
 Activities in HubSpot encompass tasks, notes, and other engagement records that track interactions with contacts, companies, deals, and tickets. Associations are the links that connect HubSpot CRM objects together -- a contact associated with a company, a deal associated with a contact, a note associated with a ticket. For MSPs, activities provide the service history and follow-up tracking that drives client satisfaction, while associations ensure that every interaction is visible from any related record.
 
+## Anti-triggers
+
+- **A customer-reported issue that needs resolving** — that is a ticket with a
+  pipeline and stage, not a task; use `hubspot-tickets`.
+- **The properties of the record being annotated** — this skill covers the
+  note, task, and association only; object fields live in `hubspot-contacts`,
+  `hubspot-companies`, `hubspot-deals`, or `hubspot-tickets`.
+- **Billable time against client work** — HubSpot tasks are not time entries;
+  the PSA is the system of record for those.
+
 ## MCP Tools
 
 ### Available Tools

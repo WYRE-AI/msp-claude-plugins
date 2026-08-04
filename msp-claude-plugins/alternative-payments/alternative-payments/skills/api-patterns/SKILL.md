@@ -27,6 +27,15 @@ The WYRE integration exposes a **read + safe-write** surface. It deliberately do
 **not** implement direct payment creation (`POST /payments`), which would charge a
 card or bank account. Money movement is out of scope.
 
+## Anti-triggers
+
+- **Transaction and payout data** — the transactions resource lives at
+  `GET /payments`, which makes this skill look like the destination; the
+  filters, statuses, and reconciliation workflows are
+  `alternative-payments-payments`.
+- **Invoice, line-item, and payment-link fields** — use
+  `alternative-payments-invoicing`.
+
 ## Base URLs
 
 | Environment | Base URL |

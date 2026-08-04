@@ -31,6 +31,17 @@ simply produces a URL. This integration never executes a direct charge. See
 [Alternative Payments API Patterns](../api-patterns/SKILL.md) for why
 `POST /payments` (direct charge) is excluded by design.
 
+## Anti-triggers
+
+- **The invoice as an accounting document** — these invoices are collection
+  artefacts with no GL coding, tax treatment, or aging; use `xero-invoices` or
+  `quickbooks-online-invoices`.
+- **Whether the invoice was paid and where the money settled** — use
+  `alternative-payments-payments`.
+- **Charging a card or bank account directly** — no such tool exists here by
+  design; a hosted link is the only collection mechanism, and the reasoning is
+  in `alternative-payments-api-patterns`.
+
 ## Core Concepts
 
 ### Invoice Status

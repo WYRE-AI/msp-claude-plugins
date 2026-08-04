@@ -26,6 +26,16 @@ Warmly identifies anonymous website visitors by IP-to-company reverse lookup, th
 
 That is the raw material for prioritizing outreach: warm > cold, deep engagement > a single bounce, target ICP > unrelated traffic.
 
+## Anti-triggers
+
+- **Connection, OAuth, org-scoping, or session errors** — use
+  `warmly-api-patterns`.
+- **Anyone who is already a CRM record** — Warmly reports website traffic, not
+  relationships; contacts, companies, and pipeline are `hubspot-contacts`,
+  `hubspot-companies`, and `hubspot-deals`.
+- **Actually contacting the visitor** — Warmly is read-only and sends nothing;
+  the outreach happens in the CRM or sequencer.
+
 ## Tool selection
 
 | Task | Tool |
