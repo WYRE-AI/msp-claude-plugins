@@ -16,6 +16,14 @@ when_to_use: >-
 
 Signals are security-relevant events detected by Huntress agents on managed endpoints. Not all signals become incidents — they represent the raw detection layer that feeds into Huntress SOC analysis. Monitoring signals provides visibility into the threat landscape before incidents are formally created.
 
+## Anti-triggers
+
+- **Anything requiring action or remediation** — signals are read-only
+  telemetry with no remediation lifecycle; once the SOC confirms one it
+  becomes an incident, so use `huntress-incidents`.
+- **Real-time alerting** — signal queries are point-in-time; Huntress
+  webhooks carry the push feed.
+
 ## Key Concepts
 
 ### Signals vs Incidents

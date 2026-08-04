@@ -20,6 +20,9 @@ when_to_use: >-
   - `description` and `when_to_use` have distinct jobs — coverage vs.
     trigger conditions. Don't duplicate content between them, and never
     add a `triggers:` list.
+  - `when_to_use` routes work *in*; `## Anti-triggers` routes it *out*.
+    Only add the section where a sibling skill is genuinely confusable —
+    see the guidance above that section.
   - State each instruction once. No repetition for emphasis, no ALL-CAPS
     warnings unless something genuinely destroys data or money.
   - Skip any section below that would only hold generic filler. A skill
@@ -35,6 +38,22 @@ when_to_use: >-
 ## Overview
 
 One short paragraph: what this domain is and what an MSP does with it.
+
+## Anti-triggers
+
+Where this skill gets loaded by mistake, and what to load instead. One
+bullet per case, each naming the correct destination skill:
+
+- **[Neighbouring concern]** — use `[vendor]-[other-skill]` instead.
+- **[Adjacent vendor with overlapping vocabulary]** — this skill only
+  speaks the [Vendor] API.
+
+Include this section **only** when a real routing mistake exists: a
+sibling skill in the same plugin covering an adjacent entity, or another
+vendor sharing this one's vocabulary. Two skills whose names alone
+disambiguate them do not need it. A bullet that just negates the
+`when_to_use` ("do not use for non-[Vendor] questions") is filler —
+cut it.
 
 ## Key Concepts
 

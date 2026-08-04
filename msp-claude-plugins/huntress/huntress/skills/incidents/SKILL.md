@@ -12,6 +12,16 @@ when_to_use: >-
 
 Manage Huntress SOC-confirmed security incidents across client organizations. Query open incidents, review SOC-recommended remediations, approve or reject remediation actions, and resolve incidents once all remediations are processed.
 
+## Anti-triggers
+
+- **Raw detections that have not become incidents** — the pre-triage
+  detection layer is signals; use `huntress-signals`.
+- **SOC notifications asking the partner to act** — those are
+  escalations, a separate object with its own resolve flow; use
+  `huntress-escalations`.
+- **Endpoint health, deployment, or coverage questions** — use
+  `huntress-agents`.
+
 ## API Tools
 
 ### List Incidents
