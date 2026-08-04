@@ -17,6 +17,20 @@ when_to_use: >-
 
 KnowBe4 training campaigns deliver security awareness content to users through structured enrollment workflows. Training can be assigned manually, triggered automatically after phishing test failures, or scheduled on a recurring basis. Each campaign tracks enrollment status, completion rates, and compliance deadlines. The training content library includes interactive modules, videos, games, assessments, and policy documents.
 
+## Anti-triggers
+
+- **A bare "campaign" question** — KnowBe4 has two campaign types with
+  separate ID spaces and near-identical lifecycles. If the subject is a
+  simulated phishing test, its templates, or who clicked, it is
+  `knowbe4-phishing`; this skill covers only training campaigns and
+  enrollments.
+- **The phishing failure that triggered an auto-enrollment** — the
+  trigger is configured here, but the failure data itself is
+  `knowbe4-phishing`.
+- **Completion rates rolled up across campaigns or departments** — this
+  skill reads individual campaigns and enrollments; aggregates and
+  compliance dashboards are `knowbe4-reporting`.
+
 ## Key Concepts
 
 ### Training Campaign Lifecycle

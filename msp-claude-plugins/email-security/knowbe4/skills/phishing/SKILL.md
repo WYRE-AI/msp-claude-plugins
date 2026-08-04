@@ -18,6 +18,26 @@ when_to_use: >-
 
 KnowBe4 phishing simulations are the core mechanism for testing and improving an organization's resilience to social engineering attacks. Campaigns deliver simulated phishing emails to users and track their interactions -- whether they opened the email, clicked the link, submitted data on the landing page, reported it via the Phish Alert Button, or took no action. The phish-prone percentage is the key metric derived from these campaigns.
 
+## Anti-triggers
+
+- **A real phishing email that reached a user** — every campaign,
+  click, and "failure" here is a simulation the MSP sent on purpose.
+  Genuine inbound phishing is detected by the mail-security vendor:
+  `proofpoint-tap`, `checkpoint-avanan-threats`, or
+  `abnormal-security-threats`.
+- **Finding, releasing, or pulling a message out of a mailbox** —
+  KnowBe4 never touches production mail flow. Use
+  `proofpoint-quarantine` or `checkpoint-avanan-quarantine` to release,
+  and `proofpoint-forensics` to remove delivered mail.
+- **"Phish Alert Button" reports as a threat-intake queue** — this
+  skill counts PAB reports as a pass/fail signal on a simulation; the
+  real user-reported phishing triage queue is `ironscales-incidents`.
+- **Enrolling the users who failed into remedial training** — the
+  enrollment side is `knowbe4-training`.
+- **Organization-wide phish-prone percentage or department
+  breakdowns** — per-campaign results are here; rolled-up metrics and
+  benchmarks are `knowbe4-reporting`.
+
 ## Key Concepts
 
 ### Campaign Lifecycle

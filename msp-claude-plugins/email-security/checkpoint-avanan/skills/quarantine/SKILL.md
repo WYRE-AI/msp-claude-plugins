@@ -19,6 +19,24 @@ when_to_use: >-
 
 Checkpoint Harmony Email & Collaboration (Avanan) quarantines emails that match security policies before they reach the end user's inbox. The quarantine system is the primary interface for reviewing flagged emails, releasing false positives, and managing email flow. This skill covers comprehensive quarantine management including search, review, release workflows, bulk operations, and quarantine configuration.
 
+## Anti-triggers
+
+- **Why the message was flagged, or the IOCs inside it** — the
+  quarantine entry is the held message; the detection record that
+  produced it is a separate object with its own URLs, hashes, and
+  verdicts — use `checkpoint-avanan-threats`.
+- **Changing what gets quarantined, or curating the allow/block lists**
+  — releasing with `addToAllowList` writes a single exception; policy
+  tuning and list administration are `checkpoint-avanan-policies`.
+- **Removing a message that already reached the mailbox** — Avanan
+  quarantine holds mail pre-delivery only and has no mailbox-purge
+  tool. Post-delivery removal on a Proofpoint tenant is
+  `proofpoint-forensics` (TRAP search-and-destroy).
+- **Another vendor's quarantine** — "release from quarantine" is shared
+  vocabulary across the email-security stack. Proofpoint is
+  `proofpoint-quarantine`, SpamTitan is `spamtitan-quarantine`, and
+  Mimecast calls it the held queue: `mimecast-queue-management`.
+
 ## Quarantine Reasons
 
 Emails are quarantined based on the detection engine that flagged them:

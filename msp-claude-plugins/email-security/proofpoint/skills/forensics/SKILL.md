@@ -19,6 +19,20 @@ Proofpoint Forensics provides deep investigation capabilities for email-borne th
 
 TRAP integrates with Microsoft 365 and Google Workspace to move or delete messages from user mailboxes after delivery, closing the gap between detection and remediation.
 
+## Anti-triggers
+
+- **Stopping a message before it is delivered** — everything here acts
+  after delivery. Releasing or deleting mail still held pre-delivery is
+  `proofpoint-quarantine`.
+- **The threat event that prompted the investigation** — GUIDs,
+  dispositions, scores, and click records come from `proofpoint-tap`;
+  this skill starts once you already have a GUID or threat ID.
+- **Campaign attribution, actor names, and IOC context** — use
+  `proofpoint-threat-intel`.
+- **"Search and destroy" on endpoints rather than mailboxes** — TRAP
+  reaches Microsoft 365 and Google Workspace mailboxes only. Killing
+  processes or removing persistence on a host is `huntress-incidents`.
+
 ## Key Concepts
 
 ### Remediation Actions

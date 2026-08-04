@@ -21,6 +21,23 @@ Quarantine operates at two levels:
 - **Admin quarantine** - Managed by administrators, holds threats and policy violations
 - **End-user quarantine** - Self-service spam quarantine with digests
 
+## Anti-triggers
+
+- **Removing a message that already reached the mailbox** — quarantine
+  only holds mail that was stopped before delivery. Pulling a delivered
+  message back out of Microsoft 365 or Google Workspace is TRAP
+  auto-pull and search-and-destroy: use `proofpoint-forensics`.
+- **Why the message scored the way it did** — the quarantine entry
+  carries the scores but not the threat event, its classification, or
+  its campaign; use `proofpoint-tap`.
+- **A rewritten link found inside a quarantined message** — decoding
+  and re-checking `urldefense.proofpoint.com` URLs is
+  `proofpoint-url-defense`.
+- **Another vendor's quarantine** — release and delete vocabulary is
+  shared across the stack. Checkpoint Harmony is
+  `checkpoint-avanan-quarantine`, SpamTitan is `spamtitan-quarantine`,
+  and Mimecast calls it the held queue: `mimecast-queue-management`.
+
 ## Key Concepts
 
 ### Quarantine Reasons
