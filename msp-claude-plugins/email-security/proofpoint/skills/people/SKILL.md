@@ -20,6 +20,19 @@ Proofpoint People-Centric Security provides user-level threat analytics that ide
 
 The core concept is that people - not infrastructure - are the primary target of modern email attacks. By understanding who is targeted and who clicks, you can focus security resources where they have the most impact.
 
+## Anti-triggers
+
+- **Simulated-phishing risk scores** — KnowBe4 also reports a per-user
+  "risk score" and a click rate, but those measure tests the MSP sent
+  deliberately. Attack Index and VAP count real attacks. For simulation
+  performance use `knowbe4-users`.
+- **Enrolling a high-risk user in awareness training** — this skill
+  identifies who needs it; the enrollment itself is
+  `knowbe4-training`.
+- **The individual threat events behind a user's Attack Index** — use
+  `proofpoint-tap`, and `proofpoint-threat-intel` for the campaigns
+  named in `topCampaigns`.
+
 ## Key Concepts
 
 ### Very Attacked People (VAP)

@@ -19,6 +19,17 @@ Proofpoint Threat Intelligence provides contextual information about threat camp
 
 Proofpoint processes billions of messages daily and correlates threats across its entire customer base, providing unique visibility into large-scale email threat campaigns.
 
+## Anti-triggers
+
+- **What hit your own tenant** — this is Proofpoint's cross-customer
+  intelligence: campaigns, families, and actors observed network-wide.
+  A campaign returned here may never have targeted your organization.
+  Your tenant's own events are `proofpoint-tap`.
+- **Evidence artifacts for one message** — sandbox reports, pcaps,
+  screenshots, and samples are `proofpoint-forensics`.
+- **Another vendor's intelligence feed** — Mimecast's near-identically
+  named skill is `mimecast-threat-intelligence`.
+
 ## Key Concepts
 
 ### Campaigns

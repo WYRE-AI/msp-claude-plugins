@@ -18,6 +18,17 @@ when_to_use: >-
 
 KnowBe4 reporting provides visibility into an organization's security awareness posture through phishing simulation metrics, training completion data, and risk scores. Effective reporting translates raw data into actionable insights for security teams, management, and compliance stakeholders. This skill covers how to retrieve, interpret, and present KnowBe4 metrics.
 
+## Anti-triggers
+
+- **An "email security report" covering threats actually blocked** —
+  every metric here measures simulations and training, not real
+  attacks. Threats stopped in production are `proofpoint-tap`,
+  `checkpoint-avanan-threats`, or `abnormal-security-threats`.
+- **One campaign's results or one person's risk score** — this skill
+  returns account-, department-, and trend-level aggregates; the
+  per-object detail sits in `knowbe4-phishing`, `knowbe4-training`, or
+  `knowbe4-users`.
+
 ## Key Concepts
 
 ### Core Metrics

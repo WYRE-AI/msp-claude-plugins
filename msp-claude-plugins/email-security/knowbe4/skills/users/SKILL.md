@@ -16,6 +16,22 @@ when_to_use: >-
 
 Users and groups are the foundation of KnowBe4's security awareness platform. Users represent individual employees who receive phishing simulations and training. Groups organize users for targeted campaign delivery, reporting segmentation, and risk analysis. Each user has a risk score calculated from their phishing test performance and training completion, providing a quantitative measure of human security risk.
 
+## Anti-triggers
+
+- **Proofpoint's user risk data** — both vendors expose a per-user
+  "risk score", but KnowBe4's is derived from simulations the MSP ran,
+  while Proofpoint's Attack Index counts real attacks aimed at that
+  person. They are not interchangeable; use `proofpoint-people` for
+  VAP, Attack Index, and top-clicker data.
+- **Per-campaign recipient rows** — a recipient belongs to a phishing
+  security test and carries that test's click and reply timestamps;
+  use `knowbe4-phishing`.
+- **Org- or department-level risk aggregates and benchmarks** — use
+  `knowbe4-reporting`.
+- **Creating, disabling, or offboarding the actual mailbox account** —
+  KnowBe4 users are training records, not identities. Microsoft 365
+  user lifecycle is `cipp-users`.
+
 ## Key Concepts
 
 ### User Lifecycle

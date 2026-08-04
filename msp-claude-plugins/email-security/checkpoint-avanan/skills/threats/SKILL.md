@@ -19,6 +19,22 @@ when_to_use: >-
 
 Checkpoint Harmony Email & Collaboration (Avanan) uses multiple detection engines to identify email-borne threats before they reach end users. The threat detection system covers phishing, malware, business email compromise (BEC), account takeover (ATO), and zero-day attacks. This skill covers threat types, detection engines, IOC extraction, timeline analysis, and investigation workflows.
 
+## Anti-triggers
+
+- **Acting on the held message** — this skill reads detection records
+  and never releases or deletes mail; those operations are
+  `checkpoint-avanan-quarantine`.
+- **Coordinating a response with status, assignment, and notes** — a
+  threat is one detection; the investigation container that groups
+  several of them is `checkpoint-avanan-incidents`.
+- **Changing what the engines detect or how they act** — detection
+  engine configuration and block-list entries are
+  `checkpoint-avanan-policies`.
+- **Another vendor's threat objects** — "threat", "BEC", "ATO", and
+  "IOC" are common currency across email-security vendors. Abnormal is
+  `abnormal-security-threats`, Proofpoint is `proofpoint-tap`, and
+  Mimecast is `mimecast-threat-intelligence`.
+
 ## Threat Types
 
 | Type | Code | Description | Severity Range |

@@ -23,6 +23,23 @@ TAP identifies three primary threat vectors:
 - **Attachment threats** - Malicious files attached to messages
 - **Message-level threats** - Threats classified at the message level (e.g., BEC, impostor)
 
+## Anti-triggers
+
+- **Anything older than 24 hours** — the SIEM API's maximum lookback is
+  24 hours and it answers an out-of-range window with an empty result,
+  not an error. "Did we see this last week?" needs
+  `proofpoint-forensics` for a specific message or
+  `proofpoint-threat-intel` for a campaign.
+- **Acting on a message** — TAP is a read-only event feed. Release and
+  delete are `proofpoint-quarantine`; removing delivered mail is
+  `proofpoint-forensics`.
+- **Which people are most targeted** — TAP returns per-event rows; the
+  per-user rollup, Attack Index, and VAP list are `proofpoint-people`.
+- **Another vendor's threat events** — Checkpoint Harmony is
+  `checkpoint-avanan-threats`, Abnormal is `abnormal-security-threats`,
+  and Mimecast message-level delivery tracking is
+  `mimecast-message-tracking`.
+
 ## Key Concepts
 
 ### Threat Classifications

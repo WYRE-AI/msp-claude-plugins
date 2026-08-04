@@ -19,6 +19,21 @@ when_to_use: >-
 
 Checkpoint Harmony Email & Collaboration (Avanan) uses a layered policy engine to detect and respond to email threats. Policies define what gets scanned, how threats are classified, and what actions are taken when threats are detected. This skill covers policy types, configuration, enable/disable workflows, and best practices for policy tuning across managed customer tenants.
 
+## Anti-triggers
+
+- **Releasing one message, even when the release adds a sender
+  exception** — the `addToAllowList` flag on a release belongs to the
+  message workflow; use `checkpoint-avanan-quarantine`. Come here when
+  the list itself is the subject.
+- **Which policy fired on a given message** — that is recorded on the
+  quarantine entry as `policyName` and on the detection record; use
+  `checkpoint-avanan-quarantine` or `checkpoint-avanan-threats`.
+- **Another vendor's allow/block lists** — SpamTitan calls them lists
+  (`spamtitan-lists`).
+- **Microsoft 365 tenant policy** — conditional access, mailbox rules,
+  and tenant security baselines are not Harmony Email policies; use
+  `cipp-standards` or `cipp-mailboxes`.
+
 ## Policy Types
 
 | Type | Code | Description | Default Action |

@@ -19,6 +19,23 @@ when_to_use: >-
 
 Checkpoint Harmony Email & Collaboration (Avanan) provides an incident management system for tracking and investigating email security events. Incidents are created when threats require coordinated investigation and response beyond simple quarantine actions. This skill covers the full incident lifecycle from creation through investigation, remediation, and closure.
 
+## Anti-triggers
+
+- **A single detection and its indicators** — an incident groups
+  threats and carries the case metadata; the detection record itself,
+  with its URLs, hashes, and engine verdict, is
+  `checkpoint-avanan-threats`.
+- **Actually releasing or deleting the messages an incident references**
+  — `relatedQuarantineEntries` names them but the operations live in
+  `checkpoint-avanan-quarantine`.
+- **Preventing recurrence after closure** — the policy and block-list
+  changes a post-incident review recommends are
+  `checkpoint-avanan-policies`.
+- **Another vendor's incident object** — IRONSCALES is
+  `ironscales-incidents`, Abnormal calls the equivalent a case
+  (`abnormal-security-cases`), and endpoint incidents are
+  `huntress-incidents`. This skill only speaks the Harmony Email API.
+
 ## Incident Status Codes
 
 | Status ID | Name | Description | Business Logic |

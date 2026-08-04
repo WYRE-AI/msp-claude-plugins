@@ -20,6 +20,19 @@ Proofpoint URL Defense rewrites URLs in email messages to route clicks through P
 
 URL Defense is a critical layer of protection because many attacks use time-delayed weaponization: a URL is clean when the email is sent but becomes malicious hours or days later.
 
+## Anti-triggers
+
+- **The click event feed across all users and threats** — this skill
+  answers "who clicked *this* URL". The full permitted/blocked click
+  stream is `proofpoint-tap`.
+- **Removing the message that carried the link** — use
+  `proofpoint-quarantine` if it is still held, or
+  `proofpoint-forensics` if it was delivered.
+- **Turning URL rewriting on or off** — rewrite behaviour is a
+  Proofpoint policy setting, not something these tools change. On a
+  Checkpoint Harmony tenant the equivalent `URL_REWRITE` policy is
+  `checkpoint-avanan-policies`.
+
 ## Key Concepts
 
 ### URL Rewriting
