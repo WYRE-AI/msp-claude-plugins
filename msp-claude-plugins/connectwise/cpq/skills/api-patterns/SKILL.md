@@ -39,7 +39,7 @@ an account that is in fact fine.
 
 - **ConnectWise PSA (Manage)** — regional `api-{na,eu,au}.myconnectwise.net` hosts, a
   `companyId` in the Basic string, and a mandatory `clientId` header CPQ does not use.
-  Use `connectwise-manage-api-patterns`.
+  Use `connectwise-psa-api-patterns`.
 - **ConnectWise Automate** — on-premise RMM server, `/cwa/api/v1/` base path,
   Bearer-token auth, singular `condition=` filters. Use
   `connectwise-automate-api-patterns`.

@@ -23,7 +23,7 @@ Postmortems in Rootly are structured retrospectives created after incidents are 
 - **The resolution note a customer reads** — a PSA ticket's resolution
   field is a customer-facing summary written to close the ticket, not a
   blameless internal retrospective. Use `halopsa-tickets`,
-  `freshdesk-ticketing`, or `connectwise-manage-tickets`.
+  `freshdesk-ticketing`, or `connectwise-psa-tickets`.
 - **A security incident write-up** — Huntress ships its own SOC
   investigation detail on the incident record; use `huntress-incidents`.
 - **The live incident** — status, severity, and response coordination

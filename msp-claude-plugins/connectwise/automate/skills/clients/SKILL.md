@@ -21,7 +21,7 @@ Clients in ConnectWise Automate represent customer organizations. Each client ca
 - **The PSA account record** — the same customer exists in ConnectWise
   PSA as a `company`, with a separate ID space; agreements, invoicing and
   ticket routing hang off that record, not this one. Use
-  `connectwise-manage-companies`.
+  `connectwise-psa-companies`.
 - **The machines inside a client** — clients and locations are containers;
   endpoint status, inventory and patching are
   `connectwise-automate-computers`.

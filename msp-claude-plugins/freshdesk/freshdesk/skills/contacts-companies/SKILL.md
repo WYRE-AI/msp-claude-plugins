@@ -38,7 +38,7 @@ ticket in the account, so it is not a labelling change.
 - **The same customer in another system** — a HaloPSA client, a
   ConnectWise company, or an Autotask company is a different record with
   different required fields; use `halopsa-clients`,
-  `connectwise-manage-companies`, or `autotask-crm`. Do not
+  `connectwise-psa-companies`, or `autotask-crm`. Do not
   assume IDs or domains map across.
 - **Assets, sites, or contracts belonging to the customer** — Freshdesk
   companies carry no CMDB or billing model; use `halopsa-assets` and

@@ -28,7 +28,7 @@ The QuickBooks Online (QBO) API is a RESTful JSON API that provides access to cu
   that reads like a permissions error.
 - **QuickBooks tools missing from the client entirely, or a 401 before any
   call succeeds** — the OAuth grant lives at the gateway, not in client
-  config; use `shared-wyre-gateway-troubleshooting`.
+  config; use `shared-skills-wyre-gateway-troubleshooting`.
 - **Which realm am I writing to** — production and sandbox are selected by
   the gateway connection, not by a parameter on the call. Verify before
   any write; the request shapes are identical either way.

@@ -21,10 +21,10 @@ Projects in ConnectWise PSA track larger bodies of work that span multiple ticke
 
 - **Service desk work** — break/fix tickets on a service board live at
   `/service/tickets` and are a different entity from project tickets; use
-  `connectwise-manage-tickets`.
+  `connectwise-psa-tickets`.
 - **Hours booked against a project** — time charges to a `ProjectTicket`,
   never to the project or phase directly; use
-  `connectwise-manage-time-entries`.
+  `connectwise-psa-time-entries`.
 
 ## API Endpoint
 

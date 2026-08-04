@@ -24,9 +24,9 @@ Tickets are the core unit of service delivery in ConnectWise PSA. Every client r
   ticket once escalated; use `connectwise-automate-alerts`.
 - **Project tickets** — tickets on a project board are `/project/tickets`,
   a separate entity with its own tools (`cw_search_project_tickets`); use
-  `connectwise-manage-projects`.
+  `connectwise-psa-projects`.
 - **Hours worked on a ticket** — the ticket is the charge target, not the
-  record that holds the time; use `connectwise-manage-time-entries`.
+  record that holds the time; use `connectwise-psa-time-entries`.
 - **Another PSA's tickets** — Autotask, HaloPSA, Atera, Syncro and
   SuperOps all call them tickets; this skill speaks only the ConnectWise
   PSA `/service/tickets` API. Use `autotask-tickets`, `halopsa-tickets`,

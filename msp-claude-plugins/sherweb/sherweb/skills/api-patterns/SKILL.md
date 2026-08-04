@@ -28,7 +28,7 @@ The Sherweb Partner API provides programmatic access to distributor-level operat
   silently changes which records you get.
 - **Sherweb tools missing from the client entirely, or a 401 before any
   call succeeds** — that is a gateway-connection problem; use
-  `shared-wyre-gateway-troubleshooting`.
+  `shared-skills-wyre-gateway-troubleshooting`.
 - **A tool that seems not to exist** — this server uses progressive
   disclosure, so domain tools are only visible after `sherweb_navigate`
   or `sherweb_list_categories`. Check discovery before concluding a

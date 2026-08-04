@@ -30,7 +30,7 @@ page a responder, or approve a remediation on a compromised endpoint.
 - **Tickets in another PSA or helpdesk** — the vocabulary is nearly
   identical but the field models are not (Halo wraps every write in an
   array and uses instance-configurable status IDs). Use
-  `freshdesk-ticketing`, `connectwise-manage-tickets`, or `autotask-tickets`.
+  `freshdesk-ticketing`, `connectwise-psa-tickets`, or `autotask-tickets`.
 - **Whether the work is covered and at what rate** — contract type,
   prepaid-hour balances, and the SLA attached to the agreement are
   `halopsa-contracts`; this skill only reads the resulting SLA fields on

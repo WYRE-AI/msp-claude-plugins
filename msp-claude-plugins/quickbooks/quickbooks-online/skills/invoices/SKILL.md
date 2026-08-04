@@ -25,10 +25,10 @@ Invoices are the primary billing mechanism in QuickBooks Online. For MSPs, invoi
   "payment terms" mean the same thing in both, so the vendor name is the
   only signal; confirm it before constructing a call.
 - **An invoice the MSP receives** — a supplier bill is accounts payable,
-  a different entity with different tools; use `quickbooks-expenses`.
+  a different entity with different tools; use `quickbooks-online-expenses`.
   A distributor invoice from Pax8 or Sherweb is not in QBO at all until
   it is entered as a bill (`pax8-invoices`, `sherweb-billing`).
-- **Recording that an invoice was paid** — use `quickbooks-payments`.
+- **Recording that an invoice was paid** — use `quickbooks-online-payments`.
   Creating an invoice and applying cash to it are separate entities;
   the invoice is never edited to mark it paid.
 - **Assembling the invoice from time and contracts** — the billable work

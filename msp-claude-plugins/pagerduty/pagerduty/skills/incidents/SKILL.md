@@ -35,7 +35,7 @@ customer under an SLA clock.
 - **A customer ticket typed "Incident"** — ITIL ticket classification
   inside a PSA or helpdesk, where the deliverable is an SLA-timed
   response and a billable time entry rather than a page; use
-  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-manage-tickets`,
+  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-psa-tickets`,
   or `autotask-tickets`.
 - **A Rootly incident** — a different vendor with a different lifecycle
   (`detected → in_triage → mitigated → resolved → closed`, not

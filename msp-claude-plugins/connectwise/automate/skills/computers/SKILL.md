@@ -24,7 +24,7 @@ Computers are the core managed entities in ConnectWise Automate. Each computer r
 - **The PSA record of the same machine** — ConnectWise PSA holds a
   parallel configuration record with its own ID; an Automate `ComputerID`
   is not a PSA `configuration/id`. Reach configurations through
-  `connectwise-manage-api-patterns` (`/company/configurations`).
+  `connectwise-psa-api-patterns` (`/company/configurations`).
 - **Which automation to run and what it returned** — inventory, status and
   health live here; finding the right script, validating its parameters
   and reading execution results are `connectwise-automate-scripts`.

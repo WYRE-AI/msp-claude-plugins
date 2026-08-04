@@ -27,7 +27,7 @@ attached. It is not a commercial service, and not a service ticket.
   `autotask-contracts`.
 - **A service request from a customer** — that is a ticket type in a
   helpdesk or PSA; use `freshdesk-ticketing`, `halopsa-tickets`, or
-  `connectwise-manage-tickets`.
+  `connectwise-psa-tickets`.
 - **Rootly's service catalog** — a different vendor's model, with tiers
   and ownership metadata rather than integration keys; use
   `rootly-services`.

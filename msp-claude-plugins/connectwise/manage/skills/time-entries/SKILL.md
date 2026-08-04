@@ -20,9 +20,9 @@ Time entries in ConnectWise PSA track time spent on tickets, projects, and other
 
 - **Writing up what happened on a ticket** — narrative goes in a ticket
   note (`cw_add_ticket_note`); only billable duration belongs in a time
-  entry. Use `connectwise-manage-tickets`.
+  entry. Use `connectwise-psa-tickets`.
 - **Project time** — project hours charge to a `ProjectTicket`, so the
-  ticket has to be located first; use `connectwise-manage-projects`.
+  ticket has to be located first; use `connectwise-psa-projects`.
 
 ## API Endpoint
 

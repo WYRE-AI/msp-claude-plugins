@@ -25,7 +25,7 @@ line, per tab and per quote.
 
 - **Looking up a product, SKU, list price or manufacturer** — CPQ has no catalog to
   search (see below). The priced SKU master list is ConnectWise PSA's; use
-  `connectwise-manage-product-catalog` and carry the values onto the line yourself.
+  `connectwise-psa-product-catalog` and carry the values onto the line yourself.
 - **Quote-level fields — status, totals, expiry, versions, quote customers, payment
   terms** — those hang off the quote header, not its lines; use `connectwise-cpq-quotes`.
 - **Line items on another vendor's quote** — Kaseya Quote Manager quote lines and

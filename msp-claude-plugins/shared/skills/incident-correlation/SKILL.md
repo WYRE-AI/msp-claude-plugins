@@ -27,8 +27,8 @@ which knows its filters, field names, and pagination.
 
 - **Reading a ticket** — use `autotask-tickets`,
   `connectwise-psa-tickets`, `halopsa-tickets`, `syncro-tickets`,
-  `atera-tickets`, or `ninjaone-tickets`.
-- **Reading device state** — use `ninjaone-devices`, `datto-rmm-devices`,
+  `atera-tickets`, or `ninjaone-rmm-tickets`.
+- **Reading device state** — use `ninjaone-rmm-devices`, `datto-rmm-devices`,
   `atera-devices`, `ncentral-devices`, or
   `connectwise-automate-computers`.
 - **Reading documentation or credentials** — use `hudu-assets`,
@@ -36,7 +36,7 @@ which knows its filters, field names, and pagination.
 - **Reading detected changes** — use `liongard-detections`.
 - **Deciding a new ticket's priority and owner** — that is triage, which
   happens before there is anything to correlate; use
-  `shared-ticket-triage`.
+  `shared-skills-ticket-triage`.
 - **A confirmed security incident** — SOC-confirmed threats have their own
   remediation lifecycle rather than a correlation workflow; use
   `huntress-incidents`.

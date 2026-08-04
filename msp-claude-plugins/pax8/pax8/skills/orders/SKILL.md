@@ -28,7 +28,7 @@ Orders in Pax8 are the mechanism for provisioning new cloud subscriptions for cl
   distributor, not the client buying from the MSP. Client-facing quoting
   lives in `connectwise-cpq-quotes` or `autotask-quotes`.
 - **A purchase order in the accounting system** — use
-  `quickbooks-expenses` or `xero-invoices`; a Pax8 order is not a PO on
+  `quickbooks-online-expenses` or `xero-invoices`; a Pax8 order is not a PO on
   the books.
 
 ## MCP Tools

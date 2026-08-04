@@ -20,10 +20,10 @@ Contacts in ConnectWise PSA represent individuals at your client companies. Cont
 
 - **The organisation itself** — company type, status, sites and billing
   defaults hang off the company record, not its contacts; use
-  `connectwise-manage-companies`.
+  `connectwise-psa-companies`.
 - **Your own technicians** — internal staff are `/system/members`, a
   separate entity that contact searches never return; query it through
-  `connectwise-manage-api-patterns`.
+  `connectwise-psa-api-patterns`.
 
 ## API Endpoint
 

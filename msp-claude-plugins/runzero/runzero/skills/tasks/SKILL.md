@@ -21,8 +21,8 @@ RunZero tasks represent network discovery scans. Each scan is executed by an exp
   it does not test for CVEs or produce findings. CVE posture is
   `sentinelone-vulnerabilities`.
 - **A unit of work rather than a network scan.** "Task" collides badly —
-  PSA project tasks and tickets are `connectwise-manage-projects` or
-  `connectwise-manage-tickets`, and an RMM script run is
+  PSA project tasks and tickets are `connectwise-psa-projects` or
+  `connectwise-psa-tickets`, and an RMM script run is
   `connectwise-automate-scripts`.
 - **Continuous polling.** Auvik and Domotz watch the network without a
   scan to launch, so there is no task to create — use `auvik-devices` or

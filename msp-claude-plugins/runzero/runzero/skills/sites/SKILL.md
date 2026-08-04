@@ -20,7 +20,7 @@ Sites are the primary organizational unit in RunZero. Each site represents a net
 - **The customer as a business record.** A runZero site is a network
   boundary, not a client account — one customer often has several, and
   the names rarely match. Company records, contacts, and contracts are
-  `connectwise-manage-companies`.
+  `connectwise-psa-companies`.
 - **A monitored network in another tool.** Auvik and Meraki both call
   their boundary a "network"; the IDs are unrelated to runZero site IDs.
   Use `auvik-networks` or `meraki-devices`.
