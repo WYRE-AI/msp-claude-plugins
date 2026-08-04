@@ -21,6 +21,23 @@ via `X-ScalePad-Region`. Discover this domain's tools with
 Backup Radar subscription
 (402 otherwise).
 
+## Anti-triggers
+
+Backup Radar reports on jobs other products ran. It never touches the
+backups themselves:
+
+- **Restoring data, browsing recovery points, or running a restore
+  test** — none of that exists here; go to the backup product itself
+  (`kaseya/datto-bcdr`, `kaseya/datto-saas-protection`,
+  `kaseya/spanning`, `kaseya/unitrends`) or the `backup-pack`
+  (`restore-test-verification`).
+- **Retention and RPO policy questions** — Backup Radar reports
+  outcomes, not schedules or retention configuration; use the
+  `backup-pack` (`retention-rpo-compliance`) or the backup vendor.
+- **Assets with no backup at all** — a device missing from Backup Radar
+  is invisible here by definition. Start from the asset inventory in
+  `scalepad-core` or the RMM and compare inward.
+
 ## API Tools
 
 | Tool | Purpose |

@@ -18,6 +18,23 @@ when_to_use: >-
 
 Microsoft 365 provides two file storage surfaces: OneDrive (personal, per-user) and SharePoint (team/department libraries). Both are accessible through the same Microsoft Graph `/drives` endpoint. MSP support tasks include investigating access issues, checking storage quotas, managing sharing permissions, and transferring file access during offboarding.
 
+## Anti-triggers
+
+- **Files on the machine this session is running on** — "read the
+  file", "find the config", "list the directory" almost always mean the
+  local filesystem, which Claude Code's own file tools handle. This
+  skill only reaches a customer's cloud storage through Graph, and
+  loading it for local work wastes the call.
+- **Restoring a deleted or ransomware-encrypted file** — past the
+  recycle bin and retention window, Graph has nothing to return; use
+  the `backup-pack` or `kaseya/datto-saas-protection`.
+- **MSP documentation, runbooks, and stored credentials** — those live
+  in the documentation platform, not the customer's OneDrive; use
+  `kaseya/it-glue` or `hudu`.
+- **A tenant-wide external-sharing posture review** — this skill
+  inspects one item's permissions; the policy question across the
+  tenant or the fleet is `m365-security` or `cipp`.
+
 ## Core Concepts
 
 | Surface | Use | Graph Resource |

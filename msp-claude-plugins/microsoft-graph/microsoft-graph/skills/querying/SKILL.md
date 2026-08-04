@@ -20,6 +20,27 @@ when_to_use: >-
 
 The Microsoft Graph MCP Server for Enterprise is **not** a raw Graph API passthrough. It is built around a Retrieval-Augmented-Generation (RAG) workflow: you describe what you want, the server hands you vetted candidate API calls from a curated catalog, and you execute the one that fits. Following this loop is the difference between correct answers and made-up endpoints.
 
+## Anti-triggers
+
+Three plugins reach the same Microsoft 365 tenant with near-identical
+vocabulary. This one answers questions; it cannot change anything.
+
+- **Any change to the tenant** — this server issues `GET` only, so
+  there is no write path to fall back on. A single-tenant change
+  (disable an account, assign a licence, set out-of-office) belongs to
+  the `m365` plugin; a packaged multi-tenant action (offboard, reset
+  MFA, revoke sessions) belongs to the `cipp` plugin.
+- **Fleet-wide questions** — "across all our tenants" needs a
+  multi-tenant control plane, not one delegated token scoped to one
+  signed-in user in one consented tenant; use the `cipp` plugin
+  (`cipp-tenants`, `cipp-standards`).
+- **A tenant that authenticates but returns nothing** — that is
+  per-tenant admin consent, not a bad query; use
+  `microsoft-graph-connection`.
+
+The short rule: **ask one tenant → this skill; change one tenant →
+`m365`; do either across the fleet → `cipp`.**
+
 ## The core rule
 
 **Always start with `microsoft_graph_suggest_queries`. Do not invent raw Graph endpoints.**

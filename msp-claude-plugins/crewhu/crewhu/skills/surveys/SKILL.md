@@ -19,6 +19,20 @@ to a ticket close, a specific tech, or a project milestone. This skill
 covers listing surveys, finding a specific one, and isolating the two
 ends of the curve (detractors and promoters) so MSP managers can react.
 
+## Anti-triggers
+
+- **"User" here is an MSP technician, not an end user.**
+  `crewhu_users_*` returns the staff being scored. A customer's staff
+  account in a tenant is `m365-users` or `cipp-users`; the customer's
+  billing or ticket contact is a PSA contact (`connectwise`,
+  `halopsa`, `kaseya/autotask`).
+- **Acting on a detractor** — Crewhu records the feedback and stops
+  there. Raising the follow-up ticket, logging the call-back, or
+  crediting the account happens in the PSA.
+- **Compliance or insurance questionnaires** — those are also
+  "surveys" in MSP conversation but share nothing with CSAT; use the
+  `compliance-pack` or `scalepad` (`scalepad-controlmap`).
+
 ## API Tools
 
 ### List & Search

@@ -25,6 +25,25 @@ Search endpoints are
 POST with filter bodies upstream — the tools accept normal filter
 arguments.
 
+## Anti-triggers
+
+- **Assessments and action items on a vCIO roadmap** — Lifecycle
+  Manager has identically named objects under `scalepad_lm_*`. An LM
+  assessment scores a client's IT maturity for a QBR; a ControlMap
+  assessment answers a framework questionnaire. Use
+  `scalepad-lifecycle-manager` for the roadmap side.
+- **A misconfigured tenant setting rather than a control** —
+  "conditional access is off", "MFA is not enforced" is a
+  configuration baseline, not a framework control. Use `cipp`
+  (`cipp-standards`), `inforcer`
+  (`inforcer-baseline-alignment`), or `m365-security`.
+- **Vendor-agnostic evidence-mapping and questionnaire workflow** — the
+  cross-platform method lives in the `compliance-pack`
+  (`evidence-mapping`, `insurance-questionnaires`); this skill is the
+  ControlMap tool calls behind it.
+- **Backup evidence** — proving backups run is `scalepad-backup-radar`
+  or the `backup-pack`; attach the result here as evidence afterwards.
+
 ## API Tools (~100; the high-value subset)
 
 ### Health & Reports

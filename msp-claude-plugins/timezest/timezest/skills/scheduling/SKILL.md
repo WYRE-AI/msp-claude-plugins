@@ -18,6 +18,26 @@ exists for. This skill walks the canonical flow: resolve the agent,
 resolve the appointment type, create the scheduling request with the
 PSA association, then poll for the customer's response.
 
+## Anti-triggers
+
+TimeZest schedules by sending the *customer* a link and letting them
+pick. Three neighbouring systems schedule by someone else picking:
+
+- **You already know the time and just need it on a calendar** — write
+  the event straight into the mailbox with `m365-calendar`. Creating a
+  TimeZest request for a time already agreed sends the customer a
+  pointless booking link.
+- **Dispatching a technician to a service window** — the PSA service
+  call is the record that carries dispatch and billing; use the
+  `autotask` plugin (`autotask-service-calls`) or the equivalent PSA
+  plugin. TimeZest links to that ticket, it does not replace it.
+- **Changing the ticket itself** — status, notes, time entries, and
+  assignment are PSA work (`connectwise`, `halopsa`,
+  `kaseya/autotask`); TimeZest only attaches a booking to it.
+- **Configuring which slots are bookable** — availability rules and
+  durations live on the appointment type, not the request; use
+  `timezest-appointment-types`.
+
 ## API Tools
 
 ### Resolve the actors

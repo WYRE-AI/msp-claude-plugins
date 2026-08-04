@@ -18,6 +18,27 @@ when_to_use: >-
 
 Microsoft 365 calendar is powered by Exchange Online and surfaced through Microsoft Graph. For MSPs, calendar tasks include troubleshooting scheduling issues, creating meetings on behalf of users, managing room resources, and checking user availability during support incidents.
 
+## Anti-triggers
+
+"Schedule a meeting" routes three different ways depending on who picks
+the time. Here, *you* pick it and write the event straight into a
+mailbox:
+
+- **The customer picks the slot from a booking link** — a self-service
+  scheduling request tied to a PSA ticket is what TimeZest is for; use
+  the `timezest` plugin (`timezest-scheduling`). Writing the event
+  directly here bypasses the PSA workflow and the customer's choice.
+- **Dispatching a technician to a job** — an onsite visit or service
+  window is a PSA service call, which carries the billing and dispatch
+  record a calendar event does not; use the `autotask` plugin
+  (`autotask-service-calls`) or the equivalent PSA plugin.
+- **The same calendar work across many tenants** — use the `cipp`
+  plugin.
+
+Note also that a TimeZest "resource" is a technician or team, while a
+resource here is a room or equipment mailbox — they are not the same
+object.
+
 ## Graph API Patterns
 
 ### Get a User's Calendar Events

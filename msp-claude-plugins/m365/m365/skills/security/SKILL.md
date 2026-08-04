@@ -19,6 +19,26 @@ when_to_use: >-
 
 Security checks are among the most high-value tasks an MSP can perform in a customer's M365 tenant. Account compromises, inadequate MFA coverage, and misconfigured mail rules are the leading causes of M365 security incidents. This skill covers the key checks and indicators that separate a secure tenant from a vulnerable one.
 
+## Anti-triggers
+
+"Security" is the most overloaded word in the MSP stack. This skill is
+identity posture inside **one** M365 tenant, read via Graph:
+
+- **A detection or alert on an endpoint** — malware, ransomware,
+  suspicious process, isolate-the-host. That is EDR/MDR, not Entra; use
+  `huntress`, `sentinelone`, `blackpoint`, or `blumira`.
+- **Enforcing a baseline rather than reporting on it** — this skill
+  tells you conditional access is missing; deploying and holding the
+  standard across tenants is `cipp` (`cipp-standards`) or `inforcer`
+  (`inforcer-baseline-alignment`).
+- **The same posture check across every tenant** — use `cipp`
+  (`cipp-security`). One tenant at a time is what this skill does.
+- **Phishing, quarantine, and mail-flow threat verdicts** — those
+  belong to the mail-security gateway: `mimecast`, `abnormal`,
+  `ironscales`, or the `email-security` pack.
+- **Evidence for an audit or insurance questionnaire** — a control
+  attestation is not a Graph query; use the `compliance-pack`.
+
 ## MFA Status Audit
 
 ### Check All Users' Authentication Methods

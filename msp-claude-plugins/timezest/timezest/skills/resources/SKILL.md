@@ -17,6 +17,22 @@ bookable — agents and teams together in one list. It is the right
 starting point when a dispatcher has not named a specific technician
 or team and you need to survey the pool first.
 
+## Anti-triggers
+
+A TimeZest resource is always a **person or a pool of people**. Every
+other plugin means something else by the word:
+
+- **A room or equipment mailbox** — meeting rooms and projectors are
+  Exchange resource mailboxes, and TimeZest does not list them; use
+  `m365-calendar`.
+- **A PSA resource** — in Autotask a "resource" is an employee record
+  carrying rates, hours, and permissions; use the `autotask` plugin.
+- **An Azure resource** — VMs, storage accounts, resource groups; use
+  `azure-mcp` or the `cloudops-pack`.
+- **A managed device or configuration item** — use the RMM
+  (`kaseya/datto-rmm`, `ncentral`, `ninjaone`) or
+  `kaseya/it-glue`.
+
 ## Domain & Tools
 
 Enter the domain with `timezest_navigate` to `resources`.

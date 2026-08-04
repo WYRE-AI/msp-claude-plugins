@@ -18,6 +18,23 @@ when_to_use: >-
 
 Microsoft 365 mailboxes are managed through Exchange Online, accessible via Microsoft Graph. For MSPs, mailbox tasks range from diagnosing delivery failures and searching for lost emails to managing shared mailboxes and offboarding users. Graph provides a unified API across all mailbox types.
 
+## Anti-triggers
+
+- **"The email never arrived"** — most often the message was
+  quarantined or blocked before Exchange, so nothing here will find it.
+  Check the mail-security gateway first: `mimecast`, `spamtitan`,
+  `abnormal`, `ironscales`, or the `email-security` pack. Come back
+  here only once you know the message reached the tenant.
+- **Mailbox permissions and forwarding across tenants** — full-access
+  delegation and forwarding rules are CIPP primitives with proper
+  multi-tenant scope; use the `cipp` plugin (`cipp-mailboxes`).
+- **A suspicious forwarding rule as an active compromise** — this skill
+  reads rules; interpreting them as an indicator, plus session
+  revocation and the rest of the response, is `m365-security`.
+- **Recovering a permanently deleted mailbox or item** — past the
+  retention window this is a backup restore, not a Graph read; use the
+  `backup-pack` or `kaseya/datto-saas-protection`.
+
 ## Mailbox Types
 
 | Type | Description | Common MSP Tasks |

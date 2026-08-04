@@ -18,6 +18,28 @@ individual agent or a team. Picking the right one is the first step of
 any booking, and TimeZest treats agents and teams differently enough
 that the choice matters.
 
+## Anti-triggers
+
+Both nouns in this skill's name are heavily overloaded. Here an
+**agent** is a bookable human technician and a **team** is a
+round-robin pool of them:
+
+- **Claude subagents** — an "agent" defined under `agents/*.md` is an
+  AI configuration, not a TimeZest technician. Nothing in this skill
+  applies.
+- **An endpoint sensor** — Huntress, RocketCyber, and Liongard all call
+  their installed software an "agent"; use `huntress`
+  (`huntress-agents`), `kaseya/rocketcyber`, or `liongard`.
+- **A PSA technician record** — hours, permissions, ticket assignment,
+  and utilisation live in the PSA; use `halopsa` (`halopsa-agents`),
+  `connectwise`, or `kaseya/autotask`. TimeZest only knows who is
+  bookable.
+- **Microsoft Teams** — a TimeZest team is a scheduling pool with no
+  channels, chat, or membership sync; use `m365-teams`.
+- **Onboarding, deactivating, or permissioning a technician** — this
+  skill is read-only lookup; identity changes happen in the PSA or in
+  Entra (`m365-users`).
+
 ## Domains & Tools
 
 TimeZest's MCP server is navigation-based. Enter a domain with

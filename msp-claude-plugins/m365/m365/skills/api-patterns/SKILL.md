@@ -17,6 +17,30 @@ when_to_use: >-
 
 Microsoft Graph is the unified REST API surface for all M365 services (users, mail, calendar, Teams, OneDrive, security). All M365 MCP tools ultimately make Graph calls. Understanding Graph's OData query syntax, pagination model, throttling behavior, and auth patterns is essential for building reliable M365 workflows.
 
+## Anti-triggers
+
+This skill teaches you to compose Graph calls by hand. Two neighbouring
+plugins cover the same tenant with almost identical vocabulary, and
+choosing the wrong one is the most common routing mistake in the
+Microsoft estate:
+
+- **A read-only question about one tenant** — "how many users", "who
+  has no MFA registered", "which licences are unassigned". The Graph
+  Enterprise MCP answers these from a vetted query catalogue, so nobody
+  hand-writes a `$filter`; use the `microsoft-graph` plugin's
+  `microsoft-graph-querying` skill. Hand-writing a Graph URL when that
+  server is connected is the exact error pattern it exists to prevent.
+- **Anything spanning more than one customer tenant** — fleet-wide
+  standards, BPA drift, GDAP, or a packaged action such as offboard /
+  reset MFA / revoke sessions. Use the `cipp` plugin, which carries the
+  multi-tenant scope and per-tenant audit trail this plugin does not.
+- **A tenant that authenticates but returns nothing** — that is an app
+  registration and admin-consent problem, not a query-syntax problem;
+  use `microsoft-graph-connection`.
+
+The short rule: **ask one tenant → `microsoft-graph`; change one tenant
+→ this plugin; do either across the fleet → `cipp`.**
+
 ## Authentication
 
 ### Token Scope for MSP Operations

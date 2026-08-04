@@ -17,6 +17,20 @@ when_to_use: >-
 
 Users in Microsoft 365 (Entra ID) are the central identity object for your tenant. Every licensed service — Exchange, Teams, OneDrive, SharePoint — flows through the user object. For MSPs, user management spans onboarding new staff, offboarding leavers, license optimization, and security posture checks across customer tenants.
 
+## Anti-triggers
+
+- **Counting, listing, or auditing users without changing them** — a
+  read-only question is cheaper and safer through the vetted query
+  catalogue; use the `microsoft-graph` plugin's
+  `microsoft-graph-querying` skill.
+- **Offboarding as one packaged action, or any user work across more
+  than one tenant** — the multi-step sequence below is a CIPP primitive
+  with its own audit record; use the `cipp` plugin (`cipp-users`).
+- **"User" meaning a PSA contact or an MSP technician** — an Entra user
+  is neither. The customer's billing/ticket contact lives in the PSA
+  (`connectwise`, `halopsa`, `kaseya/autotask`); the technician being
+  scored on a CSAT survey is a `crewhu` user.
+
 ## User Object Key Properties
 
 | Property | Description | MSP Relevance |

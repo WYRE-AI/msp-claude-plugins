@@ -21,6 +21,26 @@ IDs, and serial numbers here before touching Lifecycle Manager,
 ControlMap, or Quoter. Discover this domain's tools with
 `scalepad_navigate` (domain `core`).
 
+## Anti-triggers
+
+Core holds *lifecycle records* about assets — what was bought, when the
+warranty ends, which contract covers it. It is not a live view of the
+machine:
+
+- **Live device state** — is it online, patched, low on disk, alerting
+  right now? Core's asset rows are synced snapshots. Use the RMM:
+  `kaseya/datto-rmm` (`datto-rmm-devices`), `ncentral`, `ninjaone`,
+  `atera`, or `connectwise/automate`.
+- **Changing anything** — Core is entirely read-only. Once you have the
+  client or asset ID, the write surface is
+  `scalepad-lifecycle-manager`, `scalepad-controlmap`, or
+  `scalepad-quoter`.
+- **Hardware in Lifecycle Manager** — LM keeps its own asset list under
+  opaque `hardware_key` values that are *not* the Core asset IDs; do
+  not carry one across. Use `scalepad-lifecycle-manager`.
+- **Documented configurations, passwords, and runbooks** — use
+  `kaseya/it-glue` or `hudu`.
+
 ## API Tools
 
 ### Clients & People
