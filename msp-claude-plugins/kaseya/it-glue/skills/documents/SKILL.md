@@ -17,6 +17,16 @@ when_to_use: >-
 
 Documents in IT Glue provide structured documentation storage for organizations, enabling technicians to create runbooks, procedures, network diagrams, and general documentation. Documents support rich HTML content, embedded passwords, and relationships to other IT Glue resources.
 
+## Anti-triggers
+
+- **Documentation with a fixed field schema** — repeatable, filterable
+  records are flexible assets, not free-form documents; use
+  `it-glue-flexible-assets`.
+- **The credential a runbook refers to** — passwords are separate
+  records that documents embed by reference; use `it-glue-passwords`.
+- **Device facts rather than narrative** — use
+  `it-glue-configurations`.
+
 ## Key Concepts
 
 ### Document Structure

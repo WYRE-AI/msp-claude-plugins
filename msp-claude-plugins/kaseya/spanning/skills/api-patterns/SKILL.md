@@ -29,6 +29,16 @@ https://salesforce-api.spanningbackup.com/      (Salesforce)
 
 The MCP server takes a `platform` credential field (`m365` | `gws` | `salesforce`) plus the appropriate region if applicable.
 
+## Anti-triggers
+
+- **Datto SaaS Protection** — Kaseya's other cloud-to-cloud backup
+  product, covering the same Microsoft 365 and Google Workspace
+  workloads under separate credentials and a separate API; use
+  `datto-saas-protection-api-patterns`.
+- **Appliance-based backup** — SIRIS/Alto and Unitrends protect servers
+  and images, not SaaS tenants; use `datto-bcdr-api-patterns` or
+  `unitrends-api-patterns`.
+
 ## Authentication
 
 Spanning uses **HTTP Basic auth** per the public OpenAPI spec

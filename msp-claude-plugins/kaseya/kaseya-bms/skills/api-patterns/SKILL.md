@@ -27,6 +27,14 @@ https://<tenant>.bms.kaseya.com/api
 
 The tenant subdomain is a credential field; never hard-code.
 
+## Anti-triggers
+
+- **Autotask** — Kaseya's other PSA, with its own tickets, accounts,
+  contracts, and time entries that do not sync with BMS; use the
+  `autotask-*` skills.
+- **Kaseya VSA** — the RMM half of the Kaseya One suite. It shares SSO
+  with BMS but not its ticket objects; use `kaseya-vsa-api-patterns`.
+
 ## Authentication
 
 Two supported flows.

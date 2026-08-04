@@ -17,6 +17,15 @@ when_to_use: >-
 
 Organizations are the foundational entity in IT Glue, representing companies, clients, vendors, or internal entities. All documentation, configurations, contacts, passwords, and flexible assets are associated with an organization. Proper organization management enables comprehensive client documentation and cross-platform integration with PSA tools.
 
+## Anti-triggers
+
+- **The client as a billing entity** — the PSA company record drives
+  tickets, contracts, and invoices; use `autotask-crm`.
+- **The client's grouping in monitoring or SOC tooling** — use
+  `datto-rmm-sites` or `rocketcyber-accounts`; neither shares IDs with
+  an IT Glue organization.
+- **The people at the organization** — use `it-glue-contacts`.
+
 ## Key Concepts
 
 ### Organization Types

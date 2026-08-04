@@ -18,6 +18,16 @@ when_to_use: >-
 
 Time entries are the foundation of MSP billing and resource utilization tracking. Every hour logged against tickets, projects, and contracts flows through the time entry system. This skill covers comprehensive time management including billing calculations, approval workflows, budget validation, and utilization analytics.
 
+## Anti-triggers
+
+- **A flat charge rather than hours** — use
+  `autotask-ticket-notes-attachments` for ticket charges.
+- **Out-of-pocket costs** — use `autotask-expenses`.
+- **What an approved entry became on the invoice** — use
+  `autotask-billing`.
+- **Which agreement absorbs the hours, and at what rate** — use
+  `autotask-contracts`.
+
 ## Approval Status Codes
 
 Based on the Autotask API, these are the time entry approval statuses:

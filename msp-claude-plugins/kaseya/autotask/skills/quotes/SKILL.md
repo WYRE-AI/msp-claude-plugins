@@ -17,6 +17,16 @@ when_to_use: >-
 
 Quotes are formal pricing proposals sent to customers for products, services, and service bundles. Each quote contains line items that reference catalog entries (products, services, or service bundles) with quantities, pricing, and optional discounts. Quotes are typically linked to opportunities in the sales pipeline and can be converted to contracts or projects upon acceptance.
 
+## Anti-triggers
+
+- **Quotes in Kaseya Quote Manager** — a separate Kaseya product with
+  its own quote → section → line hierarchy and sales orders, shipped as
+  a separate plugin; use `kaseya-quote-manager-quotes`.
+- **The catalog entry behind a line item** — product, service, bundle,
+  and price-list definitions live in `autotask-product-catalog`.
+- **What the client is billed after acceptance** — recurring services
+  move onto an agreement; use `autotask-contracts`.
+
 ## Key Concepts
 
 ### Quote Structure

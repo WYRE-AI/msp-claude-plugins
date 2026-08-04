@@ -18,6 +18,17 @@ when_to_use: >-
 
 The Autotask REST API provides access to 215+ entities across the PSA. This skill covers authentication, query building, pagination, error handling, and performance optimization patterns.
 
+## Anti-triggers
+
+- **Autotask tools missing, or present but refusing to run** — a
+  lazy-loaded MCP connection exposes only four meta-tools. That is a
+  discovery problem, not an auth or query problem; use
+  `autotask-tool-discovery`.
+- **Instance-specific status, priority, queue, or phase IDs** — the
+  filter DSL will happily match an ID that does not exist in your
+  tenant and return nothing. Fetch the real values with
+  `autotask-picklists`.
+
 ## Authentication
 
 ### Header-Based Authentication

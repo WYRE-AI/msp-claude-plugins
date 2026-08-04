@@ -24,6 +24,16 @@ The incident system supports:
 - **MSP Triage** - MSP technicians investigate and remediate at the customer level
 - **Audit Trail** - Full history of incident status changes and actions
 
+## Anti-triggers
+
+- **A monitor firing rather than an analyst verdict** — Datto RMM
+  raises its own antivirus and ransomware alerts with no SOC review;
+  use `datto-rmm-alerts`.
+- **The PSA ticket raised from an incident** — use `autotask-tickets`;
+  RocketCyber incident IDs and Autotask ticket IDs are unrelated.
+- **The coverage gap behind a missing detection** — use
+  `rocketcyber-agents`.
+
 ## Key Concepts
 
 ### Incident Lifecycle

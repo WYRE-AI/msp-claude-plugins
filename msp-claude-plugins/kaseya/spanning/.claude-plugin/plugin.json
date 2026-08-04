@@ -1,6 +1,6 @@
 {
   "name": "spanning",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Claude plugins for Spanning Cloud Backup - M365 / Google Workspace / Salesforce SaaS backup, restore, audit",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -19,6 +19,18 @@ when_to_use: >-
 
 Configuration Items (CIs) are the backbone of MSP asset management in Autotask. CIs represent any trackable asset—servers, workstations, network devices, software licenses, domains, and more. Proper CI management enables warranty tracking, lifecycle planning, ticket context, and contract-based billing.
 
+## Anti-triggers
+
+- **The same asset as documentation rather than as a billable record**
+  — IT Glue holds the documentation copy with its own type schema; use
+  `it-glue-configurations`.
+- **Live endpoint state — online/offline, last check-in, agent health**
+  — a CI is a static PSA record that does not know whether the machine
+  is running; use `datto-rmm-devices`, or `kaseya-vsa-api-patterns` for
+  VSA-managed endpoints.
+- **Installed software or hardware specs** — CIs carry procurement and
+  warranty fields, not collected inventory; use `datto-rmm-audit`.
+
 ## CI Status Codes
 
 | Status ID | Name | Description | Business Logic |

@@ -18,6 +18,15 @@ when_to_use: >-
 
 Passwords in IT Glue provide secure credential storage with organization-level access control. This skill covers password creation, categorization, folder organization, and security best practices for managing sensitive credentials within MSP documentation.
 
+## Anti-triggers
+
+- **A credential stored in a flexible asset's password-type field** —
+  those are not Passwords records and will not appear in
+  `search_passwords`; use `it-glue-flexible-assets`.
+- **A password embedded in a runbook** — the document references the
+  record rather than holding it; use `it-glue-documents`.
+- **The device the credential opens** — use `it-glue-configurations`.
+
 ## Key Concepts
 
 ### Password Categories

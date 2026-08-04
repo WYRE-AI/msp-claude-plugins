@@ -33,6 +33,16 @@ https://<msp-console>/api
 
 The MCP server takes the base URL as a credential field.
 
+## Anti-triggers
+
+- **Datto SIRIS/Alto appliances** — Kaseya's other backup appliance
+  line, reached through a central portal with HMAC-signed requests
+  rather than a per-appliance session token; use
+  `datto-bcdr-api-patterns`.
+- **SaaS backup for Microsoft 365, Google Workspace, or Salesforce** —
+  Unitrends protects assets behind an appliance, not cloud tenants; use
+  `spanning-api-patterns` or `datto-saas-protection-api-patterns`.
+
 ## Authentication
 
 Session-token flow:

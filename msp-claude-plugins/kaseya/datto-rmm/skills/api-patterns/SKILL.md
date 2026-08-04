@@ -17,6 +17,14 @@ when_to_use: >-
 
 The Datto RMM REST API v2 provides programmatic access to device management, alerts, sites, jobs, and audit data. This skill covers authentication, platform selection, pagination, error handling, and performance optimization patterns.
 
+## Anti-triggers
+
+- **Kaseya's other RMM** — VSA authenticates with a two-step token
+  exchange against a per-tenant host, not OAuth against a regional
+  platform; use `kaseya-vsa-api-patterns`.
+- **Datto's backup APIs** — BCDR signs requests with HMAC-SHA256 and
+  shares no credentials with RMM; use `datto-bcdr-api-patterns`.
+
 ## Key Concepts
 
 ### Platforms

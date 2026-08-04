@@ -16,6 +16,14 @@ when_to_use: >-
 
 Contacts in IT Glue represent people associated with organizations, including clients, vendors, and partners. Proper contact management enables quick access to communication details, role information, and establishes clear points of contact for each organization.
 
+## Anti-triggers
+
+- **The contact record that drives tickets and invoices** — the PSA is
+  the system of record; use `autotask-crm`.
+- **The organization rather than the people in it** — use
+  `it-glue-organizations`.
+- **A credential belonging to a person** — use `it-glue-passwords`.
+
 ## Key Concepts
 
 ### Contact Types

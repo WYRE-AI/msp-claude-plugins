@@ -15,6 +15,14 @@ when_to_use: >-
 
 Sites in Datto RMM represent client organizations or locations. Each site contains devices, has its own settings, and can have site-level variables. Sites provide organizational hierarchy and enable scoped operations - alerts, jobs, and reports can all be filtered by site.
 
+## Anti-triggers
+
+- **The client as a billing entity** — use `autotask-crm`; as a
+  documentation entity, `it-glue-organizations`; as a SOC tenant,
+  `rocketcyber-accounts`. None of these share IDs with a Datto RMM site.
+- **The endpoints themselves rather than the grouping** — use
+  `datto-rmm-devices`.
+
 ## Key Concepts
 
 ### Site Hierarchy

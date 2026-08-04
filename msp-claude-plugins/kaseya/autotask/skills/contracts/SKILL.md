@@ -17,6 +17,17 @@ when_to_use: >-
 
 Contracts in Autotask define the service relationship with clients - what services you provide, how you bill for them, and what service levels apply. Contracts control how time and expenses flow to invoices and are critical for MSP financial management.
 
+## Anti-triggers
+
+- **The invoice or billing item a contract produced** — use
+  `autotask-billing`.
+- **The catalog definition behind a contract service** — services and
+  bundles exist in the catalog independently of any contract; use
+  `autotask-product-catalog`.
+- **Kaseya BMS agreements** — BMS is a separate Kaseya PSA with its own
+  contract objects that do not sync with Autotask; use
+  `kaseya-bms-api-patterns`.
+
 ## Key Concepts
 
 ### Contract Types

@@ -20,6 +20,16 @@ The Autotask product catalog manages three types of sellable items: **Products**
 
 This skill covers product catalog operations for MSP technicians, sales engineers, and managers who need to look up products, verify pricing, check inventory levels, or audit cost-vs-billing rates.
 
+## Anti-triggers
+
+- **Putting a catalog item on a customer proposal** — quote items have
+  their own type rules and discount mechanisms; use `autotask-quotes`.
+- **The recurring services a client actually pays for** — those are
+  contract services, not catalog entries; use `autotask-contracts`.
+- **Supplier SKUs, buy prices, and purchase orders** — this catalog
+  holds your sell price only; procurement lives in the separate Kaseya
+  Quote Manager plugin, `kaseya-quote-manager-purchasing`.
+
 ## Key Concepts
 
 ### Product Types

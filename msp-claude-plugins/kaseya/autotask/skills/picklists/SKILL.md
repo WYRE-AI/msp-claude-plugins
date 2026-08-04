@@ -18,6 +18,15 @@ when_to_use: >-
 
 Autotask uses instance-specific picklist values for queues, statuses, priorities, and phases. Before creating tickets or filtering results, retrieve these values to use the correct IDs for your organization's configuration.
 
+## Anti-triggers
+
+- **What a status or priority means for SLA, escalation, and
+  transitions** — this skill returns the values, not the behaviour; use
+  `autotask-tickets`.
+- **The project/phase/task model rather than the phase list** —
+  `autotask_list_phases` returns phases for one project; the structure
+  around them is in `autotask-projects`.
+
 ## API Patterns
 
 ### List Queues

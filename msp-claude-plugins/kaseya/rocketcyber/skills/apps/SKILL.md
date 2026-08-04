@@ -24,6 +24,15 @@ Key capabilities:
 - **Threat Context** - Application data provides context during incident investigation
 - **Per-Account Inventory** - Software inventory scoped to individual customer accounts
 
+## Anti-triggers
+
+- **Installed-software inventory for patching or licence counts** — the
+  RMM audit is the fuller inventory; use `datto-rmm-audit`.
+- **Whether the sensor reporting the apps is healthy** — use
+  `rocketcyber-agents`.
+- **An application the SOC has acted on** — that is an incident; use
+  `rocketcyber-incidents`.
+
 ## Key Concepts
 
 ### Application Detection
