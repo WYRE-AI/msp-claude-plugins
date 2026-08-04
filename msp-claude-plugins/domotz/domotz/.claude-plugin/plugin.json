@@ -1,6 +1,6 @@
 {
   "name": "domotz",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Claude plugins for Domotz - network monitoring & management, device inventory, alert management, SNMP monitoring, and Domotz Eyes sensors for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
