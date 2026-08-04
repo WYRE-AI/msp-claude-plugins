@@ -32,6 +32,10 @@ Read this whole skill before connecting. The admin-consent requirement is non-ob
 - **GDAP relationships and tenant onboarding across the fleet** — a
   different consent model entirely, managed per customer relationship
   rather than per app; use the `cipp` plugin (`cipp-tenants`).
+- **The Azure MCP server's own sign-in** — it authenticates to Azure
+  Resource Manager through a different credential chain and consent,
+  and a working Graph connection says nothing about it; use
+  `azure-mcp-connection`.
 
 ## How the connection works
 

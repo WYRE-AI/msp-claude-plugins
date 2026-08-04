@@ -49,6 +49,14 @@ Each appointment type carries at least:
 These names are tenant-configured — always read the actual list
 rather than assuming a naming convention.
 
+## Anti-triggers
+
+- **Booking, rescheduling, or cancelling an actual appointment** — this
+  skill only reads the type catalogue; the scheduling request and its
+  lifecycle are `timezest-scheduling`.
+- **Who is available to take the appointment** — technician and team
+  availability is `timezest-agents-and-teams`.
+
 ## Common Workflows
 
 ### Pick the type for a booking

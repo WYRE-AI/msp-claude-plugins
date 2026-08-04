@@ -37,6 +37,11 @@ page a responder, or approve a remediation on a compromised endpoint.
   the ticket.
 - **The device the ticket is about** — asset and CI records are
   `halopsa-assets`; the client, site, or end user are `halopsa-clients`.
+- **A ticket raised in an RMM's own helpdesk** — Atera, NinjaOne,
+  Syncro, and SuperOps each ship a queue alongside the agent, and a
+  shop running Halo for service desk often still has tickets sitting
+  there. Use `atera-tickets`, `ninjaone-rmm-tickets`,
+  `syncro-tickets`, or `superops-tickets`.
 
 ## Core API Operations
 

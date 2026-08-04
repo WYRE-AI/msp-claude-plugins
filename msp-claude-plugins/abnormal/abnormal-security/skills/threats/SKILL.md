@@ -38,6 +38,9 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 - **A threat the gateway already stopped** — mail blocked before
   delivery never reaches the mailbox, so Abnormal never sees it. Search
   the gateway's own logs.
+- **The same mail flagged by Check Point Harmony Email** — Avanan is
+  the other API-based, post-delivery platform on this stack and
+  produces its own threat records; use `checkpoint-avanan-threats`.
 
 ## Threat Types
 

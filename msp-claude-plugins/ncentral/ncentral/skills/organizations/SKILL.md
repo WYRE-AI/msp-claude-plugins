@@ -29,6 +29,9 @@ hierarchy right is the first step of any workflow.
   neither, despite the shared "organizational unit" wording; use
   `cipp-tenants`.
 - **Devices inside an org unit** — use `ncentral-devices`.
+- **The customer scope in another RMM** — NinjaOne calls the same
+  boundary an organization and keeps its own ID space; use
+  `ninjaone-rmm-organizations`.
 
 ## The Hierarchy
 

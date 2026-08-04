@@ -28,6 +28,16 @@ Escalations are high-priority notifications from the Huntress SOC to MSP partner
 
 Escalations from the Huntress SOC indicate urgency. Treat all open escalations as time-sensitive communications requiring prompt review.
 
+## Anti-triggers
+
+- **A confirmed threat with a remediation to approve** — that is an
+  incident, a separate object with its own approve/reject flow; an
+  escalation is a message asking a human to decide. Use
+  `huntress-incidents`.
+- **A detection that no analyst has looked at yet** — pre-triage
+  telemetry never reaches the partner as an escalation; use
+  `huntress-signals`.
+
 ## API Patterns
 
 ### List Escalations

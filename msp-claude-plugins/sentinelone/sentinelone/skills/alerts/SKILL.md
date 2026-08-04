@@ -33,6 +33,11 @@ For full field definitions, response examples, and error details see [REFERENCE.
   easily mistaken for them; use `sentinelone-vulnerabilities`.
 - **A cloud or Kubernetes posture finding.** Same tool shape again, but
   the XSPM misconfiguration surface — use `sentinelone-misconfigurations`.
+- **A device-health or monitoring condition** — RMM and incident
+  platforms call a monitor firing an alert too, and none of them is an
+  EDR detection. Use `atera-alerts`, `superops-alerts`,
+  `pagerduty-alerts`, or `rootly-alerts`; M365 tenant alerts are
+  `cipp-alerts`.
 
 ## MCP Tools
 

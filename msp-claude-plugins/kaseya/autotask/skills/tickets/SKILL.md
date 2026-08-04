@@ -31,6 +31,12 @@ Autotask tickets are the core unit of service delivery in the PSA. Every client 
 - **Tickets in Kaseya's other PSAs** — BMS
   (`kaseya-bms-api-patterns`) and VSA (`kaseya-vsa-api-patterns`) each
   have their own ticket objects that do not sync with Autotask.
+- **A ticket in a non-Kaseya PSA, or in an RMM's own helpdesk** —
+  "ticket", "status", "queue", and "SLA" mean the same thing in all of
+  them and none of them read Autotask. Confirm the system of record
+  first, then use `connectwise-psa-tickets`, `halopsa-tickets`,
+  `atera-tickets`, `syncro-tickets`, `superops-tickets`, or
+  `ninjaone-rmm-tickets`.
 
 ## Ticket Status Codes
 

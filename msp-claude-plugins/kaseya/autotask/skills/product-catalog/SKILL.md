@@ -29,6 +29,9 @@ This skill covers product catalog operations for MSP technicians, sales engineer
 - **Supplier SKUs, buy prices, and purchase orders** — this catalog
   holds your sell price only; procurement lives in the separate Kaseya
   Quote Manager plugin, `kaseya-quote-manager-purchasing`.
+- **The same catalog in another PSA** — a ConnectWise PSA product
+  carries its own IDs, pricing flags, and procurement links; use
+  `connectwise-psa-product-catalog`.
 
 ## Key Concepts
 

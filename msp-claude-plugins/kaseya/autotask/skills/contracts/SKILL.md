@@ -27,6 +27,9 @@ Contracts in Autotask define the service relationship with clients - what servic
 - **Kaseya BMS agreements** — BMS is a separate Kaseya PSA with its own
   contract objects that do not sync with Autotask; use
   `kaseya-bms-api-patterns`.
+- **A HaloPSA agreement** — Halo models coverage, prepaid hours, and
+  SLA on its own contract object, which does not sync with Autotask;
+  use `halopsa-contracts`.
 
 ## Key Concepts
 

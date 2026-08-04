@@ -39,6 +39,10 @@ TAP identifies three primary threat vectors:
   `checkpoint-avanan-threats`, Abnormal is `abnormal-security-threats`,
   and Mimecast message-level delivery tracking is
   `mimecast-message-tracking`.
+- **A rewritten link and what happened when it was clicked** — URL
+  Defense rewriting, click verdicts, and decoding a
+  `urldefense.proofpoint.com` target are `proofpoint-url-defense`;
+  TAP reports the click event without explaining the rewrite.
 
 ## Key Concepts
 

@@ -35,6 +35,10 @@ Assets in Hudu represent documented items such as servers, workstations, network
   `hudu-articles`.
 - **What changed on the system recently** — configuration drift is
   detected elsewhere; use `liongard-detections`.
+- **The asset row in a PSA or RMM rather than the documentation
+  platform** — those records carry contract, ticket, and agent state
+  that Hudu never sees, and they are keyed independently; use
+  `halopsa-assets`, `syncro-assets`, or `superops-assets`.
 
 ## Key Concepts
 

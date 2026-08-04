@@ -39,6 +39,9 @@ does not author rotations or decide who gets paged.
   `rootly-incidents`; this skill only scopes them to a shift window.
 - **Escalation policy configuration** — routing and escalation tiers are
   `rootly-alerts`.
+- **A rotation kept in BetterStack** — BetterStack owns its schedules
+  next to its monitors and feeds Rootly no shift data; use
+  `betterstack-oncall`.
 
 ## MCP Tools
 

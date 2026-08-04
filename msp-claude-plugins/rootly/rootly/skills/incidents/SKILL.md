@@ -53,6 +53,9 @@ endpoint, or answer a customer under an SLA clock.
   action items only as live response tasks.
 - **What fired and who it routed to** — alert sources, routing rules,
   and escalation policies are `rootly-alerts`.
+- **A monitoring or uptime incident** — an incident opened by a failing
+  health check, whose deliverable is a status-page update rather than a
+  response team, is `betterstack-incidents`.
 
 ## MCP Tools
 

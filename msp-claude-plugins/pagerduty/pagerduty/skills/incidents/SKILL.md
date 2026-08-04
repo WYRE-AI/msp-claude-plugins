@@ -44,6 +44,9 @@ customer under an SLA clock.
   policies, and overrides are `pagerduty-oncall`.
 - **The raw monitoring signal itself** — dedup keys, grouping modes, and
   Events API payloads are `pagerduty-alerts`.
+- **A monitoring or uptime incident** — an incident opened by a failing
+  health check and published to a status page never enters a PagerDuty
+  escalation policy; use `betterstack-incidents`.
 
 ## MCP Tools
 

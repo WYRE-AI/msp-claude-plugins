@@ -33,6 +33,10 @@ Postmortems in Rootly are structured retrospectives created after incidents are 
   `incident_resolved` is a workflow; use `rootly-workflows`.
 - **Publishing the retrospective as customer documentation** — MSP
   knowledge bases are `hudu-articles` or `it-glue-documents`.
+- **The vendor-agnostic retrospective process** — how to run the
+  review, structure findings, and track actions whatever incident tool
+  the client uses is `devops-pack-incident-postmortem`; this skill is
+  the Rootly postmortem API behind it.
 
 ## Key Concepts
 

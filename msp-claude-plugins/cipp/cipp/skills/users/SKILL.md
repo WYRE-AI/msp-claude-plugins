@@ -29,6 +29,10 @@ User management is the highest-volume MSP workflow against CIPP. Every step of t
 - **Creating or auditing the groups themselves** — this skill only
   reads a user's memberships (`cipp_list_user_groups`); use
   `cipp-groups`.
+- **A "user" in a security or training console** — Blumira users are
+  console operators and KnowBe4 users are training enrollees; neither
+  is an Entra identity and neither is administered through CIPP. Use
+  `blumira-users` or `knowbe4-users`.
 
 ## Tool surface
 

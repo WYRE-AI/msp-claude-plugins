@@ -32,6 +32,9 @@ Customers are the foundational entity in QuickBooks Online for MSP billing workf
   `hubspot-companies`.
 - **The client's documentation or monitoring record** — use
   `hudu-companies` or the relevant RMM's client skill.
+- **The customer as the payment rail holds them** — payment methods,
+  mandates, and hosted checkout live on the collection platform, not in
+  the ledger; use `alternative-payments-customers`.
 
 ## Key Concepts
 
