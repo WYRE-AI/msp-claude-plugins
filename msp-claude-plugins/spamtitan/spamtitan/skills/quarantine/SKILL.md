@@ -16,6 +16,19 @@ when_to_use: >-
 
 SpamTitan's quarantine holds inbound emails that its filtering engine determines are likely spam, phishing, or malware. Administrators and end users can review held messages and either release legitimate emails (false positives) or permanently delete spam. For MSPs managing multiple clients, efficient quarantine management is critical to preventing false positives from disrupting business communications while ensuring malicious mail is never delivered.
 
+## Anti-triggers
+
+- **Managing a sender list as a decision in its own right** — releasing
+  with `add_to_allowlist` is a side effect of one message. Auditing,
+  scoping, or removing list entries is `SpamTitan Lists`.
+- **Mail that already reached the mailbox** — SpamTitan filters in front
+  of the tenant and cannot reach into an inbox. Clawing back delivered
+  mail is `Abnormal Security Threats` or `IRONSCALES Incidents`.
+- **A quarantine belonging to a different gateway** — every mail security
+  product in this fleet has one and none of them share message IDs. Use
+  `Mimecast Message Tracking` for its hold queue, `Proofpoint Quarantine`,
+  or `Checkpoint Avanan Quarantine`.
+
 ## Key Concepts
 
 ### Quarantine Types

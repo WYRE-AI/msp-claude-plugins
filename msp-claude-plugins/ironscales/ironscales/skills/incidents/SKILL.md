@@ -20,6 +20,22 @@ when_to_use: >-
 
 Ironscales combines AI-powered threat detection with crowdsourced employee phishing reports to identify and remediate phishing attacks. When a user reports a suspicious email (via the Ironscales Outlook add-in or Gmail extension) or Ironscales AI auto-detects a threat, an incident is created. Security administrators triage these incidents, classify each email, and take remediation actions. Ironscales uses federated learning — decisions made on one tenant inform the global threat model, improving detection over time.
 
+## Anti-triggers
+
+- **A phishing report that arrived in a different platform** — Ironscales
+  incidents originate from its own add-in or its own AI. Abnormal's abuse
+  mailbox produces separate objects with separate IDs; use
+  `Abnormal Security Cases`.
+- **A simulated phish, or who clicked one** — Ironscales incidents come
+  from real inbound mail. Campaign results and click rates are
+  `KnowBe4 Phishing`.
+- **Mail held at a gateway before it reached anyone** — Ironscales acts
+  on mail already sitting in mailboxes and has no pre-delivery queue. Use
+  `SpamTitan Quarantine` or `Mimecast Message Tracking`.
+- **Resetting the credentials a phish harvested** — remediation here
+  removes mail and blocks senders. The identity action happens in the
+  tenant; use `cipp-users`.
+
 ## Key Concepts
 
 ### Incident Sources

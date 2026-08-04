@@ -18,6 +18,19 @@ when_to_use: >-
 
 Abnormal Security provides deep message analysis capabilities beyond basic threat detection. This skill covers message retrieval, header inspection, attachment analysis, sender authentication results, and delivery context. Use it when performing forensic analysis of specific emails or investigating delivery patterns.
 
+## Anti-triggers
+
+- **Where a message went, or why it never arrived** — Abnormal sees
+  messages only as evidence attached to a detected threat. It has no
+  delivery pipeline, no queue, and no bounce record, so "trace this
+  email" questions belong to the gateway: use
+  `Mimecast Message Tracking`.
+- **Removing the message from inboxes, or putting it back** — that is
+  the remediation surface; use `Abnormal Security Threats`.
+- **Inspecting a message a gateway is holding** — everything Abnormal
+  can show was already delivered. Pre-delivery holds are
+  `SpamTitan Quarantine` or `Proofpoint Quarantine`.
+
 ## Message Field Reference
 
 ### Core Message Fields

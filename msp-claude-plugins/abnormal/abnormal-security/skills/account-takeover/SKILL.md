@@ -19,6 +19,21 @@ when_to_use: >-
 
 Abnormal Security's Account Takeover Protection monitors sign-in activity and mailbox behavior to detect compromised internal accounts. By analyzing user behavior patterns, device fingerprints, sign-in locations, and mailbox rule changes, Abnormal identifies accounts that have been taken over by attackers. This skill covers ATO case management, investigation workflows, and remediation actions.
 
+## Anti-triggers
+
+- **Actually resetting the password or revoking the sessions** —
+  Abnormal detects the compromise; the identity change happens in the
+  M365 tenant. Use `cipp-users`.
+- **Actually deleting the malicious inbox rule or forwarding address** —
+  use `Microsoft 365 Mailboxes`.
+- **A malicious email that has not compromised anyone** — inbound attack
+  detection is `Abnormal Security Threats`.
+- **The compromised mailbox belongs to a supplier, not your customer** —
+  external senders are scored separately; use
+  `Abnormal Security Vendors`.
+- **Abuse-mailbox cases** — despite the shared `caseId` vocabulary those
+  are user-reported email submissions; use `Abnormal Security Cases`.
+
 ## Account Takeover Indicators
 
 | Indicator | Description | Risk Level |

@@ -16,6 +16,18 @@ when_to_use: >-
 
 The Mimecast delivery queue holds messages that are in transit — inbound messages being scanned and processed, outbound messages awaiting delivery to recipient servers. Queue monitoring is essential for detecting delivery backlogs, identifying stuck messages due to recipient server issues, and understanding the state of mail flow during incidents (e.g. a downstream mail server outage). A healthy queue processes messages within seconds; messages sitting in the queue for minutes or longer indicate a potential problem.
 
+## Anti-triggers
+
+- **Releasing or deleting a held message** — this skill reports queue
+  contents and cannot change a message's disposition; use
+  `Mimecast Message Tracking`.
+- **Finding one specific email** — the queue shows current in-transit
+  state only. Anything already delivered, bounced, or rejected has left
+  it; search with `Mimecast Message Tracking`.
+- **Why a message was blocked** — queueing is a delivery outcome, not a
+  security verdict. For the threat reasoning use
+  `Mimecast Threat Intelligence`.
+
 ## Key Concepts
 
 ### Queue Types

@@ -17,6 +17,23 @@ when_to_use: >-
 
 Message tracking is the primary diagnostic tool in Mimecast for investigating email delivery issues, tracing suspicious messages, and managing held email. The Mimecast MCP server provides tools to search messages across the full delivery pipeline, retrieve detailed per-message metadata, and control message disposition (hold or release). This is the first tool to reach for when investigating reported phishing emails, delivery failures, or missing messages.
 
+## Anti-triggers
+
+- **Mail that is late rather than blocked** — deferred, retrying, and
+  backlogged messages are a delivery condition, not a hold, and they are
+  not searchable here until they land in a final state. Use
+  `Mimecast Queue Management`.
+- **Whether the user clicked the link, or what the sandbox found** — URL,
+  attachment, and impersonation verdicts live in TTP; use
+  `Mimecast Threat Intelligence`.
+- **A quarantine belonging to a different gateway** — Mimecast's
+  equivalent is the hold queue, and these message IDs address only it.
+  Use `SpamTitan Quarantine`, `Proofpoint Quarantine`, or
+  `Checkpoint Avanan Quarantine`.
+- **Mail that was delivered clean and only later turned out to be an
+  attack** — Mimecast decides at the perimeter; behavioural detection
+  after delivery is `Abnormal Security Threats`.
+
 ## Key Concepts
 
 ### Message States

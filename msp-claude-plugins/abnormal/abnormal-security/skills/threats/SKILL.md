@@ -20,6 +20,25 @@ when_to_use: >-
 
 Abnormal Security uses behavioral AI to detect email threats that bypass traditional secure email gateways (SEGs). Unlike signature or rule-based detection, Abnormal profiles normal communication patterns and detects deviations indicative of attacks. This skill covers threat types, attack vectors, severity assessment, remediation, and investigation workflows.
 
+## Anti-triggers
+
+- **An email a user reported to the abuse mailbox** — those arrive as
+  cases carrying their own AI judgment and action set; use
+  `Abnormal Security Cases`.
+- **A mailbox behaving strangely rather than an email arriving** —
+  impossible travel, new inbox rules, and lateral sending are account
+  compromise; use `Abnormal Security Account Takeover`.
+- **Header, SPF/DKIM/DMARC, or attachment forensics on one message** —
+  use `Abnormal Security Messages`.
+- **Releasing something from a quarantine queue** — Abnormal has no
+  gateway queue. It inspects mail post-delivery through the M365 API and
+  pulls it back out of inboxes. Anything sitting in a hold queue belongs
+  to the gateway holding it: `SpamTitan Quarantine`,
+  `Mimecast Message Tracking`, or `Proofpoint Quarantine`.
+- **A threat the gateway already stopped** — mail blocked before
+  delivery never reaches the mailbox, so Abnormal never sees it. Search
+  the gateway's own logs.
+
 ## Threat Types
 
 | Type | Description | Severity Range |

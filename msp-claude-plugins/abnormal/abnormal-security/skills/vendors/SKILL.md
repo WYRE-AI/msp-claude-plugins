@@ -18,6 +18,17 @@ when_to_use: >-
 
 Abnormal Security's VendorBase provides AI-driven vendor risk assessment by analyzing email communication patterns between your organization and its vendors. It detects compromised vendor accounts, assesses vendor risk levels, and alerts on suspicious vendor behavior. This is critical for protecting against supply chain email attacks where a trusted vendor's account is taken over and used to send malicious emails.
 
+## Anti-triggers
+
+- **"Vendor" meaning a distributor or product catalogue** — VendorBase
+  scores external parties who email your customer, not suppliers you buy
+  from. Resale catalogue, SKUs, and supplier records are `Pax8 Products`.
+- **One specific malicious email from a vendor domain** — the vendor
+  record carries the risk score; the message carries the attack. Use
+  `Abnormal Security Threats`.
+- **A compromised mailbox inside your customer's own tenant** — use
+  `Abnormal Security Account Takeover`.
+
 ## Vendor Risk Levels
 
 | Level | Score Range | Description | Action |

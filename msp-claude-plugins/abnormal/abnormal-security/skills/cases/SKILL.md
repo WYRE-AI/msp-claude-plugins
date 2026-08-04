@@ -18,6 +18,21 @@ when_to_use: >-
 
 Abnormal Security's Abuse Mailbox automatically processes user-reported suspicious emails. When users forward or report emails to a designated abuse mailbox address, Abnormal analyzes the reported message and creates a case with an AI-generated judgment. This skill covers case lifecycle, triage workflows, remediation actions, and bulk operations.
 
+## Anti-triggers
+
+- **A `caseId` that came from an account-takeover alert** — ATO cases are
+  a separate object with their own IDs and remediation set, and both
+  skills call the identifier `caseId`; use
+  `Abnormal Security Account Takeover`.
+- **Threats Abnormal found on its own** — no user reported them, so no
+  case exists; use `Abnormal Security Threats`.
+- **User-reported phishing in a different platform** — IRONSCALES runs
+  its own report-to-incident loop from its Outlook and Gmail add-ins,
+  with separate IDs and its own classification verbs; use
+  `IRONSCALES Incidents`.
+- **A user who reported a simulated phish** — campaign reporting rates
+  belong to the training platform; use `KnowBe4 Phishing`.
+
 ## Case Lifecycle
 
 ```
