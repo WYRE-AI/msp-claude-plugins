@@ -1,6 +1,6 @@
 {
   "name": "halopsa",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Claude Code plugin for HaloPSA - tickets, clients, assets, contracts",
   "author": {
     "name": "MSP Claude Plugins Community"
