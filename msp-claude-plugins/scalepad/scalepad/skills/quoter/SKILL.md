@@ -29,6 +29,23 @@ the same product:
 
 Discover this domain's tools with `scalepad_navigate` (domain `quoter`).
 
+## Anti-triggers
+
+Most MSPs run more than one quoting system, and "build a quote" does
+not name which. This skill only speaks to Quoter:
+
+- **A ConnectWise quote** — use the `connectwise/cpq` plugin
+  (`connectwise-cpq-quotes`).
+- **An Autotask quote or opportunity** — use the `autotask` plugin
+  (`autotask-quotes`); Kaseya's standalone quoting product is
+  `kaseya-quote-manager`.
+- **Sending a document for signature** — publishing a quote here is not
+  an e-signature flow; use `pandadoc`.
+- **Invoicing and payment collection** — a published quote is not an
+  invoice; use `quickbooks`, `xero`, `stripe`, or the `finance-pack`.
+- **Distributor purchasing** — buying what you quoted happens at the
+  distributor; use `pax8` or `sherweb`.
+
 ## API Tools (~60; the high-value subset)
 
 ### Quotes

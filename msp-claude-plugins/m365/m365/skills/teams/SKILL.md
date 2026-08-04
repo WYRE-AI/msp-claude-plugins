@@ -17,6 +17,24 @@ when_to_use: >-
 
 Microsoft Teams is the collaboration hub for most M365 customers. MSP support tasks include troubleshooting access issues, managing team membership, reviewing channel structure, and investigating meeting problems. All Teams data is accessible through Microsoft Graph.
 
+## Anti-triggers
+
+"Team" means something different in four of the plugins an MSP has
+installed. Here it is a Microsoft 365 collaboration workspace backed by
+an Entra group:
+
+- **A scheduling pool of technicians** — TimeZest teams are round-robin
+  availability groups with no Microsoft Teams involvement at all; use
+  the `timezest` plugin (`timezest-agents-and-teams`).
+- **A PSA dispatch queue or technician group** — use the PSA plugins
+  (`halopsa`, `connectwise`, `kaseya/autotask`).
+- **Booking or rescheduling a meeting** — creating the calendar event
+  is `m365-calendar`; this skill covers the Teams objects the meeting
+  hangs off.
+- **Reading Teams chat for an investigation** — message retrieval for
+  compromise or eDiscovery work is a security and retention question,
+  not a membership one; start at `m365-security`.
+
 ## Core Teams Objects
 
 | Object | Description | API Resource |

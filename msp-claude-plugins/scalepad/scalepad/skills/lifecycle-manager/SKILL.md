@@ -22,6 +22,28 @@ forecasting. It is full CRUD — most write tools exist alongside the
 reads. Discover this domain's tools with `scalepad_navigate` (domain `lifecycle-manager`).
 US-only.
 
+## Anti-triggers
+
+LM shares three nouns with its sibling domains and with the wider
+stack, and each pair is a different object:
+
+- **Assessments and action items in ControlMap** — `scalepad_cm_*` and
+  `scalepad_lm_*` both have them. LM's are vCIO engagement items on a
+  roadmap; ControlMap's are compliance findings against a framework
+  control. They are separate records with separate tools; use
+  `scalepad-controlmap` for the compliance side.
+- **Contracts** — an LM contract is the vCIO agreement backing a
+  roadmap, not the billing contract that drives invoicing. For the
+  agreement you bill against, use the PSA (`kaseya/autotask`,
+  `connectwise`, `halopsa`).
+- **Live device state** — LM hardware rows are lifecycle records, not
+  RMM telemetry; use `kaseya/datto-rmm`, `ncentral`, or `ninjaone`.
+- **Vendor-agnostic warranty or refresh methodology** — the
+  cross-vendor "how do we run refresh planning" workflow is the
+  `assets-pack` (`warranty-tracking`, `refresh-cycle-planning`); this
+  skill is the ScalePad tool calls that execute it.
+- **Quoting the refresh you roadmapped** — use `scalepad-quoter`.
+
 ## API Tools (~190; the high-value subset)
 
 ### Clients & Contacts

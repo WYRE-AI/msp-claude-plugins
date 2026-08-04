@@ -21,6 +21,23 @@ calendar, and in the billing record. Two parts of the scheduling
 request payload carry that coupling: `associatedEntities` and
 `triggerMode`.
 
+## Anti-triggers
+
+This skill shapes the TimeZest side of the link. It has no PSA
+credentials and cannot read or write a ticket:
+
+- **Reading, updating, or closing the ticket** — status, notes, time
+  entries, assignment; use `connectwise`, `halopsa`, or the `autotask`
+  plugin.
+- **Finding the ticket to book against** — ticket search and triage
+  happen in the PSA; arrive here with the ID already resolved.
+- **Configuring the PSA-side integration** — the `pod` workflow, its
+  notification templates, and the TimeZest app install are configured
+  in the PSA and in the TimeZest web UI, not through these tools.
+- **A booking that never sent, as opposed to one that never synced** —
+  a request stuck before delivery is a scheduling-request state
+  question; use `timezest-scheduling`.
+
 ## `associatedEntities` — the PSA link
 
 Every `timezest_scheduling_create_request` call should carry an

@@ -21,6 +21,18 @@ The Microsoft Graph MCP Server for Enterprise is a Microsoft-hosted MCP server (
 
 Read this whole skill before connecting. The admin-consent requirement is non-obvious and the failure mode (a connection that authenticates fine but returns nothing) looks like a different bug.
 
+## Anti-triggers
+
+- **Actual directory or identity questions** once the connection works —
+  use `microsoft-graph-querying`.
+- **The `m365` plugin's Entra app registration** — it is a *different*
+  app with different (Graph `User.Read.All`-style) permissions and its
+  own consent. Consenting one does not consent the other, and the
+  troubleshooting below does not apply to it; use the `m365` plugin.
+- **GDAP relationships and tenant onboarding across the fleet** — a
+  different consent model entirely, managed per customer relationship
+  rather than per app; use the `cipp` plugin (`cipp-tenants`).
+
 ## How the connection works
 
 - The gateway exposes a `microsoft-graph` vendor that proxies to `https://mcp.svc.cloud.microsoft/enterprise`.

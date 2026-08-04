@@ -18,6 +18,24 @@ when_to_use: >-
 
 M365 licensing is a top billing concern for MSPs. Licenses are purchased as SKU subscriptions, each containing bundles of service plans (Exchange, Teams, SharePoint, etc.). Efficient license management — finding unused seats, rightsizing SKUs, ensuring all users have what they need — directly impacts both the MSP's margin and the customer's costs.
 
+## Anti-triggers
+
+Assigning a seat and buying a seat are different systems, and the word
+"license" covers both:
+
+- **Buying, cancelling, or repricing subscriptions** — changing what
+  the tenant *owns* happens at the distributor, not in Graph.
+  `subscribedSkus` only reports what was already purchased. Use `pax8`
+  (`pax8-subscriptions`), `sherweb`, or `cipp` for CSP licences.
+- **License cost, margin, or invoice reconciliation** — commercial data
+  lives with the distributor and in the PSA contract, not in Entra; use
+  `pax8` (`pax8-invoices`) or the `finance-pack`.
+- **A licence audit across every customer tenant** — use the `cipp`
+  plugin (`cipp-licenses`).
+- **Reading seat utilisation without changing assignments** — the
+  vetted query catalogue answers this without composing a `$filter`;
+  use the `microsoft-graph` plugin's `microsoft-graph-querying` skill.
+
 ## Core Concepts
 
 ### Subscription → SKU → Service Plans
