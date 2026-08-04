@@ -23,6 +23,23 @@ Rootly's on-call management provides visibility into who is currently on-call, w
 - **Shift Metrics** — Analyse incident volume, severity distribution, and response time per user, team, or schedule
 - **Incident Scoping** — Pull only the incidents that occurred during a specific shift period
 
+## Anti-triggers
+
+This skill *analyses* on-call — handoffs, shift load, burnout risk. It
+does not author rotations or decide who gets paged.
+
+- **Building or editing a rotation** — schedule layers, restrictions, and
+  temporary overrides are `pagerduty-oncall`; Rootly reads shift data
+  rather than authoring it.
+- **When the SLA clock runs against a customer** — business-hours
+  calendars and coverage windows are a contractual construct, unrelated
+  to responder shifts; use `freshdesk-sla-business-hours` or
+  `halopsa-contracts`.
+- **The incidents themselves** — triage, severity, and resolution are
+  `rootly-incidents`; this skill only scopes them to a shift window.
+- **Escalation policy configuration** — routing and escalation tiers are
+  `rootly-alerts`.
+
 ## MCP Tools
 
 ### On-Call Tools

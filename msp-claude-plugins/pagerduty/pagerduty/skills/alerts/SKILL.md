@@ -17,6 +17,22 @@ when_to_use: >-
 
 Alerts are the raw signals from monitoring tools that flow into PagerDuty. When an alert is received, PagerDuty creates or updates an incident based on the service's alert grouping configuration. Multiple alerts can be grouped into a single incident to reduce noise. Alerts can also be suppressed via event rules to prevent unnecessary notifications.
 
+## Anti-triggers
+
+- **The work item responders act on** — an alert is the signal; the
+  incident is the object with a status, an assignee, and an escalation
+  clock. Triage, acknowledgement, and resolution are
+  `pagerduty-incidents`.
+- **Alerts raised by another product** — "alert" is one of the most
+  overloaded words in the MSP stack. RMM device alerts are
+  `datto-rmm-alerts`; network alerts are `auvik-alerts`; EDR detections
+  are `sentinelone-alerts`; Rootly's alert-routing layer is
+  `rootly-alerts`. This skill only speaks the PagerDuty event model.
+- **Where an alert lands and who owns it** — the service, its
+  integration keys, and its escalation policy are `pagerduty-services`.
+- **How many alerts fired and how fast they were handled** — volume,
+  noise ratios, and MTTA/MTTR are `pagerduty-analytics`.
+
 ## Key Concepts
 
 ### Alert vs. Incident

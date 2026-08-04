@@ -18,6 +18,21 @@ when_to_use: >-
 
 PagerDuty Analytics provides data-driven insights into incident response performance. Key metrics include Mean Time to Acknowledge (MTTA), Mean Time to Resolve (MTTR), incident frequency, and responder workload. These metrics help MSPs identify operational bottlenecks, measure SLA compliance, and demonstrate value to clients.
 
+## Anti-triggers
+
+MTTA and MTTR measure how fast responders reacted to a page. They are not
+the same number as contractual SLA attainment on customer tickets, and
+reporting one as the other misstates compliance to a client.
+
+- **SLA attainment against a customer agreement** — first-response and
+  resolution targets, business-hours clocks, and breach counts are
+  `freshdesk-sla-business-hours` or `halopsa-contracts`.
+- **Ticket volume, backlog, or technician utilisation** — those come from
+  the PSA, not PagerDuty; use `halopsa-tickets` or
+  `connectwise-manage-tickets`.
+- **Per-shift incident load and burnout risk** — Rootly models on-call
+  health directly; use `rootly-oncall`.
+
 ## Key Concepts
 
 ### Core Metrics

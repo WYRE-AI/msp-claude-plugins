@@ -18,6 +18,23 @@ when_to_use: >-
 
 HaloPSA invoices represent bills generated for client work and contracts. Use these tools to view invoice status, track payment, and pull invoice data for reporting or reconciliation. Invoices are read-only via MCP; creation and dispatch happen through the HaloPSA UI or billing workflows.
 
+## Anti-triggers
+
+This surface is read-only. There is no tool here that raises, edits,
+sends, or credits an invoice — a request to do any of those cannot be
+satisfied by this skill.
+
+- **Raising, sending, or crediting an invoice** — no MCP tool exists;
+  route the operator to the HaloPSA UI rather than improvising a write.
+- **Payments, ledgers, and reconciliation in the accounting system** —
+  the invoice of record for the books lives there; use `xero-invoices`
+  and `xero-payments`.
+- **Why an invoice says what it says** — recurring charges, prepaid-hour
+  deduction, and billing frequency are configured on the agreement; use
+  `halopsa-contracts`.
+- **The billable time behind a line** — time entries are logged as ticket
+  actions; use `halopsa-tickets`.
+
 ## API Patterns
 
 ### List Invoices

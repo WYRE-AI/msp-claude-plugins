@@ -18,6 +18,25 @@ when_to_use: >-
 
 Rootly workflows automate repetitive incident response tasks. Each workflow consists of a trigger (what starts it), conditions (when it should run), and actions (what it does). Workflows can create Slack channels, page on-call, update status pages, create Jira tickets, send notifications, and more -- all automatically when incidents match specific criteria.
 
+## Anti-triggers
+
+"Workflow" means automation *inside Rootly, fired by incident events*.
+Several neighbouring things share the word.
+
+- **Claude Code automation** — subagents under `agents/*.md` and slash
+  commands under `commands/*.md` are plugin authoring concerns, not
+  Rootly resources. Nothing in this skill configures Claude.
+- **PSA workflow rules** — ticket routing, board automation, and
+  notification rules inside a PSA are `connectwise-manage-tickets`,
+  `halopsa-tickets`, or `autotask-tickets`.
+- **PagerDuty's automation** — event orchestrations and incident
+  workflows are a separate product surface; use `pagerduty-incidents`
+  and `pagerduty-alerts`.
+- **RMM scripts and scheduled jobs** — running a script on an endpoint is
+  `datto-rmm-jobs`, not a Rootly action.
+- **What a workflow did on a specific incident** — execution history is
+  read from the incident; use `rootly-incidents`.
+
 ## Key Concepts
 
 ### Workflow Components

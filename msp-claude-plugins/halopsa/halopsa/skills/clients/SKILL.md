@@ -18,6 +18,26 @@ when_to_use: >-
 
 Clients (customers) are the foundation of HaloPSA. All tickets, contracts, assets, and invoices are associated with clients. Proper client data management is critical for accurate service delivery and billing.
 
+## Anti-triggers
+
+HaloPSA calls end-user contacts **Users**. That word does not mean a
+HaloPSA login, and it does not mean a technician.
+
+- **Your own technicians and teams** — those are agents, a separate
+  entity with its own IDs; use `halopsa-agents`. Assigning a ticket needs
+  an `agent_id`, never a `user_id`.
+- **The same customer in another system** — a Freshdesk company, a
+  ConnectWise company, or an Autotask company is a different record with
+  different required fields; use `freshdesk-contacts-companies`,
+  `connectwise-manage-companies`, or `autotask-crm`. Do not assume IDs or
+  domains map across.
+- **Microsoft 365 or Entra user accounts** — mailbox, licence, and
+  identity questions are `cipp-users` or `cipp-mailboxes`; a HaloPSA User
+  is a CRM contact record with no directory presence.
+- **What the client is entitled to** — coverage, rates, and prepaid hours
+  are `halopsa-contracts`; what they have been billed is
+  `halopsa-invoices`.
+
 ## Key Concepts
 
 Three linked entities make up the CRM layer:

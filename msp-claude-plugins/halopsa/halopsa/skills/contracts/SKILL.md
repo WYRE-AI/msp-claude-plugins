@@ -18,6 +18,23 @@ when_to_use: >-
 
 Contracts in HaloPSA define the service relationship with clients - what services you provide, how you bill for them, and what service levels apply. Contracts control how time, expenses, and recurring charges flow to invoices and are critical for MSP financial management.
 
+## Anti-triggers
+
+A HaloPSA contract is the commercial agreement — coverage, rates, and the
+SLA you committed to. It is not the helpdesk configuration that computes
+a deadline, and it is not the bill.
+
+- **How a ticket's due date was calculated** — SLA policies and
+  business-hours calendars in the helpdesk are
+  `freshdesk-sla-business-hours`; the contract states the commitment, the
+  helpdesk approximates it, and the two can legitimately disagree.
+- **What has actually been billed** — issued invoices and payment status
+  are `halopsa-invoices` (read-only) and `xero-invoices` for the books.
+- **Contracts in another PSA** — the type taxonomy and prepaid-hour model
+  differ materially; use `autotask-contracts`.
+- **Which assets a contract covers** — asset records and their contract
+  links are `halopsa-assets`.
+
 ## Key Concepts
 
 ### Contract Types

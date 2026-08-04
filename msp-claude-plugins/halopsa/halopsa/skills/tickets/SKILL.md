@@ -13,6 +13,31 @@ when_to_use: >-
 
 Tickets are the core unit of service delivery in HaloPSA. The API uses array-wrapped payloads for all write operations (`POST /api/Tickets` with `[{...}]`). Status, priority, and ticket type IDs are instance-configurable -- always query `/api/Status`, `/api/Priority`, and `/api/TicketType` to get valid values.
 
+## Anti-triggers
+
+A HaloPSA ticket type is often named "Incident", which collides with two
+other meanings of the word. The routing test is what the operator does
+next: answer a client under an SLA clock and bill the time (this skill),
+page a responder, or approve a remediation on a compromised endpoint.
+
+- **An on-call service incident** — something is broken and a human must
+  be woken up; the deliverable is acknowledgement and restoration, not a
+  client-visible action and a time entry. Use `pagerduty-incidents` or
+  `rootly-incidents`.
+- **A confirmed security incident** — malware or intrusion with a
+  remediation to approve. Use `huntress-incidents`, or
+  `sentinelone-alerts` for raw EDR detections.
+- **Tickets in another PSA or helpdesk** — the vocabulary is nearly
+  identical but the field models are not (Halo wraps every write in an
+  array and uses instance-configurable status IDs). Use
+  `freshdesk-ticketing`, `connectwise-manage-tickets`, or `autotask-tickets`.
+- **Whether the work is covered and at what rate** — contract type,
+  prepaid-hour balances, and the SLA attached to the agreement are
+  `halopsa-contracts`; this skill only reads the resulting SLA fields on
+  the ticket.
+- **The device the ticket is about** — asset and CI records are
+  `halopsa-assets`; the client, site, or end user are `halopsa-clients`.
+
 ## Core API Operations
 
 ### Create Ticket

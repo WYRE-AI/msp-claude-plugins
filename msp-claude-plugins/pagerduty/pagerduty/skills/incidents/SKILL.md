@@ -21,6 +21,30 @@ Incidents are the core resource in PagerDuty — created automatically from aler
 
 PagerDuty has 14 MCP tools for incident management — more than any other domain.
 
+## Anti-triggers
+
+"Incident" names three different objects across this marketplace, and the
+routing test is what the operator does next: page a responder (this
+skill), approve a remediation on a compromised endpoint, or answer a
+customer under an SLA clock.
+
+- **A confirmed security incident** — malware, intrusion, a host to
+  contain. That object carries a SOC-recommended remediation to approve,
+  not a responder to page; use `huntress-incidents`, or
+  `sentinelone-alerts` for raw EDR detections.
+- **A customer ticket typed "Incident"** — ITIL ticket classification
+  inside a PSA or helpdesk, where the deliverable is an SLA-timed
+  response and a billable time entry rather than a page; use
+  `freshdesk-ticketing`, `halopsa-tickets`, `connectwise-manage-tickets`,
+  or `autotask-tickets`.
+- **A Rootly incident** — a different vendor with a different lifecycle
+  (`detected → in_triage → mitigated → resolved → closed`, not
+  `triggered → acknowledged → resolved`); use `rootly-incidents`.
+- **Who would be paged, rather than what fired** — schedules, escalation
+  policies, and overrides are `pagerduty-oncall`.
+- **The raw monitoring signal itself** — dedup keys, grouping modes, and
+  Events API payloads are `pagerduty-alerts`.
+
 ## MCP Tools
 
 ### Core Incident Tools

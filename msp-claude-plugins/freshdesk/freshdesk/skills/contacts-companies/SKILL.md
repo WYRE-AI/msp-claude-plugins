@@ -24,6 +24,29 @@ is the foundation for account-level context, SLA association, and reporting.
 This skill covers contact and company operations through tools named
 `freshdesk_contacts_<action>` and `freshdesk_companies_<action>`.
 
+## Anti-triggers
+
+In Freshdesk a **contact** is a customer who raises tickets; an **agent**
+is your own helpdesk staff. `freshdesk_contacts_make_agent` crosses that
+line permanently — it consumes a licensed seat and grants access to every
+ticket in the account, so it is not a labelling change.
+
+- **Technician rosters and team capacity** — this skill only converts a
+  contact *into* an agent. For looking up who your technicians are and
+  which teams they sit in, the PSA carries the richer model; use
+  `halopsa-agents`.
+- **The same customer in another system** — a HaloPSA client, a
+  ConnectWise company, or an Autotask company is a different record with
+  different required fields; use `halopsa-clients`,
+  `connectwise-manage-companies`, or `autotask-crm`. Do not
+  assume IDs or domains map across.
+- **Assets, sites, or contracts belonging to the customer** — Freshdesk
+  companies carry no CMDB or billing model; use `halopsa-assets` and
+  `halopsa-contracts`.
+- **Anything about the customer's tickets** — listing, replying, or
+  triaging is `freshdesk-ticketing`; this skill resolves who the
+  requester is.
+
 ## Contacts
 
 ### Key Contact Fields

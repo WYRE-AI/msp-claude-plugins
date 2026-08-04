@@ -19,6 +19,22 @@ when_to_use: >-
 
 PagerDuty's on-call system manages who receives pages for each service. Schedules define rotation layers (who is on-call when), and escalation policies define what happens if a page isn't acknowledged (Tier 1 → Tier 2 → Tier 3). For MSPs, PagerDuty on-call management typically covers internal SRE/IT rotations and can be configured per-customer if using multi-account setups.
 
+## Anti-triggers
+
+- **When the SLA clock runs against a customer** — business-hours
+  calendars and coverage windows in a helpdesk or PSA are a billing and
+  contractual construct, unrelated to who gets woken up. Use
+  `freshdesk-sla-business-hours` or `halopsa-contracts`.
+- **Escalating a ticket** — raising a PSA ticket's priority or moving it
+  to another queue is `freshdesk-ticketing` or `halopsa-tickets`;
+  escalation here means a page climbing tiers because nobody
+  acknowledged.
+- **Reviewing shift load or burnout risk** — Rootly analyses on-call
+  health and handoffs but does not author schedules; use `rootly-oncall`.
+- **Responder workload metrics and off-hours interruption counts** —
+  those are `pagerduty-analytics`; this skill covers coverage, not
+  measurement.
+
 ## MCP Tools
 
 ### On-Call & Schedule Tools

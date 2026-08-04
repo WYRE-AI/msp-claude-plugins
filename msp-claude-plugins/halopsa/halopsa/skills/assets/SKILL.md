@@ -18,6 +18,25 @@ when_to_use: >-
 
 Assets (also called Configuration Items or CIs) in HaloPSA represent managed devices, software, and other trackable items. Effective asset management is crucial for MSPs to track what's deployed at client sites, manage hardware lifecycle, and link service tickets to affected equipment.
 
+## Anti-triggers
+
+A HaloPSA asset is the PSA's **record** of a device — what you believe is
+deployed, and what it is billed and contracted under. It is not the
+device's live state.
+
+- **Whether the machine is online, patched, or healthy right now** — that
+  is the RMM's answer, not the PSA's; use `datto-rmm-devices` or the
+  equivalent device skill for your RMM. The two routinely disagree, and
+  the PSA is the one that goes stale.
+- **Warranty dates and hardware lifecycle reporting** — use
+  `scalepad-lifecycle-manager`; Halo's warranty fields are a local copy
+  that drifts.
+- **Documentation about the asset** — runbooks, diagrams, and
+  configuration notes are `hudu-assets` or `it-glue-configurations`.
+- **What the asset costs or is covered by** — contract coverage and
+  billing are `halopsa-contracts`; the client and site it belongs to are
+  `halopsa-clients`.
+
 ## Key Concepts
 
 An asset is always owned by a client and optionally placed at a site, assigned to a
