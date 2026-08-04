@@ -19,6 +19,20 @@ when_to_use: >-
 
 QuickBooks Online provides a comprehensive set of financial reports accessible via the API. For MSPs, the most critical reports are Accounts Receivable Aging (tracking which clients owe money and how overdue), Profit & Loss (measuring overall and per-client profitability), Balance Sheet (financial position), and Accounts Payable Aging (tracking vendor obligations). Reports are read-only API calls that return structured data suitable for dashboards, alerts, and automated analysis.
 
+## Anti-triggers
+
+- **A specific transaction** — reports are aggregates with their own
+  nested row structure and their own rounding. Pulling one invoice,
+  payment, or bill out of a report is the wrong path; use
+  `quickbooks-invoices`, `quickbooks-payments`, or `quickbooks-expenses`.
+- **The books are in Xero, not QuickBooks** — use `xero-reports`. Both
+  produce "P&L" and "aged receivables" under those exact names.
+- **Margin on resold cloud licences** — the cost side sits with the
+  distributor and the revenue side in QBO; reconciling them is
+  `shared-billing-reconciliation`, not a single report.
+- **Service-delivery metrics** — ticket volume, SLA attainment, and
+  utilisation are PSA reporting, not accounting; use the PSA's skills.
+
 ## Key Concepts
 
 ### Report Categories

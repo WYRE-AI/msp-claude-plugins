@@ -16,6 +16,19 @@ when_to_use: >-
 
 Companies in Pax8 represent the MSP's client organizations. Each company is associated with subscriptions, orders, invoices, and contacts. When an MSP provisions cloud software through Pax8, it is always tied to a specific company record. Companies are the foundational entity for all marketplace operations -- products are ordered for companies, subscriptions belong to companies, and invoices are generated per company.
 
+## Anti-triggers
+
+- **The client record of record** — a Pax8 company exists only to hang
+  licence purchases off. Contracts, contacts, and service history live in
+  the PSA; use `autotask-crm`, `connectwise-psa-companies`, or
+  `halopsa-clients`.
+- **The same client in the other CSP marketplace** — use
+  `sherweb-customers`; Pax8 and Sherweb company IDs are unrelated, so
+  matching is by name or domain, never by ID.
+- **The Microsoft tenant behind the licences** — a Pax8 company is a
+  billing entity, not a tenant. Use `m365-users` or `cipp-tenants`.
+- **The client's documentation record** — use `hudu-companies`.
+
 ## MCP Tools
 
 ### Available Tools

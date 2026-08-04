@@ -19,6 +19,24 @@ when_to_use: >-
 
 Subscriptions in Sherweb represent active cloud product licenses assigned to a customer through the distributor platform. When the MSP provisions a product for a customer via Sherweb, a subscription is created that tracks the product, quantity (seats/licenses), billing cycle, and status. Subscriptions are the core ongoing entity that MSPs manage -- adjusting seat counts as clients grow or contract, monitoring provisioning status, and ensuring license compliance.
 
+## Anti-triggers
+
+- **Licences bought through Pax8** — the other CSP marketplace in this
+  marketplace. Same concepts, different account, no shared IDs; use
+  `pax8-subscriptions`. Establish which distributor holds the product
+  before touching a seat count, because only this skill's tool can change
+  one and it changes it for real.
+- **A licence assigned to a named user** — Sherweb tracks what the MSP
+  *purchased*; who it is *assigned to* lives in the tenant. Use
+  `m365-licensing` or `cipp-licenses`. Purchased and assigned seat counts
+  legitimately differ.
+- **What the change will cost** — the charge for a mid-period quantity
+  change is prorated and net of deductions, so it is not the list price
+  times the delta. Use `sherweb-billing`.
+- **Removing a user's access rather than a seat** — dropping a Sherweb
+  quantity deprovisions licences bluntly. Offboarding a person is a tenant
+  operation; use `cipp-users` or `m365-users`.
+
 ## MCP Tools
 
 ### Available Tools

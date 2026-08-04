@@ -18,6 +18,20 @@ when_to_use: >-
 
 Payments in QuickBooks Online record money received from customers. For MSPs, payments are typically applied against outstanding invoices for managed services, project work, or hardware. QBO supports multiple payment methods (check, credit card, ACH, cash), allows partial payments, handles overpayments as credits, and tracks deposits. Proper payment recording is essential for accurate accounts receivable and cash flow management.
 
+## Anti-triggers
+
+- **Actually taking the money** — nothing here charges a card or moves
+  funds. These tools *record* that money arrived. Capture, ACH debit,
+  retries, and dunning belong to the payments platform; use
+  `alternative-payments-payments` or the Stripe plugin.
+- **The books are in Xero, not QuickBooks** — use `xero-payments`. The
+  concepts are near-identical, so only the vendor name disambiguates.
+- **Money going out** — vendor payments are accounts payable, a different
+  entity; use `quickbooks-expenses`.
+- **What is still outstanding** — an aged-receivables view is a report,
+  not a payment query; use `quickbooks-reports`.
+- **The invoice being paid against** — use `quickbooks-invoices`.
+
 ## Key Concepts
 
 ### Payment Application

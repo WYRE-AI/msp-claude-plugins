@@ -17,6 +17,21 @@ when_to_use: >-
 
 Articles in Hudu serve as the knowledge base, providing a place for runbooks, procedures, network diagrams, SOPs, and general documentation. Articles support rich HTML content, can be organized into folders, and can be scoped to specific companies or kept as global (shared across all companies). MSP technicians rely on articles to quickly find procedures and reference documentation during troubleshooting.
 
+## Anti-triggers
+
+- **The same knowledge base in IT Glue** — IT Glue calls these Documents;
+  use `it-glue-documents`. Both platforms say "article", "document", and
+  "runbook" interchangeably, so the vendor name is the only signal.
+- **A structured record rather than prose** — if the thing has fields
+  (make, model, IP, expiry) it belongs on an asset layout, not in article
+  HTML; use `hudu-assets`.
+- **A credential mentioned in a runbook** — passwords have their own
+  endpoint and their own audit trail; use `hudu-passwords`. Do not let an
+  agent paste a credential into article body HTML to "keep it together".
+- **A ticket resolution note** — work notes belong on the ticket in the
+  PSA, not in the knowledge base; use `autotask-ticket-notes-attachments`
+  or `connectwise-psa-tickets`.
+
 ## Key Concepts
 
 ### Article Scope

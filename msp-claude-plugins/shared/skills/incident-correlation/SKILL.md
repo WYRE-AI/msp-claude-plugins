@@ -19,6 +19,28 @@ when_to_use: >-
 
 MSP technicians routinely context-switch between PSA (tickets), RMM (device state), documentation (asset records), and configuration monitoring (change detection) when investigating incidents. This skill teaches Claude how to automatically correlate data across these vendor roles, starting from a ticket and producing a unified incident summary.
 
+## Anti-triggers
+
+This is a shared skill: it owns the *stitching together of two or more
+platforms*. A lookup inside one platform belongs to that platform's skill,
+which knows its filters, field names, and pagination.
+
+- **Reading a ticket** — use `autotask-tickets`,
+  `connectwise-psa-tickets`, `halopsa-tickets`, `syncro-tickets`,
+  `atera-tickets`, or `ninjaone-tickets`.
+- **Reading device state** — use `ninjaone-devices`, `datto-rmm-devices`,
+  `atera-devices`, `ncentral-devices`, or
+  `connectwise-automate-computers`.
+- **Reading documentation or credentials** — use `hudu-assets`,
+  `hudu-passwords`, or `it-glue-configurations`.
+- **Reading detected changes** — use `liongard-detections`.
+- **Deciding a new ticket's priority and owner** — that is triage, which
+  happens before there is anything to correlate; use
+  `shared-ticket-triage`.
+- **A confirmed security incident** — SOC-confirmed threats have their own
+  remediation lifecycle rather than a correlation workflow; use
+  `huntress-incidents`.
+
 ## Four Vendor Roles
 
 Each vendor tool fills one or more roles in incident investigation:

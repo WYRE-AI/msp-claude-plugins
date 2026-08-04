@@ -20,6 +20,26 @@ MSPs purchase cloud subscriptions through distributors like Pax8 and resell them
 
 The reconciliation answers one fundamental question: **"Is every active Pax8 subscription being billed to the correct client at the correct quantity and price?"**
 
+## Anti-triggers
+
+This is a shared skill: it owns the *comparison across two platforms*.
+Anything that lives inside one platform belongs to that platform's skill.
+
+- **Reading subscriptions or marketplace charges** — use
+  `pax8-subscriptions`, `pax8-invoices`, `sherweb-subscriptions`, or
+  `sherweb-billing`.
+- **Reading or creating an accounting invoice** — use
+  `quickbooks-invoices`, `quickbooks-reports`, `xero-invoices`, or
+  `xero-reports`.
+- **Chasing an invoice the client has not paid** — that is collections
+  against a single system, not a reconciliation; use `quickbooks-reports`
+  or `xero-reports` for the aged-receivables view.
+- **Recovering the gap once it is found** — this skill identifies unbilled
+  and mispriced subscriptions. Issuing the corrected invoice is a write
+  against the accounting platform, and changing a seat count is a write
+  against the marketplace. Hand off; do not let one analysis run make both
+  kinds of change.
+
 ## Reconciliation Workflow
 
 ### Step 1: Pull Active Pax8 Subscriptions with Pricing

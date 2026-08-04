@@ -17,6 +17,19 @@ when_to_use: >-
 
 Websites in Hudu represent website records associated with client companies. Beyond basic URL tracking, Hudu provides monitoring for SSL/TLS certificates and email security standards (DMARC, DKIM, SPF). MSPs use website records to track client web properties, monitor certificate expiration, and verify email authentication configuration.
 
+## Anti-triggers
+
+- **A live DNS or certificate check** — these fields are Hudu's last
+  recorded observation, not a lookup performed now. A DMARC record changed
+  this morning will still read as it did at the last scan. If the question
+  is "what is the record right now", this is the wrong source.
+- **Email security posture and threat data** — DMARC/DKIM/SPF *status* is
+  documented here; enforcement, quarantine, and phishing telemetry belong
+  to the email-security plugins (Proofpoint, Checkpoint Avanan, Mimecast).
+- **Uptime and availability** — Hudu records that a site exists; it does
+  not page anyone when it goes down. Use `betterstack` for monitoring.
+- **Credentials for the site's admin panel** — use `hudu-passwords`.
+
 ## Key Concepts
 
 ### Website Monitoring

@@ -17,6 +17,23 @@ when_to_use: >-
 
 Ticket triage is the critical first step in service delivery. Proper triage ensures tickets are correctly prioritized, categorized, and routed to the right team for efficient resolution. These practices apply across all PSA platforms.
 
+## Anti-triggers
+
+This is a shared skill: it owns the *judgement* — how to decide priority,
+category, owner, and first response. It does not know any platform's API.
+The moment the task is to read or write a ticket, load the vendor skill,
+which carries the real status values, priority enums, and queue IDs.
+
+- **Reading, creating, or updating a ticket** — use `autotask-tickets`,
+  `connectwise-psa-tickets`, `halopsa-tickets`, `syncro-tickets`,
+  `atera-tickets`, `freshdesk-ticketing`, or `ninjaone-tickets`.
+- **What a specific platform's priority or status values mean** — those
+  are vendor enums, not general practice; use that vendor's ticket skill.
+- **Pulling device, asset, and change context onto the ticket** — use
+  `shared-incident-correlation`.
+- **A monitoring alert that has not become a ticket yet** — use the RMM's
+  alerts skill, such as `ninjaone-alerts` or `datto-rmm-alerts`.
+
 ## The Triage Process
 
 ### Step 1: Initial Assessment

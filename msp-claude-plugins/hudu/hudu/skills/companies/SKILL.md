@@ -18,6 +18,21 @@ when_to_use: >-
 
 Companies are the foundational entity in Hudu, representing clients, vendors, or internal entities. All documentation, assets, passwords, articles, and websites are associated with a company. In Hudu, the "Company" label is customizable per instance -- some MSPs rename it to "Organization" or "Client" -- but the API endpoint is always `/api/v1/companies`.
 
+## Anti-triggers
+
+- **The client record of record** — a Hudu company scopes documentation.
+  Contracts, contacts, and service history live in the PSA; use
+  `autotask-crm`, `connectwise-psa-companies`, or `halopsa-clients`.
+  Hudu's `id_in_integration` field holds the PSA's ID precisely because
+  the two are different records.
+- **The same client in IT Glue** — IT Glue calls these Organizations; use
+  `it-glue-api-patterns` for its equivalent surface.
+- **The monitored client container** — an RMM organization or site is a
+  monitoring scope, not documentation; use `ninjaone-organizations`,
+  `atera-customers`, or `datto-rmm-sites`.
+- **The client's licence or billing entity** — use `pax8-companies`,
+  `sherweb-customers`, or `quickbooks-customers`.
+
 ## Key Concepts
 
 ### Company Types

@@ -16,6 +16,22 @@ when_to_use: >-
 
 Invoices in Pax8 represent the MSP's cost for cloud subscriptions procured through the marketplace. Pax8 generates invoices on a regular billing cycle, detailing the charges for each subscription across all client companies. MSPs use invoice data to reconcile their costs against what they charge their clients, ensuring profitability and catching billing discrepancies.
 
+## Anti-triggers
+
+- **An invoice the MSP sends to a client** — a Pax8 invoice is money the
+  MSP *owes*, in the opposite direction to everything in the accounting
+  and PSA plugins. Client-facing invoices are `quickbooks-invoices`,
+  `xero-invoices`, `autotask-billing`, or `halopsa-invoices`. Getting the
+  direction wrong inverts every margin calculation.
+- **The equivalent cost from the other CSP marketplace** — use
+  `sherweb-billing`.
+- **Comparing the two sides to find unbilled subscriptions** — that is the
+  cross-vendor reconciliation itself, not a Pax8 lookup; use
+  `shared-billing-reconciliation`.
+- **What is provisioned rather than what was charged** — use
+  `pax8-subscriptions`. A cancelled subscription can still appear on the
+  current invoice, and a new one may not appear yet.
+
 ## MCP Tools
 
 ### Available Tools

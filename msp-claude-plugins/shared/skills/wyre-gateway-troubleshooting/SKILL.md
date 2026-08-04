@@ -27,6 +27,26 @@ Claude Desktop / Code  →  mcp-remote  →  WYRE Gateway  →  Vendor Container
 
 Most user-reported issues are at layer 1 (Claude's tool registration cache) or layer 3 (gateway permissions / credentials). Layers 4 and 5 generally surface as a tool call returning an error after a tool has already been registered.
 
+## Anti-triggers
+
+This is a shared skill and it owns layers 1–3: the tool never appeared, or
+it fails before it reaches the vendor. Once a tool has registered and is
+returning vendor responses, the problem is at layer 4 or 5 and belongs to
+that vendor's own `api-patterns` skill, which knows its auth model, rate
+limits, and error codes.
+
+- **A tool that runs but returns an error from the vendor** — a 4xx with a
+  vendor-shaped error body is not a gateway fault. Use
+  `ninjaone-api-patterns`, `hudu-api-patterns`,
+  `quickbooks-api-patterns`, `pax8-api-patterns`, `sherweb-api-patterns`,
+  `clio-api-patterns`, or the equivalent for that vendor.
+- **A vendor-specific permission model** — Hudu's per-API-key password
+  toggle, Clio's decision-tree navigation, Sherweb's progressive tool
+  disclosure, and QuickBooks' realm scoping all look like gateway
+  problems and are not. Each is documented in that vendor's skill.
+- **Rate limiting or partial results mid-task** — that is the vendor's
+  throttle, not the gateway's.
+
 ---
 
 ## Symptom: Newly added vendor's tools don't appear in Claude

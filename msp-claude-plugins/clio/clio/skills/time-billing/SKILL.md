@@ -27,6 +27,25 @@ matter, and bills are generated from a matter's unbilled activities. See
 the [api-patterns skill](../api-patterns/SKILL.md) for the full
 matters-as-hub picture.
 
+## Anti-triggers
+
+"Log time", "the invoice", and "the bill" are the most heavily overloaded
+phrases in this marketplace, and every one of them means something else
+outside Clio:
+
+- **Technician time against a ticket or project** — MSP time entries live
+  in the PSA; use `autotask-time-entries`,
+  `connectwise-psa-time-entries`, or `halopsa-tickets`. A Clio activity is
+  billable legal work against a matter, not service-desk labour.
+- **An invoice on the accounting system** — a Clio bill is generated
+  inside Clio from unbilled activities and is read-only here. Accounting
+  invoices are `quickbooks-invoices` or `xero-invoices`, and a Clio bill
+  never appears in either until someone posts it.
+- **Editing or voiding a bill, or correcting a logged activity** — neither
+  is possible through this integration, by design. See
+  `clio-api-patterns` for the v1 scope limits and the reasoning; do not
+  route the request to another Clio domain looking for a way around.
+
 ## Activities: Time and Expense Entries
 
 An **activity** is either a time entry or an expense entry logged against

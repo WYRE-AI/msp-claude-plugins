@@ -16,6 +16,21 @@ when_to_use: >-
 
 Orders in Pax8 are the mechanism for provisioning new cloud subscriptions for client companies. When an MSP needs to set up a new product for a client -- whether it is Microsoft 365 licenses, a security tool, or backup solution -- they create an order. The order contains one or more line items, each specifying a product, quantity, and billing term. Once submitted, the order is processed and, upon successful provisioning, creates one or more subscriptions.
 
+## Anti-triggers
+
+- **What the client currently has** — an order is a historical purchase
+  event; the live licence state is `pax8-subscriptions`. An order that
+  provisioned twelve months ago tells you nothing about today's seat
+  count.
+- **What the MSP owes for it** — orders do not carry the charge; use
+  `pax8-invoices`.
+- **A quote to the client** — a Pax8 order is the MSP buying from the
+  distributor, not the client buying from the MSP. Client-facing quoting
+  lives in `connectwise-cpq-quotes` or `autotask-quotes`.
+- **A purchase order in the accounting system** — use
+  `quickbooks-expenses` or `xero-invoices`; a Pax8 order is not a PO on
+  the books.
+
 ## MCP Tools
 
 ### Available Tools

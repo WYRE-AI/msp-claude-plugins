@@ -16,6 +16,21 @@ when_to_use: >-
 
 The Pax8 product catalog contains thousands of cloud software products from hundreds of vendors. MSPs use the catalog to find the right products for their clients, check pricing, and understand provisioning requirements. Products range from Microsoft 365 and Azure to security tools, backup solutions, and line-of-business applications. Each product has associated pricing tiers, billing terms, and provisioning details that determine how it is ordered and managed.
 
+## Anti-triggers
+
+- **The same SKU in the other CSP marketplace** — Sherweb carries much of
+  the same Microsoft catalog at different prices and different billing
+  terms. Use `sherweb-api-patterns` for its catalog tool. Never quote a
+  Pax8 price for a product a client actually holds through Sherweb.
+- **What a client already owns** — the catalog is everything purchasable;
+  use `pax8-subscriptions` for what is provisioned.
+- **The MSP's own sellable product list** — the PSA's product catalog is
+  what gets quoted and billed to clients, with the MSP's own markup. Use
+  `connectwise-psa-product-catalog` or `autotask-product-catalog`.
+- **Client-facing pricing** — `pax8-get-product-pricing-by-uuid` returns
+  `partnerBuyPrice`, the MSP's cost. Retail pricing decisions belong in
+  the quoting tool (`connectwise-cpq-quotes`, `autotask-quotes`).
+
 ## MCP Tools
 
 ### Available Tools

@@ -17,6 +17,20 @@ when_to_use: >-
 
 The NinjaOne Public API uses OAuth 2.0 for authentication and provides RESTful endpoints for all platform operations.
 
+## Anti-triggers
+
+- **Another RMM's auth or pagination model** — every RMM here documents
+  OAuth, rate limits, and cursors, and none of them agree. Use
+  `atera-api-patterns`, `ncentral-api-patterns`,
+  `datto-rmm-api-patterns`, `syncro-api-patterns`, or
+  `connectwise-automate-api-patterns`.
+- **NinjaOne tools missing from the client entirely, or a 401 before any
+  call succeeds** — that is a gateway-connection problem rather than a
+  NinjaOne API problem; use `shared-wyre-gateway-troubleshooting`.
+- **Which entity to call** — this skill covers request mechanics. For the
+  entities themselves use `ninjaone-devices`, `ninjaone-organizations`,
+  `ninjaone-alerts`, or `ninjaone-tickets`.
+
 ## Regional Endpoints
 
 | Region | Base URL |

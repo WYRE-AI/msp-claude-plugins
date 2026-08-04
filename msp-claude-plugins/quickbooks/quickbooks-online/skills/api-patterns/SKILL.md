@@ -18,6 +18,21 @@ when_to_use: >-
 
 The QuickBooks Online (QBO) API is a RESTful JSON API that provides access to customers, invoices, payments, purchases, bills, vendors, accounts, items, estimates, credit memos, and financial reports. This skill covers OAuth2 authentication, the Intuit query language, pagination, error handling, and performance optimization patterns for MSP accounting workflows.
 
+## Anti-triggers
+
+- **Xero's request model** — the other accounting platform here also uses
+  OAuth2 and also has a tenant/realm concept, but its query syntax,
+  pagination, and concurrency control are entirely different. Use
+  `xero-api-patterns`. QBO's SyncToken optimistic locking in particular
+  has no Xero equivalent, so a pattern copied across will fail in a way
+  that reads like a permissions error.
+- **QuickBooks tools missing from the client entirely, or a 401 before any
+  call succeeds** — the OAuth grant lives at the gateway, not in client
+  config; use `shared-wyre-gateway-troubleshooting`.
+- **Which realm am I writing to** — production and sandbox are selected by
+  the gateway connection, not by a parameter on the call. Verify before
+  any write; the request shapes are identical either way.
+
 ## Authentication
 
 ### OAuth2 Flow
