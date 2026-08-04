@@ -12,6 +12,20 @@ when_to_use: >-
 
 Exchange Online mailbox operations through CIPP. The four supported tools cover the highest-frequency MSP mailbox tasks: listing mailboxes for inventory, auditing permissions during BEC investigations, setting OOO for leave/offboarding, and configuring forwarding for transition periods.
 
+## Anti-triggers
+
+- **The BEC investigation report itself** — `cipp_bec_check` is in
+  `cipp-users`. This skill covers the mailbox layer of the remediation
+  that follows it.
+- **A whole offboard** — `cipp_offboard_user` in `cipp-users` sets OOO,
+  forwarding, and shared-mailbox conversion in one call; reach for the
+  individual tools here only when you need step-by-step control.
+- **Inbox rules, transport rules, mail flow, or quarantine** — none are
+  in CIPP's MCP surface. Use the `m365` plugin
+  (`Microsoft 365 Mailboxes`) or Exchange Online PowerShell.
+- **Who signed in to or accessed a mailbox** — that is unified audit
+  log territory; use `cipp-alerts`.
+
 ## Tools
 
 ### `cipp_list_mailboxes`

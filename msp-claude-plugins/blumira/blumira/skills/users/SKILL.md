@@ -14,6 +14,17 @@ when_to_use: >-
 
 Blumira users are organization members who can access the portal, investigate findings, and manage the environment. This skill covers user listing and lookup, primarily for finding assignment workflows.
 
+## Anti-triggers
+
+- **The end user named in a finding** — these are Blumira *portal*
+  members (your analysts), not the M365 or AD account that triggered a
+  detection. Look that account up in `cipp-users` or
+  `inforcer-identity-governance`.
+- **Creating, disabling, or offboarding anyone** — Blumira's user
+  surface is list-only; account lifecycle is `cipp-users`.
+- **Users in a managed client account** — `blumira_users_list` is an
+  `/org/*` call; use `blumira_msp_users_list` in `blumira-msp`.
+
 ## Key Concepts
 
 ### User Roles

@@ -11,6 +11,22 @@ when_to_use: >-
 
 CIPP raises alerts based on standards violations, anomaly detection, and configured thresholds. The two tools in this skill let you triage the alert queue and pull underlying audit log evidence.
 
+## Anti-triggers
+
+- **A CIPP tool is erroring or a background job failed** — that is
+  CIPP's own application log, `cipp_list_logs`, in `cipp-ops`. It is not
+  `cipp_list_audit_logs`, which reads the customer tenant's M365
+  unified audit log.
+- **An endpoint or SIEM detection** — a CIPP alert is a configuration
+  or threshold alert about a tenant, never an EDR finding. Use
+  `huntress-incidents`, `blumira-findings`, `sentinelone-alerts`, or
+  `blackpoint-incident-response` depending on which product raised it.
+- **The forensic snapshot for one compromised user** — `cipp_bec_check`
+  is in `cipp-users`; the audit-log queries here supplement it rather
+  than replace it.
+- **Why an alert fired at all** — the standard that raised it, and its
+  Report/Alert/Remediate mode, live in `cipp-standards`.
+
 ## Tools
 
 ### `cipp_list_alert_queue`

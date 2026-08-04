@@ -25,6 +25,19 @@ envelope, and pagination, and [tenant-management](../tenant-management/SKILL.md)
 for resolving tenants to integer Client Tenant IDs. Alignment mechanics
 live in [baseline-alignment](../baseline-alignment/SKILL.md).
 
+## Anti-triggers
+
+- **Per-policy drift detail** — this skill produces the classification
+  and the roll-up; *which* controls diverged is
+  `inforcer-baseline-alignment`.
+- **CIPP's compliance view** — BPA reports, standards compliance, and
+  domain health are a separate baseline with separate findings; use
+  `cipp-standards`. Do not blend CIPP and Inforcer scores into one
+  number.
+- **Stale scores before a report** — refreshing the underlying data
+  means triggering an assessment run, the one write in this plugin; use
+  `inforcer-assessments`.
+
 ## Tools
 
 ### `inforcer_secure_scores`

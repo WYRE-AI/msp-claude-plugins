@@ -23,6 +23,19 @@ almost every Inforcer workflow.
 Read [api-patterns](../api-patterns/SKILL.md) first for the gateway
 headers, the region requirement, the envelope, and pagination.
 
+## Anti-triggers
+
+- **CIPP's tenant list** — CIPP manages the same M365 tenants but keys
+  them by domain or GUID in `tenantFilter`. An identifier from one will
+  not work in the other, and the two portfolios can legitimately
+  differ. Use `cipp-tenants`.
+- **Onboarding, offboarding, or changing a tenant** — Inforcer's tenant
+  surface is read-only; there is no tenant CRUD here.
+- **A "tenant" in an MDR or SIEM product** — Blackpoint and Blumira use
+  the same word for a customer scope that has nothing to do with M365
+  baselines. Use `blackpoint-multi-tenant-operations` or
+  `blumira-msp`.
+
 ## Tools
 
 ### `inforcer_tenants_list`

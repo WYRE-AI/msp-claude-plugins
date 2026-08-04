@@ -19,6 +19,20 @@ Assets are the leaves of the CompassOne hierarchy — every detection
 and vulnerability fires against one. This skill covers enumerating
 them, searching across classes, and mapping how they connect.
 
+## Anti-triggers
+
+- **Another vendor's asset inventory** — "asset" is one of the most
+  overloaded words in the stack. Network discovery is
+  `runzero-assets`, EDR-managed endpoints are `sentinelone-inventory`
+  or `huntress-agents`, and RMM device records are the RMM plugin's.
+  A CompassOne asset only exists because CompassOne monitors it.
+- **What is wrong with an asset** — findings against it are
+  `blackpoint-vulnerability-management` (exposure) or
+  `blackpoint-incident-response` (detections).
+- **Counting assets across every customer** — use
+  `blackpoint-multi-tenant-operations`; `blackpoint_assets_list` is
+  scoped to one tenant and one class per call.
+
 ## Asset Classes
 
 `blackpoint_assets_list` requires an asset **class**. The supported

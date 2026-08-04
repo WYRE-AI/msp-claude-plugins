@@ -28,6 +28,20 @@ headers, the region requirement, the envelope, and pagination, and
 its **integer Client Tenant ID**. Assessment calls are tenant-scoped by
 that integer id.
 
+## Anti-triggers
+
+- **"Run a compliance check on this tenant"** — if the intent is CIPP's
+  standards evaluation, that is `cipp_run_standards_check` in
+  `cipp-standards`. The two are different products with different
+  baselines; running the wrong one produces a report against a template
+  nobody asked about.
+- **Reading the results** — a run only refreshes data. Scores and drift
+  are read in `inforcer-compliance-reporting` and
+  `inforcer-baseline-alignment`.
+- **Changing the tenant** — a run re-measures; it never deploys policy,
+  remediates drift, or restores configuration. Those M365 changes are
+  `cipp-standards`, `cipp-security`, or the Inforcer UI.
+
 ## Tools
 
 ### `inforcer_assessments_list` (read-only)

@@ -12,6 +12,17 @@ when_to_use: >-
 
 Standards are CIPP's mechanism for declaring "this is what every tenant we manage should look like" and continuously enforcing it. The Best Practice Analyser (BPA) is the read side — it shows you where current tenant state diverges from CIPP's recommended baseline. Domain health is a complementary check focused on email authentication.
 
+## Anti-triggers
+
+- **Drift against an Inforcer baseline** — Inforcer and CIPP both say
+  "baseline", "drift", and "secure score" but measure different things
+  against different templates; a tenant can be CIPP-compliant and
+  Inforcer-drifted at once. Use `inforcer-baseline-alignment`.
+- **Inspecting Conditional Access policies** — CA policies are not CIPP
+  standards and do not appear in BPA output; use `cipp-security`.
+- **Triaging what an `Alert`-mode standard actually raised** — the
+  queue those alerts land in is `cipp-alerts`.
+
 ## Tools
 
 ### `cipp_list_standards`

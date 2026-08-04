@@ -13,6 +13,23 @@ when_to_use: >-
 
 User management is the highest-volume MSP workflow against CIPP. Every step of the M365 user lifecycle — onboarding, role changes, security incidents, offboarding — has a dedicated tool. Most calls require `tenantFilter`; resolve it via `cipp_list_tenants` before you start.
 
+## Anti-triggers
+
+- **Mailbox-side work during an offboard** — delegate/full-access
+  audits, out-of-office, and forwarding are Exchange operations with
+  their own tools; use `cipp-mailboxes`. (`cipp_offboard_user` bundles
+  OOO and forwarding, but only as offboarding parameters.)
+- **A single tenant you hold direct credentials for** — CIPP routes
+  through a CSP/GDAP delegation and needs `tenantFilter` on every call.
+  Direct Graph work against one tenant is the `m365` plugin
+  (`Microsoft 365 Users`) or `microsoft-graph-querying`.
+- **Reading who exists for a governance or baseline review** — that is
+  read-only identity inventory, not administration; use
+  `inforcer-identity-governance`.
+- **Creating or auditing the groups themselves** — this skill only
+  reads a user's memberships (`cipp_list_user_groups`); use
+  `cipp-groups`.
+
 ## Tool surface
 
 ### Listing & lookup

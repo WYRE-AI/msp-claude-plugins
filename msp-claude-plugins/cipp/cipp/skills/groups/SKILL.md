@@ -10,6 +10,20 @@ when_to_use: >-
 
 Groups in CIPP cover all four Entra/M365 group types: Security, Microsoft 365 (unified), Distribution List, and Mail-Enabled Security. Most groups are managed through CIPP for delegation simplicity, but membership changes for individual users typically flow through `cipp_list_user_groups` (read) and the M365 plugin or graph-API for write operations.
 
+## Anti-triggers
+
+- **Adding or removing a member of an existing group** — CIPP exposes
+  create and list only; there is no membership-write tool. Use the
+  `m365` plugin or `microsoft-graph-querying`.
+- **Which groups one user belongs to** — `cipp_list_user_groups` is in
+  `cipp-users`, and `cipp_offboard_user` strips memberships as part of
+  the offboard.
+- **Reviewing group and role assignments for a governance report** —
+  read-only identity inventory across a baseline is
+  `inforcer-identity-governance`.
+- **A shared mailbox** — a Microsoft 365 group is not a shared mailbox;
+  mailbox objects and their delegates are `cipp-mailboxes`.
+
 ## Tools
 
 ### `cipp_list_groups`

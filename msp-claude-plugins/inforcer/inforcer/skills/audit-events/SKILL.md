@@ -26,6 +26,18 @@ many pages — paging to completion matters more here than almost anywhere
 else, because a partial page silently drops events from the window you
 think you searched.
 
+## Anti-triggers
+
+- **The Microsoft 365 unified audit log** — this is Inforcer's own
+  record of what *it* observed, a much narrower feed than M365's. For
+  sign-ins, inbox-rule creation, app consents, or admin operations in
+  the tenant, use `cipp-alerts` (`cipp_list_audit_logs`).
+- **A security detection or alert to triage** — an audit event is
+  history, not a finding. Use `blumira-findings`,
+  `huntress-incidents`, or `cipp-alerts`.
+- **The current state that drifted** — audit answers *when and by
+  whom*; the state itself is `inforcer-baseline-alignment`.
+
 ## Tools
 
 ### `inforcer_audit_event_types`

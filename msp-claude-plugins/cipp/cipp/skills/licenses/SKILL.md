@@ -11,6 +11,19 @@ when_to_use: >-
 
 License visibility across managed tenants. Two tools cover the read surface: per-tenant assignment + usage, and portfolio CSP inventory. License *changes* (assigning, removing) flow through `cipp_create_user`, `cipp_offboard_user`, or the M365 plugin — this skill is read-only.
 
+## Anti-triggers
+
+- **Assigning or removing a licence** — no write tool exists here. Use
+  `cipp-users` (`cipp_create_user` assigns at create time,
+  `cipp_offboard_user` reclaims) or the `m365` plugin's
+  `Microsoft 365 Licensing`.
+- **Buying, provisioning, or cancelling a subscription** — CSP
+  *commitments* are visible here, but procurement is the distributor;
+  use `Pax8 Subscriptions` or `Pax8 Orders`.
+- **Why a standard reports a failure that is really a licensing gap** —
+  the standard and its findings are in `cipp-standards`; come here only
+  to confirm the SKU.
+
 ## Tools
 
 ### `cipp_list_licenses`

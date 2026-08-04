@@ -28,6 +28,18 @@ headers, the region requirement, the envelope, and pagination, and
 to its **integer Client Tenant ID**. Every identity call is tenant-scoped
 by that integer id.
 
+## Anti-triggers
+
+- **Any change to a user, group, or role** — create, edit, disable,
+  reset MFA, revoke sessions, offboard, or strip a privileged role are
+  all absent here. Use `cipp-users` and `cipp-groups`, or the `m365`
+  plugin.
+- **The word "governance" meaning policy configuration** — this skill
+  inventories identity *objects*; policy state and its drift are
+  `inforcer-baseline-alignment`.
+- **Who did what, and when** — role membership is a snapshot, not a
+  history; use `inforcer-audit-events`.
+
 ## Tools
 
 ### `inforcer_users_list`
