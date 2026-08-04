@@ -18,6 +18,19 @@ when_to_use: >-
 
 The ConnectWise PSA REST API provides access to all PSA entities including tickets, companies, contacts, projects, and time entries. This skill covers authentication, query syntax, pagination, rate limiting, and best practices for API integration.
 
+## Anti-triggers
+
+"ConnectWise" is an umbrella brand over three products with three
+unrelated APIs. Loading the wrong one produces auth failures that read
+like permission problems:
+
+- **ConnectWise Automate** — on-premise RMM server, `/cwa/api/v1/` base
+  path, Bearer-token auth, and singular `condition=` filters. PSA
+  public/private keys will not authenticate against it. Use
+  `connectwise-automate-api-patterns`.
+- **ConnectWise CPQ (Sell/Quosal)** — its own host and credential set
+  again; use `connectwise-cpq-api-patterns`.
+
 ## Base URLs
 
 | Region | Base URL |

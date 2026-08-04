@@ -17,6 +17,20 @@ when_to_use: >-
 
 The ConnectWise Automate REST API v1 provides programmatic access to computers, clients, scripts, monitors, alerts, and more. This skill covers authentication, token management, pagination, filtering, error handling, and performance optimization patterns.
 
+## Anti-triggers
+
+"ConnectWise" is an umbrella brand over three products with three
+unrelated APIs. Loading the wrong one produces auth failures that read
+like permission problems:
+
+- **ConnectWise PSA (Manage)** — hosted at
+  `api-*.myconnectwise.net/{codebase}/apis/3.0/`, authenticated with
+  public/private key plus a `clientId` header, and filtered with plural
+  `conditions=`. An Automate bearer token will not authenticate against
+  it. Use `connectwise-manage-api-patterns`.
+- **ConnectWise CPQ (Sell/Quosal)** — its own host and credential set
+  again; use `connectwise-cpq-api-patterns`.
+
 ## Key Concepts
 
 ### API Base URL

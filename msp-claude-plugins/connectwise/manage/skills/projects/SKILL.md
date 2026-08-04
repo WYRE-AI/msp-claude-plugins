@@ -17,6 +17,15 @@ when_to_use: >-
 
 Projects in ConnectWise PSA track larger bodies of work that span multiple tickets, phases, and resources. Projects support templates, phases, budgeting, resource allocation, and various billing methods. This skill covers project CRUD operations, phases, templates, resources, and project tickets.
 
+## Anti-triggers
+
+- **Service desk work** — break/fix tickets on a service board live at
+  `/service/tickets` and are a different entity from project tickets; use
+  `connectwise-manage-tickets`.
+- **Hours booked against a project** — time charges to a `ProjectTicket`,
+  never to the project or phase directly; use
+  `connectwise-manage-time-entries`.
+
 ## API Endpoint
 
 ```

@@ -16,6 +16,14 @@ when_to_use: >-
 
 Time entries in ConnectWise PSA track time spent on tickets, projects, and other activities. Accurate time tracking is essential for billing, resource management, and profitability analysis. This skill covers time entry CRUD operations, work types, work roles, billing settings, and approval workflows.
 
+## Anti-triggers
+
+- **Writing up what happened on a ticket** — narrative goes in a ticket
+  note (`cw_add_ticket_note`); only billable duration belongs in a time
+  entry. Use `connectwise-manage-tickets`.
+- **Project time** — project hours charge to a `ProjectTicket`, so the
+  ticket has to be located first; use `connectwise-manage-projects`.
+
 ## API Endpoint
 
 ```

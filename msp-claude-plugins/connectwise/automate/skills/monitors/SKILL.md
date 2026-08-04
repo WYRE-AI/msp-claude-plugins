@@ -16,6 +16,18 @@ when_to_use: >-
 
 Monitors in ConnectWise Automate continuously evaluate conditions on managed endpoints and generate alerts when thresholds are exceeded. This skill covers monitor types, threshold configuration, template management, and assignment strategies.
 
+## Anti-triggers
+
+- **A monitor that has already fired** — the resulting notification has
+  its own lifecycle, acknowledgment and history; use
+  `connectwise-automate-alerts`.
+- **Response and resolution targets** — SLA clocks and escalation rules
+  are ConnectWise PSA ticket behaviour, not Automate thresholds; use
+  `connectwise-manage-tickets`.
+- **Mapping the network itself** — Automate SNMP monitors evaluate a
+  threshold on a device you point them at; discovering topology and
+  watching links between devices is `auvik-networks`.
+
 ## Key Concepts
 
 ### Monitor Types

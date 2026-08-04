@@ -17,6 +17,14 @@ when_to_use: >-
 
 Companies in ConnectWise PSA represent your clients, prospects, vendors, and other business entities. Company records are central to ticketing, agreements, projects, and billing. This skill covers company CRUD operations, types, statuses, sites, and custom fields.
 
+## Anti-triggers
+
+- **The same customer in Automate** — ConnectWise Automate calls it a
+  `Client` and keeps its own ID space; a PSA `company/id` never matches an
+  Automate `ClientID`. Use `connectwise-automate-clients`.
+- **People at the company** — names, email addresses, phone numbers and
+  portal logins are contact records; use `connectwise-manage-contacts`.
+
 ## API Endpoint
 
 ```

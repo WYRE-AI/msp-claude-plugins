@@ -17,6 +17,20 @@ when_to_use: >-
 
 Scripts in ConnectWise Automate are automation routines that run on managed endpoints. They can be PowerShell, batch files, VBScript, or Automate's native scripting language. This skill covers script listing, execution, parameters, and result retrieval.
 
+## Anti-triggers
+
+- **Shell commands in this session** — "run the script" here means
+  dispatching a stored Automate script to a customer's managed endpoint,
+  never executing anything on the local machine.
+- **What fires a script automatically** — the threshold or condition that
+  triggers it is a monitor definition; use
+  `connectwise-automate-monitors`.
+- **Which machines to target** — resolving hostnames, checking online
+  status and building the target list is
+  `connectwise-automate-computers`.
+- **Another RMM's job runner** — Datto RMM quickjobs and NinjaOne script
+  runs share this vocabulary; use `datto-rmm-jobs`.
+
 ## Key Concepts
 
 ### Script Types
