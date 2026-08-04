@@ -17,6 +17,17 @@ when_to_use: >-
 
 Domotz provides comprehensive network monitoring capabilities through its agents. This includes network device discovery, SNMP polling for hardware metrics, TCP port monitoring, speed tests for bandwidth measurement, and network topology mapping.
 
+## Anti-triggers
+
+- **A switch port's VLAN, PoE, or link state** — the ports here are TCP
+  service ports on a host, not physical switch ports. Meraki switch
+  ports are `meraki-devices`.
+- **Interface counters across a whole MSP fleet** — Domotz polls one
+  site at a time; fleet-wide interface and utilisation history is
+  `auvik-networks`.
+- **Scanning to enumerate an attack surface** — Domotz discovery feeds
+  monitoring, not security assessment; use `runzero`.
+
 ## Key Concepts
 
 ### Network Scanning

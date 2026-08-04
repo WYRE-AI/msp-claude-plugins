@@ -15,6 +15,22 @@ when_to_use: >-
 
 Devices are the unit of inventory in Auvik. Every discovered piece of network gear or endpoint - whether actively monitored or just seen on a discovery scan - has a device record. This skill covers the device type taxonomy, the manage-status model, lifecycle fields, and which tool to call for which question.
 
+## Anti-triggers
+
+- **Changing the device, not just reading it** — Auvik is a monitoring
+  and documentation layer and never pushes configuration. On Meraki
+  hardware use `meraki-devices`; for MX firewall or VPN changes,
+  `meraki-security-appliance`.
+- **A per-site sweep of everything with an IP** — Auvik indexes
+  infrastructure it can poll. The collector that fingerprints every
+  host on a local subnet, including phones and IoT gear, is
+  `domotz-devices`.
+- **Hunting unknown assets as a security exercise** — Auvik's
+  `unmanaged` means "discovered but not polled", not "unaccounted
+  for". Attack-surface and rogue-asset discovery is `runzero`.
+- **Whether a device is alerting right now** — the device record
+  carries status, not the alert queue; use `auvik-alerts`.
+
 ## Tools
 
 | Tool | Use For |

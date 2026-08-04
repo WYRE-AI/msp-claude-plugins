@@ -12,6 +12,19 @@ when_to_use: >-
 
 Auvik alerts are condition-based notifications generated when a monitored entity (device, interface, network, service) crosses a threshold or changes state. This skill covers the severity model, the status lifecycle, and the dismissal semantics that confuse new users.
 
+## Anti-triggers
+
+- **An alert raised by an endpoint's RMM agent** — Auvik alerts come
+  from SNMP and ICMP polling of network infrastructure, never from
+  software running on a workstation or server; use `atera` or
+  `ncentral`.
+- **A public website or endpoint being down** — that is external
+  uptime checking, not internal polling; use `betterstack-monitors`.
+- **Conditions a site collector raised about LAN devices** — different
+  product, different alert engine; use `domotz-alerts`.
+- **Who gets paged, and when it escalates** — Auvik has no on-call
+  model; use `pagerduty-oncall` or `rootly-oncall`.
+
 ## Tools
 
 | Tool | Use For |

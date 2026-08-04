@@ -18,6 +18,17 @@ when_to_use: >-
 
 Domotz agents (also called collectors or probes) are software or hardware appliances deployed at customer sites that perform network discovery, device monitoring, and data collection. Each agent represents a monitored site/location and is the entry point for all device and network operations.
 
+## Anti-triggers
+
+- **Claude subagents** — "agent" here is a site collector appliance,
+  never an AI subagent definition under `agents/*.md`.
+- **Software installed on a workstation or server** — Domotz agents are
+  one per site, not one per endpoint. RMM endpoint agents are `atera`
+  or `ncentral`; the Huntress endpoint sensor is `huntress-agents`.
+- **What the collector found** — this skill covers the collector's own
+  health, licensing, and connectivity; the devices it discovered are
+  `domotz-devices`.
+
 ## Key Concepts
 
 ### Agent Types

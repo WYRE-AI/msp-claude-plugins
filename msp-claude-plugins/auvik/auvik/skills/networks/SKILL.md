@@ -14,6 +14,18 @@ when_to_use: >-
 
 A `network` in Auvik is an IP scope - typically a subnet that Auvik has discovered devices on. An `interface` is a port on a device. Both are distinct entity types with their own list endpoints. This skill clarifies the data model and the relationships.
 
+## Anti-triggers
+
+- **A Meraki "network"** — in the Meraki Dashboard a network is a site
+  container holding devices, not an IP scope. The word collides
+  completely; use `meraki-devices`.
+- **Scanning a subnet, mapping topology, or chasing an IP conflict** —
+  those run from a collector inside the LAN, not from Auvik's polled
+  read model; use `domotz-network`.
+- **Changing a VLAN or shutting a port** — Auvik reads `adminStatus`
+  and never sets it. On Meraki switches that write lives in
+  `meraki-devices`.
+
 ## Tools
 
 | Tool | Use For |

@@ -17,6 +17,19 @@ when_to_use: >-
 
 Incidents in Better Stack are triggered automatically when uptime monitors detect downtime, or created manually for ad-hoc issues. Each incident tracks the timeline from detection through acknowledgment to resolution, with associated monitors, status page updates, and on-call notifications.
 
+## Anti-triggers
+
+- **A security incident** — Better Stack incidents are uptime events
+  with no threat model, no indicators, and no remediation flow; use
+  `huntress-incidents`.
+- **The MSP's major-incident process** — if the question is about
+  incident commanders, customer comms, or postmortems rather than a
+  failing check, use `rootly-incidents` or `pagerduty-incidents`.
+- **Billable follow-up work** — an incident is not a PSA ticket; use
+  `autotask`, `halopsa`, or `connectwise-psa`.
+- **Telling end users about the outage** — use
+  `betterstack-status-pages`.
+
 ## Key Concepts
 
 ### Incident Lifecycle

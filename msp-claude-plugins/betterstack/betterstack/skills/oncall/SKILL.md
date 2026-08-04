@@ -19,6 +19,19 @@ when_to_use: >-
 
 Better Stack Uptime includes integrated on-call scheduling that determines who gets paged when a monitor fails. Schedules define rotation patterns, and notification/escalation policies define how and when responders are alerted (via phone, SMS, email, or push). For MSPs, on-call is commonly configured per customer team, with separate schedules for each client's SLA requirements.
 
+## Anti-triggers
+
+- **Rotations that live in PagerDuty or Rootly** — "who is on call",
+  "escalation policy", and "paging" are shared vocabulary across all
+  three products, and nothing in the phrasing disambiguates them. If
+  the MSP's paging system is not Better Stack, use `pagerduty-oncall`
+  or `rootly-oncall`.
+- **Technician shifts, dispatch, or booked appointments** — an on-call
+  rotation is not a service schedule; that lives in the PSA
+  (`autotask`, `halopsa`, `connectwise-psa`).
+- **Changing what a monitor checks rather than who it wakes** — use
+  `betterstack-monitors`.
+
 ## Key Concepts
 
 ### Schedule Structure
