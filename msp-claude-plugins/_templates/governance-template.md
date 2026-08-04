@@ -4,6 +4,14 @@
 > Its audience is an MSP owner deciding what to let an AI agent do
 > against a live production tenant. Write for that reader, not for a
 > developer. Delete this blockquote.
+>
+> Every claim in a governance document must be checkable against
+> Conduit's source (`wyre-technology/conduit`), which is what serves
+> `conduit.wyre.ai` — the endpoint every plugin's `.mcp.json` points at.
+> Do **not** verify against `wyre-technology/mcp-gateway`: that is a
+> separate repository serving `mcp.wyre.ai`, and the two have drifted.
+> `wyre-gateway/GOVERNANCE.md` substantiates every claim below,
+> including the places where it does not hold.
 
 Unofficial. Community-built plugin for the [Vendor] API. Not affiliated
 with, endorsed by, or sponsored by the vendor.
@@ -19,49 +27,89 @@ Consequences worth stating plainly:
 
 - No API key, secret, or token is stored on the technician's machine, in
   this repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
-- Every call carries operator identity, so the gateway audit log answers
+- Credential rotation happens once at Conduit, not per technician.
+- Every call carries operator identity, so Conduit's audit log answers
   "who asked for this" — the vendor's own log usually cannot.
-- Revoking a technician's gateway access revokes [Vendor] access with
-  it, immediately.
+- Removing a technician's Conduit org membership stops their [Vendor]
+  access on their next call, because membership is re-read per request.
+  It does **not** revoke an already-issued token, and it does not touch
+  credentials they connected personally. Full offboarding is more than
+  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
 
-## Tool permission tiers
+## Tool permission groups
 
-Group this plugin's tools by blast radius. The gateway enforces these
-tiers; the table tells the operator what each tier means here.
+Group this plugin's tools into the four buckets Conduit's access editor
+presents, because those are the buckets an owner actually clicks:
 
-| Tier | What it can do | Example tools |
-|---|---|---|
-| **Read** | Cannot change vendor state. Safe for autonomous agents. | `[vendor]_list_*`, `[vendor]_get_*`, `[vendor]_search_*` |
-| **Write** | Creates or modifies records. Reversible, but visible to the customer. | `[vendor]_create_*`, `[vendor]_update_*` |
-| **Destructive** | Deletes data, revokes access, or changes billing. Requires explicit human approval per call. | `[vendor]_delete_*`, `[vendor]_offboard_*` |
+| Group | What it can do | Enforcement tier | Example tools |
+|---|---|---|---|
+| **Read** | Cannot change vendor state. Safe for autonomous agents. | `read` | `[vendor]_list_*`, `[vendor]_get_*`, `[vendor]_search_*` |
+| **Write** | Creates or modifies records. Reversible, but visible to the customer. | `write` | `[vendor]_create_*`, `[vendor]_update_*` |
+| **Delete** | Removes data or revokes access. | `write` — **not** a tier of its own | `[vendor]_delete_*`, `[vendor]_offboard_*` |
+| **Admin** | Org-level state, credential reads, or unbounded passthrough/query surfaces. | `admin` | `[vendor]_raw_request`, `[vendor]_execute_tool` |
 
-List the real tool names. If a tier is empty for this vendor, say so —
+List the real tool names. If a group is empty for this vendor, say so —
 "this plugin is read-only" is a strong, useful statement.
+
+**The Delete row is the one to read twice.** Conduit's enforcement tiers
+are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
+`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
+the access editor, and a delete-group tool compiles to and enforces at
+tier `write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
+So **granting a technician `write` for this vendor also grants every
+delete tool listed above.** There is no setting that separates them; the
+only way to admit some write tools but not the delete ones is a granular
+per-tool grant, which compiles to an explicit `customTools` allowlist.
+
+Do not write that delete or destructive tools "require per-call
+approval" as though Conduit enforced it. Conduit compares tiers. It has
+no approval step, no per-call confirmation, and no interactive prompt.
+Per-call approval is a workflow you impose on your agents, and it is
+only as good as the agent configuration that carries it.
+
+**If this vendor is not classified in Conduit, say so here.** Conduit
+derives every tool's tier from `VENDOR_TOOL_CONFIG`
+(`src/proxy/result-cache.ts`), and it is fail-closed: an unclassified
+tool falls back to requiring `admin` —
+`const requiredTier: PermissionTier = classified ?? 'admin';`
+(`src/access/access-enforcement.ts:63`). Nearly half the marketplace's
+vendor plugins have no entry in that table, and for those, **every tool
+in the table above requires tier `admin`** regardless of which group it
+sits in — read tools included. The current list is in
+`wyre-gateway/GOVERNANCE.md`, *Vendors Conduit has not classified*.
+Check it before writing this section.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve destructive calls.**
+self-approve deletes.**
 
 - Read tools: allow.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Destructive tools: require a named human approver per invocation. Do
-  not grant these to scheduled or unattended agents.
+- Delete tools: require a named human approver per invocation. Do not
+  grant these to scheduled or unattended agents. Remember that Conduit
+  cannot enforce this separation for you — a `write` grant already
+  admits them — so it has to live in the agent's own configuration.
+- Admin tools: treat the grant as equivalent to full vendor
+  administrator, because for a passthrough or dispatcher tool that is
+  exactly what it is.
 
 ## What it cannot reach
 
 State the boundary explicitly — this is the question buyers actually
 ask:
 
-- Only the [Vendor] tenants mapped to the operator's gateway identity.
+- Only the [Vendor] tenants the connected credential can reach. Conduit
+  controls *who in your organisation may use that credential and which
+  tools they may call*, not which slice of the vendor's data comes back.
+  Scope the credential at the vendor if you need a narrower boundary.
 - No filesystem, no shell, no other vendor's data.
 - [Any vendor-specific scope limit — e.g. read-only API key tier,
   per-site scoping, reseller vs. tenant credential.]
 
 ## Data handling
 
-- Vendor responses pass through the gateway to the model context for the
+- Vendor responses pass through Conduit to the model context for the
   duration of the session. They are not persisted by this plugin.
 - Note here any tool that returns PII, credentials, or payment data, so
   operators can decide whether to restrict it.
