@@ -17,6 +17,21 @@ when_to_use: >-
 
 SuperOps.ai RMM generates alerts when monitored conditions are triggered on managed assets. Alerts can indicate hardware issues, software problems, security events, or custom monitoring conditions. This skill covers alert listing, filtering, acknowledgment, resolution, and automated workflows.
 
+## Anti-triggers
+
+- **The customer-facing work an alert becomes** — use
+  `superops-tickets`; the conversion is described here but the ticket
+  lifecycle is not.
+- **Alerts from a different RMM** — `atera-alerts`,
+  `ninjaone-rmm-alerts`, `datto-rmm-alerts`, and N-central active issues
+  (`ncentral-monitoring-tasks`) are separate stores with their own
+  severity scales.
+- **Security detections** — EDR and MDR findings are not RMM alerts; use
+  `huntress-incidents`, `sentinelone-alerts`, or
+  `rocketcyber-incidents`.
+- **Fixing what the alert reports** — remediation runs through
+  `superops-runbooks`; resolving an alert does not fix a machine.
+
 ## Alert Severity Levels
 
 | Severity | Description | Typical Response |

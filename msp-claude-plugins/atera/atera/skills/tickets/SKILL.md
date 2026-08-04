@@ -17,6 +17,16 @@ when_to_use: >-
 
 Atera tickets are the core unit of service delivery in the RMM/PSA platform. Every client request, incident, and service call flows through the ticketing system. This skill covers comprehensive ticket management including creation, updates, comments, and time tracking.
 
+## Anti-triggers
+
+- **The MSP's system-of-record helpdesk** — plenty of shops run Atera
+  for RMM and a separate PSA for service desk. If tickets live
+  elsewhere, use `connectwise-psa-tickets`, `autotask-tickets`,
+  `halopsa-tickets`, `syncro-tickets`, or `superops-tickets`; a ticket
+  created in the wrong system is a ticket nobody is watching.
+- **The alert behind the ticket** — alert-to-ticket conversion rules and
+  the alert side of that workflow are `atera-alerts`.
+
 ## Ticket Status Values
 
 | Status | Description | Business Logic |

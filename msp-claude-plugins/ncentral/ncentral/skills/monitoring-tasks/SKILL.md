@@ -18,6 +18,24 @@ wrong — active issues and job statuses) and **tasks** (automation that has
 run or will run — scheduled tasks and direct support tasks). Triage flows
 from the first into the second.
 
+## Anti-triggers
+
+- **Running a task on an endpoint managed elsewhere** —
+  `ncentral_create_direct_task` executes only on N-central-managed
+  devices. The same request against another fleet is
+  `immybot-script-execution`, `superops-runbooks`, `atera-agents`,
+  `syncro-assets`, `connectwise-automate-scripts`, or `datto-rmm-jobs`.
+- **ImmyBot maintenance sessions** — an N-central maintenance *window*
+  suppresses alerting for a period and executes nothing. The
+  reconciliation run that shares the name is
+  `immybot-maintenance-sessions`.
+- **Turning an active issue into customer-visible work** — active issues
+  are not tickets; the service desk of record is
+  `connectwise-psa-tickets`, `autotask-tickets`, `halopsa-tickets`, or
+  the PSA the MSP actually uses.
+- **Per-device monitor state** — the drill-down from an active issue is
+  `ncentral-devices`.
+
 ## Active Issues
 
 | Tool | Use For |

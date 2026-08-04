@@ -16,6 +16,18 @@ when_to_use: >-
 
 Customers in Atera represent the organizations you provide IT services to. Each customer can have multiple contacts (end users), agents (managed devices), contracts, and associated tickets. Proper customer management is essential for organized service delivery.
 
+## Anti-triggers
+
+- **The client's commercial record** — an Atera customer scopes
+  monitoring, not contracts or billing. The company of record lives in
+  `connectwise-psa-companies`, `autotask-crm`, `syncro-customers`, or
+  `superops-clients`; onboarding a client in the wrong system is the
+  expensive version of this mistake.
+- **The endpoints a customer owns** — a customer owns agents; list them
+  with `atera-agents` filtered by `CustomerID`.
+- **Documentation about the client** — passwords, configurations, and
+  procedures live in `hudu-companies` or `it-glue-organizations`.
+
 ## Customer Fields
 
 ### Core Fields

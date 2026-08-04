@@ -19,6 +19,23 @@ device record scoped to a customer or site org unit. This skill covers
 listing strategy (filters vs org-unit scoping), the asset/lifecycle data
 model, and service-monitor triage.
 
+## Anti-triggers
+
+- **Doing something to the device** — everything here reads, apart from
+  lifecycle writes. Running a script, restarting a service, or pushing a
+  fix is `ncentral-monitoring-tasks` and its direct-task tool.
+- **The same endpoint under a different RMM** — `atera-agents`,
+  `syncro-assets`, `superops-assets`, `immybot-endpoint-management`,
+  `ninjaone-rmm-devices`, `datto-rmm-devices`, and
+  `connectwise-automate-computers` each see only their own fleet. Watch
+  for `atera-devices` in particular, where "device" means an agentless
+  SNMP or HTTP monitor rather than an endpoint.
+- **Hardware refresh programmes** — N-central lifecycle fields are a
+  free-text store someone has to populate; procurement-grade planning is
+  `scalepad-lifecycle-manager`.
+- **Which customer or site a device belongs to** — org-unit resolution
+  is `ncentral-organizations`.
+
 ## Tools
 
 | Tool | Use For |

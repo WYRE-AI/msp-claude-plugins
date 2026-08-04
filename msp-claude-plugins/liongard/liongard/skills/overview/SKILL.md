@@ -27,6 +27,23 @@ Liongard is an automated IT documentation and configuration management platform 
 
 Liongard replaces manual documentation processes with automated, scheduled inspections that capture the state of servers, firewalls, cloud services, and more.
 
+## Anti-triggers
+
+- **"Agent" meaning an endpoint sensor** — a Liongard agent is one piece
+  of software per customer *site* that runs inspections against many
+  targets. It is not a per-endpoint monitor and reports nothing about
+  the machine it sits on. For endpoint agents use `atera-agents`,
+  `syncro-assets`, `ncentral-devices`, or
+  `immybot-endpoint-management`; in `halopsa-agents` an agent is a human
+  technician.
+- **Doing something about what Liongard found** — Liongard documents and
+  detects; it does not remediate. Action belongs to the RMM
+  (`ncentral-monitoring-tasks`, `superops-runbooks`,
+  `immybot-script-execution`) or the PSA.
+- **Working with a specific entity** — this skill only orients. Go
+  straight to `liongard-environments`, `liongard-inspections`,
+  `liongard-systems`, or `liongard-detections`.
+
 ## Key Terminology
 
 ### Environments

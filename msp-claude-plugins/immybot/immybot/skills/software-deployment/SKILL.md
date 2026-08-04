@@ -19,6 +19,19 @@ you assert what should be installed, then a maintenance session
 brings the endpoint into compliance. This skill walks the canonical
 deployment workflow end-to-end.
 
+## Anti-triggers
+
+- **Making the install actually happen** — creating a deployment changes
+  nothing on any endpoint; the reconciliation run that acts on it is
+  `immybot-maintenance-sessions`.
+- **OS and security patching** — ImmyBot deploys applications, not
+  Windows Update. Patch compliance lives in the RMM: `superops-assets`,
+  `syncro-assets`, or `ncentral-devices`.
+- **A one-off command on one machine** — use
+  `immybot-script-execution`.
+- **Whether a tenant is compliant overall** — rollups and scorecards are
+  `immybot-tenant-compliance`.
+
 ## API Tools
 
 ### Discover the catalog

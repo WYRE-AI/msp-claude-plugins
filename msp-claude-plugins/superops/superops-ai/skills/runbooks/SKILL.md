@@ -16,6 +16,23 @@ when_to_use: >-
 
 SuperOps.ai provides automation through scripts (runbooks) that execute on managed assets — maintenance tasks, remediation actions, data collection, and custom automation. This skill covers script discovery, execution, scheduling, and result monitoring.
 
+## Anti-triggers
+
+- **A written procedure or checklist** — SuperOps runbooks are
+  executable scripts, not documentation. Prose runbooks live in
+  `hudu-articles` or `it-glue-documents`.
+- **Running a script on an endpoint managed by another RMM** — "run a
+  script on this device" matches five other plugins here just as well.
+  Confirm which RMM owns the endpoint, then use `atera-agents`,
+  `syncro-assets`, `immybot-script-execution`,
+  `ncentral-monitoring-tasks`, `connectwise-automate-scripts`, or
+  `datto-rmm-jobs`.
+- **Deploying or updating an application** — a script that installs
+  software is the anti-pattern `immybot-software-deployment` exists to
+  replace when the fleet is on ImmyBot.
+- **Choosing the targets** — asset selection and online checks are
+  `superops-assets`.
+
 ## Key Concepts
 
 A **script** is a stored definition (`scriptId`, type, content, parameters, timeout, `osType`).

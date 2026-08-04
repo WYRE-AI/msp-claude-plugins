@@ -18,6 +18,16 @@ when_to_use: >-
 
 SuperOps.ai tickets are the core unit of service delivery in the PSA. Every client request, incident, and service task flows through the ticketing system. This skill covers comprehensive ticket management including creation, updates, notes, time entries, and workflow automation using the GraphQL API.
 
+## Anti-triggers
+
+- **Tickets in another PSA** — `connectwise-psa-tickets`,
+  `autotask-tickets`, `halopsa-tickets`, `syncro-tickets`, and
+  `atera-tickets` are separate queues. Nothing here reads or writes
+  them.
+- **The alert that produced the ticket** — use `superops-alerts`.
+- **Running the fix on the endpoint** — remediation is
+  `superops-runbooks`; a resolved ticket does not imply a fixed machine.
+
 ## Ticket Status Values
 
 | Status | Description | Business Logic |

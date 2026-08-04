@@ -19,6 +19,20 @@ when_to_use: >-
 
 Inspections are the core mechanism by which Liongard captures IT documentation. The system has three parts: **inspectors** (templates defining what to inspect), **launchpoints** (configured instances tying an inspector to an environment, agent, credentials, and schedule), and **inspections** (individual execution runs that produce system data and potentially trigger detections). The relationship flows: **Inspector** (template) -> **Launchpoint** (configuration) -> **Inspection** (execution) -> **System** (discovered data).
 
+## Anti-triggers
+
+- **"Run" meaning execute a script on an endpoint** —
+  `liongard_inspections_run` collects configuration data. It runs no
+  operator-supplied code and changes nothing on the target. Script
+  execution is `immybot-script-execution`,
+  `ncentral-monitoring-tasks`, `superops-runbooks`, `atera-agents`,
+  `syncro-assets`, `connectwise-automate-scripts`, or `datto-rmm-jobs`.
+- **Scheduled maintenance on endpoints** — a launchpoint cron schedules
+  data collection, not patching or reboots; use
+  `immybot-maintenance-sessions` or `ncentral-monitoring-tasks`.
+- **What an inspection produced** — `liongard-systems` for the data,
+  `liongard-detections` for the changes it surfaced.
+
 ## Key Concepts
 
 ### Inspectors

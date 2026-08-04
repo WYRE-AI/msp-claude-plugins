@@ -18,6 +18,21 @@ endpoints in **SYSTEM context**. This is a privileged, destructive
 capability — scripts can install/uninstall software, change system
 settings, access files, and reboot the machine.
 
+## Anti-triggers
+
+- **Installing or updating software** — ImmyBot has no "install this
+  now" call, and a PowerShell installer script is exactly the
+  anti-pattern the platform exists to remove; use
+  `immybot-software-deployment`.
+- **Running a script on an endpoint managed by another RMM** — ImmyBot
+  reaches only computers enrolled in this ImmyBot instance, and ImmyBot
+  is Windows-only. The same request against another fleet is
+  `atera-agents`, `syncro-assets`, `superops-runbooks`,
+  `ncentral-monitoring-tasks`, `connectwise-automate-scripts`, or
+  `datto-rmm-jobs`.
+- **A script that ran inside a reconciliation** — scripts executed by a
+  session are tasks; use `immybot-maintenance-sessions`.
+
 ## API Tools
 
 | Tool | Purpose |

@@ -18,6 +18,19 @@ ImmyBot manages Windows endpoints (computers) grouped under tenants
 (client organizations). This skill covers querying and onboarding
 those computers and inspecting their state.
 
+## Anti-triggers
+
+- **The same machine under the RMM** — ImmyBot sees only Windows
+  computers enrolled in this instance, and an endpoint is normally
+  enrolled in an RMM as well: `atera-agents`, `syncro-assets`,
+  `superops-assets`, `ncentral-devices`, `ninjaone-rmm-devices`, or
+  `datto-rmm-devices`. Inventory from the two will legitimately differ.
+- **What *should* be installed on a computer** — this skill reads what
+  is actually there; desired state is
+  `immybot-software-deployment`.
+- **Fleet-wide or per-tenant rollups** — use
+  `immybot-tenant-compliance`.
+
 ## API Tools
 
 | Tool | Purpose |

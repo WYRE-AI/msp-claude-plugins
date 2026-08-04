@@ -16,6 +16,17 @@ when_to_use: >-
 
 Clients (also called Accounts) are the foundation of SuperOps.ai's PSA. Every ticket, asset, and service is associated with a client. This skill covers client CRUD operations, site management, contact handling, and custom field configuration.
 
+## Anti-triggers
+
+- **The same client in a different PSA** — `connectwise-psa-companies`,
+  `autotask-crm`, `syncro-customers`, `halopsa-clients`, and
+  `atera-customers` are separate systems of record. Create the account
+  in the one the MSP actually bills from.
+- **A Microsoft 365 tenant** — a SuperOps client is a PSA account, not
+  an M365 tenant; use `cipp-tenants`.
+- **What a client owns** — endpoints are `superops-assets`, open work is
+  `superops-tickets`.
+
 ## Key Concepts
 
 **Stage** tracks the sales lifecycle; **status** tracks the service relationship. They are independent — a `Customer` can be `Inactive`.

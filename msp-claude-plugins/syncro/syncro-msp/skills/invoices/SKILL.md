@@ -16,6 +16,19 @@ when_to_use: >-
 
 Syncro invoices are the core of your billing workflow. Invoices can be created manually, generated from tickets, or produced automatically from recurring contracts. This skill covers invoice creation, line item management, payment processing, and billing workflows.
 
+## Anti-triggers
+
+- **The invoice in the accounting system** — Syncro usually sits
+  upstream of QuickBooks or Xero and the same invoice exists in both.
+  Raising or editing it on the ledger side is
+  `quickbooks-online-invoices` or `xero-invoices`; doing it in the wrong
+  place produces two versions of one document.
+- **Recording the payment against the ledger** — Syncro marks its own
+  invoice paid; the accounting entry is `quickbooks-online-payments` or
+  `xero-payments`.
+- **The unbilled work behind an invoice** — ticket timers and time
+  entries are `syncro-tickets`.
+
 ## Key Concepts
 
 ### Invoice

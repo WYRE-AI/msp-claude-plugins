@@ -17,6 +17,18 @@ when_to_use: >-
 
 Atera device monitors extend monitoring capabilities beyond agent-based endpoints to include network devices, services, and applications. These agentless monitors use HTTP, SNMP, and TCP protocols to check availability and gather metrics.
 
+## Anti-triggers
+
+- **A workstation or server running the Atera agent** — that is an agent
+  record, not a device monitor; use `atera-agents`. This is the single
+  most common misroute in this plugin, because "device" means the
+  managed endpoint in every other RMM here.
+- **The alert a monitor fired** — monitor configuration and thresholds
+  live here; the acknowledge/resolve lifecycle is `atera-alerts`.
+- **Network discovery, topology, or interface statistics as a product**
+  — use `auvik-devices` or `auvik-networks`; this skill only configures
+  Atera's own HTTP, SNMP, and TCP checks.
+
 ## Monitor Types
 
 ### HTTP Monitors

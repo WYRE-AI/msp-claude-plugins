@@ -18,6 +18,19 @@ Tenants are ImmyBot's client organizations. This skill covers
 tenant-level queries, compliance rollups, and the background-task
 queue that powers fleet-wide operational and QBR reporting.
 
+## Anti-triggers
+
+- **Regulatory or framework compliance** — "compliance" here means
+  installed software matches desired state, nothing more. CIS, NIST, and
+  SOC 2 control mapping is `scalepad-controlmap`; Microsoft 365 security
+  baselines are `cipp-standards`.
+- **A Microsoft 365 or Entra tenant** — an ImmyBot tenant is a client
+  organization inside this ImmyBot instance and is unrelated to an M365
+  tenant ID, even though ImmyBot authenticates via Entra. Use
+  `cipp-tenants`.
+- **Fixing what the report shows** — this skill reports; remediation is
+  `immybot-software-deployment` and `immybot-maintenance-sessions`.
+
 ## Tenant API Tools
 
 | Tool | Purpose |

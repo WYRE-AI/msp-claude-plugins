@@ -20,6 +20,20 @@ when_to_use: >-
 
 Systems are the entities discovered during Liongard inspections. When a launchpoint runs an inspection, it discovers systems such as servers, firewalls, cloud services, user accounts, domain controllers, and other infrastructure components. Each system carries detailed configuration data captured at the time of inspection, giving a historical record of the IT environment.
 
+## Anti-triggers
+
+- **Acting on the device** — a Liongard system is a read-only snapshot
+  of something an inspection found. Rebooting it, patching it, or
+  running a script needs the RMM that manages it: `ncentral-devices`,
+  `atera-agents`, `syncro-assets`, `superops-assets`, or
+  `immybot-endpoint-management`.
+- **The MSP's documentation of record** — Liongard auto-discovers.
+  Hand-maintained documentation, passwords, and CIs live in
+  `hudu-assets` or `it-glue-configurations`.
+- **Why a system's data is stale or missing** — that is an inspection
+  problem; use `liongard-inspections`.
+- **What changed between two snapshots** — use `liongard-detections`.
+
 ## Key Concepts
 
 ### Systems

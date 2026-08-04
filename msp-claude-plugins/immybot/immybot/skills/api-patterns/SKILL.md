@@ -23,6 +23,17 @@ to the desired state. The MCP surface mirrors that model — listing
 and configuring desired state is one set of tools; running and
 inspecting maintenance sessions is another.
 
+## Anti-triggers
+
+- **Entra ID app registrations, consent, or Graph scopes in general** —
+  ImmyBot happens to authenticate with an Entra client-credentials app,
+  but this skill covers only the four ImmyBot credential fields.
+  Questions about Entra apps themselves are
+  `microsoft-graph-connection`.
+- **What a maintenance session actually does** — the polling cadence is
+  here; session scope, reboot behaviour, and cancel semantics are
+  `immybot-maintenance-sessions`.
+
 ## Connection & Authentication
 
 ImmyBot uses Microsoft Entra ID (Azure AD) OAuth 2.0 client

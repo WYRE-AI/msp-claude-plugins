@@ -19,6 +19,22 @@ when_to_use: >-
 
 Detections are Liongard's automated change and anomaly detection system. Every time an inspection runs, Liongard compares the new data with previous inspection results and identifies changes. Those changes become detections that MSPs monitor, investigate, and act upon. Around detections sit **alerts** (configurable rules that turn detections into notifications), **metrics** (custom measurements evaluated across systems for compliance reporting), and the **timeline** (a platform-wide audit trail of inspections, detections, and user actions).
 
+## Anti-triggers
+
+- **Security detections and EDR alerts** — a Liongard detection is a
+  configuration *change*, not a threat. Malicious activity is
+  `huntress-signals`, `huntress-incidents`, `sentinelone-alerts`, or
+  `rocketcyber-incidents`.
+- **RMM threshold and availability alerts** — disk-full, offline, and
+  service-down alerts come from the RMM: `atera-alerts`,
+  `superops-alerts`, `ncentral-monitoring-tasks`,
+  `ninjaone-rmm-alerts`, or `datto-rmm-alerts`.
+- **Compliance frameworks** — Liongard metrics are custom JMESPath
+  measurements over inspection data; mapping evidence to CIS, NIST, or
+  SOC 2 controls is `scalepad-controlmap`.
+- **Why the underlying data changed at all** — the inspection that
+  produced the comparison is `liongard-inspections`.
+
 ## Key Concepts
 
 ### Detections
