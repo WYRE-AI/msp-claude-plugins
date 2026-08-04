@@ -17,6 +17,16 @@ when_to_use: >-
 
 Companies in HubSpot represent organizations -- MSP clients, prospects, vendors, or partners. Companies are a central entity in the CRM that ties together contacts (the people who work there), deals (sales opportunities), and tickets (support requests). For MSPs, companies typically represent managed clients, each with associated contacts, service agreements, and support history. HubSpot can automatically associate contacts with companies based on email domain matching.
 
+## Anti-triggers
+
+- **A named person at the organization** — use `hubspot-contacts`.
+- **The revenue opportunity with that organization** — amount, stage, and
+  close date live on a deal, not the company; use `hubspot-deals`.
+- **The organization as a billing entity** — HubSpot companies hold no AR
+  balance; use `xero-contacts` or `quickbooks-online-customers`.
+- **Companies seen visiting the website but not yet in the CRM** — use
+  `warmly-visitor-intelligence`.
+
 ## MCP Tools
 
 ### Available Tools

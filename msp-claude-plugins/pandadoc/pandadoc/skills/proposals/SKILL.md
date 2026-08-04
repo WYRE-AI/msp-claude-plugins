@@ -19,6 +19,16 @@ when_to_use: >-
 
 MSPs use PandaDoc to create, send, and track proposals for managed services engagements. The proposal workflow covers the full lifecycle from initial client interest through signed contract -- creating professional proposals from templates, populating with client-specific content and pricing, sending for e-signature, and tracking the pipeline. PandaDoc's template system, content tokens, and pricing tables make it ideal for standardizing the MSP sales process while personalizing each proposal.
 
+## Anti-triggers
+
+- **Document mechanics rather than the sales motion** — the status enum,
+  transition rules, and pricing-table schema are `pandadoc-documents`.
+- **The pipeline as the CRM sees it** — proposal status is a proxy for deal
+  stage, not the system of record; use `hubspot-deals` or
+  `salesbuildr-opportunities`.
+- **Producing the priced quote the proposal wraps** — use `salesbuildr-quotes`,
+  `connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes`.
+
 ## MCP Tools
 
 ### Available Tools

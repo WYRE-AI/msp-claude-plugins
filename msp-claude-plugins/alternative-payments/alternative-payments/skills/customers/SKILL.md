@@ -25,6 +25,15 @@ This skill covers the read + safe-write customer surface: listing, retrieving,
 and creating customers, adding users, and archiving (a destructive operation).
 There is no direct money-movement operation here.
 
+## Anti-triggers
+
+- **The same client in the accounting ledger** — an Alternative Payments
+  customer is a billing target on the payment rail with no GL contact record;
+  use `xero-contacts` or `quickbooks-online-customers`.
+- **The same client in the CRM** — use `hubspot-companies` or
+  `salesbuildr-companies-contacts`.
+- **Billing that customer** — use `alternative-payments-invoicing`.
+
 ## Core Concepts
 
 ### Customers and Users

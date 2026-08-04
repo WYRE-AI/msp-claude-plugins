@@ -17,6 +17,13 @@ when_to_use: >-
 
 Opportunities represent potential deals in the sales pipeline. Each opportunity is linked to a company and optionally a contact, with a value, stage, and expected close date.
 
+## Anti-triggers
+
+- **The priced breakdown behind the opportunity** — an opportunity carries a
+  single value, not line items; use `salesbuildr-quotes`.
+- **HubSpot deals** — the same pipeline concept in a different CRM; use
+  `hubspot-deals`.
+
 ## Search Opportunities
 
 ```

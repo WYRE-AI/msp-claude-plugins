@@ -18,6 +18,14 @@ when_to_use: >-
 
 The Xero API is a RESTful JSON API covering contacts, invoices, payments, accounts, bank transactions, credit notes, and reports. This skill covers the mechanics that aren't guessable from the resource names: OAuth2 Custom Connections, query building, pagination, error handling, and rate-limit behavior.
 
+## Anti-triggers
+
+- **What a resource's fields and status values mean** — use `xero-contacts`,
+  `xero-invoices`, `xero-payments`, `xero-accounts`, or `xero-reports`.
+- **QuickBooks Online's auth and query model** — also OAuth2, but a different
+  grant, a different query language, and different limits; use
+  `quickbooks-online-api-patterns`.
+
 ## Authentication
 
 Xero uses OAuth2 **Custom Connections** for machine-to-machine access — a plain `client_credentials` grant against `https://identity.xero.com/connect/token`, authenticated with HTTP Basic (`CLIENT_ID:CLIENT_SECRET`). Access tokens last **1800 seconds (30 minutes)**; there is no refresh token in this flow, you simply request a new one.

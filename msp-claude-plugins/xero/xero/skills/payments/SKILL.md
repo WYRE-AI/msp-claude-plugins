@@ -17,6 +17,14 @@ when_to_use: >-
 
 Payments in Xero record the movement of money against invoices, credit notes, and overpayments. For MSPs, payment tracking is critical for cash flow management -- monitoring which clients have paid their monthly managed services invoices, which are overdue, and reconciling incoming payments against the correct invoices.
 
+## Anti-triggers
+
+- **Taking money from the customer** — Xero records a payment that already
+  happened; the collection rail is `alternative-payments-invoicing`.
+- **What is owed rather than what was paid** — `AmountDue` and invoice status
+  are `xero-invoices`; aging summaries are `xero-reports`.
+- **The same operation in QuickBooks** — use `quickbooks-online-payments`.
+
 ## Core Concepts
 
 ### Payment Types

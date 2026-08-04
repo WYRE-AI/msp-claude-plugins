@@ -19,6 +19,14 @@ when_to_use: >-
 
 PandaDoc provides a hosted MCP server at `https://developers.pandadoc.com/mcp` for AI tool integration. The MCP server provides direct API access to PandaDoc's document automation platform, documentation search, and code generation assistance.
 
+## Anti-triggers
+
+- **Your own documents** — `pandadoc-search-docs` and
+  `pandadoc-get-code-sample` search PandaDoc's developer documentation, not
+  your PandaDoc account; use `pandadoc-documents`.
+- **Document status values and what each transition allows** — use
+  `pandadoc-documents`.
+
 ## Connection & Authentication
 
 ### MCP Server

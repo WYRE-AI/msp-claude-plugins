@@ -19,6 +19,16 @@ when_to_use: >-
 
 HubSpot provides a first-party remote MCP server at `https://mcp.hubspot.com/` for AI tool integration. The MCP server uses OAuth 2.0 with PKCE for authentication and Streamable HTTP as its transport protocol. Tools are backed by the HubSpot CRM Search API and cover contacts, companies, deals, tickets, tasks, notes, and associations. This skill covers MCP server connection, the complete tool reference, search patterns, error handling, and best practices.
 
+## Anti-triggers
+
+- **What properties an object has and what its enum values mean** — the field,
+  lifecycle-stage, and pipeline tables live with the object; use
+  `hubspot-contacts`, `hubspot-companies`, `hubspot-deals`, or
+  `hubspot-tickets`.
+- **A different hosted OAuth MCP server** — the connection shape rhymes but
+  the tenant, scopes, session model, and tools do not; use
+  `warmly-api-patterns` or `pandadoc-api-patterns`.
+
 ## Connection & Authentication
 
 ### MCP Server

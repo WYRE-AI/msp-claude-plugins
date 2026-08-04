@@ -17,6 +17,14 @@ when_to_use: >-
 
 Xero exposes its financial reports through the API as structured, programmatically parseable data. For MSPs, these reports drive profitability tracking by service line, client payment-behavior monitoring, cash flow management, and financial statements for stakeholders.
 
+## Anti-triggers
+
+- **Individual transactions rather than aggregates** — reports return
+  summarized rows with no drill-through; the underlying records are
+  `xero-invoices` and `xero-payments`.
+- **The GL structure a report groups by** — use `xero-accounts`.
+- **The same reports in QuickBooks** — use `quickbooks-online-reports`.
+
 ## Core Concepts
 
 ### Available Reports

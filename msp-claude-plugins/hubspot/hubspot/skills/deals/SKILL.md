@@ -17,6 +17,17 @@ when_to_use: >-
 
 Deals in HubSpot represent sales opportunities -- potential or active revenue from clients. For MSPs, deals track managed services agreements, project engagements, hardware sales, or any revenue opportunity moving through the sales process. Each deal belongs to a pipeline (e.g., "Sales Pipeline" or "Renewals") and progresses through stages (e.g., "Discovery", "Proposal", "Closed Won"). Deals are associated with contacts and companies to provide full context on who is involved and which client the revenue belongs to.
 
+## Anti-triggers
+
+- **Building or pricing the quote behind the deal** — a deal records *that* an
+  opportunity exists and what it is worth; the line items, catalog, and margin
+  live in `salesbuildr-quotes` or `connectwise-cpq-quotes`.
+- **Sending the customer something to sign** — use `pandadoc-documents`.
+- **Billing a won deal** — moving a deal to Closed Won invoices nobody; use
+  `xero-invoices` or `quickbooks-online-invoices`.
+- **Salesbuildr opportunities** — a different vendor's pipeline object with
+  identical vocabulary; use `salesbuildr-opportunities`.
+
 ## MCP Tools
 
 ### Available Tools

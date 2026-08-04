@@ -19,6 +19,21 @@ when_to_use: >-
 
 Documents in PandaDoc represent proposals, quotes, contracts, statements of work (SOWs), managed service agreements (MSAs), and any other business documents that need to be created, sent, signed, and tracked. MSPs use PandaDoc documents to formalize client engagements -- from initial proposals through signed contracts. Documents are typically created from templates, populated with client-specific content, sent for e-signature, and archived after completion.
 
+## Anti-triggers
+
+- **Choosing or inspecting the blueprint before a document exists** — use
+  `pandadoc-templates`.
+- **Who signs, in what order, and whether they have signed** — use
+  `pandadoc-recipients`.
+- **The MSP sales motion layered over these same tools** — proposal types,
+  token conventions, and pipeline reporting are `pandadoc-proposals`.
+- **Building or pricing the offer** — PandaDoc renders and sends an
+  already-priced proposal; catalog and margin work happens in
+  `salesbuildr-quotes`, `connectwise-cpq-quotes`, or
+  `kaseya-quote-manager-quotes`.
+- **Searching PandaDoc's developer documentation** — `pandadoc-search-docs`
+  searches the docs site, not your account; use `pandadoc-api-patterns`.
+
 ## MCP Tools
 
 ### Available Tools

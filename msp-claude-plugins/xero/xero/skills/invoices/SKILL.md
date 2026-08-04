@@ -17,6 +17,18 @@ when_to_use: >-
 
 Invoices are the core transaction entity in Xero for billing and accounts payable. For MSPs, invoices represent two primary flows: sales invoices (ACCREC) for billing managed services clients, and supplier bills (ACCPAY) for vendor costs like software licenses, hardware purchases, and ISP charges.
 
+## Anti-triggers
+
+- **A quote or proposal the customer has not agreed to** — an invoice is a
+  demand for payment, not an offer; use `salesbuildr-quotes`,
+  `connectwise-cpq-quotes`, or `pandadoc-documents`.
+- **Collecting the money the invoice asks for** — Xero records the receivable;
+  the hosted payment rail is `alternative-payments-invoicing` and recording
+  the receipt is `xero-payments`.
+- **Aged receivables or revenue totals** — do not aggregate invoice rows by
+  hand; use `xero-reports`.
+- **The same operation in QuickBooks** — use `quickbooks-online-invoices`.
+
 ## Core Concepts
 
 ### Invoice Types

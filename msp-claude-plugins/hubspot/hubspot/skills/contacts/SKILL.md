@@ -17,6 +17,19 @@ when_to_use: >-
 
 Contacts in HubSpot represent individual people -- clients, prospects, vendors, or any person your MSP interacts with. Contacts are the foundational entity in HubSpot CRM. They can be associated with companies, deals, tickets, and activities to build a complete picture of every relationship. For MSPs, contacts typically represent client employees, decision-makers, technical contacts, and billing contacts at managed companies.
 
+## Anti-triggers
+
+- **The organization rather than the person** — "look up Acme Corp" wants a
+  company record; use `hubspot-companies`.
+- **The organization as an entity you invoice** — a HubSpot contact carries no
+  balance, terms, or tax details; the AR-side record is `xero-contacts` or
+  `quickbooks-online-customers`.
+- **A company or person detected on the website but not yet in the CRM** —
+  that is intent data, not a contact record; use
+  `warmly-visitor-intelligence`.
+- **`filterGroups`, sort, and pagination syntax** — the search grammar is
+  shared across every object type; use `hubspot-api-patterns`.
+
 ## MCP Tools
 
 ### Available Tools
