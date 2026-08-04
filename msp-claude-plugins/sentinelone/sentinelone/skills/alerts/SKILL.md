@@ -15,6 +15,25 @@ All alert tools are **read-only** — you can view, search, and investigate aler
 
 For full field definitions, response examples, and error details see [REFERENCE.md](./REFERENCE.md).
 
+## Anti-triggers
+
+- **A threat the Huntress SOC found.** Both products call their findings
+  alerts or incidents, and both speak of severity, detection, and
+  remediation — the vocabulary overlaps almost completely, the data does
+  not. This skill reads only the SentinelOne console; a Huntress finding
+  appears nowhere in it. Route by which sensor is on the endpoint, not by
+  the word the ticket used — for Huntress use `huntress-incidents`.
+- **Acting on an endpoint** — isolating a host, killing a process,
+  quarantining a file, or rolling back a remediation. Every SentinelOne
+  tool here is read-only; those actions exist only in the SentinelOne
+  console. On a Huntress-managed endpoint the approve/execute
+  remediation flow is `huntress-incidents`.
+- **A CVE finding rather than a detection.** Vulnerabilities carry the
+  same severity, status, notes, and history shape as alerts and are
+  easily mistaken for them; use `sentinelone-vulnerabilities`.
+- **A cloud or Kubernetes posture finding.** Same tool shape again, but
+  the XSPM misconfiguration surface — use `sentinelone-misconfigurations`.
+
 ## MCP Tools
 
 ### list_alerts — List alerts with filters

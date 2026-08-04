@@ -17,6 +17,14 @@ when_to_use: >-
 
 The RunZero MCP server provides AI tool integration with the RunZero asset discovery and network security platform. It exposes tools covering asset inventory, network scanning, site management, service discovery, wireless detection, and vulnerability reporting. The API uses Bearer token authentication with an Account API Token.
 
+## Anti-triggers
+
+- **Running an export.** This skill explains the Export API's mechanics;
+  the tools that actually pull bulk data are `runzero_assets_export` in
+  `runzero-assets` and `runzero_services_export` in `runzero-services`.
+- **Deciding what to scan.** Query-language syntax lives here, but scan
+  scope and rate belong to `runzero-tasks` and `runzero-sites`.
+
 ## Connection & Authentication
 
 ### Bearer Token Auth

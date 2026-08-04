@@ -21,6 +21,19 @@ Vulnerabilities in SentinelOne are tracked through the Extended Security Posture
 
 All vulnerability tools are **read-only**. You can view, search, and report on vulnerabilities, but you cannot change vulnerability status, apply patches, or take remediation actions through the MCP tools.
 
+## Anti-triggers
+
+- **A bad setting rather than a missing patch.** Exposed buckets,
+  permissive firewall rules, and unrotated keys are the sibling XSPM
+  surface with an identical tool shape — use
+  `sentinelone-misconfigurations`.
+- **"Remediation" meaning deploying the patch.** These tools report; they
+  do not patch or change status. Identify affected endpoints with
+  `sentinelone-inventory`, then drive the actual patch job from the RMM.
+- **Exposure discovered by scanning rather than by an agent.** CVEs here
+  come from endpoints already running a SentinelOne agent; open ports and
+  service banners on unmanaged devices are `runzero-services`.
+
 ## MCP Tools
 
 ### Available Tools

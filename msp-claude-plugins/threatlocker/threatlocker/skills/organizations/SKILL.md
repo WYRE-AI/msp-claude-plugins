@@ -19,6 +19,15 @@ authenticate with belongs to a parent (partner) org and can see all
 of its children. Most fleet-wide reporting and any tenant pivot work
 runs through this skill.
 
+## Anti-triggers
+
+- **Policy scope.** An organization is a tenant boundary; the thing that
+  decides which allow/deny rules apply is the computer group — use
+  `threatlocker-computer-groups`.
+- **An M365 tenant.** ThreatLocker child orgs and Microsoft tenants are
+  separate directories that happen to describe the same customer; tenant
+  onboarding, GDAP, and standards live in `cipp-tenants`.
+
 ## API Tools
 
 ### List Child Organizations

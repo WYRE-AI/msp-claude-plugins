@@ -15,6 +15,18 @@ when_to_use: >-
 
 Sites are the primary organizational unit in RunZero. Each site represents a network boundary -- typically a client location, office, data center, or cloud environment. Sites contain assets, define scan targets, and have explorers assigned for discovery. For MSPs, each client typically maps to one or more sites.
 
+## Anti-triggers
+
+- **The customer as a business record.** A runZero site is a network
+  boundary, not a client account — one customer often has several, and
+  the names rarely match. Company records, contacts, and contracts are
+  `connectwise-manage-companies`.
+- **A monitored network in another tool.** Auvik and Meraki both call
+  their boundary a "network"; the IDs are unrelated to runZero site IDs.
+  Use `auvik-networks` or `meraki-devices`.
+- **Launching a scan against the site's ranges** — the site holds the
+  scope, `runzero-tasks` runs it.
+
 ## Key Concepts
 
 ### Site Structure

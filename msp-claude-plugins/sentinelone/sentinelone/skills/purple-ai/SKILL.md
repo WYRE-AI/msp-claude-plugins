@@ -21,6 +21,18 @@ Purple AI is SentinelOne's natural language cybersecurity assistant built into t
 
 Purple AI is the primary starting point for any investigation -- describe what you want to find and it will generate the appropriate PowerQuery or provide analysis. It is **read-only** and cannot take any remediation actions.
 
+## Anti-triggers
+
+- **Executing a query you already have.** `purple_ai` writes PowerQuery;
+  it does not run it. Hand the generated string to
+  `sentinelone-threat-hunting`.
+- **Working the existing alert queue.** Purple AI answers open-ended
+  questions against telemetry — listing, filtering, or reading notes on
+  alerts that already exist is `sentinelone-alerts`.
+- **Hunting on non-SentinelOne telemetry.** Purple AI reasons only over
+  the Singularity Data Lake. Huntress detections are `huntress-signals`;
+  ThreatLocker execution history is `threatlocker-audit-log`.
+
 ## MCP Tools
 
 ### Available Tools

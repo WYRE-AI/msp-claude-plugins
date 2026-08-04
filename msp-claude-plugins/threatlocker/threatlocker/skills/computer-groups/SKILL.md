@@ -20,6 +20,19 @@ A computer must belong to exactly one group, and moving a computer
 between groups changes which policy set applies to it. Groups can be
 **global** (visible across all child organizations) or **org-specific**.
 
+## Anti-triggers
+
+- **A directory group.** "Group" here is a ThreatLocker policy boundary
+  with no relationship to Entra ID or Active Directory membership.
+  Security and distribution groups in a managed M365 tenant are
+  `cipp-groups`.
+- **The client a computer belongs to.** Tenancy is the organization, not
+  the group; a computer sits in exactly one of each — use
+  `threatlocker-organizations`.
+- **Why a specific execution was blocked.** The group only says which
+  policy set applied; the individual block and the resulting request are
+  `threatlocker-audit-log` and `threatlocker-approval-requests`.
+
 ## API Tools
 
 ### List Computer Groups (Full)

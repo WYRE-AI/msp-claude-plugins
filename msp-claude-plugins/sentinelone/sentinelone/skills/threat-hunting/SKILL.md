@@ -21,6 +21,17 @@ PowerQuery is SentinelOne's query language for searching the Singularity Data La
 
 > **IMPORTANT:** PowerQuery is a Scalyr-based pipeline query language. It is **NOT** Splunk SPL, SQL, KQL (Kusto), or Elasticsearch Query DSL. The syntax is fundamentally different. The recommended approach is to use the `purple_ai` tool to generate PowerQuery strings from natural language descriptions, then execute them with the `powerquery` tool.
 
+## Anti-triggers
+
+- **A natural-language question with no query yet.** Do not hand-write
+  PowerQuery from a plain-English prompt — `sentinelone-purple-ai`
+  generates it correctly, and this skill executes what it returns.
+- **"Threat hunting" on a Huntress tenant.** The phrase belongs to both
+  products; the telemetry does not. Huntress raw detections are
+  `huntress-signals` and its confirmed threats are `huntress-incidents`.
+- **A specific alert's timeline.** Alert notes and history come from the
+  alert object, not the Data Lake — use `sentinelone-alerts`.
+
 ## MCP Tools
 
 ### Available Tools

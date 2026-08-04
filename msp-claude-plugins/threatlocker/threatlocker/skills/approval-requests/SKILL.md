@@ -22,6 +22,19 @@ computer it ran on, and a free-text justification. Triaging this queue
 well is the difference between a productive ThreatLocker deployment
 and a frustrated client.
 
+## Anti-triggers
+
+- **A malware detection.** ThreatLocker is default-deny allowlisting, not
+  EDR — it blocks everything unlisted and has no verdict on whether a
+  binary is malicious. A request in this queue means "policy said no",
+  not "something was detected". Convictions and confirmed threats are
+  `sentinelone-alerts` or `huntress-incidents`.
+- **What the binary actually did on the endpoint.** The request record
+  carries only the metadata the user submitted; execution history,
+  process chain, and prior blocks are `threatlocker-audit-log`.
+- **Which endpoints an approval would cover.** Permits land at group
+  scope, so the blast radius question is `threatlocker-computer-groups`.
+
 ## API Tools
 
 ### List Approval Requests
