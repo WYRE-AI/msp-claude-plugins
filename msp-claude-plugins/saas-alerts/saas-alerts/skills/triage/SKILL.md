@@ -23,6 +23,24 @@ The SaaS Alerts MCP surface is well-suited to this: event queries are
 customer-scoped or cross-tenant, severity is a first-class filter, and
 recommended actions are machine-generated per alert.
 
+## Anti-triggers
+
+- **Doing anything about the alert in M365.** SaaS Alerts observes; it
+  cannot disable an account, revoke sessions, reset MFA, or block a
+  sign-in. Once triage says act, the remediation surface is `cipp-users`
+  and `cipp-security` — this skill's `recommended_actions` output is
+  guidance, not an executable step.
+- **Reading tenant configuration.** Whether Conditional Access, MFA
+  enrolment, or a mailbox rule is actually in place comes from the tenant,
+  not the alert feed — use `cipp-security`, `cipp-standards`, or
+  `m365-security`.
+- **Malicious email.** Phishing, quarantine, and message-level verdicts
+  are the email-security stack, not SaaS Alerts sign-in telemetry — use
+  `ironscales-incidents`.
+- **An endpoint compromise.** These events come from SaaS audit logs, so
+  they carry no process, file, or host detail. Endpoint detections are
+  `sentinelone-alerts` or `huntress-incidents`.
+
 ## API Tools
 
 | Tool | Role in Triage |

@@ -20,6 +20,22 @@ every block, every permit, every audit-only match generates an entry.
 This is your forensics surface: when something happened on an endpoint,
 this is where you find out what.
 
+## Anti-triggers
+
+- **Admin change history.** The Action Log records what executed on
+  endpoints, not who edited a policy or approved a request in the
+  console. For approval decisions use
+  `threatlocker-approval-requests`; for who invoked a tool through the
+  gateway, see the plugin's `GOVERNANCE.md`.
+- **A pending request rather than a past block.** A user waiting on an
+  application is in the queue, not the log — use
+  `threatlocker-approval-requests`.
+- **Detection telemetry.** Every entry here is a policy outcome (Block,
+  Permit, Audit), never a threat verdict. Behavioural detections are
+  `sentinelone-threat-hunting` or `huntress-signals`.
+- **Whether an agent is reporting at all.** An empty log usually means a
+  stale agent; check check-in state with `threatlocker-computers`.
+
 ## API Tools
 
 ### Search Action Log

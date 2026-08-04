@@ -15,6 +15,21 @@ when_to_use: >-
 
 RunZero tasks represent network discovery scans. Each scan is executed by an explorer (scan agent), targets a set of IP ranges or subnets, and discovers assets, services, and network topology. This skill covers creating, managing, and reviewing scan tasks.
 
+## Anti-triggers
+
+- **Vulnerability scanning.** A runZero task fingerprints and inventories;
+  it does not test for CVEs or produce findings. CVE posture is
+  `sentinelone-vulnerabilities`.
+- **A unit of work rather than a network scan.** "Task" collides badly —
+  PSA project tasks and tickets are `connectwise-manage-projects` or
+  `connectwise-manage-tickets`, and an RMM script run is
+  `connectwise-automate-scripts`.
+- **Continuous polling.** Auvik and Domotz watch the network without a
+  scan to launch, so there is no task to create — use `auvik-devices` or
+  `domotz-devices`.
+- **Reading what a scan found** — results live on the records, not the
+  task; use `runzero-assets` or `runzero-services`.
+
 ## Key Concepts
 
 ### Explorers

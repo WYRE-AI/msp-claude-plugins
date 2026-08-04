@@ -25,6 +25,18 @@ For MSPs, misconfiguration detection is essential for maintaining client securit
 
 All misconfiguration tools are **read-only**. You can view, search, and report on misconfigurations, but you cannot remediate them through the MCP tools.
 
+## Anti-triggers
+
+- **A missing patch rather than a bad setting.** CVEs share this skill's
+  severity/status/notes/history shape and the same XSPM module — use
+  `sentinelone-vulnerabilities`.
+- **M365 tenant baseline drift.** "Compliance" and "posture" here mean
+  cloud and Kubernetes resource configuration. Conditional Access,
+  secure-score, and standards-template drift across managed M365 tenants
+  are `cipp-standards`; mailbox and identity settings are `m365-security`.
+- **An active detection.** A misconfiguration is a standing weakness, not
+  an event — for something that fired, use `sentinelone-alerts`.
+
 ## MCP Tools
 
 ### Available Tools

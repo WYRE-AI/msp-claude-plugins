@@ -16,6 +16,17 @@ when_to_use: >-
 
 RunZero discovers services running on every asset -- open ports, protocols, software versions, and TLS configurations. Service data is critical for vulnerability assessment, compliance auditing, and attack surface management. This skill covers listing, filtering, and analyzing discovered services.
 
+## Anti-triggers
+
+- **CVE findings.** runZero reports what is listening and which version
+  answered — it does not score or track vulnerabilities. Patch
+  prioritisation is `sentinelone-vulnerabilities`; cloud posture is
+  `sentinelone-misconfigurations`.
+- **Firewall rules and port forwarding.** An open port here was observed
+  from the explorer's vantage point; the rule that permits it is
+  `meraki-security-appliance`.
+- **The machine rather than the listener** — use `runzero-assets`.
+
 ## Key Concepts
 
 ### Service Attributes

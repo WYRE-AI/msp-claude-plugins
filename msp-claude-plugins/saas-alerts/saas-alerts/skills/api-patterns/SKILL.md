@@ -20,6 +20,15 @@ anomalies, and policy violations across all managed customer tenants.
 The MSP (partner) sees all customers under their account; each customer
 has one or more accounts (e.g., an M365 tenant, a Google Workspace domain).
 
+## Anti-triggers
+
+- **Working the alert queue.** This skill covers filters, cursors, and
+  the customer hierarchy; sweeping, ranking, and dispositioning events is
+  `saas-alerts-triage`.
+- **A SaaS Alerts customer treated as an M365 tenant.** They describe the
+  same organisation but are separate records with separate IDs, and this
+  API cannot read or change tenant configuration — use `cipp-tenants`.
+
 ## Connection & Authentication
 
 SaaS Alerts uses an API key passed as a request header. The key is issued

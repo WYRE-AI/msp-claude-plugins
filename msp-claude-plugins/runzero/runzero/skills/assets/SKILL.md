@@ -15,6 +15,22 @@ when_to_use: >-
 
 RunZero discovers and inventories every asset on the network -- servers, workstations, IoT devices, OT systems, cloud instances, and more. Each asset includes OS fingerprinting, hardware details, network interfaces, open services, and a full attribute history. This skill covers searching, filtering, and inspecting assets.
 
+## Anti-triggers
+
+- **Live device state.** runZero records what the last scan saw, so it
+  cannot answer "is it up right now", "what is the CPU doing", or "which
+  port is it plugged into". Continuous monitoring and topology are
+  `auvik-devices`; up/down and remote access are `domotz-devices`; the
+  switch or AP's own configuration is `meraki-devices`.
+- **Agent-managed endpoints.** runZero is agentless and discovers from
+  the network, so its record of a workstation is thinner than the
+  sensor's. Agent health, OS build, and logged-in user come from
+  `sentinelone-inventory` or `threatlocker-computers`.
+- **Launching or scheduling the scan** that produces this data — use
+  `runzero-tasks`.
+- **Ports, banners, and protocols** rather than the machine itself — each
+  is its own record; use `runzero-services`.
+
 ## Key Concepts
 
 ### Asset Types

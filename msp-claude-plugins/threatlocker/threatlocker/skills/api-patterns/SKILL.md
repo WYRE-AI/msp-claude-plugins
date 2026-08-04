@@ -24,6 +24,16 @@ that surprise people: the auth header does NOT use `Bearer`, and most
 "list" endpoints are POSTs against `/Entity/EntityGetByParameters` with
 a structured body — not GETs with query strings.
 
+## Anti-triggers
+
+- **Enumerating or pivoting between tenants.** This skill explains the
+  `organizationId` header and the `childOrganizations` flag; the tools
+  that actually list children, fetch auth keys, and resolve move targets
+  are `threatlocker-organizations`.
+- **Reading or storing an organization's auth key.** The header mechanics
+  are here, but the tool that returns a live credential is in
+  `threatlocker-organizations` — treat its output as a secret.
+
 ## Connection & Authentication
 
 ### Raw API Key Header

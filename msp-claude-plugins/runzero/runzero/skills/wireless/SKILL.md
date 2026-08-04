@@ -15,6 +15,16 @@ when_to_use: >-
 
 RunZero discovers wireless networks visible from explorer locations, including authorized corporate networks, guest networks, and potential rogue access points. Wireless discovery helps MSPs maintain visibility into the RF environment and identify unauthorized network infrastructure.
 
+## Anti-triggers
+
+- **Configuring or fixing a wireless network.** runZero only observes the
+  RF a nearby explorer can hear; it cannot change an SSID, PSK, channel,
+  or radio setting, and it has no view of client roaming or throughput.
+  Wireless configuration and client troubleshooting are `meraki-devices`
+  and `meraki-troubleshooting`.
+- **The wired side of an AP.** The access point as an inventoried device
+  is `runzero-assets`; its uplink and switch port are `auvik-devices`.
+
 ## Key Concepts
 
 ### Wireless Network Attributes

@@ -20,6 +20,17 @@ is bound to a computer group, which in turn carries the policies that
 govern allow/deny behavior. This skill covers fleet inventory, offline
 agent identification, and drilling into a single endpoint's history.
 
+## Anti-triggers
+
+- **Machines without a ThreatLocker agent.** This list is the protected
+  fleet only, so it can never answer "what else is on this network".
+  Discovery of unmanaged, IoT, and OT devices is `runzero-assets`; live
+  network devices and topology are `auvik-devices`.
+- **Another vendor's sensor fleet.** Agent counts do not reconcile
+  across products — use `sentinelone-inventory` or `huntress-agents`.
+- **Which policies apply to a machine.** Policy is attached to the group,
+  never to the computer — use `threatlocker-computer-groups`.
+
 ## API Tools
 
 ### List Computers

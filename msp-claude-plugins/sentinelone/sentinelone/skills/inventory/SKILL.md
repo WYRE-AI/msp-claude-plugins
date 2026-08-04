@@ -22,6 +22,20 @@ The SentinelOne unified asset inventory provides a single view of all assets acr
 
 The inventory uses the **REST API** (not GraphQL), with offset-based pagination and direct filter parameters. All inventory tools are **read-only**.
 
+## Anti-triggers
+
+- **Dedicated network discovery.** The `NETWORK_DISCOVERY` surface is
+  Ranger's passive by-product of the agents you already have. A question
+  about scanning a subnet, fingerprinting an unmanaged device, or
+  inventorying OT/IoT gear belongs to `runzero-assets`; live topology and
+  interface state belong to `auvik-devices`.
+- **What an endpoint detected.** This skill covers the asset record and
+  its agent health; findings on that asset are `sentinelone-alerts`,
+  `sentinelone-vulnerabilities`, or `sentinelone-misconfigurations`.
+- **A Huntress or ThreatLocker agent.** Different vendors' sensors are
+  different fleets with no shared record — use `huntress-agents` or
+  `threatlocker-computers`.
+
 ## MCP Tools
 
 ### Available Tools

@@ -24,6 +24,16 @@ The Purple MCP server has a dual API architecture:
 - **GraphQL API** - Used for Purple AI, alerts, vulnerabilities, and misconfigurations
 - **REST API** - Used for asset inventory
 
+## Anti-triggers
+
+- **"SentinelOne endpoint" meaning a machine.** This skill's `endpoint`
+  is an HTTP route; a workstation, server, or agent is
+  `sentinelone-inventory`.
+- **Writing or running an actual query.** This skill covers filter and
+  pagination mechanics only — PowerQuery execution is
+  `sentinelone-threat-hunting`, and natural-language investigation is
+  `sentinelone-purple-ai`.
+
 ## Connection & Authentication
 
 ### Service User Token
