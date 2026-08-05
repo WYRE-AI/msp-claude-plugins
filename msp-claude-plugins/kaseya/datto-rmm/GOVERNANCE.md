@@ -16,42 +16,85 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who ran this script on the customer's server" — Datto RMM's job
   history records only the API account.
-- Revoking gateway access revokes Datto RMM access with it, immediately.
+- Removing a technician's Conduit org membership stops their Datto RMM
+  access on their next call, because membership is re-read per request.
+  It does **not** revoke an already-issued token, and it does not touch
+  credentials they connected personally. Full offboarding is more than
+  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Datto RMM or endpoint state. Safe for autonomous agents. | `datto_list_devices`, `datto_get_device`, `datto_find_device`, `datto_get_device_audit`, `datto_list_sites`, `datto_get_site`, `datto_list_alerts`, `datto_get_alert` |
-| **Write** | Changes Datto RMM records. Reversible, but suppresses signal. | `datto_resolve_alert` |
-| **Destructive** | Executes code on a customer endpoint. Requires explicit per-call human approval. | `datto_run_quickjob` |
+Datto RMM is classified in Conduit's `VENDOR_TOOL_CONFIG`
+(`src/proxy/result-cache.ts`) under the slug `datto-rmm`. All ten tools
+are classified; none fall through to the unclassified-means-`admin`
+rule.
 
-`datto_run_quickjob` is the only tool here that leaves the Datto RMM
-platform and touches the customer's machine. It executes a component
-script on a named device with whatever privileges the Datto agent holds
-— which is SYSTEM on Windows. The component decides what happens;
-"install this update" and "wipe this directory" are the same tool call
-with a different `componentUid`. Blast radius is a production endpoint,
-so it is destructive regardless of which component is chosen.
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Datto RMM or endpoint state. Safe for autonomous agents. | `read` | `datto_list_devices`, `datto_get_device`, `datto_find_device`, `datto_list_sites`, `datto_get_site`, `datto_list_alerts`, `datto_get_alert` |
+| **Write** | Changes Datto RMM records. Reversible, but suppresses signal. | `write` | `datto_resolve_alert` |
+| **Delete** | — | — | **None.** This plugin exposes no delete-group tool, so the usual "a `write` grant also admits the deletes" trap does not apply here. |
+| **Admin** | Executes code on a customer endpoint, or reads forensics-class inventory. | `admin` | `datto_run_quickjob`, `datto_get_device_audit` |
 
-`datto_resolve_alert` is a write rather than a read because closing an
-alert removes it from the queue the on-call technician is watching. It
-does not fix the underlying condition — the monitor will re-fire — but
-an agent that resolves alerts in bulk can hide a live outage.
+Conduit compares tiers. It has no approval step, no per-call
+confirmation, and no interactive prompt — its source contains no
+elicitation handling at all. Per-call approval for anything below is a
+policy you impose on your agents, and it is only as good as the agent
+configuration that carries it.
+
+### `datto_run_quickjob` enforces at `admin`, and should
+
+It is the only tool here that leaves the Datto RMM platform and touches
+the customer's machine. It executes a component script on a named device
+with whatever privileges the Datto agent holds — which is SYSTEM on
+Windows. The component decides what happens; "install this update" and
+"wipe this directory" are the same tool call with a different
+`componentUid`. Blast radius is a production endpoint, so it is
+dangerous regardless of which component is chosen.
+
+Conduit classifies it `admin` rather than `write` for exactly that
+reason — its own comment puts it in the same class as
+`autotask_execute_tool`, on the grounds that the blast radius is bounded
+by execution scope rather than by the verb in the name. A technician
+with `write` on Datto RMM **cannot** call it. That is a real control,
+and it is stronger than the per-call approval this document used to
+claim.
+
+### `datto_get_device_audit` enforces at `admin`, which may surprise you
+
+It reads like a `get_*` tool and it changes nothing, but Conduit
+classifies it `isAdmin` because a device audit is forensics-class
+sensitive data: full hardware and software inventory for a customer
+endpoint. **A read-only agent cannot call it.** If your fleet-audit or
+patch-coverage workflow depends on this tool, it needs an `admin` grant
+on Datto RMM — which also admits `datto_run_quickjob`. There is no tier
+between them; separating the two requires a per-tool `customTools`
+allowlist.
+
+### `datto_resolve_alert` is the whole Write group
+
+It is a write rather than a read because closing an alert removes it
+from the queue the on-call technician is watching. It does not fix the
+underlying condition — the monitor will re-fire — but an agent that
+resolves alerts in bulk can hide a live outage. Granting `write` on
+Datto RMM grants exactly this one tool plus the reads.
 
 ## Recommended agent policy
 
-The safe default is **read autonomously, propose writes, never
-self-approve destructive calls.**
+The safe default is **read autonomously, propose writes, never let an
+agent hold `admin` on this vendor.**
 
 - Read tools: allow. Fleet audits, patch-coverage reporting, and alert
-  triage summaries are the intended autonomous use.
+  triage summaries are the intended autonomous use — noting that
+  `datto_get_device_audit` is not in this group.
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Never allow bulk alert resolution without a human reading the list.
-- Destructive tools: require a named human approver per invocation, and
-  require the approver to be told which component is being run against
-  which device. Do not grant `datto_run_quickjob` to scheduled or
-  unattended agents.
+- Admin tools: treat an `admin` grant on Datto RMM as arbitrary remote
+  code execution on every managed endpoint, because
+  `datto_run_quickjob` is exactly that. Do not grant it to scheduled or
+  unattended agents. For an interactive operator, require that they be
+  told which component is being run against which device — Conduit will
+  not ask.
 
 ## What it cannot reach
 
@@ -70,7 +113,7 @@ self-approve destructive calls.**
 
 The skills in this plugin document device, site, and variable
 create/update/delete operations that exist in the Datto RMM REST API but
-are **not exposed as MCP tools**. The nine tools above are the complete
+are **not exposed as MCP tools**. The ten tools above are the complete
 callable surface. Treat the skills' coverage of write operations as API
 reference, not as something an agent can invoke here.
 
@@ -80,7 +123,8 @@ reference, not as something an agent can invoke here.
   and are not persisted by this plugin.
 - `datto_get_device_audit` returns full hardware and software inventory
   for a customer endpoint, including installed application names and
-  versions — useful to an attacker profiling the estate.
+  versions — useful to an attacker profiling the estate. This is why
+  Conduit enforces it at `admin` rather than `read`.
 - `datto_list_devices` and `datto_get_device` return internal and
   external IP addresses, hostnames, MAC addresses, and logged-in user
   names.

@@ -16,21 +16,68 @@ tenant the operator is authorised for.
 - Credential rotation happens once at the gateway, not per technician.
 - Every call carries operator identity, so the gateway audit log answers
   "who restored data into this customer's mailbox".
-- Revoking gateway access revokes SaaS Protection access with it,
-  immediately.
+- Removing a technician's Conduit org membership stops their SaaS
+  Protection access on their next call, because membership is re-read
+  per request. It does **not** revoke an already-issued token, and it
+  does not touch credentials they connected personally. Full offboarding
+  is more than one step — see `wyre-gateway/GOVERNANCE.md`,
+  *Revocation*.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change backup or tenant state. Safe for autonomous agents. | `datto_saas_list_clients`, `datto_saas_list_domains`, `datto_saas_list_seats`, `datto_saas_get_seat`, `datto_saas_list_backups`, `datto_saas_get_restore_status`, `datto_saas_list_activity`, `datto_saas_get_license_usage` |
-| **Write** | — | None. |
-| **Destructive** | Writes data back into a live customer Microsoft 365 or Google Workspace tenant. Requires explicit per-call human approval. | `datto_saas_queue_restore` |
+**Read this section before granting anything.** Datto SaaS Protection
+has an entry in Conduit's `VENDOR_TOOL_CONFIG`
+(`src/proxy/result-cache.ts`), but that entry classifies only **three**
+of the plugin's nine tools. The other six — including the restore — are
+not in the table.
 
-`datto_saas_queue_restore` is the only mutating tool, and it does not
-mutate the backup — it mutates **production**. A restore injects
-messages, files, or an entire seat back into the customer's live cloud
-tenant. Consequences an approver needs to understand:
+Conduit is fail-closed. An unclassified tool is coerced to the *highest*
+tier at the enforcement gate:
+
+```ts
+const requiredTier: PermissionTier = classified ?? 'admin'; // UNCLASSIFIED -> ADMIN
+```
+— `src/access/access-enforcement.ts:63`. So the six unclassified tools
+below require tier `admin` to invoke, no matter what they do.
+
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change backup or tenant state. Safe for autonomous agents. | `read` | `datto_saas_list_clients`, `datto_saas_list_domains`, `datto_saas_get_license_usage` |
+| **Write** | — | — | **None.** No tool in this plugin is classified `isWrite`. |
+| **Delete** | — | — | **None.** |
+| **Admin** | Everything Conduit has not classified — read tools and the restore alike. | `admin` (by fail-closed coercion, not by classification) | `datto_saas_list_seats`, `datto_saas_get_seat`, `datto_saas_list_backups`, `datto_saas_get_restore_status`, `datto_saas_list_activity`, `datto_saas_queue_restore` |
+
+Conduit compares tiers. It has no approval step, no per-call
+confirmation, and no interactive prompt — its source contains no
+elicitation handling at all. Per-call approval for anything below is a
+policy you impose on your agents, and it is only as good as the agent
+configuration that carries it.
+
+### What the classification gap means in practice
+
+1. **A read-only agent cannot do the plugin's main job.** Seat listing,
+   backup listing, and restore-status polling are all in the coerced
+   `admin` bucket. Backup-failure sweeps and seat coverage checks — the
+   intended autonomous uses — need `admin` on this vendor today.
+2. **`admin` is the only grant that reaches the restore.** Because the
+   same grant is the only one that reaches the seat and backup readers,
+   **you cannot currently grant the read work without also granting
+   `datto_saas_queue_restore`.** There is no tier between them. The only
+   mechanism that separates them is a per-tool `customTools` allowlist.
+3. **This is drift, not design.** The three classified tools are
+   presumably the ones that existed when the entry was written. Report
+   the gap rather than working around it; classifying the remaining six
+   is a privilege *reduction*, because it would move the read tools down
+   from `admin` to `read`.
+
+Verify the table above against the deployed gateway before relying on it
+for an access-control decision.
+
+### `datto_saas_queue_restore` mutates production, not the backup
+
+A restore injects messages, files, or an entire seat back into the
+customer's live cloud tenant. Consequences an approver needs to
+understand:
 
 - Restored mail lands in the user's actual mailbox. Users see it,
   respond to it, and cannot tell it from new mail.
@@ -40,21 +87,37 @@ tenant. Consequences an approver needs to understand:
 - There is no undo tool. Nothing in this plugin removes what a restore
   put back.
 
-The MCP server marks this tool DESTRUCTIVE and prompts for confirmation.
-Do not treat that prompt as the control — an agent granted the tool can
-answer it.
+The MCP server marks this tool DESTRUCTIVE in its description and calls
+`elicitInput` to ask for confirmation before queueing
+(`src/mcp-server.ts:422`). **That prompt does not survive the gateway.**
+Conduit initialises its upstream vendor session with `capabilities: {}`
+(`src/proxy/mcp-session-pool.ts:109`) and advertises no elicitation
+capability downstream either, so the server's confirmation request has
+nobody to reach. The server's own fallback then applies: the helper
+returns `null` and the tool refuses with *"Restore cancelled: client
+does not support confirmation prompts."*
+
+Two things follow, and they point in opposite directions. The prompt is
+not a control you can rely on — but neither is the restore reliably
+callable through Conduit. Test it before you build a recovery runbook on
+it.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, never self-approve the
-restore.**
+restore** — which today requires a per-tool grant, because the tier
+model cannot express it.
 
-- Read tools: allow. Backup-failure sweeps, seat coverage checks, and
-  licence reconciliation are the intended autonomous use.
-- Destructive tool: require a named human approver per invocation, and
-  require the approver to be shown the seat, the item count, and
-  explicitly whether the item list is empty. Do not grant
+- Read tools: allow the three classified ones. The other five reads sit
+  behind `admin`; grant them per-tool rather than granting `admin` on
+  the vendor.
+- Restore: require a named human approver per invocation, and require
+  the approver to be shown the seat, the item count, and explicitly
+  whether the item list is empty. Conduit will not ask any of this — it
+  compares tiers and passes the call through. Do not grant
   `datto_saas_queue_restore` to scheduled or unattended agents.
+- Do not hand an agent blanket `admin` on this vendor as a shortcut to
+  the seat and backup readers. That grant includes the restore.
 
 ## What it cannot reach
 
@@ -74,8 +137,10 @@ restore.**
 
 The skill for this plugin is marked in-development reference
 documentation. The nine tools above are the current callable surface of
-`datto-saas-protection-mcp`. Verify against the deployed gateway before
-relying on this table for an access-control decision.
+`datto-saas-protection-mcp`. Six of the nine are absent from Conduit's
+`VENDOR_TOOL_CONFIG` and therefore coerce to `admin` — see *Tool
+permission groups*. Verify against the deployed gateway before relying
+on this table for an access-control decision.
 
 ## Data handling
 

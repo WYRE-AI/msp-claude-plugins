@@ -16,40 +16,95 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who raised this charge" — Autotask's own audit trail records only the
   API user.
-- Revoking gateway access revokes Autotask access with it, immediately.
+- Removing a technician's Conduit org membership stops their Autotask
+  access on their next call, because membership is re-read per request.
+  It does **not** revoke an already-issued token, and it does not touch
+  credentials they connected personally. Full offboarding is more than
+  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Autotask state. Safe for autonomous agents. | All `autotask_search_*` (29), `autotask_get_*` (19), and `autotask_list_*` (6) tools, plus `autotask_test_connection` and `autotask_router`. Enumerated below. |
-| **Write** | Creates or modifies records. Reversible, but visible to the customer. | `autotask_create_company`, `autotask_create_company_note`, `autotask_create_contact`, `autotask_create_opportunity`, `autotask_create_phase`, `autotask_create_project`, `autotask_create_project_note`, `autotask_create_quote`, `autotask_create_quote_item`, `autotask_create_service_call`, `autotask_create_service_call_ticket`, `autotask_create_service_call_ticket_resource`, `autotask_create_task`, `autotask_create_ticket`, `autotask_create_ticket_attachment`, `autotask_create_ticket_checklist_item`, `autotask_create_ticket_note`, `autotask_create_time_entry`, `autotask_create_expense_item`, `autotask_create_expense_report`, `autotask_update_company`, `autotask_update_company_site_configuration`, `autotask_update_contact`, `autotask_update_project`, `autotask_update_quote_item`, `autotask_update_service_call`, `autotask_update_ticket`, `autotask_update_ticket_checklist_item` |
-| **Destructive** | Deletes records, changes what the customer is billed, or executes an unbounded call. Requires explicit per-call human approval. | `autotask_delete_quote_item`, `autotask_delete_service_call`, `autotask_delete_service_call_ticket`, `autotask_delete_service_call_ticket_resource`, `autotask_delete_ticket_charge`, `autotask_delete_ticket_checklist_item`, `autotask_create_ticket_charge`, `autotask_update_ticket_charge`, `autotask_create_contract`, `autotask_update_contract`, `autotask_create_contract_service`, `autotask_update_contract_service`, `autotask_execute_tool`, `autotask_raw_request` |
+Autotask is classified in Conduit's `VENDOR_TOOL_CONFIG`
+(`src/proxy/result-cache.ts`), so the tiers below are the ones actually
+enforced. All 98 tools are classified; none fall through to the
+unclassified-means-`admin` rule.
 
-### Why some non-delete tools sit in the destructive tier
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Autotask state. Safe for autonomous agents. | `read` | All `autotask_search_*` (29), `autotask_get_*` (19), and `autotask_list_*` (6) tools, plus `autotask_test_connection`. Enumerated below. |
+| **Write** | Creates or modifies records. Reversible, but visible to the customer — and includes the billing and contract tools. | `write` | `autotask_create_company`, `autotask_create_company_note`, `autotask_create_contact`, `autotask_create_contract`, `autotask_create_contract_service`, `autotask_create_expense_item`, `autotask_create_expense_report`, `autotask_create_opportunity`, `autotask_create_phase`, `autotask_create_project`, `autotask_create_project_note`, `autotask_create_quote`, `autotask_create_quote_item`, `autotask_create_service_call`, `autotask_create_service_call_ticket`, `autotask_create_service_call_ticket_resource`, `autotask_create_task`, `autotask_create_ticket`, `autotask_create_ticket_attachment`, `autotask_create_ticket_charge`, `autotask_create_ticket_checklist_item`, `autotask_create_ticket_note`, `autotask_create_time_entry`, `autotask_update_company`, `autotask_update_contact`, `autotask_update_contract`, `autotask_update_contract_service`, `autotask_update_project`, `autotask_update_quote_item`, `autotask_update_service_call`, `autotask_update_ticket`, `autotask_update_ticket_charge`, `autotask_update_ticket_checklist_item` |
+| **Delete** | Removes a record. No recycle bin, no undo tool. | `write` — **not** a tier of its own | `autotask_delete_quote_item`, `autotask_delete_service_call`, `autotask_delete_service_call_ticket`, `autotask_delete_service_call_ticket_resource`, `autotask_delete_ticket_charge`, `autotask_delete_ticket_checklist_item` |
+| **Admin** | Unbounded passthrough, arbitrary tool dispatch, or a freeform request body. | `admin` | `autotask_raw_request`, `autotask_execute_tool`, `autotask_router`, `autotask_update_company_site_configuration` |
+
+**The Delete row is the one to read twice.** Conduit's enforcement tiers
+are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
+`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
+the access editor, and a delete-group tool compiles to and enforces at
+tier `write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
+So **granting a technician `write` on Autotask also grants all six
+`autotask_delete_*` tools.** There is no setting that separates them; the
+only way to admit some write tools but not the deletes is a granular
+per-tool grant, which compiles to an explicit `customTools` allowlist.
+
+Conduit compares tiers. It has no approval step, no per-call
+confirmation, and no interactive prompt — its source contains no
+elicitation handling at all. Per-call approval for anything below is a
+policy you impose on your agents, and it is only as good as the agent
+configuration that carries it.
+
+### Where the enforced tier is weaker than the risk
+
+The tools below enforce at `write`, which is the same tier as creating a
+ticket note. The mechanical tier is a function of `isWrite`/`isAdmin`;
+it is not a judgement about blast radius in a customer's tenant. These
+three groups deserve the care the tier does not give them:
 
 - **Ticket charges** (`autotask_create_ticket_charge`,
-  `autotask_update_ticket_charge`) post money directly onto a customer's
-  invoice. The API calls it a create; the customer calls it a bill.
-  Unlike time entries, charges do not pass through a submit/approve
-  workflow before they reach billing.
+  `autotask_update_ticket_charge`, `autotask_delete_ticket_charge`) post
+  money directly onto a customer's invoice. The API calls it a create;
+  the customer calls it a bill. Unlike time entries, charges do not pass
+  through a submit/approve workflow before they reach billing.
 - **Contract tools** (`autotask_create_contract`,
   `autotask_update_contract`, and the two contract-service tools) change
   the managed services agreement. A single edit changes the recurring
   amount the client pays every month until someone notices. The blast
   radius is the commercial relationship, not a record.
-- **`autotask_execute_tool` and `autotask_raw_request`** have no fixed
-  blast radius: the first runs any tool by name, the second issues an
-  arbitrary REST call against the Autotask API. They inherit the
-  privileges of whatever they wrap, so the tier model only holds if they
-  are governed at the highest tier.
+- **The six `autotask_delete_*` tools** remove the record outright. They
+  are in the Delete presentation group, which still enforces at `write`.
 
-`autotask_create_time_entry` deliberately stays in the write tier.
+If you need any of these held back from a technician who otherwise needs
+`write`, that has to be a per-tool `customTools` allowlist. A tier
+cannot express it.
+
+`autotask_create_time_entry` is a genuine `write` in both senses.
 Entries land in DRAFT and must be submitted and approved before they
 reach an invoice, so a mistaken entry is caught by an existing human
 control.
 
-### Read tier in full
+### Where the enforced tier is stronger than the old table said
+
+- **`autotask_router` enforces at `admin`**, not `read`. It was
+  previously documented as a read tool. Conduit groups it with
+  `autotask_raw_request` and `autotask_execute_tool` under
+  *"Passthrough surfaces (arbitrary method/path/body, arbitrary tool
+  dispatch, NL routing) -> ADMIN"*. Plan around the tier as stated — a
+  technician with `read` or `write` on Autotask cannot call it — but be
+  aware this looks like an over-classification: the handler resolves an
+  intent string and returns `{ suggestedTool, ... }`, executing nothing
+  (`autotask-mcp`, `src/handlers/tool.handler.ts:1432`).
+  `wyre-gateway/GOVERNANCE.md` reached the same conclusion about the
+  router independently. The other two passthrough tools do dispatch, and
+  their `admin` tier is earned.
+- **`autotask_update_company_site_configuration` enforces at `admin`**,
+  not `write`. Its request body is freeform
+  (`additionalProperties: true`), so Conduit cannot bound what it
+  changes.
+- **`autotask_execute_tool` and `autotask_raw_request` enforce at
+  `admin`**, which matches the risk. Granting `admin` on Autotask is
+  equivalent to granting every tool in the table, because these two can
+  reach any of them.
+
+### Read group in full
 
 `autotask_search_billing_item_approval_levels`,
 `autotask_search_billing_items`, `autotask_search_companies`,
@@ -80,20 +135,28 @@ control.
 `autotask_list_categories`, `autotask_list_category_tools`,
 `autotask_list_phases`, `autotask_list_queues`,
 `autotask_list_ticket_priorities`, `autotask_list_ticket_statuses`,
-`autotask_test_connection`, `autotask_router`.
+`autotask_test_connection`.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve destructive calls.**
+self-approve deletes.**
 
 - Read tools: allow. Reporting, triage sweeps, and utilisation analysis
   are the intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Destructive tools: require a named human approver per invocation. Do
-  not grant these to scheduled or unattended agents. In particular, do
-  not grant `autotask_raw_request` or `autotask_execute_tool` to any
-  agent you would not also trust with every tool in the table.
+  Treat the charge and contract tools as a stricter class than the rest
+  of the group even though Conduit does not.
+- Delete tools: require a named human approver per invocation. Do not
+  grant these to scheduled or unattended agents. Remember that Conduit
+  cannot enforce this separation for you — a `write` grant on Autotask
+  already admits all six — so it has to live in the agent's own
+  configuration, or in a per-tool `customTools` allowlist.
+- Admin tools: treat the grant as equivalent to full Autotask
+  administrator, because for `autotask_raw_request`, `autotask_router`,
+  and `autotask_execute_tool` that is exactly what it is. Do not grant
+  `admin` on Autotask to any agent you would not also trust with every
+  tool in the table.
 
 ## What it cannot reach
 
