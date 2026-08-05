@@ -20,11 +20,30 @@ tenant the operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `abnormal-security` has no
+> entry, so the grouping below carries no enforcement weight right now —
+> read tools require `admin` exactly as the rest do, and there is no
+> narrower grant that admits them. The grouping is still the right *risk*
+> reading, and it becomes the enforcement reading on the day this vendor
+> is classified. The list of unclassified vendors moves whenever one of
+> them is classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `abnormal-security` appears in `VENDOR_TOOL_CONFIG`, delete this
+> blockquote and change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change mailbox or Abnormal state. Safe for autonomous agents. | `abnormal_threats_list`, `abnormal_threats_get`, `abnormal_messages_list`, `abnormal_messages_get`, `abnormal_cases_list`, `abnormal_cases_get`, `abnormal_abuse_list`, `abnormal_navigate`, `abnormal_status` |
 | **Write** | Empty. Abnormal exposes no reversible bookkeeping write — the only mutating tool acts directly on customer mailboxes. | — |
-| **Destructive** | Moves real mail into or out of a user's mailbox. Requires explicit per-call human approval. | `abnormal_remediation_manage` |
+| **Destructive** | Moves real mail into or out of a user's mailbox. | `abnormal_remediation_manage` |
 
 `abnormal_remediation_manage` is a single tool carrying three actions of
 very different blast radius: `status` reads, `remediate` pulls a message
@@ -37,6 +56,12 @@ agent that can call it for `status` can call it for `unremediate`.
 what it actually does is deliver a message Abnormal classified as an
 attack into a user's inbox. Treat it as a delivery decision, not a
 correction.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

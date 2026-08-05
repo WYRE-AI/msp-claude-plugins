@@ -21,6 +21,25 @@ authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `blumira` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `blumira` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Blumira state. Safe for autonomous agents. | `blumira_status`, `blumira_navigate`, `blumira_back`, `blumira_findings_list`, `blumira_findings_get`, `blumira_findings_details`, `blumira_findings_comments_list`, `blumira_resolutions_list`, `blumira_users_list`, `blumira_agents_devices_list`, `blumira_agents_devices_get`, `blumira_agents_keys_list`, `blumira_agents_keys_get`, `blumira_msp_accounts_list`, `blumira_msp_accounts_get`, `blumira_msp_findings_all`, `blumira_msp_findings_list`, `blumira_msp_findings_get`, `blumira_msp_findings_comments_list`, `blumira_msp_devices_list`, `blumira_msp_devices_get`, `blumira_msp_keys_list`, `blumira_msp_keys_get`, `blumira_msp_users_list` |

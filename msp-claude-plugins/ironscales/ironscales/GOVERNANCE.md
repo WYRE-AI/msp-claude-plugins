@@ -21,11 +21,30 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `ironscales` has no entry, so
+> the grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `ironscales` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change mailbox, incident, or policy state. Safe for autonomous agents. | `ironscales_incidents_list`, `ironscales_incidents_get`, `ironscales_stats_company`, `ironscales_email_classify`, `ironscales_navigate`, `ironscales_status`, `ironscales_back` |
 | **Write** | Empty. Nothing here changes a record without also changing mail delivery or detection coverage. | — |
-| **Destructive** | Deletes mail, alters what the filter will catch in future, or notifies end users. Requires explicit per-call human approval. | `ironscales_remediation_act`, `ironscales_allowlist_manage` |
+| **Destructive** | Deletes mail, alters what the filter will catch in future, or notifies end users. | `ironscales_remediation_act`, `ironscales_allowlist_manage` |
 
 `ironscales_remediation_act` is destructive under every value of its
 `action` argument, not only `delete`:
@@ -50,6 +69,12 @@ reduction in the customer's protection that produces no alert and no
 visible change until an attacker spoofs the exempted sender. The verb is
 benign; the blast radius is not. Reasonable operators may argue this
 belongs in Write; we would rather it require an approver.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

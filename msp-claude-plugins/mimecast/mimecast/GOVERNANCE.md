@@ -22,11 +22,30 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `mimecast` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `mimecast` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change mail flow or Mimecast state. Safe for autonomous agents. | `mimecast_find_message`, `mimecast_get_message_info`, `mimecast_get_queue_status`, `mimecast_get_threat_incidents`, `mimecast_get_ttp_logs`, `mimecast_get_audit_events`, `mimecast_navigate`, `mimecast_status` |
 | **Write** | Stops one message reaching one recipient. Reversible, and visible to the customer as a delayed email. | `mimecast_hold_message` |
-| **Destructive** | Delivers mail the platform decided not to deliver. Requires explicit per-call human approval. | `mimecast_release_message` |
+| **Destructive** | Delivers mail the platform decided not to deliver. | `mimecast_release_message` |
 
 `mimecast_release_message` is destructive despite doing nothing that
 looks like a deletion. A message is in the hold queue because a policy
@@ -41,6 +60,12 @@ not the HTTP verb.
 `mimecast_hold_message` is the mirror image and belongs one tier lower.
 It has a customer-visible cost — legitimate business mail stops moving —
 but release undoes it, and the reach is a single message.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

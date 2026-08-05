@@ -20,11 +20,30 @@ authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `hubspot` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `hubspot` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change HubSpot state. Safe for autonomous agents. | `hubspot_retrieve_contact`, `hubspot_list_contacts`, `hubspot_list_contact_properties`, `hubspot_search_contacts`, `hubspot_retrieve_company`, `hubspot_list_company_properties`, `hubspot_search_companies`, `hubspot_retrieve_deal`, `hubspot_list_deal_properties`, `hubspot_search_deals`, `hubspot_retrieve_ticket`, `hubspot_access_associations`, `hubspot_get_user_details`, `hubspot_open_hubspot_ui` |
 | **Write** | Creates or modifies records. Reversible, internally visible. | `hubspot_create_company`, `hubspot_update_company`, `hubspot_create_deal`, `hubspot_update_deal`, `hubspot_create_ticket`, `hubspot_update_ticket`, `hubspot_create_task`, `hubspot_create_note`, `hubspot_create_association` |
-| **Destructive** | Can cause HubSpot to email a real person. Requires explicit per-call human approval. | `hubspot_create_contact`, `hubspot_update_contact` |
+| **Destructive** | Can cause HubSpot to email a real person. | `hubspot_create_contact`, `hubspot_update_contact` |
 
 There is no delete tool in this plugin, so the destructive tier is not defined
 by data loss — it is defined by outbound reach.
@@ -37,6 +56,11 @@ hands a real named prospect to a marketing sequence. The plugin sends nothing;
 HubSpot does, on the strength of the write — and a sent email cannot be
 recalled. Company, deal, and ticket objects carry no email address of their
 own, which is why they stay in the write tier.
+
+Conduit does not enforce any of that as an approval requirement. It compares
+tiers — it has no approval step, no per-call confirmation, and no interactive
+prompt. Per-call approval is a workflow you impose on your agents, and it is
+only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

@@ -23,6 +23,25 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `knowbe4` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `knowbe4` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change KnowBe4 state. Safe for autonomous agents. | `knowbe4_phishing_list_campaigns`, `knowbe4_phishing_get_campaign`, `knowbe4_phishing_list_security_tests`, `knowbe4_phishing_get_security_test`, `knowbe4_phishing_list_recipients`, `knowbe4_phishing_get_recipient`, `knowbe4_phishing_list_templates`, `knowbe4_phishing_get_template`, `knowbe4_training_list_campaigns`, `knowbe4_training_get_campaign`, `knowbe4_training_list_enrollments`, `knowbe4_training_get_enrollment`, `knowbe4_training_list_modules`, `knowbe4_training_get_module`, `knowbe4_training_list_store_purchases`, `knowbe4_training_get_store_purchase`, `knowbe4_users_list`, `knowbe4_users_get`, `knowbe4_users_risk_score_history`, `knowbe4_users_list_events`, `knowbe4_groups_list`, `knowbe4_groups_get`, `knowbe4_groups_list_members`, `knowbe4_groups_risk_score_history`, `knowbe4_reporting_account_summary`, `knowbe4_reporting_phishing_summary`, `knowbe4_reporting_training_summary`, `knowbe4_reporting_risk_overview`, `knowbe4_reporting_ppp_trend`, `knowbe4_reporting_department_breakdown` |
