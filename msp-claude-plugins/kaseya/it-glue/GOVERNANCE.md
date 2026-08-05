@@ -15,54 +15,109 @@ operator is authorised for.
 - Credential rotation happens once at the gateway, not per technician.
 - Every call carries operator identity, so the gateway audit log answers
   "who read this password" — IT Glue's own log records only the API key.
-- Revoking gateway access revokes IT Glue access with it, immediately.
+- Removing a technician's Conduit org membership stops their IT Glue
+  access on their next call, because membership is re-read per request.
+  It does **not** revoke an already-issued token, and it does not touch
+  credentials they connected personally. Full offboarding is more than
+  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change IT Glue state. Safe for autonomous agents — with the password exception below. | `search_organizations`, `get_organization`, `search_configurations`, `get_configuration`, `search_documents`, `get_document`, `list_document_folders`, `list_document_sections`, `list_flexible_asset_types`, `search_flexible_assets`, `search_locations`, `get_location`, `search_passwords`, `get_password`, `itglue_health_check` |
-| **Write** | Creates or modifies documentation. Reversible, visible to everyone with tenant access. | `create_document`, `create_document_section`, `update_document_section`, `publish_document`, `create_location`, `update_location`, `unarchive_document` |
-| **Destructive** | Removes documentation, irreversibly or near-irreversibly. Requires explicit per-call human approval. | `delete_document_section`, `archive_document` |
+IT Glue is classified in Conduit's `VENDOR_TOOL_CONFIG`
+(`src/proxy/result-cache.ts`) under the slug **`itglue`** — no hyphen,
+unlike the plugin directory name. All 24 tools are classified; none fall
+through to the unclassified-means-`admin` rule.
 
-`archive_document` sits in the destructive tier despite being a soft
-delete. Archiving hides a document from search and from normal views, so
-the practical effect during an incident is that the runbook is gone —
-and nobody discovers this until they need it at 2am. It is reversible
-via `unarchive_document`, but only by someone who knows the document
-existed and what it was called.
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change IT Glue state. Safe for autonomous agents — but see the flexible-asset caveat below. | `read` | `search_organizations`, `get_organization`, `search_configurations`, `get_configuration`, `search_documents`, `get_document`, `list_document_folders`, `list_document_sections`, `list_flexible_asset_types`, `search_flexible_assets`, `search_locations`, `get_location`, `itglue_health_check` |
+| **Write** | Creates or modifies documentation. Reversible, visible to everyone with tenant access. | `write` | `create_document`, `create_document_section`, `update_document_section`, `publish_document`, `create_location`, `update_location`, `unarchive_document` |
+| **Delete** | Removes documentation, irreversibly or near-irreversibly. | `write` — **not** a tier of its own | `delete_document_section`, `archive_document` |
+| **Admin** | Reads stored credentials, or the list of them. | `admin` | `get_password`, `search_passwords` |
 
-`delete_document_section` is flagged irreversible by the server itself.
-There is no undo.
+**The Delete row is the one to read twice.** Conduit's enforcement tiers
+are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
+`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
+the access editor, and a delete-group tool compiles to and enforces at
+tier `write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
+So **granting a technician `write` on IT Glue also grants
+`archive_document` and `delete_document_section`.** There is no setting
+that separates them; the only way to admit the document-editing tools
+but not the removals is a granular per-tool grant, which compiles to an
+explicit `customTools` allowlist.
 
-## `get_password` is a read tool that returns secrets
+Conduit compares tiers. It has no approval step, no per-call
+confirmation, and no interactive prompt — its source contains no
+elicitation handling at all. Per-call approval for anything below is a
+policy you impose on your agents, and it is only as good as the agent
+configuration that carries it.
 
-This is the sharpest edge in the plugin and it does not fit the tier
-model cleanly:
+### The delete group, and why its two members are unequal
+
+`archive_document` enforces at `write` and is a soft delete — the tier
+is arguably right. But archiving hides a document from search and from
+normal views, so the practical effect during an incident is that the
+runbook is gone, and nobody discovers this until they need it at 2am. It
+is reversible via `unarchive_document`, but only by someone who knows
+the document existed and what it was called. (`unarchive_document` sits
+in the Write group, not Delete, because its name carries no delete-ish
+verb token — a naming artefact, not a judgement.)
+
+`delete_document_section` also enforces at `write`, and it is flagged
+irreversible by the server itself. There is no undo. A `write` grant on
+IT Glue admits it.
+
+## The password tools enforce at `admin`
+
+Both password tools are read-only against IT Glue, so an
+`isWrite`-based reading would put them in the Read group. Conduit
+overrides that and classifies both `isAdmin`, because a credential read
+is a credential read:
 
 - `search_passwords` returns **metadata only** — names, categories,
-  usernames, and IDs. No secret values.
-- `get_password` returns **the actual password value** for the record.
+  usernames, and IDs. No secret values. It is still `admin`: the
+  username-plus-system list is a complete target list on its own.
+- `get_password` returns **the actual password value**. Conduit also
+  pins its cache TTL to zero so the plaintext is never held in the
+  result cache.
 
-Both are technically read-only against IT Glue, so both sit in the read
-tier. But `get_password` pulls a live production credential into model
-context. Treat it as its own tier:
+This is the one place the mechanical tier is *stricter* than a naive
+read/write reading, and it is the right call. The consequence for
+operators: a technician granted `read` or even `write` on IT Glue cannot
+call either password tool. Granting `admin` to reach them also grants
+every other tool on this vendor, including the deletes. If you want the
+password tools without the deletes, that is a per-tool `customTools`
+allowlist.
 
-- Do not grant `get_password` to autonomous, scheduled, or unattended
-  agents.
-- Grant it per-session to an interactive operator who is already
-  entitled to that credential.
-- Assume anything it returns is exposed for the life of the session.
+Regardless of tier, assume anything `get_password` returns is exposed
+for the life of the session, and do not grant it to scheduled or
+unattended agents.
+
+### The credential path the tiering does not close
+
+`search_flexible_assets` enforces at `read`. Flexible assets frequently
+carry credentials in password-type fields, and those values come back
+through that tool without passing through the password tools or their
+`admin` gate. A read-only agent on IT Glue can reach secrets this way.
+If that matters to you, restrict `search_flexible_assets` explicitly —
+the tier model will not do it for you.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve destructive calls** — plus the `get_password` carve-out
-above.
+self-approve deletes.**
 
-- Read tools: allow, except `get_password`.
+- Read tools: allow, with `search_flexible_assets` reviewed separately
+  for the reason above.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Destructive tools: require a named human approver per invocation.
+- Delete tools: require a named human approver per invocation. Remember
+  that Conduit cannot enforce this separation for you — a `write` grant
+  already admits both — so it has to live in the agent's own
+  configuration, or in a per-tool `customTools` allowlist.
+- Admin tools: `get_password` and `search_passwords` sit here, and
+  granting `admin` to reach them grants everything else on the vendor
+  too. Prefer a per-tool grant to an interactive operator who is already
+  entitled to that credential.
 
 ## What it cannot reach
 
@@ -75,13 +130,19 @@ above.
   return.
 - No filesystem, no shell, no other vendor's data.
 
-## Tool names are unprefixed
+## Tool names are unprefixed, and the vendor slug is not the plugin name
 
 Unlike every sibling plugin in this family, IT Glue's tools carry no
 vendor prefix — `create_document`, not `itglue_create_document`. When
 writing allowlists, denylists, or audit queries, match on the exact
 names above; a rule keyed on an `itglue_` prefix will match only
-`itglue_health_check` and silently permit everything else.
+`itglue_health_check` and silently permit everything else. This matters
+most for a per-tool `customTools` allowlist, which is the only mechanism
+that can separate the delete tools from the rest of the write group.
+
+Two names are in play and they differ. The marketplace plugin is
+`it-glue`; Conduit's vendor slug in `VENDOR_TOOL_CONFIG` is `itglue`.
+Look the vendor up under `itglue` when checking classification.
 
 ## Tool surface is narrower than the skills
 
@@ -93,14 +154,15 @@ queries. The skill is API reference; treat it as such.
 
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
-- `get_password` returns live credentials. See above.
-- `search_passwords` returns usernames and the systems they belong to —
-  a complete target list even without the secrets.
+- `get_password` returns live credentials; `search_passwords` returns
+  usernames and the systems they belong to, a complete target list even
+  without the secrets. Both enforce at `admin` — see above.
 - `search_organizations` and the document tools surface client PII
   wherever it was written into the documentation.
 - Flexible assets frequently contain credentials in password-type
-  fields. Those values come back through `search_flexible_assets`
-  without passing through the password tools or their access controls.
+  fields. Those values come back through `search_flexible_assets`, which
+  enforces at `read`, without passing through the password tools or
+  their `admin` gate.
 
 ## Known sharp edges
 
