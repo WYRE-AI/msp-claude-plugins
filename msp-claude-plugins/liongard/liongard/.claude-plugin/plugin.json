@@ -1,6 +1,6 @@
 {
   "name": "liongard",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Claude plugins for Liongard - environments, inspections, systems, detections, agents",
   "author": {
     "name": "MSP Claude Plugins Community"
