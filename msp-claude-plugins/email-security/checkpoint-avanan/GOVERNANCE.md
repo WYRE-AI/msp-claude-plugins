@@ -22,48 +22,85 @@ operator is authorised for.
 - Revoking gateway access revokes Harmony Email access with it,
   immediately.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Harmony Email state or mail flow. Safe for autonomous agents. | `avanan_quarantine_list`, `avanan_quarantine_get`, `avanan_quarantine_search`, `avanan_quarantine_stats`, `avanan_threats_list`, `avanan_threats_get`, `avanan_threats_iocs`, `avanan_threats_timeline`, `avanan_threats_search`, `avanan_threats_stats`, `avanan_incidents_list`, `avanan_incidents_get`, `avanan_incidents_list_notes`, `avanan_incidents_timeline`, `avanan_incidents_stats`, `avanan_policies_list`, `avanan_policies_get`, `avanan_allow_list_get`, `avanan_block_list_get` |
-| **Write** | Creates or annotates case records. Does not touch mail or detection behaviour. | `avanan_incidents_create`, `avanan_incidents_update`, `avanan_incidents_add_note`, `avanan_incidents_add_evidence`, `avanan_threats_mark_false_positive` |
-| **Destructive** | Delivers, destroys, or blocks customer mail, or changes what the tenant scans for. Requires explicit per-call human approval. | `avanan_quarantine_release`, `avanan_quarantine_delete`, `avanan_policies_enable`, `avanan_policies_disable`, `avanan_policies_update`, `avanan_allow_list_add`, `avanan_allow_list_remove`, `avanan_block_list_add`, `avanan_block_list_remove` |
+> **The tool names this document previously listed do not exist.** Every
+> `avanan_*` name in the earlier revision of this table — 34 of them —
+> is absent from both shipped servers. Conduit routes this vendor to
+> `http://avanan-mcp` (`conduit/src/credentials/vendor-config.ts:3035`),
+> whose tools are named `hec_*`. The separate `avanan-legacy-mcp` uses
+> `avanan_*` names, but for MSP-partner, tenant and licence management —
+> not quarantine, threats, incidents or policies. The table below is the
+> real surface.
+>
+> **The plugin's five skills have the same defect** and are not corrected
+> here: they name 33 `avanan_*` tools and mention `hec_*` nowhere, so an
+> agent following them calls tools that do not exist. That is tracked in
+> issue #178 and needs its own pass.
 
-Three of those classifications are worth defending, because the API
-calls them ordinary updates:
+Conduit's access editor presents four groups; enforcement uses only
+`read`, `write` and `admin`.
 
-**`avanan_quarantine_release` is destructive.** Releasing is not
-un-quarantining a record — it delivers a message the security stack
-already judged malicious into a real person's inbox, and there is no
-un-deliver. When the quarantine reason is `MALWARE` or `BEC`, an
-erroneous release is the exact outcome the product exists to prevent.
-The `addToAllowList: true` parameter makes it worse: a single release
-call can also write a permanent tenant-wide detection bypass for that
-sender, so an operator approving "release this one email" may be
-approving a standing policy change they never saw.
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Harmony Email state or mail flow. | `read` | `hec_query_events`, `hec_list_exceptions`, `hec_search_emails` |
+| **Write** | — | `write` | *None classified.* |
+| **Delete** | — | `write` | *None classified.* |
+| **Admin** | Everything else, by fail-closed coercion — see below. | `admin` | `hec_get_email`, `hec_get_event`, `hec_get_task_status`, `hec_add_exception`, `hec_update_exception`, `hec_delete_exception`, `hec_quarantine_emails`, `hec_quarantine_events`, `hec_restore_emails`, `hec_restore_events` |
 
-**`avanan_quarantine_delete` is destructive.** The quarantine copy is
-the only copy — the message never reached the mailbox. Deleting it
-destroys the evidence for any later investigation, and the skill's own
-error table confirms an expired or deleted entry cannot be recovered.
+**Conduit classifies 3 of the server's 13 tools.** The other ten have no
+`VENDOR_TOOL_CONFIG` entry, and Conduit fails closed per *tool*, not per
+vendor: `const requiredTier: PermissionTier = classified ?? 'admin';`
+(`conduit/src/access/access-enforcement.ts:63`). So the ten sit at
+`admin` today by coercion rather than by judgement — including
+`hec_get_email`, an ordinary read, which a `read` grant cannot reach.
 
-**Every policy and list mutation is destructive.** `avanan_policies_*`
-and the allow/block list tools look like configuration edits, but their
-blast radius is the tenant's entire mail flow:
+The coercion is currently protective by accident. `hec_restore_emails`
+delivers quarantined mail to a user's inbox and `hec_delete_exception`
+removes a standing detection bypass; both would land in **Write** the
+moment someone classifies this vendor by verb alone, and the first
+`write` grant would pick them up silently. Whoever classifies Avanan
+should pin the quarantine/restore family and the exception writes
+deliberately rather than letting name inference decide.
 
-- Disabling an anti-phishing or anti-malware policy silently removes a
-  detection layer for every user until someone notices.
-- Enabling a policy, or updating its action to `QUARANTINE` or `BLOCK`,
-  can bury a customer's legitimate inbound mail within minutes. This is
-  a mail-flow outage, not a settings change.
-- `avanan_allow_list_add` creates a standing bypass of every detection
-  engine for a sender or domain — the first thing an attacker wants.
-- `avanan_block_list_add` on the wrong domain silently drops a
-  customer's supplier, invoice, or payroll mail with no bounce visible
-  to the recipient.
-- The `_remove` calls are equally sharp in reverse: removing a block
-  entry re-admits a sender someone deliberately excluded.
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Where this document asks for a named
+human approver, that is a policy you impose on your agents, and it is
+only as good as the agent configuration that carries it.
+
+Two of the coerced-`admin` tools deserve the tier on their merits, not
+just by fail-closed accident. The reasoning below was written against the
+previous revision's invented tool names; it is retained because the
+hazards are real, remapped onto the tools that actually exist.
+
+**`hec_restore_emails` / `hec_restore_events` are the sharp ones.**
+Restoring is not un-quarantining a record — it delivers a message the
+security stack already judged malicious into a real person's inbox, and
+there is no un-deliver. When the quarantine reason is malware or BEC, an
+erroneous restore is the exact outcome the product exists to prevent.
+These are the tools that would land in **Write** under verb-based
+classification, which is why Avanan should be classified deliberately.
+
+**`hec_add_exception` / `hec_update_exception` create standing detection
+bypasses.** An exception is the allowlist: it exempts a sender or domain
+from the engines that would otherwise catch it, permanently and
+tenant-wide, and it is the first thing an attacker wants. Spoofed mail
+claiming to be the exempted sender inherits the exemption.
+`hec_delete_exception` is equally sharp in reverse — removing an
+exception re-admits detection for a sender someone deliberately exempted,
+which may be the correct fix or may break a customer's mail flow.
+
+**`hec_quarantine_emails` / `hec_quarantine_events` can cause a mail-flow
+outage.** Quarantining in bulk on a bad query buries legitimate inbound
+mail with no bounce visible to the recipient. The blast radius is the
+tenant's mail flow, not a settings table.
+
+**Concerns with no corresponding tool.** The previous revision described
+policy enable/disable/update and separate allow/block-list management.
+The shipped server exposes none of those — there are no policy tools and
+no block list. If you need that surface, it is in the Harmony Email
+console, not through this plugin.
 
 ## Recommended agent policy
 
@@ -98,19 +135,18 @@ self-approve destructive calls.**
 
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
-- **Quarantine tools return message content and correspondent PII.**
-  `avanan_quarantine_list` and `avanan_quarantine_get` include
-  `subject`, `sender`, `senderDisplayName`, the full `recipients` list,
-  `attachmentNames`, and `bodyPreview` — the first 200 characters of the
-  email body. For a DLP-quarantined outbound message, that preview is
-  by definition the sensitive content the DLP rule matched.
-- `avanan_threats_get` and `avanan_threats_iocs` return sender IP
-  addresses, recipient lists, and attachment hashes.
-- `avanan_incidents_*` records name affected users
-  (`affectedUsers`) and carry analyst notes, which routinely contain
-  account names and investigation detail.
+- **The search and read tools return message content and correspondent
+  PII.** `hec_search_emails` and `hec_get_email` reach subject, sender,
+  recipients, attachment names, and body content; `hec_query_events` and
+  `hec_get_event` carry sender IP addresses, recipient lists, and
+  attachment hashes. For a DLP-quarantined outbound message, that content
+  is by definition what the DLP rule matched.
+- Note the tier split here works against you: `hec_search_emails` is one
+  of the three tools classified `read`, so it is reachable by the lowest
+  grant, while `hec_get_email` — arguably less sensitive, since it needs
+  an id you already hold — sits at `admin` by coercion.
 
-Restrict quarantine and incident reads if your agents run unattended, or
+Restrict the search and event reads if your agents run unattended, or
 scope them to the tenants that specific operator supports.
 
 ## Known sharp edges
@@ -134,8 +170,12 @@ scope them to the tenants that specific operator supports.
 - **A wrong region looks like a bad credential.** Pointing at the US
   gateway for an EU-provisioned tenant returns 401, which invites an
   agent to "fix" working credentials.
-- **Marking a threat a false positive is a security decision.**
-  `avanan_threats_mark_false_positive` sits in the write tier because it
-  changes no mail flow directly, but it feeds detection tuning. Treat a
-  pattern of agent-driven false-positive marking as a signal to review,
-  not as bookkeeping.
+- **Exception writes are security decisions, not bookkeeping.**
+  `hec_add_exception` and `hec_update_exception` change no mail flow at
+  the moment they run, which is exactly why they read as harmless — but
+  they exempt a sender from detection from then on. Treat a pattern of
+  agent-driven exception creation as a signal to review.
+- **The plugin's skills name tools that do not exist.** Until issue #178's
+  pass lands, an agent following them will call `avanan_*` names against a
+  server that serves `hec_*`. Verify against this document, not the
+  skills.
