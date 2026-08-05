@@ -33,34 +33,89 @@ technician. Consequences worth stating plainly:
   Consent is per tenant and revocable by the customer at any time, from
   their side, without involving you.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change any tenant state. Safe for autonomous agents. | `microsoft_graph_suggest_queries`, `microsoft_graph_list_properties`, `microsoft_graph_get` |
-| **Write** | — | None. |
-| **Destructive** | — | None. |
+Conduit's access editor presents four groups. This vendor fills two of
+them, and not the two you would guess from "read-only".
 
-**This plugin is read-only, structurally and not just by convention.**
-The server exposes exactly three tools, and the only one that reaches a
-tenant — `microsoft_graph_get` — issues HTTP `GET` requests to Microsoft
-Graph. There is no create, update, delete, or action endpoint to
-withhold, no admin-consent scope that would add one, and no parameter
-that turns a read into a write.
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Describes the Graph query surface. Reaches no customer tenant and returns no tenant data. | `read` | `microsoft_graph_suggest_queries`, `microsoft_graph_list_properties` |
+| **Write** | *Empty.* | — | None. |
+| **Delete** | *Empty.* | — | None. |
+| **Admin** | Issues an arbitrary `GET` against any Microsoft Graph endpoint the caller's roles and the consented scopes allow. | `admin` | `microsoft_graph_get` |
 
-This is the strongest safety property in the Microsoft part of the
-fleet, and it is the reason to prefer this plugin for questions. If an
-operator asks for a change, the correct answer is to route to a
-write-capable tool — the `m365` plugin for one tenant, the `cipp`
-plugin for the fleet — not to look for a way to do it here.
+**`microsoft_graph_get` is a read-only tool pinned to `admin`, and that
+is the single most instructive fact in this document.** Conduit
+classifies it `isWrite: false, isAdmin: true`
+(`src/proxy/result-cache.ts:1043`), and `isAdmin` outranks `isWrite`
+(`src/access/tool-classification.ts:33-38`), so it requires the highest
+tier Conduit has despite mutating nothing.
+
+The reason is a property of the enforcement model, not a judgement
+about Graph. Conduit's tier check matches on **tool name only** — the
+gate input carries `identity`, `vendorSlug`, and `toolName` and has no
+`arguments` field at all (`src/proxy/tool-call-enforcement.ts:69-79`).
+For `microsoft_graph_get` the blast radius is chosen entirely by the
+arguments: one call returns the room list, the next returns every
+sign-in record for a named director. A name-matching gate cannot tell
+those apart, so the tool is pinned where the worst argument belongs.
+This is the same rule that pins `autotask_raw_request` and
+`cwautomate_scripts_execute` to `admin`, applied to a tool that only
+reads.
+
+The lesson generalises past this plugin: **"read" and "safe" are
+different questions.** Conduit's tiers answer the first one — can this
+call change vendor state — and nothing in the model answers the second.
+A tool that reads a customer's entire directory is tier `read` on most
+vendors; the fact that this one is not is an accident of it being a
+passthrough, not evidence that Conduit is grading disclosure.
+
+**The practical consequence: an agent restricted to tier `read` cannot
+use this plugin for anything.** The two read tools describe the query
+surface; they return no tenant data. Every question this plugin exists
+to answer goes through `microsoft_graph_get`, which needs `admin`.
+Granting `write` changes nothing at all here — there is no write tool
+and no delete tool to admit — so the only meaningful settings are
+`read` (effectively off) and `admin` (everything).
+
+A granular per-tool grant whose `customTools` is exactly
+`["microsoft_graph_get"]` still compiles to stored tier `admin`, because
+the compiled tier is the highest any checked tool requires
+(`src/access/tier-group-mapping.ts`, `selectionToGrant`). On a
+three-tool vendor that narrowing buys nothing; on a vendor where the
+same operator also holds `admin` for other reasons, it is the difference
+between a scoped grant and a blanket one.
+
+It remains true that **nothing here can write.** The server exposes
+three tools, the only one that reaches a tenant issues HTTP `GET`, and
+there is no parameter that turns a read into a write. If an operator
+asks for a change, route to a write-capable plugin — `m365` for one
+tenant, `cipp` for the fleet — rather than looking for a way to do it
+here.
 
 ## Recommended agent policy
 
-**Allow all three tools to autonomous agents.** Unattended audits,
-scheduled reporting, and cross-tenant question-answering are the
-intended use, and the read-only ceiling makes them safe.
+The safe default is **allow the two read tools freely; treat the
+`admin` grant that `microsoft_graph_get` requires as a deliberate
+decision, not a formality.**
 
-The residual risk is not damage — it is **disclosure and wrong
+- Read tools (`suggest_queries`, `list_properties`): allow. They
+  describe the query surface and disclose nothing about a tenant.
+- `microsoft_graph_get`: the grant is `admin`, so make it on purpose.
+  Unattended audits, scheduled reporting, and cross-tenant
+  question-answering are the intended use and the read-only ceiling
+  makes them safe *from a damage standpoint* — but you are handing the
+  agent every Graph read the caller's Entra roles permit, which is a
+  disclosure decision. Scope it at Entra, where the boundary is real.
+- Write and delete tools: none exist, so there is nothing to withhold.
+
+Conduit will not ask a human before any of this. It compares tiers — it
+has no approval step, no per-call confirmation, and no interactive
+prompt. Any "check with me first" rule lives in your agent
+configuration and is only as good as that configuration.
+
+The residual risk here is not damage — it is **disclosure and wrong
 conclusions**. See Data handling and Known sharp edges.
 
 ## What it cannot reach
