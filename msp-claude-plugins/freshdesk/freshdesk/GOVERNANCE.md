@@ -23,11 +23,30 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `freshdesk` has no entry, so
+> the grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `freshdesk` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Freshdesk state. Safe for autonomous agents. | `freshdesk_status`, `freshdesk_navigate`, `freshdesk_tickets_list`, `freshdesk_tickets_get`, `freshdesk_tickets_search`, `freshdesk_tickets_list_conversations`, `freshdesk_contacts_list`, `freshdesk_contacts_get`, `freshdesk_contacts_search`, `freshdesk_contacts_autocomplete`, `freshdesk_companies_list`, `freshdesk_companies_get`, `freshdesk_companies_search`, `freshdesk_companies_autocomplete`, `freshdesk_agents_list`, `freshdesk_agents_get`, `freshdesk_agents_me`, `freshdesk_groups_list`, `freshdesk_groups_get`, `freshdesk_sla_list`, `freshdesk_business_hours_list`, `freshdesk_business_hours_get`, `freshdesk_canned_responses_list_folders`, `freshdesk_canned_responses_get_folder`, `freshdesk_canned_responses_list_responses`, `freshdesk_solutions_categories_list`, `freshdesk_solutions_categories_get`, `freshdesk_solutions_folders_list`, `freshdesk_solutions_folders_get`, `freshdesk_solutions_articles_list`, `freshdesk_solutions_articles_get` |
 | **Write** | Creates or modifies records. Reversible, but visible to the customer. | `freshdesk_tickets_create`, `freshdesk_tickets_update`, `freshdesk_tickets_add_note`, `freshdesk_tickets_update_conversation`, `freshdesk_contacts_create`, `freshdesk_contacts_update`, `freshdesk_contacts_restore`, `freshdesk_companies_create`, `freshdesk_companies_update`, `freshdesk_groups_create`, `freshdesk_groups_update`, `freshdesk_agents_update`, `freshdesk_solutions_categories_create`, `freshdesk_solutions_categories_update`, `freshdesk_solutions_folders_create`, `freshdesk_solutions_folders_update`, `freshdesk_solutions_articles_create`, `freshdesk_solutions_articles_update` |
-| **Destructive** | Emails a customer, deletes data, grants access, or changes billing. Requires explicit per-call human approval. | `freshdesk_tickets_reply`, `freshdesk_contacts_send_invite`, `freshdesk_contacts_merge`, `freshdesk_contacts_make_agent`, `freshdesk_agents_create`, `freshdesk_agents_delete`, `freshdesk_sla_create`, `freshdesk_sla_update`, `freshdesk_tickets_delete`, `freshdesk_tickets_delete_conversation`, `freshdesk_contacts_soft_delete`, `freshdesk_contacts_hard_delete`, `freshdesk_companies_delete`, `freshdesk_groups_delete`, `freshdesk_solutions_categories_delete`, `freshdesk_solutions_folders_delete`, `freshdesk_solutions_articles_delete` |
+| **Destructive** | Emails a customer, deletes data, grants access, or changes billing. | `freshdesk_tickets_reply`, `freshdesk_contacts_send_invite`, `freshdesk_contacts_merge`, `freshdesk_contacts_make_agent`, `freshdesk_agents_create`, `freshdesk_agents_delete`, `freshdesk_sla_create`, `freshdesk_sla_update`, `freshdesk_tickets_delete`, `freshdesk_tickets_delete_conversation`, `freshdesk_contacts_soft_delete`, `freshdesk_contacts_hard_delete`, `freshdesk_companies_delete`, `freshdesk_groups_delete`, `freshdesk_solutions_categories_delete`, `freshdesk_solutions_folders_delete`, `freshdesk_solutions_articles_delete` |
 
 Four of those destructive entries look like ordinary writes in the API and
 are worth justifying:
@@ -48,6 +67,12 @@ are worth justifying:
   and `fr_due_by` across the live queue. A single policy edit can put
   tickets into breach retrospectively and change what your SLA reports —
   and any contractual credits derived from them — say.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

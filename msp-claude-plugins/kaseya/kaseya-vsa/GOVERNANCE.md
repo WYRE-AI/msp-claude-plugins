@@ -20,11 +20,30 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `kaseya-vsa` has no entry, so
+> the grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `kaseya-vsa` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change VSA or endpoint state. Safe for autonomous agents. | `kaseya_vsa_list_agents`, `kaseya_vsa_get_agent`, `kaseya_vsa_get_software_inventory`, `kaseya_vsa_get_hardware_inventory`, `kaseya_vsa_get_patch_status`, `kaseya_vsa_list_procedures`, `kaseya_vsa_list_alarms`, `kaseya_vsa_list_tickets`, `kaseya_vsa_list_organizations`, `kaseya_vsa_list_machine_groups` |
 | **Write** | — | None. This plugin has no reversible-write tier. |
-| **Destructive** | Executes code or forces reboots on a customer endpoint. Requires explicit per-call human approval. | `kaseya_vsa_deploy_patches_now`, `kaseya_vsa_run_procedure` |
+| **Destructive** | Executes code or forces reboots on a customer endpoint. | `kaseya_vsa_deploy_patches_now`, `kaseya_vsa_run_procedure` |
 
 Both destructive tools are marked DESTRUCTIVE by the MCP server itself
 and prompt for confirmation before running. Do not treat that prompt as
@@ -43,6 +62,12 @@ There is no write tier because VSA exposes no reversible mutation here.
 Every tool either reads, or acts on a customer machine. That gap is
 worth stating plainly: with this plugin an agent is either observing or
 intervening, with nothing in between.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

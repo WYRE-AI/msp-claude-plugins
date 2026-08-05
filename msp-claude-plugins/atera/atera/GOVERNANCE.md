@@ -30,6 +30,25 @@ rather than enforced.
 
 Grouped by blast radius, not HTTP verb.
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `atera` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When `atera`
+> appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and change
+> nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Atera or endpoint state. Safe for autonomous agents. | `atera_navigate`, `atera_back`, `atera_agents_list`, `atera_agents_get`, `atera_agents_get_by_machine`, `atera_alerts_list`, `atera_alerts_get`, `atera_alerts_by_agent`, `atera_alerts_by_device`, `atera_customers_list`, `atera_customers_get`, `atera_contacts_list`, `atera_contacts_get`, `atera_contacts_by_customer`, `atera_tickets_list`, `atera_tickets_get` |

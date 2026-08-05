@@ -37,11 +37,30 @@ Grouped by blast radius, not HTTP verb. Several tools that look like
 reads or harmless writes are classified destructive below, with the
 reasoning stated.
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `immybot` has no entry, so the
+> grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `immybot` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change ImmyBot or endpoint state. Safe for autonomous agents. | `immybot_navigate`, `immybot_back`, `immybot_status`, `immybot_computers_list`, `immybot_computers_get`, `immybot_computers_search`, `immybot_computers_inventory`, `immybot_computers_deployments`, `immybot_software_list`, `immybot_software_list_global`, `immybot_software_get`, `immybot_software_search`, `immybot_software_versions`, `immybot_software_latest_version`, `immybot_software_categories`, `immybot_software_publishers`, `immybot_software_stats`, `immybot_deployments_list`, `immybot_deployments_get`, `immybot_deployments_compliance`, `immybot_deployments_for_computer`, `immybot_deployments_for_software`, `immybot_scripts_list`, `immybot_scripts_get`, `immybot_scripts_search`, `immybot_scripts_categories`, `immybot_scripts_validate`, `immybot_scripts_execution_history`, `immybot_scripts_execution_result`, `immybot_tenants_list`, `immybot_tenants_get`, `immybot_tenants_search`, `immybot_tenants_stats`, `immybot_tenants_computers`, `immybot_tenants_deployments`, `immybot_tenants_compliance`, `immybot_tenants_software_inventory`, `immybot_maintenance_sessions_list`, `immybot_maintenance_sessions_get`, `immybot_maintenance_sessions_active`, `immybot_maintenance_sessions_summary`, `immybot_maintenance_sessions_logs`, `immybot_maintenance_sessions_results`, `immybot_tasks_list`, `immybot_tasks_get`, `immybot_tasks_logs`, `immybot_tasks_history`, `immybot_tasks_queued`, `immybot_tasks_running`, `immybot_tasks_failed`, `immybot_tasks_for_computer`, `immybot_tasks_for_tenant`, `immybot_tasks_by_type`, `immybot_tasks_child_tasks`, `immybot_tasks_dependencies`, `immybot_tasks_estimated_completion`, `immybot_tasks_queue_stats`, `immybot_tasks_metrics` |
 | **Write** | Changes ImmyBot-side records or session flow. Reversible. | `immybot_computers_create`, `immybot_maintenance_sessions_pause`, `immybot_maintenance_sessions_resume` |
-| **Destructive** | Acts on customer Windows endpoints, or arms an action that will. Requires explicit per-call human approval. | `immybot_scripts_run`, `immybot_software_install`, `immybot_deployments_trigger`, `immybot_deployments_create`, `immybot_maintenance_sessions_start`, `immybot_maintenance_sessions_cancel`, `immybot_computers_trigger_checkin` |
+| **Destructive** | Acts on customer Windows endpoints, or arms an action that will. | `immybot_scripts_run`, `immybot_software_install`, `immybot_deployments_trigger`, `immybot_deployments_create`, `immybot_maintenance_sessions_start`, `immybot_maintenance_sessions_cancel`, `immybot_computers_trigger_checkin` |
 
 ### Why each destructive tool is there
 
@@ -78,6 +97,12 @@ reasoning stated.
 `immybot_scripts_validate` is safe and belongs in Read: it checks
 PowerShell syntax without executing anything. Use it before every
 `immybot_scripts_run`.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 

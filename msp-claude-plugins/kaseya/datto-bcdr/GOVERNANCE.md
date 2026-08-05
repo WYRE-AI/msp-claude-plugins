@@ -23,6 +23,25 @@ for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `datto-bcdr` has no entry, so
+> the grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `datto-bcdr` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
+> change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change appliance, agent, or backup state. | `datto_bcdr_list_devices`, `datto_bcdr_get_device`, `datto_bcdr_list_assets`, `datto_bcdr_get_asset`, `datto_bcdr_list_backups`, `datto_bcdr_list_screenshots`, `datto_bcdr_get_screenshot`, `datto_bcdr_get_offsite_status`, `datto_bcdr_list_alerts`, `datto_bcdr_list_activity` |

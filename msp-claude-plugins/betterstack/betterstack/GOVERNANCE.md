@@ -21,11 +21,30 @@ the operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires
+> tier `admin` today.** Conduit derives each tool's tier from
+> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
+> anything absent from it:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `betterstack` has no entry, so
+> the grouping below carries no enforcement weight right now — read tools
+> require `admin` exactly as the rest do, and there is no narrower grant
+> that admits them. The grouping is still the right *risk* reading, and it
+> becomes the enforcement reading on the day this vendor is classified.
+> The list of unclassified vendors moves whenever one of them is
+> classified, so it is stated in one place only:
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified*.
+>
+> *This blockquote is the whole of the not-classified caveat. When
+> `betterstack` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote
+> and change nothing else.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Better Stack state or notify anyone. Safe for autonomous agents. | `list_monitors`, `get_monitor`, `list_heartbeats`, `get_heartbeat`, `list_incidents`, `get_incident`, `list_on_call_schedules`, `get_on_call_schedule`, `list_schedule_policies`, `list_status_pages`, `get_status_page`, `list_status_page_sections`, `execute_query`, `list_saved_queries`, `get_saved_query`, `list_dashboards`, `get_dashboard`, `list_dashboard_panels`, `list_applications`, `get_application`, `list_releases` |
 | **Write** | Creates or modifies records. Reversible, but may page a human on the way. | `create_monitor`, `update_monitor`, `resume_monitor`, `create_heartbeat`, `update_heartbeat`, `create_incident`, `acknowledge_incident`, `resolve_incident`, `create_on_call_schedule`, `update_on_call_schedule`, `create_status_page`, `update_status_page`, `create_dashboard`, `create_release` |
-| **Destructive** | Removes monitoring coverage, breaks paging, or publishes to the public. Requires explicit per-call human approval. | `delete_monitor`, `delete_heartbeat`, `delete_on_call_schedule`, `pause_monitor`, `create_status_page_incident` |
+| **Destructive** | Removes monitoring coverage, breaks paging, or publishes to the public. | `delete_monitor`, `delete_heartbeat`, `delete_on_call_schedule`, `pause_monitor`, `create_status_page_incident` |
 
 ### Why two non-delete tools sit in the destructive tier
 
@@ -49,6 +68,12 @@ the operator is authorised for.
 notification policy that referenced the deleted schedule is left with
 a step that resolves to nobody, so pages route into the void. The
 failure shows up at the worst possible moment.
+
+Conduit does not enforce any of that as an approval requirement. It
+compares tiers — it has no approval step, no per-call confirmation, and
+no interactive prompt. Per-call approval is a workflow you impose on your
+agents, and it is only as good as the agent configuration that carries
+it.
 
 ## Recommended agent policy
 
