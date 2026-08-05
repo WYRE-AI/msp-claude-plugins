@@ -552,18 +552,31 @@ verified findings make the class concrete. These are facts about the
 vendor repositories, so they hold regardless of which gateway is in front
 of them.
 
-**Annotations are metadata, not gates.** In `meraki-mcp`, six tools carry
-`destructiveHint: true` in their annotations while their handlers call
-`guardWrite({ destructive: false })` — which means no confirmation is
-required and the call proceeds: `meraki_devices_reboot`,
-`meraki_networks_update`, `meraki_clients_update_policy`,
-`meraki_switch_ports_update`, `meraki_wireless_ssids_update`, and
-`meraki_appliance_firewall_l3_update`. Only `meraki_devices_remove`,
-`meraki_networks_delete`, and `meraki_raw_request` on a DELETE method
-actually require the `confirm_destructive_action` flag. Several of those
-six can take a site off the network — replacing a firewall ruleset or
-changing an uplink port is not a routine update — and the annotation that
-says so is the part that is not enforced.
+**Annotations are metadata, not gates.** `meraki-mcp` shipped six tools
+carrying `destructiveHint: true` whose handlers called
+`guardWrite({ destructive: false })` — so no confirmation was required
+and the call proceeded: `meraki_devices_reboot`, `meraki_networks_update`,
+`meraki_clients_update_policy`, `meraki_switch_ports_update`,
+`meraki_wireless_ssids_update`, and `meraki_appliance_firewall_l3_update`.
+Several can take a site off the network — replacing a firewall ruleset or
+changing an uplink port is not a routine update — and the annotation
+saying so was precisely the part not enforced.
+
+Fixed in `wyre-technology/meraki-mcp#3` (merged 2026-08-04): all six are
+now gated, and a surface-wide test asserts every tool annotated
+`destructiveHint: true` both declares `confirm_destructive_action` and is
+refused without it. The enumeration was the wrong fix — the PR originally
+covered four, and an audit found two more — so the invariant replaced it.
+
+**Keep the general lesson even though this instance is closed.** An
+annotation is advice to the model; only a runtime check is a control.
+When a vendor document claims a tool "confirms first", that claim is
+about the vendor server's own behaviour, and it is worth verifying rather
+than inheriting. The same pattern held in `connectwise-cpq-mcp`, where
+elicitation returned `unavailable` for clients that do not declare
+form-elicitation capability and the code treated that as consent — so the
+prompt existed for interactive clients and silently did not for Conduit
+(fixed in `connectwise-cpq-mcp#3`).
 
 **Interactive confirmations do not exist for a non-interactive client.**
 In `connectwise-cpq-mcp`, confirmation is implemented through MCP
@@ -573,9 +586,10 @@ and callers treat `unavailable` the same as approval in order to preserve
 pre-elicitation behaviour. Conduit is a non-interactive client. The
 confirmation is therefore never asked, and the delete proceeds.
 
-Neither of these is a bug in isolation — both are defensible local
-designs, and both have fixes in flight. The class is what matters, and the
-class outlives the instances:
+Both are now fixed (`meraki-mcp#3`, `connectwise-cpq-mcp#3`, merged
+2026-08-04). Neither was a bug in isolation — both were defensible local
+designs that became gaps only once a gateway was the client. The class is
+what matters, and the class outlives the instances:
 
 > **A control that depends on the client being interactive, or on the
 > client reading and acting on annotations, is not a control when the
@@ -628,14 +642,28 @@ correctly:
 | `cipp_run_standards_check` | 516 | `isWrite`, `isAdmin` | **admin** |
 | `powerquery` / `purple_ai` (SentinelOne) | 845, 848 | `isAdmin` | **admin** |
 | `microsoft_graph_get` | 1043 | `isAdmin` | **admin** |
-| **`meraki_raw_request`** | **1491** | **`isWrite` only** | **write — see below** |
+| `meraki_raw_request` | 1496 | `isWrite`, `isAdmin` | **admin** |
 
-**`meraki_raw_request` is the outlier and worth acting on.** Every sibling
-arbitrary-request passthrough is pinned to `admin`; this one is not, so a
-`write`-tier caller can issue arbitrary Meraki API calls — including
-admin-scoped ones — and no gate reads the arguments to notice. This
-contradicts the stated convention at `tool-classification.ts:15-17`
-(*"unbounded passthrough/query surfaces"* → admin).
+**`meraki_raw_request` was the one outlier, and it has been fixed**
+(`wyre-technology/conduit#1274`, merged 2026-08-04). It was `isWrite`
+only, so a `write`-tier caller could issue arbitrary Meraki API calls —
+including the DELETEs that `meraki_networks_delete` and
+`meraki_devices_remove` pin to `admin` twelve lines above it — and no
+gate reads arguments to notice.
+
+It was not an oversight. `tool-naming-exceptions.ts` recorded the
+decision as *"narrower than Autotask's raw/execute surfaces; kept
+as-classified"*, which was not accurate: both take an arbitrary method
+and path. The convention at `tool-classification.ts:15-17` (*"unbounded
+passthrough/query surfaces"* → admin) was correct and the entry
+contradicted it.
+
+The convention is now enforced rather than merely stated: a guard in
+`conduit/src/access/tool-classification.test.ts` asserts every
+arbitrary-request passthrough is admin-pinned, and it was verified to
+fail without the fix. **A tool whose blast radius is chosen by its
+arguments cannot be gated by its name** — that is the general rule this
+row exists to illustrate.
 
 Three tools the previous revision listed **do not exist in Conduit**:
 `auvik_raw_request` (Auvik's block, `result-cache.ts:886-902`, contains no
@@ -707,7 +735,9 @@ Consolidated, so you can read them without reading the rest:
 - **Owners bypass grants and allowlists**; personal connections bypass org
   policy (but are capped at `write`).
 - **Policy ignores arguments**, so dispatchers and passthrough tools defeat
-  it — and `meraki_raw_request` is currently mis-tiered as `write`.
+  it. Every such tool is now pinned to `admin` and a guard keeps it that
+  way (`conduit#1274`), but that is containment, not a fix: granting
+  `admin` on a vendor with a passthrough grants that vendor's whole API.
 - **Tool-call arguments are never audited**, by deliberate design.
 - **`request_log` writes are best-effort** and can be lost silently.
 - **`request_log` retention is effectively 90 days** (boot sweep), despite
