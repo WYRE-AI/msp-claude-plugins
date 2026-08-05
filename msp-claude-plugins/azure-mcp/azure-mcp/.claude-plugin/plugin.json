@@ -1,6 +1,6 @@
 {
   "name": "azure-mcp",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Claude plugins for the Azure MCP Server \u2014 read-only Azure observability, cost, and resource health in natural language: Monitor metrics and Log Analytics KQL, retail pricing, quotas, Advisor recommendations, Resource Health, AppLens diagnostics, and subscription/resource-group inventory across tenants",
   "author": {
     "name": "MSP Claude Plugins Community"

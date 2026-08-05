@@ -19,33 +19,86 @@ authorised for.
   pulled this cost data" — Quote Manager sees a single API key and cannot.
 - Revoking gateway access revokes Quote Manager access with it, immediately.
 
-## Tool permission tiers
+## Tool permission groups
 
-**This plugin is read-only.** Every tool is a `_list` or a `_get`. The write
-and destructive tiers are empty, and that is the whole safety story: no agent
-using this plugin can create, edit, send, cancel, or delete anything in Quote
-Manager.
+**This plugin is read-only.** Every tool is a `_list` or a `_get`. Three of
+Conduit's four access-editor groups are empty, and that is the whole
+state-change safety story: no agent using this plugin can create, edit, send,
+cancel, or delete anything in Quote Manager.
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Quote Manager state. Safe for autonomous agents. | Sales: `kqm_quote_list`, `kqm_quote_get`, `kqm_quote_section_list`, `kqm_quote_section_get`, `kqm_quote_line_list`, `kqm_quote_line_get`, `kqm_sales_order_list`, `kqm_sales_order_get`, `kqm_sales_order_line_list`, `kqm_sales_order_line_get`, `kqm_sales_order_payment_list`, `kqm_sales_order_payment_get`. Procurement: `kqm_purchase_order_list`, `kqm_purchase_order_get`, `kqm_purchase_order_line_list`, `kqm_purchase_order_line_get`, `kqm_purchase_order_cost_list`, `kqm_purchase_order_cost_get`, `kqm_supplier_list`, `kqm_supplier_get`, `kqm_product_supplier_list`, `kqm_product_supplier_get`. Catalog: `kqm_product_list`, `kqm_product_get`, `kqm_product_image_list`, `kqm_category_list`, `kqm_category_get`, `kqm_brand_list`, `kqm_brand_get`. CRM: `kqm_customer_list`, `kqm_customer_get`, `kqm_customer_address_list`, `kqm_customer_address_get`, `kqm_contact_list`, `kqm_contact_get`. Org: `kqm_employee_list`, `kqm_employee_get`, `kqm_warehouse_list`, `kqm_warehouse_get`. Diagnostics: `kqm_status`, `kqm_navigate` |
-| **Write** | — | None. |
-| **Destructive** | — | None. |
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Quote Manager state. | `read` for `kqm_customer_list` only; `admin` for every other tool — see below | Sales: `kqm_quote_list`, `kqm_quote_get`, `kqm_quote_section_list`, `kqm_quote_section_get`, `kqm_quote_line_list`, `kqm_quote_line_get`, `kqm_sales_order_list`, `kqm_sales_order_get`, `kqm_sales_order_line_list`, `kqm_sales_order_line_get`, `kqm_sales_order_payment_list`, `kqm_sales_order_payment_get`. Procurement: `kqm_purchase_order_list`, `kqm_purchase_order_get`, `kqm_purchase_order_line_list`, `kqm_purchase_order_line_get`, `kqm_purchase_order_cost_list`, `kqm_purchase_order_cost_get`, `kqm_supplier_list`, `kqm_supplier_get`, `kqm_product_supplier_list`, `kqm_product_supplier_get`. Catalog: `kqm_product_list`, `kqm_product_get`, `kqm_product_image_list`, `kqm_category_list`, `kqm_category_get`, `kqm_brand_list`, `kqm_brand_get`. CRM: `kqm_customer_list`, `kqm_customer_get`, `kqm_customer_address_list`, `kqm_customer_address_get`, `kqm_contact_list`, `kqm_contact_get`. Org: `kqm_employee_list`, `kqm_employee_get`, `kqm_warehouse_list`, `kqm_warehouse_get`. Diagnostics: `kqm_status` |
+| **Write** | *Empty.* | — | — |
+| **Delete** | *Empty.* | — | — |
+| **Admin** | *Empty.* No passthrough, dispatcher, or credential-reading tool. | — | — |
 
 The absence of write tools is a deliberate design choice, not an oversight. An
 agent cannot issue a quote, accept an order, place a purchase order with a
 distributor, or record a payment through this plugin.
 
+### What Conduit actually classifies
+
+`VENDOR_TOOL_CONFIG` carries **two** entries for `kaseya-quote-manager`:
+`kqm_customer_list` and `kqm_navigate`, both `read`. Every other tool in the
+table above is unclassified.
+
+Conduit is fail-closed per tool, not per vendor. The enforcement gate coerces
+an unclassified tool to the highest tier —
+`const requiredTier: PermissionTier = classified ?? 'admin';`
+(`src/access/access-enforcement.ts:63`). **So a read-only connector's read
+surface currently requires tier `admin`, one tool excepted.** That is the
+opposite of what the group table above implies an owner is buying, and it is
+the most likely source of a support ticket about this plugin: an agent
+granted `read` can list customers and nothing else.
+
+`kqm_navigate` is classified `read` and is still unreachable. Conduit refuses
+every `*_navigate` and `*_back` tool before any tier check, for every caller
+including org owners and personal connections
+(`src/proxy/tool-call-enforcement.ts:123-129`,
+`src/proxy/discovery-tools.ts:41-50`); `conduit__my_access` replaces them.
+`kqm_status` is deliberately kept. So of the two classified tools, only one
+is actually callable.
+
+Classifying the rest is a privilege *reduction* — it moves them down from
+`admin` to `read`. Until that lands, a granular per-tool `customTools`
+allowlist is the only way to give an analysis agent this surface without also
+granting it `admin` on the vendor, and `admin` is a materially different
+thing to hold: it is the tier that would admit any write or passthrough tool
+this connector ever gains.
+
+### There is no write surface to grant, and no delete row to misread
+
+Nothing here for a `write` grant to admit. State the general rule anyway,
+because this connector is the exception and not the pattern: Conduit's
+enforcement tiers are only `read`, `write` and `admin` (plus `none`, meaning
+deny) — `src/access/permission-tier.ts:27`. The access editor's "Delete"
+group is presentation only and compiles to and enforces at tier `write`
+(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`), so on any
+vendor that does have delete tools, granting `write` grants every one of
+them. Only a granular per-tool `customTools` allowlist separates them.
+
+Conduit compares tiers. It has **no approval step, no per-call confirmation,
+and no elicitation.** There is nothing to approve here today, but do not
+carry the assumption to a connector where there is.
+
 ## Recommended agent policy
 
-Because there is no write surface, **read tools can be granted to autonomous
-and scheduled agents** — margin analysis, procurement reporting, and quote
-pipeline review are the intended unattended uses.
+Because there is no write surface, **read tools are safe to grant to
+autonomous and scheduled agents** — margin analysis, procurement reporting,
+and quote pipeline review are the intended unattended uses. Grant them
+through a granular `customTools` allowlist naming the tools the agent
+actually needs; a bare `read` grant reaches one tool, and `admin` reaches
+everything including anything added later.
 
 The remaining control is not about state change, it is about disclosure. The
 data this plugin returns is among the most commercially sensitive an MSP holds
 (see below), so scope agent access by *what an operator may see*, not by what
-it may break.
+it may break. Conduit's tier model is a poor instrument for that: it ranks
+tools by whether they mutate state, and every tool here is a read. **The
+mechanical tier and the real risk are orthogonal on this connector** — which
+is exactly why the `customTools` allowlist, not the tier, is the control to
+reach for.
 
 ## What it cannot reach
 
