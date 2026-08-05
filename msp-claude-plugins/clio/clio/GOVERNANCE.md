@@ -27,17 +27,27 @@ account the operator connected.
   application.
 - Revoking gateway access revokes Clio access with it, immediately.
 
-## Tool permission tiers
+## Tool permission groups
 
 Tools sit behind decision-tree navigation: `clio_navigate` moves into a
 domain, `clio_status` reports where you are, `clio_back` returns. Domain
-tools are not callable until you have navigated into their domain.
+tools are not callable until you have navigated into their domain. That
+is a **server-side workflow, not an access control** — Conduit knows
+nothing about it, enforces nothing about it, and would admit any of
+these tools in any order. Do not treat navigation as a safety boundary.
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Clio state. Returns privileged material — see Data handling. | `clio_navigate`, `clio_status`, `clio_back`, `clio_matters_list`, `clio_matters_get`, `clio_contacts_list`, `clio_contacts_get`, `clio_activities_list`, `clio_activities_get`, `clio_tasks_list`, `clio_tasks_get`, `clio_communications_list`, `clio_communications_get`, `clio_documents_list`, `clio_documents_get`, `clio_calendar_entries_list`, `clio_calendar_entries_get`, `clio_bills_list`, `clio_bills_get` |
-| **Write** | Creates or edits case records. Visible to the whole firm, and in the case of time entries, to the client. | `clio_matters_create`, `clio_matters_update`, `clio_contacts_create`, `clio_contacts_update`, `clio_tasks_create`, `clio_tasks_update`, `clio_activities_create` |
-| **Destructive** | *Empty.* | — |
+These are the four groups Conduit's access editor presents. All 26 tools
+are classified in `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts:1515`),
+so every tier below is the tier Conduit actually enforces — this is one
+of the few plugins in the fleet where the document and the gate agree
+tool-for-tool.
+
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Clio state. Returns privileged material — see Data handling. | `read` | `clio_navigate`, `clio_status`, `clio_back`, `clio_matters_list`, `clio_matters_get`, `clio_contacts_list`, `clio_contacts_get`, `clio_activities_list`, `clio_activities_get`, `clio_tasks_list`, `clio_tasks_get`, `clio_communications_list`, `clio_communications_get`, `clio_documents_list`, `clio_documents_get`, `clio_calendar_entries_list`, `clio_calendar_entries_get`, `clio_bills_list`, `clio_bills_get` (19) |
+| **Write** | Creates or edits case records. Visible to the whole firm, and in the case of time entries, to the client. | `write` | `clio_matters_create`, `clio_matters_update`, `clio_contacts_create`, `clio_contacts_update`, `clio_tasks_create`, `clio_tasks_update`, `clio_activities_create` (7) |
+| **Delete** | *Empty.* | — | None. |
+| **Admin** | *Empty.* | — | None. |
 
 **There is no delete tool on any entity, in any domain.** That is a
 deliberate v1 decision, not an oversight: legal records are routinely
@@ -45,12 +55,37 @@ subject to retention obligations, malpractice-insurance requirements, or
 discovery. Deletion, when genuinely needed, happens in Clio directly, by a
 human, inside Clio's own audit trail.
 
+The empty Delete group is worth a sentence because of what it means
+elsewhere. Conduit's enforcement tiers are only `read`, `write`, and
+`admin` (plus `none`, meaning deny) — `src/access/permission-tier.ts:27`.
+"Delete" is a presentation group in the access editor, and a
+delete-group tool compiles to and enforces at tier `write`
+(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`), so on
+most vendors a `write` grant silently admits every delete tool as well.
+Here it does not, because there are none: granting a technician `write`
+on Clio admits exactly the seven create/update tools above and nothing
+else. That is an unusually clean grant, and it is a property of this
+vendor rather than of the tier model.
+
+**Where the mechanical tier and the real risk disagree.** Conduit's
+model grades one thing: can this call change vendor state. It has no
+opinion about what a call *discloses*. So
+`clio_communications_get` — logged emails, calls, and notes on a matter,
+the clearest case of privileged attorney-client communication in the
+whole marketplace — sits at tier `read`, identical to `clio_status`,
+which returns where you are in a menu. A tier-based grant cannot
+separate them. If you need that separation it has to be a granular
+per-tool grant, which compiles to an explicit `customTools` allowlist,
+or a rule in the agent's own configuration.
+
 `clio_activities_create` is the write tool that deserves a second look. It
 is **create-only — there is no update or delete for activities.** A time
 or expense entry logged in error cannot be corrected or removed through
 this integration, and unbilled activities are what a bill is generated
 from. An agent that logs 8 hours instead of 0.8 has put a number on a
-client's invoice that only a human in Clio can take off.
+client's invoice that only a human in Clio can take off. Conduit tiers it
+`write`, indistinguishable from `clio_tasks_update`, which is trivially
+undoable.
 
 ## Recommended agent policy
 
@@ -64,13 +99,21 @@ communications and documents domains as off by default.**
   Logged emails, calls, and notes on a matter are frequently the most
   sensitive record in the file and the clearest case of privileged
   attorney-client communication. Grant only where the operator has a
-  specific reason.
+  specific reason. Conduit will not do this for you — both tools are
+  tier `read`, so a plain `read` grant already admits them, and the only
+  mechanism that excludes them is a granular `customTools` allowlist.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-  Treat `clio_activities_create` as approval-required every time, because
+  Treat `clio_activities_create` as requiring a human every time, because
   it is not correctable afterwards.
-- Destructive tools: none exist. Do not let an agent simulate one — a
-  matter that should not exist gets its status changed to closed, never
+- Delete and admin tools: none exist. Do not let an agent simulate one —
+  a matter that should not exist gets its status changed to closed, never
   worked around through another domain.
+
+Conduit does not enforce any of the approval steps above. It compares
+tiers; it has no approval step, no per-call confirmation, and no
+interactive prompt. "Human approves, then it runs" is a workflow you
+impose on your agents, and it is only as good as the agent
+configuration that carries it.
 
 ## What it cannot reach
 

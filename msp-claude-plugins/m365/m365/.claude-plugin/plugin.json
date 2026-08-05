@@ -1,6 +1,6 @@
 {
   "name": "m365",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Claude plugins for Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
   "author": {
     "name": "MSP Claude Plugins Community"
