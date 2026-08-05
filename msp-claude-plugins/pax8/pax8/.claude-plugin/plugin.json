@@ -1,6 +1,6 @@
 {
   "name": "pax8",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Claude plugins for Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
   "author": {
     "name": "MSP Claude Plugins Community"

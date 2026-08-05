@@ -21,47 +21,122 @@ operator is authorised for.
 Hudu is self-hosted or Hudu-cloud per MSP, so the instance URL is part of
 the gateway connection, not something the model chooses.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change Hudu state. Returns documentation — including credentials, see Data handling. | `hudu_test_connection`, `hudu_list_companies`, `hudu_get_company`, `hudu_list_assets`, `hudu_get_asset`, `hudu_list_asset_layouts`, `hudu_get_asset_layout`, `hudu_list_articles`, `hudu_get_article`, `hudu_list_websites`, `hudu_get_website`, `hudu_list_asset_passwords`, `hudu_get_asset_password`, `hudu_list_folders`, `hudu_list_procedures`, `hudu_list_relations`, `hudu_list_magic_dash`, `hudu_list_activity_logs` |
-| **Write** | Creates or modifies documentation records. Reversible, and visible to everyone who reads the doc next. | `hudu_create_company`, `hudu_update_company`, `hudu_unarchive_company`, `hudu_archive_company`, `hudu_create_asset`, `hudu_update_asset`, `hudu_create_article`, `hudu_update_article`, `hudu_create_website`, `hudu_update_website`, `hudu_create_asset_password`, `hudu_update_asset_password`, `hudu_create_asset_layout` |
-| **Destructive** | Removes documentation, or changes a schema that every asset under it depends on. Requires explicit per-call human approval. | `hudu_delete_company`, `hudu_delete_asset`, `hudu_delete_article`, `hudu_delete_website`, `hudu_delete_asset_password`, `hudu_archive_asset`, `hudu_archive_article`, `hudu_update_asset_layout` |
+Conduit's access editor presents four groups — Read, Write, Delete, Admin —
+so those are the buckets an owner actually clicks. The **Enforcement tier**
+column is what Conduit compares against a technician's grant, derived
+mechanically from `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`).
 
-Three of those classifications are not obvious from the HTTP verb, so they
-are stated explicitly:
+**Every tool below is classified**, and Hudu is one of only two vendors in
+this batch where all four groups are populated. Read the Delete and Admin
+rows twice.
+
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change Hudu state. Returns documentation — see Data handling. | `read` | `hudu_test_connection`, `hudu_list_companies`, `hudu_get_company`, `hudu_list_assets`, `hudu_get_asset`, `hudu_list_asset_layouts`, `hudu_get_asset_layout`, `hudu_list_articles`, `hudu_get_article`, `hudu_list_websites`, `hudu_get_website`, `hudu_list_folders`, `hudu_list_procedures`, `hudu_list_relations`, `hudu_list_magic_dash`, `hudu_list_activity_logs` |
+| **Write** | Creates or modifies documentation records. Reversible, and visible to everyone who reads the doc next. | `write` | `hudu_create_company`, `hudu_update_company`, `hudu_unarchive_company`, `hudu_create_asset`, `hudu_update_asset`, `hudu_create_article`, `hudu_update_article`, `hudu_create_website`, `hudu_update_website`, `hudu_create_asset_layout`, `hudu_update_asset_layout` |
+| **Delete** | Removes documentation from the active set. | `write` — **not** a tier of its own | `hudu_delete_company`, `hudu_delete_asset`, `hudu_delete_article`, `hudu_delete_website`, `hudu_archive_company`, `hudu_archive_asset`, `hudu_archive_article` |
+| **Admin** | Reads, writes, or destroys stored credentials. | `admin` | `hudu_get_asset_password`, `hudu_list_asset_passwords`, `hudu_create_asset_password`, `hudu_update_asset_password`, `hudu_delete_asset_password` |
+
+### The Admin row is the good news on this page
+
+The five password tools are classified `isAdmin` in `VENDOR_TOOL_CONFIG`,
+which is why they land in the Admin group even though two of them only read
+and one of them deletes. `isAdmin` outranks `isWrite`
+(`src/access/tool-classification.ts:33-38`), and Conduit's convention puts
+credential reads at `admin` deliberately.
+
+This is exactly the tightening an earlier revision of this document asked
+for in prose — *"read-tier by state change and credential-tier by
+consequence"* — and it turns out Conduit already enforces it. Three
+consequences:
+
+- **A `read` grant cannot reach a password.** Neither can `write`. Only
+  `admin` does.
+- **A personal (BYOC) connection can never reach one at all.** Personal
+  credentials are capped at tier `write` by a database CHECK constraint, so
+  an admin-classified tool *"has no personal escalation path at all"*
+  (`src/credentials/credential-service.ts:427-435`).
+- **An org owner reaches them regardless.** Owner bypass resolves to
+  `{ tier: 'admin', customTools: null }` before any grant query
+  (`src/access/access-grant-service.ts:260-262`). Do not run day-to-day
+  agent work under an owner account on this vendor.
+
+### The Delete row is the bad news
+
+**Granting a technician `write` on Hudu also grants every tool in the Delete
+row.** Conduit's enforcement tiers are only `read`, `write` and `admin`
+(plus `none`, meaning deny) — `src/access/permission-tier.ts:27`. "Delete"
+is a presentation group in the access editor, and a delete-group tool
+compiles to and enforces at tier `write` (`src/access/tier-group-mapping.ts`,
+`GROUP_ENFORCEMENT_TIER`). There is no setting that separates them. The only
+way to admit `hudu_update_article` but not `hudu_delete_article` is a
+granular per-tool selection, which compiles to an explicit `customTools`
+allowlist.
+
+The grouping is derived from the verb token in the name
+(`DELETE_TOKENS = delete, remove, dismiss, archive`,
+`src/access/tool-naming.ts`), which is why `hudu_archive_*` sits in Delete
+and `hudu_unarchive_company` sits in Write. That is the right call on this
+vendor for a reason the token rule does not know about — see below.
+
+Conduit compares tiers. It has **no approval step, no per-call confirmation,
+and no elicitation.** Nothing at the gateway will pause an agent before it
+deletes a runbook. Per-call approval is a policy you impose on your agents,
+and it is only as good as the agent configuration that carries it.
+
+### Where the mechanical tier disagrees with the judgement
+
+Three classifications are not obvious from the HTTP verb, and two of them
+are cases where the risk is higher than the enforcement tier suggests:
 
 - **`hudu_archive_asset` and `hudu_archive_article` are one-way through
   this integration.** `hudu_unarchive_company` exists; there is no
   unarchive tool for assets or articles. An agent that archives a runbook
   cannot put it back, and the technician looking for it at 2am will not
-  find it.
+  find it. They group under Delete, which is correct, and enforce at
+  `write`, which is the whole point of the paragraph above.
 - **`hudu_update_asset_layout` is a schema change, not a record edit.**
   Layouts are templates. Renaming or removing a field changes every asset
   built on that layout at once, and the data in a removed field does not
-  come back. Blast radius is the whole asset type across every client.
+  come back. Blast radius is the whole asset type across every client — and
+  because its name carries `update` rather than a delete token, it sits in
+  the **Write** group, alongside editing a single article. Of everything on
+  this page, this is the widest gap between where a tool sits and what it
+  can do. Keep it out of any `customTools` list you hand an unattended
+  agent.
 - **`hudu_delete_asset_password` destroys the credential and its
   context.** Hudu keeps no rotation history of its own, so the deleted
   record takes the "what was this for" description with it — the
-  credential may still work on the customer's system, now undocumented.
+  credential may still work on the customer's system, now undocumented. It
+  is classified `admin`, so it is out of reach of a `write` grant; that is
+  the correct outcome and it is worth knowing it is deliberate rather than
+  incidental.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve destructive calls** — with one Hudu-specific tightening.
+self-approve deletes** — with two Hudu-specific tightenings.
 
-- Read tools: allow, **except the password tools**. Grant
-  `hudu_get_asset_password` and `hudu_list_asset_passwords` only to
-  attended sessions. They are read-tier by state change and
-  credential-tier by consequence.
+- Read tools: allow. The bundled `documentation-auditor` and
+  `runbook-freshness-auditor` subagents need nothing more than this.
+- Password tools: these require `admin`, and `admin` on this vendor is the
+  tier that admits everything else too. If an agent genuinely needs to read
+  a credential, give it **its own grant** whose `customTools` names exactly
+  the password tools it needs and nothing else, and treat holding that grant
+  as equivalent to holding the credentials themselves.
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Documentation writes are low-risk to undo but high-visibility — a wrong
-  runbook is worse than a missing one.
-- Destructive tools: require a named human approver per invocation. Do not
-  grant these to scheduled or unattended agents, including the bundled
-  `documentation-auditor` and `runbook-freshness-auditor` subagents, which
-  only need read access to do their jobs.
+  runbook is worse than a missing one. Remember that
+  `hudu_update_asset_layout` rides in this group with a blast radius that
+  does not belong to it.
+- Delete tools: require a named human approver per invocation. Do not grant
+  these to scheduled or unattended agents. Conduit cannot enforce this
+  separation for you — a `write` grant already admits them — so unattended
+  agents need a granular `customTools` allowlist, not a tier.
+- Admin tools: treat the grant as equivalent to full Hudu administrator,
+  because for a credential-reading surface that is exactly what it is.
 
 ## What it cannot reach
 

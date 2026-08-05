@@ -1,6 +1,6 @@
 {
   "name": "rootly",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Claude plugins for Rootly - incident management, response automation, postmortems, service catalog, alert routing, and workflow orchestration",
   "author": {
     "name": "MSP Claude Plugins Community"

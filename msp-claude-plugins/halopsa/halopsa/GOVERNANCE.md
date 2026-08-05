@@ -21,42 +21,90 @@ operator is authorised for.
   action is attributed to one integration user.
 - Revoking gateway access revokes HaloPSA access with it, immediately.
 
-## Tool permission tiers
+## Tool permission groups
 
-| Tier | What it can do | Tools |
-|---|---|---|
-| **Read** | Cannot change HaloPSA state. Safe for autonomous agents. | `halopsa_status`, `halopsa_navigate`, `halopsa_tickets_list`, `halopsa_tickets_get`, `halopsa_clients_list`, `halopsa_clients_get`, `halopsa_clients_search`, `halopsa_assets_list`, `halopsa_assets_get`, `halopsa_assets_search`, `halopsa_assets_list_types`, `halopsa_agents_list`, `halopsa_agents_get`, `halopsa_teams_list`, `halopsa_invoices_list`, `halopsa_invoices_get` |
-| **Write** | Creates or modifies records. Reversible, but visible to the client. | `halopsa_tickets_create`, `halopsa_tickets_update`, `halopsa_clients_create` |
-| **Destructive** | Emails the client or posts billable time. Requires explicit per-call human approval. | `halopsa_tickets_add_action` |
+Conduit's access editor presents four groups — Read, Write, Delete, Admin —
+so those are the buckets an owner actually clicks. The **Enforcement tier**
+column is what Conduit compares against a technician's grant, derived
+mechanically from `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`).
 
-There are no delete tools in this plugin. Nothing here can remove a
-ticket, client, asset, contract, or invoice.
+**Every tool below is classified**, which makes this one of the few
+connectors in the marketplace where the table is fully load-bearing. Note
+that Conduit also carries a separate `halopsa-official` slug with a slightly
+different tool set; it has no marketplace plugin, and it is not what this
+one connects to.
 
-`halopsa_tickets_add_action` sits in the destructive tier deliberately,
-because the API calls it an "add" and it does two irreversible things
-depending on the payload:
+| Group | What it can do | Enforcement tier | Tools |
+|---|---|---|---|
+| **Read** | Cannot change HaloPSA state. Safe for autonomous agents. | `read` | `halopsa_status`, `halopsa_tickets_list`, `halopsa_tickets_get`, `halopsa_clients_list`, `halopsa_clients_get`, `halopsa_clients_search`, `halopsa_assets_list`, `halopsa_assets_get`, `halopsa_assets_search`, `halopsa_assets_list_types`, `halopsa_agents_list`, `halopsa_agents_get`, `halopsa_teams_list`, `halopsa_invoices_list`, `halopsa_invoices_get` |
+| **Write** | Creates or modifies records. Reversible in the database, but two of these are visible to the client the moment they run. | `write` | `halopsa_tickets_create`, `halopsa_tickets_update`, `halopsa_clients_create`, `halopsa_tickets_add_action` |
+| **Delete** | *Empty.* Nothing here can remove a ticket, client, asset, contract, or invoice. | — | — |
+| **Admin** | *Empty.* No passthrough, dispatcher, or credential-reading tool. | — | — |
 
-- With `hiddenfromuser: false` and an `emailto` address, it sends mail to
-  the client from your service desk. There is no unsend.
+`halopsa_navigate` is classified `read` and is deliberately omitted from the
+table because it is unreachable: Conduit refuses every `*_navigate` and
+`*_back` tool before any tier check, for every caller including org owners
+and personal connections (`src/proxy/tool-call-enforcement.ts:123-129`,
+`src/proxy/discovery-tools.ts:41-50`). `conduit__my_access` replaces it.
+`halopsa_status` is deliberately kept.
+
+### Where the mechanical tier disagrees with the judgement
+
+An earlier revision of this document put `halopsa_tickets_add_action` in a
+tier of its own. Conduit has no such tier — it classifies the tool `write`
+(`isWrite: true`, no `isAdmin`), the same as `halopsa_clients_create`. The
+reasoning that motivated the separation is unchanged and matters more now
+that the mechanism cannot express it:
+
+- With `hiddenfromuser: false` and an `emailto` address,
+  `halopsa_tickets_add_action` sends mail to the client from your service
+  desk. There is no unsend.
 - With `timetaken` and `charge: true`, it posts billable time against the
   ticket's contract. That time flows into the next invoice run, deducts
   from a prepaid-hours balance, and is corrected by a human in the
   billing UI, not by another API call.
 
 An agent that adds actions unattended is an agent that can bill your
-clients and write to them in your name.
+clients and write to them in your name — and **Conduit's policy never
+inspects arguments.** `ToolCallGateInput` carries the tool name and the
+caller's identity and has no `arguments` field at all
+(`src/proxy/tool-call-enforcement.ts:69-79`), so no grant can express "may
+add an internal note, may not email the client." That distinction lives
+entirely in your agent's configuration.
+
+### What a `write` grant means here
+
+**Granting a technician `write` on HaloPSA grants all four write tools**,
+including `halopsa_tickets_add_action`. Conduit's enforcement tiers are only
+`read`, `write` and `admin` (plus `none`, meaning deny) —
+`src/access/permission-tier.ts:27` — and the access editor's "Delete" group
+is presentation only, compiling to and enforcing at tier `write`
+(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`). This plugin
+has no delete tools, so that trap does not bite here; the one that does is
+the same shape. There is no setting that admits ticket creation but not
+billable-time posting. The only way to separate them is a granular per-tool
+selection, which compiles to an explicit `customTools` allowlist.
+
+Conduit compares tiers. It has **no approval step, no per-call confirmation,
+and no elicitation.** Nothing at the gateway will pause an agent before it
+emails a client. Per-call approval is a policy you impose on your agents, and
+it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve destructive calls.**
+self-approve anything that reaches the client or the invoice.**
 
 - Read tools: allow. Queue triage, SLA-risk reporting, asset lookups, and
   invoice reconciliation are the intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Destructive tools: require a named human approver per invocation. Do
-  not grant `halopsa_tickets_add_action` to scheduled or unattended
-  agents.
+- `halopsa_tickets_add_action` specifically: require a named human approver
+  per invocation, and do not grant it to scheduled or unattended agents.
+  Conduit cannot enforce this separation for you — a `write` grant already
+  admits it — so give unattended agents a granular `customTools` allowlist
+  that omits it rather than a `write` tier.
+- Admin tools: none exist here. An `admin` grant on this vendor buys nothing
+  beyond `write` today, so there is no reason to hand one out.
 
 ## What it cannot reach
 
@@ -97,11 +145,11 @@ self-approve destructive calls.**
   `halopsa_tickets_update` is the only way to move a ticket to Resolved
   or Closed, which stops the SLA clock, stamps the attainment numbers
   your client reports read, and in most configurations fires the
-  satisfaction-survey email. It sits in the Write tier because it is also
+  satisfaction-survey email. It enforces at `write` because it is also
   how you set a priority or assign an agent — but if you bill against SLA
-  attainment, gate it at the destructive tier instead. A bulk close of a
-  stale queue rewrites last month's numbers and mails every affected
-  client.
+  attainment, treat it like `halopsa_tickets_add_action` and keep it out of
+  unattended agents' `customTools` lists. A bulk close of a stale queue
+  rewrites last month's numbers and mails every affected client.
 - **Writes are array-wrapped.** Every create and update posts
   `[{...}]`, not `{...}`. An agent that sends a bare object gets a
   validation error whose message does not mention the array.
