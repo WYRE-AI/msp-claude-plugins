@@ -1,6 +1,6 @@
 {
   "name": "threatlocker",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Claude plugins for ThreatLocker - zero-trust application allowlisting, approval request triage, audit log investigation, and computer/group inventory for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
