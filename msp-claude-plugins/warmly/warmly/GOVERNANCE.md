@@ -24,6 +24,25 @@ operator is authorised for.
 **This plugin is read-only.** Warmly exposes three tools and none of them
 changes vendor state.
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `warmly` has no entry there, so
+> the grouping below carries no enforcement meaning at present. That bites
+> harder on a read-only plugin than on most: a `read` grant admits nothing,
+> so the only way to use this plugin at all today is an `admin` grant, and
+> the recommendation below to hand these tools to unattended agents cannot
+> be followed at a lower tier. The grouping becomes what Conduit actually
+> enforces once the vendor is classified, and classifying it is a privilege
+> *reduction*, not an expansion. For the live list of unclassified vendors
+> see `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `warmly` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Warmly state. Safe for autonomous agents. | `list_warm_visitors`, `list_warm_accounts`, `get_credits_remaining` |

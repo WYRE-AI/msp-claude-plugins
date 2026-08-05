@@ -20,11 +20,29 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `runzero` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `runzero_tasks_create`. The
+> grouping becomes what Conduit actually enforces once the vendor is
+> classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
+> classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `runzero` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change runZero state and puts no traffic on the customer's network. Safe for autonomous agents. | `runzero_assets_list`, `runzero_assets_get`, `runzero_assets_search`, `runzero_assets_export`, `runzero_services_list`, `runzero_services_get`, `runzero_services_export`, `runzero_sites_list`, `runzero_sites_get`, `runzero_wireless_list`, `runzero_wireless_get`, `runzero_explorers_list`, `runzero_explorers_get`, `runzero_tasks_list`, `runzero_tasks_get` |
 | **Write** | Changes runZero-side records. Reversible, no customer-network effect. | `runzero_sites_create`, `runzero_tasks_stop` |
-| **Destructive** | Puts active traffic on a customer's production network, now or later. Requires explicit per-call human approval. | `runzero_tasks_create`, `runzero_sites_update` |
+| **Destructive** | Puts active traffic on a customer's production network, now or later. | `runzero_tasks_create`, `runzero_sites_update` |
 
 `runzero_tasks_create` is the reason this plugin needs a governance
 document at all. It is a `create` against runZero's own API, but what it
@@ -50,6 +68,14 @@ one call that makes a customer's network quieter, not busier. It is
 still a real change — an aborted scan leaves partial, misleading
 inventory, and stopping a compliance scan silently creates an evidence
 gap — so it needs approval, just not the same ceremony.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and a
+`max`-rate scan of a customer's network once the tier is granted. Where
+this document asks for a named human approver, that is a policy you impose
+on your agents, and it is only as good as the agent configuration that
+carries it.
 
 ## Recommended agent policy
 

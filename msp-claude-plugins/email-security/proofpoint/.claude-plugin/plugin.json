@@ -1,6 +1,6 @@
 {
   "name": "proofpoint",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Claude plugins for Proofpoint Email Protection - TAP, quarantine, threat intelligence, forensics, URL defense",
   "author": {
     "name": "MSP Claude Plugins Community"

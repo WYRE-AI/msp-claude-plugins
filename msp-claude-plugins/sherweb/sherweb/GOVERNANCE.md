@@ -25,11 +25,29 @@ point of view.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `sherweb` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` grant on this vendor admits nothing; an `admin` grant
+> admits everything, including `sherweb_subscriptions_change_quantity` and
+> the dispatchers that can reach it. The grouping becomes what Conduit
+> actually enforces once the vendor is classified, and classifying it is a
+> privilege *reduction*, not an expansion. For the live list of unclassified
+> vendors see `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors
+> Conduit has not classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `sherweb` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Sherweb state. Safe for autonomous agents. | `sherweb_status`, `sherweb_navigate`, `sherweb_list_categories`, `sherweb_list_category_tools`, `sherweb_router`, `sherweb_customers_list`, `sherweb_customers_get`, `sherweb_customers_accounts_receivable`, `sherweb_subscriptions_list`, `sherweb_subscriptions_get`, `sherweb_billing_payable_charges`, `sherweb_billing_charge_details`, `sherweb_catalog_list_products` |
 | **Write** | *Empty.* No tool in this plugin creates a customer, places an order, or edits a record. | — |
-| **Destructive** | Changes what the MSP is billed and what software a customer's users can open. Requires explicit per-call human approval. | `sherweb_subscriptions_change_quantity` |
+| **Destructive** | Changes what the MSP is billed and what software a customer's users can open. | `sherweb_subscriptions_change_quantity` |
 | **Meta** | Dispatches another tool by name; inherits that tool's tier. | `sherweb_execute_tool` |
 
 `sherweb_subscriptions_change_quantity` is the only mutating tool here,
@@ -51,6 +69,13 @@ reasons, none of which are visible in the HTTP verb:
 Commitment terms compound it: annual subscriptions frequently forbid
 decreases mid-term, so the failure mode is asymmetric — the increase
 succeeds and bills, the correction is rejected.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and a
+30-to-5 seat cut once the tier is granted. Where this document asks for a
+named human approver, that is a policy you impose on your agents, and it
+is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

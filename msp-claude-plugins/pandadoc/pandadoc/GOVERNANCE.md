@@ -20,11 +20,29 @@ authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `pandadoc` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `pandadoc-send-document`. The
+> grouping becomes what Conduit actually enforces once the vendor is
+> classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `pandadoc` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change PandaDoc state. Safe for autonomous agents. | `pandadoc-list-documents`, `pandadoc-get-document`, `pandadoc-get-document-status`, `pandadoc-list-templates`, `pandadoc-get-template`, `pandadoc-download-document`, `pandadoc-search-docs`, `pandadoc-get-code-sample` |
 | **Write** | Creates or modifies drafts. Not yet visible to the customer. | `pandadoc-create-document`, `pandadoc-add-recipient` |
-| **Destructive** | Emails a real customer a document to sign. Requires explicit per-call human approval. | `pandadoc-send-document` |
+| **Destructive** | Emails a real customer a document to sign. | `pandadoc-send-document` |
 
 `pandadoc-send-document` is the entire reason this plugin needs a governance
 document. It does not modify a record in a database an operator can correct —
@@ -43,6 +61,13 @@ behind a live link. It reduces the noise, not the commitment.
 it exists in your workspace, nobody outside it can see it, and it can be
 discarded. `pandadoc-add-recipient` likewise only stages who *would* receive
 the document when it is eventually sent.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there is
+no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and
+`pandadoc-send-document` once its tier is granted. Where this document asks
+for a named human approver, that is a policy you impose on your agents, and
+it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
