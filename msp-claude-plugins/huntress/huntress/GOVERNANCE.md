@@ -40,7 +40,7 @@ source of truth. The convention is `isAdmin → admin` (outranks),
 | **Delete** | *Empty for this vendor.* Huntress's two delete tools are `isAdmin`, so they sit in the Admin row rather than here. | `write` — **not a tier of its own** | *None.* |
 | **Admin** | Creates, changes, or removes people and organizations in the Huntress account itself. | `admin` | `huntress_users_create`, `huntress_users_update`, `huntress_users_delete`, `huntress_organizations_delete` |
 
-Two tools shipped by the server are absent from the table. `huntress_navigate`
+One tool shipped by the server is absent from the table. `huntress_navigate`
 is classified `read` but is refused for every caller — owners and personal
 connections included — by Conduit's discovery-tool suppression gate
 (`src/proxy/tool-call-enforcement.ts:125-130`). Nothing else this plugin
