@@ -27,11 +27,29 @@ for most vendors because of `superops_custom_mutation` (below).
 
 Grouped by blast radius, not HTTP verb.
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `superops` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `superops_custom_mutation`. The
+> grouping becomes what Conduit actually enforces once the vendor is
+> classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
+> classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `superops` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change SuperOps or endpoint state. Safe for autonomous agents. | `superops_navigate`, `superops_status`, `superops_test_connection`, `superops_assets_list`, `superops_assets_get`, `superops_assets_patches`, `superops_assets_software`, `superops_clients_list`, `superops_clients_get`, `superops_clients_search`, `superops_technicians_list`, `superops_technicians_get`, `superops_technicians_groups`, `superops_tickets_list`, `superops_tickets_get`, `superops_custom_query` |
 | **Write** | Creates or modifies PSA records. Reversible, customer-visible. | `superops_tickets_create`, `superops_tickets_update`, `superops_tickets_add_note`, `superops_tickets_log_time` |
-| **Destructive** | Unbounded write access to the tenant. Requires explicit per-call human approval. | `superops_custom_mutation` |
+| **Destructive** | Unbounded write access to the tenant. | `superops_custom_mutation` |
 
 `superops_custom_mutation` is the single most dangerous tool in this
 plugin and the reason its destructive tier is not empty. It executes an
@@ -53,6 +71,13 @@ the API calls it.
 `superops_custom_query` stays in Read because it cannot mutate, but it
 can read anything the token can see, including entities no typed tool
 surfaces. It is the exfiltration path, not the damage path.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and an
+arbitrary GraphQL mutation once the tier is granted. Where this document
+asks for a named human approver, that is a policy you impose on your
+agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

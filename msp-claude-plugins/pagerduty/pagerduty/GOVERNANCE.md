@@ -24,11 +24,29 @@ accounts) and its 66 generated tools.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `pagerduty` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `create_incident`. The grouping
+> becomes what Conduit actually enforces once the vendor is classified, and
+> classifying it is a privilege *reduction*, not an expansion. For the live
+> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
+> *Fail-closed, and the vendors Conduit has not classified* — it is stated
+> once there because it moves.
+>
+> *Editor's note: when `pagerduty` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change PagerDuty state or notify anyone. Safe for autonomous agents. | `list_incidents`, `get_incident`, `list_incident_alerts`, `list_incident_notes`, `list_incident_log_entries`, `list_past_incidents`, `get_incident_field_values`, `list_oncalls`, `list_schedules`, `get_schedule`, `list_schedule_overrides`, `list_escalation_policies`, `get_escalation_policy`, `list_services`, `get_service`, `list_event_orchestrations`, `get_event_orchestration`, `get_global_orchestration_rules`, `get_service_orchestration_rules`, `get_event_orchestration_active_status`, `list_status_pages`, `get_status_page`, `list_status_page_posts`, `list_status_page_post_updates`, `list_teams`, `get_team`, `list_team_members`, `list_users`, `get_user`, `get_alert_grouping_settings`, `list_intelligent_alert_grouping_settings`, `list_incident_workflows`, `get_incident_workflow`, `list_incident_workflow_instances`, `list_change_events`, `get_change_event`, `list_log_entries`, `get_log_entry` |
 | **Write** | Changes PagerDuty-side records. Reversible, visible to responders. | `update_incident`, `create_incident_note`, `snooze_incident`, `set_incident_field_values`, `create_service`, `update_service`, `update_change_event`, `create_schedule`, `update_schedule`, `create_team`, `update_team`, `add_team_member`, `update_alert_grouping_settings`, `create_intelligent_alert_grouping_settings`, `update_intelligent_alert_grouping_settings` |
-| **Destructive** | Wakes a human, publishes to customers, or silently removes paging coverage. Requires explicit per-call human approval. | `create_incident`, `merge_incidents`, `manage_incidents`, `delete_schedule`, `delete_team`, `update_global_orchestration_rules`, `update_service_orchestration_rules`, `create_status_page_post`, `update_status_page_post`, `create_status_page_post_update`, `delete_status_page_post` |
+| **Destructive** | Wakes a human, publishes to customers, or silently removes paging coverage. | `create_incident`, `merge_incidents`, `manage_incidents`, `delete_schedule`, `delete_team`, `update_global_orchestration_rules`, `update_service_orchestration_rules`, `create_status_page_post`, `update_status_page_post`, `create_status_page_post_update`, `delete_status_page_post` |
 
 Most of that destructive tier is classified by blast radius, not by HTTP
 verb. The four groups worth justifying:
@@ -58,6 +76,13 @@ verb. The four groups worth justifying:
   public and its subscribers are notified by email and SMS on publish.
   You cannot unsend that, and customers screenshot status pages. Deleting
   the post afterwards removes the page, not the notification.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and
+`create_incident` once the tier is granted. Where this document asks for a
+named human approver, that is a policy you impose on your agents, and it
+is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

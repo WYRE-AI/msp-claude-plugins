@@ -1,6 +1,6 @@
 {
   "name": "ncentral",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "N-able N-central RMM — devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
   "author": {
     "name": "WYRE Technology"

@@ -20,11 +20,29 @@ authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `salesbuildr` has no entry there,
+> so the grouping below carries no enforcement meaning at present — read
+> tools included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `salesbuildr_quotes_create` and
+> both deletes. The grouping becomes what Conduit actually enforces once the
+> vendor is classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
+> classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `salesbuildr` gains a `VENDOR_TOOL_CONFIG` entry,
+> delete this blockquote and nothing else. No other part of this document
+> depends on it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Salesbuildr state. Safe for autonomous agents. | `salesbuildr_companies_list`, `salesbuildr_companies_get`, `salesbuildr_contacts_list`, `salesbuildr_contacts_get`, `salesbuildr_opportunities_list`, `salesbuildr_opportunities_get`, `salesbuildr_products_list`, `salesbuildr_products_get`, `salesbuildr_quotes_list`, `salesbuildr_quotes_get`, `salesbuildr_status`, `salesbuildr_navigate` |
 | **Write** | Creates or modifies records. Reversible in principle, but see below. | `salesbuildr_companies_create`, `salesbuildr_companies_update`, `salesbuildr_contacts_create`, `salesbuildr_contacts_update`, `salesbuildr_opportunities_create`, `salesbuildr_opportunities_update`, `salesbuildr_quotes_create` |
-| **Destructive** | Removes records and everything hanging off them. Requires explicit per-call human approval. | `salesbuildr_companies_delete`, `salesbuildr_contacts_delete` |
+| **Destructive** | Removes records and everything hanging off them. | `salesbuildr_companies_delete`, `salesbuildr_contacts_delete` |
 
 `salesbuildr_quotes_create` is deliberately **not** in the destructive tier.
 The API creates a priced quote record; it does not publish or email it — that
@@ -35,6 +53,14 @@ salesperson clicks publish.
 `salesbuildr_companies_delete` is destructive in the cascading sense: a company
 is the parent of its contacts, opportunities, and quotes. Deleting one removes
 the commercial history behind live deals, and there is no undelete tool.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there is
+no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and a priced
+`salesbuildr_quotes_create`, or a cascading delete, once the tier is granted.
+Where this document asks for a named human approver, that is a policy you
+impose on your agents, and it is only as good as the agent configuration that
+carries it.
 
 ## Recommended agent policy
 

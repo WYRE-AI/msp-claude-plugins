@@ -24,16 +24,46 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `proofpoint` has no entry there,
+> so the grouping below carries no enforcement meaning at present — read
+> tools included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including the search-and-destroy surface.
+> The grouping becomes what Conduit actually enforces once the vendor is
+> classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
+> classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `proofpoint` gains a `VENDOR_TOOL_CONFIG` entry,
+> delete this blockquote and nothing else. No other part of this document
+> depends on it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Proofpoint state, mail flow, or mailboxes. Safe for autonomous agents. | `proofpoint_tap_get_all_events`, `proofpoint_tap_get_messages_blocked`, `proofpoint_tap_get_messages_delivered`, `proofpoint_tap_get_clicks_permitted`, `proofpoint_tap_get_clicks_blocked`, `proofpoint_tap_get_top_clickers`, `proofpoint_quarantine_search`, `proofpoint_quarantine_list`, `proofpoint_quarantine_get`, `proofpoint_quarantine_preview`, `proofpoint_people_get_vap`, `proofpoint_people_get_top_clickers`, `proofpoint_people_get_user_risk`, `proofpoint_people_get_attack_index`, `proofpoint_people_list_vip`, `proofpoint_forensics_get_report`, `proofpoint_forensics_get_evidence`, `proofpoint_forensics_get_operation`, `proofpoint_forensics_list_operations`, `proofpoint_forensics_message_trace`, `proofpoint_forensics_auto_pull_status`, `proofpoint_forensics_get_sandbox_report`, `proofpoint_threat_get_campaign`, `proofpoint_threat_search_campaigns`, `proofpoint_threat_get_indicators`, `proofpoint_threat_search_indicators`, `proofpoint_threat_get_family`, `proofpoint_threat_get_actor`, `proofpoint_threat_get_landscape`, `proofpoint_url_decode`, `proofpoint_url_analyze`, `proofpoint_url_get_clicks`, `proofpoint_url_get_verdict`, `proofpoint_url_batch_decode` |
 | **Write** | Changes a protection setting for one user. Reversible. | `proofpoint_people_set_vip` |
-| **Destructive** | Delivers or destroys customer mail, including mail already sitting in mailboxes. Requires explicit per-call human approval. | `proofpoint_quarantine_release`, `proofpoint_quarantine_bulk_release`, `proofpoint_quarantine_delete`, `proofpoint_quarantine_bulk_delete`, `proofpoint_forensics_search_destroy` |
+| **Destructive** | Delivers or destroys customer mail, including mail already sitting in mailboxes. | `proofpoint_quarantine_release`, `proofpoint_quarantine_bulk_release`, `proofpoint_quarantine_delete`, `proofpoint_quarantine_bulk_delete`, `proofpoint_forensics_search_destroy` ⚠️ |
+
+> ⚠️ **`proofpoint_forensics_search_destroy` is not a tool the deployed
+> server exposes.** The search-and-destroy capability described below is real
+> and is served by `proofpoint_forensics_pull_messages`; the name in this
+> table is wrong. Do not use it in an allowlist or an agent configuration —
+> an allowlist entry for a tool that does not exist blocks nothing and grants
+> nothing, and the capability it was meant to gate is reachable under its
+> real name. The risk analysis that follows is about the capability and
+> stands as written. Correcting tool names across this repo is tracked
+> separately (issue #178) and is deliberately out of scope for this
+> document's current revision.
 
 The classifications that a reviewer might argue with:
 
 **`proofpoint_forensics_search_destroy` is the single highest-blast-radius
-tool in this plugin, and it is not a delete-by-ID call.** It takes search
+tool in this plugin, and it is not a delete-by-ID call.** (Read it as the
+capability, under the real name flagged above.) It takes search
 criteria — sender, subject, message ID — and applies an action to every
 matching message across every mailbox in the tenant. A criterion that is
 one field too broad ("subject contains Invoice") reaches into hundreds of
@@ -65,6 +95,13 @@ detonation. Retrieving one does not execute it, but it does pull a
 weaponized binary into the session and onto whatever the operator does
 with it next. Treat it as read-tier for approval purposes and handle the
 output like the malware it is.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there is
+no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and a bulk
+release or a search-and-destroy once the tier is granted. Where this document
+asks for a named human approver, that is a policy you impose on your agents,
+and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

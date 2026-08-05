@@ -20,11 +20,29 @@ the operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `timezest` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including
+> `timezest_scheduling_create_request`. The grouping becomes what Conduit
+> actually enforces once the vendor is classified, and classifying it is a
+> privilege *reduction*, not an expansion. For the live list of unclassified
+> vendors see `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors
+> Conduit has not classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `timezest` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change TimeZest state or reach the customer. Safe for autonomous agents. | `timezest_agents_list`, `timezest_agents_get`, `timezest_teams_list`, `timezest_teams_get`, `timezest_appointment_types_list`, `timezest_appointment_types_get`, `timezest_resources_list`, `timezest_scheduling_list`, `timezest_scheduling_get`, `timezest_navigate`, `timezest_back`, `timezest_status` |
 | **Write** | Creates a record — and sends the customer an email that cannot be recalled. | `timezest_scheduling_create_request` |
-| **Destructive** | Revokes a booking link or cancels a confirmed appointment. Requires explicit per-call human approval. | `timezest_scheduling_cancel` |
+| **Destructive** | Revokes a booking link or cancels a confirmed appointment. | `timezest_scheduling_cancel` |
 
 `timezest_scheduling_create_request` is the tool to watch. It is a
 create, but its blast radius is not a database row: it emails the
@@ -41,6 +59,13 @@ booked one it cancels a confirmed appointment, which removes the slot
 from the technician's calendar and sends the customer a cancellation.
 There is no uncancel — recovery means creating a new request and asking
 the customer to book again.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and an
+email to a real customer once the tier is granted. Where this document
+asks for a named human approver, that is a policy you impose on your
+agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

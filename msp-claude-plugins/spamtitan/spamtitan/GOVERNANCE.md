@@ -19,11 +19,29 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `spamtitan` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` grant on this vendor admits nothing; an `admin` grant
+> admits everything, including `spamtitan_delete_message`. The grouping
+> becomes what Conduit actually enforces once the vendor is classified, and
+> classifying it is a privilege *reduction*, not an expansion. For the live
+> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
+> *Fail-closed, and the vendors Conduit has not classified* — it is stated
+> once there because it moves.
+>
+> *Editor's note: when `spamtitan` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change mail flow or filter policy. Safe for autonomous agents. | `spamtitan_get_queue`, `spamtitan_get_message`, `spamtitan_get_stats`, `spamtitan_navigate`, `spamtitan_status` |
 | **Write** | Empty. Every mutating tool here either delivers mail or changes what the filter will do to a customer's future mail. | — |
-| **Destructive** | Delivers held mail, destroys evidence, or silently changes deliverability. Requires explicit per-call human approval. | `spamtitan_release_message`, `spamtitan_delete_message`, `spamtitan_manage_allowlist`, `spamtitan_manage_blocklist` |
+| **Destructive** | Delivers held mail, destroys evidence, or silently changes deliverability. | `spamtitan_release_message`, `spamtitan_delete_message`, `spamtitan_manage_allowlist`, `spamtitan_manage_blocklist` |
 
 Why each of the four is destructive:
 
@@ -55,6 +73,13 @@ action or otherwise behave benignly under some arguments. The gateway
 tiers by tool name, not by argument, so the whole tool takes the
 highest tier its arguments can reach. That is the correct conservative
 reading.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there
+is no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and a
+quarantine delete once the tier is granted. Where this document asks for a
+named human approver, that is a policy you impose on your agents, and it
+is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

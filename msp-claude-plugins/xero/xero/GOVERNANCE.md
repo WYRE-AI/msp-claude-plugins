@@ -23,11 +23,28 @@ authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `xero` has no entry there, so the
+> grouping below carries no enforcement meaning at present — read tools
+> included. A `read` or `write` grant on this vendor admits nothing; an
+> `admin` grant admits everything, including `xero_payments_create`. The
+> grouping becomes what Conduit actually enforces once the vendor is
+> classified, and classifying it is a privilege *reduction*, not an
+> expansion. For the live list of unclassified vendors see
+> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+> not classified* — it is stated once there because it moves.
+>
+> *Editor's note: when `xero` gains a `VENDOR_TOOL_CONFIG` entry, delete this
+> blockquote and nothing else. No other part of this document depends on it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change Xero state. Safe for autonomous agents, but see Data handling. | `xero_accounts_list`, `xero_accounts_get`, `xero_contacts_list`, `xero_contacts_get`, `xero_contacts_search`, `xero_invoices_list`, `xero_invoices_get`, `xero_payments_list`, `xero_payments_get`, `xero_reports_profit_and_loss`, `xero_reports_balance_sheet`, `xero_reports_aged_receivables`, `xero_reports_aged_payables`, `xero_status`, `xero_navigate`, `xero_back` |
 | **Write** | Creates a record with no financial effect. Reversible. | `xero_contacts_create` |
-| **Destructive** | Creates, issues, cancels, or settles a financial obligation. Requires explicit per-call human approval. | `xero_invoices_create`, `xero_invoices_update_status`, `xero_payments_create` |
+| **Destructive** | Creates, issues, cancels, or settles a financial obligation. | `xero_invoices_create`, `xero_invoices_update_status`, `xero_payments_create` |
 
 The write tier holds exactly one tool. That is not an accident of the API
 surface — it reflects that in an accounting system almost nothing that changes
@@ -51,6 +68,13 @@ state is safely reversible.
 `xero_contacts_create` stays in the write tier because a contact carries no
 balance and no obligation. It is the one thing here you can create and then
 change your mind about.
+
+**Conduit does not enforce per-call approval.** It compares tiers — there is
+no approval step, no per-call confirmation, and no interactive prompt
+anywhere in its enforcement path. Nothing sits between an agent and
+`xero_payments_create` once its tier is granted. Where this document asks
+for a named human approver, that is a policy you impose on your agents, and
+it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

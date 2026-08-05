@@ -19,11 +19,29 @@ operator is authorised for.
 
 ## Tool permission tiers
 
+> **Not classified in Conduit — every tool in the table below requires tier
+> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
+> (`src/proxy/result-cache.ts`) and fails closed:
+> `const requiredTier: PermissionTier = classified ?? 'admin';`
+> (`src/access/access-enforcement.ts:63`). `spanning` has no entry there, so
+> the grouping below carries no enforcement meaning at present — read tools
+> included. A `read` grant on this vendor admits nothing; an `admin` grant
+> admits everything, including `spanning_queue_restore`. The grouping becomes
+> what Conduit actually enforces once the vendor is classified, and
+> classifying it is a privilege *reduction*, not an expansion. For the live
+> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
+> *Fail-closed, and the vendors Conduit has not classified* — it is stated
+> once there because it moves.
+>
+> *Editor's note: when `spanning` gains a `VENDOR_TOOL_CONFIG` entry, delete
+> this blockquote and nothing else. No other part of this document depends on
+> it.*
+
 | Tier | What it can do | Tools |
 |---|---|---|
 | **Read** | Cannot change backup or tenant state. Safe for autonomous agents. | `spanning_list_users`, `spanning_get_user`, `spanning_list_services`, `spanning_list_backups`, `spanning_get_restore_status`, `spanning_list_audit_log`, `spanning_get_license_usage`, `spanning_status` |
 | **Write** | — | None. |
-| **Destructive** | Writes data back into a live customer Microsoft 365, Google Workspace, or Salesforce tenant. Requires explicit per-call human approval. | `spanning_queue_restore` |
+| **Destructive** | Writes data back into a live customer Microsoft 365, Google Workspace, or Salesforce tenant. | `spanning_queue_restore` |
 
 `spanning_queue_restore` is the only mutating tool, and what it mutates
 is **production**, not the backup. A restore injects mail, files, or
@@ -38,6 +56,12 @@ back.
 The MCP server marks this tool DESTRUCTIVE and prompts for confirmation.
 Do not treat that prompt as the control — an agent granted the tool can
 answer it.
+
+**Conduit does not enforce per-call approval either.** It compares tiers —
+there is no approval step, no per-call confirmation, and no interactive
+prompt anywhere in its enforcement path. Where this document asks for a
+named human approver, that is a policy you impose on your agents, and it
+is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
