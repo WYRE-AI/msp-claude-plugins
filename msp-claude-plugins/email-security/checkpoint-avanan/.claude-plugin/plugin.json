@@ -1,6 +1,6 @@
 {
   "name": "checkpoint-avanan",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Claude plugins for Checkpoint Harmony Email & Collaboration (Avanan) - email security, threat detection, quarantine actions, sender exceptions",
   "author": {
     "name": "MSP Claude Plugins Community"
