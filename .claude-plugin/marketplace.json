@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.27.0",
+  "version": "1.27.1",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -761,7 +761,7 @@
     {
       "name": "wyre-gateway",
       "source": "./msp-claude-plugins/wyre-gateway",
-      "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to mcp.wyre.ai.",
+      "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
       "category": "productivity",
       "tags": [
         "wyre",

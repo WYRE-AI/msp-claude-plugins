@@ -2205,7 +2205,7 @@ export const plugins: Plugin[] = [
     id: 'wyre-gateway',
     name: 'Wyre Gateway',
     vendor: 'Wyre-gateway',
-    description: 'WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to mcp.wyre.ai.',
+    description: 'WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.',
     category: 'productivity',
     maturity: 'alpha',
     features: [],
