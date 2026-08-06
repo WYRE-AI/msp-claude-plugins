@@ -22,12 +22,16 @@ Get a summary of recent phishing and training campaigns from KnowBe4.
    - Apply status filter (default: all)
 
 2. **Retrieve phishing campaigns**
-   - Use `knowbe4_phishing_list_campaigns` for phishing data
+   - Use `knowbe4_phishing_campaigns_list` for phishing data
    - Get key metrics for each campaign
 
 3. **Retrieve training campaigns**
-   - Use `knowbe4_training_list_campaigns` for training data
+   - Use `knowbe4_training_campaigns_list` for training data
    - Get enrollment and completion metrics
+
+   Neither list tool accepts a status or date argument, so the type,
+   period and status filters above are applied client-side after a full
+   paginated read.
 
 4. **Calculate aggregate metrics**
    - Total campaigns run

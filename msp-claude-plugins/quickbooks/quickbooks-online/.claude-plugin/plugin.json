@@ -1,6 +1,6 @@
 {
   "name": "quickbooks-online",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Claude plugins for QuickBooks Online - customers, invoices, expenses, payments, reports",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -44,15 +44,37 @@ operator is authorised for.
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change KnowBe4 state. Safe for autonomous agents. | `knowbe4_phishing_list_campaigns`, `knowbe4_phishing_get_campaign`, `knowbe4_phishing_list_security_tests`, `knowbe4_phishing_get_security_test`, `knowbe4_phishing_list_recipients`, `knowbe4_phishing_get_recipient`, `knowbe4_phishing_list_templates`, `knowbe4_phishing_get_template`, `knowbe4_training_list_campaigns`, `knowbe4_training_get_campaign`, `knowbe4_training_list_enrollments`, `knowbe4_training_get_enrollment`, `knowbe4_training_list_modules`, `knowbe4_training_get_module`, `knowbe4_training_list_store_purchases`, `knowbe4_training_get_store_purchase`, `knowbe4_users_list`, `knowbe4_users_get`, `knowbe4_users_risk_score_history`, `knowbe4_users_list_events`, `knowbe4_groups_list`, `knowbe4_groups_get`, `knowbe4_groups_list_members`, `knowbe4_groups_risk_score_history`, `knowbe4_reporting_account_summary`, `knowbe4_reporting_phishing_summary`, `knowbe4_reporting_training_summary`, `knowbe4_reporting_risk_overview`, `knowbe4_reporting_ppp_trend`, `knowbe4_reporting_department_breakdown` |
+| **Read** | Cannot change KnowBe4 state. Safe for autonomous agents. | *Account:* `knowbe4_account_get`, `knowbe4_account_risk_score_history`. *Users:* `knowbe4_users_list`, `knowbe4_users_get`, `knowbe4_users_risk_score_history`. *Groups:* `knowbe4_groups_list`, `knowbe4_groups_get`, `knowbe4_groups_members`, `knowbe4_groups_risk_score_history`. *Phishing:* `knowbe4_phishing_campaigns_list`, `knowbe4_phishing_campaigns_get`, `knowbe4_phishing_campaign_tests`, `knowbe4_phishing_security_tests_list`, `knowbe4_phishing_security_test_get`, `knowbe4_phishing_security_test_recipients`, `knowbe4_phishing_security_test_recipient`. *Training:* `knowbe4_training_campaigns_list`, `knowbe4_training_campaigns_get`, `knowbe4_training_enrollments_list`, `knowbe4_training_enrollments_get`, `knowbe4_store_purchases_list`, `knowbe4_store_purchases_get`, `knowbe4_policies_list`, `knowbe4_policies_get`. *Reporting:* `knowbe4_reporting_phishing_summary`, `knowbe4_reporting_training_summary`, `knowbe4_reporting_risk_overview` |
 | **Write** | — | None. |
 | **Destructive** | — | None. |
 
-**This plugin is read-only.** Every tool it exposes is a GET against the
-KnowBe4 Reporting API. It cannot launch a phishing simulation, enroll a
-user in training, create or archive a user, or change a group. An agent
-using this plugin cannot send email to a customer's staff under any
-circumstances.
+Two more tools ship but are not risk-bearing: `knowbe4_status` (reports
+whether credentials are configured) and `knowbe4_navigate` / `knowbe4_back`
+(discovery aids). The latter two are unreachable through the gateway
+regardless of tier — Conduit refuses every `*_navigate` and `*_back` tool
+before any tier check, for every caller including org owners
+(`src/proxy/tool-call-enforcement.ts:123-129`,
+`src/proxy/discovery-tools.ts:41-50`). `conduit__my_access` replaces them.
+`knowbe4_status` is deliberately kept.
+
+A further four meta-tools — `knowbe4_list_categories`,
+`knowbe4_list_category_tools`, `knowbe4_execute_tool`, `knowbe4_router` —
+exist only when the server is started with `LAZY_LOADING=true`, which is
+not how it is deployed here; in the default flattened mode the full tool
+list is advertised directly and these are absent. `knowbe4_execute_tool`
+is worth naming explicitly because it is a **dispatcher**: it invokes any
+tool by name. That does not widen the surface — the pool it dispatches
+into is exactly the read-only set above — but an allowlist written against
+tool names should not assume a dispatcher is absent if lazy-loading is
+ever enabled.
+
+**This plugin is read-only, and that claim is enforced at the transport
+layer rather than by convention.** The shared HTTP client accepts a
+`method` option, but every domain call leaves it at the default `GET` —
+there is no `POST`, `PUT`, `PATCH`, or `DELETE` anywhere in
+`src/domains/`. It cannot launch a phishing simulation, enroll a user in
+training, create or archive a user, or change a group. An agent using this
+plugin cannot send email to a customer's staff under any circumstances.
 
 That is a genuinely strong safety property and it is worth stating to a
 buyer plainly, because the skills in this plugin describe workflows —
@@ -60,6 +82,15 @@ buyer plainly, because the skills in this plugin describe workflows —
 human performs in the KnowBe4 console. An agent can plan and recommend
 those actions; it cannot execute them. Do not read the presence of a
 workflow in a skill as evidence a tool exists for it.
+
+**KnowBe4 PhishER is not part of this surface.** PhishER is a separate
+KnowBe4 product for triaging real user-reported phishing, and none of it
+is exposed here — no message queue, no verdict lookup, no purge or
+bulk-action tool. Earlier revisions of this plugin's
+`security-awareness-analyst` agent described a PhishER triage workflow
+that purged mail from customer mailboxes; no such tool has ever existed in
+this server, and that description has been removed. If an agent proposes
+purging or blocking anything, it has hallucinated a capability.
 
 ## Recommended agent policy
 
@@ -96,29 +127,65 @@ data-access question rather than a blast-radius one.
   email, employee number, job title, department, division, office
   location, manager name and email, hire date, last sign-in, and custom
   fields frequently mapped to further HR attributes.
-- **Recipient and event data is individual behavioural monitoring.**
-  `knowbe4_phishing_list_recipients` and `knowbe4_phishing_get_recipient`
-  return, per named employee, whether they opened a simulated phish,
-  whether they clicked, whether they entered credentials on the landing
-  page, the timestamp of each, plus the IP address and browser used.
+- **Recipient data is individual behavioural monitoring.**
+  `knowbe4_phishing_security_test_recipients` and
+  `knowbe4_phishing_security_test_recipient` return, per named employee,
+  whether they opened a simulated phish, whether they clicked, whether
+  they entered credentials on the landing page, the timestamp of each,
+  plus the IP address and browser used.
   `knowbe4_users_risk_score_history` turns that into a per-person
-  trendline.
+  trendline. Both recipient tools are scoped to one Phishing Security
+  Test and require its `pst_id`, so reaching this data takes a deliberate
+  two-step (list tests, then pull recipients) rather than a single sweep —
+  a small friction worth preserving in agent design, not engineering
+  around.
 - In several jurisdictions this class of data is subject to
   works-council agreement or employee-monitoring rules independent of
-  any security justification. Restrict the user, recipient, and event
-  tools for unattended agents; `knowbe4_reporting_*` answers most
-  MSP reporting questions at department granularity without naming
-  individuals.
+  any security justification. Restrict the user and recipient tools for
+  unattended agents. **The aggregate alternative is narrower than it
+  looks:** `knowbe4_reporting_phishing_summary`,
+  `knowbe4_reporting_training_summary` and `knowbe4_reporting_risk_overview`
+  aggregate at the *account* level and take no filter arguments at all, and
+  `knowbe4_account_get` is likewise account-wide. There is **no
+  department-level reporting tool** — the finest non-individual grain
+  available is the KnowBe4 group, via `knowbe4_groups_list` and
+  `knowbe4_groups_risk_score_history`. A KnowBe4 group is not a
+  department: departments live as a free-text field on the user record,
+  so any genuine per-department figure has to be derived by reading
+  individual users, which defeats the point of avoiding them. Say so to
+  the client rather than promising department reporting this connector
+  cannot produce.
 
 ## Known sharp edges
 
 - **The daily rate limit is small and shared.** KnowBe4 allows roughly
   1,000 requests per day per token, and under the gateway that single
   token is shared by every technician and every agent working that
-  account. One unattended agent paginating users at the default
-  `per_page=25` can consume the whole day's budget before anyone else
-  starts. Use `per_page=500` and cache; treat a sudden 429 as "a
-  colleague's agent is looping", not as a KnowBe4 outage.
+  account. The list tools default to `per_page=100` against a ceiling of
+  500, so an unattended agent that paginates a large account without
+  raising it spends five times the requests it needs to. Pass
+  `per_page=500` and cache; treat a sudden 429 as "a colleague's agent is
+  looping", not as a KnowBe4 outage.
+- **The reporting summaries are page-scoped, not account-scoped.**
+  `knowbe4_reporting_phishing_summary` describes itself as fetching all
+  Phishing Security Tests, but it retrieves a single page — default
+  `per_page=500` — and computes its averages over just that page.
+  `knowbe4_reporting_training_summary` behaves the same way over training
+  campaigns. On an account with more than 500 tests the
+  `average_phish_prone_percentage` it returns is an average of an
+  arbitrary subset while presenting as a whole-account figure, with
+  nothing in the response marking it as partial beyond the echoed `page`
+  and `per_page`. Check those two fields before quoting a summary to a
+  client, and never trend two summaries against each other without
+  confirming both covered the same span.
+- **Most tools take no filters.** `knowbe4_training_enrollments_list` has
+  no campaign or status argument, and the three `knowbe4_reporting_*`
+  tools take no date range — `knowbe4_reporting_risk_overview` takes no
+  arguments at all. "Overdue enrollments for campaign X this quarter" is
+  a client-side filter over a full paginated read, not a query. An agent
+  that assumes a filter parameter exists will silently report on the
+  whole account instead of the slice it was asked about, which is the
+  more dangerous failure because the answer still looks well-formed.
 - **A wrong region reads as "the user doesn't exist".** The account's
   region (US, EU, CA, UK, DE) is fixed at creation and cannot be
   changed. Querying the wrong regional base URL returns 404 for valid

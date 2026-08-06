@@ -58,6 +58,62 @@ export QBO_ENVIRONMENT="production"  # or "sandbox"
 2. Configure environment variables
 3. For automated token refresh, install the SDK: `npm install node-quickbooks`
 
+## MCP Tool Surface
+
+The connector registers **133 tools**. Names follow
+`qbo_<domain>_<operation>`. Most are generated from a per-entity config
+rather than hand-written, so an entity either has an operation or it does
+not — there is no near-miss spelling to guess at. Notably **invoices and
+customers have no `_update`**, and `qbo_tax_codes_*`, `qbo_tax_rates_*` and
+`qbo_company_info_*` are read-only.
+
+Before granting access, read [GOVERNANCE.md](GOVERNANCE.md): Conduit
+classifies only four of these tools, so everything else currently enforces
+at tier `admin` — including every report.
+
+| Domain | Operations | Tools |
+|---|---|---|
+| Discovery | Domain listing and credential status | `qbo_navigate`, `qbo_status` |
+| `qbo_customers_*` | list, get, create, and search customers | `qbo_customers_list`, `qbo_customers_get`, `qbo_customers_create`, `qbo_customers_search` |
+| `qbo_invoices_*` | list, get, create invoices and send them by email | `qbo_invoices_get`, `qbo_invoices_create`, `qbo_invoices_list`, `qbo_invoices_send` |
+| `qbo_payments_*` | list, get, and create payments linked to invoices | `qbo_payments_list`, `qbo_payments_get`, `qbo_payments_create` |
+| `qbo_vendors_*` | list, get, create, update, and search vendors | `qbo_vendors_list`, `qbo_vendors_get`, `qbo_vendors_create`, `qbo_vendors_update`, `qbo_vendors_search` |
+| `qbo_items_*` | list, get, create, update, and search products and services | `qbo_items_list`, `qbo_items_get`, `qbo_items_create`, `qbo_items_update`, `qbo_items_search` |
+| `qbo_accounts_*` | list, get, create, update, and search accounts | `qbo_accounts_list`, `qbo_accounts_get`, `qbo_accounts_create`, `qbo_accounts_update`, `qbo_accounts_search` |
+| `qbo_journal_entries_*` | list, get, create, update double-entry debit/credit transactions | `qbo_journal_entries_list`, `qbo_journal_entries_get`, `qbo_journal_entries_create`, `qbo_journal_entries_update` |
+| `qbo_bills_*` | list, get, create, update, and search vendor bills (accounts payable) | `qbo_bills_list`, `qbo_bills_get`, `qbo_bills_create`, `qbo_bills_update`, `qbo_bills_search` |
+| `qbo_bill_payments_*` | list, get, create, and update payments against bills | `qbo_bill_payments_list`, `qbo_bill_payments_get`, `qbo_bill_payments_create`, `qbo_bill_payments_update` |
+| `qbo_vendor_credits_*` | list, get, create, and update credits from vendors | `qbo_vendor_credits_list`, `qbo_vendor_credits_get`, `qbo_vendor_credits_create`, `qbo_vendor_credits_update` |
+| `qbo_purchases_*` | list, get, create, update purchases paid at point of sale | `qbo_purchases_list`, `qbo_purchases_get`, `qbo_purchases_create`, `qbo_purchases_update` |
+| `qbo_purchase_orders_*` | list, get, create, update non-posting POs to vendors | `qbo_purchase_orders_list`, `qbo_purchase_orders_get`, `qbo_purchase_orders_create`, `qbo_purchase_orders_update` |
+| `qbo_estimates_*` | list, get, create, update quotes/proposals to customers | `qbo_estimates_list`, `qbo_estimates_get`, `qbo_estimates_create`, `qbo_estimates_update` |
+| `qbo_sales_receipts_*` | list, get, create, update paid-at-sale customer transactions | `qbo_sales_receipts_list`, `qbo_sales_receipts_get`, `qbo_sales_receipts_create`, `qbo_sales_receipts_update` |
+| `qbo_credit_memos_*` | list, get, create, update customer credits | `qbo_credit_memos_list`, `qbo_credit_memos_get`, `qbo_credit_memos_create`, `qbo_credit_memos_update` |
+| `qbo_refund_receipts_*` | list, get, create, update cash refunds to customers | `qbo_refund_receipts_list`, `qbo_refund_receipts_get`, `qbo_refund_receipts_create`, `qbo_refund_receipts_update` |
+| `qbo_deposits_*` | list, get, create, update deposits aggregating receipts | `qbo_deposits_list`, `qbo_deposits_get`, `qbo_deposits_create`, `qbo_deposits_update` |
+| `qbo_transfers_*` | list, get, create, update bank-to-bank transfers | `qbo_transfers_list`, `qbo_transfers_get`, `qbo_transfers_create`, `qbo_transfers_update` |
+| `qbo_time_activities_*` | list, get, create, update billable employee/vendor time | `qbo_time_activities_list`, `qbo_time_activities_get`, `qbo_time_activities_create`, `qbo_time_activities_update` |
+| `qbo_classes_*` | list, get, create, update transaction classifications | `qbo_classes_list`, `qbo_classes_get`, `qbo_classes_create`, `qbo_classes_update`, `qbo_classes_search` |
+| `qbo_departments_*` | list, get, create, update business locations/divisions | `qbo_departments_list`, `qbo_departments_get`, `qbo_departments_create`, `qbo_departments_update`, `qbo_departments_search` |
+| `qbo_terms_*` | list, get, create, update terms like Net 30 | `qbo_terms_list`, `qbo_terms_get`, `qbo_terms_create`, `qbo_terms_update`, `qbo_terms_search` |
+| `qbo_payment_methods_*` | list, get, create, update payment method choices | `qbo_payment_methods_list`, `qbo_payment_methods_get`, `qbo_payment_methods_create`, `qbo_payment_methods_update`, `qbo_payment_methods_search` |
+| `qbo_tax_codes_*` | list, get, and search (read-only) | `qbo_tax_codes_list`, `qbo_tax_codes_get`, `qbo_tax_codes_search` |
+| `qbo_tax_rates_*` | list, get, and search (read-only) | `qbo_tax_rates_list`, `qbo_tax_rates_get`, `qbo_tax_rates_search` |
+| `qbo_employees_*` | list, get, create, update, and search employees | `qbo_employees_list`, `qbo_employees_get`, `qbo_employees_create`, `qbo_employees_update`, `qbo_employees_search` |
+| `qbo_company_info_*` | get this QBO realm's company profile (read-only) | `qbo_company_info_list`, `qbo_company_info_get` |
+| `qbo_attachables_*` | list, get, create, update attachment metadata, and upload files on transactions | `qbo_attachables_list`, `qbo_attachables_get`, `qbo_attachables_create`, `qbo_attachables_update`, `qbo_attachables_upload` |
+| `qbo_expenses_*` | List and view purchases and bills (legacy naming, kept for compatibility) | `qbo_expenses_list_purchases`, `qbo_expenses_list_bills`, `qbo_expenses_get_purchase`, `qbo_expenses_get_bill` |
+| `qbo_reports_*` | Financial reports | `qbo_reports_profit_and_loss`, `qbo_reports_balance_sheet`, `qbo_reports_aged_receivables`, `qbo_reports_aged_payables`, `qbo_reports_customer_sales`, `qbo_reports_cash_flow`, `qbo_reports_trial_balance`, `qbo_reports_general_ledger`, `qbo_reports_customer_balance`, `qbo_reports_vendor_expenses` |
+
+Two behaviours are worth knowing before an agent calls anything here:
+
+- `qbo_customers_list` and `qbo_invoices_list` **elicit** when called with
+  no arguments — they prompt for a search term or date range rather than
+  returning the whole book. Pass explicit pagination arguments when you
+  want a deterministic sweep.
+- Every `_update` is a sparse update requiring both the record `Id` and
+  its current `SyncToken`, which must be read immediately beforehand.
+
 ## Available Skills
 
 | Skill | Description |

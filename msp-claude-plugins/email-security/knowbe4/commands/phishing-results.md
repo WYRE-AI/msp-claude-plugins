@@ -22,15 +22,20 @@ Retrieve and display phishing simulation results and click rates from KnowBe4.
    - If neither, default to most recent completed campaign
 
 2. **Retrieve campaign data**
-   - Use `knowbe4_phishing_list_campaigns` to find campaigns
-   - Use `knowbe4_phishing_get_campaign` for specific campaign details
+   - Use `knowbe4_phishing_campaigns_list` to find campaigns — it takes no
+     status or date filter, so narrow the results yourself
+   - Use `knowbe4_phishing_campaigns_get` for specific campaign details
 
 3. **Get security test results**
-   - Use `knowbe4_phishing_list_security_tests` for each campaign
-   - Use `knowbe4_phishing_get_security_test` for detailed counts
+   - Use `knowbe4_phishing_campaign_tests` to list the PSTs of a given
+     campaign (`knowbe4_phishing_security_tests_list` if you want them
+     across all campaigns instead)
+   - Use `knowbe4_phishing_security_test_get` for detailed counts
 
 4. **Filter by group if specified**
-   - Cross-reference recipients with group membership
+   - Pull recipients per PST with `knowbe4_phishing_security_test_recipients`
+     (it is scoped to one `pst_id`; there is no campaign-wide recipient tool)
+   - Cross-reference against `knowbe4_groups_members` for the group
    - Calculate group-specific metrics
 
 5. **Calculate metrics**

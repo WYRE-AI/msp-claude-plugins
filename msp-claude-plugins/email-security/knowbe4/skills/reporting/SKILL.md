@@ -136,26 +136,67 @@ Interpretation:
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
+| Tool | Description | Parameters |
 |------|-------------|----------------|
-| `knowbe4_reporting_account_summary` | Get account-level summary stats | none |
-| `knowbe4_reporting_phishing_summary` | Get phishing simulation summary | `start_date`, `end_date` |
-| `knowbe4_reporting_training_summary` | Get training completion summary | `campaign_id`, `start_date`, `end_date` |
-| `knowbe4_reporting_risk_overview` | Get risk score overview | `group_id` |
-| `knowbe4_reporting_ppp_trend` | Get PPP trend over time | `start_date`, `end_date`, `interval` |
-| `knowbe4_reporting_department_breakdown` | Get metrics by department | `metric_type` |
+| `knowbe4_account_get` | Account-level summary: subscription level, seats, admin details, current risk score | none |
+| `knowbe4_account_risk_score_history` | Account risk score over time | `page`, `per_page` |
+| `knowbe4_reporting_phishing_summary` | Aggregate phishing stats: total tests, delivered/opened/clicked/reported, average PPP, click and report rates | `page`, `per_page` |
+| `knowbe4_reporting_training_summary` | Aggregate training stats: total, active and completed campaign counts | `page`, `per_page` |
+| `knowbe4_reporting_risk_overview` | Account risk posture: current score, recent trend, highest-risk groups | none |
+
+### What the reporting surface will not do
+
+These three constraints govern almost every report you will be asked for,
+and none of them are visible from the tool names.
+
+**No date filtering, anywhere.** None of these tools takes a date range —
+`knowbe4_reporting_risk_overview` takes no arguments at all. "Phishing
+results for March" cannot be requested; it has to be reconstructed by
+reading Phishing Security Tests and filtering on their dates client-side.
+
+**The summaries are page-scoped, and they do not say so.**
+`knowbe4_reporting_phishing_summary` reads a single page of PSTs (default
+`per_page=500`) and averages over it, then returns
+`average_phish_prone_percentage` with no marker that it covered part of
+the account. `knowbe4_reporting_training_summary` does the same over
+campaigns. Read back the `page` and `per_page` fields it echoes and state
+the coverage in the report, or paginate and aggregate yourself. Two
+summaries taken at different sizes are not comparable.
+
+**There is no PPP-trend tool and no department breakdown.** Both are
+routinely asked for and neither exists:
+
+- *PPP over time* has to be assembled from
+  `knowbe4_phishing_security_tests_list`, taking each test's
+  `phish_prone_percentage` and its date. Do **not** substitute
+  `knowbe4_account_risk_score_history` — risk score and phish-prone
+  percentage are different measures on different scales, and a risk-score
+  trendline presented as a PPP trend is wrong in a way a client cannot
+  catch.
+- *Department metrics* have to be aggregated from `knowbe4_users_list`,
+  grouping on each user's `department` field. `knowbe4_groups_list` is
+  not a substitute: KnowBe4 groups are membership lists that may or may
+  not correspond to departments, and reporting group risk scores under
+  department headings misstates who the numbers describe.
 
 ## Common Workflows
 
 ### Monthly Security Awareness Report
 
-1. **Get account summary** for top-level metrics
-2. **Pull phishing summary** for the month
-3. **Pull training summary** for active campaigns
-4. **Get PPP trend** for the last 6 months
-5. **Break down by department** to identify problem areas
-6. **Compare to previous month** for trend direction
-7. **Format report** with key findings and recommendations
+1. **Get account summary** with `knowbe4_account_get` for top-level metrics
+2. **Pull the phishing aggregate** with `knowbe4_reporting_phishing_summary`,
+   and record the `page`/`per_page` it covered
+3. **Pull the training aggregate** with `knowbe4_reporting_training_summary`
+4. **Scope to the month yourself** — read
+   `knowbe4_phishing_security_tests_list` and keep the tests whose dates
+   fall in the reporting period; the summaries above are not date-filtered
+5. **Build the PPP trend** from those per-test `phish_prone_percentage`
+   values, bucketed by month
+6. **Aggregate by department** from `knowbe4_users_list`, grouping on the
+   `department` field
+7. **Compare to previous month** for trend direction
+8. **Format report** with key findings, recommendations, and an explicit
+   note of what the figures cover
 
 ### Quarterly Executive Report
 

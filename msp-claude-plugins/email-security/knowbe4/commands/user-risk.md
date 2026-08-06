@@ -30,8 +30,14 @@ Retrieve the risk score, risk history, and contributing factors for a specific K
    - Default to 6 months if period not specified
 
 4. **Get contributing events**
-   - Use `knowbe4_users_list_events` for phishing test and training events
-   - Correlate events with risk score changes
+   - There is no per-user event tool. Reconstruct the phishing side by
+     listing PSTs with `knowbe4_phishing_security_tests_list` and pulling
+     `knowbe4_phishing_security_test_recipients` for the ones that
+     included this user
+   - Training standing comes from the user record itself
+     (`knowbe4_users_get`) and from `knowbe4_training_enrollments_list`
+   - Correlate what you find with risk score changes, and say which
+     window you actually covered
 
 5. **Compare to peers if requested**
    - Get department or group average risk score

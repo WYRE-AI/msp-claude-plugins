@@ -22,7 +22,7 @@ Get security awareness metrics for a specific KnowBe4 group including phishing r
 
 2. **Get group details**
    - Use `knowbe4_groups_get` for group info and member count
-   - Use `knowbe4_groups_list_members` for member list
+   - Use `knowbe4_groups_members` for member list
 
 3. **Get group risk score data**
    - Use `knowbe4_groups_risk_score_history` for trend data

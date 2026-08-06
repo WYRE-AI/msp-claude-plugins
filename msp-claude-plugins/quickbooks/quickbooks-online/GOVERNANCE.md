@@ -44,7 +44,7 @@ second column. Note that Conduit's slug for this vendor is **`qbo`**, not
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
 | **Read** | Cannot change the books. Safe for autonomous agents. | `read` for four tools, `admin` for everything else — see below | `qbo_status`, `qbo_customers_list`, `qbo_invoices_list`, `qbo_reports_aged_receivables`; every other `qbo_<entity>_list`, `qbo_<entity>_get`, and `qbo_<entity>_search`; `qbo_expenses_list_bills`, `qbo_expenses_list_purchases`, `qbo_expenses_get_bill`, `qbo_expenses_get_purchase`; and the rest of the report set — `qbo_reports_profit_and_loss`, `qbo_reports_balance_sheet`, `qbo_reports_aged_payables`, `qbo_reports_cash_flow`, `qbo_reports_trial_balance`, `qbo_reports_general_ledger`, `qbo_reports_customer_sales`, `qbo_reports_customer_balance`, `qbo_reports_vendor_expenses` |
-| **Write** | Creates or edits records that post to the books but do not move money or leave the building. | `admin` — Conduit classifies none of them | `qbo_customers_create`, `qbo_vendors_create`, `qbo_vendors_update`, `qbo_items_create`, `qbo_items_update`, `qbo_accounts_create`, `qbo_accounts_update`, `qbo_classes_create`, `qbo_classes_update`, `qbo_departments_create`, `qbo_departments_update`, `qbo_employees_create`, `qbo_employees_update`, `qbo_terms_create`, `qbo_terms_update`, `qbo_payment_methods_create`, `qbo_payment_methods_update`, `qbo_estimates_create`, `qbo_estimates_update`, `qbo_purchase_orders_create`, `qbo_purchase_orders_update`, `qbo_invoices_create`, `qbo_bills_create`, `qbo_bills_update`, `qbo_purchases_create`, `qbo_purchases_update`, `qbo_time_activities_create`, `qbo_time_activities_update`, `qbo_attachables_create`, `qbo_attachables_update`, `qbo_attachables_upload`, and the money-moving set below |
+| **Write** | Creates or edits records that post to the books but do not move money or leave the building. | `admin` — Conduit classifies none of them | `qbo_customers_create`, `qbo_vendors_create`, `qbo_vendors_update`, `qbo_items_create`, `qbo_items_update`, `qbo_accounts_create`, `qbo_accounts_update`, `qbo_classes_create`, `qbo_classes_update`, `qbo_departments_create`, `qbo_departments_update`, `qbo_employees_create`, `qbo_employees_update`, `qbo_terms_create`, `qbo_terms_update`, `qbo_payment_methods_create`, `qbo_payment_methods_update`, `qbo_estimates_create`, `qbo_estimates_update`, `qbo_purchase_orders_create`, `qbo_purchase_orders_update`, `qbo_invoices_create`, `qbo_bills_create`, `qbo_bills_update`, `qbo_purchases_create`, `qbo_purchases_update`, `qbo_time_activities_create`, `qbo_time_activities_update`, `qbo_vendor_credits_create`, `qbo_vendor_credits_update`, `qbo_attachables_create`, `qbo_attachables_update`, `qbo_attachables_upload`, and the money-moving set below |
 | **Delete** | *Empty.* There is no delete tool and no void tool anywhere in this plugin. | — | — |
 | **Admin** | *Empty by design.* This connector exposes no passthrough, dispatcher, or credential-reading tool. | — | — |
 
@@ -54,7 +54,8 @@ The money-moving tools — `qbo_invoices_send`, `qbo_payments_create`,
 `qbo_deposits_create`, `qbo_deposits_update`, `qbo_transfers_create`,
 `qbo_transfers_update`, `qbo_refund_receipts_create`,
 `qbo_refund_receipts_update`, `qbo_credit_memos_create`,
-`qbo_credit_memos_update` — sit in the **Write** group, because Conduit has
+`qbo_credit_memos_update`, `qbo_sales_receipts_create`,
+`qbo_sales_receipts_update` — sit in the **Write** group, because Conduit has
 no group for them. They are unclassified, so they enforce at `admin` today;
 were they classified they would sit at `write` alongside
 `qbo_customers_create`. That collapse is the single most important thing on
@@ -122,6 +123,14 @@ here as prose. It has not changed:
   catch the rest of this list.
 - **`qbo_credit_memos_*` and `qbo_refund_receipts_*` give money back.** A
   credit memo reduces revenue; a refund receipt records cash leaving.
+- **`qbo_sales_receipts_*` books revenue and cash in one document.**
+  Unlike an invoice, a sales receipt asserts the sale was already paid, so
+  a mistaken one overstates both income and the deposit account without
+  ever appearing in accounts receivable where an AR review would catch it.
+- **`qbo_vendor_credits_*` reduce what the business owes a vendor**, and
+  flow into the same aged-payables figure the MSP pays from. A wrong
+  vendor credit shows up as an underpayment to the supplier, not as an
+  obvious error in QBO.
 
 ### What a `write` grant would mean here
 
@@ -215,10 +224,15 @@ half of that on this connector (see *What Conduit actually classifies*).
   `sparse: true`, meaning omitted fields are left alone. If that ever
   changes, an omitted field becomes a cleared field. Never assume a
   partial payload is safe on an entity you have not read first.
-- **Invoices and customers have no update tool here.** `qbo_invoices_get`
-  and `qbo_invoices_create` exist; there is no `qbo_invoices_update`.
-  An agent asked to "fix the invoice" must not improvise with a journal
-  entry — that reaches the general ledger sideways.
+- **Invoices and customers have no update tool here.** Most entities get
+  a generated `_update`; invoices and customers do not.
+  `qbo_invoices_get`, `qbo_invoices_create`, `qbo_invoices_list` and
+  `qbo_invoices_send` are the whole invoice surface, and customers stop at
+  `qbo_customers_list`, `qbo_customers_get`, `qbo_customers_create` and
+  `qbo_customers_search`. An agent asked to "fix the invoice" must not
+  improvise with a journal entry — that reaches the general ledger
+  sideways — and must not assume the missing tool is a naming problem it
+  can guess its way around.
 - **Reports are point-in-time and macro-dependent.** Date macros like
   "This Fiscal Year-to-date" resolve against the realm's fiscal calendar,
   not the calendar year. Two reports pulled minutes apart across a period

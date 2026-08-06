@@ -137,25 +137,44 @@ The risk score is influenced by:
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
+| Tool | Description | Parameters (required in **bold**) |
 |------|-------------|----------------|
-| `knowbe4_users_list` | List all users | `status`, `group_id`, `page`, `per_page` |
-| `knowbe4_users_get` | Get user details | `user_id` |
-| `knowbe4_users_risk_score_history` | Get risk score history for a user | `user_id`, `page`, `per_page` |
-| `knowbe4_users_list_events` | List events for a user | `user_id`, `event_type`, `page` |
-| `knowbe4_groups_list` | List all groups | `status`, `page`, `per_page` |
-| `knowbe4_groups_get` | Get group details | `group_id` |
-| `knowbe4_groups_list_members` | List members of a group | `group_id`, `page`, `per_page` |
-| `knowbe4_groups_risk_score_history` | Get risk score history for a group | `group_id`, `page` |
+| `knowbe4_users_list` | List users — email, name, risk score, department | `status` (`active`\|`archived`), `group_id`, `page`, `per_page` |
+| `knowbe4_users_get` | Get user details: risk score, PPP, training status, group memberships | **`user_id`** |
+| `knowbe4_users_risk_score_history` | Risk score history for one user | **`user_id`**, `page`, `per_page` |
+| `knowbe4_groups_list` | List groups — names, member counts, risk scores | `page`, `per_page` |
+| `knowbe4_groups_get` | Get group details, including risk score and member count | **`group_id`** |
+| `knowbe4_groups_members` | List members of a group, with user details for each | **`group_id`**, `page`, `per_page` |
+| `knowbe4_groups_risk_score_history` | Risk score history for one group | **`group_id`**, `page`, `per_page` |
+| `knowbe4_account_get` | Account-level info: subscription, seats, admin details, current risk score | none |
+| `knowbe4_account_risk_score_history` | Account-level risk score over time | `page`, `per_page` |
+
+**There is no per-user event feed.** No tool returns a user's phishing and
+training history as a stream, and `knowbe4_users_get` does not carry one —
+it returns the user's current standing (risk score, phish-prone
+percentage, training status, groups), not the events behind it. Per-person
+behavioural detail lives on the phishing side instead, as recipient
+records within a specific Phishing Security Test: see
+`knowbe4_phishing_security_test_recipients` and
+`knowbe4_phishing_security_test_recipient` in the phishing skill. Building
+"everything this user did" means walking the PSTs they were part of, which
+is deliberate friction around individually identifying monitoring data —
+see GOVERNANCE.md.
+
+Note `knowbe4_groups_list` has no `status` filter, and a KnowBe4 group is
+not a department: `department` is a field on the user record, so
+department rollups have to be computed from `knowbe4_users_list`.
 
 ## Common Workflows
 
 ### User Risk Assessment
 
 1. **Get user details** with `knowbe4_users_get` for current risk score
-2. **Pull risk score history** to see trend over time
-3. **Check user events** -- phishing test results and training completions
-4. **Compare to group average** -- is the user above or below their department?
+2. **Pull risk score history** with `knowbe4_users_risk_score_history`
+3. **Check phishing behaviour** -- find the PSTs the user was part of and
+   pull their recipient records (there is no per-user event feed)
+4. **Compare to group average** -- use `knowbe4_groups_get` for the group's
+   risk score; note a group is not necessarily their department
 5. **Recommend action** based on risk level and trend direction
 
 ### Identify High-Risk Users

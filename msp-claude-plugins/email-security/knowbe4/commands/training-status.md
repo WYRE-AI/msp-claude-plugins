@@ -23,12 +23,15 @@ Check training completion status for users or groups in KnowBe4.
    - If none provided, show summary across all active campaigns
 
 2. **Retrieve training campaigns**
-   - Use `knowbe4_training_list_campaigns` to find active campaigns
-   - Use `knowbe4_training_get_campaign` for specific campaign details
+   - Use `knowbe4_training_campaigns_list` to find campaigns, then keep
+     the active ones yourself — there is no status argument
+   - Use `knowbe4_training_campaigns_get` for specific campaign details
 
 3. **Get enrollment data**
-   - Use `knowbe4_training_list_enrollments` for campaign enrollments
-   - Filter by status if specified
+   - Use `knowbe4_training_enrollments_list`. It is account-wide and takes
+     no `campaign_id`, so page through it and match enrollments back to
+     the campaign yourself
+   - Filter by status client-side if specified
 
 4. **Resolve user/group context**
    - If user specified, look up by email or ID
