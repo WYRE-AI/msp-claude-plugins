@@ -10,7 +10,7 @@ when_to_use: >-
   Allowlists changes won't save, OAuth is failing on the WYRE gateway, or a
   tool call returns an unexpected error. Use when: wyre gateway not working,
   mcp gateway troubleshooting, tools missing in claude, failed to update
-  tool access, vendor tools not appearing, mcp.wyre.ai issues, claude not
+  tool access, vendor tools not appearing, conduit.wyre.ai issues, claude not
   seeing tools, oauth invalid_token gateway, or gateway 403.
 ---
 
@@ -57,7 +57,7 @@ Claude registers the gateway's tool catalog at the moment its MCP client connect
 
 **Fix:**
 
-1. Verify the vendor connection is saved at [mcp.wyre.ai](https://mcp.wyre.ai) — open **Plugins** and confirm the vendor shows as connected with a recent test result.
+1. Verify the vendor connection is saved at [conduit.wyre.ai](https://conduit.wyre.ai) — open **Plugins** and confirm the vendor shows as connected with a recent test result.
 2. **Fully quit Claude Desktop (Cmd+Q on macOS) and reopen it.** Closing the window is not enough — the MCP client process keeps running.
 3. In Claude Code, run `/mcp`, find the gateway entry, and reconnect it. (Restarting the whole CLI also works.)
 4. Start a new conversation. The first tool list request will trigger the gateway to re-aggregate vendor tools and register them with Claude.
@@ -93,8 +93,10 @@ Claude registers the gateway's tool catalog at the moment its MCP client connect
 
 **Fix:**
 
-1. Check the gateway health: `curl https://mcp.wyre.ai/health` should return `{"status":"ok"}`.
-2. Check vendor health: `https://mcp.wyre.ai/health/vendors`.
+1. Check the gateway health: `curl https://conduit.wyre.ai/health` should return `{"status":"ok"}`.
+2. Check vendor health at `https://conduit.wyre.ai/health/vendors` — admin-gated, so it needs a
+   gateway admin session or the ops admin key. Without one, open **Plugins** in the dashboard and
+   run **Test Connection** for the vendor instead.
 3. Wait 60–120 seconds and retry — most deployments complete within a minute.
 4. If `/health` is failing for more than 2 minutes, contact `hello@wyre.ai`.
 
@@ -118,7 +120,7 @@ This means the tool was registered (so layers 1–3 are fine) but layer 4 or 5 r
 
 **Fix:**
 
-1. Use the unified endpoint — replace per-vendor `mcp-remote` entries with a single entry pointing to `https://mcp.wyre.ai/v1/mcp`. One OAuth flow instead of many.
+1. Use the unified endpoint — replace per-vendor `mcp-remote` entries with a single entry pointing to `https://conduit.wyre.ai/v1/mcp`. One OAuth flow instead of many.
 2. Kill stale `mcp-remote` processes: `pkill -f mcp-remote`.
 3. Restart Claude Desktop.
 
@@ -131,7 +133,7 @@ This means the tool was registered (so layers 1–3 are fine) but layer 4 or 5 r
 | No tools at all in Claude | Cmd+Q Claude, reopen, start new conversation |
 | One vendor's tools missing | Plugins page → run Test Connection for that vendor |
 | "Failed to update tool access" | Org role — only owners can save tool allowlists |
-| "Invalid OAuth error response" / HTML | `curl https://mcp.wyre.ai/health` |
+| "Invalid OAuth error response" / HTML | `curl https://conduit.wyre.ai/health` |
 | Tool call returns expired/invalid auth | Plugins → Reconnect for the vendor |
 | Tool call times out (no error body) | Vendor IP allowlist — contact WYRE support |
 

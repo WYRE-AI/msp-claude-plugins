@@ -33,7 +33,7 @@ export PANDADOC_API_KEY="your-api-key"
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect -- just paste your API key and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- just paste your API key and you're done.
 
 ### Self-Hosted (Claude Desktop)
 

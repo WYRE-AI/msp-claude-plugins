@@ -46,7 +46,7 @@ Accept: application/json
 
 ```bash
 export ABNORMAL_API_TOKEN="your-api-token"
-export ABNORMAL_MCP_URL="https://mcp.wyre.ai/v1/abnormal-security/mcp"
+export ABNORMAL_MCP_URL="https://conduit.wyre.ai/v1/abnormal-security/mcp"
 ```
 
 ### MCP Gateway Headers

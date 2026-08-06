@@ -34,7 +34,7 @@ export HUNTRESS_API_SECRET="your-api-secret"
 |----------|----------|---------|-------------|
 | `HUNTRESS_API_KEY` | Yes | | API key from Settings > API Credentials |
 | `HUNTRESS_API_SECRET` | Yes | | API secret from Settings > API Credentials |
-| `HUNTRESS_MCP_URL` | No | `https://mcp.wyre.ai/v1/huntress/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `HUNTRESS_MCP_URL` | No | `https://conduit.wyre.ai/v1/huntress/mcp` | MCP server URL — override to use a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -59,7 +59,7 @@ HUNTRESS_MCP_URL=https://your-gateway-domain/v1/huntress/mcp
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect — paste your API key and secret and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API key and secret and you're done.
 
 ### Self-Hosted (Docker)
 
@@ -159,7 +159,7 @@ Huntress enforces a rate limit of 60 requests per minute:
 ### Connection Issues
 
 If the MCP server fails to connect:
-1. Verify network connectivity to `https://mcp.wyre.ai`
+1. Verify network connectivity to `https://conduit.wyre.ai`
 2. Check that your API credentials are valid
 3. Ensure the MCP Gateway service is running
 

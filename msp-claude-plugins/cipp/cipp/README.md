@@ -49,7 +49,7 @@ CIPP exposes two auth modes — pick one:
 
 ## Wyre MCP Gateway
 
-If you connect through the [Wyre MCP Gateway](https://mcp.wyre.ai), CIPP tools are automatically routed and authenticated via your gateway session — no per-user CIPP credentials required. See the `wyre-gateway` plugin for setup.
+If you connect through the [Wyre MCP Gateway](https://conduit.wyre.ai), CIPP tools are automatically routed and authenticated via your gateway session — no per-user CIPP credentials required. See the `wyre-gateway` plugin for setup.
 
 ## Resources
 

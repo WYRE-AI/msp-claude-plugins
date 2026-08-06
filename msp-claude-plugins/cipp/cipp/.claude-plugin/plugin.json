@@ -1,6 +1,6 @@
 {
   "name": "cipp",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Claude plugins for CIPP (CyberDrain Improved Partner Portal) \u2014 Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
   "author": {
     "name": "MSP Claude Plugins Community"

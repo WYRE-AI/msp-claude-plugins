@@ -35,7 +35,7 @@ export SHERWEB_MCP_URL="https://your-sherweb-mcp-url"
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect -- configure your Sherweb credentials and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- configure your Sherweb credentials and you're done.
 
 ### Self-Hosted
 

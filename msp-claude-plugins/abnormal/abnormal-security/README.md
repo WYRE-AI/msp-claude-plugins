@@ -49,7 +49,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `ABNORMAL_API_TOKEN` | Yes | | API token from Settings > Integrations > API |
-| `ABNORMAL_MCP_URL` | No | `https://mcp.wyre.ai/v1/abnormal-security/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `ABNORMAL_MCP_URL` | No | `https://conduit.wyre.ai/v1/abnormal-security/mcp` | MCP server URL -- override to use a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -204,7 +204,7 @@ Abnormal Security enforces API rate limits:
 ### Connection Issues
 
 If the MCP server fails to connect:
-1. Verify network connectivity to `https://mcp.wyre.ai`
+1. Verify network connectivity to `https://conduit.wyre.ai`
 2. Check that your API token is valid
 3. Ensure the MCP Gateway service is running
 

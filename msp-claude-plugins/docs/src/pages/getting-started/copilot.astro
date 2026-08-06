@@ -70,7 +70,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
     <p class="text-sm">
       <strong>Transport note:</strong> If your MCP server uses SSE transport, it must be updated to
       Streamable HTTP before connecting to Copilot Studio. The WYRE MCP Gateway at
-      <code>mcp.wyre.ai</code> already supports Streamable HTTP &mdash; no changes needed.
+      <code>conduit.wyre.ai</code> already supports Streamable HTTP &mdash; no changes needed.
     </p>
   </div>
 
@@ -118,7 +118,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   <ul>
     <li><strong>Server name:</strong> A descriptive name (used by the orchestrator to identify the server)</li>
     <li><strong>Server description:</strong> Clear, concise description of what the server does &mdash; the agent uses this to decide when to invoke it</li>
-    <li><strong>Server URL:</strong> Your Streamable HTTP endpoint (e.g., <code>https://mcp.wyre.ai/v1/mcp</code>)</li>
+    <li><strong>Server URL:</strong> Your Streamable HTTP endpoint (e.g., <code>https://conduit.wyre.ai/v1/mcp</code>)</li>
   </ul>
 
   <h4>5. Configure authentication</h4>
@@ -191,7 +191,7 @@ import DocsLayout from '@/layouts/DocsLayout.astro';
   <h4>3. Add your MCP server as an action</h4>
   <ul>
     <li>In the toolkit: <strong>Add Action &rarr; Start with an MCP server</strong></li>
-    <li>Enter your MCP server URL (e.g., <code>https://mcp.wyre.ai/v1/mcp</code>)</li>
+    <li>Enter your MCP server URL (e.g., <code>https://conduit.wyre.ai/v1/mcp</code>)</li>
     <li>The toolkit reads the server schema, generates function definitions, and wires up auth automatically</li>
   </ul>
 

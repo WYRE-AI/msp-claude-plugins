@@ -17,7 +17,7 @@ Claude Code plugin for [ScalePad](https://www.scalepad.com) - asset lifecycle ma
 /plugin install scalepad
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/scalepad/mcp`.
+The plugin connects through the [WYRE MCP Gateway](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/scalepad/mcp`.
 
 ## Configuration
 

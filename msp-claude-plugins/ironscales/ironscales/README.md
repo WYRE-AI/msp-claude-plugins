@@ -46,7 +46,7 @@ To obtain credentials:
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect — enter your API key and Company ID.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your API key and Company ID.
 
 ### Self-Hosted (Docker)
 

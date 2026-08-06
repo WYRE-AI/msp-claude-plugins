@@ -32,7 +32,7 @@ export PAGERDUTY_API_TOKEN="your-api-token"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `PAGERDUTY_API_TOKEN` | Yes | | User API Token from My Profile > User Settings > API Access |
-| `PAGERDUTY_MCP_URL` | No | `https://mcp.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `PAGERDUTY_MCP_URL` | No | `https://conduit.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- override to use a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -57,7 +57,7 @@ PAGERDUTY_MCP_URL=https://your-gateway-domain/v1/pagerduty/mcp
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect -- paste your API token and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
 
 ### Self-Hosted (Docker)
 
@@ -161,7 +161,7 @@ PagerDuty enforces rate limits (varies by endpoint, typically 960 requests/minut
 ### Connection Issues
 
 If the MCP server fails to connect:
-1. Verify network connectivity to `https://mcp.wyre.ai`
+1. Verify network connectivity to `https://conduit.wyre.ai`
 2. Check that your API token is valid
 3. Ensure the MCP Gateway service is running
 4. For EU accounts, verify the correct region URL is configured

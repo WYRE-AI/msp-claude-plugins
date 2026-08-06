@@ -4,16 +4,16 @@ import InstallCommand from '@/components/InstallCommand.astro';
 
 const baseUrl = import.meta.env.BASE_URL;
 
-const claudeCodeAddUser = `claude mcp add --scope user --transport http msp-mcp-gateway https://mcp.wyre.ai/v1/mcp`;
+const claudeCodeAddUser = `claude mcp add --scope user --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp`;
 
-const claudeCodeAddProject = `claude mcp add --transport http msp-mcp-gateway https://mcp.wyre.ai/v1/mcp`;
+const claudeCodeAddProject = `claude mcp add --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp`;
 
 const claudeCodeMcpJson = `// .mcp.json (in your project root) — manual alternative
 {
   "mcpServers": {
     "msp-mcp-gateway": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/mcp"
+      "url": "https://conduit.wyre.ai/v1/mcp"
     }
   }
 }`;
@@ -23,7 +23,7 @@ const claudeDesktopUnified = `// claude_desktop_config.json
   "mcpServers": {
     "msp-mcp-gateway": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.wyre.ai/v1/mcp"]
+      "args": ["-y", "mcp-remote", "https://conduit.wyre.ai/v1/mcp"]
     }
   }
 }`;
@@ -31,8 +31,8 @@ const claudeDesktopUnified = `// claude_desktop_config.json
 const claudeCodePerVendor = `// .mcp.json — per-vendor (legacy)
 {
   "mcpServers": {
-    "autotask": { "url": "https://mcp.wyre.ai/v1/autotask/mcp" },
-    "datto-rmm": { "url": "https://mcp.wyre.ai/v1/datto-rmm/mcp" }
+    "autotask": { "url": "https://conduit.wyre.ai/v1/autotask/mcp" },
+    "datto-rmm": { "url": "https://conduit.wyre.ai/v1/datto-rmm/mcp" }
   }
 }`;
 
@@ -41,22 +41,22 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
   "mcpServers": {
     "autotask": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.wyre.ai/v1/autotask/mcp"]
+      "args": ["-y", "mcp-remote", "https://conduit.wyre.ai/v1/autotask/mcp"]
     },
     "datto-rmm": {
       "command": "npx",
-      "args": ["-y", "mcp-remote", "https://mcp.wyre.ai/v1/datto-rmm/mcp"]
+      "args": ["-y", "mcp-remote", "https://conduit.wyre.ai/v1/datto-rmm/mcp"]
     }
   }
 }`;
 
 ---
-<DocsLayout title="WYRE MCP Gateway" description="Hosted MCP gateway at mcp.wyre.ai with OAuth 2.1 and encrypted credential storage.">
+<DocsLayout title="WYRE MCP Gateway" description="Hosted MCP gateway at conduit.wyre.ai with OAuth 2.1 and encrypted credential storage.">
   <h1>WYRE MCP Gateway</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
     Connect Claude to all MSP tools through a single hosted gateway at
-    <code>mcp.wyre.ai</code>. No Docker, no config files — just add one URL and authenticate.
+    <code>conduit.wyre.ai</code>. No Docker, no config files — just add one URL and authenticate.
   </p>
 
   <h2>How It Works</h2>
@@ -71,7 +71,7 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
   <h2 id="supported-vendors">Supported Connections</h2>
   <p>
     Every connection is available through the unified endpoint at
-    <code>https://mcp.wyre.ai/v1/mcp</code>. You only need to connect the vendors
+    <code>https://conduit.wyre.ai/v1/mcp</code>. You only need to connect the vendors
     you use — the gateway automatically discovers which ones you have credentials for.
   </p>
   <p>
@@ -99,7 +99,7 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
 
   <p class="text-sm text-[var(--muted)] mt-2">
     On first use, Claude Code will open a browser for OAuth authentication. After signing in, connect your
-    vendor credentials at <a href="https://mcp.wyre.ai" target="_blank" rel="noopener noreferrer">mcp.wyre.ai</a> —
+    vendor credentials at <a href="https://conduit.wyre.ai" target="_blank" rel="noopener noreferrer">conduit.wyre.ai</a> —
     all connected vendors are then available automatically.
   </p>
 
@@ -163,12 +163,12 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
     <li>Open Claude Desktop → <strong>Settings</strong> → <strong>Connectors</strong></li>
     <li>Click <strong>Add Connector</strong> (or <strong>Add custom connector</strong>)</li>
     <li>Name it <code>MSP Gateway</code> (or anything you like)</li>
-    <li>Remote MCP server URL: <code>https://mcp.wyre.ai/v1/mcp</code></li>
+    <li>Remote MCP server URL: <code>https://conduit.wyre.ai/v1/mcp</code></li>
     <li>Click <strong>Add</strong>, then complete the OAuth login in the browser that opens</li>
   </ol>
   <p class="text-sm text-[var(--muted)] mt-2">
     After OAuth completes, connect your vendor credentials at
-    <a href="https://mcp.wyre.ai" target="_blank" rel="noopener noreferrer">mcp.wyre.ai</a>.
+    <a href="https://conduit.wyre.ai" target="_blank" rel="noopener noreferrer">conduit.wyre.ai</a>.
     All connected vendors become available immediately.
   </p>
 
@@ -184,7 +184,7 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
   <p class="mt-4">
     That's it — one entry for all vendors. On first use, a browser will open for OAuth authentication.
     After that, add your vendor credentials via the gateway web UI at
-    <a href="https://mcp.wyre.ai" target="_blank" rel="noopener noreferrer">mcp.wyre.ai</a>.
+    <a href="https://conduit.wyre.ai" target="_blank" rel="noopener noreferrer">conduit.wyre.ai</a>.
   </p>
 
   <h4>Config File Location</h4>
@@ -211,7 +211,7 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
     <li>Click <strong>Connectors</strong></li>
     <li>Click the <strong>+</strong> button, then <strong>Add custom connector</strong></li>
     <li>Enter a name (e.g. <code>MSP Gateway</code>)</li>
-    <li>Enter the Remote MCP server URL: <code>https://mcp.wyre.ai/v1/mcp</code></li>
+    <li>Enter the Remote MCP server URL: <code>https://conduit.wyre.ai/v1/mcp</code></li>
     <li>Click <strong>Add</strong>, then complete the OAuth login flow when prompted</li>
   </ol>
   <p class="text-sm text-[var(--muted)] mt-2">
