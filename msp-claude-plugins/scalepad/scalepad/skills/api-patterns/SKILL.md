@@ -45,8 +45,8 @@ export X_SCALEPAD_REGION="us"   # optional
 
 ## Discovery
 
-All tools are exposed upfront — nothing is gated behind navigation.
-Two helper tools aid discovery:
+All **381** tools are exposed upfront — nothing is gated behind
+navigation. Two helper tools aid discovery:
 
 - `scalepad_navigate` — list a product domain's tools with
   descriptions (`core`, `lifecycle-manager`, `controlmap`,
@@ -54,7 +54,37 @@ Two helper tools aid discovery:
 - `scalepad_status` — credential status and available domains
 
 Tool names follow `scalepad_<domain-prefix>_<resource>_<action>`
-with prefixes `core`, `lm`, `cm`, `br`, and `quoter`.
+with prefixes `core`, `lm`, `cm`, `br`, and `quoter`. The counts are
+Core 24, Lifecycle Manager 193, ControlMap 98, Backup Radar 3,
+Quoter 61, plus the two helpers.
+
+**Do not guess a tool name from the pattern.** The naming is regular
+but not exhaustive, and a plausible-looking name that does not exist
+fails at call time. Check
+[references/tool-inventory.md](../../references/tool-inventory.md),
+which lists all 381 with their read/write classification, enforced
+permission tier, and resolved HTTP verb and path.
+
+## Reads, writes, and the two exceptions
+
+The server marks its own mutating tools: 202 carry
+`{readOnlyHint: false, destructiveHint: true}`, and the 179 read-only
+ones carry no annotations at all. No mutating tool uses `GET`. So the
+annotation is a reliable read/write signal — with two exceptions you
+must know by name:
+
+`scalepad_quoter_auth_authorize` and `scalepad_quoter_auth_refresh`
+carry **no** annotations, yet they mint OAuth access and refresh tokens
+against `api.quoter.com` — a different host from every other tool here
+— and `_authorize` accepts optional `client_id` / `secret` arguments
+that override the configured credentials. The gateway pins both to the
+`admin` tier by hand. Treat their responses as bearer credentials in
+context: never echo, log, or summarise them. See the
+[quoter](../quoter/SKILL.md) skill for the full shape.
+
+A third tool is gated the same way for the same reason:
+`scalepad_lm_enrollment_tokens_create` mints a client device-enrollment
+token.
 
 ## Pagination
 

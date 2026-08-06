@@ -132,6 +132,51 @@ function walkFiles(dir, pred, acc = []) {
 
 // ---------------------------------------------------------------- ground truth: static
 const TOOLISH = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)+$/;
+const TOOLISH_SRC = "[a-z][a-z0-9]*(?:_[a-z0-9]+)+";
+
+/**
+ * Return the paren-balanced parameter list starting at `open` (index of the `(`).
+ * Balancing parens is safe across TS param lists: arrow-function types
+ * (`(a: X) => Y`) and indexed access types (`Tool["inputSchema"]`) nest cleanly.
+ */
+function paramList(text, open) {
+  let depth = 0;
+  for (let i = open; i < text.length; i++) {
+    if (text[i] === "(") depth++;
+    else if (text[i] === ")" && --depth === 0) return text.slice(open + 1, i);
+  }
+  return null;
+}
+
+/**
+ * Names of local *tool factory* helpers — functions that take the tool name and
+ * its schema and return the Tool for you:
+ *
+ *   function ro(name: string, description: string, inputSchema: Tool["inputSchema"], call) {
+ *     return { tool: { name, description, inputSchema }, call };
+ *   }
+ *   const specs = [ ro("vendor_clients_list", "…", schema({…}), (c, a) => …) ];
+ *
+ * There is no `name: "…"` literal anywhere, so the object-literal pass below
+ * cannot see a single one of these tools. A factory is recognised by its
+ * signature declaring both a `name` and an `inputSchema` parameter, with `name`
+ * first — the tool name is then the first argument at each call site.
+ */
+function toolFactories(text) {
+  const names = new Set();
+  const DECL = /(?:^|[\s;])(?:export\s+)?(?:function\s+([A-Za-z_$][\w$]*)\s*(\()|(?:const|let|var)\s+([A-Za-z_$][\w$]*)\s*=\s*(?:function\s*)?(\())/g;
+  let m;
+  while ((m = DECL.exec(text))) {
+    const fn = m[1] ?? m[3];
+    const params = paramList(text, m.index + m[0].length - 1);
+    if (!fn || !params) continue;
+    if (!/\binputSchema\b/.test(params)) continue;
+    if (!/^\s*name\s*[:,)]/.test(params) && !/^\s*name\s*$/.test(params)) continue;
+    names.add(fn);
+  }
+  return names;
+}
+
 function staticTools(serverDir) {
   if (!SERVERS_ROOT) return null;
   const src = join(SERVERS_ROOT, serverDir, "src");
@@ -142,10 +187,18 @@ function staticTools(serverDir) {
     // prompts.ts declares MCP *prompt* arguments as `{ name: 'client_name' }` —
     // same object shape as a Tool literal, but not a tool.
     !/^prompts\.[cm]?[tj]s$/.test(n));
+  const texts = files.map((f) => readFileSync(f, "utf8"));
+  // Factories are collected across the whole src tree first: a repo may declare
+  // them in one module and call them from another.
+  const factories = new Set();
+  for (const text of texts) for (const fn of toolFactories(text)) factories.add(fn);
+  const FACTORY = factories.size
+    ? new RegExp(`\\b(?:${[...factories].join("|")})\\(\\s*(['"\`])(${TOOLISH_SRC})\\1`, "g")
+    : null;
+
   const tools = new Set();
   const REG = /\.(?:registerTool|tool|addTool)\(\s*(['"`])([a-z][a-z0-9]*(?:_[a-z0-9]+)+)\1/g;
-  for (const f of files) {
-    const text = readFileSync(f, "utf8");
+  for (const text of texts) {
     const lines = text.split("\n");
     // MCP `Tool` object literals: `name: "x"` with an adjacent inputSchema/description.
     for (let i = 0; i < lines.length; i++) {
@@ -157,6 +210,8 @@ function staticTools(serverDir) {
     // Imperative registration: server.registerTool("x", ...) — often multi-line.
     let r; REG.lastIndex = 0;
     while ((r = REG.exec(text))) tools.add(r[2]);
+    // Tool-factory call sites: ro("x", …), hi("x", …), irrev("x", …).
+    if (FACTORY) { FACTORY.lastIndex = 0; while ((r = FACTORY.exec(text))) tools.add(r[2]); }
   }
   return [...tools].sort();
 }

@@ -46,7 +46,7 @@ not name which. This skill only speaks to Quoter:
 - **Distributor purchasing** — buying what you quoted happens at the
   distributor; use `pax8` or `sherweb`.
 
-## API Tools (~60; the high-value subset)
+## API Tools (61 total — the high-value subset below; full list in [references/tool-inventory.md](../../references/tool-inventory.md))
 
 ### Quotes
 
@@ -73,14 +73,42 @@ not name which. This skill only speaks to Quoter:
 | `scalepad_quoter_categories_*` | Categories |
 | `scalepad_quoter_manufacturers_*` | Manufacturers |
 
-### Contacts, Suppliers & Auth
+### Contacts & Suppliers
 
 | Tool | Purpose |
 |------|---------|
 | `scalepad_quoter_contacts_list` / `scalepad_quoter_contacts_create` / `scalepad_quoter_contacts_get` / `scalepad_quoter_contacts_update` | Quote recipients |
 | `scalepad_quoter_suppliers_*` | Suppliers (list/create/get/update/delete) |
 | `scalepad_quoter_datafeeds_list_suppliers` / `scalepad_quoter_datafeeds_list_supplier_items` | Supplier datafeeds (distributor pricing) |
-| `scalepad_quoter_auth_authorize` / `scalepad_quoter_auth_refresh` | Standalone-path OAuth token mint/refresh (1 h TTL) — not needed on the default hosted path |
+
+### The two auth tools mint credentials — do not call them casually
+
+`scalepad_quoter_auth_authorize` and `scalepad_quoter_auth_refresh` are
+the only tools in this plugin that talk to a host other than ScalePad.
+They target **`api.quoter.com`** directly:
+
+| Tool | What it actually does |
+|------|----------------------|
+| `scalepad_quoter_auth_authorize` | `POST /v1/auth/oauth/authorize` — exchanges OAuth client credentials for an `access_token` (1 h TTL) **and a `refresh_token`**. Its `client_id` / `secret` arguments are optional and, when supplied, **override the configured credentials** — so it will mint tokens for a Quoter tenant unrelated to this connection. |
+| `scalepad_quoter_auth_refresh` | `POST /v1/auth/refresh` — exchanges a `refresh_token` for a fresh pair, extending possession without re-presenting the client secret. |
+
+Two things follow:
+
+- **The server does not flag these as mutating.** They carry no
+  `destructiveHint`, because from the server's point of view they read
+  a token rather than write a record. The gateway pins them to `admin`
+  by hand for exactly this reason — do not infer "safe" from the
+  missing annotation.
+- **Their responses are bearer credentials in your context.** Do not
+  echo them, log them, or paste them into a summary. The refresh token
+  has no useful expiry.
+
+You almost certainly do not need them: the ScalePad-hosted path is the
+default and covers the full surface. Reach for these only when the
+tenant explicitly runs standalone Quoter and `X-Quoter-Client-Id` /
+`X-Quoter-Client-Secret` are configured — and even then the server
+exchanges and refreshes the token for you automatically on the calls
+that need it.
 
 ## Common Workflows
 

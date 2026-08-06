@@ -41,7 +41,7 @@ machine:
 - **Documented configurations, passwords, and runbooks** — use
   `kaseya/it-glue` or `hudu`.
 
-## API Tools
+## API Tools (24 total, all read-only — every one is listed below)
 
 ### Clients & People
 
