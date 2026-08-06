@@ -21,11 +21,13 @@ Manage Huntress SOC-confirmed security incidents across client organizations. Qu
   `huntress-escalations`.
 - **Endpoint health, deployment, or coverage questions** — use
   `huntress-agents`.
-- **An incident that is not a security finding** — uptime, paging, and
-  email-security platforms each use the word for their own object with
-  its own lifecycle. Use `betterstack-incidents` for a service outage,
-  `pagerduty-incidents` or `rootly-incidents` for a paged response,
-  and `checkpoint-avanan-incidents` for a mail-borne threat.
+- **An incident that is not a security finding** — uptime and paging
+  platforms each use the word for their own object with its own
+  lifecycle. Use `betterstack-incidents` for a service outage, and
+  `pagerduty-incidents` or `rootly-incidents` for a paged response.
+- **A mail-borne threat** — Harmony Email has no incident object at all;
+  its detections are events, not cases. Use
+  `checkpoint-avanan-threats`.
 
 ## API Tools
 
