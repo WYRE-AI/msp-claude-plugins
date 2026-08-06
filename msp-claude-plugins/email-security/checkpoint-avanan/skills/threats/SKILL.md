@@ -1,278 +1,192 @@
 ---
 name: "Checkpoint Avanan Threats"
 description: >
-  Checkpoint Harmony Email & Collaboration (Avanan) threat detection and
-  analysis: threat types and detection engines, IOC extraction, timeline
-  and severity assessment, and investigation workflows for phishing,
-  malware, BEC, and account-takeover threats.
+  The Checkpoint Harmony Email (Avanan) security-event surface: the event
+  type, state, severity and SaaS enums accepted by `hec_query_events`, what a
+  detection record does and does not carry, how `availableEventActions`
+  governs what you can do next, and phishing, BEC and malware triage built on
+  those fields.
 when_to_use: >-
-  When investigating or analyzing an email-borne threat detected by Checkpoint
-  Harmony Email. Use when: checkpoint threat, avanan threat, email threat,
-  phishing detection, malware email, bec detection, business email compromise,
-  account takeover, threat analysis, ioc extraction, threat indicators, email
-  security threat, threat timeline, or threat severity.
+  When sweeping for or investigating detections in Checkpoint Harmony Email —
+  what the engines caught, how severe, and whether it was acted on. Use when:
+  checkpoint threat, avanan threat, harmony email detection, hec_query_events,
+  phishing detection, malware email, bec, dlp event, shadow it, malicious url
+  click, email threat sweep, or security event triage.
 ---
 
-# Checkpoint Harmony Email Threat Detection & Analysis
+# Checkpoint Harmony Email Threat Detection
 
 ## Overview
 
-Checkpoint Harmony Email & Collaboration (Avanan) uses multiple detection engines to identify email-borne threats before they reach end users. The threat detection system covers phishing, malware, business email compromise (BEC), account takeover (ATO), and zero-day attacks. This skill covers threat types, detection engines, IOC extraction, timeline analysis, and investigation workflows.
+Harmony Email runs several detection engines over mail and SaaS content and
+records each verdict as a **security event**. The event is the engine's
+finding — type, state, severity, confidence — not the message itself. MSP work
+here is sweeping events across a window, judging which are real, and
+following the ones that are through to the message.
 
 ## Anti-triggers
 
-- **Acting on the held message** — this skill reads detection records
-  and never releases or deletes mail; those operations are
-  `checkpoint-avanan-quarantine`.
-- **Coordinating a response with status, assignment, and notes** — a
-  threat is one detection; the investigation container that groups
-  several of them is `checkpoint-avanan-incidents`.
-- **Changing what the engines detect or how they act** — detection
-  engine configuration and block-list entries are
-  `checkpoint-avanan-policies`.
-- **Another vendor's threat objects** — "threat", "BEC", "ATO", and
-  "IOC" are common currency across email-security vendors. Abnormal is
-  `abnormal-security-threats`, Proofpoint is `proofpoint-tap`, and
-  Mimecast is `mimecast-threat-intelligence`.
+- **The message behind the detection** — subject, sender, recipients,
+  attachments, and the quarantine and restore actions all live on the entity,
+  not the event. Use `checkpoint-avanan-quarantine`.
+- **Exempting a sender so the engines stop firing** — use
+  `checkpoint-avanan-exceptions`.
+- **Which id a tool wants, paging, or an auth failure** — use
+  `checkpoint-avanan-api-patterns`.
+- **Another vendor's detections** — "threat", "BEC", "phishing" and "IOC" are
+  shared currency across the email-security stack. Abnormal is
+  `abnormal-security-threats`, Proofpoint is `proofpoint-tap`, Mimecast is
+  `mimecast-threat-intelligence`, IRONSCALES is `ironscales-incidents`.
 
-## Threat Types
+## Querying events
 
-| Type | Code | Description | Severity Range |
-|------|------|-------------|----------------|
-| **Phishing** | `PHISHING` | Credential harvesting via fake login pages or deceptive links | Medium - Critical |
-| **Spear Phishing** | `SPEAR_PHISHING` | Targeted phishing aimed at specific individuals | High - Critical |
-| **Malware** | `MALWARE` | Malicious attachments or drive-by download links | High - Critical |
-| **Ransomware** | `RANSOMWARE` | Ransomware payload in attachment or link | Critical |
-| **BEC** | `BEC` | Business email compromise / CEO fraud | High - Critical |
-| **Account Takeover** | `ATO` | Compromised internal account sending malicious email | Critical |
-| **Zero-Day** | `ZERO_DAY` | Previously unknown threat detected by sandbox | Critical |
-| **Spam** | `SPAM` | Unsolicited bulk email | Low |
-| **Bulk** | `BULK` | Marketing/newsletter content | Low |
-| **DLP Violation** | `DLP` | Outbound data loss prevention trigger | Medium - High |
+`hec_query_events` takes only filters — no required argument, and no `limit`.
+Every filter is an array except the dates.
 
-### Detection Engines
+| Argument | Accepts |
+|---|---|
+| `eventTypes` | see type table |
+| `eventStates` | `new`, `detected`, `pending`, `remediated`, `dismissed`, `exception` |
+| `severities` | free-form strings, e.g. `Critical`, `High`, `Medium`, `Low` |
+| `startDate` / `endDate` | ISO 8601; `endDate` defaults to now |
+| `saas` | see platform table |
+| `eventIds` | fetch specific events by id |
+| `scrollId` | next page cursor |
 
-| Engine | Description | Threat Types Detected |
-|--------|-------------|----------------------|
-| **Anti-Phishing** | URL reputation, page similarity, brand impersonation | PHISHING, SPEAR_PHISHING |
-| **Anti-Malware** | Signature-based and heuristic file scanning | MALWARE, RANSOMWARE |
-| **Sandbox** | Dynamic analysis of attachments in isolated environment | MALWARE, RANSOMWARE, ZERO_DAY |
-| **AI/ML Engine** | Machine learning models for anomaly and impersonation detection | BEC, ATO, SPEAR_PHISHING |
-| **URL Rewriting** | Click-time URL scanning and rewriting | PHISHING, MALWARE |
-| **DLP Engine** | Content inspection against data loss policies | DLP |
-| **Anti-Spam** | Reputation and content-based spam filtering | SPAM, BULK |
+### Event types
 
-## Complete Threat Field Reference
+| Value | What fired |
+|---|---|
+| `phishing` | Credential harvesting, impersonation, deceptive links |
+| `malware` | Confirmed malicious attachment or link |
+| `suspicious malware` | Probable malware, below the confirmed threshold |
+| `dlp` | Outbound or internal content matched a data-loss rule |
+| `anomaly` | Behavioural outlier — unusual sender, volume or pattern |
+| `shadow_it` | Unsanctioned SaaS application activity |
+| `malicious_url` | A malicious link was present in content |
+| `malicious_url_click` | A user actually clicked one |
+| `alert` | Generic platform alert |
 
-### Core Fields
+`suspicious malware` contains a space and no underscore, unlike every other
+multi-word value. Sending `suspicious_malware` filters to nothing.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `threatId` | string | Unique threat identifier |
-| `type` | string | Threat type code (see table above) |
-| `severity` | string | CRITICAL, HIGH, MEDIUM, LOW |
-| `confidenceScore` | int | Detection confidence 0-100 |
-| `detectedDate` | datetime | When the threat was first detected |
-| `detectionEngine` | string | Which engine identified the threat |
-| `status` | string | DETECTED, QUARANTINED, REMEDIATED, FALSE_POSITIVE |
+There is no separate `bec`, `ato`, `ransomware`, `spear_phishing` or `spam`
+type. Business email compromise and targeted phishing arrive as `phishing`;
+ransomware arrives as `malware`. Judge those distinctions from the event's
+`description` and `confidenceIndicator`, not from the type filter.
 
-### Email Context Fields
+### Event states
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `messageId` | string | Email message ID (RFC 5322) |
-| `subject` | string | Email subject line |
-| `sender` | string | Sender email address |
-| `senderDisplayName` | string | Sender display name |
-| `senderIp` | string | Originating IP address |
-| `recipients` | string[] | Target recipient addresses |
-| `recipientCount` | int | Number of recipients targeted |
-| `direction` | string | INBOUND, OUTBOUND, INTERNAL |
+`new` and `detected` are open; `remediated` means an action completed;
+`dismissed` and `exception` mean a human or an exception rule closed it.
 
-### Indicator of Compromise (IOC) Fields
+**Omitting `eventStates` does not return everything** — it defaults to
+`new`/`detected`. A sweep that means to include already-handled events must
+name the states explicitly. This is the most common cause of an event
+"disappearing" between two queries: it moved to `remediated`.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `urls` | object[] | Malicious URLs found in email body/attachments |
-| `urls[].url` | string | The full URL |
-| `urls[].verdict` | string | MALICIOUS, SUSPICIOUS, CLEAN |
-| `urls[].category` | string | Phishing page, malware host, C2 server, etc. |
-| `domains` | string[] | Suspicious domains extracted from URLs and headers |
-| `ipAddresses` | string[] | IP addresses associated with the threat |
-| `fileHashes` | object[] | Hashes of malicious attachments |
-| `fileHashes[].sha256` | string | SHA-256 hash |
-| `fileHashes[].md5` | string | MD5 hash |
-| `fileHashes[].fileName` | string | Original filename |
-| `fileHashes[].verdict` | string | MALICIOUS, SUSPICIOUS, CLEAN |
+### SaaS platforms
 
-### Timeline Fields
+`email`, `office365_emails`, `office365_onedrive`, `office365_sharepoint`,
+`google_mail`, `google_drive`, `slack`, `ms_teams`, `box2`, `dropbox2`.
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `receivedDate` | datetime | When email entered the mail system |
-| `scannedDate` | datetime | When scanning completed |
-| `quarantinedDate` | datetime | When email was quarantined (if applicable) |
-| `remediatedDate` | datetime | When threat was remediated |
-| `reportedDate` | datetime | When user reported (if user-reported) |
+Box and Dropbox carry a `2` suffix. `email` and `office365_emails` are not
+synonyms — a tenant may report under either depending on how it was
+onboarded, so a mail-only sweep that names just one can miss the other.
 
-## MCP Tools
+## What an event carries
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `avanan_threats_list` | List detected threats with filters | `startDate`, `endDate`, `type`, `severity`, `status`, `limit`, `offset` |
-| `avanan_threats_get` | Get detailed threat analysis | `threatId` |
-| `avanan_threats_iocs` | Extract IOCs from a threat | `threatId`, `iocTypes` |
-| `avanan_threats_timeline` | Get threat detection timeline | `threatId` |
-| `avanan_threats_search` | Search threats by various criteria | `query`, `field`, `startDate`, `endDate`, `type` |
-| `avanan_threats_stats` | Get threat statistics and trends | `startDate`, `endDate`, `groupBy` |
-| `avanan_threats_mark_false_positive` | Mark threat as false positive | `threatId`, `reason` |
+The query result summarises each event as `eventId`, `type`, `state`,
+`severity`, `saas`, `eventCreated`, `description`, `confidenceIndicator` and
+`availableActions`. `hec_get_event` adds `entityId`, `customerId`, `data`,
+`additionalData` and the `actions` history.
 
-### Tool Usage Examples
+Two fields do most of the work:
 
-**List critical threats from last 24 hours:**
-```json
-{
-  "tool": "avanan_threats_list",
-  "parameters": {
-    "startDate": "2024-02-14T00:00:00Z",
-    "endDate": "2024-02-15T00:00:00Z",
-    "severity": "CRITICAL",
-    "status": "DETECTED",
-    "limit": 50
-  }
-}
-```
+- **`entityId`** is the bridge to the message. Almost every investigation goes
+  event → `entityId` → `hec_get_email`.
+- **`availableEventActions`** tells you what this event will actually accept.
+  Read it before attempting an action rather than assuming quarantine is
+  available — an event's state constrains what it still offers.
 
-**Extract IOCs from a threat:**
-```json
-{
-  "tool": "avanan_threats_iocs",
-  "parameters": {
-    "threatId": "threat-abc123",
-    "iocTypes": ["urls", "domains", "fileHashes", "ipAddresses"]
-  }
-}
-```
+`confidenceIndicator` is the engine's own certainty and is the field to weigh
+when deciding whether a detection deserves a human. `severity` is about
+potential impact, not certainty — a high-severity, low-confidence phishing
+event is exactly the shape of a false positive.
 
-**Search for phishing threats targeting a specific user:**
-```json
-{
-  "tool": "avanan_threats_search",
-  "parameters": {
-    "query": "cfo@company.com",
-    "field": "recipients",
-    "type": "PHISHING",
-    "startDate": "2024-02-01T00:00:00Z"
-  }
-}
-```
+## Triage workflows
 
-## Threat Analysis Workflows
+### Sweeping a window
 
-### Phishing Investigation Workflow
+1. `hec_query_events` with an explicit `startDate`, the types you care about,
+   and — if you want more than open items — explicit `eventStates`.
+2. Page with `scrollId` until no cursor comes back. Do not report a count
+   before the scroll is exhausted.
+3. Sort your attention by `severity` then `confidenceIndicator`.
+4. For anything you will act on, `hec_get_event` for the `entityId`.
 
-1. **Get threat details** - Retrieve full threat record with IOCs
-2. **Analyze sender:**
-   - Check sender address vs display name mismatch
-   - Look up sender domain age and reputation
-   - Check SPF/DKIM/DMARC results
-3. **Analyze URLs:**
-   - Extract all URLs from body and attachments
-   - Check URL reputation and redirect chains
-   - Identify brand impersonation (login page similarity)
-4. **Check scope:**
-   - Search for same sender across all recipients
-   - Identify how many users received the same campaign
-5. **Remediate:**
-   - Quarantine all related messages if not already quarantined
-   - Add sender domain to block list if confirmed malicious
-   - Notify affected users
-6. **Document** - Create incident with findings and IOCs
+### Phishing and BEC
 
-### BEC Investigation Workflow
+Both arrive as `phishing`. The distinguishing evidence is on the entity, not
+the event, so pull the message with `hec_get_email` and compare:
 
-1. **Review impersonation indicators:**
-   - Display name matches executive but email address differs
-   - Reply-to address differs from sender
-   - Unusual urgency language or financial requests
-2. **Check sender authentication:**
-   - SPF, DKIM, DMARC results
-   - Whether sender domain is a lookalike (typosquatting)
-3. **Analyze email content:**
-   - Wire transfer or gift card requests
-   - Urgency indicators ("immediately", "today", "confidential")
-   - Unusual sender behavior patterns
-4. **Check for account compromise:**
-   - Search for ATO indicators on the impersonated account
-   - Review recent login activity and impossible travel
-5. **Remediate and report:**
-   - Block sender domain
-   - Alert targeted recipients
-   - Report to incident management
+- `fromName` against `fromEmail` — a display name matching an executive over
+  an unrelated address is the classic BEC signature.
+- The sending domain against the tenant's own and its known partners —
+  lookalike and typosquatted domains.
+- Recipients — finance, payroll and executive assistants concentrated in one
+  event indicate targeting rather than a broad campaign.
 
-### Malware Analysis Workflow
+Scope the campaign with `hec_search_emails` filtered on `fromEmail` or
+`senderDomain` over the same window; the event surface will only show you the
+detections, not the messages from the same sender that were not flagged.
 
-1. **Get attachment details** - File name, type, size, hashes
-2. **Check hash reputation** - Look up SHA-256 in threat intelligence
-3. **Review sandbox results** - Dynamic analysis behavior indicators
-4. **Extract IOCs:**
-   - C2 server addresses
-   - Dropped file hashes
-   - Registry modifications
-   - Network connections
-5. **Assess blast radius:**
-   - How many users received the attachment
-   - Whether any users opened/executed it
-6. **Remediate:**
-   - Quarantine all instances
-   - Block file hash at endpoint level
-   - Block C2 domains/IPs at firewall
+### Malware
 
-## Severity Assessment Matrix
+`malware` is confirmed; `suspicious malware` is not. For either, take the
+`entityId` and read the entity's `attachments` array for names, MIME types,
+sizes and MD5 hashes. Those hashes are what you feed to endpoint and network
+controls — this plugin has no threat-intelligence lookup of its own.
 
-| Factor | Low | Medium | High | Critical |
-|--------|-----|--------|------|----------|
-| Recipients | 1 user | 2-10 users | 10-50 users | 50+ users or executives |
-| Threat Type | SPAM, BULK | DLP, ANOMALY | PHISHING, BEC | MALWARE, RANSOMWARE, ATO |
-| Confidence | < 50% | 50-75% | 75-90% | > 90% |
-| User Interaction | None | Email opened | Link clicked | Attachment executed |
-| Data Exposure | None | Metadata only | Credentials entered | Data exfiltrated |
+### DLP
 
-## Error Handling
+`dlp` events are usually outbound or internal. Treat the entity payload as
+sensitive by construction: for a DLP detection the matched content is the
+regulated data itself, so pull it only when the investigation needs it and
+keep it out of anything long-lived.
 
-### Common API Errors
+## Gotchas
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Invalid threat type | Use valid type codes from reference above |
-| 400 | Invalid date range | Max 90-day range, startDate before endDate |
-| 401 | Unauthorized | Check API credentials and token expiry |
-| 403 | Insufficient permissions | API key needs threat detection scope |
-| 404 | Threat not found | Verify threat ID exists |
-| 429 | Rate limited | Implement exponential backoff |
+- **`severities` is not enum-validated.** Any string is accepted, and an
+  unrecognised one silently matches nothing rather than erroring. Confirm
+  casing against a value the API has actually returned before trusting an
+  empty result.
+- **`eventIds` and the filter arguments coexist awkwardly.** Pass `eventIds`
+  to fetch known events; combining it with type or state filters narrows
+  rather than broadens and is rarely what is meant.
+- **An empty result is not an all-clear.** A wrong region, a scopeless key or
+  a window outside retention all return zero records without an error. See
+  `checkpoint-avanan-api-patterns`.
+- **Event state is not agent-settable.** `dismissed` and `exception` are
+  filterable states, but no tool transitions an event into them. Closing a
+  detection as a false positive is a console action, or an exception via
+  `checkpoint-avanan-exceptions`.
 
-### Validation Errors
+## Capability gaps
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Invalid severity filter | Unrecognized severity value | Use CRITICAL, HIGH, MEDIUM, or LOW |
-| Too many IOC types | Requested more than supported | Use valid iocTypes: urls, domains, fileHashes, ipAddresses |
-| Threat expired | Older than retention period | Data no longer available |
+Present in the Harmony Email console, absent from this surface:
 
-## Best Practices
-
-1. **Prioritize by severity** - Critical threats first, then high, then medium
-2. **Check blast radius early** - Know how many users are affected before deep analysis
-3. **Extract and share IOCs** - Feed IOCs to other security tools (SIEM, firewall, EDR)
-4. **Correlate across threat types** - A phishing campaign may precede an ATO
-5. **Document investigation steps** - Maintains chain of evidence for incident response
-6. **Review false positive rates** - High FP rates indicate policy tuning needed
-7. **Monitor threat trends** - Track threat volume by type over time for reporting
-8. **Never release malware to users** - Even if they insist; escalate to management
+- **No IOC extraction tool.** There is no call that returns URLs, domains or
+  IPs as a structured indicator set. What exists is the entity's attachment
+  metadata and whatever the event's `data` / `additionalData` blobs carry.
+- **No timeline tool.** The `actions` array on a full event record is the
+  nearest equivalent.
+- **No statistics or trend tool.** Counts come from paging a query.
+- **No false-positive marking, and no incident object** — no case, status,
+  assignee or note anywhere in the surface.
 
 ## Related Skills
 
-- [Checkpoint Quarantine](../quarantine/SKILL.md) - Quarantine management
-- [Checkpoint Incidents](../incidents/SKILL.md) - Incident investigation
-- [Checkpoint Policies](../policies/SKILL.md) - Policy management
-- [Checkpoint API Patterns](../api-patterns/SKILL.md) - Authentication and API usage
+- [Checkpoint Quarantine](../quarantine/SKILL.md) — the message and the actions
+- [Checkpoint Exceptions](../exceptions/SKILL.md) — stopping repeat detections
+- [Checkpoint API Patterns](../api-patterns/SKILL.md) — ids, paging, auth

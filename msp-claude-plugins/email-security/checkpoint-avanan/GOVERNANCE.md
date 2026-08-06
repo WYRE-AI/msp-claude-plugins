@@ -32,11 +32,6 @@ operator is authorised for.
 > `avanan_*` names, but for MSP-partner, tenant and licence management —
 > not quarantine, threats, incidents or policies. The table below is the
 > real surface.
->
-> **The plugin's five skills have the same defect** and are not corrected
-> here: they name 33 `avanan_*` tools and mention `hec_*` nowhere, so an
-> agent following them calls tools that do not exist. That is tracked in
-> issue #178 and needs its own pass.
 
 Conduit's access editor presents four groups; enforcement uses only
 `read`, `write` and `admin`.
@@ -82,6 +77,11 @@ erroneous restore is the exact outcome the product exists to prevent.
 These are the tools that would land in **Write** under verb-based
 classification, which is why Avanan should be classified deliberately.
 
+The MCP annotations invert the same hazard. The two quarantine tools
+carry `destructiveHint: true`; the two restore tools carry no annotations
+at all. A client that gates confirmation on `destructiveHint` will stop
+on a quarantine and wave a restore through.
+
 **`hec_add_exception` / `hec_update_exception` create standing detection
 bypasses.** An exception is the allowlist: it exempts a sender or domain
 from the engines that would otherwise catch it, permanently and
@@ -91,16 +91,23 @@ claiming to be the exempted sender inherits the exemption.
 exception re-admits detection for a sender someone deliberately exempted,
 which may be the correct fix or may break a customer's mail flow.
 
+The default matching modes widen entries beyond what an operator
+typically intends: `senderDomainMatching` defaults to `endswith` and
+`subjectMatching` to `contains`, so a domain exemption for `example.com`
+also covers `notexample.com`.
+
 **`hec_quarantine_emails` / `hec_quarantine_events` can cause a mail-flow
 outage.** Quarantining in bulk on a bad query buries legitimate inbound
 mail with no bounce visible to the recipient. The blast radius is the
 tenant's mail flow, not a settings table.
 
 **Concerns with no corresponding tool.** The previous revision described
-policy enable/disable/update and separate allow/block-list management.
-The shipped server exposes none of those — there are no policy tools and
-no block list. If you need that surface, it is in the Harmony Email
-console, not through this plugin.
+policy enable/disable/update. The shipped server exposes none of it —
+there are no policy tools at all. If you need that surface, it is in the
+Harmony Email console, not through this plugin. Allow and block lists,
+by contrast, *are* reachable: they are the `whitelist` and `blacklist`
+values of `excType` on the four `hec_*_exception` tools, not a separate
+list API.
 
 ## Recommended agent policy
 
@@ -155,6 +162,10 @@ scope them to the tenants that specific operator supports.
   splitting a 500-message action into batches is performing five
   separate irreversible operations; a failure partway through leaves the
   tenant in a mixed state with no transaction to roll back.
+- **Actions are asynchronous.** Quarantine and restore return one
+  `taskId` per entity and report acceptance, not completion. An agent
+  that reports "released" without polling `hec_get_task_status` is
+  reporting an intention.
 - **Queries silently truncate.** The date range maxes at 90 days and any
   single query returns at most 10,000 results. "Show me every threat
   this year" returns a confident partial answer with no error. Do not
@@ -163,19 +174,13 @@ scope them to the tenants that specific operator supports.
   the retention period (default 30 days) and cannot be recovered. The
   documented way to extend retention — release and re-quarantine —
   means briefly delivering the message.
-- **Status transitions are validated server-side.** Moving an incident
-  to `RESOLVED` without a `remediationSummary`, or to `FALSE_POSITIVE`
-  without a justification, returns a 400 that reads like a malformed
-  request rather than a missing field.
 - **A wrong region looks like a bad credential.** Pointing at the US
   gateway for an EU-provisioned tenant returns 401, which invites an
-  agent to "fix" working credentials.
+  agent to "fix" working credentials. A key with no farm association
+  fails differently again — every call returns zero records rather than
+  an error.
 - **Exception writes are security decisions, not bookkeeping.**
   `hec_add_exception` and `hec_update_exception` change no mail flow at
   the moment they run, which is exactly why they read as harmless — but
   they exempt a sender from detection from then on. Treat a pattern of
   agent-driven exception creation as a signal to review.
-- **The plugin's skills name tools that do not exist.** Until issue #178's
-  pass lands, an agent following them will call `avanan_*` names against a
-  server that serves `hec_*`. Verify against this document, not the
-  skills.

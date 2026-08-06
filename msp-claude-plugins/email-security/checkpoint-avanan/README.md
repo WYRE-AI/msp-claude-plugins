@@ -6,10 +6,15 @@ Claude Code plugin for Checkpoint Harmony Email & Collaboration (formerly Avanan
 
 This plugin provides Claude with deep knowledge of Checkpoint Harmony Email & Collaboration, enabling:
 
-- **Quarantine Management** - Search, review, release, and delete quarantined emails
-- **Threat Detection** - Analyze phishing, malware, BEC, and account takeover threats
-- **Policy Management** - View and manage DLP, anti-phishing, and anti-malware policies
-- **Incident Investigation** - Investigate security incidents with full lifecycle management
+- **Threat Detection** - Query and investigate phishing, malware, DLP, anomaly and shadow-IT detections
+- **Message Search** - Locate mail and SaaS entities by sender, subject, recipient or attachment hash
+- **Quarantine Actions** - Quarantine and restore mail, with asynchronous task tracking
+- **Exception Management** - Maintain the whitelist and blacklist sender exceptions
+
+The plugin speaks the `hec_*` tool surface of the Harmony Email Smart API v1.50.
+It has **no policy or incident surface** — Harmony Email exposes neither through
+this API, and both are console-only. See [GOVERNANCE.md](GOVERNANCE.md) for the
+full tool inventory and permission model.
 
 ## Configuration
 
@@ -42,7 +47,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `CHECKPOINT_CLIENT_ID` | Yes | | OAuth2 client ID from Infinity Portal |
-| `CHECKPOINT_CLIENT_SECRET` | Yes | | OAuth2 client secret |
+| `CHECKPOINT_CLIENT_SECRET` | Yes | | OAuth2 client secret (sent as `accessKey`) |
 | `CHECKPOINT_AVANAN_MCP_URL` | No | `https://checkpoint-avanan-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
 
 ## Self-Hosted Gateway
@@ -76,20 +81,18 @@ CHECKPOINT_AVANAN_MCP_URL=https://your-gateway-domain/v1/checkpoint-avanan/mcp
    - Select the appropriate scope (Email & Collaboration)
    - Copy the Client ID and Client Secret immediately (secret is only shown once)
 
-3. **Configure Permissions**
-   - Ensure the API key has read/write access to:
-     - Quarantine management
-     - Threat detection
-     - Policy management
-     - Incident investigation
+3. **Confirm the key has a farm association**
+   - The key must resolve to at least one `farm:customer` scope
+     (e.g. `mt-prod-cp-eu-1:yourorg`). A key with no farm association
+     authenticates successfully but returns zero records on every call.
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+Once configured, the cheapest read-only check is listing an exception list —
+it needs no date range and returns quickly:
 
 ```bash
-# Test connection (using the Checkpoint Avanan MCP tool)
-mcp-cli call checkpoint-avanan/avanan_test_connection '{}'
+mcp-cli call checkpoint-avanan/hec_list_exceptions '{"excType": "whitelist"}'
 ```
 
 ### API Documentation
@@ -107,11 +110,10 @@ mcp-cli call checkpoint-avanan/avanan_test_connection '{}'
 
 | Skill | Description |
 |-------|-------------|
-| `quarantine` | Email quarantine management and workflows |
-| `threats` | Threat detection and analysis |
-| `policies` | Email security policy management |
-| `incidents` | Security incident investigation |
-| `api-patterns` | Checkpoint Harmony API patterns and authentication |
+| `threats` | Security events: types, states, severities, and triage |
+| `quarantine` | Entity search, quarantine and restore actions |
+| `exceptions` | Whitelist and blacklist sender exceptions |
+| `api-patterns` | Tool surface, event/entity ids, paging, auth and regions |
 
 ## Available Commands
 
@@ -120,8 +122,8 @@ mcp-cli call checkpoint-avanan/avanan_test_connection '{}'
 | `/search-quarantine` | Search quarantined emails by various criteria |
 | `/release-quarantine` | Release quarantined email(s) back to recipients |
 | `/search-threats` | Search detected threats by type and severity |
-| `/check-threat` | Get detailed threat analysis with IOCs |
-| `/manage-policy` | View or toggle email security policies |
+| `/check-threat` | Get detailed threat analysis |
+| `/manage-policy` | **Unsupported** — Harmony Email exposes no policy tools; pending removal |
 
 ## Contributing
 
