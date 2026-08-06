@@ -5,6 +5,26 @@ endorsed by, or sponsored by the vendor.
 
 ## What it connects as
 
+> **Conduit does not broker this vendor. Read this before anything else in
+> this document.** `warmly` has no entry in Conduit's
+> `src/credentials/vendor-config.ts` — not a hidden one, not a disabled one,
+> none at all. The connector is wired only in the older
+> `wyre-technology/mcp-gateway` registry (`warmly:` in that repo's own
+> `src/credentials/vendor-config.ts`), a separate system this marketplace has
+> otherwise moved off. There is no `warmly` slug to reach at
+> `https://conduit.wyre.ai/v1/mcp`, so a connect attempt there 404s.
+>
+> Nothing is silently misrouted: this plugin ships no `.mcp.json`, so it wires
+> no client anywhere. But **everything below about gateway-brokered identity,
+> audit, and revocation describes the posture this plugin will have once a
+> `warmly` entry is ported to Conduit — not what happens today.** The skills
+> and the tool reference are accurate about Warmly's own API now, and are why
+> the plugin is still listed.
+>
+> *Editor's note: when `warmly` gains a Conduit `vendor-config.ts` entry,
+> delete this blockquote and the matching note in `README.md`. The rest of
+> this document is written to be true from that point on.*
+
 This plugin does not hold credentials. It reaches Warmly through the WYRE
 Conduit gateway (`https://conduit.wyre.ai/v1/mcp`), which brokers
 authentication centrally and scopes every call to the Warmly organization the
@@ -38,11 +58,14 @@ changes vendor state.
 > (`src/proxy/result-cache.ts`) and fails closed:
 > `const requiredTier: PermissionTier = classified ?? 'admin';`
 > (`src/access/access-enforcement.ts:63`). `warmly` has no entry there, so
-> the grouping below carries no enforcement meaning at present. That bites
-> harder on a read-only plugin than on most: a `read` grant admits nothing,
-> so the only way to use this plugin at all today is an `admin` grant, and
-> the recommendation below to hand these tools to unattended agents cannot
-> be followed at a lower tier. The grouping becomes what Conduit actually
+> the grouping below carries no enforcement meaning at present — and no
+> grant of any tier reaches this vendor today, because Conduit has no
+> `warmly` slug at all (see *What it connects as*). Once it is brokered, the
+> missing classification bites harder on a read-only plugin than on most: a
+> `read` grant would admit nothing, so the only way to use this plugin would
+> be an `admin` grant, and the recommendation below to hand these tools to
+> unattended agents could not be followed at a lower tier. The grouping
+> becomes what Conduit actually
 > enforces once the vendor is classified, and classifying it is a privilege
 > *reduction*, not an expansion. For the live list of unclassified vendors
 > see `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has

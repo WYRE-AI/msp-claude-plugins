@@ -2,6 +2,10 @@
 
 Claude Code plugin for [Warmly](https://www.warmly.ai) — visitor intelligence and account-level engagement for B2B sales teams.
 
+> **Not currently brokered by Conduit.** Every other connector in this marketplace reaches its vendor through the WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`). Warmly does not: Conduit's `src/credentials/vendor-config.ts` has no `warmly` entry, so there is no slug to connect and a connect attempt 404s. The connector is wired only in the older `wyre-technology/mcp-gateway` registry, described below.
+>
+> This plugin ships no `.mcp.json`, so it wires no client anywhere and nothing is silently misrouted. Its skills and tool reference are accurate about Warmly's API and are why it remains listed — but treat the connection instructions below as describing the legacy system, not the one the rest of this marketplace targets. See `GOVERNANCE.md` for what that means for identity, audit, and revocation.
+
 ## Overview
 
 This plugin gives Claude access to Warmly's hosted MCP server, which exposes three read-only tools backed by Warmly's visitor identification platform:
@@ -30,9 +34,11 @@ WARMLY_CLIENT_SECRET=            # may be empty for public PKCE clients
 WARMLY_ORGANIZATION_ID=          # optional; multi-org accounts only
 ```
 
-## Connecting via the WYRE MCP Gateway
+## Connecting via the legacy WYRE MCP Gateway
 
-The WYRE MCP Gateway (`mcp.wyre.ai`) hosts Warmly as a first-party connector. Connect Warmly in the gateway UI — the gateway proxies tool calls to `https://opps-api.getwarmly.com/api/mcp`, handles the AuthKit OAuth dance per tenant, and injects `X-Warmly-Organization-Id` automatically when the field is set.
+Warmly is a first-party connector on the older WYRE MCP Gateway (`mcp.wyre.ai`, the `wyre-technology/mcp-gateway` repo) and **only** there — see the note at the top of this file. Connect Warmly in that gateway's UI: it proxies tool calls to `https://opps-api.getwarmly.com/api/mcp`, handles the AuthKit OAuth dance per tenant, and injects `X-Warmly-Organization-Id` automatically when the field is set.
+
+Do not substitute `conduit.wyre.ai` in these steps. Conduit has no `warmly` slug, and a per-vendor path for a slug it does not know 404s while looking correct.
 
 ## Skills
 

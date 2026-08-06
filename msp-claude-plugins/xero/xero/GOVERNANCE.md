@@ -10,10 +10,11 @@ gateway (`https://conduit.wyre.ai/v1/mcp`), which brokers authentication
 centrally and scopes every call to the Xero organization the operator is
 authorised for.
 
-- No Xero client id, client secret, or access token is stored on the
-  technician's machine, in this repo, or in the model's context. Xero Custom
-  Connections mint 30-minute tokens with no refresh token; the gateway handles
-  that cycle.
+- No Xero client id, client secret, access token, or refresh token is stored on
+  the technician's machine, in this repo, or in the model's context. Conduit
+  connects through Xero's standard OAuth 2.0 authorization-code flow and
+  requests the `offline_access` scope, so it holds a refresh token and renews
+  the access token itself; the whole token set stays at the gateway.
 - The org's Xero connection is stored once at the gateway, so replacing it is
   one edit rather than a change on every technician's machine. Xero is OAuth:
   Conduit refreshes the token itself as it nears expiry, and asks you to
@@ -21,7 +22,7 @@ authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers "who
   authorised this invoice". Xero's own history attributes every change to the
-  Custom Connection, which is one name for your whole team — and that matters
+  connected app, which is one name for your whole team — and that matters
   more here than in most connectors, because these are accounting records.
 - Removing someone from the organisation clears their per-vendor grants and
   revokes their gateway refresh tokens at once; a user deactivated in your
