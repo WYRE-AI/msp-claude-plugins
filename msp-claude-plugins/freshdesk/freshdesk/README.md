@@ -16,7 +16,7 @@ Claude Code plugin for [Freshdesk](https://www.freshworks.com/freshdesk/) - clou
 /plugin install freshdesk
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/freshdesk/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/freshdesk/mcp`.
 
 ## Configuration
 

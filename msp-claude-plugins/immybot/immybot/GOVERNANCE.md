@@ -10,7 +10,7 @@ machines by design.
 ## What it connects as
 
 This plugin does not hold credentials. It reaches ImmyBot through the
-WYRE gateway (`https://mcp.wyre.ai/v1/immybot/mcp`), which brokers
+WYRE gateway (`https://conduit.wyre.ai/v1/immybot/mcp`), which brokers
 authentication centrally and scopes every call to the instance the
 operator is authorised for.
 

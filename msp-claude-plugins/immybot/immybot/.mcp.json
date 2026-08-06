@@ -2,7 +2,7 @@
   "mcpServers": {
     "immybot": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/immybot/mcp",
+      "url": "https://conduit.wyre.ai/v1/immybot/mcp",
       "headers": {
         "X-Immybot-Instance-Subdomain": "${IMMYBOT_INSTANCE_SUBDOMAIN}",
         "X-Immybot-Tenant-Id": "${IMMYBOT_TENANT_ID}",

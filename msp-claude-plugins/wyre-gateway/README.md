@@ -19,7 +19,7 @@ This plugin provides access to:
 
 ## Prerequisites
 
-1. A Wyre Technology account at [mcp.wyre.ai](https://mcp.wyre.ai)
+1. A Wyre Technology account at [conduit.wyre.ai](https://conduit.wyre.ai)
 2. At least one vendor connected through the gateway
 
 ## Connecting Vendors
@@ -27,13 +27,13 @@ This plugin provides access to:
 Each vendor must be connected individually through the gateway's connect page:
 
 ```
-https://mcp.wyre.ai/connect/{vendor}
+https://conduit.wyre.ai/connect/{vendor}
 ```
 
 For example:
-- `https://mcp.wyre.ai/connect/itglue` - Connect IT Glue
-- `https://mcp.wyre.ai/connect/autotask` - Connect Autotask
-- `https://mcp.wyre.ai/connect/datto-rmm` - Connect Datto RMM
+- `https://conduit.wyre.ai/connect/itglue` - Connect IT Glue
+- `https://conduit.wyre.ai/connect/autotask` - Connect Autotask
+- `https://conduit.wyre.ai/connect/datto-rmm` - Connect Datto RMM
 
 Once connected, the vendor's tools are immediately available through the gateway.
 
@@ -41,14 +41,14 @@ Once connected, the vendor's tools are immediately available through the gateway
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `WYRE_GATEWAY_URL` | No | `https://mcp.wyre.ai/v1/mcp` | Gateway MCP endpoint URL |
+| `WYRE_GATEWAY_URL` | No | `https://conduit.wyre.ai/v1/mcp` | Gateway MCP endpoint URL |
 
 ## Installation
 
 ### Claude Code (CLI)
 
 ```bash
-claude mcp add --transport http msp-mcp-gateway https://mcp.wyre.ai/v1/mcp
+claude mcp add --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp
 ```
 
 Claude Code will open a browser for OAuth authentication on first use. No API keys or headers needed.
@@ -56,7 +56,7 @@ Claude Code will open a browser for OAuth authentication on first use. No API ke
 To install for all projects instead of just the current one:
 
 ```bash
-claude mcp add --transport http --scope user msp-mcp-gateway https://mcp.wyre.ai/v1/mcp
+claude mcp add --transport http --scope user msp-mcp-gateway https://conduit.wyre.ai/v1/mcp
 ```
 
 ### Claude.ai (web)
@@ -64,13 +64,13 @@ claude mcp add --transport http --scope user msp-mcp-gateway https://mcp.wyre.ai
 Go to **Settings → Connectors** and add a custom connector pointing to:
 
 ```
-https://mcp.wyre.ai/v1/mcp
+https://conduit.wyre.ai/v1/mcp
 ```
 
 ### After installing
 
 1. Complete OAuth authentication when prompted
-2. Connect your vendors at `https://mcp.wyre.ai/connect/{vendor}`
+2. Connect your vendors at `https://conduit.wyre.ai/connect/{vendor}`
 3. All connected vendor tools appear automatically
 
 No API keys or headers are needed — authentication is handled via OAuth Bearer token automatically.
@@ -136,13 +136,13 @@ If your Wyre account belongs to a team or organization, vendor connections are s
 
 ### OAuth prompt doesn't appear
 
-1. Ensure `WYRE_GATEWAY_URL` is set correctly (default: `https://mcp.wyre.ai/v1/mcp`)
+1. Ensure `WYRE_GATEWAY_URL` is set correctly (default: `https://conduit.wyre.ai/v1/mcp`)
 2. Try disconnecting and reconnecting the plugin
 
 ### No tools available after connecting
 
-1. Verify you've connected at least one vendor at `https://mcp.wyre.ai/connect/{vendor}`
-2. Check your connection status at `https://mcp.wyre.ai`
+1. Verify you've connected at least one vendor at `https://conduit.wyre.ai/connect/{vendor}`
+2. Check your connection status at `https://conduit.wyre.ai`
 
 ### Tool call errors
 

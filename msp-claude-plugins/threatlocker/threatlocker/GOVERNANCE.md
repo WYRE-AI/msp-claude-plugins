@@ -9,13 +9,9 @@ This plugin does not hold credentials. It reaches ThreatLocker through
 the WYRE Conduit gateway, which brokers authentication centrally and
 scopes every call to the tenant the operator is authorised for.
 
-- **Check the endpoint before trusting the rest of this document.** This
-  plugin's `.mcp.json` still points at `https://mcp.wyre.ai/v1/threatlocker/mcp`
-  — the older `wyre-technology/mcp-gateway` system, not the Conduit
-  deployment at `conduit.wyre.ai` that every claim below is derived
-  from. The two share ancestry and have drifted. Reconciling the
-  endpoint is tracked as follow-up work; see `wyre-gateway/GOVERNANCE.md`,
-  *Which system this describes*.
+- **The endpoint matches this document.** This plugin's `.mcp.json`
+  points at `https://conduit.wyre.ai/v1/threatlocker/mcp` — the Conduit
+  deployment every claim below is derived from.
 - No ThreatLocker API key is stored on the technician's machine, in this
   repo, or in the model's context.
 - Credential rotation happens once at Conduit, not per technician.

@@ -24,23 +24,26 @@ several of that revision's findings turned out to describe only the older
 system. This revision re-derives every claim from Conduit's source and
 says explicitly, at the end, which of the earlier findings survived.
 
-Two pieces of stale naming follow from that split, and neither is fixed
-here because both are marketplace-level changes:
+Two pieces of stale naming followed from that split. One has since been
+fixed; the other is deliberately left alone:
 
 - **This plugin is still called `wyre-gateway`.** It is the Conduit
   plugin. Renaming it would change the install id, the `enabledPlugins`
   key, and every skill namespace that references it, so it is deliberately
   left alone.
-- **This plugin's own `.mcp.json` still points at
-  `https://mcp.wyre.ai/v1/mcp`** — the *other* system. So does the
+- **This plugin's own `.mcp.json` used to point at
+  `https://mcp.wyre.ai/v1/mcp`** — the *other* system — as did the
   `.mcp.json` in nine vendor plugins: `auvik`, `blackpoint`, `crewhu`,
   `freshdesk`, `immybot`, `inforcer`, `saas-alerts`, `threatlocker`, and
-  `timezest`. Eleven plugins point at `conduit.wyre.ai` — `ncentral` plus
-  all ten `*-pack` aggregates — and the remaining 55 of the marketplace's
-  76 entries ship no `.mcp.json` at all. **A reader who installs
-  one of those nine vendor plugins is not talking to the system this
-  document describes.** Reconciling them is tracked as follow-up work;
-  until then, check the endpoint before trusting the governance text.
+  `timezest`. All ten have been repointed at Conduit. **No plugin in this
+  marketplace points at `mcp.wyre.ai` any more.** Twenty-one entries ship
+  a `.mcp.json`: this plugin and the ten `*-pack` aggregates use the
+  unified `https://conduit.wyre.ai/v1/mcp`; `ncentral` and the nine
+  vendor plugins above use the per-vendor
+  `https://conduit.wyre.ai/v1/<vendor>/mcp`, whose path segment must
+  match the vendor's `slug` in `src/credentials/vendor-config.ts` or
+  Conduit answers 404 (`src/proxy/router.ts:103`). The remaining 55 of
+  the marketplace's 76 entries ship no `.mcp.json` at all.
 
 ## What it is
 

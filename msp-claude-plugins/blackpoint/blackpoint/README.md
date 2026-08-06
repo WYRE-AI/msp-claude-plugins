@@ -21,7 +21,7 @@ Claude Code plugin for [Blackpoint Cyber](https://blackpointcyber.com) (the Comp
 /plugin install blackpoint
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/blackpoint/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/blackpoint/mcp`.
 
 ## Configuration
 

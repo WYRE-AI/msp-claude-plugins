@@ -10,13 +10,9 @@ This plugin does not hold credentials. It reaches CompassOne through the
 WYRE Conduit gateway, which brokers authentication centrally and scopes
 every call to the partner account the operator is authorised for.
 
-- **Check the endpoint before trusting the rest of this document.** This
-  plugin's `.mcp.json` still points at `https://mcp.wyre.ai/v1/blackpoint/mcp`
-  — the older `wyre-technology/mcp-gateway` system, not the Conduit
-  deployment at `conduit.wyre.ai` that every claim below is derived
-  from. The two share ancestry and have drifted. Reconciling the
-  endpoint is tracked as follow-up work; see `wyre-gateway/GOVERNANCE.md`,
-  *Which system this describes*.
+- **The endpoint matches this document.** This plugin's `.mcp.json`
+  points at `https://conduit.wyre.ai/v1/blackpoint/mcp` — the Conduit
+  deployment every claim below is derived from.
 - No CompassOne API token is stored on the technician's machine, in this
   repo, or in the model's context. Conduit maps `BLACKPOINT_API_TOKEN`
   onto the `X-Blackpoint-Api-Token` header and forwards it upstream as a
