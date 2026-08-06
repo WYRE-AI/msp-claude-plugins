@@ -117,13 +117,25 @@ mcp-cli call checkpoint-avanan/hec_list_exceptions '{"excType": "whitelist"}'
 
 ## Available Commands
 
-| Command | Description |
-|---------|-------------|
-| `/search-quarantine` | Search quarantined emails by various criteria |
-| `/release-quarantine` | Release quarantined email(s) back to recipients |
-| `/search-threats` | Search detected threats by type and severity |
-| `/check-threat` | Get detailed threat analysis |
-| `/manage-policy` | **Unsupported** — Harmony Email exposes no policy tools; pending removal |
+| Command | Description | Tools |
+|---------|-------------|-------|
+| `/search-threats` | Sweep detections by type, state, severity and window | `hec_query_events` |
+| `/check-threat` | Full detail for one detection and the message behind it | `hec_get_event`, `hec_get_email`, `hec_search_emails` |
+| `/search-quarantine` | Find messages by sender, subject, hash or quarantine state | `hec_search_emails` |
+| `/release-quarantine` | Deliver held mail back to recipients, with task polling | `hec_restore_emails`, `hec_restore_events`, `hec_get_task_status` |
+
+`/manage-policy` was removed in 0.4.0. Harmony Email exposes no policy tools
+through this API, so the command described a capability that did not exist.
+Allow and block lists — the nearest real capability — are the `whitelist` and
+`blacklist` values of `excType` on the four `hec_*_exception` tools; see the
+`exceptions` skill.
+
+## Available Agents
+
+| Agent | Description |
+|-------|-------------|
+| `cloud-email-defender` | Detection triage, message search, quarantine and restore, exception management |
+| `exception-hygiene-auditor` | Read-only periodic review of allow and block entries for age, scope and justification |
 
 ## Contributing
 
