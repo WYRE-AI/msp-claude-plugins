@@ -1,255 +1,176 @@
 ---
-description: Get detailed threat analysis including IOCs and timeline from Checkpoint Harmony Email
-argument-hint: "<threat-id> [include-iocs] [include-timeline] [include-related]"
-arguments: [threat-id, include-iocs, include-timeline, include-related]
+description: Pull full detail for one Checkpoint Harmony Email detection and the message behind it
+argument-hint: "<event-id> [include-entity] [include-related]"
+arguments: [event-id, include-entity, include-related]
 ---
 
 # Check Threat Details
 
-Get comprehensive threat analysis for a specific detection in Checkpoint Harmony Email & Collaboration (Avanan), including indicators of compromise, detection timeline, and related events.
+Retrieve the full record for a single security detection in Checkpoint Harmony Email & Collaboration (Avanan), resolve it to the message that triggered it, and optionally scope the surrounding campaign.
+
+Obtain the event id from `/search-threats`.
 
 ## Prerequisites
 
-- Valid Checkpoint Harmony API credentials configured (CHECKPOINT_CLIENT_ID, CHECKPOINT_CLIENT_SECRET)
-- API key must have threat detection read permissions
-- A valid threat ID (obtain from `/search-threats`)
+- A working Harmony Email connection (see [README](../README.md) for configuration)
+- The connection must resolve to at least one `farm:customer` scope
+- Access to `hec_get_event` and `hec_get_email`; see [GOVERNANCE.md](../GOVERNANCE.md) for the permission tiers
 
 ## Steps
 
-1. **Retrieve threat details**
-   ```http
-   GET /app/hec-api/v1.0/threats/<threat-id>
-   Authorization: Bearer <token>
+1. **Fetch the event**
+   ```json
+   { "eventId": "evt-a1b2c3" }
+   ```
+   `hec_get_event` returns the query summary fields plus `entityId`, `customerId`, `data`, `additionalData` and the `actions` history.
+
+2. **Read `availableEventActions` before proposing anything**
+   - It states what this event will actually accept right now. An event's state constrains its options — do not assume quarantine or restore is still on offer.
+
+3. **Resolve to the message** (default; skip with `--include-entity false`)
+   - Take `entityId` from step 1 and call `hec_get_email`:
+   ```json
+   { "entityId": "ent-x9y8z7" }
+   ```
+   - This is where sender, recipients, subject, `combinedVerdict` and the `attachments` array live. The event carries the verdict; the entity carries the evidence.
+
+4. **Scope the campaign** (only with `--include-related`)
+   - Call `hec_search_emails` filtered on the sender over the same window, to find messages from the same source that were *not* flagged:
+   ```json
+   {
+     "saas": "office365_emails",
+     "startDate": "2026-07-28T00:00:00Z",
+     "filters": [
+       { "saasAttrName": "fromEmail", "saasAttrOp": "is",
+         "saasAttrValue": "noreply@d0cusign.net" }
+     ]
+   }
    ```
 
-2. **Extract IOCs** (if --include-iocs)
-   ```http
-   GET /app/hec-api/v1.0/threats/<threat-id>/iocs
-   Authorization: Bearer <token>
-   ```
-
-3. **Get timeline** (if --include-timeline)
-   ```http
-   GET /app/hec-api/v1.0/threats/<threat-id>/timeline
-   Authorization: Bearer <token>
-   ```
-
-4. **Find related threats** (if --include-related)
-   - Search for threats from same sender/domain
-   - Link to quarantine entries
-
-5. **Format comprehensive analysis report**
+5. **Report the disposition** with its justification, and say what remains unknown.
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| threat-id | string | Yes | - | Threat ID to analyze |
-| include-iocs | boolean | No | true | Include IOC extraction |
-| include-timeline | boolean | No | true | Include event timeline |
-| include-related | boolean | No | false | Include related threats |
+| event-id | string | Yes | - | The `eventId` to retrieve |
+| include-entity | boolean | No | true | Resolve `entityId` and pull the full message record |
+| include-related | boolean | No | false | Search for other messages from the same sender |
+
+## What This Command Cannot Do
+
+Named here because the surface invites the assumption:
+
+- **No IOC extraction.** There is no call returning URLs, domains or IPs as a structured indicator set. What exists is the entity's attachment metadata (name, MIME type, size, MD5) and whatever the event's `data` / `additionalData` blobs happen to carry. Read those; do not present them as a curated IOC list.
+- **No timeline.** There is no per-detection engine timeline. The `actions` array on the full event record is the nearest equivalent, and it records actions taken, not scan stages.
+- **No message body or attachment download.** Names, sizes, MIME types and MD5 hashes are exposed; content is not.
+- **No SHA-256.** Attachment `MD5` is the only hash the payload carries, despite SHA-256 being the more common currency downstream.
+- **No threat-intelligence lookup, no reputation scoring, no sandbox detonation on demand.** Feed the MD5 hashes to your endpoint and network controls; this plugin has no enrichment of its own.
+- **No incident object.** No case, status, assignee or note anywhere in this surface. There is nothing to "open an investigation" against.
+- **No false-positive marking.** Closing a detection as a false positive is a console action, or an exception — see the `exceptions` skill.
 
 ## Examples
 
-### Basic Threat Check
+### Full Detail
 
 ```
-/check-threat thr-abc123
+/check-threat evt-a1b2c3
 ```
 
-### Full Analysis with Related Threats
+### Event Record Only
 
 ```
-/check-threat thr-abc123 --include-related
+/check-threat evt-a1b2c3 --include-entity false
 ```
 
-### Quick Check Without Timeline
+### With Campaign Scoping
 
 ```
-/check-threat thr-abc123 --include-timeline false
-```
-
-### IOC-Focused Analysis
-
-```
-/check-threat thr-abc123 --include-iocs --include-timeline false
+/check-threat evt-a1b2c3 --include-related
 ```
 
 ## Output
 
-### Phishing Threat Analysis
-
 ```
 ========================================================
-THREAT ANALYSIS: thr-def456
+EVENT evt-a1b2c3
 ========================================================
 
-CLASSIFICATION
-  Type:         Phishing (Credential Harvesting)
-  Severity:     High
-  Confidence:   88%
-  Engine:       Anti-Phishing + URL Rewriting
-  Status:       Quarantined
+DETECTION
+  Type:            phishing
+  State:           new
+  Severity:        Critical
+  Confidence:      High
+  SaaS:            office365_emails
+  Created:         2026-07-30T08:45:03Z
+  Description:     Credential harvesting page impersonating a document service
+  Entity ID:       ent-x9y8z7
 
-EMAIL DETAILS
-  Subject:      Your DocuSign Document is Ready
-  Sender:       noreply@d0cusign.net (DocuSign)
-  Reply-To:     noreply@d0cusign.net
-  Recipients:   john@company.com
-  Direction:    Inbound
-  Received:     2024-02-15 08:45:00 UTC
+AVAILABLE ACTIONS
+  quarantine, restore
 
-DETECTION INDICATORS
-  - Sender domain typosquatting: d0cusign.net (similar to docusign.net)
-  - Login page similarity: 94% match to DocuSign login
-  - SPF: FAIL (d0cusign.net does not authorize sender IP)
-  - DKIM: NONE (no DKIM signature)
-  - DMARC: FAIL
+ACTION HISTORY
+  (none — event is untouched)
 
-INDICATORS OF COMPROMISE (IOCs)
-  URLs:
-    [MALICIOUS] https://d0cusign.net/sign/review?id=abc123
-      - Verdict: Phishing page
-      - Redirects to: https://185.234.xxx.xxx/harvest.php
-      - SSL: Self-signed certificate
-      - Page similarity: 94% DocuSign login
+MESSAGE  (hec_get_email ent-x9y8z7)
+  Subject:         Your DocuSign Document is Ready
+  From:            noreply@d0cusign.net  ("DocuSign")
+  To:              john@example.com
+  Received:        2026-07-30T08:45:00Z
+  Quarantined:     false
+  Restored:        false
+  Combined verdict: malicious
+  Attachments:     none
 
-  Domains:
-    - d0cusign.net (registered 2 days ago, registrar: NameCheap)
-    - Hosting: 185.234.xxx.xxx (AS12345 - known bulletproof host)
+ASSESSMENT
+  fromName "DocuSign" over an unrelated sending domain, and d0cusign.net is a
+  digit-substitution lookalike for docusign.net. Type is phishing with High
+  confidence and the entity's combinedVerdict agrees. Not a false positive.
 
-  IP Addresses:
-    - 185.234.xxx.xxx (origin server)
-    - 91.123.xxx.xxx (email relay)
+RELATED  (--include-related)
+  2 further messages from noreply@d0cusign.net in the same window, neither
+  flagged. Both remain deliverable.
+    ent-p3q4r5  "Document shared with you"     2026-07-30T08:41Z  quarantined: false
+    ent-s6t7u8  "Reminder: signature needed"   2026-07-29T16:02Z  quarantined: false
 
-TIMELINE
-  08:45:00 UTC  Email received by mail server
-  08:45:02 UTC  Anti-spam scan: PASS
-  08:45:03 UTC  Anti-phishing scan: DETECTED (88% confidence)
-  08:45:03 UTC  URL analysis: d0cusign.net flagged as typosquat
-  08:45:04 UTC  Page similarity check: 94% match to DocuSign
-  08:45:05 UTC  Email quarantined
-  08:45:06 UTC  Admin notification sent
-
-QUARANTINE
-  Entity ID:    qe-def456
-  Status:       Quarantined
-  Expires:      2024-03-16 08:45:00 UTC
-
-RECOMMENDED ACTIONS
-  1. Do NOT release this email - confirmed phishing
-  2. Block domain d0cusign.net at email gateway
-  3. Check if any users received similar emails
-  4. Search for: /search-threats --sender "noreply@d0cusign.net"
-========================================================
-```
-
-### BEC Threat Analysis
-
-```
-========================================================
-THREAT ANALYSIS: thr-abc123
-========================================================
-
-CLASSIFICATION
-  Type:         BEC (Business Email Compromise)
-  Severity:     Critical
-  Confidence:   92%
-  Engine:       AI/ML Engine
-  Status:       Detected
-
-EMAIL DETAILS
-  Subject:      Urgent: Wire Transfer Needed
-  Sender:       ceo@c0mpany.com (John Smith)
-  Reply-To:     reply@attacker-domain.com
-  Recipients:   cfo@company.com
-  Direction:    Inbound
-  Received:     2024-02-15 09:23:00 UTC
-
-DETECTION INDICATORS
-  - Display name impersonation: "John Smith" matches CEO
-  - Domain typosquatting: c0mpany.com (zero for 'o')
-  - Reply-to mismatch: reply@attacker-domain.com
-  - Financial request: wire transfer mentioned
-  - Urgency language: "urgent", "immediately"
-  - No prior email history from c0mpany.com
-
-INDICATORS OF COMPROMISE (IOCs)
-  Domains:
-    - c0mpany.com (registered 1 day ago)
-    - attacker-domain.com (registered 3 days ago)
-
-  IP Addresses:
-    - 203.0.xxx.xxx (email origin)
-
-  Email Addresses:
-    - ceo@c0mpany.com (impersonation)
-    - reply@attacker-domain.com (reply collection)
-
-TIMELINE
-  09:23:00 UTC  Email received by mail server
-  09:23:01 UTC  Anti-spam scan: PASS
-  09:23:02 UTC  Anti-phishing scan: PASS (no URLs)
-  09:23:03 UTC  AI/ML scan: BEC DETECTED (92% confidence)
-  09:23:03 UTC  Display name match to internal executive
-  09:23:04 UTC  Email quarantined
-  09:23:05 UTC  Admin notification sent (critical severity)
-
-RECOMMENDED ACTIONS
-  1. Do NOT release this email - confirmed BEC
-  2. Block domains: c0mpany.com, attacker-domain.com
-  3. Alert the CFO that this email is fraudulent
-  4. Check for similar attacks: /search-threats --type bec
-  5. Consider creating an incident for investigation
+RECOMMENDED
+  1. Quarantine this entity and the two related ones — /release-quarantine
+     is the reverse operation if this proves wrong.
+  2. Consider a blacklist exception on senderDomain d0cusign.net. Note the
+     default senderDomainMatching is "endswith", which is a suffix match —
+     set it deliberately.
+  3. No IOC set is available from this API. The lookalike domain above is
+     the indicator; feed it to your other controls manually.
 ========================================================
 ```
 
 ## Error Handling
 
-### Threat Not Found
+### Event Not Found
 
 ```
-Error: Threat not found: thr-invalid123
+Error: no event returned for evt-invalid123.
 
-The threat may have:
-- Expired (past data retention period)
-- Never existed (check the threat ID)
-
-Use /search-threats to find the correct threat ID.
+An empty response is not the same as "does not exist" here. Check:
+- the id came from hec_query_events, not from an entity search
+  (entity ids and event ids are different namespaces)
+- the event is within retention
+- region and farm scope — a key with no farm association returns zero
+  records rather than an error
 ```
 
-### Expired Data
+### Entity Not Resolvable
 
 ```
-Warning: IOC data partially unavailable for thr-old789
+Warning: event evt-a1b2c3 has no entityId.
 
-The threat was detected 85 days ago. Some detailed analysis
-data may have been purged per the retention policy.
-
-Available: Basic threat details, classification
-Unavailable: Full IOC extraction, URL analysis details
-```
-
-### Permission Denied
-
-```
-Error: Insufficient permissions to view threat details
-
-Your API key does not have threat detection read permissions.
-Contact your Checkpoint administrator to update API key scopes.
-```
-
-### Rate Limiting
-
-```
-Rate limited by Checkpoint API
-
-Retrying in 30 seconds...
+Not every event resolves to a message — shadow_it and some alert events
+describe activity rather than mail. Report the event record alone and say
+so, rather than searching for a message that was never there.
 ```
 
 ## Related Commands
 
-- `/search-threats` - Search for threats
-- `/search-quarantine` - Find related quarantine entries
-- `/release-quarantine` - Release false positives
-- `/manage-policy` - Adjust detection policies
+- `/search-threats` - Sweep detections to find event ids
+- `/search-quarantine` - Find messages by sender, subject or quarantine state
+- `/release-quarantine` - Deliver a held message back to its recipients

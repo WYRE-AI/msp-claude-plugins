@@ -1,209 +1,199 @@
 ---
-description: Release quarantined email(s) back to recipients in Checkpoint Harmony Email
-argument-hint: "<entity-id> [allow-list] [reason] [notify]"
-arguments: [entity-id, allow-list, reason, notify]
+description: Restore quarantined mail to its recipients in Checkpoint Harmony Email, with task polling
+argument-hint: "<entity-id> [event-id] [entity-type]"
+arguments: [entity-id, event-id, entity-type]
 ---
 
 # Release Quarantined Email
 
-Release one or more quarantined emails back to their original recipients in Checkpoint Harmony Email & Collaboration (Avanan).
+Deliver held messages back to their recipients in Checkpoint Harmony Email & Collaboration (Avanan) with `hec_restore_emails` (entity ids) or `hec_restore_events` (event ids).
+
+**Restore is the sharp operation on this surface, and the tool metadata says the opposite.** The two quarantine tools carry `destructiveHint: true`; the two restore tools carry **no annotations at all**. A client that gates confirmation on `destructiveHint` will stop you on a quarantine and wave a restore straight through — the inverse of the real risk ordering. Require a named human approver explicitly. Do not rely on the tool metadata to ask.
+
+Restoring delivers a message the security stack already judged malicious into a real person's inbox, and **there is no un-deliver**. When the detection was malware or BEC, an erroneous restore is precisely the outcome the product exists to prevent.
 
 ## Prerequisites
 
-- Valid Checkpoint Harmony API credentials configured (CHECKPOINT_CLIENT_ID, CHECKPOINT_CLIENT_SECRET)
-- API key must have quarantine write permissions
-- Quarantine entry must exist and be in QUARANTINED status
+- A working Harmony Email connection (see [README](../README.md) for configuration)
+- Restore sits at the `admin` tier in Conduit — see [GOVERNANCE.md](../GOVERNANCE.md). Conduit compares tiers; it does **not** enforce per-call approval, so the approval discipline below is a policy you impose, not one the platform guarantees.
+- Entity ids from `/search-quarantine`, or event ids from `/search-threats`
 
 ## Steps
 
-1. **Validate quarantine entries**
-   - Verify each entity ID exists
-   - Confirm entries are in QUARANTINED status (not already released or deleted)
-   - Check quarantine reason and severity for safety warnings
+1. **Read the message before touching it**
+   - `hec_get_email` on each entity id. Check `entitySecurityResult.combinedVerdict` rather than the search summary line, and read `entityAvailableActions` — an entity's state constrains what it still accepts.
+   - Confirm `isQuarantined` is actually true. An entity with `isRestored` already true was delivered previously.
 
-2. **Safety checks**
-   - Warn if releasing MALWARE-quarantined email
-   - Warn if releasing CRITICAL severity items
-   - Display entry details for confirmation
+2. **Establish why it was held**
+   - There is no quarantine-reason field. Pivot through `/search-threats` and `/check-threat` to the detection. The release posture depends on the detection type — see the table below.
 
-3. **Execute release**
-   ```http
-   POST /app/hec-api/v1.0/quarantine/release
-   Authorization: Bearer <token>
-   Content-Type: application/json
+3. **Get out-of-band confirmation**
+   - Confirm the sender's legitimacy with the customer by a channel other than the mail in question.
+   - Check whether other recipients received the same message; a single release on a campaign is rarely the whole answer.
 
-   {
-     "entityIds": ["qe-abc123"],
-     "releaseToRecipients": true,
-     "addToAllowList": false
-   }
+4. **Get named approval, then restore**
+   ```json
+   { "entityIds": ["ent-x9y8z7"], "entityType": "email" }
    ```
+   Or, if you hold event ids instead:
+   ```json
+   { "eventIds": ["evt-a1b2c3"] }
+   ```
+   Both reach the same underlying action; use whichever id namespace you already have.
 
-4. **Optionally add to allow list**
-   - If --allow-list flag is set, add sender to allow list
+5. **Poll every task**
+   - The call returns **one `taskId` per entity** and reports acceptance, not completion.
+   - Call `hec_get_task_status` for each `taskId`. Poll all of them, not just the last.
+   - **An agent that reports "released" off the back of the action call alone is reporting an intention.**
 
-5. **Report results**
-   - Confirm release success for each entry
-   - Note any failures
+6. **Report per-entity outcomes**, including any task that did not reach a terminal state.
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| entity-id | string | Yes | - | Quarantine entity ID(s), comma-separated for bulk |
-| allow-list | boolean | No | false | Add sender to allow list |
-| reason | string | No | - | Reason for releasing (recommended) |
-| notify | boolean | No | true | Notify recipient of release |
+| entity-id | string[] | Conditional | - | `entityIds` for `hec_restore_emails` |
+| event-id | string[] | Conditional | - | `eventIds` for `hec_restore_events` |
+| entity-type | string | No | `email` | `entityType`, entity-id path only |
+
+One of `entity-id` or `event-id` is required.
+
+## What This Command Cannot Do
+
+The previous revision of this command offered three flags that have no backing:
+
+- **No `--allow-list`.** Releasing a message and creating a sender exception are two separate operations against two different tools. There is no release-with-allow-list. If the sender should stop being flagged, that is a `hec_add_exception` call with `excType: "whitelist"` — a separate, deliberate security decision. Say which of the two you are proposing.
+- **No `--notify`.** Nothing on this surface tells a recipient their mail was held or released.
+- **No `--reason`.** The restore action accepts only ids and an optional entity type. There is no reason field, no audit note, and nothing written back to the record. Your justification lives in the ticket, not in Harmony Email.
+
+Also absent: there is **no delete**. This surface has quarantine and restore only; permanently removing a held message is a console action.
+
+## Release Posture by Detection Type
+
+| Detection | Posture |
+|-----------|---------|
+| `malware` | **Do not release.** Escalate. |
+| `suspicious malware` | Do not release without sandbox or hash corroboration. |
+| `phishing` (incl. BEC) | Release only after out-of-band sender confirmation. |
+| `dlp` | Outbound. This is a data-handling decision, not a security one — it needs the data owner, not the helpdesk. |
+| `anomaly` | Usually a genuine sender behaving unusually. Highest legitimate release rate. |
+| `malicious_url` | Check whether the link is still live before judging. |
+
+A `malicious_url_click` event means a user already reached the destination. Releasing or holding the message is then secondary to credential response.
 
 ## Examples
 
-### Release Single Email
+### Single Message
 
 ```
-/release-quarantine qe-abc123
+/release-quarantine ent-x9y8z7
 ```
 
-### Release with Allow List
+### By Event ID
 
 ```
-/release-quarantine qe-abc123 --allow-list --reason "Legitimate email from known vendor"
+/release-quarantine --event-id evt-a1b2c3
 ```
 
-### Bulk Release
+### Several at Once
 
 ```
-/release-quarantine qe-abc123,qe-def456,qe-ghi789 --reason "False positive - marketing partner emails"
-```
-
-### Release Without Notification
-
-```
-/release-quarantine qe-abc123 --notify false
-```
-
-### Release with Detailed Reason
-
-```
-/release-quarantine qe-abc123 --reason "Confirmed legitimate DocuSign document from known client" --allow-list
+/release-quarantine ent-x9y8z7,ent-p3q4r5,ent-s6t7u8
 ```
 
 ## Output
 
-### Successful Release
-
 ```
-Released 1 email from quarantine
+RESTORE — 3 entities submitted
 
-Entity ID:   qe-abc123
-Subject:     Your DocuSign Document
-Sender:      noreply@docusign.com
-Recipients:  john@company.com
-Released:    2024-02-15 14:30:00 UTC
-Allow List:  Sender added to allow list
+Pre-flight:
+  ent-x9y8z7  "Weekly Newsletter"   news@partner.example   verdict: clean    held: yes
+  ent-p3q4r5  "Monthly Report"      reports@partner.example verdict: clean   held: yes
+  ent-s6t7u8  "Partner Update"      news@partner.example   verdict: clean    held: yes
 
-The email has been delivered to the recipient's inbox.
-```
+  Detection type: anomaly (bulk sender, first send from this domain)
+  Sender confirmed out of band with the client on 2026-08-06.
+  Approved by: <named approver>
 
-### Bulk Release
+Submitted. Task ids returned:
+  ent-x9y8z7 -> task-11aa22
+  ent-p3q4r5 -> task-33bb44
+  ent-s6t7u8 -> task-55cc66
 
-```
-Released 3 of 3 emails from quarantine
+Polling hec_get_task_status:
++------------+-----------+-----------+
+| Entity ID  | Task ID   | Status    |
++------------+-----------+-----------+
+| ent-x9y8z7 | task-11aa22 | completed |
+| ent-p3q4r5 | task-33bb44 | completed |
+| ent-s6t7u8 | task-55cc66 | completed |
++------------+-----------+-----------+
 
-+-----------+---------------------------------+---------+
-| Entity ID | Subject                         | Status  |
-+-----------+---------------------------------+---------+
-| qe-abc123 | Weekly Newsletter               | Released |
-| qe-def456 | Monthly Report                  | Released |
-| qe-ghi789 | Partner Update                  | Released |
-+-----------+---------------------------------+---------+
-
-Reason: False positive - marketing partner emails
-Allow List: Not modified
+3 of 3 delivered. All tasks reached a terminal state.
+No sender exception was created — the messages were released, nothing standing changed.
 ```
 
-### Safety Warning (Malware)
+### Partial Completion
 
 ```
-WARNING: You are about to release a MALWARE-quarantined email
+Submitted. Task ids returned:
+  ent-x9y8z7 -> task-11aa22   completed
+  ent-p3q4r5 -> task-33bb44   completed
+  ent-s6t7u8 -> task-55cc66   still pending
 
-Entity ID:   qe-xyz789
-Subject:     Invoice #4521 Attached
-Sender:      billing@unknown-corp.com
-Reason:      MALWARE
-Severity:    Critical
-Confidence:  95%
-Attachments: invoice_4521.docm (SHA-256: a1b2c3...)
-
-This email was flagged as containing malware with high confidence.
-Releasing this email could expose the recipient to a malicious payload.
-
-Are you sure you want to proceed? This action is strongly discouraged.
-If the user confirms, add --force to override the safety check.
-```
-
-### Partial Failure
-
-```
-Released 2 of 3 emails from quarantine
-
-+-----------+---------------------------------+----------+
-| Entity ID | Subject                         | Status   |
-+-----------+---------------------------------+----------+
-| qe-abc123 | Weekly Newsletter               | Released  |
-| qe-def456 | Monthly Report                  | Released  |
-| qe-ghi789 | Old Notification                | FAILED    |
-+-----------+---------------------------------+----------+
-
-Failures:
-- qe-ghi789: Quarantine entry expired (past 30-day retention)
+2 of 3 confirmed delivered. One task has not reached a terminal state —
+this is NOT a failure and NOT a success. Re-poll task-55cc66 before
+reporting an outcome for ent-s6t7u8.
 ```
 
 ## Error Handling
 
+### Batches Are Not Transactional
+
+```
+The API caps a single action call at 100 entities (see GOVERNANCE.md).
+
+Splitting a larger action into batches performs several independent
+irreversible operations. A failure partway leaves a mixed state with
+nothing to roll back. Poll every taskId, not just the last, and report
+the mixed state honestly rather than as an aggregate.
+```
+
 ### Entity Not Found
 
 ```
-Error: Quarantine entry not found: qe-invalid123
+Error: no entity returned for ent-invalid123.
 
-The quarantine entry may have:
-- Already been deleted
-- Expired (past retention period)
-- Never existed (check the entity ID)
-
-Use /search-quarantine to find the correct entity ID.
+Check:
+- the id is an entity id, not an event id (different namespaces —
+  use hec_restore_events for event ids)
+- quarantine expiry: entries auto-delete after the tenant's retention
+  period (30 days by default) and cannot be recovered
+- region and farm scope
 ```
 
-### Already Released
+### Already Restored
 
 ```
-Error: Quarantine entry already released: qe-abc123
+ent-x9y8z7 has isRestored: true — it was already delivered.
 
-Released by:  admin@company.com
-Released on:  2024-02-15 10:00:00 UTC
-
-No action needed - the email was already delivered to the recipient.
+No action taken. Note that isQuarantined and isRestored can both be
+true; that means held and then released, not held now.
 ```
 
-### Permission Denied
+### Quarantine Expiry
 
 ```
-Error: Insufficient permissions to release quarantine entries
+Warning: quarantine expiry is a hard deletion.
 
-Your API key does not have quarantine write permissions.
-Contact your Checkpoint administrator to update API key scopes.
-```
-
-### Rate Limiting
-
-```
-Rate limited by Checkpoint API
-
-Retrying in 30 seconds...
-For bulk operations, consider releasing in smaller batches (max 100 per request).
+Entries age out after the retention period and cannot be recovered.
+There is no tool that reads or extends retention. The only documented
+workaround — release and re-quarantine — means briefly delivering
+the message, which is itself the risk you were trying to avoid.
 ```
 
 ## Related Commands
 
-- `/search-quarantine` - Search quarantined emails
-- `/check-threat` - Get detailed threat analysis before releasing
-- `/search-threats` - Search for related threats
+- `/search-quarantine` - Find held messages and their entity ids
+- `/check-threat` - Full detail on the detection before you judge it
+- `/search-threats` - Sweep detections to find related activity

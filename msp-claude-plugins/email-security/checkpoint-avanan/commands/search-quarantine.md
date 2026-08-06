@@ -1,207 +1,177 @@
 ---
-description: Search quarantined emails in Checkpoint Harmony Email by various criteria
-argument-hint: "[query] [sender] [recipient] [reason] [severity] [start-date] [end-date] [status] [limit]"
-arguments: [query, sender, recipient, reason, severity, start-date, end-date, status, limit]
+description: Find messages in Checkpoint Harmony Email by sender, subject, attachment hash or quarantine state
+argument-hint: "<saas> <start-date> [end-date] [sender] [subject] [recipient] [quarantined] [attachment-md5]"
+arguments: [saas, start-date, end-date, sender, subject, recipient, quarantined, attachment-md5]
 ---
 
-# Search Quarantined Emails
+# Search Quarantine
 
-Search and filter quarantined emails in Checkpoint Harmony Email & Collaboration (Avanan) using various criteria.
+Locate mail and SaaS entities in Checkpoint Harmony Email & Collaboration (Avanan) with `hec_search_emails`, including messages currently held in quarantine.
+
+This searches **entities** — the things that were scanned. To find out *why* something was held, follow its detection with `/check-threat`.
 
 ## Prerequisites
 
-- Valid Checkpoint Harmony API credentials configured (CHECKPOINT_CLIENT_ID, CHECKPOINT_CLIENT_SECRET)
-- API key must have quarantine read permissions
+- A working Harmony Email connection (see [README](../README.md) for configuration)
+- The connection must resolve to at least one `farm:customer` scope
+- Read access to `hec_search_emails`; see [GOVERNANCE.md](../GOVERNANCE.md) for the permission tiers
 
 ## Steps
 
-1. **Build search filter**
-   - Parse all provided arguments
-   - Map text values to API filter codes (reason, severity, status)
-   - Validate date range (max 90 days)
+1. **Establish the two mandatory inputs**
+   - `saas` (a **single string**, not an array — unlike the events surface) and `startDate`. Both are required. There is no way to search everything.
 
-2. **Execute search query**
-   ```http
-   GET /app/hec-api/v1.0/quarantine?startDate=...&endDate=...&reason=...&limit=...
-   Authorization: Bearer <token>
+2. **Express matching as `filters` triples**
+   - Each filter is `{ saasAttrName, saasAttrOp, saasAttrValue }`. There is no free-text `query` argument and no `field` argument.
+
+3. **Call `hec_search_emails`**
+   ```json
+   {
+     "saas": "office365_emails",
+     "startDate": "2026-07-28T00:00:00Z",
+     "filters": [
+       { "saasAttrName": "fromEmail", "saasAttrOp": "is",
+         "saasAttrValue": "sender@example.com" },
+       { "saasAttrName": "isQuarantined", "saasAttrOp": "is",
+         "saasAttrValue": true }
+     ]
+   }
    ```
 
-3. **Format and return results**
-   - Display quarantine list with key details
-   - Include quick actions for each entry
+4. **Page to exhaustion** with the returned `scrollId`. There is no `limit`.
+
+5. **Format results**, stating the platform and window searched.
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| query | string | No | - | Free text search (sender, recipient, subject) |
-| sender | string | No | - | Sender email address filter |
-| recipient | string | No | - | Recipient email address filter |
-| reason | string | No | - | phishing/malware/spam/dlp/bec/anomaly/policy/bulk |
-| severity | string | No | - | critical/high/medium/low |
-| start-date | string | No | 24h ago | ISO 8601 date |
-| end-date | string | No | now | ISO 8601 date |
-| status | string | No | quarantined | quarantined/released/deleted/all |
-| limit | int | No | 25 | Max results (1-200) |
+| saas | string | **Yes** | - | Single platform string — see the platform list |
+| start-date | string | **Yes** | - | ISO 8601 |
+| end-date | string | No | now | ISO 8601 |
+| sender | string | No | - | `fromEmail` filter |
+| subject | string | No | - | `subject` filter |
+| recipient | string | No | - | `recipients` filter |
+| quarantined | boolean | No | - | `isQuarantined` filter |
+| attachment-md5 | string | No | - | `attachmentMd5` filter |
+
+### Filter Operators
+
+`is`, `isNot`, `contains`, `notContains`, `startsWith`, `isEmpty`, `isNotEmpty`, `greaterThan`, `lessThan`.
+
+`isEmpty` and `isNotEmpty` take no `saasAttrValue`.
+
+**The operator list has no `or`, and filters do not nest.** Multiple filters combine as AND. An either/or sender search is two calls whose results you merge yourself.
+
+### SaaS Platforms
+
+`email`, `office365_emails`, `office365_onedrive`, `office365_sharepoint`, `google_mail`, `google_drive`, `slack`, `ms_teams`, `box2`, `dropbox2`.
+
+`email` and `office365_emails` are **not** synonyms — a tenant may report under either depending on how it was onboarded. `saas` takes one value per call, so covering both is two searches.
+
+## What This Command Cannot Do
+
+- **No quarantine-reason filter.** Harmony Email exposes no "quarantine reason" field on the entity. The reason is the detection that caused it, which lives on the event — sweep with `/search-threats` and pivot through `entityId`. There is no `PHISHING`/`MALWARE`/`SPAM`/`BEC`/`POLICY`/`BULK` reason enum on this surface.
+- **No severity filter.** Severity is an event attribute, not an entity attribute.
+- **No free-text search.** All matching goes through `filters` triples on named attributes.
+- **No `limit`.** Result size is controlled by paging with `scrollId`.
+- **No status filter for released or deleted.** The entity carries two flags — `isQuarantined` and `isRestored` — and both being true means it was held and then delivered. There is no "deleted" state, because this surface has no delete.
+- **No body preview.** The payload exposes headers, recipients and attachment metadata, not content.
 
 ## Examples
 
-### Search by Sender
+### Everything Currently Held, Last 7 Days
 
 ```
-/search-quarantine --sender "suspicious@external-domain.com"
+/search-quarantine office365_emails "2026-07-28T00:00:00Z" --quarantined true
 ```
 
-### Search by Subject Text
+### A Specific Sender
 
 ```
-/search-quarantine "invoice payment"
+/search-quarantine office365_emails "2026-07-01T00:00:00Z" --sender "suspicious@external-domain.com"
 ```
 
-### Phishing Quarantine in Date Range
+### Subject Substring
 
 ```
-/search-quarantine --reason phishing --start-date "2024-02-01" --end-date "2024-02-15"
+/search-quarantine office365_emails "2026-07-01T00:00:00Z" --subject "invoice payment"
 ```
 
-### Critical Severity Quarantine Items
+### A Recipient's Held Mail
 
 ```
-/search-quarantine --severity critical --status quarantined
+/search-quarantine office365_emails "2026-07-01T00:00:00Z" --recipient "cfo@example.com" --quarantined true
 ```
 
-### Quarantine for Specific Recipient
+### Blast Radius of a Known Attachment
 
 ```
-/search-quarantine --recipient "cfo@company.com" --reason bec
+/search-quarantine office365_emails "2026-07-01T00:00:00Z" --attachment-md5 "d41d8cd98f00b204e9800998ecf8427e"
 ```
 
 ## Output
 
 ```
-Found 4 quarantined emails matching criteria
+4 entities — office365_emails, 2026-07-28T00:00:00Z to now
+(scroll exhausted, 1 page)
 
-+--------------+-----------------------------------+--------------------------+----------+----------+------------+
-| Entity ID    | Subject                           | Sender                   | Reason   | Severity | Date       |
-+--------------+-----------------------------------+--------------------------+----------+----------+------------+
-| qe-abc123    | Urgent: Wire Transfer Needed      | ceo@c0mpany.com          | BEC      | Critical | 2024-02-15 |
-| qe-def456    | Your DocuSign Document            | noreply@d0cusign.net     | Phishing | High     | 2024-02-15 |
-| qe-ghi789    | Invoice #4521 Attached            | billing@unknown-corp.com | Malware  | High     | 2024-02-14 |
-| qe-jkl012    | Weekly Newsletter                 | news@marketing-blast.com | Spam     | Low      | 2024-02-14 |
-+--------------+-----------------------------------+--------------------------+----------+----------+------------+
++------------+-----------------------------+--------------------------+-------------+----------+----------+
+| Entity ID  | Subject                     | From                     | Verdict     | Held     | Restored |
++------------+-----------------------------+--------------------------+-------------+----------+----------+
+| ent-x9y8z7 | Your DocuSign Document      | noreply@d0cusign.net     | malicious   | yes      | no       |
+| ent-p3q4r5 | Invoice #4521 Attached      | billing@unknown-corp.com | malicious   | yes      | no       |
+| ent-s6t7u8 | Urgent: Wire Transfer       | ceo@examp1e.com          | malicious   | yes      | no       |
+| ent-v9w0x1 | Weekly Newsletter           | news@marketing-blast.com | clean       | yes      | yes      |
++------------+-----------------------------+--------------------------+-------------+----------+----------+
 
-Quick Actions:
-- Release email: /release-quarantine <entity-id>
-- View threat: /check-threat <entity-id>
-- Search related: /search-threats --sender <sender>
+Available actions per entity are on each record — read them before proposing one.
+
+Note: this covers office365_emails only. If the tenant also reports under
+"email", run a second search to cover it.
+
+Quick actions:
+- Why was it held: /search-threats then /check-threat <event-id>
+- Full message record: hec_get_email with the entity id
+- Deliver it: /release-quarantine <entity-id>
 ```
-
-### Detailed View
-
-```
-/search-quarantine --sender "ceo@c0mpany.com" --detailed
-```
-
-```
-Found 1 quarantined email
-
-========================================================
-qe-abc123 - Urgent: Wire Transfer Needed
-========================================================
-Sender:       ceo@c0mpany.com (CEO Name)
-Recipients:   cfo@company.com
-Reason:       BEC (Business Email Compromise)
-Severity:     Critical
-Confidence:   92%
-Engine:       AI/ML Engine
-Quarantined:  2024-02-15 09:23:00 UTC
-Expires:      2024-03-16 09:23:00 UTC
-
-Body Preview:
-"Hi, I need you to process an urgent wire transfer
-of $45,000 to the following account. This is time
-sensitive and confidential..."
-
-Indicators:
-- Sender domain mismatch: c0mpany.com vs company.com
-- Reply-to differs from sender
-- Urgency language detected
-- Financial request detected
-
-Attachments: None
-URLs: 0
-========================================================
-```
-
-## Filter Reference
-
-### Quarantine Reasons
-
-| Text | API Code |
-|------|----------|
-| phishing | PHISHING |
-| malware | MALWARE |
-| spam | SPAM |
-| dlp | DLP |
-| bec | BEC |
-| anomaly | ANOMALY |
-| policy | POLICY |
-| bulk | BULK |
-
-### Severity Values
-
-| Text | API Code |
-|------|----------|
-| critical | CRITICAL |
-| high | HIGH |
-| medium | MEDIUM |
-| low | LOW |
-
-### Status Values
-
-| Text | Filter Behavior |
-|------|-----------------|
-| quarantined | Only items currently in quarantine |
-| released | Only items that were released |
-| deleted | Only items that were deleted |
-| all | All quarantine entries regardless of status |
 
 ## Error Handling
 
 ### No Results
 
 ```
-No quarantined emails found matching criteria
+No entities found matching criteria.
 
-Suggestions:
-- Broaden your search (remove filters)
-- Check spelling of sender/recipient addresses
-- Expand the date range
-- Try --status all to include released/deleted items
+An empty search is not proof of absence. Check, in order:
+- saas — is the tenant reporting under "email" rather than "office365_emails"?
+- the window — startDate is mandatory and retention bounds how far back it can reach
+- operator choice — "is" is exact; a partial address needs "contains"
+- region and farm scope — a key with no farm association returns zero records
+  rather than an error
 ```
 
-### Invalid Date Range
+### Missing Required Argument
 
 ```
-Error: Date range exceeds 90-day maximum
+Error: hec_search_emails requires both saas and startDate.
 
-Current range: 2024-01-01 to 2024-06-01 (152 days)
-Maximum allowed: 90 days
-
-Split your search into multiple 90-day windows.
+There is no "search everything" on this surface. For a message a user
+reports from "a while ago", guess a window and widen it — but retention
+bounds how far back you can go.
 ```
 
-### Rate Limiting
+### Date Range Too Wide
 
 ```
-Rate limited by Checkpoint API
+Error: the date range maxes at 90 days.
 
-Retrying in 30 seconds...
-(X-RateLimit-Remaining: 0, X-RateLimit-Reset: 1708012800)
+Split the search into multiple windows and page each to exhaustion.
+A single query also returns at most 10,000 results, silently.
 ```
 
 ## Related Commands
 
-- `/release-quarantine` - Release email(s) from quarantine
-- `/search-threats` - Search detected threats
-- `/check-threat` - Get detailed threat analysis
+- `/search-threats` - Sweep detections to learn why something was held
+- `/check-threat` - Full detail for one detection and its message
+- `/release-quarantine` - Deliver a held message back to its recipients
