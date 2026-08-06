@@ -169,16 +169,32 @@ function calculatePhishPronePercentage(campaign) {
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
+| Tool | Description | Parameters (required in **bold**) |
 |------|-------------|----------------|
-| `knowbe4_phishing_list_campaigns` | List all phishing campaigns | `status`, `page`, `per_page` |
-| `knowbe4_phishing_get_campaign` | Get campaign details | `campaign_id` |
-| `knowbe4_phishing_list_security_tests` | List security tests for a campaign | `campaign_id` |
-| `knowbe4_phishing_get_security_test` | Get detailed security test results | `pst_id` |
-| `knowbe4_phishing_list_recipients` | List recipients for a security test | `pst_id`, `page`, `per_page` |
-| `knowbe4_phishing_get_recipient` | Get individual recipient details | `recipient_id` |
-| `knowbe4_phishing_list_templates` | List available phishing templates | `category`, `page`, `per_page` |
-| `knowbe4_phishing_get_template` | Get template details | `template_id` |
+| `knowbe4_phishing_campaigns_list` | List all phishing campaigns | `page`, `per_page` |
+| `knowbe4_phishing_campaigns_get` | Get campaign details, including its associated security tests | **`campaign_id`** |
+| `knowbe4_phishing_campaign_tests` | List the Phishing Security Tests belonging to **one** campaign | **`campaign_id`**, `page`, `per_page` |
+| `knowbe4_phishing_security_tests_list` | List Phishing Security Tests across **all** campaigns | `page`, `per_page` |
+| `knowbe4_phishing_security_test_get` | Get detailed results for one PST — PPP, clicked/opened/reported counts | **`pst_id`** |
+| `knowbe4_phishing_security_test_recipients` | Recipient-level results for one PST: who clicked, opened, reported | **`pst_id`**, `page`, `per_page` |
+| `knowbe4_phishing_security_test_recipient` | One recipient's result within one PST | **`pst_id`**, **`recipient_id`** |
+
+There is no campaign-level recipient tool. Recipients hang off a Phishing
+Security Test, never off a campaign, so "who clicked in this campaign"
+is two steps: `knowbe4_phishing_campaign_tests` to get the campaign's
+PSTs, then `knowbe4_phishing_security_test_recipients` per PST. A
+recipient ID is only meaningful alongside the `pst_id` it came from —
+`knowbe4_phishing_security_test_recipient` requires both.
+
+**There is no phishing-template tool.** Nothing in this plugin lists the
+template library or reads a single template's content, and no `page`/
+`per_page` sweep will find one. Template selection is console work.
+Campaign and PST records name the template that was used, which is enough
+to compare how templates performed after the fact, but not to browse what
+is available before a send.
+
+None of the list tools filter by status or date. Narrowing to "completed
+campaigns since March" means paginating and filtering client-side.
 
 ## Common Workflows
 

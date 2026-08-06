@@ -130,22 +130,41 @@ Training can be triggered automatically based on:
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
+| Tool | Description | Parameters (required in **bold**) |
 |------|-------------|----------------|
-| `knowbe4_training_list_campaigns` | List training campaigns | `status`, `page`, `per_page` |
-| `knowbe4_training_get_campaign` | Get campaign details | `campaign_id` |
-| `knowbe4_training_list_enrollments` | List enrollments for a campaign | `campaign_id`, `status`, `page` |
-| `knowbe4_training_get_enrollment` | Get enrollment details | `enrollment_id` |
-| `knowbe4_training_list_modules` | List available training modules | `type`, `page`, `per_page` |
-| `knowbe4_training_get_module` | Get module details | `module_id` |
-| `knowbe4_training_list_store_purchases` | List store purchases | `page`, `per_page` |
-| `knowbe4_training_get_store_purchase` | Get purchase details | `store_purchase_id` |
+| `knowbe4_training_campaigns_list` | List training campaigns | `page`, `per_page` |
+| `knowbe4_training_campaigns_get` | Get campaign details, including its modules, enrollments and completion stats | **`campaign_id`** |
+| `knowbe4_training_enrollments_list` | List training enrollments across the account | `page`, `per_page` |
+| `knowbe4_training_enrollments_get` | Get enrollment details, including module progress and completion date | **`enrollment_id`** |
+| `knowbe4_store_purchases_list` | List ModStore purchases — the training content this account owns | `page`, `per_page` |
+| `knowbe4_store_purchases_get` | Get purchase details | **`purchase_id`** |
+| `knowbe4_policies_list` | List security policies and their acknowledgment requirements | `page`, `per_page` |
+| `knowbe4_policies_get` | Get one policy, including acknowledgment status | **`policy_id`** |
+
+Two shape notes that change how these get used:
+
+**`knowbe4_training_enrollments_list` is account-wide and takes no
+filters.** There is no `campaign_id` and no `status` argument. "Overdue
+enrollments for the HIPAA campaign" is a full paginated read filtered
+client-side on the `campaign` and `status` fields of each record — not a
+query. Budget the request count accordingly (see api-patterns), and pass
+`per_page=500` rather than accepting the default of 100.
+
+**There is no training-module catalog tool.** Nothing here lists the
+modules available to assign or reads a single module by ID.
+`knowbe4_store_purchases_list` is the nearest real capability and it
+answers a different question — what content this account has *purchased*
+from the ModStore, not what modules exist or what a campaign could use.
+`knowbe4_training_campaigns_get` names the modules already attached to a
+campaign. Choosing content for a new campaign is console work.
 
 ## Common Workflows
 
 ### Create and Monitor Training Campaign
 
-1. **Browse available modules** using `knowbe4_training_list_modules`
+1. **Review owned content** using `knowbe4_store_purchases_list` — this
+   shows what the account has bought, which constrains what a campaign
+   can assign. Browsing the full module catalog is console-only.
 2. **Select target groups** -- choose which user groups need training
 3. **Set completion deadline** -- allow adequate time (2-4 weeks typical)
 4. **Launch campaign** -- schedule or start immediately
@@ -155,8 +174,10 @@ Training can be triggered automatically based on:
 
 ### Track Compliance Status
 
-1. **List active campaigns** with `knowbe4_training_list_campaigns`
-2. **Get enrollments** for each campaign
+1. **List campaigns** with `knowbe4_training_campaigns_list`, then filter
+   to the active ones yourself — there is no `status` argument
+2. **Read enrollments** with `knowbe4_training_enrollments_list` (account-wide;
+   match them back to campaigns on the enrollment record)
 3. **Filter by status** to find incomplete/past_due enrollments
 4. **Identify non-compliant users** -- group by department or manager
 5. **Escalate** users who are past due on required training
