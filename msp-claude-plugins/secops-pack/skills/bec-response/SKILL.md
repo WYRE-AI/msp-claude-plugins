@@ -31,9 +31,11 @@ confirmed or strongly suspected.
 
 ## Anti-triggers
 
-- **A vendor's own account-takeover case** — Abnormal models ATO as a case
-  type with its own investigation and remediation actions; use
-  `abnormal-security-account-takeover` when working inside it.
+- **A vendor's own case record** — Abnormal tracks investigations as
+  cases with their own remediation actions; use
+  `abnormal-security-cases` when working inside one. It has no separate
+  account-takeover case type — ATO is a threat classification, not an
+  object, so an ATO investigation is an ordinary case.
 - **The inbound phishing message itself** — quarantine, release, and
   message-level forensics are the email-security connector's surface; use
   `checkpoint-avanan-quarantine`, `ironscales-incidents`,

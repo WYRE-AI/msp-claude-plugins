@@ -1,6 +1,6 @@
 {
   "name": "betterstack",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Claude plugins for Better Stack - uptime monitoring, incident management, status pages, on-call schedules, and log management (Logtail) for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
