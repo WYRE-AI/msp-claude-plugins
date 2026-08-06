@@ -19,12 +19,12 @@ const baseUrl = import.meta.env.BASE_URL;
     If you use Claude Code, a single command wires up the hosted gateway for all projects on this machine:
   </p>
 
-  <pre><code class="language-bash">claude mcp add --scope user --transport http msp-mcp-gateway https://mcp.wyre.ai/v1/mcp</code></pre>
+  <pre><code class="language-bash">claude mcp add --scope user --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp</code></pre>
 
   <p>
     Drop <code>--scope user</code> to scope the gateway to the current project only. On first tool call,
     Claude Code will open a browser for OAuth; then connect your vendor credentials at
-    <a href="https://mcp.wyre.ai" target="_blank" rel="noopener noreferrer">mcp.wyre.ai</a>.
+    <a href="https://conduit.wyre.ai" target="_blank" rel="noopener noreferrer">conduit.wyre.ai</a>.
   </p>
 
   <p class="text-sm text-[var(--muted)] mt-2">
@@ -45,7 +45,7 @@ const baseUrl = import.meta.env.BASE_URL;
     </li>
     <li>
       <strong>Add the MCP gateway server</strong> — easiest via Settings &rarr; Connectors &rarr;
-      Add custom connector, with URL <code>https://mcp.wyre.ai/v1/mcp</code>.
+      Add custom connector, with URL <code>https://conduit.wyre.ai/v1/mcp</code>.
     </li>
   </ol>
 
@@ -66,7 +66,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <li>Click <strong>Connectors</strong></li>
     <li>Click the <strong>+</strong> button, then <strong>Add custom connector</strong></li>
     <li>Enter a name (e.g. <code>MSP Gateway</code>)</li>
-    <li>Enter the Remote MCP server URL: <code>https://mcp.wyre.ai/v1/mcp</code></li>
+    <li>Enter the Remote MCP server URL: <code>https://conduit.wyre.ai/v1/mcp</code></li>
     <li>Click <strong>Add</strong>, then complete the OAuth login flow when prompted</li>
   </ol>
 

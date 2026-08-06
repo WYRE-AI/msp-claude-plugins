@@ -57,5 +57,5 @@ See the `connection` skill for the full step-by-step, including the exact RBAC r
 
 - Azure MCP Server: https://github.com/Azure/azure-mcp
 - Azure MCP Server image: `mcr.microsoft.com/azure-sdk/azure-mcp`
-- WYRE MCP Gateway: https://mcp.wyre.ai
+- WYRE MCP Gateway: https://conduit.wyre.ai
 - Azure RBAC built-in roles: https://learn.microsoft.com/azure/role-based-access-control/built-in-roles

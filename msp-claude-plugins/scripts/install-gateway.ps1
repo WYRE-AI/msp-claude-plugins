@@ -12,7 +12,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$GatewayUrl = if ($env:GATEWAY_URL) { $env:GATEWAY_URL } else { "https://mcp.wyre.ai/v1/mcp" }
+$GatewayUrl = if ($env:GATEWAY_URL) { $env:GATEWAY_URL } else { "https://conduit.wyre.ai/v1/mcp" }
 $Scope      = if ($env:SCOPE) { $env:SCOPE } else { "project" }
 $McpName    = "msp-mcp-gateway"
 
@@ -124,7 +124,7 @@ if ($InstalledAny) {
     Write-Success "Done! Next steps:"
     Write-Host "    1. Restart Claude Code / Claude Desktop"
     Write-Host "    2. Complete OAuth when prompted"
-    Write-Host "    3. Connect vendors at https://mcp.wyre.ai"
+    Write-Host "    3. Connect vendors at https://conduit.wyre.ai"
 } else {
     Write-Error2 "Neither Claude Code nor Claude Desktop was detected."
     Write-Host "    Install Claude Code:    https://docs.anthropic.com/en/docs/claude-code"

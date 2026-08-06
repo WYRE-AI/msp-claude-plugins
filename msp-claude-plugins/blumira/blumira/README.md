@@ -36,7 +36,7 @@ export BLUMIRA_JWT_TOKEN="your-jwt-token"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `BLUMIRA_JWT_TOKEN` | Yes | | JWT token from Settings > API Access |
-| `BLUMIRA_MCP_URL` | No | `https://mcp.wyre.ai/v1/blumira/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `BLUMIRA_MCP_URL` | No | `https://conduit.wyre.ai/v1/blumira/mcp` | MCP server URL — override to use a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -61,7 +61,7 @@ BLUMIRA_MCP_URL=https://your-gateway-domain/v1/blumira/mcp
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect — just paste your JWT token and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect — just paste your JWT token and you're done.
 
 ### Self-Hosted (Docker)
 
@@ -72,7 +72,7 @@ Add to your MCP configuration:
   "mcpServers": {
     "blumira": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/blumira/mcp",
+      "url": "https://conduit.wyre.ai/v1/blumira/mcp",
       "headers": {
         "X-Blumira-JWT-Token": "${BLUMIRA_JWT_TOKEN}"
       }

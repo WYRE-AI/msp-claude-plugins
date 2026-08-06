@@ -8,7 +8,7 @@ MSP Claude Plugins is a free, open-source collection of integrations that connec
 
 MSP Claude Plugins provides two ways to connect MSP tools to Claude:
 
-1. **Hosted Gateway** (recommended): A cloud-hosted MCP gateway at mcp.wyre.ai. Connect Claude Desktop or any MCP client with OAuth 2.1 + PKCE authentication. No servers to manage, encrypted credential storage with per-user isolation.
+1. **Hosted Gateway** (recommended): A cloud-hosted MCP gateway at conduit.wyre.ai. Connect Claude Desktop or any MCP client with OAuth 2.1 + PKCE authentication. No servers to manage, encrypted credential storage with per-user isolation.
 
 2. **Self-Hosted**: Run MCP servers locally. Install via Claude Code marketplace with `/plugin marketplace add wyre-technology/msp-claude-plugins`. Full control, credentials stay on your machine.
 
@@ -54,7 +54,7 @@ MSP Claude Plugins provides two ways to connect MSP tools to Claude:
 
 ## Pricing
 
-All MSP Claude Plugins are free and open source under the Apache 2.0 license. The hosted gateway has a free tier (details at mcp.wyre.ai/waitlist).
+All MSP Claude Plugins are free and open source under the Apache 2.0 license. The hosted gateway is a paid product with a 14-day free trial (start at conduit.wyre.ai/signup).
 
 ## Links
 
@@ -63,4 +63,4 @@ All MSP Claude Plugins are free and open source under the Apache 2.0 license. Th
 - Getting Started: https://mcp.wyre.ai/getting-started/
 - Gateway: https://mcp.wyre.ai/getting-started/gateway/
 - All Plugins: https://mcp.wyre.ai/plugins/
-- Waitlist: https://mcp.wyre.ai/waitlist
+- Start a free trial: https://conduit.wyre.ai/signup

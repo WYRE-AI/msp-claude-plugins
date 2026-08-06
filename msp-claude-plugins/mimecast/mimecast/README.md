@@ -47,7 +47,7 @@ Mimecast operates regional API endpoints. Use the region matching your Mimecast 
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect — enter your Client ID, Client Secret, and select your region.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your Client ID, Client Secret, and select your region.
 
 ### Self-Hosted (Docker)
 

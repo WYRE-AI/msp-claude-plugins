@@ -1,6 +1,6 @@
 {
   "name": "mimecast",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
   "author": {
     "name": "MSP Claude Plugins Community"

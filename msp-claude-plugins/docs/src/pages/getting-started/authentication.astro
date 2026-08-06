@@ -16,7 +16,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
   <h2 id="sign-in">Signing In</h2>
   <p>
-    When you visit <a href="https://mcp.wyre.ai/settings">mcp.wyre.ai/settings</a>,
+    When you visit <a href="https://conduit.wyre.ai/settings">conduit.wyre.ai/settings</a>,
     you'll be prompted to sign in. If both Microsoft and Auth0 are enabled, you'll see a chooser page.
     Otherwise you'll be redirected to your organization's identity provider automatically.
   </p>
@@ -32,7 +32,7 @@ const baseUrl = import.meta.env.BASE_URL;
     If your organization's Azure AD tenant has already been onboarded (see below), just:
   </p>
   <ol>
-    <li>Go to <a href="https://mcp.wyre.ai/auth/microsoft/login">mcp.wyre.ai</a></li>
+    <li>Go to <a href="https://conduit.wyre.ai/auth/microsoft/login">conduit.wyre.ai</a></li>
     <li>Click <strong>Sign in with Microsoft</strong></li>
     <li>Sign in with your work Microsoft account</li>
     <li>You're in — head to <strong>Connections</strong> to add your first vendor</li>
@@ -60,7 +60,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <li>
       WYRE will send you an admin consent link (or you can use the direct URL below).
       The link looks like:
-      <pre><code>https://mcp.wyre.ai/auth/admin-consent?customer_name=Your+Company</code></pre>
+      <pre><code>https://conduit.wyre.ai/auth/admin-consent?customer_name=Your+Company</code></pre>
     </li>
     <li>
       Click the link — you'll be redirected to Microsoft's standard admin consent dialog.
@@ -103,7 +103,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
   <p>
     No admin setup required — just sign in at
-    <a href="https://mcp.wyre.ai/auth/login">mcp.wyre.ai</a>
+    <a href="https://conduit.wyre.ai/auth/login">conduit.wyre.ai</a>
     and create your account.
   </p>
 
@@ -116,7 +116,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
   <p>
     You don't need to configure anything — when Claude connects to
-    <code>https://mcp.wyre.ai/v1/mcp</code>, it will open a browser window for you
+    <code>https://conduit.wyre.ai/v1/mcp</code>, it will open a browser window for you
     to sign in and authorize the connection. See the
     <a href={`${baseUrl}getting-started/gateway/`}>Gateway Setup</a> page for details.
   </p>

@@ -53,7 +53,7 @@ export SENTINELONE_BASE_URL="https://your-console.sentinelone.net"
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://mcp.wyre.ai) to connect -- just paste your Service User token and console URL and you're done.
+Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- just paste your Service User token and console URL and you're done.
 
 ### Self-Hosted (Claude Desktop)
 

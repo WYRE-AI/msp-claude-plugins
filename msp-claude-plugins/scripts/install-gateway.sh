@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-GATEWAY_URL="${GATEWAY_URL:-https://mcp.wyre.ai/v1/mcp}"
+GATEWAY_URL="${GATEWAY_URL:-https://conduit.wyre.ai/v1/mcp}"
 SCOPE="${SCOPE:-project}"
 MCP_NAME="msp-mcp-gateway"
 
@@ -143,7 +143,7 @@ if [ "$installed_any" = true ]; then
   info "Done! Next steps:"
   printf "  1. Restart Claude Code / Claude Desktop\n"
   printf "  2. Complete OAuth when prompted\n"
-  printf "  3. Connect vendors at https://mcp.wyre.ai\n"
+  printf "  3. Connect vendors at https://conduit.wyre.ai\n"
 else
   error "Neither Claude Code nor Claude Desktop was detected."
   printf "  Install Claude Code:    https://docs.anthropic.com/en/docs/claude-code\n"

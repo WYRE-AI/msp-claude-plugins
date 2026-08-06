@@ -8,7 +8,7 @@ const baseUrl = import.meta.env.BASE_URL;
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
     Common issues and fixes for the WYRE MCP Gateway. If your issue isn't listed here,
-    check the <a href="https://mcp.wyre.ai/health/vendors" target="_blank" rel="noopener noreferrer">vendor health dashboard</a>
+    check your vendor connections in the <a href="https://conduit.wyre.ai/settings" target="_blank" rel="noopener noreferrer">gateway dashboard</a>
     for upstream outages. Prefer to have Claude triage it for you?
     <a href="#triage-with-claude">Use the <code>wyre-gateway-troubleshooting</code> skill</a>.
   </p>
@@ -27,8 +27,8 @@ const baseUrl = import.meta.env.BASE_URL;
   <h3>Fix</h3>
   <ol>
     <li>Wait 1–2 minutes and try again (deployments typically complete within 60 seconds)</li>
-    <li>Check <a href="https://mcp.wyre.ai/health" target="_blank" rel="noopener noreferrer"><code>/health</code></a> — if it returns <code>{`{"status":"ok"}`}</code>, the gateway is running</li>
-    <li>Check <a href="https://mcp.wyre.ai/health/vendors" target="_blank" rel="noopener noreferrer"><code>/health/vendors</code></a> to see if a specific vendor is down</li>
+    <li>Check <a href="https://conduit.wyre.ai/health" target="_blank" rel="noopener noreferrer"><code>/health</code></a> — if it returns <code>{`{"status":"ok"}`}</code>, the gateway is running</li>
+    <li>Check whether a specific vendor is down — <code>/health/vendors</code> is admin-gated, so ask a gateway admin (or, if you are one, open it with your admin session)</li>
     <li>If the issue persists, restart Claude Desktop and try again</li>
   </ol>
 
@@ -50,7 +50,7 @@ const baseUrl = import.meta.env.BASE_URL;
   <ol>
     <li>
       <strong>Use the unified endpoint</strong> — replace all per-vendor <code>mcp-remote</code> entries with a single entry pointing
-      to <code>https://mcp.wyre.ai/v1/mcp</code>. This means one OAuth flow instead of many.
+      to <code>https://conduit.wyre.ai/v1/mcp</code>. This means one OAuth flow instead of many.
       See the <a href={`${baseUrl}getting-started/gateway/`}>Gateway setup guide</a>.
     </li>
     <li>If using per-vendor endpoints, add them one at a time — connect one vendor, restart Claude Desktop, then add the next</li>
@@ -82,9 +82,11 @@ const baseUrl = import.meta.env.BASE_URL;
 
   <h2 id="vendor-down">Vendor shows DOWN on /health/vendors</h2>
   <p>
-    The <a href="https://mcp.wyre.ai/health/vendors" target="_blank" rel="noopener noreferrer"><code>/health/vendors</code></a>
-    endpoint monitors all vendor MCP containers. If a vendor shows <code>"status": "down"</code>,
-    the underlying vendor container is unreachable.
+    The <code>https://conduit.wyre.ai/health/vendors</code> endpoint monitors all vendor MCP
+    containers. It is <strong>admin-gated</strong> — it needs a gateway admin session or the ops
+    admin key, because it reports every vendor container's version and last error across all
+    tenants. If a vendor shows <code>"status": "down"</code>, the underlying vendor container is
+    unreachable; if you are not an admin, ask one to check it for you.
   </p>
   <h3>Causes</h3>
   <ul>
@@ -106,7 +108,7 @@ const baseUrl = import.meta.env.BASE_URL;
     If you've added credentials for a vendor but its tools don't show up in Claude:
   </p>
   <ol>
-    <li>Verify your credentials are saved at <a href="https://mcp.wyre.ai" target="_blank" rel="noopener noreferrer">mcp.wyre.ai</a> — log in and check the credentials page</li>
+    <li>Verify your credentials are saved at <a href="https://conduit.wyre.ai" target="_blank" rel="noopener noreferrer">conduit.wyre.ai</a> — log in and check the credentials page</li>
     <li>
       <strong>Fully quit and reopen Claude Desktop</strong> (<code>Cmd+Q</code> on macOS, then relaunch).
       Claude registers the gateway's tool catalog at the moment its MCP client connects and does <em>not</em>
@@ -169,7 +171,7 @@ const baseUrl = import.meta.env.BASE_URL;
   <ul>
     <li>"My WYRE gateway tools aren't showing up in Claude"</li>
     <li>"I get 'Failed to update tool access' when I try to save"</li>
-    <li>"OAuth is failing on mcp.wyre.ai"</li>
+    <li>"OAuth is failing on conduit.wyre.ai"</li>
     <li>"Why is my IT Glue (or Autotask, CIPP, etc.) connection not working?"</li>
     <li>"Help me troubleshoot the WYRE gateway"</li>
   </ul>

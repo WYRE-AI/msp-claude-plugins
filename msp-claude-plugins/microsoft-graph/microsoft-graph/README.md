@@ -2,7 +2,7 @@
 
 Claude plugins for the **Microsoft Graph MCP Server for Enterprise** — Microsoft's hosted MCP server (currently in **public preview**) that lets MSPs query a client's Microsoft Entra (Azure AD) identity and directory data in natural language.
 
-This plugin orients Claude around the `microsoft-graph` vendor on the [Wyre MCP Gateway](https://mcp.wyre.ai). The Graph Enterprise MCP server exposes a small, deliberate tool surface designed for a Retrieval-Augmented-Generation (RAG) query workflow rather than raw API access. Skills and agents in this plugin embed that workflow so Claude answers identity and directory questions correctly instead of inventing Graph endpoints.
+This plugin orients Claude around the `microsoft-graph` vendor on the [Wyre MCP Gateway](https://conduit.wyre.ai). The Graph Enterprise MCP server exposes a small, deliberate tool surface designed for a Retrieval-Augmented-Generation (RAG) query workflow rather than raw API access. Skills and agents in this plugin embed that workflow so Claude answers identity and directory questions correctly instead of inventing Graph endpoints.
 
 > **Public preview.** The Microsoft Graph MCP Server for Enterprise is a Microsoft preview service hosted at `https://mcp.svc.cloud.microsoft/enterprise`. Behavior, the example catalog, and available scopes may change before general availability. Treat output as advisory and verify anything material in the Entra admin center.
 
@@ -55,6 +55,6 @@ The `microsoft-graph-connection` skill documents the full app-registration and a
 
 ## Resources
 
-- Wyre MCP Gateway: https://mcp.wyre.ai
+- Wyre MCP Gateway: https://conduit.wyre.ai
 - Microsoft Graph documentation: https://learn.microsoft.com/graph
 - Microsoft Entra app registration: https://learn.microsoft.com/entra/identity-platform/quickstart-register-app
