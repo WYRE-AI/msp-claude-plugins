@@ -9,21 +9,28 @@
  * that a reference resolved. This does.
  *
  * Rules:
- *   1. Every marketplace entry's `source` resolves to a real directory, and
- *      every on-disk plugin (a dir with .claude-plugin/plugin.json) is
- *      registered in marketplace.json. Neither side may name the other's ghost.
- *   2. Every backticked skill-id-shaped reference in the repo's prose resolves
- *      to a real skill, agent or command.
- *   3. Every skill / agent / command the generated docs-site data claims a
- *      plugin ships exists on disk under that plugin.
+ *   1.  Every marketplace entry's `source` resolves to a real directory, and
+ *       every on-disk plugin (a dir with .claude-plugin/plugin.json) is
+ *       registered in marketplace.json. Neither side may name the other's ghost.
+ *   2.  Every backticked skill-id-shaped reference in the repo's prose resolves
+ *       to a real skill, agent or command.
+ *   2b. A slug-shaped skill `name:` frontmatter equals that skill's canonical
+ *       id. A second id for one skill is what let half of #181's malformed
+ *       references resolve while their siblings dangled.
+ *   3.  Every skill / agent / command the generated docs-site data claims a
+ *       plugin ships exists on disk under that plugin.
+ *   3b. The hand-maintained routine-catalog table names only real plugins and
+ *       real agents.
  *
  * CANONICAL IDS ARE DERIVED FROM marketplace.json, NOT FROM DIRECTORY NAMES.
- * A skill's id is `<marketplace entry name>-<skill directory slug>`; five
- * plugins (connectwise/manage -> connectwise-psa, connectwise/automate ->
- * connectwise-automate, connectwise/cpq -> connectwise-cpq, shared ->
- * shared-skills, superops/superops-ai -> superops, syncro/syncro-msp -> syncro)
- * would resolve differently if the directory name were used, which is exactly
- * the bug #181 repaired.
+ * A skill's id is `<marketplace entry name>-<skill directory slug>`. Six
+ * entries carry a name that is not their directory basename — connectwise/
+ * {manage,automate,cpq} -> connectwise-{psa,automate,cpq}, shared ->
+ * shared-skills, superops/superops-ai -> superops, syncro/syncro-msp ->
+ * syncro — and references are also written from the *vendor* directory
+ * (`quickbooks-` for quickbooks-online, `ninjaone-` for ninjaone-rmm). Both
+ * forms are the #181 bug, and both are recognised as plugin aliases below so
+ * that writing one is reported rather than silently accepted.
  *
  * Usage: node scripts/check-doc-references.mjs [--verbose]
  */

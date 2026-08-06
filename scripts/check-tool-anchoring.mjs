@@ -125,7 +125,7 @@ for (const entry of marketplace.plugins) {
 }
 
 // ── Classify ───────────────────────────────────────────────────────────
-const unanchored = new Map(); // id -> { citation, http, flags, all }
+const unanchored = new Map(); // id -> { citation, http, flags }
 for (const u of units) {
   const tools = new Set();
   for (const f of u.files) for (const t of toolsIn(f)) tools.add(t);
@@ -190,7 +190,7 @@ for (const [id, info] of [...unanchored].sort()) {
 for (const id of Object.keys(inventory).sort()) {
   if (unanchored.has(id)) continue;
   const reason = unitIds.has(id)
-    ? 'it now names MCP tools'
+    ? 'it is anchored now (it names MCP tools, or the request/flag recipe is gone)'
     : 'it no longer exists';
   errors.push(
     `stale inventory entry "${id}" — ${reason}.\n` +
