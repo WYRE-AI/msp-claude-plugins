@@ -355,9 +355,9 @@ export const plugins: Plugin[] = [
     id: 'checkpoint-avanan',
     name: 'Checkpoint Avanan',
     vendor: 'Email Security',
-    description: 'Checkpoint Harmony Email & Collaboration (Avanan) - quarantine, threats, policies, incidents, Smart Banners',
+    description: 'Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions',
     category: 'email-security',
-    maturity: 'production',
+    maturity: 'beta',
     features: [
       'Exceptions',
       'Quarantine',
@@ -370,15 +370,14 @@ export const plugins: Plugin[] = [
       { name: 'api-patterns', description: 'Shape of the Checkpoint Harmony Email (Avanan) `hec_*` tool surface: the thirteen tools and what each reaches, the event/entity split that governs which tool accepts which id, the `responseEnvelope`/`responseData` result shape, `scrollId` pagination, and the auth, regional-routing and farm-scope behaviour behind every call.' }
     ],
     agents: [
-      { name: 'cloud-email-defender', description: 'Use this agent when investigating quarantined threats, managing email security events, auditing Avanan tenant configuration, or performing cross-tenant threat sweeps in Check Point Avanan (Harmony Email & Collaboration).' },
-      { name: 'tenant-policy-auditor', description: 'Use this agent when an MSP needs to audit email security policy completeness and correctness across Avanan (Check Point Harmony Email & Collaboration) managed tenants — verifying anti-phishing coverage, attachment sandboxing, impersonation protection, DLP rules, and exception hygiene.' }
+      { name: 'cloud-email-defender', description: 'Use this agent when investigating security detections, locating or releasing quarantined mail, or managing sender allow and block entries in Checkpoint Harmony Email & Collaboration (Avanan).' },
+      { name: 'exception-hygiene-auditor', description: 'Use this agent for a periodic read-only review of the sender allow and block entries in Checkpoint Harmony Email & Collaboration (Avanan) — finding exceptions that are undocumented, scoped wider than intended, stale, or still suppressing live detections.' }
     ],
     commands: [
-      { name: '/check-threat', description: 'Get detailed threat analysis including IOCs and timeline from Checkpoint Harmony Email' },
-      { name: '/manage-policy', description: 'View or toggle email security policies in Checkpoint Harmony Email' },
-      { name: '/release-quarantine', description: 'Release quarantined email(s) back to recipients in Checkpoint Harmony Email' },
-      { name: '/search-quarantine', description: 'Search quarantined emails in Checkpoint Harmony Email by various criteria' },
-      { name: '/search-threats', description: 'Search detected threats in Checkpoint Harmony Email by type, severity, and date range' }
+      { name: '/check-threat', description: 'Pull full detail for one Checkpoint Harmony Email detection and the message behind it' },
+      { name: '/release-quarantine', description: 'Restore quarantined mail to its recipients in Checkpoint Harmony Email, with task polling' },
+      { name: '/search-quarantine', description: 'Find messages in Checkpoint Harmony Email by sender, subject, attachment hash or quarantine state' },
+      { name: '/search-threats', description: 'Sweep security events in Checkpoint Harmony Email by type, state, severity and date range' }
     ],
     apiInfo: {
       baseUrl: '',
