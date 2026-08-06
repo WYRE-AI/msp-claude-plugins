@@ -79,7 +79,7 @@ To identify the correct region, log into the Mimecast Administration Console and
 
 | Tool | Description |
 |------|-------------|
-| `mimecast_get_queue` | Get email delivery queue status |
+| `mimecast_get_queue_status` | Get email delivery queue status — whole gateway, no arguments, no filters |
 
 ## Pagination
 

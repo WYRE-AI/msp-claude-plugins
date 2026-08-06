@@ -56,124 +56,140 @@ When Mimecast cannot deliver a message (e.g. the recipient mail server is down),
 
 ## API Patterns
 
-### Get Delivery Queue
+### Get Delivery Queue Status
 
 ```
-mimecast_get_queue
+mimecast_get_queue_status
 ```
 
-Returns current queue contents with message counts and delivery status.
-
-Parameters:
-- `direction` — Queue direction: `inbound` or `outbound` (optional, returns both if omitted)
-- `status` — Filter by status: `queued`, `retrying`, `deferred`, `held` (optional)
-
-**Example — Get full queue overview:**
-
-```json
-{}
-```
+**This tool takes no arguments.** Its input schema is empty — there is no
+`direction` filter, no `status` filter, and no paging. Every call returns
+the same whole-gateway snapshot, and any narrowing happens in your own
+code after the fact.
 
 **Example response:**
 
 ```json
 {
-  "meta": { "status": 200 },
-  "data": [
-    {
-      "direction": "inbound",
-      "status": "queued",
-      "count": 12,
-      "oldestMessageAge": 45,
-      "messages": [
-        {
-          "id": "eNqrVkpJLU...",
-          "from": "vendor@external.com",
-          "to": "user@client.com",
-          "subject": "Purchase Order #4892",
-          "received": "2026-03-02T09:00:00Z",
-          "ageSeconds": 45,
-          "status": "queued",
-          "retryCount": 0
-        }
-      ]
-    },
-    {
-      "direction": "outbound",
-      "status": "deferred",
-      "count": 3,
-      "oldestMessageAge": 1800,
-      "messages": [
-        {
-          "id": "eNqrVkpABC...",
-          "from": "user@client.com",
-          "to": "recipient@destination.com",
-          "subject": "Report Q1 2026",
-          "received": "2026-03-02T08:30:00Z",
-          "ageSeconds": 1800,
-          "status": "deferred",
-          "retryCount": 4,
-          "lastError": "550 5.1.1 The email account does not exist",
-          "nextRetry": "2026-03-02T09:45:00Z"
-        }
-      ]
-    }
-  ]
+  "inbound": {
+    "count": 12,
+    "oldest": "2026-03-02T09:00:00Z",
+    "details": [
+      {
+        "id": "eNqrVkpJLU...",
+        "created": "2026-03-02T09:00:00Z",
+        "status": "queued",
+        "from": "vendor@external.com",
+        "to": ["user@client.com"],
+        "subject": "Purchase Order #4892",
+        "reason": ""
+      }
+    ]
+  },
+  "outbound": {
+    "count": 3,
+    "oldest": "2026-03-02T08:30:00Z",
+    "details": [
+      {
+        "id": "eNqrVkpABC...",
+        "created": "2026-03-02T08:30:00Z",
+        "status": "deferred",
+        "from": "user@client.com",
+        "to": ["recipient@destination.com"],
+        "subject": "Report Q1 2026",
+        "reason": "550 5.1.1 The email account does not exist"
+      }
+    ]
+  }
 }
 ```
 
 Key fields:
-- `oldestMessageAge` — Age in seconds of the oldest message in this queue segment (high values indicate a backlog)
-- `retryCount` — Number of delivery attempts made
-- `lastError` — SMTP error from the last delivery attempt
-- `nextRetry` — Scheduled time for next delivery attempt
+- `inbound` / `outbound` — the two queue directions, each an object. Either
+  may be absent; treat a missing key as "no data returned", not as zero.
+- `count` — messages currently in that direction's queue
+- `oldest` — an **ISO 8601 timestamp**, not an age in seconds. Compute the
+  age yourself as `now − oldest` before comparing against a threshold.
+- `details[]` — per-message entries. **Every field is optional and the
+  array itself may be absent even when `count` is non-zero.** An agent that
+  iterates `details` without checking `count` will report a clean queue on
+  a backlogged gateway.
+- `reason` — free text explaining the current state. It often carries the
+  SMTP response, but it is not guaranteed to, and it is not a parsed error
+  code.
 
-**Example — Outbound deferred queue only:**
+### What this tool does not give you
 
-```json
-{
-  "direction": "outbound",
-  "status": "deferred"
-}
-```
+The queue snapshot has no per-message retry accounting: there is no
+`retryCount` and no `nextRetry`. You cannot tell how many delivery
+attempts a message has had or when the next one is due, so any rule of the
+form "escalate after N retries" is not implementable against this tool.
+Use age (`created`) and `reason` instead.
+
+To work with a *subset* of messages — deferred only, held only, one
+sender, one recipient — use `mimecast_find_message`, which does take
+filters, including `status` with `queued`, `deferred`, `held`, `bounced`,
+`failed`, `delivered`, `accepted`, `blocked`, and `processing`. The queue
+tool is a gauge; message tracking is the query interface.
 
 ## Common Workflows
 
 ### Daily Queue Health Check
 
-1. Call `mimecast_get_queue` with no filters to get a full queue snapshot
-2. Check `oldestMessageAge` for each queue segment:
+1. Call `mimecast_get_queue_status` — it takes no arguments and returns
+   both directions at once
+2. For each of `inbound` and `outbound`, derive the age of the backlog from
+   `oldest` (`now − oldest`), then compare:
    - Under 60 seconds: healthy
    - 60–300 seconds: minor delay, monitor
    - Over 300 seconds: investigate
-3. Check `count` for deferred messages — any deferred outbound messages need attention
-4. For deferred messages, read `lastError` to diagnose the cause
+3. Read `count` per direction. A rising outbound `count` with an ageing
+   `oldest` is the backlog signal
+4. Scan `details[].status` for `deferred` entries and read their `reason`.
+   If `count` is non-zero but `details` is empty or missing, say so —
+   do not report the queue as clean
 
 ### Investigate a Stuck Message
 
-1. Call `mimecast_get_queue` with `status=deferred`
-2. Identify messages with high `retryCount` (5+) and long `ageSeconds`
-3. Read `lastError` to diagnose:
-   - `5xx` errors — Permanent rejection by recipient server (invalid address, policy block)
-   - `4xx` errors — Temporary failure (server down, greylisting)
-4. For `5xx` errors, notify the sender that delivery failed permanently
-5. For `4xx` errors, confirm the recipient server is online; messages will auto-retry
-6. Cross-reference with `mimecast_find_message` using the message ID for full delivery history
+1. Call `mimecast_find_message` with `status: "deferred"` — the queue tool
+   cannot filter, and message tracking is the only way to pull just the
+   stuck messages
+2. Rank candidates by age from `created`. There is no `retryCount`
+   available, so attempt-count heuristics do not apply
+3. Read `reason` for the failure text. When it carries an SMTP response:
+   - `5xx` — permanent rejection by the recipient server (invalid address, policy block)
+   - `4xx` — temporary failure (server down, greylisting)
+   Treat `reason` as a hint, not a parsed code; it may be empty or prose
+4. For `5xx`, notify the sender that delivery failed permanently
+5. For `4xx`, confirm the recipient server is online; messages auto-retry
+6. Use `mimecast_get_message_info` with the message `id` for full routing
+   and rejection detail
 
 ### Detect a Downstream Outage
 
-1. Call `mimecast_get_queue` filtering for `direction=outbound` and `status=deferred`
-2. If many messages to the same destination domain are deferred with 4xx errors, the recipient server may be down
-3. Check `lastError` for all affected messages — consistent errors to the same domain confirm an outage
-4. Notify the client that outbound delivery to that domain is affected and messages will auto-retry
-5. Monitor the queue; when the recipient server recovers, deferred messages will deliver automatically
+1. Call `mimecast_find_message` with `status: "deferred"` and, where you
+   already suspect a partner, `recipient_address` for that domain
+2. Group the results by recipient domain yourself — neither tool aggregates
+   by domain
+3. Many deferred messages to one destination domain with consistent 4xx
+   text in `reason` points at that recipient's server being down
+4. Confirm the scale against `mimecast_get_queue_status` — the outbound
+   `count` tells you how much mail is affected in total
+5. Notify the client that outbound delivery to that domain is affected and
+   messages will auto-retry
 
 ### Identify Incorrectly Held Messages
 
-1. Call `mimecast_get_queue` with `status=held`
-2. Review held messages for false positives — legitimate emails held by overly strict policy
-3. For legitimate emails, use `mimecast_release_message` (see message-tracking skill) to release them
-4. Document the release and consider adjusting the Mimecast policy to prevent recurrence
+1. Call `mimecast_find_message` with `status: "held"`. Held mail is not a
+   queue-status filter — the queue snapshot has no held segment
+2. Review held messages for false positives — legitimate emails held by
+   overly strict policy
+3. For legitimate emails, use `mimecast_release_message` (see
+   message-tracking skill) to release them. Releasing is the plugin's one
+   destructive tool: it delivers mail the platform decided not to deliver,
+   and it cannot be undone
+4. Document the release and consider adjusting the Mimecast policy to
+   prevent recurrence
 
 ## Error Handling
 
@@ -196,9 +212,10 @@ Key fields:
 
 - Run a queue health check at the start of each business day to catch overnight delivery failures
 - A sudden spike in deferred outbound messages often indicates a recipient server outage — investigate by domain
-- High `retryCount` with `5xx` errors means permanent delivery failure — these messages will eventually bounce; notify senders promptly
-- `4xx` deferred messages auto-retry — only escalate if `oldestMessageAge` exceeds 2 hours
-- Correlate queue data with `mimecast_find_message` for full message history when investigating specific reports
+- A `5xx` response in `reason` means permanent delivery failure — these messages will eventually bounce; notify senders promptly
+- `4xx` deferred messages auto-retry — only escalate once `now − oldest` exceeds 2 hours
+- Treat `count` as the source of truth for how much mail is queued, and `details[]` as a sample of it — never infer "queue is empty" from an absent `details` array
+- Reach for `mimecast_find_message` whenever the question is about a subset; `mimecast_get_queue_status` only answers "how bad is it overall"
 
 ## Related Skills
 

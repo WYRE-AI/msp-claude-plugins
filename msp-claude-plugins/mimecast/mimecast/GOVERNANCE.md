@@ -134,6 +134,16 @@ self-approve destructive calls.**
   pending` awaiting manual approval in the Administration Console. This
   plugin cannot approve them, so an agent reporting "remediation
   underway" may be describing something that has not started.
-- **Skills document one tool name the server does not expose.** The
-  skills reference `mimecast_get_queue`; the shipped MCP server exposes
-  `mimecast_get_queue_status`. Tier the real name.
+- **The queue tool cannot be scoped, so it cannot be least-privileged by
+  argument.** `mimecast_get_queue_status` has an empty input schema. Every
+  caller who holds it gets the whole gateway's in-flight mail — both
+  directions, every client on the tenant, with sender, recipient, and
+  subject in `details[]`. There is no direction or status filter to narrow
+  it with, and Conduit's gate does not read arguments in any case. The
+  only available boundary is whether a caller holds the tool at all.
+- **A queue count without detail reads as an empty queue.** `count` and
+  `details[]` are independent and both optional. The gateway can return a
+  non-zero `count` with no `details[]` at all, and an agent looping over
+  `details` will then report a clean queue during a live backlog. Require
+  agents to report `count` alongside anything they conclude from
+  `details`.

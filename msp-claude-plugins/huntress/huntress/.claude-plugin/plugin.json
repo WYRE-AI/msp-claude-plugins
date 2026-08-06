@@ -1,6 +1,6 @@
 {
   "name": "huntress",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "Claude plugins for Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
