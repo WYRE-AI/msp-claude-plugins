@@ -105,8 +105,13 @@ destructive calls.**
 ## What it cannot reach
 
 - Only the Xero organization selected by the `xero-tenant-id` the operator's
-  gateway identity maps to. A Custom Connection token can address multiple
-  organizations; the header, set at the gateway, picks one.
+  gateway identity maps to. The authorization-code grant Conduit holds can
+  cover every organization the consenting user authorised; the header, set at
+  the gateway, picks exactly one. Note that Conduit chooses it for you — at
+  connect time it calls `https://api.xero.com/connections` and stores the
+  **first** tenant returned (`fetchXeroTenantId`, `src/oauth/vendor-oauth.ts`).
+  If the consenting user can see more than one Xero organization, confirm the
+  stored tenant is the intended one before granting anyone the write tools.
 - Only the scopes granted. Reports are read-only by scope
   (`accounting.reports.read`) and cannot be made writable from this plugin.
 - No filesystem, no shell, no other vendor's data.
