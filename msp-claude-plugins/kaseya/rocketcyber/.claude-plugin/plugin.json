@@ -1,6 +1,6 @@
 {
   "name": "rocketcyber",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Claude plugins for RocketCyber managed SOC - incidents, agents, accounts, threat detection",
   "author": {
     "name": "MSP Claude Plugins Community"

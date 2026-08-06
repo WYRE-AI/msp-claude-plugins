@@ -25,7 +25,12 @@ account the operator connected.
 - Every call carries operator identity, so the gateway audit log answers
   "who read that matter" — Clio's own log records the connected
   application.
-- Revoking gateway access revokes Clio access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated in
+  your identity provider is refused on their very next request. A user
+  only removed from the org keeps an already-issued access token for up to
+  an hour, but it reaches only a personal Clio connection made with their
+  own key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission groups
 

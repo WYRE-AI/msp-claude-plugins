@@ -27,14 +27,26 @@ Consequences worth stating plainly:
 
 - No API key, secret, or token is stored on the technician's machine, in
   this repo, or in the model's context.
-- Credential rotation happens once at Conduit, not per technician.
+- The org's [Vendor] credential is stored once at Conduit, so replacing it
+  is one edit rather than a change on every technician's machine.
+  **Do not promise a rotate action — Conduit has none for any vendor.**
+  Pick the line that matches [Vendor]'s auth type in
+  `src/credentials/vendor-config.ts`: if the entry has an `oauthConfig`,
+  say Conduit refreshes the token itself as it nears expiry and asks you
+  to reconnect only when that refresh fails; if it does not, say rotation
+  means re-submitting the connect form, which overwrites the stored
+  credential in place, and that nothing tracks its age or prompts you.
+  38 of the 98 vendors are OAuth; the other 60 are key-based.
 - Every call carries operator identity, so Conduit's audit log answers
-  "who asked for this" — the vendor's own log usually cannot.
-- Removing a technician's Conduit org membership stops their [Vendor]
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+  "who asked for this" — the vendor's own log usually cannot. It records
+  *who called what*, never with what arguments.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated in
+  your identity provider is refused on their very next request. A user
+  only removed from the org keeps an already-issued access token for up
+  to an hour, but it reaches only a personal [Vendor] connection made
+  with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`, *Revocation*.
 
 ## Tool permission groups
 

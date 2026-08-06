@@ -1,6 +1,6 @@
 {
   "name": "pagerduty",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Claude plugins for PagerDuty - incident management, on-call scheduling, service health monitoring, alert management, and analytics for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"

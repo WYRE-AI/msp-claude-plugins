@@ -14,9 +14,11 @@ is authorised for.
   machine, in this repo, or in the model's context. The three arrive at
   the MCP server as `X-CPQ-*` headers and the server assembles the
   upstream Basic token itself.
-- Credential rotation happens once at Conduit, not per technician. This
-  matters more in CPQ than most: the private key is displayed once, at
-  creation, and losing it means regenerating the pair for everyone.
+- The org's CPQ credential is stored once at Conduit, so replacing it is
+  one edit rather than a change on every technician's machine. There is no
+  rotate action, though — you re-submit the connect form. This matters more
+  in CPQ than most: the private key is displayed once, at creation, and
+  losing it means regenerating the pair for everyone.
 - Every call carries operator identity, so Conduit's audit log answers
   "who repriced that quote". CPQ's own trail records only the single API
   user the key pair belongs to, so without Conduit every agent action

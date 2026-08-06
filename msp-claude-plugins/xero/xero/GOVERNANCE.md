@@ -14,12 +14,21 @@ authorised for.
   technician's machine, in this repo, or in the model's context. Xero Custom
   Connections mint 30-minute tokens with no refresh token; the gateway handles
   that cycle.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Xero connection is stored once at the gateway, so replacing it is
+  one edit rather than a change on every technician's machine. Xero is OAuth:
+  Conduit refreshes the token itself as it nears expiry, and asks you to
+  reconnect only when that refresh fails.
+
 - Every call carries operator identity, so the gateway audit log answers "who
   authorised this invoice". Xero's own history attributes every change to the
   Custom Connection, which is one name for your whole team — and that matters
   more here than in most connectors, because these are accounting records.
-- Revoking gateway access revokes Xero access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants and
+  revokes their gateway refresh tokens at once; a user deactivated in your
+  identity provider is refused on their very next request. A user only removed
+  from the org keeps an already-issued access token for up to an hour, but it
+  reaches only a personal Xero connection made with their own key — never the
+  org's. See `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission tiers
 

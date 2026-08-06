@@ -1,6 +1,6 @@
 {
   "name": "unitrends",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Claude plugins for Unitrends backup - appliances, jobs, recovery, replication, alerting",
   "author": {
     "name": "MSP Claude Plugins Community"

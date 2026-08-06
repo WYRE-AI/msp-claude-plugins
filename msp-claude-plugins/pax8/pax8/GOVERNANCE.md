@@ -16,10 +16,20 @@ a WYRE-built container. The tool surface below is Pax8's, not ours.
 
 - No Pax8 MCP token is stored on the technician's machine, in this repo,
   or in the model's context. The token lives at the gateway.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Pax8 credential is stored once at the gateway, so replacing
+  it is one edit rather than a change on every technician's machine.
+  There is no rotate action, though — you re-submit the connect form,
+  which overwrites the stored credential in place, and nothing tracks
+  its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who pulled that pricing" — the Pax8 portal sees only the partner token.
-- Revoking gateway access revokes Pax8 access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated in
+  your identity provider is refused on their very next request. A user
+  only removed from the org keeps an already-issued access token for up to
+  an hour, but it reaches only a personal Pax8 connection made with their
+  own key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission groups
 

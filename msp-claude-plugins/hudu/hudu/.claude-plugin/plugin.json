@@ -1,6 +1,6 @@
 {
   "name": "hudu",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Claude plugins for Hudu documentation platform - companies, assets, articles, passwords, websites",
   "author": {
     "name": "MSP Claude Plugins Community"

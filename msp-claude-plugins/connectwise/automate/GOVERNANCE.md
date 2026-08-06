@@ -14,7 +14,12 @@ operator is authorised for.
 - No Automate server hostname, integrator username, password or 2FA
   bypass key is stored on the technician's machine, in this repo, or in
   the model's context.
-- Credential rotation happens once at Conduit, not per technician.
+- The org's ConnectWise Automate credential is stored once at the
+  gateway, so replacing it is one edit rather than a change on every
+  technician's machine. There is no rotate action, though — you
+  re-submit the connect form, which overwrites the stored credential in
+  place, and nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so Conduit's audit log answers
   "who ran that script on that server". Automate's own log records the
   integrator account the API authenticates as, which is the same value for

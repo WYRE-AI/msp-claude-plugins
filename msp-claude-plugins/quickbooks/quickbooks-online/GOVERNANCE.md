@@ -13,11 +13,22 @@ brokers OAuth 2.0 centrally and scopes every call to the QBO company
 - No Intuit client ID, client secret, access token, or refresh token is
   stored on the technician's machine, in this repo, or in the model's
   context. The gateway holds the OAuth grant and refreshes it.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's QuickBooks Online connection is stored once at the gateway,
+  so replacing it is one edit rather than a change on every
+  technician's machine. QuickBooks Online is OAuth: Conduit refreshes
+  the token itself as it nears expiry, and asks you to reconnect only
+  when that refresh fails.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who posted that journal entry" — QBO's own audit log records only the
   connected app.
-- Revoking gateway access revokes QuickBooks access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal QuickBooks
+  connection made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 The gateway connection also selects **sandbox vs production**. A sandbox
 connection is the correct default for anyone evaluating agent behaviour

@@ -14,12 +14,22 @@ operator is authorised for.
   machine, in this repo, or in the model's context. The gateway holds the
   `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` pair and translates it
   into the upstream HTTP Basic `apikey:X` credential.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Freshdesk credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the connect
+  form, which overwrites the stored credential in place, and nothing
+  tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who sent that reply to the customer". Freshdesk's own activity log
   records only the API key's agent account, so without the gateway every
   action looks like it came from one shared robot.
-- Revoking gateway access revokes Freshdesk access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated in
+  your identity provider is refused on their very next request. A user
+  only removed from the org keeps an already-issued access token for up
+  to an hour, but it reaches only a personal Freshdesk connection made
+  with their own key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission tiers
 

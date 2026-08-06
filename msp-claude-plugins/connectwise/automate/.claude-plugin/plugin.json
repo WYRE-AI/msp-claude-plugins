@@ -1,6 +1,6 @@
 {
   "name": "connectwise-automate",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Claude plugins for ConnectWise Automate RMM - computers, scripts, monitors, alerts, and client management",
   "author": {
     "name": "MSP Claude Plugins Community"

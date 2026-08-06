@@ -14,12 +14,23 @@ operator is authorised for.
   technician's machine, in this repo, or in the model's context. HaloPSA
   uses OAuth 2.0 client credentials; the gateway runs that exchange and
   holds the refreshing token.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's HaloPSA credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the connect
+  form, which overwrites the stored credential in place, and nothing
+  tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who billed that time" and "who emailed the client". HaloPSA's own
   audit records only the API application, so without the gateway every
   action is attributed to one integration user.
-- Revoking gateway access revokes HaloPSA access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal HaloPSA connection
+  made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission groups
 

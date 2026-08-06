@@ -21,12 +21,23 @@ tenant the operator is authorised for.
 
 - No client secret is stored on the technician's machine, in this repo,
   or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Microsoft 365 connection is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. Microsoft 365 is OAuth: Conduit refreshes the token itself
+  as it nears expiry, and asks you to reconnect only when that refresh
+  fails.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who disabled that account" — the Microsoft 365 unified audit log
   records only the app registration, and cannot tell you which
   technician was behind it.
-- Revoking gateway access revokes Graph access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal Graph connection
+  made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 **One exception you must know about.** This plugin's `README.md` and
 `.env.example` still document a direct-to-Microsoft path: an Entra app

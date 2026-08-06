@@ -18,9 +18,12 @@ every call to the partner account the operator is authorised for.
   onto the `X-Blackpoint-Api-Token` header and forwards it upstream as a
   Bearer token; the outbound header set is built from scratch, never
   proxied from the client.
-- Credential rotation happens once at Conduit, not per technician.
-  Blackpoint is not an OAuth vendor there, so rotation means
-  re-submitting the connect form; nothing tracks credential age for you.
+- The org's CompassOne credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the connect
+  form, which overwrites the stored credential in place, and nothing
+  tracks its age or prompts you. Blackpoint is not an OAuth vendor in
+  Conduit, so there is no automatic token refresh either.
 - Every call carries operator identity, so Conduit's audit log answers
   "who pulled this customer's dark-web exposure" — CompassOne's own log
   records only the API account. It records *who called what*, never with

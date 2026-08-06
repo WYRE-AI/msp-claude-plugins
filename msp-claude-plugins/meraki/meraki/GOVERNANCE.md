@@ -12,7 +12,12 @@ operator is authorised for.
 
 - No Meraki Dashboard API key is stored on the technician's machine, in
   this repo, or in the model's context.
-- Credential rotation happens once at Conduit, not per technician.
+- The org's Meraki credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the
+  connect form, which overwrites the stored credential in place, and
+  nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so Conduit's audit log answers
   "who replaced that firewall ruleset". The Meraki change log records
   only the Dashboard account that owns the API key, which for an MSP is
