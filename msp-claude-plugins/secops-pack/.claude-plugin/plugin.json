@@ -2,7 +2,7 @@
   "name": "secops-pack",
   "displayName": "Security Operations",
   "description": "Cross-vendor security alert triage and incident response \u2014 normalizes severity, runs containment playbooks, and builds incident timelines across whatever EDR/MDR/SIEM stack you have connected.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

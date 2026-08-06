@@ -19,8 +19,11 @@ Uptime monitors are the core of Better Stack's monitoring platform. They periodi
 ## Anti-triggers
 
 - **An internal or RFC1918 target** — checks run from Better Stack's
-  public regions and cannot reach a private LAN. Internal service
-  checks run from a collector inside the site; use `domotz-eyes`.
+  public regions and cannot reach a private LAN. Reachability from
+  inside the site is `domotz-network`, which polls from a collector on
+  the LAN. Note it answers a different question: Domotz reports device
+  and interface state, not synthetic HTTP/TCP probes, so there is no
+  in-LAN equivalent of a Better Stack check.
 - **Azure Monitor** — same word, different product. Azure metrics, KQL,
   and alert rules are `azure-mcp-observability`.
 - **Whether a piece of infrastructure is up** — SNMP and ICMP polling
