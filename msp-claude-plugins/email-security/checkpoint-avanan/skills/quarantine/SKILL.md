@@ -1,237 +1,180 @@
 ---
 name: "Checkpoint Avanan Quarantine"
 description: >
-  Checkpoint Harmony Email & Collaboration (Avanan) quarantine management:
-  quarantine reasons and severity mapping, the quarantine field reference,
-  release and bulk-operation workflows, and quarantine expiry/retention
-  behavior for held emails.
+  Finding and acting on mail in Checkpoint Harmony Email (Avanan): the
+  `hec_search_emails` attribute-filter syntax, what an entity payload carries,
+  the asynchronous quarantine and restore actions and their task polling, and
+  the judgement a restore requires because delivery cannot be undone.
 when_to_use: >-
-  When listing, searching, releasing, or deleting quarantined emails in Checkpoint
-  Harmony Email. Use when: checkpoint quarantine, avanan quarantine, quarantined
-  email, release quarantine, delete quarantine, quarantine search, email blocked,
-  email held, quarantine review, bulk release, quarantine policy, false positive
-  email, email restore, or quarantine management.
+  When locating a specific message, checking whether it was held, or
+  quarantining or releasing mail in Checkpoint Harmony Email. Use when:
+  checkpoint quarantine, avanan quarantine, quarantined email, release
+  quarantine, restore email, hec_search_emails, hec_quarantine_emails, email
+  held, false positive email, missing email, or blast-radius search.
 ---
 
-# Checkpoint Harmony Email Quarantine Management
+# Checkpoint Harmony Email Quarantine and Message Actions
 
 ## Overview
 
-Checkpoint Harmony Email & Collaboration (Avanan) quarantines emails that match security policies before they reach the end user's inbox. The quarantine system is the primary interface for reviewing flagged emails, releasing false positives, and managing email flow. This skill covers comprehensive quarantine management including search, review, release workflows, bulk operations, and quarantine configuration.
+Where an event is a verdict, an **entity** is the thing that was scanned —
+usually the email, with its subject, sender, recipients and attachments.
+Quarantine and restore operate on entities. Day-to-day MSP work here is
+finding a message a user says is missing, judging whether the detection was
+right, and either leaving it held or delivering it.
 
 ## Anti-triggers
 
-- **Why the message was flagged, or the IOCs inside it** — the
-  quarantine entry is the held message; the detection record that
-  produced it is a separate object with its own URLs, hashes, and
-  verdicts — use `checkpoint-avanan-threats`.
-- **Changing what gets quarantined, or curating the allow/block lists**
-  — releasing with `addToAllowList` writes a single exception; policy
-  tuning and list administration are `checkpoint-avanan-policies`.
-- **Removing a message that already reached the mailbox** — Avanan
-  quarantine holds mail pre-delivery only and has no mailbox-purge
-  tool. Post-delivery removal on a Proofpoint tenant is
-  `proofpoint-forensics` (TRAP search-and-destroy).
+- **Why the message was flagged** — the engine verdict, type, severity and
+  confidence are on the detection record. Use `checkpoint-avanan-threats`.
+- **Stopping a sender being flagged again** — a release delivers one message
+  and changes nothing standing. Sender allow entries are
+  `checkpoint-avanan-exceptions`.
+- **Search-and-destroy in a delivered mailbox on another stack** — Proofpoint
+  TRAP is `proofpoint-forensics`; Microsoft 365 mailbox operations are
+  `cipp-mailboxes`.
 - **Another vendor's quarantine** — "release from quarantine" is shared
-  vocabulary across the email-security stack. Proofpoint is
-  `proofpoint-quarantine`, SpamTitan is `spamtitan-quarantine`, and
-  Mimecast calls it the held queue: `mimecast-queue-management`.
+  vocabulary. Proofpoint is `proofpoint-quarantine`, SpamTitan is
+  `spamtitan-quarantine`, Mimecast calls it the held queue
+  (`mimecast-queue-management`), Abnormal is `abnormal-security-cases`.
 
-## Quarantine Reasons
+## Finding a message
 
-Emails are quarantined based on the detection engine that flagged them:
+`hec_search_emails` requires **`saas` and `startDate`**. `saas` here is a
+single string, not an array — unlike the events surface, which takes a list.
+Everything else is optional.
 
-| Reason Code | Name | Description | Typical Action |
-|-------------|------|-------------|----------------|
-| **PHISHING** | Phishing | Suspected phishing attempt | Review sender, URLs, release if legitimate |
-| **MALWARE** | Malware | Malicious attachment or link detected | Almost never release; escalate to incident |
-| **SPAM** | Spam | Bulk or unsolicited email | Release if legitimate business email |
-| **DLP** | Data Loss Prevention | Outbound email violates DLP policy | Review content, release if authorized |
-| **BEC** | Business Email Compromise | Impersonation or fraud attempt | Investigate thoroughly before any release |
-| **ANOMALY** | Anomaly Detection | Unusual sender behavior detected | Compare against known sender patterns |
-| **POLICY** | Policy Violation | Custom policy rule triggered | Check which policy matched, release if appropriate |
-| **BULK** | Bulk Mail | Marketing or newsletter content | Release if subscribed/wanted |
+Attribute matching goes in `filters`, an array of triples:
 
-### Severity Mapping
-
-| Severity | Quarantine Reasons | Auto-Release Eligible |
-|----------|-------------------|----------------------|
-| Critical | MALWARE, BEC | No - requires manual review |
-| High | PHISHING | No - requires manual review |
-| Medium | DLP, ANOMALY, POLICY | Configurable per policy |
-| Low | SPAM, BULK | Yes - if admin configured |
-
-## Complete Quarantine Field Reference
-
-### Core Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `entityId` | string | Unique quarantine entry identifier |
-| `messageId` | string | Email message ID (RFC 5322) |
-| `subject` | string | Email subject line |
-| `sender` | string | Sender email address |
-| `senderDisplayName` | string | Sender display name (may differ from address) |
-| `recipients` | string[] | List of recipient email addresses |
-| `receivedDate` | datetime | When the email was received |
-| `quarantinedDate` | datetime | When the email was quarantined |
-
-### Classification Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `quarantineReason` | string | Why the email was quarantined (see codes above) |
-| `confidenceLevel` | string | Detection confidence: HIGH, MEDIUM, LOW |
-| `severity` | string | Threat severity: CRITICAL, HIGH, MEDIUM, LOW |
-| `detectionEngine` | string | Which engine flagged the email |
-| `policyName` | string | Name of the policy that triggered quarantine |
-
-### Content Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `hasAttachments` | boolean | Whether email contains attachments |
-| `attachmentNames` | string[] | List of attachment filenames |
-| `attachmentHashes` | string[] | SHA-256 hashes of attachments |
-| `containsUrls` | boolean | Whether email body contains URLs |
-| `urlCount` | int | Number of URLs in the email |
-| `bodyPreview` | string | First 200 characters of email body |
-
-### Status Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `status` | string | Current status: QUARANTINED, RELEASED, DELETED |
-| `releasedBy` | string | Who released the email (if released) |
-| `releasedDate` | datetime | When the email was released |
-| `expiresDate` | datetime | When quarantine entry auto-deletes |
-
-## MCP Tools
-
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `avanan_quarantine_list` | List quarantined emails with filters | `startDate`, `endDate`, `reason`, `severity`, `status`, `limit`, `offset` |
-| `avanan_quarantine_get` | Get detailed quarantine entry | `entityId` |
-| `avanan_quarantine_release` | Release email(s) from quarantine | `entityIds`, `releaseToRecipients`, `addToAllowList` |
-| `avanan_quarantine_delete` | Permanently delete quarantined email(s) | `entityIds`, `reason` |
-| `avanan_quarantine_search` | Search quarantine by sender, recipient, subject | `query`, `field`, `startDate`, `endDate` |
-| `avanan_quarantine_stats` | Get quarantine statistics and trends | `startDate`, `endDate`, `groupBy` |
-
-### Tool Usage Examples
-
-**List recent quarantined emails:**
 ```json
 {
-  "tool": "avanan_quarantine_list",
-  "parameters": {
-    "startDate": "2024-02-01T00:00:00Z",
-    "endDate": "2024-02-15T23:59:59Z",
-    "status": "QUARANTINED",
-    "limit": 50
-  }
+  "saas": "office365_emails",
+  "startDate": "2026-07-01T00:00:00Z",
+  "filters": [
+    { "saasAttrName": "fromEmail", "saasAttrOp": "is",
+      "saasAttrValue": "sender@example.com" },
+    { "saasAttrName": "isQuarantined", "saasAttrOp": "is",
+      "saasAttrValue": true }
+  ]
 }
 ```
 
-**Search by sender:**
-```json
-{
-  "tool": "avanan_quarantine_search",
-  "parameters": {
-    "query": "suspicious@external-domain.com",
-    "field": "sender",
-    "startDate": "2024-02-01T00:00:00Z"
-  }
-}
-```
+Operators: `is`, `isNot`, `contains`, `notContains`, `startsWith`, `isEmpty`,
+`isNotEmpty`, `greaterThan`, `lessThan`. `isEmpty` and `isNotEmpty` take no
+`saasAttrValue`.
 
-**Release with allow-list:**
-```json
-{
-  "tool": "avanan_quarantine_release",
-  "parameters": {
-    "entityIds": ["qe-abc123", "qe-def456"],
-    "releaseToRecipients": true,
-    "addToAllowList": true
-  }
-}
-```
+Useful attribute names: `fromEmail`, `subject`, `recipients`,
+`isQuarantined`, `attachmentMd5`.
 
-## Common Workflows
+There is no free-text `query` argument and no `field` argument — all matching
+is through this structure. The operator list has no `or` and filters do not
+nest, so an either/or sender search is two calls whose results you merge.
 
-### False Positive Review Workflow
+## What an entity carries
 
-1. **User reports missing email** - Check quarantine for the expected message
-2. **Search quarantine** by sender address and date range
-3. **Review quarantine entry** - Check reason, confidence, severity
-4. **Verify legitimacy:**
-   - Compare sender address vs display name (BEC indicator)
-   - Check if sender is known/expected
-   - Review attachment types and URL destinations
-   - Check confidence level of detection
-5. **Release if legitimate:**
-   - Release to original recipients
-   - Optionally add sender to allow list
-   - Document the false positive for policy tuning
-6. **If suspicious** - Escalate to incident investigation
+The search result summarises each hit as `entityId`, `saas`, `entityCreated`,
+`subject`, `from`, `to`, `isQuarantined`, `isRestored`, `verdict` and
+`availableActions`. `hec_get_email` returns the full record:
 
-### Bulk Quarantine Review Workflow
+- **`entityPayload`** — `internetMessageId`, `subject`, `received`,
+  `fromEmail`, `fromName`, `to`, `cc`, `recipients`, `attachmentCount`, and
+  `attachments` with each file's `name`, `mimetype`, `size` and `MD5`.
+- **`entitySecurityResult.combinedVerdict`** — the engines' combined judgement.
+- **`entityAvailableActions`** — what this entity will accept right now.
+- **`isQuarantined` / `isRestored`** — the two flags that answer "where is
+  this message". Both true means it was held and then delivered.
 
-1. **List quarantined emails** for the review period (e.g., last 24 hours)
-2. **Group by quarantine reason** to prioritize review
-3. **Review SPAM/BULK first** - highest false positive rate
-4. **Review POLICY matches** - check if policy is too broad
-5. **Review PHISHING/BEC last** - most likely true positives
-6. **Bulk release** confirmed false positives
-7. **Bulk delete** confirmed threats
+Attachment `MD5` is the hash the payload exposes; there is no SHA-256 field
+here despite SHA-256 being the more common currency downstream.
 
-### Quarantine Expiry Management
+## Acting on mail
 
-Quarantined emails auto-delete after the configured retention period (default: 30 days).
+Four tools, two operations, two id namespaces:
 
-```
-Day 1-7:   Email in quarantine, available for review
-Day 8-14:  Email still available, notification sent to admin
-Day 15-30: Email nearing expiry
-Day 30+:   Email permanently deleted
-```
+| Tool | Takes |
+|---|---|
+| `hec_quarantine_emails` | `entityIds`, optional `entityType` (default `email`) |
+| `hec_restore_emails` | `entityIds`, optional `entityType` |
+| `hec_quarantine_events` | `eventIds` |
+| `hec_restore_events` | `eventIds` |
 
-**To extend retention:** Release and re-quarantine, or export before expiry.
+Use whichever id you already hold. They reach the same underlying action.
 
-## Error Handling
+### Actions are asynchronous
 
-### Common API Errors
+None of the four completes inline. Each returns one **`taskId` per entity**,
+and the call returning successfully means the work was accepted, not done.
+Poll each with `hec_get_task_status`. An agent that reports "released" off the
+back of the action call alone is reporting an intention.
 
-| Code | Message | Resolution |
-|------|---------|------------|
-| 400 | Invalid date range | Ensure startDate is before endDate, max 90-day range |
-| 400 | Invalid entity ID | Verify the quarantine entity ID exists |
-| 401 | Unauthorized | Check API credentials and token expiry |
-| 403 | Insufficient permissions | API key needs quarantine management scope |
-| 404 | Quarantine entry not found | Entry may have expired or been deleted |
-| 409 | Already released | Email was already released from quarantine |
-| 429 | Rate limited | Implement exponential backoff |
+### Restore is the sharp one
 
-### Validation Errors
+Restoring delivers a message the security stack judged malicious into a real
+person's inbox, and there is no un-deliver. When the detection was malware or
+BEC, an erroneous restore is precisely the outcome the product exists to
+prevent.
 
-| Error | Cause | Fix |
-|-------|-------|-----|
-| Date range too wide | Exceeds 90-day maximum | Narrow the date range |
-| Too many entity IDs | Bulk operation exceeds 100 items | Split into smaller batches |
-| Invalid reason filter | Unrecognized quarantine reason | Use valid reason codes from reference above |
-| Expired entry | Quarantine retention period passed | Entry cannot be recovered |
+Note the asymmetry in how the tools are annotated: the two quarantine tools
+carry `destructiveHint: true` and prompt for confirmation, while **the restore
+tools carry no annotations at all**. A client that gates on `destructiveHint`
+will therefore wave restores through and stop on quarantines — the opposite of
+the risk ordering. Require a human on restores explicitly; do not rely on the
+tool metadata to ask.
 
-## Best Practices
+Before any restore, confirm the sender with the customer out of band, read
+the entity's `combinedVerdict` rather than the summary alone, and check
+whether other recipients received the same message.
 
-1. **Review quarantine daily** - Prevents legitimate emails from expiring undelivered
-2. **Never release MALWARE without investigation** - Even if the user requests it
-3. **Use allow lists judiciously** - Over-broad allow lists weaken security posture
-4. **Document release decisions** - Helps tune policies and track patterns
-5. **Monitor quarantine volume trends** - Sudden spikes may indicate a targeted attack
-6. **Batch operations for efficiency** - Use bulk release/delete for large review sets
+## Reading a quarantine decision
+
+Harmony Email does not expose a "quarantine reason" field. The reason is the
+detection that caused it, so the mapping runs through the event type:
+
+| Detection | Release posture |
+|---|---|
+| `malware` | Do not release. Escalate. |
+| `suspicious malware` | Do not release without sandbox or hash corroboration. |
+| `phishing` (incl. BEC) | Release only after out-of-band sender confirmation. |
+| `dlp` | Outbound. Release is a data-handling decision, not a security one — it needs the data owner, not the helpdesk. |
+| `anomaly` | Usually a genuine sender behaving unusually. Highest release rate. |
+| `malicious_url` | Check whether the link is still live before judging. |
+
+A `malicious_url_click` event means a user already reached the destination.
+Releasing or holding the message is then secondary to credential response.
+
+## Gotchas
+
+- **Batches are not transactional.** The tool schema sets only `minItems: 1`
+  with no upper bound, but the API caps a single action call (GOVERNANCE.md
+  records 100 entities). Splitting a large action into batches performs
+  several independent irreversible operations; a failure partway leaves a
+  mixed state with nothing to roll back. Poll every `taskId`, not just the
+  last.
+- **`startDate` is mandatory, so "search everything" is impossible.** A user
+  reporting a message from "a while ago" needs a window guessed and widened,
+  and retention bounds how far back that can go.
+- **Quarantine expiry is a hard deletion.** Entries age out after the
+  tenant's retention period (30 days by default) and cannot be recovered.
+  There is no tool that reads or extends retention; the only documented
+  workaround — release and re-quarantine — means briefly delivering the
+  message.
+- **An empty search is not proof of absence.** Wrong `saas` value, wrong
+  region, or a window that misses the message all return zero records
+  without an error.
+
+## Capability gaps
+
+- **No delete.** The surface has quarantine and restore only. There is no way
+  to permanently delete a held message; that is a console action.
+- **No release-with-allow-list.** Releasing and creating a sender exception
+  are two separate operations against two different tools.
+- **No message body or attachment download.** Names, sizes, MIME types and
+  MD5 hashes are exposed; the content is not.
+- **No notification.** Nothing here tells a recipient their mail was held or
+  released.
 
 ## Related Skills
 
-- [Checkpoint Threats](../threats/SKILL.md) - Threat detection and analysis
-- [Checkpoint Incidents](../incidents/SKILL.md) - Incident investigation
-- [Checkpoint Policies](../policies/SKILL.md) - Policy management
-- [Checkpoint API Patterns](../api-patterns/SKILL.md) - Authentication and API usage
+- [Checkpoint Threats](../threats/SKILL.md) — why it was held
+- [Checkpoint Exceptions](../exceptions/SKILL.md) — stopping it recurring
+- [Checkpoint API Patterns](../api-patterns/SKILL.md) — ids, paging, auth
