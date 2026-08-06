@@ -66,13 +66,13 @@ configuration to Microsoft 365. Its real cost is vendor-side compute and
 a misleading audit entry against the wrong customer. The confirmation
 discipline is right; the tier is Write.
 
-> **Tool-name drift.** Three skill documents refer to
-> `inforcer_secure_scores`, `inforcer_audit_events_search`, and
-> `inforcer_tenant_policies_list`. The MCP server registers those
-> handlers as `inforcer_secure_scores_get`, `inforcer_audit_search`, and
-> `inforcer_policies_list`. Build gateway allow/deny rules against the
-> names in the table above — a rule written against a name the server
-> does not register silently permits nothing and blocks nothing.
+> **Build allow/deny rules against the table above, not against prose.**
+> The names in that table are the ones the server registers
+> (`inforcer-mcp/src/domains/`). A rule written against a name the server
+> does not register silently permits nothing and blocks nothing — it does
+> not fail loudly, so a mistyped rule looks like a working one. An earlier
+> revision of this plugin carried three such names across its README,
+> agent, commands and skills; they were corrected in 1.0.6.
 
 ## Recommended agent policy
 

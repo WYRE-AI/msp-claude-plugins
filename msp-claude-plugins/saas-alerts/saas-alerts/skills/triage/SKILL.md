@@ -49,9 +49,28 @@ recommended actions are machine-generated per alert.
 | `saas_alerts_customers_list` | Enumerate all managed customers |
 | `saas_alerts_events_query` | Pull events filtered by severity and time window, per customer or all |
 | `saas_alerts_events_query_advanced` | Cross-tenant pattern queries (impossible travel across tenants, bulk sign-in anomalies) |
-| `saas_alerts_recommended_actions` | Fetch vendor-generated remediation steps for a specific alert |
-| `saas_alerts_users_get` | Attribute an event to a specific user for context |
-| `saas_alerts_devices_get` | Attribute an event to a specific device |
+| `saas_alerts_recommended_actions` | Fetch the vendor's remediation guidance. Takes no arguments — it returns the full event-type → action mapping, which you match against each alert's event type yourself |
+| `saas_alerts_users_list_by_customer` | Pull one customer's users once, then match IDs against it locally to put a name on an event |
+
+**No per-user or per-device lookup exists.** An earlier revision of this table
+named one of each; the server registers neither
+(`saas-alerts-mcp/src/domains/users.ts`,
+`saas-alerts-mcp/src/domains/devices.ts`). Two consequences for triage:
+
+- **Attributing an alert to a person** is a list-and-match, not a call per
+  event. Fetch `saas_alerts_users_list_by_customer` once for the customer and
+  resolve every ID in the sweep against that one result. Where the event
+  already carries a user email, use it directly — `saas_alerts_events_query`
+  takes `user_email`, so you can pivot to that person's other events without
+  resolving anything. Do not substitute `saas_alerts_users_get_msp`: it takes
+  no arguments and returns your own API key's profile, so it will silently
+  attribute every alert to the MSP.
+- **Attributing an alert to a specific device is not available through this
+  plugin.** The device tools (`saas_alerts_devices_list_orgs`,
+  `saas_alerts_devices_list_mapped`, `saas_alerts_devices_list_unmapped`,
+  `saas_alerts_devices_list_ignored`) exist to manage device-to-organization
+  mapping and are keyed by `organization_ids`, not by an event or a customer.
+  Report device context only from what the event payload itself carries.
 
 ## Common Workflows
 
@@ -60,10 +79,13 @@ recommended actions are machine-generated per alert.
 1. `saas_alerts_status` — confirm connectivity.
 2. `saas_alerts_events_query` with `alert_status: critical` and a
    24-hour window across all customers.
-3. For each critical alert, call `saas_alerts_recommended_actions` to
-   surface remediation guidance.
-4. Attribute each alert to a user via `saas_alerts_users_get` if a
-   user ID is present.
+3. Call `saas_alerts_recommended_actions` **once** — it takes no
+   arguments and returns the whole event-type → action mapping. Join it
+   to each alert's event type locally rather than calling it per alert.
+4. Attribute alerts to people: use the event's own `user_email` where it
+   is present, and for the rest pull
+   `saas_alerts_users_list_by_customer` once per affected customer and
+   match IDs against that result.
 5. Produce a ranked table: customer | alert type | user | recommended action | disposition.
 
 ### 2 — Per-customer summary
@@ -115,8 +137,9 @@ generate medium-severity events as precursors.
   without customer attribution is not actionable for an MSP.
 - Rank, do not just list. Severity is the primary key; customer size and
   strategic importance break ties. State the ranking logic.
-- Pair every critical alert with its `saas_alerts_recommended_actions`
-  output — the analyst should not have to make a separate tool call.
+- Pair every critical alert with its matching entry from the
+  `saas_alerts_recommended_actions` mapping — the analyst should not have
+  to make a separate tool call.
 - For cross-tenant sweeps, watch for volume anomalies: a customer that
   normally generates five events per day suddenly generating fifty is
   itself a signal regardless of individual severity.

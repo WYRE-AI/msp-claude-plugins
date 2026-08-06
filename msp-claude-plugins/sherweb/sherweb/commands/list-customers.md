@@ -11,7 +11,7 @@ List all customers under your Sherweb service provider account. Optionally searc
 ## Prerequisites
 
 - Sherweb MCP server connected with valid credentials
-- MCP tools `sherweb_customers_list` and optionally `sherweb_customers_get_accounts_receivable` available
+- MCP tools `sherweb_customers_list` and optionally `sherweb_customers_accounts_receivable` available
 
 ## Steps
 
@@ -28,7 +28,7 @@ List all customers under your Sherweb service provider account. Optionally searc
 
 3. **Enrich with accounts receivable** if `show_ar` is true
 
-   For each customer, call `sherweb_customers_get_accounts_receivable` with the `customerId` to get outstanding balance and aging data
+   For each customer, call `sherweb_customers_accounts_receivable` with the `customerId` to get outstanding balance and aging data
 
 4. **Format and return** the customer list with details
 
@@ -193,7 +193,7 @@ Please wait a moment and try again. The Sherweb API enforces rate limits per sub
 | Tool | Purpose |
 |------|---------|
 | `sherweb_customers_list` | List and search customers |
-| `sherweb_customers_get_accounts_receivable` | Get AR data per customer (when show_ar=true) |
+| `sherweb_customers_accounts_receivable` | Get AR data per customer (when show_ar=true) |
 
 ## Related Commands
 

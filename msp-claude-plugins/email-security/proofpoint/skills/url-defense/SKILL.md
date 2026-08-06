@@ -29,9 +29,11 @@ URL Defense is a critical layer of protection because many attacks use time-dela
   `proofpoint-quarantine` if it is still held, or
   `proofpoint-forensics` if it was delivered.
 - **Turning URL rewriting on or off** — rewrite behaviour is a
-  Proofpoint policy setting, not something these tools change. On a
-  Checkpoint Harmony tenant the equivalent `URL_REWRITE` policy is
-  `checkpoint-avanan-policies`.
+  Proofpoint policy setting, and no tool here changes it; use the
+  Proofpoint console. The same is true on a Checkpoint Harmony tenant:
+  that plugin exposes no policy tool either, so its `URL_REWRITE`
+  configuration is console-only as well. Do not route this question to a
+  Harmony skill expecting a tool to exist.
 
 ## Key Concepts
 
@@ -125,51 +127,72 @@ In the v3 format, the original URL uses a different encoding:
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_url_decode` | Decode a Proofpoint-rewritten URL | `url` |
-| `proofpoint_url_analyze` | Analyze a URL for threats | `url` |
-| `proofpoint_url_get_clicks` | Get click activity for a URL | `url`, `sinceSeconds` |
-| `proofpoint_url_get_verdict` | Get the current verdict for a URL | `url` |
-| `proofpoint_url_batch_decode` | Decode multiple URLs at once | `urls[]` |
+| `proofpoint_url_decode` | Decode one **or many** Proofpoint-rewritten URLs back to the originals | `urls` (required, array) |
+| `proofpoint_url_analyze` | Analyze a URL for threats — returns classification, risk score, associated campaigns | `url` (required) |
+
+Two tools, and that is the whole domain. `proofpoint_url_decode` takes an
+**array**, so batch decoding is the ordinary call, not a separate tool —
+pass one URL in a one-element array. `proofpoint_url_analyze` is also the
+verdict tool: the classification and risk score it returns *are* the
+verdict, so there is no separate verdict call to poll.
+
+### Not available through this plugin
+
+**Click activity is not keyed by URL anywhere.** URL Defense here decodes
+and analyses; it has no click surface. Click records live in TAP —
+`proofpoint_tap_get_clicks_permitted` and `proofpoint_tap_get_clicks_blocked`
+— and both are keyed by **time window**, not by URL. To answer "who clicked
+this link", pull the clicks for the relevant window and filter the results
+on the URL yourself, and remember TAP's 24-hour SIEM ceiling: outside that
+window you get an empty result that reads like "nobody clicked" and means
+"no data".
 
 ## Common Workflows
 
 ### Decode a Rewritten URL
 
 1. User or analyst provides a Proofpoint-rewritten URL
-2. Call `proofpoint_url_decode` with the full rewritten URL
+2. Call `proofpoint_url_decode` with `urls` set to a one-element array
+   containing the full rewritten URL
 3. Return the original decoded URL
 4. Optionally call `proofpoint_url_analyze` to check the URL's current threat status
 
 ### Investigate a Suspicious URL
 
 1. Call `proofpoint_url_analyze` with the URL
-2. Review the verdict, classification, and redirect chain
-3. If malicious, call `proofpoint_url_get_clicks` to see who clicked
-4. Cross-reference with TAP click events for full context
+2. Review the classification, risk score, and associated campaigns
+3. If malicious, pull `proofpoint_tap_get_clicks_permitted` for the relevant
+   time window and filter the results for this URL to see who clicked
+4. Cross-reference with the rest of the TAP click events for full context
 5. If the URL is being used in an active campaign, escalate to threat intelligence
 
 ### Bulk URL Decoding
 
 1. Extract all Proofpoint-rewritten URLs from an email or document
-2. Call `proofpoint_url_batch_decode` with the array of URLs
+2. Call `proofpoint_url_decode` with the whole array in `urls` — one call
 3. Review the decoded URLs for any suspicious destinations
 4. Check each decoded URL against threat intelligence
 
 ### Click Activity Investigation
 
 1. Identify a suspicious URL from TAP events or quarantine
-2. Call `proofpoint_url_get_clicks` with the URL
+2. Call `proofpoint_tap_get_clicks_permitted` and
+   `proofpoint_tap_get_clicks_blocked` for the window, then filter both
+   result sets on the URL — there is no per-URL click tool
 3. Review which users clicked and when
-4. Check whether clicks were permitted or blocked
+4. Permitted clicks are the exposure; blocked clicks are volume signal
 5. For permitted clicks, assess whether credentials may be compromised
 6. Initiate password resets for users who clicked on credential harvesting URLs
 
-### URL Verdict Monitoring
+### Re-checking a URL After Delivery
 
-1. Call `proofpoint_url_get_verdict` for a URL that was previously clean
-2. Check if the verdict has changed (URLs can become malicious after delivery)
-3. If the verdict changed to `block`, check if any users received emails containing the URL
-4. If users received the URL before it was blocked, initiate search-and-destroy
+1. Call `proofpoint_url_analyze` for a URL that was previously clean —
+   URLs can become malicious after delivery, and the analysis reflects the
+   current classification, not the one at delivery time
+2. If it now classifies as malicious, check whether users received emails
+   containing it
+3. If they did, run the search-and-destroy sequence in the
+   `proofpoint-forensics` skill
 
 ## URL Decoding Reference
 
@@ -234,7 +257,7 @@ Output: https://example.com/path
 4. **Don't bypass URL Defense** - Never instruct users to work around URL rewriting
 5. **Use browser isolation for risky clicks** - Configure isolation for suspicious-but-not-confirmed URLs
 6. **Audit redirect chains** - Multi-hop redirects are a common evasion technique
-7. **Batch decode for efficiency** - When processing multiple URLs, use `proofpoint_url_batch_decode`
+7. **Batch decode for efficiency** - `proofpoint_url_decode` takes an array; pass every URL in one call rather than looping
 8. **Retain decoded URLs** - Log the original URLs for threat intelligence and IOC tracking
 9. **Combine with TAP data** - Cross-reference URL analysis with TAP events for full visibility
 

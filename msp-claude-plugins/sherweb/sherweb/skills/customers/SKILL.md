@@ -39,7 +39,7 @@ Customers in Sherweb represent the end-client organizations managed by a service
 |------|-------------|----------------|
 | `sherweb_customers_list` | List all customers under the service provider | `page`, `pageSize`, `search` |
 | `sherweb_customers_get` | Get detailed information about a specific customer | `customerId` (required) |
-| `sherweb_customers_get_accounts_receivable` | Get accounts receivable data for a customer | `customerId` (required) |
+| `sherweb_customers_accounts_receivable` | Get accounts receivable data for a customer | `customerId` (required) |
 
 ### List Customers
 
@@ -63,10 +63,10 @@ Call `sherweb_customers_get` with the `customerId` parameter.
 
 ### Get Accounts Receivable
 
-Call `sherweb_customers_get_accounts_receivable` with the `customerId` parameter to view outstanding balances and payment history.
+Call `sherweb_customers_accounts_receivable` with the `customerId` parameter to view outstanding balances and payment history.
 
 **Example:**
-- `sherweb_customers_get_accounts_receivable` with `customerId=cust-abc-123`
+- `sherweb_customers_accounts_receivable` with `customerId=cust-abc-123`
 
 ## Key Concepts
 
@@ -186,7 +186,7 @@ Accounts receivable data shows the financial relationship between the service pr
 ### Accounts Receivable Review
 
 1. Call `sherweb_customers_list` to get all customers
-2. For each customer, call `sherweb_customers_get_accounts_receivable`
+2. For each customer, call `sherweb_customers_accounts_receivable`
 3. Flag customers with amounts in 60-day or 90-day aging buckets
 4. Generate a collections priority report sorted by overdue amount
 
@@ -274,5 +274,5 @@ Accounts receivable data shows the financial relationship between the service pr
 ## Related Skills
 
 - [Sherweb API Patterns](../api-patterns/SKILL.md) - Authentication, endpoints, and rate limits
-- [Sherweb Billing](../billing/SKILL.md) - Billing charges and invoices per customer
+- [Sherweb Billing](../billing/SKILL.md) - Payable charges per customer (no invoice retrieval)
 - [Sherweb Subscriptions](../subscriptions/SKILL.md) - Subscription management per customer

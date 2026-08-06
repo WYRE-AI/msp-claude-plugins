@@ -137,18 +137,23 @@ TAP SIEM API supports relative and absolute time windows:
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_tap_get_all_events` | Retrieve all TAP events (messages + clicks) | `sinceSeconds`, `sinceTime`, `threatType`, `threatStatus` |
-| `proofpoint_tap_get_messages_blocked` | Get messages blocked by TAP | `sinceSeconds`, `sinceTime` |
-| `proofpoint_tap_get_messages_delivered` | Get messages delivered despite threats | `sinceSeconds`, `sinceTime` |
-| `proofpoint_tap_get_clicks_permitted` | Get clicks that were permitted | `sinceSeconds`, `sinceTime` |
-| `proofpoint_tap_get_clicks_blocked` | Get clicks that were blocked | `sinceSeconds`, `sinceTime` |
-| `proofpoint_tap_get_top_clickers` | Get users who click most on threats | `window` (14, 30, 90 days) |
+| `proofpoint_tap_get_all_threats` | Retrieve all TAP events (messages + clicks) | `sinceSeconds`, `sinceTime`, `interval`, `threatStatus`, `format` |
+| `proofpoint_tap_get_messages_blocked` | Get messages blocked by TAP | `sinceSeconds`, `sinceTime`, `interval`, `threatStatus` |
+| `proofpoint_tap_get_messages_delivered` | Get messages delivered despite threats | `sinceSeconds`, `sinceTime`, `interval`, `threatStatus` |
+| `proofpoint_tap_get_clicks_permitted` | Get clicks that were permitted | `sinceSeconds`, `sinceTime`, `interval`, `threatStatus` |
+| `proofpoint_tap_get_clicks_blocked` | Get clicks that were blocked | `sinceSeconds`, `sinceTime`, `interval`, `threatStatus` |
+
+**Top clickers is not a TAP tool.** The ranked list of users who click
+threats lives in the People domain as `proofpoint_people_get_top_clickers`
+(`window`, `page`, `size`) — see the `proofpoint-people` skill. There is no
+`threatType` filter on any of the SIEM tools either; filter the returned
+events client-side by classification.
 
 ## Common Workflows
 
 ### Check Recent Threats (Last Hour)
 
-1. Call `proofpoint_tap_get_all_events` with `sinceSeconds=3600`
+1. Call `proofpoint_tap_get_all_threats` with `sinceSeconds=3600`
 2. Separate results into messages blocked, messages delivered, clicks permitted, clicks blocked
 3. Prioritize any delivered threats or permitted clicks for immediate investigation
 4. Group threats by classification (malware, phish, impostor)
@@ -169,7 +174,7 @@ TAP SIEM API supports relative and absolute time windows:
 
 ### Daily Threat Summary
 
-1. Call `proofpoint_tap_get_all_events` with `sinceSeconds=86400`
+1. Call `proofpoint_tap_get_all_threats` with `sinceSeconds=86400`
 2. Aggregate by classification: malware, phish, spam, impostor counts
 3. Identify top targeted recipients
 4. List any permitted clicks with threat details

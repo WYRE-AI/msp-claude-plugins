@@ -21,7 +21,7 @@ commits to, and business-hours calendars define when the SLA clock runs.
 Together they compute each ticket's `fr_due_by` (first-response deadline) and
 `due_by` (resolution deadline). This skill covers listing policies and
 calendars and reasoning about deadlines and breaches through tools named
-`freshdesk_sla_policies_list` and `freshdesk_business_hours_list`.
+`freshdesk_sla_list` and `freshdesk_business_hours_list`.
 
 ## Anti-triggers
 

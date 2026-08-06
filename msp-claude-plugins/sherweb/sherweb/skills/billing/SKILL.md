@@ -1,12 +1,14 @@
 ---
 name: "Sherweb Billing"
 description: >
-  Sherweb distributor billing: billing periods, Setup/Recurring/Usage charge types,
-  billing cycles (OneTime, Monthly, Yearly), the pricing breakdown (listPrice,
-  netPrice, prorated, subTotal), promotional and performance deductions, fees,
-  taxes, invoices, and MSP margin calculation.
+  Sherweb distributor billing: explicit billing date ranges, Setup/Recurring/Usage
+  charge types, billing cycles (OneTime, Monthly, Yearly), the pricing breakdown
+  (listPrice, netPrice, prorated, subTotal), promotional and performance deductions,
+  fees, taxes, and MSP margin calculation. Also covers what this plugin cannot
+  retrieve: there is no billing-period enumeration and no invoice surface.
 when_to_use: >-
-  When reviewing Sherweb payable charges, invoices, costs, or MSP margins. Use when:
+  When reviewing Sherweb payable charges, costs, or MSP margins — or when asked for a
+  Sherweb invoice, which this plugin cannot retrieve. Use when:
   sherweb billing, sherweb invoice, sherweb charges, sherweb payable, sherweb pricing,
   sherweb deductions, sherweb fees, sherweb taxes, sherweb margin, sherweb cost,
   sherweb billing period, sherweb recurring, or sherweb prorated.
@@ -16,7 +18,7 @@ when_to_use: >-
 
 ## Overview
 
-Billing in Sherweb represents the financial data flowing from the distributor to the service provider (MSP). When Sherweb provisions or manages cloud subscriptions on behalf of an MSP's customers, it generates payable charges that roll up into billing periods. Each charge includes detailed pricing breakdown with list prices, net prices, proration, deductions (promotional and performance), fees, and taxes. Understanding Sherweb billing data is critical for MSPs to calculate margins, reconcile invoices, and ensure accurate client billing.
+Billing in Sherweb represents the financial data flowing from the distributor to the service provider (MSP). When Sherweb provisions or manages cloud subscriptions on behalf of an MSP's customers, it generates payable charges dated within a billing period. Each charge includes detailed pricing breakdown with list prices, net prices, proration, deductions (promotional and performance), fees, and taxes. Understanding Sherweb billing data is critical for MSPs to calculate margins, reconcile costs, and ensure accurate client billing. Note that the tool surface reaches charges, not periods and not invoices — see *What this plugin cannot retrieve*.
 
 ## Anti-triggers
 
@@ -38,41 +40,58 @@ Billing in Sherweb represents the financial data flowing from the distributor to
 
 ### Available Tools
 
+The server registers exactly two billing tools
+(`sherweb-mcp/src/domains/billing.ts:17-69`).
+
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `sherweb_billing_get_payable_charges` | Get payable charges for a billing period | `billingPeriodId`, `page`, `pageSize` |
-| `sherweb_billing_get_billing_periods` | List available billing periods | `page`, `pageSize` |
-| `sherweb_billing_get_charge_details` | Get detailed breakdown of a specific charge | `chargeId` |
-| `sherweb_billing_get_invoices` | List invoices for the service provider | `page`, `pageSize`, `status` |
-| `sherweb_billing_get_invoice_details` | Get a specific invoice with line items | `invoiceId` |
+| `sherweb_billing_payable_charges` | Get payable charges for a date range | `billingCycleType` (`OneTime`\|`Monthly`\|`Yearly`), `periodFrom`, `periodTo`, `page`, `pageSize` |
+| `sherweb_billing_charge_details` | Get detailed breakdown of a specific charge | `chargeId` (required) |
 
-### Get Billing Periods
+### What this plugin cannot retrieve
 
-Call `sherweb_billing_get_billing_periods` to list available billing periods:
+Two capabilities that earlier revisions of this skill described do not exist
+on the shipped server. Do not substitute a near-miss for either.
 
-- **Paginate:** Set `page` (1-based) and `pageSize` (default 25)
-- Returns billing period IDs, start/end dates, and status
-
-**Example: List recent billing periods:**
-- `sherweb_billing_get_billing_periods` with `pageSize=10`
+- **There is no billing-period enumeration.** No tool lists available
+  billing periods, their IDs, dates, or open/closed status. You supply the
+  window yourself as `periodFrom`/`periodTo` on
+  `sherweb_billing_payable_charges`; you cannot ask the server which periods
+  exist. If an operator says "the latest period", resolve that from the
+  calendar and the MSP's own billing cycle, then pass explicit dates — never
+  guess a `billingPeriodId`, which is not a parameter of any tool here.
+- **There is no invoice surface at all.** Nothing on this server lists
+  invoices, fetches an invoice by ID, or returns invoice line items. The two
+  invoice-adjacent capabilities are narrower and are not substitutes:
+  `sherweb_billing_charge_details` returns the line items of a *single
+  charge* by charge ID, and `sherweb_customers_accounts_receivable` returns a
+  customer's outstanding balance and aging. Neither is an invoice. When an
+  operator asks for a Sherweb invoice, say so plainly and offer charge-level
+  reconciliation or the AR balance instead. Invoice documents live in the
+  Sherweb partner portal.
 
 ### Get Payable Charges
 
-Call `sherweb_billing_get_payable_charges` with a `billingPeriodId`:
+Call `sherweb_billing_payable_charges` with an explicit date range:
 
-- **Required:** `billingPeriodId` from the billing periods list
-- **Paginate:** Set `page` and `pageSize` for large result sets
-- Returns all charges for the period with full pricing breakdown
+- **`periodFrom` / `periodTo`:** ISO 8601 dates bounding the window
+  (e.g. `2026-02-01` to `2026-02-28`). You choose these; there is no period
+  list to pick from.
+- **`billingCycleType`:** `OneTime`, `Monthly`, or `Yearly`. If you call the
+  tool with none of `billingCycleType`, `periodFrom`, or `periodTo`, the
+  server elicits the cycle type from the caller before proceeding.
+- **Paginate:** Set `page` (1-based) and `pageSize` for large result sets
+- Returns all charges in the window with full pricing breakdown
 
-**Example: Get charges for a billing period:**
-- `sherweb_billing_get_payable_charges` with `billingPeriodId=bp-2026-02`, `pageSize=100`
+**Example: Get monthly recurring charges for February 2026:**
+- `sherweb_billing_payable_charges` with `billingCycleType=Monthly`,
+  `periodFrom=2026-02-01`, `periodTo=2026-02-28`, `pageSize=100`
 
-### Get Invoices
+### Get Charge Details
 
-Call `sherweb_billing_get_invoices` to list invoices:
-
-- **Filter by status:** Set `status` to filter (e.g., `Paid`, `Unpaid`, `Overdue`)
-- **Paginate:** Set `page` and `pageSize`
+Call `sherweb_billing_charge_details` with the `chargeId` of a charge returned
+by `sherweb_billing_payable_charges` to see its line items, pricing tiers,
+deductions, fees, and tax.
 
 ## Key Concepts
 
@@ -148,16 +167,6 @@ Margin %     = (Margin / Client Price) * 100
 
 ## Field Reference
 
-### Billing Period Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Billing period identifier |
-| `startDate` | date | Period start date |
-| `endDate` | date | Period end date |
-| `status` | string | Period status (Open, Closed, Processing) |
-| `totalAmount` | decimal | Total charges for the period |
-
 ### Payable Charge Fields
 
 | Field | Type | Description |
@@ -180,32 +189,25 @@ Margin %     = (Margin / Client Price) * 100
 | `taxes` | decimal | Tax amount |
 | `total` | decimal | Final payable amount |
 
-### Invoice Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `id` | string | Invoice unique identifier |
-| `invoiceNumber` | string | Human-readable invoice number |
-| `invoiceDate` | date | Date invoice was issued |
-| `dueDate` | date | Payment due date |
-| `status` | string | Invoice status (Paid, Unpaid, Overdue) |
-| `totalAmount` | decimal | Invoice total |
-| `currency` | string | Currency code (e.g., USD, CAD) |
-| `lineItems` | array | Itemized charges on the invoice |
+> **No invoice fields are documented here** because no tool on this server
+> returns an invoice. See *What this plugin cannot retrieve*, above.
 
 ## Common Workflows
 
 ### Monthly Billing Reconciliation
 
-1. Call `sherweb_billing_get_billing_periods` to find the current or most recent closed period
-2. Call `sherweb_billing_get_payable_charges` with the `billingPeriodId`, paginating through all results
+1. Determine the window you want from the calendar — there is no period list
+   to read it from
+2. Call `sherweb_billing_payable_charges` with `periodFrom` and `periodTo` set
+   to that window and `billingCycleType` set to the cycle you are reconciling,
+   paginating through all results
 3. Group charges by `customerId` to see per-customer totals
 4. Compare Sherweb charges against what you bill each customer in your PSA
 5. Flag discrepancies where MSP cost exceeds or is too close to client billing
 
 ### Margin Analysis Across Customers
 
-1. Fetch all payable charges for the billing period
+1. Fetch all payable charges for the date range
 2. For each customer, sum the `total` field across all charges
 3. Compare against your retail billing to that customer
 4. Calculate margin per customer and overall portfolio margin
@@ -218,20 +220,25 @@ Margin %     = (Margin / Client Price) * 100
 3. Sum total savings from each deduction category
 4. Track performance percentage deductions over time to monitor volume rebate trends
 
-### Invoice Verification
+### Charge Verification (there is no invoice verification workflow)
 
-1. Call `sherweb_billing_get_invoices` to list recent invoices
-2. For each invoice, call `sherweb_billing_get_invoice_details` with the `invoiceId`
-3. Cross-reference invoice line items with payable charges from the billing period
-4. Verify totals match and flag any discrepancies
+Invoice retrieval is not available through this plugin — see *What this plugin
+cannot retrieve*. Verify at the charge level instead:
+
+1. Call `sherweb_billing_payable_charges` for the window under review
+2. For each charge worth scrutiny, call `sherweb_billing_charge_details` with
+   its `chargeId` to see the line items, deductions, fees, and tax
+3. Cross-reference those line items against what you expected to be provisioned
+4. Verify totals and flag discrepancies. To confirm the invoice document
+   itself, open it in the Sherweb partner portal — no tool here returns it.
 
 ### Cost Forecasting
 
-1. Pull 3-6 months of historical billing periods
-2. For each period, get all payable charges
-3. Calculate average monthly cost per customer and per product
-4. Identify trends (growing seat counts, new products, usage spikes)
-5. Project next month's Sherweb costs for budget planning
+1. Pull 3-6 months of history by calling `sherweb_billing_payable_charges`
+   once per month, with `periodFrom`/`periodTo` bounding each month explicitly
+2. Calculate average monthly cost per customer and per product
+3. Identify trends (growing seat counts, new products, usage spikes)
+4. Project next month's Sherweb costs for budget planning
 
 ## Response Examples
 
@@ -272,10 +279,8 @@ Margin %     = (Margin / Client Price) * 100
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| Billing period not found | Invalid `billingPeriodId` | List available periods with `sherweb_billing_get_billing_periods` |
-| No charges found | Period has no charges or wrong period selected | Verify the billing period dates cover the expected range |
-| Charge details unavailable | Charge ID does not exist | Verify the charge ID from the payable charges list |
-| Invoice not found | Invalid `invoiceId` | List invoices with `sherweb_billing_get_invoices` |
+| No charges found | The `periodFrom`/`periodTo` window contains no charges, or the wrong `billingCycleType` was requested | Widen the date range and re-check the cycle type. There is no period list to validate against — the window is whatever you passed |
+| Charge details unavailable | Charge ID does not exist | Verify the charge ID from the `sherweb_billing_payable_charges` result |
 | Authentication error | Expired or invalid token | Re-authenticate using OAuth 2.0 client credentials flow |
 
 ## Best Practices

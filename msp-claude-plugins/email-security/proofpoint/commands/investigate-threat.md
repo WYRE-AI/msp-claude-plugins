@@ -24,8 +24,8 @@ Perform a deep-dive investigation of a specific threat, campaign, or suspicious 
 
 2. **Gather threat context**
    - Call `proofpoint_threat_get_campaign` if a campaign ID is available
-   - Call `proofpoint_threat_get_indicators` for IOCs
-   - Call `proofpoint_forensics_get_report` if forensics are requested
+   - Call `proofpoint_threat_get_iocs` for IOCs
+   - Call `proofpoint_forensics_get_threat` if forensics are requested
 
 3. **Assess impact**
    - Query TAP for all messages containing this threat

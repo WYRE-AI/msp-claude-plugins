@@ -1,9 +1,10 @@
 ---
 name: "SpamTitan API Patterns"
 description: >
-  SpamTitan MCP fundamentals: the available tool catalog, API-key header
-  authentication, API structure, pagination, rate limiting, and error
-  handling.
+  SpamTitan MCP fundamentals: the available tool catalog and its exact
+  parameters, API-key header authentication, API structure, pagination, rate
+  limiting, and error handling. Includes the tenant-isolation limit —
+  spamtitan_get_queue takes no domain filter.
 when_to_use: >-
   When authenticating to SpamTitan, navigating its MCP tools, paging results, or interpreting a
   SpamTitan API error. Use when: spamtitan, spamtitan api, spam filter, titanhq, SpamTitan API,
@@ -39,43 +40,67 @@ export SPAMTITAN_API_KEY="your-api-key"
 
 ## Available MCP Tools
 
+The server registers nine tools. There is no separate `list` tool for either
+sender list and no separate per-domain statistics tool — both capabilities are
+arguments on the tools below.
+
 ### Quarantine Management
 
-| Tool | Description |
-|------|-------------|
-| `spamtitan_get_queue` | List messages in the quarantine queue |
-| `spamtitan_release_message` | Release a quarantined message to the recipient |
-| `spamtitan_delete_message` | Permanently delete a quarantined message |
-| `spamtitan_get_message` | Get details for a specific quarantined message |
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `spamtitan_get_queue` | `page`, `per_page`, `sender`, `recipient`, `subject`, `reason` | List messages in the quarantine queue. **No `domain` parameter — see the warning below.** |
+| `spamtitan_get_message` | `message_id` (required) | Get details for a specific quarantined message |
+| `spamtitan_release_message` | `message_id` (required) | Release a quarantined message to the recipient |
+| `spamtitan_delete_message` | `message_id` (required) | ⚠ Permanently delete a quarantined message. Irreversible |
+
+> **⚠ `spamtitan_get_queue` cannot be scoped to a customer domain.** Its
+> shipped input schema is exactly `page`, `per_page`, `sender`, `recipient`,
+> `subject`, `reason` (`spamtitan-mcp/src/domains/quarantine.ts:21-53`). On a
+> multi-tenant appliance the listing therefore spans every tenant, and
+> per-customer filtering has to be done client-side on `recipient` after the
+> fetch. This is easy to miss because the sibling `spamtitan_get_stats` *does*
+> take `domain`. See the quarantine skill and `GOVERNANCE.md`.
 
 ### Email Statistics
 
-| Tool | Description |
-|------|-------------|
-| `spamtitan_get_stats` | Get email flow statistics (inbound, outbound, spam rates) |
-| `spamtitan_get_domain_stats` | Get statistics broken down by domain |
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `spamtitan_get_stats` | `period` (`today`\|`yesterday`\|`last_7_days`\|`last_30_days`\|`last_90_days`), `domain` | Email flow statistics. Pass `domain` for a single customer's numbers |
+
+Per-domain statistics are real — they are the `domain` argument on this tool,
+not a separate tool.
 
 ### List Management
 
-| Tool | Description |
-|------|-------------|
-| `spamtitan_manage_allowlist` | Add or remove entries from the sender allowlist |
-| `spamtitan_manage_blocklist` | Add or remove entries from the sender blocklist |
-| `spamtitan_list_allowlist` | List current allowlist entries |
-| `spamtitan_list_blocklist` | List current blocklist entries |
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `spamtitan_manage_allowlist` | `action` (required: `add`\|`remove`\|`list`), `sender`, `note` | Add, remove, or list sender allowlist entries |
+| `spamtitan_manage_blocklist` | `action` (required: `add`\|`remove`\|`list`), `sender`, `note` | ⚠ HIGH-IMPACT. Add, remove, or list sender blocklist entries. Changes deliverability for real users |
+
+Listing is `action: "list"` on the same tool — there is no separate list tool.
+`action` is the only required parameter; `sender` is required by the handler
+for `add` and `remove`. Omitting `action` makes the server elicit it from the
+caller, which an unattended agent cannot answer.
+
+### Discovery
+
+| Tool | Parameters | Description |
+|------|------------|-------------|
+| `spamtitan_status` | — | Show credentials status and available domains |
+| `spamtitan_navigate` | `domain` (required) | Discover tools by domain. This `domain` is a *tool category*, not a mail domain |
 
 ## Pagination
 
-The SpamTitan API uses page/limit style pagination:
+The quarantine queue uses page/per-page pagination:
 
-- Pass `page` (1-based) and `limit` parameters
-- Continue fetching pages until the result count is less than the `limit`
+- Pass `page` (1-based) and `per_page` (default 50, max 200)
+- Continue fetching pages until the result count is less than `per_page`
 
 **Example workflow:**
 
-1. Call `spamtitan_get_queue` with `page=1&limit=100`
+1. Call `spamtitan_get_queue` with `page=1`, `per_page=100`
 2. If 100 results returned, call again with `page=2`
-3. Repeat until fewer than `limit` results are returned
+3. Repeat until fewer than `per_page` results are returned
 
 ## Rate Limiting
 
@@ -112,11 +137,20 @@ SpamTitan enforces API rate limits per API key:
 
 ## Best Practices
 
-- Use date range filters when listing the quarantine queue to avoid pulling the full history
-- Use domain filters to scope queries to specific customer domains in multi-tenant deployments
-- Use bulk actions (release or delete) rather than individual calls when processing multiple messages
-- Always confirm before bulk-deleting quarantined messages — deletion is irreversible
-- Log all list management changes (allowlist/blocklist) for audit trail purposes
+- Narrow the quarantine queue with the filters that exist — `sender`,
+  `recipient`, `subject`, `reason` — rather than paging the whole appliance.
+  There is no date filter and no domain filter on `spamtitan_get_queue`.
+- To approximate per-customer scope on the queue, pass `recipient` (a full
+  address) or filter the results client-side on the recipient's domain. Do not
+  tell an operator the listing is scoped to their customer when it is not.
+- `spamtitan_get_stats` does accept `domain`, so per-customer statistics are
+  genuinely scoped server-side. The asymmetry with the queue is the trap.
+- There is no bulk release or bulk delete tool — both act on one `message_id`
+  per call. Iterate deliberately and confirm each destructive call.
+- Always confirm before deleting quarantined messages — deletion is irreversible
+- Log all list management changes (allowlist/blocklist) for audit trail purposes,
+  using the `note` parameter on `spamtitan_manage_allowlist` /
+  `spamtitan_manage_blocklist`
 
 ## Related Skills
 

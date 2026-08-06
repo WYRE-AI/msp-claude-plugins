@@ -1,9 +1,10 @@
 ---
 name: "SpamTitan Lists"
 description: >
-  SpamTitan sender allowlists and blocklists: entry types, per-domain vs.
-  global list scope, allowlisting trusted senders to prevent false
-  positives, and blocking unwanted senders and domains.
+  SpamTitan sender allowlists and blocklists: the add/remove/list action
+  parameter, entry types, allowlisting trusted senders to prevent false
+  positives, blocking unwanted senders and domains, and the scoping limit —
+  neither manage tool takes a domain parameter.
 when_to_use: >-
   When adding, removing, or reviewing SpamTitan allowlist or blocklist entries. Use when:
   allowlist, blocklist, whitelist, blacklist, sender policy, spamtitan allow, spamtitan block,
@@ -54,40 +55,63 @@ The blocklist causes matching emails to be immediately rejected or quarantined, 
 
 ### Entry Types
 
-Both lists support multiple entry scopes:
+The `sender` parameter on both tools accepts:
 
 - **Email address** — e.g., `sender@example.com` — matches only that exact address
-- **Domain** — e.g., `@example.com` or `example.com` — matches all senders from that domain
-- **IP address** — e.g., `203.0.113.45` — matches email from a specific sending IP
+- **Domain** — e.g., `@example.com` — matches all senders from that domain
+
+The appliance also supports IP-based entries, but this connector's `sender`
+parameter is documented for addresses and domains only
+(`spamtitan-mcp/src/domains/lists.ts:30-34`). Add IP entries in the SpamTitan
+admin interface.
 
 ### Per-Domain vs. Global Lists
 
-In multi-tenant SpamTitan deployments, lists can be applied at two scopes:
+The SpamTitan appliance itself distinguishes global entries from per-domain
+ones, and per-domain entries are what you want in an MSP environment — a
+global entry affects every client the gateway filters for.
 
-- **Global** — Applies to all client domains managed by the gateway
-- **Per-domain** — Applies only to a specific client domain
-
-Always prefer per-domain entries in MSP environments to avoid unintended cross-client effects.
+**But this connector cannot express that distinction.**
+`spamtitan_manage_allowlist` and `spamtitan_manage_blocklist` take only
+`action`, `sender`, and `note` (`spamtitan-mcp/src/domains/lists.ts:15-79`).
+There is no `domain` or `scope` parameter, so an entry added through these
+tools lands at whatever default scope the appliance and API key give it. If a
+client-scoped entry is required, add it in the SpamTitan admin interface and
+record the reason there; do not claim a per-domain scope you did not set.
 
 ## API Patterns
 
 ### List Allowlist Entries
 
-```
-spamtitan_list_allowlist
-```
-
-Parameters:
-- `domain` — Filter entries for a specific client domain (omit for global entries)
-- `type` — Filter by entry type (`email`, `domain`, `ip`)
-- `page` — Page number (1-based)
-- `limit` — Results per page (max 200)
-
-**Example response:**
+Listing is an argument, not a separate tool: call `spamtitan_manage_allowlist`
+with `action: "list"`.
 
 ```json
 {
-  "entries": [
+  "action": "list"
+}
+```
+
+Parameters (complete — there is no `domain`, `type`, `page`, or `limit`):
+- `action` — **Required.** `add`, `remove`, or `list`
+- `sender` — Email address or domain. Required by the handler for `add` and
+  `remove`; ignored for `list`
+- `note` — Free-text reason recorded with the entry (for `add`)
+
+Omitting `action` makes the server elicit it from the caller. An unattended
+agent cannot answer an elicitation, so the call stalls instead of proceeding.
+
+The list is returned whole — there is no pagination on this call, so a large
+list arrives in one response.
+
+**Example response:**
+
+The server wraps whatever the appliance returns as `{ "allowlist": [...] }`.
+Entry shape is the appliance's, not this connector's — expect something like:
+
+```json
+{
+  "allowlist": [
     {
       "id": "al-00491",
       "entry": "alerts@pagerduty.com",
@@ -96,43 +120,37 @@ Parameters:
       "added_at": "2026-01-15T10:30:00Z",
       "added_by": "admin@mymsp.com",
       "notes": "PagerDuty monitoring alerts — falsely quarantined"
-    },
-    {
-      "id": "al-00492",
-      "entry": "@trusted-partner.com",
-      "type": "domain",
-      "domain": "clientcorp.com",
-      "added_at": "2026-02-01T14:22:00Z",
-      "added_by": "admin@mymsp.com",
-      "notes": "Accounting partner — invoices frequently quarantined"
     }
-  ],
-  "total": 12,
-  "page": 1,
-  "limit": 200
+  ]
 }
 ```
 
-### Add Allowlist Entry
+Note the response may carry a `domain` on an entry even though you cannot set
+one through this connector — that reflects how the entry was created, which
+may have been in the admin interface.
+
+### Add or Remove Allowlist Entries
+
+Same tool, different `action`.
 
 ```
 spamtitan_manage_allowlist
 ```
 
 Parameters:
-- `action` — `add` or `remove`
-- `entry` — The sender address, domain, or IP to allowlist
-- `domain` — Client domain scope (omit for global)
-- `notes` — Reason for adding (strongly recommended for audit trail)
+- `action` — **Required.** `add`, `remove`, or `list`
+- `sender` — The sender address or domain (e.g. `user@example.com` or
+  `@example.com`). Required for `add` and `remove`
+- `note` — Reason for adding (strongly recommended for audit trail; applies to
+  `add`). Singular `note`, not `notes`
 
 **Example — Add email address to allowlist:**
 
 ```json
 {
   "action": "add",
-  "entry": "noreply@vendor-crm.com",
-  "domain": "clientcorp.com",
-  "notes": "CRM notification emails — quarantined due to bulk mail score"
+  "sender": "noreply@vendor-crm.com",
+  "note": "CRM notification emails — quarantined due to bulk mail score"
 }
 ```
 
@@ -141,11 +159,7 @@ Parameters:
 ```json
 {
   "success": true,
-  "id": "al-00499",
-  "entry": "noreply@vendor-crm.com",
-  "type": "email",
-  "domain": "clientcorp.com",
-  "added_at": "2026-03-02T11:15:00Z"
+  "message": "'noreply@vendor-crm.com' added to allowlist"
 }
 ```
 
@@ -154,74 +168,73 @@ Parameters:
 ```json
 {
   "action": "remove",
-  "entry": "noreply@former-vendor.com",
-  "domain": "clientcorp.com"
+  "sender": "noreply@former-vendor.com"
 }
 ```
 
 ### List Blocklist Entries
 
-```
-spamtitan_list_blocklist
-```
-
-Parameters:
-- `domain` — Filter entries for a specific client domain (omit for global entries)
-- `type` — Filter by entry type (`email`, `domain`, `ip`)
-- `page` — Page number (1-based)
-- `limit` — Results per page
-
-**Example response:**
+Same shape as the allowlist: `spamtitan_manage_blocklist` with
+`action: "list"`.
 
 ```json
 {
-  "entries": [
+  "action": "list"
+}
+```
+
+Parameters (complete — there is no `domain`, `type`, `page`, or `limit`):
+- `action` — **Required.** `add`, `remove`, or `list`
+- `sender` — Required for `add` and `remove`
+- `note` — Free-text reason (for `add`)
+
+**Example response** (wrapped as `{ "blocklist": [...] }`):
+
+```json
+{
+  "blocklist": [
     {
       "id": "bl-00201",
       "entry": "@persistent-spammer.net",
       "type": "domain",
-      "domain": null,
       "scope": "global",
       "added_at": "2026-02-28T09:00:00Z",
-      "added_by": "admin@mymsp.com",
       "notes": "Confirmed spam campaign — multiple clients targeted"
-    },
-    {
-      "id": "bl-00202",
-      "entry": "invoice@fake-billing.ru",
-      "type": "email",
-      "domain": "clientcorp.com",
-      "scope": "per-domain",
-      "added_at": "2026-03-02T08:30:00Z",
-      "added_by": "admin@mymsp.com",
-      "notes": "Phishing sender — quarantined 2026-03-02 campaign"
     }
-  ],
-  "total": 8,
-  "page": 1,
-  "limit": 200
+  ]
 }
 ```
 
-### Add Blocklist Entry
+### Add or Remove Blocklist Entries
 
 ```
 spamtitan_manage_blocklist
 ```
 
-Parameters:
-- `action` — `add` or `remove`
-- `entry` — The sender address, domain, or IP to block
-- `domain` — Client domain scope (omit for global)
-- `notes` — Reason for blocking (required for audit trail best practice)
+> **⚠ HIGH-IMPACT — the server marks this tool `destructiveHint: true` and
+> opens its own description with a warning.** One `add` can silently stop a
+> customer's legitimate mail: there is no bounce visible to the recipient and
+> no alert, so the sender simply stops arriving, sometimes for weeks before
+> anyone notices. A domain-scoped entry against a shared sending service takes
+> out every customer using it. And because this connector has no `domain`
+> parameter, you cannot confine the entry to one client from here. Confirm with
+> a human before every `add` and every `remove`; `action: "list"` is the only
+> benign call on this tool.
 
-**Example — Block a domain globally:**
+Parameters:
+- `action` — **Required.** `add`, `remove`, or `list`
+- `sender` — The sender address or domain to block (e.g. `spammer@evil.com` or
+  `@evil.com`). Required for `add` and `remove`
+- `note` — Reason for blocking (required as audit-trail practice, optional to
+  the API). Singular `note`, not `notes`
+
+**Example — Block a domain:**
 
 ```json
 {
   "action": "add",
-  "entry": "@confirmed-malicious.ru",
-  "notes": "Confirmed phishing domain — identified in multiple client incidents 2026-03-02"
+  "sender": "@confirmed-malicious.ru",
+  "note": "Confirmed phishing domain — identified in multiple client incidents 2026-03-02"
 }
 ```
 
@@ -230,11 +243,7 @@ Parameters:
 ```json
 {
   "success": true,
-  "id": "bl-00209",
-  "entry": "@confirmed-malicious.ru",
-  "type": "domain",
-  "scope": "global",
-  "added_at": "2026-03-02T12:00:00Z"
+  "message": "'@confirmed-malicious.ru' added to blocklist"
 }
 ```
 
@@ -243,7 +252,7 @@ Parameters:
 ```json
 {
   "action": "remove",
-  "entry": "notifications@legitimate-service.com"
+  "sender": "notifications@legitimate-service.com"
 }
 ```
 
@@ -253,23 +262,23 @@ Parameters:
 
 1. Identify the falsely quarantined sender via the quarantine queue
 2. Confirm the sender is legitimate by reviewing headers, links, and content
-3. Call `spamtitan_list_allowlist` to check if the sender is already listed (may need to be updated)
-4. Call `spamtitan_manage_allowlist` with `action=add` and the sender address or domain
-5. Release the quarantined message with `spamtitan_release_message`
-6. Document the allowlist entry with a clear `notes` value explaining why the sender is trusted
+3. Call `spamtitan_manage_allowlist` with `action=list` to check if the sender is already listed (may need to be updated)
+4. Call `spamtitan_manage_allowlist` with `action=add` and the `sender` address or domain
+5. Release the quarantined message with `spamtitan_release_message` — a separate call; release does not allowlist
+6. Document the allowlist entry with a clear `note` value explaining why the sender is trusted
 
 ### Blocking a Persistent Spam Campaign
 
 1. Identify the spam sender from the quarantine queue or a user complaint
 2. Check if other clients are receiving the same mail (cross-domain pattern)
-3. Decide on scope: per-domain if only one client is affected, global if multiple clients are targeted
-4. Call `spamtitan_manage_blocklist` with `action=add` and include descriptive notes
+3. Recognise that you cannot choose the scope from here — these tools take no `domain` parameter, so the entry lands wherever the appliance and API key put it. If the block must be confined to one client, do it in the SpamTitan admin interface instead
+4. Call `spamtitan_manage_blocklist` with `action=add`, the `sender`, and a descriptive `note`. Get a human to confirm first — this is the high-impact tool
 5. If blocking a domain rather than a single address, confirm the domain is not a legitimate shared sending service (e.g., never block `@gmail.com`)
-6. Delete any existing quarantined messages from the same sender with `spamtitan_delete_message`
+6. Delete any existing quarantined messages from the same sender with `spamtitan_delete_message`, one `message_id` per call
 
 ### Reviewing and Auditing List Entries
 
-1. Call `spamtitan_list_allowlist` and `spamtitan_list_blocklist` for each client domain
+1. Call `spamtitan_manage_allowlist` and `spamtitan_manage_blocklist`, each with `action=list`. Both return the appliance-wide list — there is no per-client filter, so attribute entries to clients yourself from the sender values
 2. Review entries older than 6 months — vendors and partners may have changed, and allowlist entries should be periodically revalidated
 3. Look for overly broad domain allowlists that may create a security risk (e.g., allowlisting an entire popular domain)
 4. Remove stale entries with `spamtitan_manage_allowlist` or `spamtitan_manage_blocklist` using `action=remove`
@@ -277,9 +286,9 @@ Parameters:
 
 ### Blocking After a Phishing Campaign
 
-1. After identifying and deleting a phishing campaign in the quarantine queue, note the sending domain and IP
-2. Add the sending domain to the global blocklist with `spamtitan_manage_blocklist`
-3. If the phishing mail arrived from a specific sending IP, also blocklist the IP address
+1. After identifying and deleting a phishing campaign in the quarantine queue, note the sending domain
+2. Add the sending domain with `spamtitan_manage_blocklist`, `action=add`. It applies at the appliance's default scope, not a client's — confirm that is acceptable before you call
+3. IP-based entries are not expressible through this connector's `sender` parameter; block a sending IP in the SpamTitan admin interface
 4. Check whether any related domains (typosquats or same registrant) should also be blocked
 5. Verify the block is effective by checking subsequent quarantine entries — the sender should no longer appear
 
@@ -288,30 +297,40 @@ Parameters:
 ### Duplicate Entry
 
 **Cause:** Attempting to add an entry that already exists in the list
-**Solution:** Call `spamtitan_list_allowlist` or `spamtitan_list_blocklist` to check existing entries before adding
+**Solution:** Call the same tool with `action=list` to check existing entries before adding
+
+### Missing `action`
+
+**Cause:** `action` is the only required parameter, and it was omitted
+**Solution:** The server elicits it interactively. An unattended agent cannot answer, so pass `action` explicitly on every call
+
+### Missing `sender`
+
+**Cause:** `action=add` or `action=remove` without a `sender`
+**Solution:** The handler returns `'sender' is required when action is 'add'` (or `'remove'`). Supply it; `sender` is ignored only for `action=list`
 
 ### Entry Not Found on Remove
 
 **Cause:** Attempting to remove an entry that doesn't exist or uses a different format than what was added
-**Solution:** List the current entries and use the exact `entry` value that appears in the list response
+**Solution:** Call `action=list` and use the exact sender value that appears in the response
 
 ### Invalid Entry Format
 
-**Cause:** Submitting an improperly formatted email address, domain, or IP
-**Solution:** Ensure domains use the `@domain.com` format; IP addresses must be valid IPv4 or IPv6; email addresses must include both local part and domain
+**Cause:** Submitting an improperly formatted email address or domain
+**Solution:** Ensure domains use the `@domain.com` format and email addresses include both local part and domain. IP entries are not addressable through the `sender` parameter — use the SpamTitan admin interface
 
-### Permission Denied on Domain
+### Permission Denied
 
-**Cause:** API key does not have permission to manage lists for the specified domain
-**Solution:** Verify API key scope; use global scope or contact your SpamTitan admin to grant per-domain access
+**Cause:** API key does not have permission to manage lists
+**Solution:** Verify API key scope with your SpamTitan admin. There is no per-call domain scope to adjust — these tools take no `domain` parameter
 
 ## Best Practices
 
-- Always provide `notes` when adding list entries — six months from now, no one will remember why a sender was allowlisted
+- Always provide a `note` when adding list entries — six months from now, no one will remember why a sender was allowlisted
 - Prefer allowlisting specific email addresses over entire domains when possible; domain allowlisting is a broader trust grant
 - Never allowlist based on a user's request alone — always verify the sender is legitimate before adding
-- Review allowlists and blocklists quarterly; stale entries accumulate and become a security and maintenance burden
-- For global blocklist entries, document the threat intelligence source (e.g., "Confirmed phishing — seen across 3 client accounts on 2026-03-02")
+- Review allowlists and blocklists quarterly with `action=list`; stale entries accumulate and become a security and maintenance burden
+- Document the threat intelligence source in the `note` on every blocklist entry (e.g., "Confirmed phishing — seen across 3 client accounts on 2026-03-02"). Since scope cannot be confined from here, treat every entry as potentially appliance-wide and write the note accordingly
 - Be cautious about blocking shared sending services (SendGrid, Mailchimp, etc.) — block the specific sending address or subdomain, not the entire service
 - Cross-reference blocklist additions with allowlists — a sender cannot be in both lists simultaneously
 

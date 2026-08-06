@@ -56,7 +56,7 @@ Provided by the Freshdesk MCP server through the WYRE MCP Gateway. Tool names fo
 ### Tickets
 - `freshdesk_tickets_list`, `freshdesk_tickets_get`, `freshdesk_tickets_search`
 - `freshdesk_tickets_create`, `freshdesk_tickets_update`
-- `freshdesk_tickets_reply`, `freshdesk_tickets_add_note`, `freshdesk_tickets_conversations`
+- `freshdesk_tickets_reply`, `freshdesk_tickets_add_note`, `freshdesk_tickets_list_conversations`
 
 ### Contacts & Companies
 - `freshdesk_contacts_list`, `freshdesk_contacts_get`, `freshdesk_contacts_search`
@@ -70,10 +70,20 @@ Provided by the Freshdesk MCP server through the WYRE MCP Gateway. Tool names fo
 
 ### Knowledge Base (Solutions)
 - `freshdesk_solutions_categories_list`, `freshdesk_solutions_folders_list`
-- `freshdesk_solutions_articles_list`, `freshdesk_solutions_articles_get`, `freshdesk_solutions_articles_search`
+- `freshdesk_solutions_articles_list`, `freshdesk_solutions_articles_get`
+
+> **There is no knowledge-base article search.** An earlier revision of this
+> table listed freshdesk_solutions_articles_search; the server registers no
+> such handler (`freshdesk-mcp/src/domains/solutions.ts` registers list, get,
+> create, update and delete over categories, folders and articles — nothing
+> else). The only way to reach an article through this plugin is to walk
+> category → folder → article. What makes the phantom plausible is the
+> contrast: `freshdesk_tickets_search`, `freshdesk_contacts_search` and
+> `freshdesk_companies_search` all exist, so search reads as a house pattern
+> — one the knowledge base does not share.
 
 ### SLA & Business Hours
-- `freshdesk_sla_policies_list`, `freshdesk_business_hours_list`
+- `freshdesk_sla_list`, `freshdesk_business_hours_list`
 
 ## License
 

@@ -26,10 +26,10 @@ These capabilities exist in the Inforcer product UI but are **not exposed throug
 |-------|---------------|
 | `api-patterns` | gateway headers, upstream auth, base URL, `/beta/` prefix, envelope, pagination, the client-tenant-id gotcha |
 | `tenant-management` | `inforcer_tenants_list` |
-| `baseline-alignment` | `inforcer_baselines_list`, `inforcer_alignment_scores`, `inforcer_alignment_details`, `inforcer_tenant_policies_list` |
-| `compliance-reporting` | `inforcer_secure_scores`, `inforcer_alignment_scores` |
+| `baseline-alignment` | `inforcer_baselines_list`, `inforcer_alignment_scores`, `inforcer_alignment_details`, `inforcer_policies_list` |
+| `compliance-reporting` | `inforcer_secure_scores_get`, `inforcer_alignment_scores` |
 | `identity-governance` | `inforcer_users_list`, `inforcer_groups_list`, `inforcer_roles_list` |
-| `audit-events` | `inforcer_audit_events_search`, `inforcer_audit_event_types` |
+| `audit-events` | `inforcer_audit_search`, `inforcer_audit_event_types` |
 | `assessments` | `inforcer_assessments_list`, `inforcer_assessments_run` |
 
 ### Agents (1)

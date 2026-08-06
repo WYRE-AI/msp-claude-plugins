@@ -35,46 +35,53 @@ TRAP integrates with Microsoft 365 and Google Workspace to move or delete messag
 
 ## Key Concepts
 
-### Remediation Actions
+### Remediation is a two-step sequence, not one call
 
-| Action | Description | Reversible |
-|--------|-------------|------------|
-| `auto-pull` | Automatic removal of delivered threats | Yes (within retention) |
-| `search-and-destroy` | Manual search and removal across mailboxes | Yes (within retention) |
-| `move-to-junk` | Move message to user's junk folder | Yes |
-| `soft-delete` | Delete message (recoverable from deleted items) | Yes |
-| `hard-delete` | Permanently delete message | No |
-| `quarantine` | Move to admin quarantine | Yes |
+The single most important thing to know about this domain: **finding
+messages and removing them are separate tools.**
 
-### Evidence Types
+1. `proofpoint_forensics_search_messages` — read-only. Takes criteria
+   (`sender`, `subject`, `message_id`, `threat_id`, `startDate`,
+   `endDate`) and returns matching delivered messages. Changes nothing.
+2. `proofpoint_forensics_pull_messages` — destructive. Takes
+   `message_ids` (an explicit array) plus a `reason` string for the audit
+   trail, and removes those messages from mailboxes.
 
-| Type | Description | Contents |
-|------|-------------|----------|
-| `screenshot` | Screenshot of threat page/attachment | PNG image of rendered content |
-| `pcap` | Network capture from sandbox | Full packet capture during detonation |
-| `sample` | Malware sample | Original malicious file |
-| `headers` | Email headers | Full RFC 822 headers |
-| `urls` | Extracted URLs | All URLs found in the message |
-| `attachments` | Attachment metadata | File names, hashes, sizes |
-| `sandbox_report` | Sandbox detonation report | Behavioral analysis results |
+The scope of the destructive step is therefore fixed and inspectable
+*before* you call it. Always look at the ID list the search returned, and
+its length, before passing it on. Piping step 1 straight into step 2
+without reading the result is how an over-broad criterion ("subject
+contains Invoice") turns into hundreds of deleted legitimate messages.
 
-### Investigation Status
+### Remediation actions are a tenant setting, not a parameter
 
-| Status | Description |
-|--------|-------------|
-| `pending` | Investigation initiated, awaiting results |
-| `in_progress` | Analysis is actively running |
-| `completed` | Investigation finished with results |
-| `failed` | Investigation could not be completed |
-| `remediated` | Threat has been remediated |
+Proofpoint TRAP can move a pulled message to junk, soft-delete it,
+hard-delete it, or quarantine it. **None of these is selectable through
+this plugin** — `proofpoint_forensics_pull_messages` exposes no action
+argument, so what "pull" does is whatever the tenant's TRAP policy says.
+Do not promise a user that a removal is recoverable; check the tenant's
+configuration in the Proofpoint console, because no tool here reports it.
 
-### Auto-Pull Modes
+### Evidence types
 
-| Mode | Description |
-|------|-------------|
-| `automatic` | Messages pulled immediately upon threat reclassification |
-| `confirmation` | Admin must confirm before pull (notification sent) |
-| `disabled` | Auto-pull is off; manual search-and-destroy only |
+`proofpoint_forensics_get_threat` returns forensic evidence for one
+threat, and `proofpoint_forensics_get_campaign` returns it aggregated
+across a campaign. Depending on what the tenant's analysis produced, the
+response may contain any of:
+
+| Type | Contents |
+|------|----------|
+| `screenshot` | PNG of the rendered threat page or attachment |
+| `pcap` | Full packet capture from sandbox detonation |
+| `sample` | The original malicious file |
+| `headers` | Full RFC 822 headers |
+| `urls` | All URLs found in the message |
+| `attachments` | File names, hashes, sizes |
+| `sandbox_report` | Behavioural analysis results |
+
+These are response contents, not arguments — there is no per-type fetch.
+`sample` and `pcap` are live malware; pulling one into the session is
+read-tier by blast radius and handled-as-malware by common sense.
 
 ## Field Reference
 
@@ -101,20 +108,6 @@ TRAP integrates with Microsoft 365 and Google Workspace to move or delete messag
 | `details` | string | Detailed analysis findings |
 | `iocs` | object[] | IOCs extracted by this engine |
 
-### Search-and-Destroy Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `operationId` | string | Unique operation identifier |
-| `status` | string | `pending`, `in_progress`, `completed`, `failed` |
-| `criteria` | object | Search criteria used |
-| `matchCount` | int | Number of messages matched |
-| `remediatedCount` | int | Number of messages remediated |
-| `failedCount` | int | Number of messages that failed remediation |
-| `startTime` | datetime | When the operation started |
-| `endTime` | datetime | When the operation completed |
-| `initiatedBy` | string | Who started the operation |
-
 ### Message Trace Fields
 
 | Field | Type | Description |
@@ -134,60 +127,77 @@ TRAP integrates with Microsoft 365 and Google Workspace to move or delete messag
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_forensics_get_report` | Get forensic report for a threat | `threatId`, `GUID` |
-| `proofpoint_forensics_get_evidence` | Download evidence artifacts | `reportId`, `evidenceType` |
-| `proofpoint_forensics_search_destroy` | Initiate search and destroy | `sender`, `subject`, `messageId`, `action` |
-| `proofpoint_forensics_get_operation` | Check status of a search-and-destroy | `operationId` |
-| `proofpoint_forensics_list_operations` | List recent operations | `status`, `startDate`, `endDate` |
-| `proofpoint_forensics_message_trace` | Trace a message through the system | `GUID`, `messageId`, `sender`, `recipient` |
-| `proofpoint_forensics_auto_pull_status` | Check auto-pull configuration | - |
-| `proofpoint_forensics_get_sandbox_report` | Get sandbox detonation report | `threatId` |
+| `proofpoint_forensics_get_threat` | Forensic evidence for one threat — behavioural analysis, network activity, file modifications, sandbox results | `threat_id` (required), `includeCampaignForensics` |
+| `proofpoint_forensics_get_campaign` | The same evidence aggregated across every threat in a campaign | `campaign_id` (required) |
+| `proofpoint_forensics_search_messages` | Find delivered messages to remediate. Read-only | `sender`, `subject`, `message_id`, `threat_id`, `startDate`, `endDate` |
+| `proofpoint_forensics_pull_messages` | ⚠ **Destructive.** Auto-pull / search-and-destroy: removes delivered messages from mailboxes | `message_ids` (required, array), `reason` |
+| `proofpoint_smart_search_trace` | Trace messages through mail flow — delivery status and processing history | `sender`, `recipient`, `subject`, `message_id`, `startDate`, `endDate`, `status` |
+
+### Not available through this plugin
+
+Do not substitute a near-miss for any of these; the correct answer is that
+Proofpoint is not reachable this way here.
+
+- **Polling a remediation's progress.** `proofpoint_forensics_pull_messages`
+  returns no operation ID and there is no status, list, or history tool.
+  The call's own response is the only confirmation you get.
+- **Reading TRAP auto-pull configuration.** No tool exposes whether
+  auto-pull is on, or in which mode. Check the Proofpoint console.
+- **Choosing the removal action.** See above — no action parameter exists.
+- **A standalone sandbox-report call.** Sandbox behavioural analysis comes
+  back inside `proofpoint_forensics_get_threat`; there is no separate
+  fetch.
 
 ## Common Workflows
 
 ### Investigate a Delivered Threat
 
-1. From a TAP delivered-message event, get the `GUID` and `threatID`
-2. Call `proofpoint_forensics_get_report` to get the full forensic analysis
-3. Review sandbox results and extracted IOCs
-4. Call `proofpoint_forensics_get_evidence` for screenshots and pcaps
-5. Determine impact: how many users received the message?
-6. If remediation is needed, proceed with search-and-destroy
+1. From a TAP delivered-message event, get the `threat_id`
+2. Call `proofpoint_forensics_get_threat` for the full forensic analysis,
+   including sandbox results and extracted IOCs
+3. Set `includeCampaignForensics` (or call
+   `proofpoint_forensics_get_campaign`) if the threat belongs to a
+   campaign and you need the wider picture
+4. Determine impact with `proofpoint_forensics_search_messages` — how many
+   mailboxes actually hold the message
+5. If remediation is needed, proceed to the sequence below
 
-### Search and Destroy Operation
+### Search and Destroy
 
-1. Identify the message to remediate (by sender, subject, or messageId)
-2. Call `proofpoint_forensics_search_destroy` with criteria and `action=soft-delete`
-3. Note the `operationId` from the response
-4. Call `proofpoint_forensics_get_operation` to monitor progress
-5. Verify `remediatedCount` matches expected scope
-6. Document the operation for incident records
+1. Identify the message to remediate — sender, subject, `message_id`, or
+   the `threat_id` from the investigation above
+2. Call `proofpoint_forensics_search_messages` with those criteria
+3. **Read the result.** Check the returned message IDs and their count
+   against what you expected. If the count is surprising, the criteria
+   were wrong — narrow them and search again. This is the only point at
+   which the mistake is still free
+4. Get human approval on the resolved ID list, not on the criteria
+5. Call `proofpoint_forensics_pull_messages` with those `message_ids` and
+   a `reason` for the audit trail
+6. Confirm the outcome by re-running the search — the pull reports no
+   per-mailbox result, and mailboxes on legal hold will silently not be
+   remediated
+7. Record the criteria, the ID list, and the reason in the incident notes
 
 ### Post-Incident Evidence Collection
 
-1. Call `proofpoint_forensics_get_report` for the threat
-2. Download all evidence types: screenshots, pcaps, samples
-3. Call `proofpoint_forensics_get_sandbox_report` for behavioral analysis
-4. Extract IOCs from the forensic report
-5. Cross-reference IOCs with threat intelligence
-6. Package evidence for incident report
+1. Call `proofpoint_forensics_get_threat` for the threat
+2. Review the returned evidence — screenshots, pcaps, samples, sandbox
+   behavioural analysis all arrive in that one response
+3. Call `proofpoint_forensics_get_campaign` for campaign-wide context
+4. Extract IOCs from the forensic response
+5. Cross-reference with `proofpoint_threat_get_iocs`
+6. Package evidence for the incident report
 
 ### Message Trace Investigation
 
 1. User reports a suspicious message they received
-2. Call `proofpoint_forensics_message_trace` with sender and recipient
+2. Call `proofpoint_smart_search_trace` with sender and recipient
 3. Review the routing path and policy actions applied
 4. Check if TAP flagged the message and what disposition was applied
-5. If the message was delivered and is malicious, initiate search-and-destroy
+5. If the message was delivered and is malicious, run the search-and-destroy
+   sequence above
 6. If the message was blocked, confirm with the user
-
-### Auto-Pull Verification
-
-1. Call `proofpoint_forensics_auto_pull_status` to check configuration
-2. Verify auto-pull is enabled for the organization
-3. Review the auto-pull mode (automatic vs. confirmation)
-4. Check recent auto-pull operations for success rate
-5. Adjust configuration if messages are not being pulled as expected
 
 ## Error Handling
 
@@ -195,15 +205,12 @@ TRAP integrates with Microsoft 365 and Google Workspace to move or delete messag
 
 | Code | Message | Resolution |
 |------|---------|------------|
-| 400 | Invalid search criteria | At least one search criterion is required |
-| 400 | Invalid action | Use `soft-delete`, `hard-delete`, `move-to-junk`, or `quarantine` |
+| 400 | Invalid search criteria | `proofpoint_forensics_search_messages` needs at least one criterion |
+| 400 | `message_ids` required | `proofpoint_forensics_pull_messages` will not run without an explicit ID array — there is no "pull everything matching" form |
 | 401 | Authentication failed | Verify service principal and secret |
 | 403 | TRAP access not enabled | Ensure your license includes Threat Response |
-| 403 | Insufficient permissions for hard-delete | Hard-delete requires elevated admin permissions |
-| 404 | Forensic report not found | Report may not be available for all threats |
-| 404 | Operation not found | Verify the operation ID |
-| 409 | Operation already in progress | Wait for the current operation to complete |
-| 429 | Rate limit exceeded | Implement backoff for search-and-destroy operations |
+| 404 | Forensic data not found | `proofpoint_forensics_get_threat` has no data for every threat ID; absence is not a clean bill of health |
+| 429 | Rate limit exceeded | Forensics allows 500 requests/hour — back off rather than retrying tightly |
 
 ### Search-and-Destroy Failures
 
@@ -217,16 +224,26 @@ TRAP integrates with Microsoft 365 and Google Workspace to move or delete messag
 
 ## Best Practices
 
-1. **Prefer soft-delete over hard-delete** - Soft-delete allows recovery if a mistake is made
-2. **Narrow your scope** - Use specific criteria (messageId + sender) to avoid accidental remediation
-3. **Monitor operation progress** - Always check operation status after initiating search-and-destroy
-4. **Document everything** - Record operation IDs, criteria, and results for incident documentation
-5. **Collect evidence first** - Download forensic evidence before remediation in case it is needed later
-6. **Test auto-pull in confirmation mode** - Before enabling automatic mode, run in confirmation to verify accuracy
-7. **Coordinate with users** - Notify affected users that messages were removed and explain why
-8. **Use message trace for debugging** - When users report missing legitimate email, trace the message path
-9. **Limit hard-delete scope** - Only use hard-delete for confirmed high-severity threats
-10. **Review auto-pull logs regularly** - Ensure auto-pull is not catching false positives
+1. **Read the ID list before you pull it** - The search result is the last
+   point at which an over-broad criterion costs nothing. Check the count
+2. **Narrow your scope** - Use specific criteria (`message_id` + `sender`)
+   rather than a bare subject match
+3. **Never assume the removal is recoverable** - No action parameter is
+   exposed; the tenant's TRAP policy decides. Do not tell a user their
+   mail can be restored unless you have checked the console
+4. **Verify, do not trust the return** - Re-run
+   `proofpoint_forensics_search_messages` after pulling. There is no
+   operation-status tool and per-mailbox failures (legal hold, missing
+   integration) do not surface in the pull response
+5. **Document everything** - Record the criteria, the resolved ID list,
+   and the `reason` string you passed; that reason is the audit trail
+6. **Collect evidence first** - Call `proofpoint_forensics_get_threat`
+   before remediating. Once the messages are pulled you cannot go back for
+   what you did not capture
+7. **Coordinate with users** - Notify affected users that messages were
+   removed and explain why
+8. **Use message trace for debugging** - When users report missing
+   legitimate email, trace the path with `proofpoint_smart_search_trace`
 
 ## Related Skills
 

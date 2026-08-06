@@ -2,9 +2,10 @@
 name: "Freshdesk Knowledge Base"
 description: >
   Freshdesk Solutions knowledge base: the three-level categories -> folders ->
-  articles hierarchy, article fields and draft/published status, solution
-  search, and the MSP workflow of suggesting relevant KB articles to deflect or
-  resolve a ticket, through the Freshdesk REST API v2.
+  articles hierarchy, article fields and draft/published status, finding an
+  article by walking that tree (there is no KB search tool), and the MSP
+  workflow of suggesting relevant KB articles to deflect or resolve a ticket,
+  through the Freshdesk REST API v2.
 when_to_use: >-
   When navigating the Freshdesk solutions knowledge base — categories, folders, and articles — or
   suggesting relevant KB articles for a ticket. Use when: freshdesk knowledge base, freshdesk
@@ -20,8 +21,8 @@ Freshdesk's knowledge base is called **Solutions** and is organized as a
 nested, three-level hierarchy. Articles live inside folders, folders live
 inside categories. Surfacing the right article on a ticket deflects repeat
 questions and speeds resolution. This skill covers navigating the hierarchy,
-reading and searching articles, and suggesting articles for tickets through
-tools named `freshdesk_solutions_<action>`.
+reading articles, and suggesting articles for tickets through tools named
+`freshdesk_solutions_<action>`.
 
 ## Anti-triggers
 
@@ -107,16 +108,29 @@ GET /api/v2/solutions/articles/{article_id}
 Only **published** articles (`status: 2`) should be suggested to customers;
 drafts are internal-only.
 
-## Searching Articles
+## Finding an Article — There Is No KB Search
 
-```http
-GET /api/v2/search/solutions?term=outlook%20disconnected
-```
+Freshdesk's REST API exposes `GET /api/v2/search/solutions?term=...`, but
+**this plugin cannot reach it.** The MCP server registers no knowledge-base
+search handler — only list/get/create/update/delete over categories, folders
+and articles (`freshdesk-mcp/src/domains/solutions.ts`). Tickets, contacts and
+companies each get a search tool, so search reads as a house pattern; the
+knowledge base is the one surface that does not have it.
 
-Search returns articles matching the term across titles and bodies. Use it
-when you have a symptom phrase from a ticket and want candidate articles
-without walking the whole hierarchy. Fall back to hierarchy navigation when
-you want to browse a known category or folder rather than free-text search.
+The real path to an article is the walk:
+
+1. `freshdesk_solutions_categories_list` — the top level.
+2. `freshdesk_solutions_folders_list` for the category that plausibly owns
+   the topic (takes the parent `category_id`).
+3. `freshdesk_solutions_articles_list` for that folder (takes `folder_id`),
+   then `freshdesk_solutions_articles_get` on the candidates worth reading.
+
+You do the keyword matching yourself, against article `title` and `tags` as
+you walk. The tree is small and changes rarely, so cache it for the session
+rather than re-listing it per ticket. When a request genuinely needs
+full-text search across article bodies, say the plugin cannot do it and point
+the operator at the Freshdesk portal search — do not present a walk as if it
+were an exhaustive search.
 
 ## Suggesting KB Articles for a Ticket
 
@@ -125,19 +139,19 @@ knowledge so the agent can resolve faster or deflect entirely:
 
 1. **Extract the symptom** — pull the ticket subject and the first incoming
    message; identify keywords (product, error text, action).
-2. **Search solutions** — run `GET /search/solutions?term=...` with the
-   strongest keywords.
+2. **Walk to candidates** — pick the category and folder that plausibly own
+   the topic and list their articles. There is no KB search tool; see above.
 3. **Filter to published** — keep only `status: 2` articles; ignore drafts.
-4. **Rank candidates** — prefer exact title/keyword matches and higher `hits`
-   (popularity); break ties by recency.
+4. **Rank candidates** — prefer exact title/`tags` keyword matches and higher
+   `hits` (popularity); break ties by recency.
 5. **Present the top matches** — surface 1-3 articles with title and link.
 6. **Act on the ticket** — either attach the article link in a customer-facing
    reply (deflection) or cite it in an internal note as the resolution path.
 
 ```text
 Ticket: "Outlook shows Disconnected since this morning"
-  search term: "outlook disconnected"
-  candidates (published, ranked by relevance + hits):
+  walk: category "Email & Collaboration" -> folder "Outlook" -> articles
+  candidates (published, ranked by title/tag match + hits):
     1. Fix Outlook disconnected status        (hits: 1,204)
     2. Rebuild the Outlook OST cache           (hits:   538)
   -> reply with article #1 link, or add internal note citing it
@@ -148,7 +162,7 @@ Ticket: "Outlook shows Disconnected since this morning"
 | Error | Cause | Resolution |
 |-------|-------|------------|
 | 404 Not found | Unknown category/folder/article ID | Re-list the parent level to confirm IDs |
-| 400 Bad request | Missing/empty search term | Provide a non-empty `term` |
+| 400 Bad request | `freshdesk_solutions_articles_create` missing a required field | Supply all of `folder_id`, `title`, `description`, `status` |
 | 403 Forbidden | Folder visibility restricts access | Check folder `visibility`; the article may be internal |
 
 ## Best Practices

@@ -20,7 +20,7 @@ View recent Proofpoint TAP threat events to monitor email security posture.
    - Validate window does not exceed 24 hours
 
 2. **Fetch threat events**
-   - Call `proofpoint_tap_get_all_events` with `sinceSeconds`
+   - Call `proofpoint_tap_get_all_threats` with `sinceSeconds`
    - Or call specific endpoints based on `status` filter
 
 3. **Filter and aggregate results**

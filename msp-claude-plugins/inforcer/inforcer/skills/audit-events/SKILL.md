@@ -2,11 +2,12 @@
 name: "Inforcer Audit Events"
 description: >
   Inforcer's read-only record of changes and activity: searching and
-  filtering auditEvents, enumerating the event-type catalog to build valid
-  filters, and the continuationToken paging audit searches require.
+  filtering auditEvents by type and date window (the search is account-wide
+  — there is no tenant filter), enumerating the event-type catalog to build
+  valid filters, and the continuationToken paging audit searches require.
 when_to_use: >-
-  When searching Inforcer audit events, or listing the available event types, for a managed
-  tenant or across the portfolio. Use when:
+  When searching Inforcer audit events, or listing the available event types, across the
+  managed portfolio. Use when:
   inforcer audit, audit events, auditevents, event types, change history inforcer, who changed
   inforcer, inforcer activity log, or audit search inforcer.
 ---
@@ -53,24 +54,31 @@ Pull this first when you need to filter `auditEvents` by type: it tells you
 the valid type values rather than guessing. The catalog is also a useful
 map of *what kinds of activity* Inforcer tracks at all.
 
-### `inforcer_audit_events_search`
+### `inforcer_audit_search`
 
-Search the audit event history. Supports filtering — typically by tenant
-(integer Client Tenant ID), event type, and a time window — and returns the
-matching events.
+Search the audit event history. Every filter is optional, and they are:
+`event_types` (an array of values from the catalog), `date_from` /
+`date_to`, `page_size`, and `continuation_token`.
 
 ```
-inforcer_audit_events_search(
-  clientTenantId=1423,
-  eventType="<from the event-type catalog>",
-  from="2024-02-01",
-  to="2024-02-29"
+inforcer_audit_search(
+  event_types=["<from the event-type catalog>"],
+  date_from="2024-02-01",
+  date_to="2024-02-29"
 )
 ```
 
 Returns event objects describing what occurred, when, and (where the API
-exposes it) the actor and target. This is the primary input for "what
-changed on this tenant in the last month?" questions.
+exposes it) the actor and target, plus a continuation token for the next
+page.
+
+**There is no tenant filter.** The search is account-wide across every
+managed tenant — the tool takes no `tenant` argument, unlike the rest of
+this plugin's surface. To answer "what changed on *this* tenant", filter by
+type and window, then attribute each returned event to a tenant from its own
+payload and discard the rest. Budget for that: a narrow per-tenant question
+still pulls the whole portfolio's events for the window, so keep windows
+tight and page to completion before you filter.
 
 ## What to look for in an audit review
 
@@ -86,24 +94,26 @@ changed on this tenant in the last month?" questions.
 ### Build a valid filter, then search
 
 ```
-types = inforcer_audit_event_types()               # discover valid types
-ctid  = resolve("Acme")                             # integer Client Tenant ID
-events = inforcer_audit_events_search(
-            clientTenantId=ctid,
-            eventType=types[...],                   # a value from the catalog
-            from="2024-02-01", to="2024-02-29")
+types  = inforcer_audit_event_types()              # discover valid types
+events = inforcer_audit_search(
+            event_types=[types[...]],              # values from the catalog
+            date_from="2024-02-01", date_to="2024-02-29")
+mine   = [e for e in events if tenant_of(e) == "Acme"]   # filter client-side
 ```
 
 Discover the event types first so your filter uses real values; an invalid
 type quietly returns nothing and looks like "no activity." Page
-`continuationToken` to completion before concluding the window is empty.
+`continuation_token` to completion before concluding the window is empty —
+and before filtering to a tenant, since the tenant you want may only appear
+on a later page.
 
 ### Drift corroboration
 
 When [baseline-alignment](../baseline-alignment/SKILL.md) shows a tenant has
-drifted, search `auditEvents` for the same tenant around the drift window to
-find the change(s) that produced it. Audit gives the *narrative* behind the
-alignment delta — useful in a report and in client conversations.
+drifted, search the audit trail around the drift window and pick out the
+events belonging to that tenant to find the change(s) that produced it.
+Audit gives the *narrative* behind the alignment delta — useful in a report
+and in client conversations.
 
 ## Caveats
 
@@ -115,16 +125,16 @@ alignment delta — useful in a report and in client conversations.
   parameter names are illustrative and credited to
   [`royklo/InforcerCommunity`](https://github.com/royklo/InforcerCommunity).
   Confirm filter field names against the catalog on first use.
-- Tenant-scoped audit searches use the **integer Client Tenant ID**. An
-  empty result is more often a wrong filter (unresolved tenant id, invalid
-  event type, or a too-narrow window) than genuine silence — widen and
-  re-check before reporting "no activity."
+- An empty result is more often a wrong filter (an invalid event type or a
+  too-narrow window) than genuine silence — widen and re-check before
+  reporting "no activity." The same goes for a tenant that vanishes from a
+  client-side filter: confirm you paged the whole window first.
 - Page to completion. An un-paged audit search is the easiest way to
   under-report a change window.
 
 ## Related Skills
 
-- [tenant-management](../tenant-management/SKILL.md) - resolve a tenant to the integer Client Tenant ID before scoping a search
+- [tenant-management](../tenant-management/SKILL.md) - the managed-tenant roster you attribute returned events against
 - [identity-governance](../identity-governance/SKILL.md) - attribute change events to the identities/roles that made them
 - [baseline-alignment](../baseline-alignment/SKILL.md) - the drift the audit trail helps explain
 - [api-patterns](../api-patterns/SKILL.md) - envelope, continuationToken pagination, region, and the integer-id gotcha

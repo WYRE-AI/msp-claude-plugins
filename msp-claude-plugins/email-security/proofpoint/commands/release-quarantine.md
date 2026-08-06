@@ -17,27 +17,33 @@ Release quarantined messages from Proofpoint quarantine to deliver them to the i
 ## Steps
 
 1. **Identify messages to release**
-   - If `id` is provided, look up the single message
-   - If `ids` are provided, validate each ID
-   - If `sender` is provided, search for all quarantined messages from that sender
+   - If `id` is provided, use it directly as the `message_id`
+   - If `ids` are provided, split them into individual message IDs
+   - If `sender` is provided, call `proofpoint_quarantine_list` with that
+     `sender` and collect the message IDs from the results
 
-2. **Preview message(s) before release**
-   - Call `proofpoint_quarantine_preview` for each message
-   - Display sender, recipient, subject, and quarantine reason
-   - Show threat scores if available
+2. **Show what is about to be released**
+   - Display the sender, recipient, subject, and quarantine reason from
+     the `proofpoint_quarantine_list` row for each message
+   - **The message body cannot be read.** There is no preview or
+     get-by-ID tool on this server, so the decision is made on metadata
+     alone — say so rather than implying the content was checked
 
 3. **Confirm release action**
-   - Display warning if message has high threat scores
-   - Require explicit confirmation for malware-quarantined messages
-   - Skip confirmation if `--confirm` flag is set
+   - Display a warning for anything quarantined as malware, phish, or
+     impostor
+   - Require explicit confirmation for those, and state that the body was
+     not inspected
+   - Skip confirmation only if `--confirm` flag is set
 
 4. **Execute release**
-   - For single message: call `proofpoint_quarantine_release`
-   - For bulk release: call `proofpoint_quarantine_bulk_release`
+   - Call `proofpoint_quarantine_release` once per `message_id`. There is
+     no bulk-release tool; releasing several messages means several calls,
+     each one its own irreversible delivery
 
 5. **Report results**
    - Confirm successful releases
-   - Report any failures
+   - Report any failures, per message
 
 ## Parameters
 

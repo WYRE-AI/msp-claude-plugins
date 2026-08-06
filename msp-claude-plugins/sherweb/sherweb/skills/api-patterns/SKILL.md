@@ -32,7 +32,9 @@ The Sherweb Partner API provides programmatic access to distributor-level operat
 - **A tool that seems not to exist** — this server uses progressive
   disclosure, so domain tools are only visible after `sherweb_navigate`
   or `sherweb_list_categories`. Check discovery before concluding a
-  capability is missing.
+  capability is missing. Two capabilities really are absent, and no amount
+  of discovery will surface them: billing-period enumeration and invoice
+  retrieval. See the billing tool table below.
 
 ## Authentication
 
@@ -139,15 +141,17 @@ Sherweb supports two API scopes that control the level of access:
 | Endpoint | Method | Description |
 |----------|--------|-------------|
 | `/customers` | GET | List customers |
-| `/customers/{id}` | GET | Get customer details |
-| `/customers/{id}/accounts-receivable` | GET | Customer AR data |
-| `/subscriptions` | GET | List subscriptions |
-| `/subscriptions/{id}` | GET | Get subscription details |
-| `/subscriptions/{id}/quantity` | PATCH | Change subscription quantity |
-| `/billing/periods` | GET | List billing periods |
-| `/billing/periods/{id}/charges` | GET | Get payable charges |
-| `/billing/invoices` | GET | List invoices |
-| `/billing/invoices/{id}` | GET | Get invoice details |
+| `/customers/{customerId}` | GET | Get customer details |
+| `/customers/{customerId}/accounts-receivable` | GET | Customer AR data |
+| `/customers/{customerId}/subscriptions` | GET | List a customer's subscriptions |
+| `/customers/{customerId}/subscriptions/{subscriptionId}` | GET | Get subscription details |
+| `/customers/{customerId}/subscriptions/{subscriptionId}/change-quantity` | POST | Change subscription quantity |
+| `/catalog/products` | GET | List catalog products |
+| `/payable-charges` | GET | Get payable charges for a date range (distributor scope) |
+| `/payable-charges/{chargeId}` | GET | Get one charge's breakdown (distributor scope) |
+
+There is **no billing-period endpoint and no invoice endpoint** behind this
+connector. See the billing tool table below.
 
 ## MCP Tool Reference
 
@@ -155,27 +159,53 @@ Sherweb supports two API scopes that control the level of access:
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `sherweb_customers_list` | List and search customers | `page`, `pageSize`, `search` |
+| `sherweb_customers_list` | List and search customers | `search`, `page`, `pageSize` |
 | `sherweb_customers_get` | Get a single customer | `customerId` (required) |
-| `sherweb_customers_get_accounts_receivable` | Get customer AR data | `customerId` (required) |
+| `sherweb_customers_accounts_receivable` | Get customer AR data | `customerId` (required) |
 
 ### Subscription Tools
 
+Every subscription tool is scoped by customer — `customerId` is required on
+all three, because the underlying routes are nested under `/customers/{id}`.
+
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `sherweb_subscriptions_list` | List subscriptions with filters | `customerId`, `page`, `pageSize`, `status` |
-| `sherweb_subscriptions_get` | Get a single subscription | `subscriptionId` (required) |
-| `sherweb_subscriptions_change_quantity` | Modify seat count | `subscriptionId` (required), `quantity` (required) |
+| `sherweb_subscriptions_list` | List a customer's subscriptions | `customerId` (required), `page`, `pageSize` |
+| `sherweb_subscriptions_get` | Get a single subscription | `customerId` (required), `subscriptionId` (required) |
+| `sherweb_subscriptions_change_quantity` | Set seat count (absolute, not a delta) | `customerId` (required), `subscriptionId` (required), `quantity` (required) |
+
+### Catalog Tools
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `sherweb_catalog_list_products` | Browse the Sherweb product catalog | `search`, `page`, `pageSize` |
 
 ### Billing Tools
 
 | Tool | Description | Parameters |
 |------|-------------|------------|
-| `sherweb_billing_get_billing_periods` | List billing periods | `page`, `pageSize` |
-| `sherweb_billing_get_payable_charges` | Get charges for a period | `billingPeriodId` (required), `page`, `pageSize` |
-| `sherweb_billing_get_charge_details` | Get charge breakdown | `chargeId` (required) |
-| `sherweb_billing_get_invoices` | List invoices | `page`, `pageSize`, `status` |
-| `sherweb_billing_get_invoice_details` | Get invoice details | `invoiceId` (required) |
+| `sherweb_billing_payable_charges` | Get charges for an explicit date range | `billingCycleType` (`OneTime`\|`Monthly`\|`Yearly`), `periodFrom`, `periodTo`, `page`, `pageSize` |
+| `sherweb_billing_charge_details` | Get charge breakdown | `chargeId` (required) |
+
+**Billing capabilities this connector does not have.** There is no tool that
+enumerates billing periods, and no tool that lists or fetches invoices.
+`sherweb_billing_payable_charges` takes the window you give it as
+`periodFrom`/`periodTo`; you cannot ask which periods exist. For invoices, the
+closest surfaces are `sherweb_billing_charge_details` (line items of one
+charge) and `sherweb_customers_accounts_receivable` (a customer's outstanding
+balance) — neither is an invoice, and neither should be presented as one. See
+`sherweb-billing` for the full statement.
+
+### Discovery and Dispatch Tools
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `sherweb_status` | Show credentials status and available domains | — |
+| `sherweb_navigate` | Discover tools by domain | `domain` (required) |
+| `sherweb_list_categories` | List tool categories with counts | — |
+| `sherweb_list_category_tools` | List a category's tools with full schemas | `category` (required) |
+| `sherweb_router` | Suggest tools for a plain-language intent | `intent` (required) |
+| `sherweb_execute_tool` | Dispatch any Sherweb tool by name | `toolName` (required) |
 
 ## Pagination
 
@@ -197,13 +227,8 @@ All list endpoints use 1-based page pagination:
 | `totalCount` | Total number of records |
 | `totalPages` | Total number of pages |
 
-### Iterating Through All Pages
-
-1. Call the endpoint with `page=1` and `pageSize=100`
-2. Check `totalPages` in the response
-3. If more pages exist, increment `page` and call again
-4. Continue until `page >= totalPages`
-5. Collect results from each response
+To iterate: call with `page=1` and `pageSize=100`, read `totalPages`, then
+increment `page` until `page >= totalPages`, collecting each response.
 
 ## Accept-Language Support
 
@@ -216,14 +241,6 @@ The Sherweb API supports localized responses via the `Accept-Language` header:
 This is particularly useful since Sherweb is a Canadian company with bilingual support. Product names, descriptions, and error messages can be returned in either language.
 
 ## Token Caching
-
-### Token Lifecycle
-
-```
-Request Token --> Cache Token --> Use Token (up to 1 hour) --> Refresh Token
-                                        |
-                              Refresh 5 min before expiry
-```
 
 **Caching strategy:**
 
@@ -320,6 +337,6 @@ When rate limited, the API returns a `429 Too Many Requests` response with:
 
 ## Related Skills
 
-- [Sherweb Billing](../billing/SKILL.md) - Billing charges and invoices
+- [Sherweb Billing](../billing/SKILL.md) - Payable charges and charge details
 - [Sherweb Customers](../customers/SKILL.md) - Customer management
 - [Sherweb Subscriptions](../subscriptions/SKILL.md) - Subscription lifecycle

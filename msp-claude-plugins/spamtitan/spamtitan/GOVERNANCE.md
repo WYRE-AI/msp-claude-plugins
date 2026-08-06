@@ -68,11 +68,13 @@ Why each of the four is destructive:
   used. The server does not annotate it as destructive; blast radius
   says it is.
 
-All four `manage_*` and disposition tools accept a read-only `list`
-action or otherwise behave benignly under some arguments. The gateway
-tiers by tool name, not by argument, so the whole tool takes the
-highest tier its arguments can reach. That is the correct conservative
-reading.
+Both `manage_*` tools accept a read-only `action: "list"` alongside `add`
+and `remove` — reading a sender list and rewriting it are the same tool.
+The gateway tiers by tool name, not by argument, so the whole tool takes
+the highest tier its arguments can reach. That is the correct conservative
+reading, and its practical consequence is that **there is no read-only view
+of either sender list**: anyone granted enough to list the blocklist is
+granted enough to add to it.
 
 **Conduit does not enforce per-call approval.** It compares tiers — there
 is no approval step, no per-call confirmation, and no interactive prompt
@@ -87,7 +89,10 @@ The safe default is **read autonomously, propose writes, never
 self-approve destructive calls.**
 
 - Read tools: allow. Daily quarantine review, per-domain statistics, and
-  false-positive hunting are the intended autonomous use.
+  false-positive hunting are the intended autonomous use. Note that only the
+  statistics are actually per-domain — `spamtitan_get_queue` is not, so any
+  agent presenting quarantine results as belonging to one customer must be
+  filtering them itself. See the sharp edge below.
 - Write tools: none exist here.
 - Destructive tools: require a named human approver per invocation. Do
   not grant any of the four to scheduled or unattended agents. An agent
@@ -116,9 +121,11 @@ self-approve destructive calls.**
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
 - `spamtitan_get_queue` returns sender, recipient, subject, and
-  quarantine reason for every held message — a customer's inbound mail
-  metadata in bulk, including personal mail that happens to have been
-  caught.
+  quarantine reason for every held message — inbound mail metadata in bulk,
+  including personal mail that happens to have been caught. On a multi-tenant
+  appliance this is **every tenant's** mail metadata, not one customer's,
+  because the call takes no domain filter. Pulling it puts other customers'
+  data into model context.
 - `spamtitan_get_message` returns the same plus the spam score
   breakdown, header set including `Reply-To` and SPF/DKIM results, and
   every link in the body.
@@ -130,14 +137,33 @@ self-approve destructive calls.**
 
 ## Known sharp edges
 
-- **`spamtitan_get_queue` has no domain filter.** The skill documents a
-  `domain` parameter; the shipped server accepts only page, per_page,
-  sender, recipient, subject, and reason. In a multi-tenant appliance
-  the quarantine listing is therefore not scoped by customer, and the
-  release or delete that follows it is scoped only by the API key. Use
-  recipient filters deliberately, and never let an agent act on "the
-  first result" from an unfiltered listing.
-  `spamtitan_get_stats` does accept `domain`.
+- **`spamtitan_get_queue` has no domain filter — the quarantine listing is
+  not tenant-scoped.** This is a tenant-isolation property of the connector,
+  not a usage tip, and it is the sharpest thing in this document.
+
+  The tool's shipped input schema is exactly `page`, `per_page`, `sender`,
+  `recipient`, `subject`, `reason`
+  (`spamtitan-mcp/src/domains/quarantine.ts:21-53`). Earlier revisions of this
+  plugin's skills documented a `domain` parameter. There is none.
+
+  On a multi-tenant appliance that means an operator who asks for "customer
+  X's quarantine" receives **the appliance-wide queue, across every tenant**.
+  Any per-customer filtering has to be done client-side on the `recipient`
+  field after the fetch, by whatever is reading the result — the server
+  applies no boundary beyond the API key. The release or delete that follows
+  is scoped only by `message_id`, so a cross-tenant listing leads directly to
+  a cross-tenant action on mail belonging to a customer nobody was looking at.
+
+  The asymmetry is what makes this easy to miss: the sibling
+  `spamtitan_get_stats` **does** accept `domain`
+  (`spamtitan-mcp/src/domains/stats.ts:28-31`), so a reader who has just
+  scoped statistics to one customer reasonably assumes the queue beside it
+  behaves the same way. It does not.
+
+  There is no workaround the server can perform. Use `recipient` filters
+  deliberately, treat every listing as cross-tenant until narrowed, never let
+  an agent act on "the first result" from an unfiltered listing, and never
+  label an unfiltered listing as one customer's quarantine.
 - **Virus-quarantined messages refuse to release.** SpamTitan blocks it
   server-side. Treat a release failure on a virus item as the control
   working, not as an error to route around.
@@ -147,8 +173,30 @@ self-approve destructive calls.**
   automatically after the configured period, typically 30 days. A
   false positive nobody reviewed in time is unrecoverable, and its
   absence looks identical to a message that never arrived.
-- **Skills document tools the server does not expose.** The skills
-  reference `spamtitan_list_allowlist`, `spamtitan_list_blocklist`, and
-  `spamtitan_get_domain_stats`. The shipped server covers those through
-  the `list` action on the `manage_*` tools and the `domain` argument on
-  `spamtitan_get_stats`. Tier the real names.
+- **Listing is an argument, not a tool — and that changes what a grant
+  buys.** Earlier revisions of the skills named three tools that do not
+  exist — a list-allowlist tool, a list-blocklist tool, and a
+  get-domain-stats tool. There is no separate tool for any of the three.
+  Reading a sender list is `action: "list"` on
+  `spamtitan_manage_allowlist` / `spamtitan_manage_blocklist`
+  (`spamtitan-mcp/src/domains/lists.ts:15-79`), and per-domain statistics
+  are the `domain` argument on `spamtitan_get_stats`. The tool names in this
+  document are the real ones and are what to tier.
+
+  The consequence for tiering is above, under *Why each of the four is
+  destructive*: because reading a list means calling the tool that can also
+  write it, and the gateway tiers by tool name rather than by argument, there
+  is no way to grant read-only access to a sender list. Anyone who can list
+  the blocklist can add to it.
+
+- **Neither `manage_*` tool takes a `domain` or `scope` parameter.** Their
+  complete input schema is `action`, `sender`, `note`. An entry added through
+  this connector lands at whatever scope the appliance and API key give it,
+  so a blocklist addition intended for one client may apply to every client
+  the gateway filters for. Per-client list scoping has to be done in the
+  SpamTitan admin interface.
+
+- **No bulk operations.** `spamtitan_release_message` and
+  `spamtitan_delete_message` each act on a single `message_id`. There is no
+  tool that clears a queue. That is a safety property worth keeping: an agent
+  working a backlog has to decide once per message.

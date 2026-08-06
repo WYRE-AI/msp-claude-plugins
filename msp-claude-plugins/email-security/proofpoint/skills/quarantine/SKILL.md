@@ -114,54 +114,79 @@ Quarantine operates at two levels:
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_quarantine_search` | Search quarantined messages | `sender`, `recipient`, `subject`, `reason`, `startDate`, `endDate` |
-| `proofpoint_quarantine_list` | List recent quarantined messages | `folder`, `limit`, `offset` |
-| `proofpoint_quarantine_get` | Get details of a specific quarantined message | `id` |
-| `proofpoint_quarantine_preview` | Preview message content without releasing | `id` |
-| `proofpoint_quarantine_release` | Release message to original recipient | `id`, `recipient` |
-| `proofpoint_quarantine_delete` | Permanently delete quarantined message | `id` |
-| `proofpoint_quarantine_bulk_release` | Release multiple messages at once | `ids[]` |
-| `proofpoint_quarantine_bulk_delete` | Delete multiple messages at once | `ids[]` |
+| `proofpoint_quarantine_list` | List quarantined messages with sender, recipient, subject and reason | `sender`, `recipient`, `subject`, `startDate`, `endDate`, `folder`, `page`, `per_page` |
+| `proofpoint_quarantine_search` | Keyword search across sender, recipient and subject | `query` (required), `startDate`, `endDate`, `page`, `per_page` |
+| `proofpoint_quarantine_release` | ⚠ **High-impact.** Deliver a quarantined message to its recipient | `message_id` (required) |
+| `proofpoint_quarantine_delete` | ⚠ **Destructive, irreversible.** Permanently delete a quarantined message | `message_id` (required) |
+
+Note the split: `_list` is the structured, field-filtered query and `_search`
+is a single free-text `query` across three fields. Reach for `_list` when you
+know the sender or recipient — `_search` cannot filter by them.
+
+### Not available through this plugin
+
+- **Previewing or reading a message body.** There is no
+  `quarantine_preview` and no get-by-ID. `_list` and `_search` return
+  metadata — sender, recipient, subject, reason — and nothing more. **A
+  release decision here is made on metadata alone.** If the subject line
+  is not enough to judge legitimacy, escalate to someone with Proofpoint
+  console access rather than releasing on a guess.
+- **Bulk release and bulk delete.** Both destructive tools take a single
+  `message_id`. Multiple messages means multiple calls, each one a
+  separate decision — which is a feature, not a limitation to work
+  around.
 
 ## Common Workflows
 
 ### User Reports Missing Email
 
 1. Get the sender and approximate time from the user
-2. Call `proofpoint_quarantine_search` with `recipient=<user>` and `sender=<expected_sender>` and appropriate date range
-3. If found, call `proofpoint_quarantine_preview` to verify the message is legitimate
-4. If legitimate, call `proofpoint_quarantine_release` to deliver the message
-5. If the sender is consistently quarantined, consider adding a safe sender policy
+2. Call `proofpoint_quarantine_list` with `recipient=<user>`,
+   `sender=<expected_sender>` and an appropriate date range
+3. Judge legitimacy from the metadata you have — sender, subject, and the
+   quarantine reason. **You cannot read the body**; if the metadata does
+   not settle it, do not release, escalate
+4. If legitimate, call `proofpoint_quarantine_release` with the
+   `message_id`
+5. If the sender is consistently quarantined, consider adding a safe sender
+   policy in the Proofpoint console — this plugin has no policy-write tool
 
 ### Daily Quarantine Review
 
-1. Call `proofpoint_quarantine_list` with `folder=quarantine` and `limit=100`
+1. Call `proofpoint_quarantine_list` with `folder=quarantine` and
+   `per_page=100`
 2. Review messages grouped by reason
-3. Release any false positives
-4. Delete confirmed threats
+3. Release any false positives — one `proofpoint_quarantine_release` call
+   per message
+4. Delete confirmed threats, one `proofpoint_quarantine_delete` at a time
 5. Note recurring senders for blocklist consideration
 
-### Bulk Release for Known-Good Sender
+### Release for a Known-Good Sender
 
-1. Call `proofpoint_quarantine_search` with `sender=<known_good_sender>`
-2. Collect all message IDs from results
-3. Call `proofpoint_quarantine_bulk_release` with the collected IDs
+1. Call `proofpoint_quarantine_list` with `sender=<known_good_sender>`
+2. Collect the message IDs from the results and confirm the list is what
+   you expect — there is no bulk tool, so each release is its own call and
+   its own decision
+3. Call `proofpoint_quarantine_release` once per `message_id`
 4. Recommend adding the sender to the organization's safe sender list
 
 ### Investigate Quarantine Spike
 
-1. Call `proofpoint_quarantine_search` with a narrow time window
+1. Call `proofpoint_quarantine_list` with a narrow time window
 2. Group results by `reason` to identify what type of messages increased
 3. Group by `sender` to identify if a single source is responsible
-4. Cross-reference with TAP data using message GUIDs
+4. Cross-reference with TAP data using message identifiers
 5. Determine if this is a targeted attack or spam campaign
 
 ### Clean Up Expired Threats
 
-1. Call `proofpoint_quarantine_search` with `reason=malware` and date range > 14 days
-2. Review any remaining malware-quarantined messages
-3. Call `proofpoint_quarantine_bulk_delete` to remove confirmed threats
-4. Document any messages that were released for audit trail
+1. Call `proofpoint_quarantine_list` with a date range older than 14 days
+   and review what is still held
+2. Confirm each message is a genuine threat before removing it — the
+   quarantine store is the only copy, and deleting forecloses any later
+   forensic question
+3. Call `proofpoint_quarantine_delete` per `message_id`
+4. Document any messages that were released for the audit trail
 
 ## Error Handling
 

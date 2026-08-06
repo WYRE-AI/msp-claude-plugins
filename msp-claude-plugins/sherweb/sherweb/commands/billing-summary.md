@@ -1,29 +1,40 @@
 ---
-description: View payable charges for a Sherweb billing period with pricing breakdown
-argument-hint: "[period] [customer] [charge_type]"
-arguments: [period, customer, charge_type]
+description: View payable charges for a Sherweb billing date range with pricing breakdown
+argument-hint: "[period_from] [period_to] [billing_cycle] [customer] [charge_type]"
+arguments: [period_from, period_to, billing_cycle, customer, charge_type]
 ---
 
 # Sherweb Billing Summary
 
-View payable charges for a billing period with detailed pricing breakdown including list prices, net prices, deductions, fees, and taxes. Useful for monthly reconciliation, margin analysis, and cost reporting.
+View payable charges for an explicit date range with detailed pricing breakdown including list prices, net prices, deductions, fees, and taxes. Useful for monthly reconciliation, margin analysis, and cost reporting.
 
 ## Prerequisites
 
 - Sherweb MCP server connected with valid credentials
-- MCP tools `sherweb_billing_get_billing_periods`, `sherweb_billing_get_payable_charges`, and `sherweb_customers_list` available
+- MCP tools `sherweb_billing_payable_charges` and `sherweb_customers_list` available
 
 ## Steps
 
-1. **Resolve billing period** - Find the target billing period
+1. **Resolve the date range** - Decide the window from the calendar
 
-   - If "latest" or no period specified, call `sherweb_billing_get_billing_periods` with `pageSize=1` to get the most recent period
-   - If a specific period ID was provided, use it directly
+   There is **no tool that lists available billing periods** on this server, so
+   there is nothing to look a period ID up in. Convert whatever the operator
+   said into explicit ISO 8601 dates:
 
-2. **Fetch payable charges** for the billing period
+   - "latest" or nothing specified → the most recently completed calendar month
+     (e.g. on 2026-03-10, that is `2026-02-01` to `2026-02-28`)
+   - An explicit range → use `period_from` and `period_to` as given
+   - A period *ID* (e.g. "bp-2026-02") → this connector has no concept of one.
+     Ask the operator for the dates it refers to, or translate the label
+     yourself and say which dates you used.
 
-   Call `sherweb_billing_get_payable_charges` with:
-   - `billingPeriodId` set to the resolved period ID
+2. **Fetch payable charges** for the range
+
+   Call `sherweb_billing_payable_charges` with:
+   - `periodFrom` and `periodTo` set to the resolved dates
+   - `billingCycleType` set to `OneTime`, `Monthly`, or `Yearly` if the
+     operator narrowed it. Passing none of the three parameters makes the
+     server elicit a cycle type before it will run.
    - `pageSize=100` for maximum results per page
    - Paginate through all pages if needed
 
@@ -44,22 +55,30 @@ View payable charges for a billing period with detailed pricing breakdown includ
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| period | string | No | latest | Billing period ID or "latest" |
-| customer | string | No | - | Customer name or ID to filter by |
-| charge_type | string | No | all | Charge type filter (Setup, Recurring, Usage, all) |
+| period_from | date | No | first day of last completed month | Start of the window (ISO 8601), passed as `periodFrom` |
+| period_to | date | No | last day of last completed month | End of the window (ISO 8601), passed as `periodTo` |
+| billing_cycle | string | No | - | `OneTime`, `Monthly`, or `Yearly`, passed as `billingCycleType` |
+| customer | string | No | - | Customer name or ID to filter by (applied client-side after fetch) |
+| charge_type | string | No | all | Charge type filter (Setup, Recurring, Usage, all — applied client-side) |
 
 ## Examples
 
-### Latest Billing Period Summary
+### Last Completed Month
 
 ```
 /billing-summary
 ```
 
-### Specific Billing Period
+### Specific Date Range
 
 ```
-/billing-summary --period "bp-2026-02"
+/billing-summary --period_from 2026-02-01 --period_to 2026-02-28
+```
+
+### Recurring Charges Only
+
+```
+/billing-summary --period_from 2026-02-01 --period_to 2026-02-28 --billing_cycle Monthly
 ```
 
 ### Filter by Customer
@@ -88,9 +107,8 @@ View payable charges for a billing period with detailed pricing breakdown includ
 Sherweb Billing Summary
 ================================================================
 
-Billing Period: February 2026 (bp-2026-02)
-Period: 2026-02-01 to 2026-02-28
-Status: Closed
+Range: 2026-02-01 to 2026-02-28
+Billing cycle: Monthly
 
 Charges by Customer:
 +------------------------------+----------+-----------+------------+---------+----------+
@@ -123,7 +141,7 @@ Deductions Applied:
 Sherweb Billing Summary - Acme Corporation
 ================================================================
 
-Billing Period: February 2026 (bp-2026-02)
+Range: 2026-02-01 to 2026-02-28
 
 +--------------------------------------------+----------+---------+-----+--------+--------+--------+
 | Product                                    | Type     | Qty     | Net | SubTot | Deduct | Total  |
@@ -152,10 +170,11 @@ TOTAL:       $2,983.14
 No payable charges found for the specified criteria.
 
 Suggestions:
-  - Verify the billing period ID is correct
+  - Widen the date range — periodFrom/periodTo is whatever you passed, and
+    nothing validated it against a real period
+  - Check the billing cycle type (OneTime / Monthly / Yearly)
   - Check if the customer name matches a Sherweb customer
   - Try without filters: /billing-summary
-  - List available periods: check sherweb_billing_get_billing_periods
 ```
 
 ## Error Handling
@@ -168,12 +187,17 @@ Error: Unable to connect to Sherweb MCP server
 Check your MCP configuration and verify credentials at cumulus.sherweb.com > Security > APIs
 ```
 
-### Invalid Billing Period
+### Operator asked for a period ID or an invoice
 
 ```
-Error: Billing period not found: "bp-invalid"
+This connector has no billing-period list and no invoice tool.
 
-List available periods and try again.
+  - Billing periods: pass the dates directly as periodFrom/periodTo. Confirm
+    with the operator which dates a period label refers to.
+  - Invoices: not available here. Offer charge-level detail
+    (sherweb_billing_charge_details) or the customer's outstanding balance
+    (sherweb_customers_accounts_receivable), or point at the Sherweb partner
+    portal for the invoice document itself.
 ```
 
 ### Authentication Error
@@ -189,8 +213,8 @@ If the issue persists, verify your Client ID and Client Secret.
 
 | Tool | Purpose |
 |------|---------|
-| `sherweb_billing_get_billing_periods` | Find available billing periods |
-| `sherweb_billing_get_payable_charges` | Get charges for the period |
+| `sherweb_billing_payable_charges` | Get charges for the date range |
+| `sherweb_billing_charge_details` | Drill into one charge's line items |
 | `sherweb_customers_list` | Resolve customer name to ID |
 
 ## Related Commands
