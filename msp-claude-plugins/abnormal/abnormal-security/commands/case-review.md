@@ -99,10 +99,25 @@ Recommended Actions:
 5. Case 12350 (Phishing Simulation) - DISMISS
 
 Quick Actions:
-- Remediate a case: Use abnormal_cases_action with action REMEDIATE
-- Dismiss a case: Use abnormal_cases_action with action DISMISS
-- View case details: Use abnormal_cases_get with the case ID
+- View case details: Use abnormal_cases_get with the numeric case ID
+- Remediate the mail behind a case: find the threat, then
+  abnormal_messages_list + abnormal_remediation_manage per message
+- Dismiss / acknowledge / close: Abnormal portal only — no tool does this
 ```
+
+## What this command cannot do
+
+Cases are **read-only** through this server. `abnormal_cases_list` and
+`abnormal_cases_get` are both GETs, and there is no tool that changes a
+case's state, assigns an analyst, or closes a case. This command produces
+a triage recommendation; a human enters the disposition in the Abnormal
+portal.
+
+The one action available is message remediation, and it is reached
+through the *threat*, not the case: `abnormal_remediation_manage`
+requires a `threatId` and a `messageId`, and a `caseId` is neither. Note
+also that `caseId` is a **number** while `threatId` is a **UUID string** —
+they are not interchangeable.
 
 ## Judgment Reference
 
@@ -139,5 +154,3 @@ Regenerate your token at Abnormal Security Portal > Settings > Integrations > AP
 
 - `/threat-triage` - Triage recent threats
 - `/search-threats` - Search for specific threats
-- `/vendor-risk` - Check vendor risk
-- `/account-audit` - Audit for account takeover

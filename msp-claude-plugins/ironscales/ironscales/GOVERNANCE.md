@@ -86,9 +86,10 @@ self-approve destructive calls.**
 - Write tools: none exist here.
 - Destructive tools: require a named human approver per invocation. Do
   not grant either destructive tool to scheduled or unattended agents.
-  In particular, an agent that auto-classifies high-confidence incidents
-  and then auto-remediates them is one model error away from deleting a
-  customer's legitimate mail.
+  In particular, an agent that sweeps the queue and remediates what it
+  judges malicious is one model error away from deleting a customer's
+  legitimate mail — and there is no vendor-supplied verdict on an incident
+  to check itself against, because no tool here produces one.
 
 ## What it cannot reach
 
@@ -109,11 +110,14 @@ self-approve destructive calls.**
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
 - `ironscales_incidents_get` and `ironscales_incidents_list` return
-  subject lines, sender and reply-to addresses, sender IP, per-URL
-  verdicts, and recipient counts for a customer's real mail.
-- `ironscales_stats_company` returns `topTargetedUsers` — a named list
-  of the customer's most-attacked employees. Treat it as sensitive
-  security information, not a metric.
+  subject lines, sender addresses, threat indicators, and recipient lists
+  and counts for a customer's real mail. `ironscales_incidents_get` is
+  vendor pass-through, so a tenant's payload may carry more — reply-to,
+  sender IP, per-URL verdicts — none of which is guaranteed.
+- `ironscales_stats_company` is vendor pass-through and typically includes
+  a most-targeted-users list: named employees of the customer, ranked by
+  how often they are attacked. Treat it as sensitive security information,
+  not a metric.
 - `ironscales_email_classify` is the inverse flow: the operator supplies
   raw headers, plain-text and HTML bodies, and URLs, which are sent to
   IRONSCALES for analysis. It changes no state, so it is tiered Read,
@@ -122,13 +126,18 @@ self-approve destructive calls.**
 
 ## Known sharp edges
 
-- **Classification fires remediation automatically.** Classifying an
-  incident as phishing can trigger the configured remediation without a
-  second call. An agent that "just labels" the backlog may find it has
-  deleted mail. Check `remediationTriggered` before assuming a
-  classification was inert.
-- **Closed incidents cannot be reclassified.** The resulting error reads
-  like a permissions failure. Verify status first.
+- **Classification changes nothing, and the name hides that.**
+  `ironscales_email_classify` takes a raw email, not an incident ID. It
+  returns a verdict and writes nothing — no incident is labelled, contained,
+  or closed by it. No tool on this server sets a verdict on an incident. An
+  agent that "classified the backlog" has contained nothing; only
+  `ironscales_remediation_act` changes state.
+- **Closed incidents reject remediation.** The resulting error reads
+  like a permissions failure. Verify status first. The four statuses are
+  `open`, `in_progress`, `pending`, and `closed`.
+- **Domain blocking is not available here.** `block_sender` covers one
+  address. An agent asked to "block the campaign's domain" cannot do it from
+  this server and must say so rather than substituting a sender block.
 - **Allowlist scope is narrower than it looks.** An entry for a single
   address does not cover other addresses on the same domain; an agent
   told to "allowlist this vendor" will under-deliver unless it uses a

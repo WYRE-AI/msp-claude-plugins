@@ -1,95 +1,107 @@
 ---
-description: Classify a specific Ironscales incident email as phishing, spam, or legitimate
-argument-hint: "<incident_id> [classification] [comment]"
-arguments: [incident_id, classification, comment]
+description: Get an Ironscales AI verdict on a raw email, then act on it with a remediation action
+argument-hint: "<sender> [subject] [body] [incident_id]"
+arguments: [sender, subject, body, incident_id]
 ---
 
 # Ironscales Email Classification
 
-Investigate and classify a specific Ironscales phishing incident. Retrieves full incident details including AI indicators, URL verdicts, and message metadata, then applies the specified classification. If no classification is provided, presents the investigation findings and asks for input before classifying.
+Submit a raw email to Ironscales' AI classifier and get a verdict back, then — separately and deliberately — take a remediation action if the email corresponds to an incident.
+
+**Read this first.** `ironscales_email_classify` is stateless. It POSTs an email you assemble and returns a verdict. It takes **no incident ID**, sets no classification on any incident, and changes no state anywhere. There is no tool on this server that writes a phishing/spam/legitimate verdict onto an existing incident. If you want incident state to change, that is a separate `ironscales_remediation_act` call, and this command will not make it for you without saying so.
+
+This command therefore does two distinct things, and reports them separately:
+
+1. **Analysis** — a verdict on message content. Changes nothing.
+2. **Action** — an optional remediation on a named incident. Changes mail delivery.
 
 ## Prerequisites
 
 - Ironscales MCP server connected with valid API key and company ID
-- MCP tools `ironscales_get_incident`, `ironscales_classify_email`, and `ironscales_remediate_incident` available
+- MCP tools `ironscales_email_classify`, `ironscales_remediation_act`, `ironscales_incidents_get`, and `ironscales_allowlist_manage` available
 
 ## Steps
 
-1. **Retrieve full incident details**
+1. **Confirm authorisation before sending content**
 
-   Call `ironscales_get_incident` with the provided `incident_id`. Extract:
-   - Subject, sender, reply-to, sender IP
-   - AI verdict and confidence score
-   - All indicators (suspicious domain, reply-to mismatch, financial language, etc.)
-   - URL verdicts for all links
-   - Recipient list
-   - Current classification status
+   This call ships the customer's message — subject, plain-text body, HTML body, URLs, headers — outbound to Ironscales for analysis. Confirm you are authorised for that tenant before pasting anything in. Pass attachment **metadata only** (`filename`, `content_type`, `size_bytes`); the schema has no field for file contents and you must not invent one.
 
-2. **Analyze indicators**
+2. **Assemble the email**
 
-   Present a structured analysis:
-   - **Strong phishing signals:** REPLY_TO_MISMATCH, SUSPICIOUS_DOMAIN (newly registered), malicious URL verdict, FINANCIAL_REQUEST combined with lookalike sender
-   - **Moderate signals:** FIRST_TIME_SENDER, unusual sending time, mismatched display name
-   - **Legitimate signals:** Established sender domain, no malicious links, consistent reply-to
+   Build the `ironscales_email_classify` payload. `sender` is required; everything else is optional: `subject`, `sender_display_name`, `reply_to`, `body_text`, `body_html`, `headers`, `urls`, `attachments`.
 
-3. **Apply classification if provided**
+   If an `incident_id` was supplied, call `ironscales_incidents_get` first and use the incident to populate what you can — `sender`, `subject`, and whatever else that tenant's payload carries. Do not fabricate fields the incident did not contain.
 
-   If `classification` is specified, call `ironscales_classify_email` with the incident ID, classification, and optional comment.
+3. **Classify**
 
-4. **If no classification provided, ask for input**
+   Call `ironscales_email_classify`. The response is a verdict — typically a classification, a confidence score, and threat-type/indicator lists — and nothing else.
 
-   Present the full indicator analysis and AI verdict, then ask the user to specify:
-   - `phishing` — Confirmed malicious
-   - `spam` — Unwanted but not targeted/malicious
-   - `legitimate` — Safe email, false positive
+   Report it as analysis. Do **not** say the incident was classified, resolved, or updated, because none of that happened.
 
-5. **After classification, report remediation status**
+4. **Combine with incident indicators**
 
-   Report what remediation actions were automatically triggered:
-   - For `phishing`: email removal from mailboxes, sender block
-   - For `spam`: sender block
-   - For `legitimate`: incident closed, optionally add sender to allowlist
+   Where an `incident_id` was supplied, present the AI verdict alongside the incident's own `threat_indicators`, its `recipient_count` and `recipients` (breadth), and a sender-versus-reply-to comparison if the payload carries a reply-to. A reply-to that diverges from the sender domain is the strongest BEC signal available here.
 
-6. **Offer follow-up actions**
+5. **Decide, then act — as a separate step**
 
-   Based on the classification:
-   - **Phishing with many recipients:** Offer to block the sender domain with `ironscales_remediate_incident`
-   - **Legitimate:** Offer to add sender to allowlist with `ironscales_manage_allowlist`
+   State the recommended action and why, then take it only with the user's agreement. `ironscales_remediation_act` requires `incident_id` and `action`, with an optional `reason` for the audit trail:
+
+   | Action | Effect | Reversible? |
+   |---|---|---|
+   | `quarantine` | Moves the message out of inboxes | Yes — can be released |
+   | `delete` | Permanently removes it from **all** mailboxes | **No** — destroys the evidence |
+   | `block_sender` | Blocks that one sender address | Yes, via the blocklist |
+   | `mark_false_positive` | Marks it legitimate and **restores** it to recipients | Reverses containment |
+   | `report_to_microsoft` | Submits the message to Microsoft | **No** — cannot be recalled |
+
+   `quarantine` is the default. Use `delete` only on confirmed-malicious mail whose evidence you have already captured. `mark_false_positive` puts the message back in front of its recipients — confirm that is intended before calling it. Leave `notify_users` at `false` unless the customer explicitly asked; that mail cannot be unsent.
+
+6. **Offer follow-up**
+
+   - **Benign, recurring sender:** offer an allowlist entry via `ironscales_allowlist_manage` with `operation=add`, `entry_type=email`, and the address as `value`. Use `entry_type=domain` only when the intent really is to exempt every sender on that domain from phishing detection company-wide.
+   - **Campaign:** say plainly that campaign-wide domain blocking is **not exposed by this server**. `block_sender` is per-address; a domain block belongs in the Ironscales console or the upstream mail filter.
 
 ## Parameters
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| incident_id | string | Yes | Ironscales incident ID (e.g. `INC-10042`) |
-| classification | string | No | phishing, spam, or legitimate |
-| comment | string | No | Classification reason for audit trail |
+| sender | string | Yes* | Sender email address — the only required field of `ironscales_email_classify` |
+| subject | string | No | Email subject line |
+| body | string | No | Plain-text body, passed as `body_text` |
+| incident_id | string | No | An Ironscales incident to pull context from and, optionally, remediate afterwards |
+
+\* If `incident_id` is supplied and `sender` is not, take `sender` from the incident.
 
 ## Examples
 
-### Investigate and Classify Interactively
+### Classify a Raw Email
 
 ```
-/classify-email --incident_id "INC-10042"
+/classify-email --sender "billing@suspicious-domain.net" --subject "Your invoice is ready"
 ```
 
-### Classify Directly as Phishing
+### Classify with Body Content
 
 ```
-/classify-email --incident_id "INC-10042" --classification phishing --comment "Confirmed credential phishing via lookalike domain"
+/classify-email --sender "security@paypa1.com" --subject "Urgent: Verify your account" --body "Click here to confirm your login within 24 hours."
 ```
 
-### Classify as Legitimate
+### Investigate an Incident and Then Remediate
 
 ```
-/classify-email --incident_id "INC-10041" --classification legitimate --comment "Verified with sender — legitimate vendor notification"
+/classify-email --incident_id "inc-10042"
 ```
+
+The verdict comes back first. The remediation is a separate, explicit call.
 
 ## Error Handling
 
-- **Incident not found:** Verify the incident ID is correct; use `/triage-incidents` to list current incidents
-- **Incident already classified:** The incident may be in `resolved` or `closed` status — only open incidents can be reclassified
-- **Classification has no effect:** Verify the API key has write permissions in Ironscales Platform > Settings > API
+- **`sender` missing:** `ironscales_email_classify` requires it; supply it directly or pull it from the incident
+- **Incident not found:** verify the ID with `/triage-incidents`. The parameter is `incident_id` in snake_case
+- **"Nothing changed after classification":** working as designed — the tool is stateless. Call `ironscales_remediation_act` if you wanted state to change
+- **Remediation rejected:** the incident may already be `closed`; the error often reads like a permissions failure. Valid statuses are `open`, `in_progress`, `pending`, `closed` — there is no `resolved`
+- **Remediation reports partial success:** normal. Reach depends on the customer's M365/Exchange integration; clear remaining mailboxes manually
 
 ## Related Commands
 
-- `/triage-incidents` - Triage all open incidents by status and AI confidence
+- `/triage-incidents` - Triage the open incident queue by status and severity

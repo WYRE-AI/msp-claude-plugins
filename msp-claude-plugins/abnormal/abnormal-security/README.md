@@ -7,10 +7,18 @@ Claude Code plugin for the Abnormal Security AI-powered email security platform.
 This plugin provides Claude with deep knowledge of Abnormal Security, enabling:
 
 - **Threat Detection** - Investigate BEC, phishing, malware, and socially-engineered email attacks
-- **Abuse Mailbox Cases** - Manage user-reported email cases with triage and remediation workflows
+- **Cases & Abuse Mailbox** - Read user-reported email cases and abuse-mailbox submissions for triage
 - **Message Analysis** - Analyze email headers, attachments, sender reputation, and delivery context
-- **Vendor Risk Assessment** - Monitor VendorBase vendor risk scores and compromised vendor activity
-- **Account Takeover Protection** - Detect suspicious sign-ins, impossible travel, and compromised accounts
+- **Per-message Remediation** - Pull a specific message out of mailboxes, restore it, or check its status
+
+### What this plugin does not cover
+
+The shipped MCP server exposes ten tools and nothing else. There is **no
+account-takeover domain** (no sign-in events, impossible travel, or
+identity actions) and **no VendorBase/vendor-risk domain**. Cases are
+read-only — case state changes happen in the Abnormal portal. Message
+lookups are always scoped to a single threat; there is no tenant-wide
+message search.
 
 ## Configuration
 
@@ -74,20 +82,20 @@ ABNORMAL_MCP_URL=https://your-gateway-domain/v1/abnormal-security/mcp
    - Copy the API token immediately (it is only shown once)
 
 3. **Configure Permissions**
-   - Ensure the API token has read access to:
-     - Threats
-     - Cases (Abuse Mailbox)
-     - Messages
-     - Account Takeover
-     - Vendor Risk (VendorBase)
+   - Ensure the API token has access to:
+     - Threats (read)
+     - Cases (read)
+     - Abuse Mailbox (read)
+     - Messages (read)
+     - Remediation (write — required only if you intend to remediate)
 
 ### Testing Your Connection
 
 Once configured in Claude Code settings, test the connection:
 
 ```bash
-# Test connection (using the Abnormal Security MCP tool)
-mcp-cli call abnormal-security/abnormal_test_connection '{}'
+# Report server and credential status (takes no arguments)
+mcp-cli call abnormal-security/abnormal_status '{}'
 ```
 
 ### API Documentation
@@ -105,11 +113,9 @@ mcp-cli call abnormal-security/abnormal_test_connection '{}'
 
 | Skill | Description |
 |-------|-------------|
-| `threats` | Threat detection and email threat analysis (BEC, phishing, malware) |
-| `cases` | Abuse mailbox case management, triage, and remediation |
+| `threats` | Threat detection, email threat analysis (BEC, phishing, malware), and per-message remediation |
+| `cases` | Abuse mailbox case triage — read-only |
 | `messages` | Message analysis, headers, attachments, sender reputation |
-| `vendors` | VendorBase vendor risk assessment and compromised vendor tracking |
-| `account-takeover` | Account takeover detection, suspicious sign-ins, compromised accounts |
 | `api-patterns` | Abnormal Security REST API authentication, pagination, and error handling |
 
 ## Available Commands
@@ -119,8 +125,28 @@ mcp-cli call abnormal-security/abnormal_test_connection '{}'
 | `/threat-triage` | Triage recent email threats by severity and attack type |
 | `/search-threats` | Search for specific threat patterns by sender, recipient, or type |
 | `/case-review` | Review and triage abuse mailbox cases |
-| `/vendor-risk` | Check vendor risk scores and compromised vendor activity |
-| `/account-audit` | Audit for account takeover indicators and suspicious sign-ins |
+
+## MCP Tools
+
+All ten tools are available at all times — there is no progressive
+disclosure.
+
+| Tool | Tier | Notes |
+|------|------|-------|
+| `abnormal_navigate` | read | Domain discovery: `threats`, `messages`, `remediation`, `abuse`, `cases` |
+| `abnormal_status` | read | Server and credential status; no arguments |
+| `abnormal_threats_list` | read | `pageSize`, `pageNumber`, `filter` (OData) |
+| `abnormal_threats_get` | read | `threatId` (UUID string) |
+| `abnormal_messages_list` | read | `threatId` |
+| `abnormal_messages_get` | read | `threatId`, `messageId` — headers, URLs, attachments and AI analysis in one payload |
+| `abnormal_cases_list` | read | `pageSize`, `pageNumber`, `filter` (OData) |
+| `abnormal_cases_get` | read | `caseId` (**number**, unlike the UUID `threatId`) |
+| `abnormal_abuse_list` | read | `pageSize`, `pageNumber`, `filter` (OData) |
+| `abnormal_remediation_manage` | destructive | `threatId`, `messageId`, `action` (`remediate` \| `unremediate` \| `status`) |
+
+Remediation acts on **one message**, not a threat. Removing a campaign
+means listing the threat's messages and looping — a partial failure
+leaves it half-remediated. See [GOVERNANCE.md](GOVERNANCE.md).
 
 ## Quick Start
 
@@ -140,18 +166,6 @@ mcp-cli call abnormal-security/abnormal_test_connection '{}'
 
 ```
 /case-review
-```
-
-### Check Vendor Risk
-
-```
-/vendor-risk --vendor "example-vendor.com"
-```
-
-### Audit Account Takeover
-
-```
-/account-audit --user "user@company.com"
 ```
 
 ## Security Considerations
@@ -201,6 +215,38 @@ See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
 All contributions require a PRD in the `prd/` directory before implementation.
 
 ## Changelog
+
+### Unreleased
+
+#### Removed
+
+- Skill `account-takeover` and command `/account-audit` — the shipped MCP
+  server has no account-takeover domain, and the ATO tools they
+  documented never existed.
+- Skill `vendors` and command `/vendor-risk` — there is no VendorBase
+  domain, and the vendor tools they documented never existed.
+- Documented case-action and case-actions tools. Cases are read-only;
+  nothing changes a case's state, assigns it, or closes it. That happens
+  in the Abnormal portal.
+- Documented threat-level action, remediate, and unremediate tools. There
+  is no threat-level action tool; remediation is per message, through
+  `abnormal_remediation_manage`.
+- A documented standalone message-headers tool. Headers are returned
+  inline by `abnormal_messages_get`, in the same payload as URLs,
+  attachments and the AI analysis.
+
+#### Fixed
+
+- Tool names across skills, agents, commands and docs now match the
+  shipped server: `abnormal_threats_list`, `abnormal_threats_get`,
+  `abnormal_messages_list`, `abnormal_messages_get`,
+  `abnormal_cases_list`, `abnormal_abuse_list`,
+  `abnormal_remediation_manage`.
+- Remediation documented as per-message (`threatId` + `messageId`)
+  rather than per-threat, including the partial-failure hazard of the
+  required N-call loop.
+- `abnormal_cases_get` documented as taking a **numeric** `caseId`,
+  distinct from the UUID `threatId`.
 
 ### 0.1.0 (2026-03-27)
 

@@ -20,10 +20,10 @@ Abnormal Security's Abuse Mailbox automatically processes user-reported suspicio
 
 ## Anti-triggers
 
-- **A `caseId` that came from an account-takeover alert** — ATO cases are
-  a separate object with their own IDs and remediation set, and both
-  skills call the identifier `caseId`; use
-  `Abnormal Security Account Takeover`.
+- **A compromised mailbox rather than a reported email** — sign-in
+  anomalies, new inbox rules, and session revocation have no surface on
+  this server at all; investigate identity in the M365 tenant, use
+  `cipp-users`.
 - **Threats Abnormal found on its own** — no user reported them, so no
   case exists; use `Abnormal Security Threats`.
 - **User-reported phishing in a different platform** — IRONSCALES runs
@@ -71,7 +71,7 @@ User Reports Email
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `caseId` | string | Unique case identifier |
+| `caseId` | number | Unique case identifier — numeric, unlike `threatId` |
 | `severity` | string | Severity level of the case |
 | `affectedEmployee` | string | Email address of the user who reported |
 | `firstReported` | datetime | When the case was first reported |
@@ -106,21 +106,41 @@ User Reports Email
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `abnormal_cases_list` | List abuse mailbox cases | `pageSize`, `pageNumber`, `filter`, `fromDate`, `toDate` |
-| `abnormal_cases_get` | Get detailed case by ID | `caseId` |
-| `abnormal_cases_actions` | Get available actions for a case | `caseId` |
-| `abnormal_cases_action` | Take action on a case | `caseId`, `action` |
+**The cases domain is read-only.** Two tools, both GETs. There is no tool
+that changes a case's state, assigns it to an analyst, dismisses it, or
+closes it. Case state changes happen in the Abnormal portal, not through
+this server — an agent can read and reason about a case, then it has to
+hand the actual disposition to a human in the UI.
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `abnormal_cases_list` | List cases | `pageSize` (default 100, max 100), `pageNumber` (1-indexed), `filter` (OData string) |
+| `abnormal_cases_get` | Get one case by ID | `caseId` (required, **number**) |
+
+There is no date-range parameter. Narrow by time through the OData
+`filter` string: `createdTime gt 2026-03-01T00:00:00Z`.
+
+### ID vocabulary
+
+`caseId` is a **number** — `12345`, not `"12345"`. The neighbouring
+`threatId` used by `abnormal_threats_get` is a **UUID string**. Both are
+called "the ID" in conversation and they are not interchangeable; a
+threat UUID passed to `abnormal_cases_get` is a type error, not a lookup
+miss.
+
+The one action this server *can* take on the mail behind a case is
+message remediation, and it is reached through the threat, not the case:
+`abnormal_remediation_manage` needs a `threatId` and a `messageId`, and a
+`caseId` is neither.
 
 ### Tool Usage Examples
 
-**List open cases:**
+**List cases from this month:**
 ```json
 {
   "tool": "abnormal_cases_list",
   "parameters": {
-    "filter": "overallStatus eq 'Open'",
+    "filter": "createdTime gt 2026-03-01T00:00:00Z",
     "pageSize": 25
   }
 }
@@ -131,18 +151,7 @@ User Reports Email
 {
   "tool": "abnormal_cases_get",
   "parameters": {
-    "caseId": "12345"
-  }
-}
-```
-
-**Remediate a case:**
-```json
-{
-  "tool": "abnormal_cases_action",
-  "parameters": {
-    "caseId": "12345",
-    "action": "REMEDIATE"
+    "caseId": 12345
   }
 }
 ```
@@ -158,15 +167,20 @@ User Reports Email
    - If Spam: dismiss or move to junk
    - If Safe: dismiss and respond to reporter
    - If No Action Needed: dismiss (likely phishing simulation)
-4. **Take action** - Remediate, dismiss, or mark not spam
-5. **Close case** - Case moves to Done status after action
+4. **Decide** - produce the disposition and the evidence for it
+5. **Hand off** - the case's own state (Open → Acknowledged → Done) can
+   only be changed in the Abnormal portal. If mail still needs pulling
+   from inboxes, that runs through the threat:
+   `abnormal_messages_list` then `abnormal_remediation_manage` per
+   message.
 
 ### Bulk Triage Workflow
 
 1. **Filter cases by judgment** - Start with cases judged as Malicious
-2. **Batch remediate** - Remediate all confirmed Malicious cases
-3. **Review Suspicious** - Manually review cases without clear judgment
-4. **Auto-dismiss Safe/Spam** - Close remaining low-risk cases
+2. **Review Suspicious** - Manually review cases without clear judgment
+3. **Batch the read, not the write** - paginate `abnormal_cases_list` to
+   build the full picture in one pass. There is no bulk case action to
+   follow it with; dispositions are entered in the portal one at a time.
 
 ### Escalation Criteria
 
@@ -177,13 +191,21 @@ Escalate a case when:
 - Credentials may have been entered on a phishing page
 - The sender is a known vendor or partner (supply chain risk)
 
-## Case Actions
+## Case Actions — where they actually happen
 
-| Action | Description | When to Use |
-|--------|-------------|-------------|
-| `REMEDIATE` | Remove the email from all recipients' inboxes | Confirmed malicious email |
-| `MARK_NOT_SPAM` | Release email back to inbox | False positive, legitimate email |
-| `DISMISS` | Close case without action | Safe email, phishing simulation, spam |
+The dispositions below are portal actions. None of them is an MCP tool,
+and none can be driven from this server.
+
+| Disposition | Effect | Where |
+|-------------|--------|-------|
+| Remediate | Remove the email from recipients' inboxes | Abnormal portal — or, per message, via `abnormal_remediation_manage` on the underlying threat |
+| Mark not spam | Release email back to inbox | Abnormal portal only |
+| Dismiss | Close case without action | Abnormal portal only |
+
+The gap matters for automation design: an agent can fully triage the
+queue from `abnormal_cases_list` and `abnormal_cases_get`, but the case
+stays Open until a human touches the portal. Write the handoff into the
+workflow rather than assuming the agent closed anything.
 
 ## Error Handling
 
@@ -194,15 +216,14 @@ Escalate a case when:
 | 400 | Invalid filter | Check OData filter syntax |
 | 401 | Unauthorized | Check API token |
 | 403 | Insufficient permissions | Token needs abuse mailbox scope |
-| 404 | Case not found | Verify case ID |
-| 409 | Case already actioned | Case was already remediated/dismissed |
+| 404 | Case not found | Verify the case ID — and that you passed a numeric `caseId`, not a threat UUID |
 | 429 | Rate limited | Wait and retry |
 
 ## Best Practices
 
 1. **Triage daily** - Review abuse mailbox cases at least once per day
 2. **Trust the AI judgment** - Abnormal's accuracy is high; use it to prioritize
-3. **Remediate org-wide** - When a threat is confirmed, remediate for all recipients
+3. **Remediate every message, not "the case"** - remediation is per message on the underlying threat; loop `abnormal_remediation_manage` and confirm each one, or you will leave the campaign half-pulled
 4. **Respond to reporters** - Let users know their report was reviewed
 5. **Track phishing simulation reports** - Monitor security awareness training effectiveness
 6. **Correlate with threats** - Check if reported emails match known threat campaigns

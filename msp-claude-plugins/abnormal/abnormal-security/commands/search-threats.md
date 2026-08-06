@@ -105,9 +105,9 @@ AI Insights (threat 184def76):
 - First-time sender from this domain
 
 Quick Actions:
-- View threat details: Use abnormal_threats_get with the threat ID
+- View threat details: Use abnormal_threats_get with the threat UUID
 - Triage all threats: /threat-triage
-- Check vendor risk: /vendor-risk --vendor "c0mpany.com"
+- Enumerate the threat's messages: Use abnormal_messages_list
 ```
 
 ## Filter Reference
@@ -159,5 +159,3 @@ Retrying in 60 seconds...
 
 - `/threat-triage` - Triage recent threats by severity
 - `/case-review` - Review abuse mailbox cases
-- `/vendor-risk` - Check vendor risk scores
-- `/account-audit` - Audit for account takeover

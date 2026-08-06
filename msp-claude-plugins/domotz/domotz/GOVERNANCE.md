@@ -165,7 +165,8 @@ self-approve deletes.**
   mechanism Conduit offers to separate them.
 - For a human-driven outlet control: name an approver per invocation and
   confirm the specific outlet with the customer before the call. Conduit
-  will not ask.
+  will not ask. The `power` skill carries the pre-flight checks that
+  belong in front of a mains interruption.
 
 ## What it cannot reach
 
@@ -214,12 +215,21 @@ self-approve deletes.**
 - **Every device query needs an agent ID.** Omitting it does not
   return everything — it fails, or worse, an agent picks an arbitrary
   site and reports one customer's devices under another's name.
-- **Documented tool names lag the server, in the skills.** The tool table
-  above matches the 21 tools the server registers today. Some skills in
-  this plugin still describe tools under older names (for example
-  `domotz_list_devices` or `domotz_scan_network`) that the current server
-  does not expose — tracked as issue #178. Prefer the table when the two
-  disagree.
+- **Several capabilities the skills used to describe do not exist.** The
+  plugin's skills previously documented a Domotz Eyes sensor surface, an
+  on-demand network scan trigger, a speed test, a TCP port list, a
+  device search, and a fired-alert feed. None of these is registered by
+  the server, and all have been removed rather than remapped. Domotz's
+  own API does use an `/eye/snmp` path, but the server surfaces only the
+  SNMP-sensor slice of it, as `domotz_metrics_snmp_sensors_list` and
+  `domotz_metrics_sensor_history` — there is no TCP/HTTP synthetic-probe
+  surface here. The tool table above is the authority.
+- **Alert tools return configuration, never a fired alert.**
+  `domotz_alerts_profiles_list` and `domotz_alerts_device_list` describe
+  what *would* notify. Nothing in this integration answers "what is
+  alerting right now". Device state from `domotz_devices_list` is a
+  reasonable proxy for site health, but presenting it as alert state is
+  a misrepresentation, not a shortcut.
 - **A denial at tier `read` is expected, not a misconfiguration.** Only
   three Domotz tools are classified, so most calls a `read`-tier agent
   makes will be refused. Check `conduit__my_access` before assuming a

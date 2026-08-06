@@ -15,7 +15,11 @@ when_to_use: >-
 
 ## Overview
 
-The Abnormal Security REST API provides programmatic access to threat detection, abuse mailbox cases, account takeover protection, vendor risk assessment, and message analysis. This skill covers authentication, request patterns, pagination, filtering, rate limiting, error handling, and performance optimization.
+The Abnormal Security REST API provides programmatic access to threat detection, cases, abuse mailbox submissions, message analysis, and per-message remediation. This skill covers authentication, request patterns, pagination, filtering, rate limiting, error handling, and performance optimization.
+
+The paths below are the ones this plugin's MCP server actually calls. The
+vendor's wider API surface is out of scope here — if a path is not
+listed, no tool reaches it.
 
 ## Authentication
 
@@ -67,15 +71,20 @@ The gateway forwards this header to the Abnormal Security MCP server, which uses
 
 ### API Paths
 
-| Service | Path | Description |
-|---------|------|-------------|
-| **Threats** | `/v1/threats` | Threat detection data |
-| **Threat Details** | `/v1/threats/{threatId}` | Individual threat details |
-| **Cases** | `/v1/cases` | Abuse mailbox cases |
-| **Case Details** | `/v1/cases/{caseId}` | Individual case details |
-| **Account Takeover** | `/v1/account-takeover/cases` | ATO cases |
-| **Vendors** | `/v1/vendors` | VendorBase vendor risk |
-| **Messages** | `/v1/threats/{threatId}/messages` | Messages for a threat |
+| Service | Path | Backing tool |
+|---------|------|--------------|
+| **Threats** | `/v1/threats` | `abnormal_threats_list` |
+| **Threat Details** | `/v1/threats/{threatId}` | `abnormal_threats_get`, `abnormal_messages_list` |
+| **Cases** | `/v1/cases` | `abnormal_cases_list` |
+| **Case Details** | `/v1/cases/{caseId}` | `abnormal_cases_get` |
+| **Messages** | `/v1/threats/{threatId}/messages/{messageId}` | `abnormal_messages_get` |
+| **Remediation** | `/v1/threats/{threatId}/messages/{messageId}/remediation` | `abnormal_remediation_manage` — GET for `status`, POST for `remediate`/`unremediate` |
+| **Abuse Mailbox** | `/v1/abuse_mailbox` | `abnormal_abuse_list` |
+
+`{threatId}` is a UUID string; `{caseId}` is a number. They are the two
+identifier vocabularies in this API and they look alike in prose — a
+threat UUID on the `/cases/` path is a type error, not a 404 you should
+retry.
 
 ## Request Patterns
 
@@ -115,29 +124,15 @@ Accept: application/json
 
 ## Pagination
 
-### Cursor-Based Pagination
-
-Abnormal Security uses page-number-based pagination:
-
-```http
-GET /v1/threats?pageSize=25&pageNumber=1
-```
-
-**Response:**
-```json
-{
-  "threats": [...],
-  "pageNumber": 1,
-  "total": 142,
-  "nextPageNumber": 2
-}
-```
+Page-number based, not cursor based — `GET /v1/threats?pageSize=25&pageNumber=1`.
+Responses carry `nextPageNumber` (absent on the last page) and `total`,
+as in the response example above.
 
 ### Pagination Parameters
 
 | Parameter | Type | Description | Default | Maximum |
 |-----------|------|-------------|---------|---------|
-| `pageSize` | int | Results per page | 25 | 100 |
+| `pageSize` | int | Results per page | 100 at the tool layer | 100 |
 | `pageNumber` | int | Page number (1-based) | 1 | - |
 
 ### Pagination Pattern
@@ -176,7 +171,14 @@ async function fetchAllPages(endpoint, params = {}) {
 
 ## OData Filtering
 
-Abnormal Security supports OData-style filter expressions on list endpoints:
+Abnormal Security supports OData-style filter expressions on list endpoints.
+
+All three list tools — `abnormal_threats_list`, `abnormal_cases_list`,
+`abnormal_abuse_list` — expose this as one `filter` string parameter.
+There is no `fromDate`/`toDate` pair anywhere; date scoping goes inside
+the filter string, and the time field differs per endpoint:
+`receivedTime` for threats, `createdTime` for cases,
+`firstReportedTime` for abuse mailbox.
 
 ### Filter Syntax
 
@@ -190,8 +192,8 @@ filter=<field> <operator> '<value>'
 |----------|-------------|---------|
 | `eq` | Equals | `attackType eq 'BEC'` |
 | `ne` | Not equals | `status ne 'Closed'` |
-| `gt` | Greater than | `riskScore gt 70` |
-| `lt` | Less than | `riskScore lt 30` |
+| `gt` | Greater than | `receivedTime gt 2026-03-01T00:00:00Z` |
+| `lt` | Less than | `createdTime lt 2026-03-27T00:00:00Z` |
 | `ge` | Greater than or equal | `sentTime ge '2026-03-01T00:00:00Z'` |
 | `le` | Less than or equal | `sentTime le '2026-03-27T00:00:00Z'` |
 | `and` | Logical AND | `attackType eq 'BEC' and severity eq 'Critical'` |
@@ -297,28 +299,26 @@ async function requestWithRetry(url, options, maxRetries = 5) {
 
 ### Minimize API Calls
 
-```javascript
-// Good: Use filters to narrow results server-side
-const threats = await client.threats.list({
-  filter: "attackType eq 'BEC' and sentTime ge '2026-03-20T00:00:00Z'",
-  pageSize: 100
-});
+Push the narrowing into the `filter` argument of `abnormal_threats_list`,
+`abnormal_cases_list`, and `abnormal_abuse_list` rather than pulling a
+broad page and discarding most of it client-side. Each of the three takes
+an OData `filter` plus `pageSize`/`pageNumber`.
 
-// Avoid: Fetching all threats and filtering client-side
-const allThreats = await client.threats.list({ pageSize: 100 });
-const becThreats = allThreats.filter(t => t.attackType === 'BEC');
-```
+### What can and cannot run in parallel
 
-### Parallelize Independent Requests
+`abnormal_threats_list`, `abnormal_cases_list`, and `abnormal_abuse_list`
+are independent top-level collections and can be issued concurrently.
 
-```javascript
-// Good: Independent endpoints in parallel
-const [threats, cases, atoCases] = await Promise.all([
-  client.threats.list({ pageSize: 25 }),
-  client.cases.list({ pageSize: 25 }),
-  client.ato.list({ pageSize: 25 })
-]);
-```
+`abnormal_messages_list`, `abnormal_messages_get`, and
+`abnormal_remediation_manage` are **not** independent — all three are
+nested under a threat and need a `threatId` you obtained first, so they
+serialise behind a `/threats` call. Remediating a campaign is therefore
+inherently sequential: list the threat's messages, then one
+`abnormal_remediation_manage` call per message. At 60 requests/minute a
+wide campaign will hit the rate limit mid-loop, so record which message
+IDs succeeded rather than assuming the loop ran to completion — a
+half-remediated campaign looks identical to a finished one from the
+outside.
 
 ### Use Appropriate Page Sizes
 
@@ -333,11 +333,10 @@ const [threats, cases, atoCases] = await Promise.all([
 3. **Paginate all list calls** - Never assume results fit in one page
 4. **Monitor rate limits** - Track usage to avoid throttling
 5. **Use ISO 8601 dates** - Always include timezone (Z suffix for UTC)
+6. **Track per-message remediation outcomes** - Partial failure is silent
 
 ## Related Skills
 
 - [Abnormal Threats](../threats/SKILL.md) - Threat detection and analysis
 - [Abnormal Cases](../cases/SKILL.md) - Abuse mailbox case management
 - [Abnormal Messages](../messages/SKILL.md) - Message analysis
-- [Abnormal Vendors](../vendors/SKILL.md) - Vendor risk assessment
-- [Abnormal Account Takeover](../account-takeover/SKILL.md) - Account takeover detection

@@ -6,12 +6,16 @@ Claude Code plugin for the Domotz network monitoring and management platform.
 
 This plugin provides Claude with deep knowledge of Domotz, enabling:
 
-- **Agent & Site Management** - Monitor Domotz agents/collectors, manage sites and network probes
-- **Device Inventory** - Discover, list, and inspect devices across monitored networks
-- **Alert Management** - Configure alert profiles, review triggers, and manage notifications
-- **Network Monitoring** - Network scanning, SNMP polling, port monitoring, speed tests
-- **Domotz Eyes** - TCP/HTTP sensors, custom monitoring checks, and synthetic tests
-- **API Integration** - Domotz Public API patterns, authentication, and pagination
+- **Agent & Site Management** - Monitor Domotz agents/collectors and site health
+- **Device Inventory** - List and inspect devices, uptime, and online/offline history across monitored networks
+- **Alert Coverage** - Read alert profiles and per-device bindings to audit monitoring coverage
+- **Network Observation** - Topology, IP conflicts, collector interfaces, and SNMP metrics with history
+- **Power Control** - Read PDU/smart-outlet state and switch outlets on, off, or cycle — the one destructive tool in this integration
+- **API Integration** - Domotz Public API patterns, authentication, and error handling
+
+The Domotz MCP server is read-only apart from outlet power control. It
+cannot trigger a network scan, run a speed test, probe TCP ports, query
+fired alerts, or change any Domotz configuration.
 
 ## Prerequisites
 
@@ -78,21 +82,19 @@ export DOMOTZ_REGION="us-east-1"
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | Authentication, API structure, pagination, rate limiting, error handling |
-| `agents` | Domotz agents/collectors, sites, network probes, and agent health |
-| `devices` | Device inventory, discovery, status, and network topology |
-| `alerts` | Alert profiles, triggers, notifications, and alert management |
-| `network` | Network scanning, SNMP monitoring, port checks, speed tests |
-| `eyes` | Domotz Eyes sensors, TCP/HTTP checks, and custom monitoring |
+| `api-patterns` | Authentication, the 21-tool catalog, agent-scoped calls, rate limiting, error handling |
+| `agents` | Domotz agents/collectors, sites, and collector health |
+| `devices` | Device inventory, status, uptime, event history, and inventory metadata |
+| `alerts` | Alert profiles and per-device bindings — configuration only, not fired alerts |
+| `network` | Topology, IP conflicts, collector interfaces, and SNMP variables and sensors |
+| `power` | PDU/smart-outlet state and outlet control, with its approval discipline |
 
 ## Available Commands
 
 | Command | Description |
 |---------|-------------|
 | `/device-lookup` | Find a device by name, IP address, or MAC address |
-| `/network-scan` | Scan a network for devices |
-| `/alert-status` | Check current alerts across agents |
-| `/site-overview` | Overview of a site's network health |
+| `/site-overview` | Overview of a site's device health and network faults |
 | `/device-inventory` | List all devices at a site |
 
 ## Quick Start
@@ -101,18 +103,6 @@ export DOMOTZ_REGION="us-east-1"
 
 ```
 /device-lookup --query "192.168.1.1"
-```
-
-### Scan a Network
-
-```
-/network-scan --agent_id "12345"
-```
-
-### Check Alerts
-
-```
-/alert-status
 ```
 
 ### Site Health Overview
@@ -163,8 +153,8 @@ If you see unexpected errors or empty responses:
 ### Rate Limits
 
 Domotz enforces API rate limits:
-1. Space out requests when iterating over large device inventories
-2. Use pagination to limit result sizes
+1. Space out requests when iterating over agents — every device call needs an `agent_id`, so a fleet report is one call per site
+2. No tool accepts page/limit arguments; scope by `agent_id` rather than trying to shrink a response
 3. If rate limited (HTTP 429), wait before retrying
 
 ### Connection Issues
@@ -186,6 +176,16 @@ See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
 All contributions require a PRD in the `prd/` directory before implementation.
 
 ## Changelog
+
+### 0.2.6
+
+- Rewrote every skill and command against the tool names the server
+  actually registers
+- Removed the `eyes` skill and the `/network-scan` and `/alert-status`
+  commands — the Eyes sensor surface, the scan trigger, and the
+  fired-alert feed do not exist on this server
+- Added the `power` skill covering `domotz_power_outlets_list` and
+  `domotz_power_outlet_control`, which no skill previously mentioned
 
 ### 0.1.0 (2026-03-27)
 
