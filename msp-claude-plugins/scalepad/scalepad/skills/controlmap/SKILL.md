@@ -44,7 +44,7 @@ arguments.
 - **Backup evidence** — proving backups run is `scalepad-backup-radar`
   or the `backup-pack`; attach the result here as evidence afterwards.
 
-## API Tools (~100; the high-value subset)
+## API Tools (98 total — 40 read, 58 write; the high-value subset below, full list in [references/tool-inventory.md](../../references/tool-inventory.md))
 
 ### Health & Reports
 

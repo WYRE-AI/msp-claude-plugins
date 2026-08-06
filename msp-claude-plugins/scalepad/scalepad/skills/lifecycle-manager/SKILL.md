@@ -44,7 +44,7 @@ stack, and each pair is a different object:
   skill is the ScalePad tool calls that execute it.
 - **Quoting the refresh you roadmapped** — use `scalepad-quoter`.
 
-## API Tools (~190; the high-value subset)
+## API Tools (193 total — 83 read, 110 write; the high-value subset below, full list in [references/tool-inventory.md](../../references/tool-inventory.md))
 
 ### Clients & Contacts
 

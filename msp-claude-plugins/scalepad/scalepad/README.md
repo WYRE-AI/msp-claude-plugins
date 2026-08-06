@@ -55,18 +55,32 @@ Product endpoints return HTTP 402 when the account lacks an active subscription 
 
 ## Tools
 
-Provided by the ScalePad MCP server through the WYRE MCP Gateway. All tools are
-exposed upfront; `scalepad_navigate` is a discovery aid that lists a product
-domain's tools, and `scalepad_status` reports credential status and available
-domains.
+**381 tools**, provided by the ScalePad MCP server through the WYRE MCP Gateway.
+All are exposed upfront; `scalepad_navigate` is a discovery aid that lists a
+product domain's tools, and `scalepad_status` reports credential status and
+available domains.
 
-| Domain | Prefix | Tools | Notes |
-|--------|--------|-------|-------|
-| Core | `scalepad_core_*` | 24 | Read-only, US-only |
-| Lifecycle Manager | `scalepad_lm_*` | ~190 | Full CRUD over engagement/roadmap workflows |
-| ControlMap | `scalepad_cm_*` | ~100 | Compliance CRUD, regions us/eu/ca/au |
-| Backup Radar | `scalepad_br_*` | 3 | Read-only, regions us/eu |
-| Quoter | `scalepad_quoter_*` | ~60 | Quotes + catalog CRUD |
+| Domain | Prefix | Tools | Read | Write | Notes |
+|--------|--------|-------|------|-------|-------|
+| Core | `scalepad_core_*` | 24 | 24 | 0 | Read-only, US-only |
+| Lifecycle Manager | `scalepad_lm_*` | 193 | 83 | 110 | Full CRUD over engagement/roadmap workflows |
+| ControlMap | `scalepad_cm_*` | 98 | 40 | 58 | Compliance CRUD, regions us/eu/ca/au |
+| Backup Radar | `scalepad_br_*` | 3 | 3 | 0 | Read-only, regions us/eu |
+| Quoter | `scalepad_quoter_*` | 61 | 27 | 34 | Quotes + catalog CRUD |
+| Discovery | `scalepad_navigate`, `scalepad_status` | 2 | 2 | 0 | Local helpers, no ScalePad call |
+
+The skills above cover the high-value subset in workflow terms.
+**[references/tool-inventory.md](references/tool-inventory.md) is the complete
+list** — every tool name with its read/write classification, the permission
+tier the gateway enforces, and the HTTP verb and path it resolves to. Use it to
+build a per-tool allowlist or to check whether a capability exists before
+assuming it does.
+
+Three tools mint credentials and are gated at `admin`:
+`scalepad_quoter_auth_authorize`, `scalepad_quoter_auth_refresh`, and
+`scalepad_lm_enrollment_tokens_create`. The first two carry no destructive
+annotation from the server despite minting OAuth tokens against a different
+host — see [GOVERNANCE.md](GOVERNANCE.md#credential-minting-tools).
 
 ## License
 
