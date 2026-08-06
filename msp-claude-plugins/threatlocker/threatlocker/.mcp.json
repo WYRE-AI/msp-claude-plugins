@@ -2,7 +2,7 @@
   "mcpServers": {
     "threatlocker": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/threatlocker/mcp",
+      "url": "https://conduit.wyre.ai/v1/threatlocker/mcp",
       "headers": {
         "X-Threatlocker-Api-Key": "${THREATLOCKER_API_KEY}",
         "X-Threatlocker-Organization-Id": "${THREATLOCKER_ORGANIZATION_ID}"

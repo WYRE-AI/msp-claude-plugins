@@ -48,10 +48,10 @@ These capabilities exist in the Inforcer product UI but are **not exposed throug
 /plugin install inforcer
 ```
 
-The plugin connects to the Inforcer MCP server through the Wyre MCP Gateway:
+The plugin connects to the Inforcer MCP server through Conduit:
 
 ```
-https://mcp.wyre.ai/v1/inforcer/mcp
+https://conduit.wyre.ai/v1/inforcer/mcp
 ```
 
 ## Configuration
@@ -76,12 +76,12 @@ Inforcer's tenant-scoped API paths take an **integer Client Tenant ID** — **no
 
 The MCP server resolves friendly names, DNS domains, and Azure AD GUIDs to the integer Client Tenant ID for you, so you can refer to a tenant naturally. But the underlying path is the integer id. If a tenant-scoped call returns nothing, confirm you are passing a value that resolves to the integer Client Tenant ID rather than a GUID or domain.
 
-## Wyre MCP Gateway
+## Conduit
 
-If you connect through the [Wyre MCP Gateway](https://mcp.wyre.ai), Inforcer tools are routed and authenticated via your gateway session using the `X-Inforcer-Region` and `X-Inforcer-Api-Key` headers configured above. See the `wyre-gateway` plugin for setup.
+If you connect through [Conduit](https://conduit.wyre.ai), Inforcer tools are routed and authenticated via your gateway session using the `X-Inforcer-Region` and `X-Inforcer-Api-Key` headers configured above. See the `wyre-gateway` plugin for setup.
 
 ## Resources
 
 - Inforcer (vendor): https://www.inforcer.com
 - Community API project (the source of this plugin's API knowledge): https://github.com/royklo/InforcerCommunity
-- Wyre MCP Gateway: https://mcp.wyre.ai
+- Conduit: https://conduit.wyre.ai

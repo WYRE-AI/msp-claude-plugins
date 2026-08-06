@@ -23,7 +23,7 @@ Install via the [MSP Claude Plugins marketplace](https://github.com/wyre-technol
 /plugin install threatlocker
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/threatlocker/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/threatlocker/mcp`.
 
 ## Configuration
 

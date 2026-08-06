@@ -16,7 +16,7 @@ Claude Code plugin for [TimeZest](https://timezest.com) - PSA-coupled customer s
 /plugin install timezest
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/timezest/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/timezest/mcp`.
 
 ## Configuration
 

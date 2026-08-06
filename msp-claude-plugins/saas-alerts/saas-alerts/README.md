@@ -20,7 +20,7 @@ Claude Code plugin for [SaaS Alerts](https://saasalerts.com) — SaaS security m
 /plugin install saas-alerts
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/saas-alerts/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/saas-alerts/mcp`.
 
 ## Configuration
 

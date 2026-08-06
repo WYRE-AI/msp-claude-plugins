@@ -2,7 +2,7 @@
   "mcpServers": {
     "auvik": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/auvik/mcp",
+      "url": "https://conduit.wyre.ai/v1/auvik/mcp",
       "headers": {
         "X-Auvik-Username": "${AUVIK_USERNAME}",
         "X-Auvik-Api-Key": "${AUVIK_API_KEY}",

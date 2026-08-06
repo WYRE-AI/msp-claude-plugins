@@ -18,7 +18,7 @@ Claude Code plugin for [ImmyBot](https://immy.bot) - desired-state Windows softw
 /plugin install immybot
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/immybot/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/immybot/mcp`.
 
 ## Configuration
 

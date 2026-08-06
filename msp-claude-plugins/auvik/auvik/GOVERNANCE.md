@@ -5,17 +5,11 @@ with, endorsed by, or sponsored by the vendor.
 
 ## What it connects as
 
-This plugin does not hold credentials. It reaches Auvik through a WYRE
-gateway, which brokers authentication centrally and scopes every call to
-the tenant the operator is authorised for.
-
-**Read the endpoint before trusting the rest of this document.** This
-plugin's `.mcp.json` points at `https://mcp.wyre.ai/v1/auvik/mcp` — the
-older `wyre-technology/mcp-gateway` system. Every tier claim below is
-derived from **Conduit** (`https://conduit.wyre.ai/v1/mcp`), which is a
-different codebase that has drifted from it. Auvik is one of nine vendor
-plugins in this state; see `wyre-gateway/GOVERNANCE.md`, *Which system
-this describes*. Reconciling the endpoint is tracked separately.
+This plugin does not hold credentials. It reaches Auvik through
+**Conduit** (`https://conduit.wyre.ai/v1/auvik/mcp`), which brokers
+authentication centrally and scopes every call to the tenant the
+operator is authorised for. Every tier claim below is derived from
+Conduit's source, and this plugin's `.mcp.json` points at it.
 
 Consequences worth stating plainly:
 

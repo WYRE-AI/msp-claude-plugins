@@ -4,7 +4,7 @@ Claude Code plugin for the Auvik cloud-based network monitoring platform.
 
 ## Overview
 
-This plugin gives Claude working knowledge of Auvik so MSP analysts can interrogate device inventories, triage alerts, audit network configurations, and plan capacity without leaving the chat. It talks to Auvik through the [WYRE MCP Gateway](https://mcp.wyre.ai), so no local SDK or proxy is required.
+This plugin gives Claude working knowledge of Auvik so MSP analysts can interrogate device inventories, triage alerts, audit network configurations, and plan capacity without leaving the chat. It talks to Auvik through [Conduit](https://conduit.wyre.ai), so no local SDK or proxy is required.
 
 ## What Is Auvik
 
@@ -27,7 +27,7 @@ Install via the [MSP Claude Plugins marketplace](https://github.com/wyre-technol
 /plugin install auvik
 ```
 
-The plugin connects through the [WYRE MCP Gateway](https://mcp.wyre.ai) at `https://mcp.wyre.ai/v1/auvik/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/auvik/mcp`.
 
 ## Configuration
 
