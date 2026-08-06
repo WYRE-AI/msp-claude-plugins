@@ -1,5 +1,5 @@
 ---
-name: "ninjaone-devices"
+name: "NinjaOne Devices"
 description: >
   NinjaOne device management: device details and updates, Windows service
   control, inventory, maintenance windows, reboot modes, and health-check

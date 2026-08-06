@@ -1,5 +1,5 @@
 ---
-name: "connectwise-manage-tickets"
+name: "ConnectWise Manage Tickets"
 description: >
   ConnectWise PSA ticket management: ticket fields, service boards, statuses,
   priorities, SLAs, ticket notes, and workflow automation. Essential for MSP

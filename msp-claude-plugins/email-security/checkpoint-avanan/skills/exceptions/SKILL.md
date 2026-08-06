@@ -36,8 +36,9 @@ is adding narrow, justified entries and auditing the ones that accumulated.
 - **Microsoft 365 tenant policy** — conditional access, transport rules and
   security baselines are not Harmony Email exceptions. Use `cipp-standards`
   or `cipp-mailboxes`.
-- **Another vendor's lists** — SpamTitan is `spamtitan-lists`, Mimecast
-  managed senders are `mimecast-policies`.
+- **Another vendor's lists** — SpamTitan is `spamtitan-lists`. The `mimecast`
+  plugin has no managed-sender skill; it covers message tracking, delivery
+  queues and threat intelligence only.
 
 ## The four tools
 

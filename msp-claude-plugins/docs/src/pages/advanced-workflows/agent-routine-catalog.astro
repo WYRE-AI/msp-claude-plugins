@@ -69,7 +69,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>compliance-reporter</td><td>blumira</td><td>✅</td><td>blumira</td><td>monthly</td><td>SIEM compliance evidence packages; reporter.</td></tr>
       <tr><td>security-posture-reviewer</td><td>cipp</td><td>✅</td><td>cipp</td><td>monthly</td><td>M365 portfolio posture sweep; auditor. CIPP posture is now partly covered by the Compliance Drift Reporter.</td></tr>
       <tr><td>automation-health-checker</td><td>connectwise-automate</td><td>✅</td><td>connectwise-automate</td><td>weekly</td><td>RMM environment health audit.</td></tr>
-      <tr><td>project-tracker</td><td>connectwise-manage</td><td>✅</td><td>connectwise-manage</td><td>weekly</td><td>Open-project health review; reporter.</td></tr>
+      <tr><td>project-tracker</td><td>connectwise-psa</td><td>✅</td><td>connectwise-manage</td><td>weekly</td><td>Open-project health review; reporter.</td></tr>
       <tr><td>exception-hygiene-auditor</td><td>checkpoint-avanan</td><td>✅</td><td>checkpoint-avanan</td><td>monthly</td><td>Reviews standing allow/block-list exceptions — scope, justification, age, and what each one suppresses. Replaces tenant-policy-auditor: Harmony Email exposes no policy tools, so a policy-completeness audit was never possible.</td></tr>
       <tr><td>security-awareness-analyst</td><td>knowbe4</td><td>✅</td><td>knowbe4</td><td>monthly</td><td>Phishing-sim and training results analysis.</td></tr>
       <tr><td>email-security-auditor</td><td>proofpoint</td><td>✅</td><td>proofpoint</td><td>monthly</td><td>Per-org email security posture report.</td></tr>
@@ -95,14 +95,14 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>contract-tracker</td><td>pandadoc</td><td>✅</td><td>pandadoc</td><td>weekly</td><td>✅ built — batch 2 (Pending-Proposal Tracker).</td></tr>
       <tr><td>license-optimizer</td><td>pax8</td><td>✅</td><td>pax8</td><td>monthly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with renewal-calendar into one guide.</td></tr>
       <tr><td>renewal-calendar</td><td>pax8</td><td>✅</td><td>pax8</td><td>weekly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with license-optimizer into one guide.</td></tr>
-      <tr><td>billing-reconciler</td><td>quickbooks</td><td>✅</td><td>quickbooks</td><td>weekly</td><td>✅ built — batch 1 (Billing Reconciler).</td></tr>
-      <tr><td>profitability-reporter</td><td>quickbooks</td><td>✅</td><td>quickbooks</td><td>monthly</td><td>✅ built — batch 2 (Client Profitability Reporter); revenue-ranked from QBO (true cost-allocated margin lives in the service-profitability-auditor portfolio agent).</td></tr>
+      <tr><td>billing-reconciler</td><td>quickbooks-online</td><td>✅</td><td>quickbooks</td><td>weekly</td><td>✅ built — batch 1 (Billing Reconciler).</td></tr>
+      <tr><td>profitability-reporter</td><td>quickbooks-online</td><td>✅</td><td>quickbooks</td><td>monthly</td><td>✅ built — batch 2 (Client Profitability Reporter); revenue-ranked from QBO (true cost-allocated margin lives in the service-profitability-auditor portfolio agent).</td></tr>
       <tr><td>margin-analyzer</td><td>salesbuildr</td><td>✅</td><td>salesbuildr</td><td>weekly</td><td>Quote-margin health analysis; reporter.</td></tr>
       <tr><td>endpoint-hardening-auditor</td><td>sentinelone</td><td>✅</td><td>sentinelone</td><td>weekly</td><td>Endpoint config-hardening audit.</td></tr>
       <tr><td>billing-reconciler</td><td>sherweb</td><td>✅</td><td>sherweb</td><td>monthly</td><td>Distributor billing reconciliation; reporter.</td></tr>
       <tr><td>customer-account-auditor</td><td>sherweb</td><td>✅</td><td>sherweb</td><td>weekly</td><td>Portfolio AR/account-health audit.</td></tr>
-      <tr><td>automation-opportunity-finder</td><td>superops-ai</td><td>✅</td><td>superops-ai</td><td>monthly</td><td>Retrospective ticket-pattern analysis.</td></tr>
-      <tr><td>billing-auditor</td><td>syncro-msp</td><td>✅</td><td>syncro-msp</td><td>weekly</td><td>Billing completeness/accuracy audit.</td></tr>
+      <tr><td>automation-opportunity-finder</td><td>superops</td><td>✅</td><td>superops-ai</td><td>monthly</td><td>Retrospective ticket-pattern analysis.</td></tr>
+      <tr><td>billing-auditor</td><td>syncro</td><td>✅</td><td>syncro-msp</td><td>weekly</td><td>Billing completeness/accuracy audit.</td></tr>
       <tr><td>fleet-health-auditor</td><td>threatlocker</td><td>✅</td><td>threatlocker</td><td>weekly</td><td>Fleet inventory/hygiene report; auditor.</td></tr>
       <tr><td>booking-pipeline-auditor</td><td>timezest</td><td>✅</td><td>timezest</td><td>weekly</td><td>Scheduling-pipeline report; reporter.</td></tr>
       <tr><td>client-360-briefer</td><td>wyre-gateway</td><td>⚠️</td><td>wyre-gateway (multi)</td><td>on-demand</td><td>Per-client briefing; better on-demand than crewed, but read-only and routine-shaped.</td></tr>
@@ -131,13 +131,13 @@ const baseUrl = import.meta.env.BASE_URL;
     <tbody>
       <tr><td>msp-ops-assistant</td><td>atera</td><td>⚠️</td><td>atera</td><td>daily</td><td>Combined alert/ticket triage; narrow to a triage-only routine.</td></tr>
       <tr><td>alert-response-coordinator</td><td>blackpoint</td><td>⚠️</td><td>blackpoint</td><td>hourly</td><td>Ranks the detection queue; routine-fit if it only triages, not escalates autonomously.</td></tr>
-      <tr><td>service-desk-ops</td><td>connectwise-manage</td><td>✅</td><td>connectwise-manage</td><td>hourly</td><td>Queue/SLA review; status transition guards reruns.</td></tr>
+      <tr><td>service-desk-ops</td><td>connectwise-psa</td><td>✅</td><td>connectwise-manage</td><td>hourly</td><td>Queue/SLA review; status transition guards reruns.</td></tr>
       <tr><td>training-enforcer</td><td>knowbe4</td><td>✅</td><td>knowbe4</td><td>weekly</td><td>Flags overdue training, drafts re-enrol campaigns; bounded writes.</td></tr>
       <tr><td>service-desk-ops</td><td>halopsa</td><td>✅</td><td>halopsa</td><td>hourly</td><td>✅ built — batch 2 (Service Desk SLA Triage); idempotent via a per-ticket triage note.</td></tr>
       <tr><td>ticket-dispatcher</td><td>autotask</td><td>✅</td><td>autotask</td><td>hourly</td><td>Autotask queue triage — the canonical archetype-B fit.</td></tr>
       <tr><td>quarantine-release-reviewer</td><td>spamtitan</td><td>⚠️</td><td>spamtitan</td><td>daily</td><td>Quarantine digest fits; releasing mail is a consequential write — keep it digest-only.</td></tr>
-      <tr><td>msp-service-ops</td><td>superops-ai</td><td>⚠️</td><td>superops-ai</td><td>daily</td><td>Combined PSA/RMM review; narrow to a triage-only routine.</td></tr>
-      <tr><td>msp-service-ops</td><td>syncro-msp</td><td>⚠️</td><td>syncro-msp</td><td>daily</td><td>Combined queue/device/billing review; narrow to a triage-only routine.</td></tr>
+      <tr><td>msp-service-ops</td><td>superops</td><td>⚠️</td><td>superops-ai</td><td>daily</td><td>Combined PSA/RMM review; narrow to a triage-only routine.</td></tr>
+      <tr><td>msp-service-ops</td><td>syncro</td><td>⚠️</td><td>syncro-msp</td><td>daily</td><td>Combined queue/device/billing review; narrow to a triage-only routine.</td></tr>
       <tr><td>approval-triage-analyst</td><td>threatlocker</td><td>✅</td><td>threatlocker</td><td>hourly</td><td>Classifies the approval queue; recommends rather than auto-approves.</td></tr>
       <tr><td>incident-war-room-coordinator</td><td>wyre-gateway</td><td>❌</td><td>wyre-gateway (multi)</td><td>n/a</td><td>Triage-shaped but fires on a declared P1 — event-triggered, not scheduled.</td></tr>
     </tbody>
@@ -187,7 +187,7 @@ const baseUrl = import.meta.env.BASE_URL;
     </thead>
     <tbody>
       <tr><td>user-offboarding-runner</td><td>cipp</td><td>❌</td><td>cipp</td><td>n/a</td><td>Full M365 offboarding sequence; consequential, human-driven.</td></tr>
-      <tr><td>procurement-specialist</td><td>connectwise-manage</td><td>❌</td><td>connectwise-manage</td><td>n/a</td><td>Catalog edits and quote assembly; needs human input.</td></tr>
+      <tr><td>procurement-specialist</td><td>connectwise-psa</td><td>❌</td><td>connectwise-manage</td><td>n/a</td><td>Catalog edits and quote assembly; needs human input.</td></tr>
       <tr><td>client-onboarding-validator</td><td>huntress</td><td>⚠️</td><td>huntress</td><td>on-demand</td><td>Mostly validation/reporting; runs per onboarding, so event-triggered not crewed.</td></tr>
       <tr><td>endpoint-remediation-specialist</td><td>immybot</td><td>❌</td><td>immybot</td><td>n/a</td><td>Runs remediation scripts on endpoints; consequential writes.</td></tr>
       <tr><td>software-deployment-orchestrator</td><td>immybot</td><td>❌</td><td>immybot</td><td>n/a</td><td>Plans and executes software rollouts; needs human gating.</td></tr>
