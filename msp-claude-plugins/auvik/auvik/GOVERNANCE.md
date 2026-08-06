@@ -15,10 +15,12 @@ Consequences worth stating plainly:
 
 - No Auvik username or API key is stored on the technician's machine,
   in this repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
-  Auvik is an API-key vendor, not OAuth, so "rotation" means
-  re-submitting the connect form — there is no rotate action and nothing
-  tracks credential age.
+- The org's Auvik credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the
+  connect form, which overwrites the stored credential in place, and
+  nothing tracks its age or prompts you. Auvik is an API-key vendor, not
+  an OAuth one, so there is no automatic token refresh either.
 - Every call carries operator identity, so the audit log answers "who
   dismissed that alert" — Auvik's own audit trail records only the API
   user. The log records *who called what*, never with what arguments.

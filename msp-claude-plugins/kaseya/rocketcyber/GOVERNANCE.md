@@ -12,7 +12,12 @@ operator is authorised for.
 
 - No RocketCyber API key is stored on the technician's machine, in this
   repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's RocketCyber credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the
+  connect form, which overwrites the stored credential in place, and
+  nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who pulled this customer's incident data" — RocketCyber's own log
   records only the provider API key.

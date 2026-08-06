@@ -12,7 +12,12 @@ operator is authorised for.
 
 - No Autotask integration code, API username, or secret is stored on the
   technician's machine, in this repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Autotask credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the connect
+  form, which overwrites the stored credential in place, and nothing
+  tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who raised this charge" — Autotask's own audit trail records only the
   API user.

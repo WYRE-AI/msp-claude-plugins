@@ -126,9 +126,12 @@ are attributable in the log but never join to a human user record.
 
 The browser session is separate: a signed cookie with a 7-day sliding
 window and a 30-day absolute cap (`src/lib/session-cookie.ts:14,17,27`),
-with no server-side session table. Its only global revocation lever is
-rotating `JWT_SECRET`, which logs everyone out at once
-(`session-cookie.ts:24-25`).
+with no server-side session table. Two levers reach it. A per-request
+`onRequest` hook refuses any session whose user is deactivated and clears
+the cookie (`src/auth/session-deactivation-guard.ts`) — a hook rather than
+a check inside `requireAuth0`, so it covers every console route including
+ones not yet written. The only *global* lever remains rotating
+`JWT_SECRET`, which logs everyone out at once (`session-cookie.ts:24-25`).
 
 ### How identity is carried — and where it stops
 
@@ -315,24 +318,53 @@ than forwarded.
 
 ### 2. Single-point rotation — holds for OAuth, weaker for keys
 
-**38 of the 98 vendors are OAuth** (they carry an `oauthConfig` in
-`src/credentials/vendor-config.ts`). For those, rotation is genuine and
-automatic, by two paths: proactive refresh on stored-expiry staleness
-(`credential-injector.ts:466`, `:734`), and a reactive 401 → refresh →
+**There is no rotate action in Conduit, for any vendor.** No HTTP route,
+no console control, no CLI command updates a stored vendor credential in
+place. The only `rotate` action in the whole product is for a tunnel
+enrolment token. What "rotation" means here therefore depends entirely on
+the vendor's auth type, and the two cases are genuinely different.
+
+**38 of the 98 vendors are OAuth** — they carry an `oauthConfig` in
+`src/credentials/vendor-config.ts`, and `isOAuthVendor` (`:6538-6541`) is
+the only discriminator there is; Conduit has no declared auth-type field.
+For those 38, token refresh is genuine and automatic, by two paths:
+proactive refresh when the stored token is within 60 seconds of expiry
+(`credential-injector.ts:732`, `isTokenExpired` in
+`src/oauth/vendor-oauth.ts:389`), and a reactive 401 → refresh →
 retry-once (`src/proxy/oauth-reactive-retry.ts:45-64`). Refresh is
-single-flight per `cacheScope:vendor` (`credential-injector.ts:138`), and
-the new tokens are written back to whichever store the key came from
-(`:178-207`). The reactive retry is scoped to unary JSON-RPC paths — the
-legacy streaming per-vendor route is explicitly out of scope
-(`oauth-reactive-retry.ts:22-31`).
+single-flight per `cacheScope:vendor`, and the new tokens are written back
+to whichever store the key came from (`credential-injector.ts:152-216`),
+including the reseller's org rather than the borrowing customer's. When
+refresh fails, the caller gets a 401 naming the reconnect URL. The
+reactive retry is scoped to unary JSON-RPC paths — the legacy streaming
+per-vendor route is explicitly out of scope (`oauth-reactive-retry.ts:22-31`).
 
-For the other 60 vendors there is **no rotate endpoint and no rotation
-tooling**. Rotation means re-submitting the connect form, which upserts
-the row with a fresh salt and IV. That works, but it is manual and nothing
-tracks credential age or prompts you.
+Note the limit of that: automatic refresh keeps a *working* token working.
+It does not replace the underlying grant. Changing the actual credential
+still means re-running the connect flow.
 
-Two caveats before you rely on rotation as an incident response:
+**For the other 60 vendors there is no rotation path at all beyond the
+connect form.** Re-submitting it upserts the row with a fresh salt and IV.
+That works, it takes effect on the very next tool call — there is no
+decrypted-credential cache anywhere in the request path — but it is manual,
+and nothing tracks credential age or warns you before a secret expires.
 
+Three caveats before you rely on rotation as an incident response:
+
+- **"Once at the gateway" means once per scope, not once per vendor.** A
+  vendor credential can exist in five places at the same time: personal
+  (`credentials`), org anchor (`org_credentials`), named org key
+  (`org_credential_keys`, optionally team-bound), legacy team
+  (`org_team_credentials`), and service client
+  (`service_client_credentials`). Resolution prefers them roughly in that
+  order (`credential-injector.ts:627-706`), so **a technician who connected
+  the vendor personally is unaffected by an org rotation** — their own key
+  wins. Rotating the anchor also does not propagate to named keys hanging
+  off it (`ensureOrgAnchor` is `ON CONFLICT DO NOTHING`,
+  `credential-service.ts:1184-1199`). There is no fan-out, no
+  rotate-everywhere, and no admin view that enumerates every stored copy.
+  If you are rotating because a credential leaked, enumerate the scopes
+  yourself.
 - **The result cache is not evicted on revoke or rotate.** The tool-schema
   cache (5 min, `src/proxy/tool-cache.ts:86`) and the MCP session pool
   (10 min, `src/proxy/mcp-session-pool.ts:19`) both key on a hash of the
@@ -340,11 +372,21 @@ Two caveats before you rely on rotation as an incident response:
   stale entries become unreachable. The **result cache does not** — it
   keys on the *scope* (`user:<id>` / `org:<id>` / …), which is invariant
   across rotation and revocation, and its `invalidate()` early-returns
-  unless the tool is a write tool (`src/proxy/result-cache.ts:1638-1645`).
-  No credential-delete route touches any cache. So after you revoke a
-  credential, previously-cached read results for that scope stay readable
-  for up to the tool's TTL — 30 seconds for tickets, up to 24 hours for
-  picklists.
+  unless the tool is a write tool (`src/proxy/result-cache.ts:2056-2058`).
+  Its only callers are the routers' post-write path; nothing in
+  deprovisioning, token revocation, credential update, or connection
+  delete touches it, and `CacheStore` exposes no delete operation to call.
+  So previously-cached read results for that scope stay readable for up to
+  the tool's TTL — 30 seconds for tickets, up to 24 hours for picklists.
+
+  Two things bound this. **It is not an authorisation bypass**: every
+  cache hit still runs `injectCredentials` and `enforceToolCall` first, so
+  a deprovisioned or deactivated user is refused before the lookup. And
+  caching is currently on for only four vendors — `connectwise-psa`,
+  `autotask`, `connectwise-cpq` and `itglue`; every other classified
+  vendor is `ttlMs: 0`, and credential-plaintext tools are non-cacheable by
+  construction. The exposure is a still-authorised caller reading data
+  fetched with a credential you have since rotated.
 - **There is no master-key rotation tooling**, and because `MASTER_KEY` is
   read into memory once at boot, changing the Key Vault secret does not
   reach a running replica.
@@ -409,105 +451,147 @@ Its real limits, and one genuine strength:
   the `users` table at read time. Delete the user and the trail degrades to
   an opaque id.
 
-### 4. Revocation that revokes — holds for membership, with four named exceptions
+### 4. Revocation that revokes — holds, with one residual gap
 
-The reason the membership half works is architectural: because the JWT
-carries no org, team, or role, all three are re-read from the database on
-every single request (`credential-injector.ts:571-580`,
-`org-route-helpers.ts:317-321`). Remove someone from the org, revoke their
-per-vendor grant, or delete the credential row, and the very next call
-fails — no cache sits in front of that lookup.
+This section was rewritten against `wyre-technology/conduit#1303` (merged
+2026-08-06), which closed most of what an earlier revision listed here as
+four exceptions. Two of the four — unrevoked refresh tokens, and a
+`users.active` flag nothing read — are simply gone. One, the unrevocable
+access token, is narrowed to a stated one-hour window. One, personal
+credentials, is unchanged and still true. Both survivors are below.
 
-**What SCIM deprovisioning actually does.** On `PATCH active=false`, `PUT`
-with `active:false`, or `DELETE /Users/:id`
-(`src/scim/users-handler.ts:260-314`, `:350-368`), in order:
+Three mechanisms carry the claim — live membership resolution,
+refresh-token revocation, and the deactivation check — and they are worth
+separating because they fail differently.
 
-1. `UPDATE users SET active = FALSE, deactivated_at = NOW()`.
-2. `DELETE FROM org_members` (tenant scope) or `DELETE FROM reseller_members`
-   (reseller scope) — `detachMembership`, `:418-434`. That is the whole of
-   it: one row, one table.
-3. `revokeActingAsForDeprovisionedOperator` (`:467-505`), which **returns
-   immediately unless the SCIM connection is reseller-scope** (`:473`).
+**Membership-derived access is resolved live, on every request.** Because
+the JWT carries no org, team, or role, all three are re-read from the
+database on every single call (`credential-injector.ts:589-598` for org and
+team; `org-route-helpers.ts:317-321` for role). Remove someone from the
+org, revoke their per-vendor grant, or delete the credential row, and the
+very next call cannot resolve the org credential — no cache sits in front
+of that lookup.
 
+**Deprovisioning is one primitive, and the invariant is enforced by a
+test.** `src/auth/deprovisioning.ts` owns two of the three durable
+artifacts a deprovisioned person can be holding: their gateway refresh
+tokens (`revokeGatewayTokensForUser` `:93`, `revokeGatewayTokensForOrgMembers`
+`:117`) and the `users.active` flag (`isUserDeactivated` `:144`). Every
+teardown path goes through it:
+
+| Path | Source | Clears per-vendor grants | Revokes refresh tokens |
+|---|---|---|---|
+| Console member removal | `org/member-service.ts:141`, `:147` | yes | yes |
+| SCIM `active:false` (PATCH/PUT) and `DELETE /Users/:id` | `scim/users-handler.ts:470-478` | yes, tenant scope | yes |
+| Reseller operator removal | `org/reseller-member-service.ts:352` | n/a — the `reseller_members` row *is* the authority | yes |
+| Org hard-delete / soft-delete / suspend | `org/org-service.ts:1838`, `:1913`, `:1991` | by cascade | yes |
+
+`revokeAllUserTokens` (`src/oauth/token-store.ts:300`) no longer has zero
+callers; it is reached from every row above. The revoke is deliberately
+global rather than per-org — a refresh token carries no org binding, so
+there is no narrower revocation that is correct, and a user removed from
+one of two orgs must re-run the OAuth flow (`deprovisioning.ts:85-91`).
+
+The invariant is mechanical rather than conventional:
+`src/auth/__tests__/deprovisioning.invariant.test.ts` source-scans the tree
+for membership-teardown SQL (`DELETE FROM org_members`, `reseller_members`,
+`users`, `organizations`) and fails any file that tears membership down
+without going through `deprovisioning.ts`. A future offboarding route that
+forgets gets a red test with the reason in it, rather than a fourth silent
+gap.
+
+**SCIM teardown previously ran where it could not delete.** A SCIM request
+authenticates with an opaque connection token, so it runs on the
+NOBYPASSRLS request pool with `conduit.current_user_id = ''`. Every table
+the teardown touches gates its DELETE on that GUC, so **every one of those
+DELETEs matched zero rows and reported success.** The whole transaction now
+runs under `runAsSystem` (`scim/users-handler.ts:470`), which is what makes
+SCIM deprovisioning actually deprovision. If you tested SCIM offboarding
+before 2026-08-06 and it appeared to succeed, it did not.
+
+**`users.active` is now read at four layers.** It was previously written by
+SCIM and read by nothing:
+
+| # | Layer | Source | What it stops |
+|---|---|---|---|
+| 1 | Authorisation-code grant | `oauth/authorization-server.ts:608` | minting a token at login |
+| 2 | Refresh grant | `authorization-server.ts:698` | minting a token from a refresh token — and because rotation destroys the presented token first (`:690`), the chain **terminates** rather than being refused once |
+| 3 | `injectCredentials` | `proxy/credential-injector.ts:432` | every vendor-bound request — the choke point all four routers pass through |
+| 4 | Browser session | `auth/session-deactivation-guard.ts:57` | console access; nulls the user and clears the cookie |
+
+Layer 4 closed the sharpest of the old gaps. The session cookie is a pure
+signed-cookie decode with a sliding 7-day window and a 30-day cap, so
+before this a deactivated user kept **full console access for up to 30
+days** — reading and rotating org credentials, granting vendor access,
+inviting members. That is a higher-privilege surface than the MCP endpoint.
+
+Layer 3 is the load-bearing one for the MCP path: it is what makes an
+*already-issued* token stop working, rather than surviving to its `exp`.
+
+One deliberate design note: `isUserDeactivated` **fails open on a missing
+`users` row** (`deprovisioning.ts:124-143`). Every human who completed an
+OAuth login has a row and no production path hard-deletes one, so "row
+absent" is not a state a deprovisioned user can reach.
+
+**The residual gap: an access token issued before an org-removal.** The
+access token is a stateless HS256 JWT verified by signature only — no store
+check, no `jti`, no denylist, no introspection endpoint
+(`credential-injector.ts:404-407`). Revoking refresh tokens stops
+re-issuance; it cannot reach a JWT already in a client's hands. The
+deactivation check does reach it, but only for the deactivation event.
+
+So: a user **deactivated in your IdP** is refused on their very next
+request, everywhere. A user **only removed from an organisation** keeps
+their last access token until it expires — one hour by default
+(`config.ts:78`, `ACCESS_TOKEN_TTL`). During that window it can no longer
+reach anything through the organisation's credentials, because those are
+resolved from live membership on every request. It can still reach vendors
+the person connected **personally**, with their own key.
+
+Closing the general case needs either a `jti` denylist or introspection on
+the verify path, both of which convert a deliberately stateless design into
+a stateful one. That is a product decision, and it is stated as still open
+in the module's own header (`deprovisioning.ts:49-57`).
+
+**Personal credentials still survive deprovisioning.** Nothing in SCIM or
+member removal deletes them — the only `DELETE` against `credentials` is
+keyed on the user's own disconnect
+(`src/credentials/credential-service.ts:504`). A deprovisioned user whose
+org membership is gone falls through to the `user-personal` branch and
+keeps proxying to the vendor with their own key, subject to the deactivation
+check at layer 3.
+
+They are not unrestricted, though: personal connections are gated by
+`credentials.access_tier`, which migration 080's CHECK constraint limits to
+`'read'` or `'write'`, defaulting to read-only. Admin-classified tools
+*"have no personal escalation path at all … and are denied unconditionally
+for personal connections"*
+(`src/credentials/credential-service.ts:427-435`). A personal connection is
+a real bypass of org *policy*, but not of the tier model.
+
+**In-flight reseller impersonation is revoked separately.**
 `revokeAllForOperator` (`src/reseller/acting-as-session-service.ts:204`)
-touches exactly one table, `acting_as_sessions` — the reseller
-*impersonation* ledger (`migrations/049_acting_as_sessions.sql:48-58`). It
-has three real callers: SCIM deprovision (`src/scim/users-handler.ts:476`),
-member removal from a reseller-type org (`src/org/routes.ts:988`), and the
-reseller admin console (`src/reseller/routes.ts:567`). All three revoke
-in-flight impersonation. **None of them revokes an ordinary MCP session, an
-OAuth token, or a browser session.** The method's own docblock is explicit
-that it exists for *"immediacy, not durability"* — it closes the window
-between removal and the next lazy re-check.
+clears `acting_as_sessions` and is wired beside the token revoke at each
+deprovisioning event. It is deliberately not folded into
+`deprovisioning.ts` — it is reseller-scoped and emits its own audit event
+(`deprovisioning.ts:13-19`). If you add a sixth deprovisioning path, the
+invariant test enforces the token half; the acting-as half is still on you.
 
-So the four exceptions:
+**Practical guidance.** Offboarding is now two steps, not four:
 
-- **The access token is never revoked.** It is a stateless HS256 JWT,
-  verified by signature only, with no store check, no `jti`, no denylist,
-  and no introspection endpoint — verification is
-  `jose.jwtVerify(token, secret, { issuer, audience })`
-  (`src/proxy/credential-injector.ts:404-407`). A removed member keeps a
-  working token for up to an hour.
-- **Refresh tokens are not revoked either.** `revokeAllUserTokens` exists
-  (`src/oauth/token-store.ts:286`) and **has zero callers anywhere in the
-  codebase** — the same finding that held for the older gateway. The
-  refresh grant checks only token existence, expiry, and `client_id`
-  match; it never re-reads `users.active` or membership
-  (`src/oauth/authorization-server.ts:641-716`). A deprovisioned user's
-  30-day refresh token keeps minting fresh 1-hour access tokens. The only
-  refresh revocation that ever fires is rotation-on-use or the RFC 7009
-  `POST /oauth/revoke` endpoint acting on one caller-supplied token
-  (`:807-820`).
-- **`users.active` is written but never read on the auth path.** Conduit
-  *does* have a user-disabled state — `active` and `deactivated_at`
-  (`migrations/016_scim_provisioning.sql:112-114`), which the older gateway
-  lacked entirely. But nothing in login, bearer verification, credential
-  injection, or the tool gate consults it. The only `WHERE active = true`
-  in the codebase is on `customer_tenants`, a different table
-  (`src/auth/tenant-trust.ts:46`). Conduit's own source says so:
-  *"reads `reseller_members` and the customer org's lifecycle columns — but
-  NEVER `users.active`"* (`src/scim/users-handler.ts:442`). Deactivation is
-  effective only through the membership DELETE that accompanies it.
-- **Personal credentials survive.** They are fetched first, before any org
-  lookup (`credential-injector.ts:554`, precedence stated at `:612-616`),
-  and nothing in SCIM or member removal deletes them — the only `DELETE`
-  against `credentials` is the user's own `/disconnect/:vendor` route
-  (`src/web/routes.ts:1499`). A deprovisioned user whose org membership is
-  gone falls through to the `user-personal` branch (`:678-687`) and keeps
-  proxying to the vendor with their own key.
+1. **Deactivate the person in your identity provider** (or delete them)
+   whenever SCIM is wired up. This is the strongest lever: it revokes
+   refresh tokens, clears per-vendor grants, and refuses their very next
+   request to both the console and the gateway.
+2. **Confirm they hold no personal connections.** These are the one thing
+   deprovisioning does not remove on their behalf, and the audit is worth
+   doing at offboarding rather than discovering later.
 
-  **But — and this is a genuine improvement over the older gateway —
-  personal connections are no longer unrestricted.** They are gated by
-  `credentials.access_tier`, which migration 080's CHECK constraint limits
-  to `'read'` or `'write'`, defaulting to read-only. Admin-classified tools
-  *"have no personal escalation path at all … and are denied
-  unconditionally for personal connections"*
-  (`src/credentials/credential-service.ts:427-435`). Raising the tier goes
-  through an approval flow. So a personal connection is a real bypass of
-  org *policy*, but not of the tier model.
-
-**One more asymmetry worth knowing.** Console member removal
-(`src/org/member-service.ts:143-156`) deletes `org_server_access`, the
-`org_vendor_access_grant` mirror, and `org_team_members` *before* dropping
-`org_members`, with a comment explaining why: without it, *"a removed
-member's per-vendor grants and team rows linger — and re-inviting/re-adding
-them (or SCIM re-provision) silently restores access that was never
-re-granted or reviewed."* **SCIM's `detachMembership` does none of that.**
-It drops `org_members` and stops. A SCIM-deprovisioned user who is later
-re-provisioned gets their old per-vendor grants back, unreviewed. (SCIM's
-*Groups* handler does mirror grant deletion —
-`src/scim/groups-handler.ts:302` — so the omission is specific to the
-`/Users` path.)
-
-**Practical guidance.** Treat "remove from org" as revoking shared access
-promptly and reliably. Treat full offboarding as four steps:
-
-1. Remove from the org **via the console**, not SCIM alone, so grants and
-   team rows are cleaned up too.
-2. Revoke the refresh token (`POST /oauth/revoke`) — nothing does this for
-   you.
-3. Accept that the access token stays valid for up to an hour.
-4. Confirm the person holds no personal connections.
+If you can only remove them from the org — no SCIM, no IdP deactivation —
+that revokes shared access reliably and immediately, and leaves them at
+most one hour of a token that can reach only their own personal
+connections. `POST /oauth/revoke` is no longer a required offboarding step,
+though it still works on a single caller-supplied token.
 
 ## Conduit's own tools
 
@@ -745,14 +829,23 @@ Consolidated, so you can read them without reading the rest:
 - **`request_log` writes are best-effort** and can be lost silently.
 - **`request_log` retention is effectively 90 days** (boot sweep), despite
   a 395-day `pg_cron` job.
-- **Access tokens are not revocable** and last up to an hour; refresh
-  tokens last 30 days and `revokeAllUserTokens` still has zero callers.
-- **`users.active` is never read on the auth path** — deactivation works
-  only via the membership DELETE beside it.
-- **SCIM deprovision leaves grants and team rows behind**, so
-  re-provisioning silently restores unreviewed access.
+- **An already-issued access token is still not revocable in the general
+  case** — stateless JWT, no `jti`, no denylist. Deprovisioning revokes
+  refresh tokens, so the *chain* ends immediately, but a token already in
+  a client's hands survives to its `exp`: one hour by default. IdP
+  deactivation is the exception that reaches it, at all four layers.
+- **That residual hour reaches only personal connections.** Org, team and
+  role are resolved live per request, so an ex-member's surviving token
+  cannot use the organisation's credentials — only ones they connected
+  themselves, which deprovisioning does not delete on their behalf.
+- **There is no rotate action for any vendor.** OAuth vendors get
+  automatic token refresh; the other 60 require re-submitting the connect
+  form, and nothing tracks credential age.
+- **A credential can exist in five scopes at once**, and rotating one does
+  not reach the others — a personal connection outranks the org's.
 - **The result cache is not evicted on revoke or rotate**, per replica, for
-  up to 24 hours on long-TTL tools.
+  up to 24 hours on long-TTL tools — though every hit is still
+  authorisation-checked first, and only four vendors cache at all.
 - **No master-key rotation path exists**, and the key is read once at boot.
 - **Rate limiting is throughput protection, not a security control.** A
   global 600/minute backstop (`src/rate-limit-backstop.ts:21-22`) and a
@@ -777,9 +870,9 @@ claims. Measured against Conduit's code:
 | Claim | Verdict |
 |---|---|
 | "No API key or secret is stored on the technician's machine, in this repo, or in the model's context." | **Accurate.** |
-| "Credential rotation happens once at the gateway, not per technician." | **Accurate for the 38 OAuth vendors. Overstated for the other 60** — there is no rotate action, only re-submitting the connect form, and cached *results* survive it for up to the tool's TTL. |
+| "Credential rotation happens once at the gateway, not per technician." | **Was overstated; now corrected in all 59 documents that carried it.** There is no rotate action for *any* vendor. The 38 OAuth vendors get automatic token refresh; the other 60 require re-submitting the connect form, with no age tracking. "Once" is also per *scope*, not per vendor — a personal connection outranks the org's and is not touched by an org rotation. Cached *results* survive rotation for up to the tool's TTL. |
 | "Every call carries operator identity, so the gateway audit log answers 'who asked for this' — the vendor's own log cannot." | **Accurate, and mechanically explained** by the built-from-scratch outbound header set. Qualify with: `request_log` writes are best-effort, and **arguments are never captured**, so the log answers *who called what*, never *with what*. |
-| "Revoking gateway access revokes vendor access with it, immediately." | **Accurate for membership-derived access** — org, team, role and grants are re-read per request. **Not accurate as an unqualified statement**: the access token stays valid up to an hour, refresh tokens 30 days with no offboarding path revoking them, `users.active` is never read on the auth path, personal connections are unaffected, and SCIM deprovision leaves grants and team rows in place. |
+| "Revoking gateway access revokes vendor access with it, immediately." | **Was false when written; now true with one stated exception, and the 38 documents carrying it have been rewritten.** `conduit#1303` made deprovisioning revoke refresh tokens and clear per-vendor grants on every teardown path, fixed SCIM's teardown (which had been matching zero rows and reporting success), and made `users.active` readable at four layers including the console session. The one residual: a user *only* removed from an org keeps an already-issued access token for up to an hour, reaching only their own personal connections. |
 
 Two further corrections apply to the documents' shared structure, both of
 which the template has now been changed to prevent:

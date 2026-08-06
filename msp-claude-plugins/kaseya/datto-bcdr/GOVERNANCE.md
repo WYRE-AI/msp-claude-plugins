@@ -15,11 +15,21 @@ for.
 - No Datto BCDR public/private key pair is stored on the technician's
   machine, in this repo, or in the model's context. The HMAC-SHA256
   request signing happens at the gateway.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Datto BCDR credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the
+  connect form, which overwrites the stored credential in place, and
+  nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who pulled this customer's backup posture".
-- Revoking gateway access revokes Datto BCDR access with it,
-  immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal Datto BCDR
+  connection made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission tiers
 

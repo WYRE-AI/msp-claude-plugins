@@ -1,6 +1,6 @@
 {
   "name": "ninjaone-rmm",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Claude Code plugin for NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
   "author": {
     "name": "MSP Claude Plugins Community"

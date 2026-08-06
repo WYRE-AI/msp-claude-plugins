@@ -1,6 +1,6 @@
 {
   "name": "blackpoint",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "Blackpoint Cyber / CompassOne MDR - tenant, asset, detection, and vulnerability data for MSP incident response",
   "author": {
     "name": "WYRE AI"

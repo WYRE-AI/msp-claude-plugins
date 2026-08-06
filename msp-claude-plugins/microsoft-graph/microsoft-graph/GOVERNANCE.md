@@ -27,7 +27,14 @@ technician. Consequences worth stating plainly:
   signed-in user*, not as a service principal. Operator identity is
   therefore enforced by Entra itself, not merely logged: a technician
   cannot read what their own Entra roles do not permit.
-- Revoking gateway access revokes Graph access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal Graph connection
+  made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
+
 - Separately, a Global Administrator in **each customer tenant** must
   grant admin consent out of band before that tenant returns any data.
   Consent is per tenant and revocable by the customer at any time, from

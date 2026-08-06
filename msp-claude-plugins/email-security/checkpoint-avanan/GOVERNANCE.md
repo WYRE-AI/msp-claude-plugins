@@ -13,14 +13,24 @@ operator is authorised for.
 
 - No Checkpoint client ID, access key, or bearer token is stored on the
   technician's machine, in this repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
-  Harmony Email tokens expire hourly; the gateway handles the refresh.
+- The org's Harmony Email credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the connect
+  form, and nothing tracks the credential's age. The hourly Infinity-portal
+  token is minted by the Harmony Email connector itself from that stored
+  client id and secret; Conduit's own OAuth refresh does not apply here,
+  because Harmony Email is a key-based vendor to it.
 - Every call carries operator identity, so the gateway audit log answers
   "who released that message" — Harmony Email's own log records only the
   API application, and the `releasedBy` field on a quarantine entry will
   show the shared integration account for every release.
-- Revoking gateway access revokes Harmony Email access with it,
-  immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal Harmony Email
+  connection made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission groups
 

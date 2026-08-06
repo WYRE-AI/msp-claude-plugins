@@ -18,7 +18,12 @@ Consequences worth stating plainly:
 
 - No NinjaOne client ID or client secret is stored on the technician's
   machine, in this repo, or in the model's context.
-- Credential rotation happens once at Conduit, not per technician.
+- The org's NinjaOne credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. There is no rotate action, though — you re-submit the
+  connect form, which overwrites the stored credential in place, and
+  nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so Conduit's audit log answers
   "who rebooted that server" — NinjaOne's own activity log records only
   the API application. The log records *who called what*, never with what

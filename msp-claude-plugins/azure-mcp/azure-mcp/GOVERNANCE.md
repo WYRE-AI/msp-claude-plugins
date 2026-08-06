@@ -14,13 +14,23 @@ operator is authorised for.
 - No Azure tenant ID, client ID, or client secret is stored on the
   technician's machine, in this repo, or in the model's context. The
   service principal you register lives at the gateway.
-- Credential rotation happens once at the gateway, not per technician.
-  This matters more here than elsewhere: Azure client secrets expire on
-  a fixed date, and rotating one place beats chasing every workstation.
+- The org's Azure credential is stored once at the gateway, so
+  replacing it is one edit rather than a change on every
+  technician's machine. There is no rotate action, though — you
+  re-submit the connect form, which overwrites the stored credential
+  in place, and nothing tracks its age or prompts you. That matters more
+  here than elsewhere: Azure client secrets expire on a fixed date, and
+  Conduit will not warn you before one does.
 - Every call carries operator identity, so the gateway audit log
   answers "who ran that KQL query". Azure's activity log records only
   the service principal.
-- Revoking gateway access revokes Azure access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal Azure connection
+  made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission groups
 

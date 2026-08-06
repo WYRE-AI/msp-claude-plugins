@@ -1,6 +1,6 @@
 {
   "name": "datto-rmm",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Claude plugins for Datto RMM - devices, alerts, sites, jobs, remote monitoring",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -15,12 +15,22 @@ accounts) and its 66 generated tools.
 - No PagerDuty API token is stored on the technician's machine, in this
   repo, or in the model's context. The gateway holds it and forwards
   `Authorization: Token token=<key>` on every call.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's PagerDuty connection is stored once at the gateway, so
+  replacing it is one edit rather than a change on every technician's
+  machine. PagerDuty is OAuth: Conduit refreshes the token itself as it
+  nears expiry, and asks you to reconnect only when that refresh fails.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who paged the on-call at 3am". PagerDuty's own log attributes actions
   to the token's user, so a shared General Access Token makes every
   action anonymous.
-- Revoking gateway access revokes PagerDuty access with it, immediately.
+- Removing someone from the organisation clears their per-vendor grants
+  and revokes their gateway refresh tokens at once; a user deactivated
+  in your identity provider is refused on their very next request. A
+  user only removed from the org keeps an already-issued access token
+  for up to an hour, but it reaches only a personal PagerDuty connection
+  made with their own key — never the org's. See
+  `wyre-gateway/GOVERNANCE.md`.
 
 ## Tool permission tiers
 

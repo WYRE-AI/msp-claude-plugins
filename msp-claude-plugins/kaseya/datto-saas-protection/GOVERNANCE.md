@@ -13,7 +13,12 @@ tenant the operator is authorised for.
 
 - No Datto SaaS Protection bearer token or region setting is stored on
   the technician's machine, in this repo, or in the model's context.
-- Credential rotation happens once at the gateway, not per technician.
+- The org's Datto SaaS Protection credential is stored once at the
+  gateway, so replacing it is one edit rather than a change on every
+  technician's machine. There is no rotate action, though — you
+  re-submit the connect form, which overwrites the stored credential
+  in place, and nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so the gateway audit log answers
   "who restored data into this customer's mailbox".
 - Removing a technician's Conduit org membership stops their SaaS

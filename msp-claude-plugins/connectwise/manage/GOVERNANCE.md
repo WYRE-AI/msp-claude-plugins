@@ -12,7 +12,12 @@ is authorised for.
 
 - No company ID, public key, private key or `clientId` is stored on the
   technician's machine, in this repo, or in the model's context.
-- Credential rotation happens once at Conduit, not per technician.
+- The org's ConnectWise PSA credential is stored once at the gateway,
+  so replacing it is one edit rather than a change on every
+  technician's machine. There is no rotate action, though — you
+  re-submit the connect form, which overwrites the stored credential in
+  place, and nothing tracks its age or prompts you.
+
 - Every call carries operator identity, so Conduit's audit log answers
   "who closed that ticket". ConnectWise's own audit trail records only the
   API member the integration authenticates as, so without Conduit every
