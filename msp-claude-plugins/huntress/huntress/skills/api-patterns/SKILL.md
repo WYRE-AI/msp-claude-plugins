@@ -43,9 +43,17 @@ export HUNTRESS_API_SECRET="your-api-secret"
 
 | Tool | Description |
 |------|-------------|
-| `huntress_navigate` | Navigate to a specific resource |
-| `huntress_status` | Get current navigation status |
-| `huntress_back` | Navigate back to previous resource |
+| `huntress_navigate` | Discovery aid — lists the tool names and descriptions in one domain (`accounts`, `agents`, `organizations`, `incidents`, `billing`, `signals`, `users`) |
+| `huntress_status` | Check Huntress API connection status and which domains are available |
+
+Navigation here is **stateless discovery, not a cursor**. There is no
+current resource and no history, so there is no "back" tool — every tool
+below is callable directly at any time, and `huntress_navigate` is never
+a prerequisite for calling one.
+
+Through Conduit, `huntress_navigate` is refused for every caller by the
+discovery-tool suppression gate, so a workflow that begins by calling it
+will fail at step one. Read the catalog below instead.
 
 ### Account
 
@@ -167,7 +175,7 @@ Huntress enforces **60 requests per minute**.
 
 - Use organization filters to scope queries to specific clients
 - Cache account/org info to reduce API calls
-- Use the navigation tools (`huntress_navigate`, `huntress_status`, `huntress_back`) to manage stateful workflows
+- Do not build workflows on navigation state — there is none. Call the tool you need directly; use `huntress_status` only to confirm credentials and reachability before a batch run
 
 ## Related Skills
 

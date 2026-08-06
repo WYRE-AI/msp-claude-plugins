@@ -225,20 +225,35 @@ const DOC_GLOBS = (dir) => walkFiles(dir, (p, n) => {
          /^agents\//.test(rel) || /^commands\//.test(rel);
 });
 
+// A governance doc that says "There is no `vendor_raw_request`" is *documenting
+// a tool's absence*, correctly, and must not be reported as a drifted name —
+// renaming it to the nearest real tool would invert the sentence's meaning, and
+// deleting it would drop a deliberate security assurance. Same for the
+// counter-example form IT Glue uses: "`create_document`, not `itglue_create_document`".
+// Match only the explicit non-existence family, and only when the trigger
+// precedes the token inside the same sentence.
+const NEG_SENTENCE = /\b(?:is no|are no|and no|or no|no such|carr(?:y|ies) no|ha(?:s|ve) no|does not exist|do not exist|not exposed|never exposed)\b|[,—-]\s*not\s*$/i;
+
 function documentedNames(pluginDir) {
   const files = DOC_GLOBS(pluginDir);
-  const hits = new Map(); // name -> [file:line]
+  const hits = new Map(); // name -> [{ site, negated }]
   for (const f of files) {
     const lines = readFileSync(f, "utf8").split("\n");
     for (let i = 0; i < lines.length; i++) {
+      // Prose wraps, so a trigger on the previous line still governs this one.
+      const prev = i > 0 ? lines[i - 1] : "";
+      const joined = `${prev} ${lines[i]}`;
+      const offset = prev.length + 1;
       // backtick-quoted tokens, plus mcp__vendor__tool references
       for (const m of lines[i].matchAll(/`([^`\s]+)`/g)) {
         let t = m[1];
         const ns = t.match(/^mcp__[a-z0-9-]+__(.+)$/);
         if (ns) t = ns[1];
         if (!TOOLISH.test(t)) continue;
+        // Text before this token, cut back to the start of its own sentence.
+        const before = joined.slice(0, offset + m.index).split(/(?<=[.!?])\s+/).pop();
         if (!hits.has(t)) hits.set(t, []);
-        hits.get(t).push(`${relative(pluginDir, f)}:${i + 1}`);
+        hits.get(t).push({ site: `${relative(pluginDir, f)}:${i + 1}`, negated: NEG_SENTENCE.test(before) });
       }
     }
   }
@@ -317,7 +332,7 @@ for (const dir of findPluginDirs(PLUGINS)) {
       : "NONE",
     runtimeCount: rt ? rt.length : null, staticCount: st ? st.length : null,
     schemaCount: sc ? sc.length : null, liveCount: lv ? lv.length : null,
-    documented: [], drifted: [], undocumented: [], unverified: !truth,
+    documented: [], drifted: [], negated: [], undocumented: [], unverified: !truth,
     // Self-check: anything the live server advertised that the static scan missed.
     staticMissed: st && rt ? rt.filter((t) => !st.includes(t)) : [],
   };
@@ -337,8 +352,16 @@ for (const dir of findPluginDirs(PLUGINS)) {
 
   const prefixes = prefixesOf(truth);
   const truthSet = new Set(truth);
-  for (const [name, sites] of docs) {
+  for (const [name, occ] of docs) {
     if (!prefixes.has(name.split("_")[0])) continue; // not a tool of this server's namespace
+    const sites = occ.map((o) => o.site);
+    // Every mention asserts the tool does NOT exist — that is a correct claim
+    // about a real absence, not a name the plugin tells you to call. Record it
+    // separately so it stays visible, but keep it out of both counts.
+    if (!truthSet.has(name) && occ.every((o) => o.negated)) {
+      entry.negated.push({ name, sites: sites.slice(0, 6), occurrences: sites.length });
+      continue;
+    }
     entry.documented.push(name);
     if (truthSet.has(name)) continue;
     const { candidate, score } = nearest(name, truth);
@@ -360,7 +383,7 @@ if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(report, null, 2));
 const drifted = report.filter((r) => r.drifted.length);
 const clean = report.filter((r) => !r.unverified && !r.drifted.length);
 const unver = report.filter((r) => r.unverified);
-console.log("PLUGIN".padEnd(38) + "TRUTH".padEnd(7) + "DOC'D".padEnd(7) + "DRIFT".padEnd(7) + "UNDOC".padEnd(7) + "SOURCE");
+console.log("PLUGIN".padEnd(38) + "TRUTH".padEnd(7) + "DOC'D".padEnd(7) + "DRIFT".padEnd(7) + "UNDOC".padEnd(7) + "NEG".padEnd(5) + "SOURCE");
 for (const r of report) {
   console.log(
     r.plugin.padEnd(38) +
@@ -368,8 +391,11 @@ for (const r of report) {
     String(r.documented.length).padEnd(7) +
     String(r.drifted.length).padEnd(7) +
     String(r.undocumented.length).padEnd(7) +
+    String(r.negated.length).padEnd(5) +
     r.groundTruthSource,
   );
 }
+// NEG = names the docs mention only to say they do not exist ("There is no `x`").
+// Correct documentation of an absence; never drift.
 console.log(`\ndrifted=${drifted.length} clean=${clean.length} unverified=${unver.length} total=${report.length}`);
 process.exitCode = drifted.length ? 1 : 0;
