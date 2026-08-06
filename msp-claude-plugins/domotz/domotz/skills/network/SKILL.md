@@ -1,27 +1,39 @@
 ---
 name: "Domotz Network"
 description: >
-  Domotz network operations: agent-driven network scanning and discovery
-  (ARP, SNMP, DNS, MAC OUI), SNMP polling of interface and system metrics,
-  TCP port monitoring, speed tests, and the tools and error modes for each.
+  Domotz network observation: the collector's topology graph, its own
+  interfaces, detected IP conflicts, and the two SNMP surfaces — polled
+  variables and custom sensors — with their history endpoints and the
+  tools and error modes for each.
 when_to_use: >-
-  When scanning a network, polling SNMP data, checking service ports, or measuring
-  site bandwidth through Domotz agents. Use when: domotz network, network scan, snmp,
-  port monitoring, speed test, network discovery, network topology, bandwidth, port check, or snmp
-  polling.
+  When reading network topology, checking for IP conflicts, or pulling SNMP
+  metrics and their history through Domotz agents. Use when: domotz network, snmp,
+  network topology, ip conflict, duplicate ip, interface counters, snmp sensor,
+  snmp variable, bandwidth counters, or snmp polling.
 ---
 
 # Domotz Network Operations
 
 ## Overview
 
-Domotz provides comprehensive network monitoring capabilities through its agents. This includes network device discovery, SNMP polling for hardware metrics, TCP port monitoring, speed tests for bandwidth measurement, and network topology mapping.
+Domotz agents observe the network they sit on: they map how devices connect,
+detect addressing collisions, and poll SNMP-capable devices for operational
+metrics. Everything in this skill is read-only and scoped to one agent.
+
+Domotz discovery is **passive and continuous** — the agent scans on its own
+schedule. There is no tool that triggers a scan on demand, so "rescan the
+network" is not an action available here; a fresh census means re-reading
+`domotz_devices_list` and comparing.
 
 ## Anti-triggers
 
-- **A switch port's VLAN, PoE, or link state** — the ports here are TCP
-  service ports on a host, not physical switch ports. Meraki switch
-  ports are `meraki-devices`.
+- **A switch port's VLAN, PoE, or link state** — Domotz exposes the
+  collector's own interfaces and SNMP counters, not switch port
+  configuration. Meraki switch ports are `meraki-devices`.
+- **TCP service-port checks on a host** — Domotz's MCP surface has no
+  port-probe tool. Synthetic service checks are `betterstack-monitors`.
+- **Bandwidth speed tests** — no speed-test tool exists here; use
+  `betterstack-monitors` or the ISP's own reporting.
 - **Interface counters across a whole MSP fleet** — Domotz polls one
   site at a time; fleet-wide interface and utilisation history is
   `auvik-networks`.
@@ -30,176 +42,145 @@ Domotz provides comprehensive network monitoring capabilities through its agents
 
 ## Key Concepts
 
-### Network Scanning
+### Topology
 
-Domotz agents periodically scan local network subnets to discover devices. Scans can also be triggered on demand. Discovery uses:
-- **ARP scanning** - Discovers devices on local subnets
-- **SNMP discovery** - Identifies device capabilities and metadata
-- **DNS resolution** - Resolves hostnames for discovered IPs
-- **MAC OUI lookup** - Identifies device vendor from MAC address
+The agent builds a connectivity graph of the devices it has discovered —
+which device is reachable through which, and how the site hangs together.
+It is derived from what the collector can observe from its own vantage
+point, so it reflects one LAN, not a routed multi-site estate.
 
-### SNMP Monitoring
+### IP Conflicts
 
-Domotz polls SNMP-enabled devices for operational metrics:
-- **Interface statistics** - Bandwidth utilization, errors, discards
-- **System resources** - CPU, memory, disk usage
-- **Environmental** - Temperature, fan status, power supply
-- **Custom OIDs** - User-defined SNMP data points
+Domotz flags addressing collisions it observes — the same IP answering for
+more than one MAC. These are usually a static address colliding with a DHCP
+lease, and they present as intermittent, hard-to-reproduce faults.
 
-### Port Monitoring
+### SNMP: two distinct surfaces
 
-TCP port monitoring checks whether specific services are reachable:
-- Web servers (80, 443)
-- Remote access (3389, 22)
-- Database servers (1433, 3306, 5432)
-- Custom application ports
+Domotz has two separate SNMP lists per device, and they are not
+interchangeable:
 
-### Speed Tests
+- **Variables** — the metrics Domotz polls by default once it identifies
+  a device as SNMP-capable (interface counters, system resources).
+  Addressed by `variable_id`.
+- **Custom sensors** — SNMP sensors an operator configured explicitly on
+  that device. Addressed by `sensor_id`.
 
-Agents can run bandwidth speed tests to measure:
-- **Download speed** - Downstream bandwidth
-- **Upload speed** - Upstream bandwidth
-- **Latency** - Round-trip time
+Each has its own history endpoint. A `variable_id` will not resolve
+against the sensor history tool, or vice versa.
 
-## API Patterns
+## Tools
 
-### Trigger Network Scan
+| Tool | Description | Arguments |
+|------|-------------|-----------|
+| `domotz_network_topology` | Connectivity graph for the agent's network | `agent_id` |
+| `domotz_network_interfaces` | Network interfaces on the **collector itself** | `agent_id` |
+| `domotz_network_ip_conflicts` | Detected IP address conflicts | `agent_id` |
+| `domotz_metrics_variables_list` | SNMP metrics/variables polled for a device | `agent_id`, `device_id` |
+| `domotz_metrics_variable_history` | Time series for one variable | `agent_id`, `device_id`, `variable_id` |
+| `domotz_metrics_snmp_sensors_list` | Custom SNMP sensors configured on a device | `agent_id`, `device_id` |
+| `domotz_metrics_sensor_history` | History for one custom sensor | `agent_id`, `device_id`, `sensor_id` |
 
-```
-domotz_scan_network
-```
-
-Parameters:
-- `agent_id` -- The agent to run the scan from (required)
-
-### List SNMP Data
-
-```
-domotz_list_snmp_data
-```
-
-Parameters:
-- `agent_id` -- The agent ID (required)
-- `device_id` -- The device to get SNMP data for (required)
-
-**Example response:**
-
-```json
-[
-  {
-    "oid": "1.3.6.1.2.1.2.2.1.10.1",
-    "label": "ifInOctets (GigabitEthernet0/1)",
-    "value": "1234567890",
-    "type": "Counter32",
-    "last_polled": "2026-03-27T15:00:00Z"
-  }
-]
-```
-
-### List Open Ports
-
-```
-domotz_list_ports
-```
-
-Parameters:
-- `agent_id` -- The agent ID (required)
-- `device_id` -- The device to check ports for (required)
-
-**Example response:**
-
-```json
-[
-  {
-    "port": 443,
-    "protocol": "tcp",
-    "status": "open",
-    "service": "https",
-    "last_checked": "2026-03-27T15:00:00Z"
-  }
-]
-```
-
-### Run Speed Test
-
-```
-domotz_run_speed_test
-```
-
-Parameters:
-- `agent_id` -- The agent to run the speed test from (required)
-
-**Example response:**
-
-```json
-{
-  "download_speed": 245.6,
-  "upload_speed": 48.2,
-  "latency": 12.4,
-  "timestamp": "2026-03-27T15:05:00Z"
-}
-```
+All IDs are numbers. None of these tools takes a time range, a page, or a
+limit — history endpoints return whatever window Domotz retains, and you
+narrow it after the fact.
 
 ## Common Workflows
 
-### Network Discovery Audit
+### Bandwidth review for a network device
 
-1. Call `domotz_scan_network` to trigger a fresh scan
-2. Wait for scan to complete
-3. Call `domotz_list_devices` to see all discovered devices
-4. Compare against known inventory for new/rogue devices
+1. Call `domotz_metrics_variables_list` for the device to see what is
+   actually being polled.
+2. Identify the interface counters (`ifInOctets` / `ifOutOctets` style
+   entries) and note their `variable_id`.
+3. Call `domotz_metrics_variable_history` per variable.
+4. Counters are cumulative — derive utilisation from the delta between
+   samples and the interval, not from the raw value.
+5. Flag interfaces trending toward capacity.
 
-### Bandwidth Monitoring
+### Custom sensor review
 
-1. Call `domotz_list_snmp_data` for network devices
-2. Look for `ifInOctets` and `ifOutOctets` counters
-3. Calculate bandwidth utilization over time
-4. Flag interfaces exceeding capacity thresholds
+1. Call `domotz_metrics_snmp_sensors_list` for the device.
+2. For any sensor of interest, call `domotz_metrics_sensor_history` with
+   its `sensor_id`.
+3. An empty sensor list means nobody configured custom sensors on that
+   device — it does not mean SNMP is unavailable. Check
+   `domotz_metrics_variables_list` before concluding the device is not
+   polled.
 
-### Service Availability Check
+### IP conflict triage
 
-1. Call `domotz_list_ports` for a server device
-2. Verify expected services are showing as `open`
-3. Flag any expected ports that are `closed`
-4. Cross-reference with Domotz Eyes checks for deeper monitoring
+1. Call `domotz_network_ip_conflicts` for the agent.
+2. For each conflicting address, call `domotz_devices_list` and match on
+   IP to identify which devices are involved.
+3. Resolve at the DHCP scope or the statically-addressed device.
 
-### Site Bandwidth Assessment
+### Site topology review
 
-1. Call `domotz_run_speed_test` from the site's agent
-2. Compare results against the ISP's advertised speeds
-3. Track trends over time to identify degradation
-4. Flag sites with consistently low bandwidth
+1. Call `domotz_network_topology` for the agent.
+2. Cross-reference node IDs against `domotz_devices_list` for names,
+   vendors, and status.
+3. Identify the devices everything else depends on, and check their
+   uptime with `domotz_devices_uptime`.
+
+Treat the output as sensitive: a topology graph plus the device census is
+close to what an attacker would want for lateral movement. See
+`GOVERNANCE.md`, *Data handling*.
+
+### Detecting new devices without a scan trigger
+
+1. Call `domotz_devices_list` for the agent.
+2. Compare against your previous snapshot, or sort by `first_seen`.
+3. New entries appear as the agent's own scan cycle finds them — there
+   is no way to force that cycle from here, so a device plugged in
+   moments ago may not be present yet.
 
 ## Error Handling
 
-### Scan Not Completing
+### Empty SNMP variable list
 
-**Cause:** Agent is busy, offline, or network is very large
-**Solution:** Check agent status; wait and retry; reduce scan scope
+**Cause:** Device does not support SNMP, SNMP is not enabled, or the
+community string on the agent does not match the device.
+**Solution:** Verify SNMP is enabled on the device and configured on the
+collector in the Domotz portal. This cannot be fixed through the API.
 
-### No SNMP Data
+### `variable_id` or `sensor_id` returns 404
 
-**Cause:** Device does not support SNMP, wrong community string, or SNMP not configured
-**Solution:** Verify SNMP is enabled on the device; check community string configuration
+**Cause:** The ID came from the other list, or belongs to a different
+device.
+**Solution:** Re-read the correct list for that exact `agent_id` /
+`device_id` pair.
 
-### Port Check Failures
+### Topology looks incomplete
 
-**Cause:** Firewall blocking the scan, device offline, or service not running
-**Solution:** Verify device is online; check firewall rules; verify service is running
+**Cause:** The collector can only map what it observes; devices behind a
+routed segment or on a VLAN the agent cannot reach are absent.
+**Solution:** Confirm agent placement; a site with multiple isolated
+segments may need more than one collector.
+
+### Stale metrics
+
+**Cause:** The agent is offline, so history stops but last-known values
+still return.
+**Solution:** Check `domotz_agents_get` status and `last_seen` before
+trusting any metric as current.
 
 ## Best Practices
 
-- Schedule regular network scans to detect new devices
-- Monitor SNMP metrics for all critical network infrastructure
-- Set up port monitoring for business-critical services
-- Run periodic speed tests to track ISP performance
-- Use SNMP data to build capacity planning reports
-- Configure alert profiles for SNMP threshold violations
+- Read `domotz_metrics_variables_list` before assuming which counters
+  exist — what is polled varies by device
+- Derive rates from deltas; SNMP counters are cumulative and wrap
+- Check for IP conflicts when a device reports intermittent
+  connectivity; the symptom is easily misread as a failing device
+- Verify collector health before drawing conclusions from any of these
+  reads
+- Restrict topology output if agents run unattended or transcripts are
+  retained
 
 ## Related Skills
 
-- [api-patterns](../api-patterns/SKILL.md) - Pagination and rate limiting
-- [agents](../agents/SKILL.md) - Agents that perform network operations
-- [devices](../devices/SKILL.md) - Devices discovered by scans
-- [alerts](../alerts/SKILL.md) - Alerts from network monitoring
-- [eyes](../eyes/SKILL.md) - Advanced monitoring sensors
+- [api-patterns](../api-patterns/SKILL.md) - Authentication, tool catalog, error codes
+- [agents](../agents/SKILL.md) - Collector health and placement
+- [devices](../devices/SKILL.md) - The device census these tools reference
+- [alerts](../alerts/SKILL.md) - Alert profiles for threshold conditions
+- [power](../power/SKILL.md) - PDU outlet control

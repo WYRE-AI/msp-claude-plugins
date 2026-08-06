@@ -33,11 +33,17 @@ Abnormal Security provides deep message analysis capabilities beyond basic threa
 
 ## Message Field Reference
 
+These are **response** fields describing what Abnormal reports about a
+message. They are not tool parameters — the only parameters the message
+tools accept are `threatId` and `messageId`. Availability varies by
+message and by tenant configuration; treat any single field as
+best-effort.
+
 ### Core Message Fields
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `abxMessageId` | long | Abnormal internal message ID |
+| `abxMessageId` | string | Abnormal's identifier for the message, as returned in the `abnormal_messages_list` response |
 | `subject` | string | Email subject line |
 | `fromAddress` | string | From header email address |
 | `fromName` | string | From header display name |
@@ -95,24 +101,36 @@ Abnormal Security provides deep message analysis capabilities beyond basic threa
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `abnormal_messages_get` | Get full message details | `threatId`, `abxMessageId` |
-| `abnormal_messages_list` | List messages for a threat | `threatId` |
-| `abnormal_messages_headers` | Get raw email headers | `threatId`, `abxMessageId` |
+Two tools, and both are scoped to a single threat. There is no separate
+headers tool and no tenant-wide message search — you cannot ask "show me
+every message from this sender". Every message lookup starts from a
+`threatId`.
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `abnormal_messages_list` | List the messages inside one threat case. Returns message IDs and summary data. | `threatId` (required) |
+| `abnormal_messages_get` | Full analysis of one message: metadata, headers, URLs, attachments, and AI threat analysis — all in a single payload. | `threatId` (required), `messageId` (required) |
+
+### Headers arrive inline, not from a separate call
+
+`abnormal_messages_get` returns the header set as part of its one
+response, alongside URLs, attachments and the AI analysis. Everything the
+*Header Analysis Workflow* below asks for comes out of that single call —
+there is no second, header-only fetch to make, and nothing to page
+through. The practical consequence is on the other side: one
+`abnormal_messages_get` pulls the entire substance of a customer's email
+into context, including recipient addresses and `Authentication-Results`,
+whether or not you needed the headers. Call it when you intend to do
+forensics on that message, not to browse.
+
+### ID vocabulary
+
+`threatId` is a **UUID string**. `messageId` is the message identifier
+from the `abnormal_messages_list` response (URL-encoded when sent). Do
+not confuse either with `caseId`, which `abnormal_cases_get` takes as a
+**number**.
 
 ### Tool Usage Examples
-
-**Get message details:**
-```json
-{
-  "tool": "abnormal_messages_get",
-  "parameters": {
-    "threatId": "184def76-3c28-4e1b-9ef0-a5abc123def4",
-    "abxMessageId": 987654321
-  }
-}
-```
 
 **List messages associated with a threat:**
 ```json
@@ -124,11 +142,23 @@ Abnormal Security provides deep message analysis capabilities beyond basic threa
 }
 ```
 
+**Get one message in full (metadata, headers, URLs, attachments):**
+```json
+{
+  "tool": "abnormal_messages_get",
+  "parameters": {
+    "threatId": "184def76-3c28-4e1b-9ef0-a5abc123def4",
+    "messageId": "<CA+8mv1x@mail.example.com>"
+  }
+}
+```
+
 ## Message Analysis Workflows
 
 ### Header Analysis Workflow
 
-1. **Retrieve message headers** - Get raw headers for detailed inspection
+1. **Retrieve the message** - `abnormal_messages_get` returns the headers
+   inline; there is no separate header call
 2. **Check authentication:**
    - SPF: Does the sending IP match the domain's SPF record?
    - DKIM: Is the DKIM signature valid and aligned?
@@ -208,7 +238,7 @@ Abnormal Security provides deep message analysis capabilities beyond basic threa
 
 | Code | Message | Resolution |
 |------|---------|------------|
-| 400 | Invalid message ID | Verify abxMessageId is a valid long integer |
+| 400 | Invalid message ID | Use a `messageId` taken from `abnormal_messages_list`, not a hand-built one |
 | 401 | Unauthorized | Check API token |
 | 404 | Message not found | Message may have been purged or threat ID is wrong |
 | 429 | Rate limited | Wait and retry |

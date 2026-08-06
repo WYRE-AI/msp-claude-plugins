@@ -6,11 +6,24 @@ Claude Code plugin for Ironscales, an AI-powered anti-phishing platform.
 
 This plugin provides Claude with deep knowledge of Ironscales, enabling:
 
-- **Incident Management** - Triage, classify, and remediate phishing incidents reported by users or detected by AI
-- **Email Classification** - Classify specific emails as phishing, spam, or legitimate
-- **Remediation** - Take remediation actions on confirmed phishing incidents
-- **Allowlist Management** - Manage sender allowlists to reduce false positives
+- **Incident Triage** - List phishing incidents by status and severity, and pull full detail on any one of them
+- **Email Analysis** - Submit a raw email to Ironscales' AI and get a phishing/spam/legitimate verdict back
+- **Remediation** - Quarantine, delete, block a sender, mark a false positive, or report a message to Microsoft
+- **Allowlist Management** - Manage email, domain, and IP allowlist entries to reduce false positives
 - **Dashboard & Reporting** - Access company-wide phishing statistics and trends
+
+### What it does not do
+
+- **It cannot set a verdict on an incident.** `ironscales_email_classify` takes a
+  raw email, not an incident ID. It is stateless: it returns a verdict and
+  changes nothing. The only tool that changes incident state is
+  `ironscales_remediation_act`.
+- **It cannot block a domain.** `block_sender` blocks one address. Campaign-wide
+  domain blocking has to be done in the Ironscales console or the upstream mail
+  filter.
+- **It cannot filter incidents by source.** There is no `source` parameter — a
+  user-reported versus AI-detected split has to be partitioned client-side from
+  the records returned.
 
 ## Prerequisites
 
@@ -20,8 +33,8 @@ Ironscales authenticates via API key and company ID:
 
 | Header | Description |
 |--------|-------------|
-| `X-Ironscales-API-Key` | Your Ironscales API key |
-| `X-Ironscales-Company-ID` | Your Ironscales company ID |
+| `X-IronScales-API-Key` | Your Ironscales API key |
+| `X-IronScales-Company-ID` | Your Ironscales company ID |
 
 To obtain credentials:
 
@@ -52,15 +65,15 @@ export IRONSCALES_COMPANY_ID="your-company-id"
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | API key + company ID authentication, available tools, pagination, error handling |
-| `incidents` | Phishing incident lifecycle, classification, remediation, allowlist management |
+| `api-patterns` | API key + company ID authentication, the nine tools, pagination, error handling |
+| `incidents` | Phishing incident lifecycle, remediation, email classification, allowlist management |
 
 ## Available Commands
 
 | Command | Description |
 |---------|-------------|
-| `/triage-incidents` | Triage open phishing incidents — list by status, classify, remediate |
-| `/classify-email` | Classify a specific email as phishing, spam, or legitimate |
+| `/triage-incidents` | Triage open phishing incidents — list by status and severity, investigate, remediate |
+| `/classify-email` | Get an Ironscales AI verdict on a raw email, then act on it separately |
 
 ## Quick Start
 
@@ -70,10 +83,16 @@ export IRONSCALES_COMPANY_ID="your-company-id"
 /triage-incidents
 ```
 
-### Classify a Specific Email
+### Classify an Email
 
 ```
-/classify-email --incident_id "INC-12345" --classification phishing
+/classify-email --sender "billing@suspicious-domain.net" --subject "Your invoice is ready"
+```
+
+### Quarantine a Confirmed Phish
+
+```
+Ask Claude: "Quarantine incident inc-10042 in Ironscales"
 ```
 
 ### View Dashboard Statistics
@@ -91,6 +110,23 @@ Ask Claude: "Show me the Ironscales dashboard statistics for this company"
 - Rotate API keys periodically via the Ironscales Platform
 - Use the minimum permissions necessary for your use case
 
+### Irreversible and Outbound Actions
+
+- `delete` permanently removes a message from **all** mailboxes and destroys the
+  evidence with it. `quarantine` is the recoverable default.
+- `mark_false_positive` **restores** a contained message to its recipients — it
+  reverses containment rather than tightening it.
+- `report_to_microsoft` cannot be recalled.
+- `notify_users: true` mails the customer's end users and cannot be unsent.
+  It defaults to `false`; leave it there unless asked.
+- `ironscales_email_classify` sends customer message content — subject, plain
+  text and HTML bodies, URLs, headers — outbound to Ironscales. Its
+  `attachments` schema is metadata only (`filename`, `content_type`,
+  `size_bytes`); never put file contents in it.
+- An allowlist `domain` entry exempts every sender on that domain from phishing
+  detection company-wide — a far larger grant than an `email` entry, and one
+  that produces no alert until someone spoofs it.
+
 ### HTTP Transport Security
 
 If using the MCP server over HTTP transport, ensure:
@@ -107,17 +143,29 @@ If you see "401 Unauthorized":
 2. Confirm `IRONSCALES_COMPANY_ID` matches your tenant
 3. Check that the API key has not been revoked at Ironscales Platform > Settings > API
 
-### Incident Classification Not Taking Effect
+### Classification Returned a Verdict but Nothing Changed
 
-If classification does not update:
-1. Verify you have the correct `incident_id`
-2. Confirm the incident is in an open/pending state — closed incidents cannot be reclassified
+Working as designed. `ironscales_email_classify` is stateless — it analyses raw
+email content and returns a verdict without touching any incident. If you
+wanted incident state to change, call `ironscales_remediation_act`.
+
+### Remediation Rejected or Partially Applied
+
+1. Verify you have the correct `incident_id` (snake_case, not `incidentId`)
+2. Confirm the incident is not already `closed` — the resulting error often
+   reads like a permissions failure. Valid statuses are `open`,
+   `in_progress`, `pending`, and `closed`; there is no `resolved`
 3. Check that your API key has write permissions
+4. Partial success is normal: remediation reach depends on the customer's
+   M365/Exchange integration, not on this plugin. Verify that integration and
+   clear the remaining mailboxes manually
 
 ### Empty Incident List When Incidents Exist
 
 1. Verify the `status` filter is correct — default may be filtering to a specific status
 2. Confirm `IRONSCALES_COMPANY_ID` matches the tenant where incidents are located
+3. Remember there is no total count in the response — page by `offset` until a
+   call returns fewer records than `limit`
 
 ## API Documentation
 

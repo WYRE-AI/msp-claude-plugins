@@ -104,8 +104,8 @@ Priority Actions:
 
 Quick Actions:
 - View threat details: /search-threats --type bec
-- Check vendor risk: /vendor-risk --vendor "vendor-acct.com"
-- Audit accounts: /account-audit
+- Inspect one threat: abnormal_threats_get with the threat UUID
+- Remediate: abnormal_messages_list, then abnormal_remediation_manage per message
 ```
 
 ## Error Handling
@@ -133,5 +133,3 @@ Regenerate your token at Abnormal Security Portal > Settings > Integrations > AP
 
 - `/search-threats` - Search for specific threat patterns
 - `/case-review` - Review abuse mailbox cases
-- `/vendor-risk` - Check vendor risk scores
-- `/account-audit` - Audit for account takeover

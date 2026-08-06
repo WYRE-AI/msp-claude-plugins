@@ -27,7 +27,8 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
   `Abnormal Security Cases`.
 - **A mailbox behaving strangely rather than an email arriving** —
   impossible travel, new inbox rules, and lateral sending are account
-  compromise; use `Abnormal Security Account Takeover`.
+  compromise, and this server exposes no account-takeover surface at all.
+  Investigate identity in the M365 tenant instead; use `cipp-users`.
 - **Header, SPF/DKIM/DMARC, or attachment forensics on one message** —
   use `Abnormal Security Messages`.
 - **Releasing something from a quarantine queue** — Abnormal has no
@@ -116,13 +117,25 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 
 ## MCP Tools
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `abnormal_threats_list` | List detected threats with filters | `pageSize`, `pageNumber`, `filter`, `fromDate`, `toDate` |
-| `abnormal_threats_get` | Get detailed threat by ID | `threatId` |
-| `abnormal_threats_actions` | Get remediation actions for a threat | `threatId` |
-| `abnormal_threats_remediate` | Remediate a threat (move to junk/trash/quarantine) | `threatId`, `action` |
-| `abnormal_threats_unremediate` | Undo remediation on a threat | `threatId` |
+Two tools cover the threat domain. There is no threat-level action tool —
+nothing here changes a threat's state, and `abnormal_threats_get` is a
+read.
+
+| Tool | Description | Parameters |
+|------|-------------|------------|
+| `abnormal_threats_list` | List detected threats. Returns threat IDs plus summary only — no message bodies, no headers. | `pageSize` (default 100, max 100), `pageNumber` (1-indexed), `filter` (OData string) |
+| `abnormal_threats_get` | Get one threat by ID, including its related message IDs. | `threatId` (required) |
+
+There is no date-range parameter. Narrow by time through the OData
+`filter` string: `receivedTime gt 2026-03-20T00:00:00Z`.
+
+### ID vocabulary
+
+`threatId` is a **UUID string**. The neighbouring `caseId` used by
+`abnormal_cases_get` is a **number**. The two identifiers read alike in
+prose ("pull case 12345", "pull the case for that threat") and are not
+interchangeable — passing a threat UUID to `abnormal_cases_get` is a type
+error, not a lookup miss.
 
 ### Tool Usage Examples
 
@@ -131,8 +144,7 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 {
   "tool": "abnormal_threats_list",
   "parameters": {
-    "fromDate": "2026-03-20T00:00:00Z",
-    "toDate": "2026-03-27T00:00:00Z",
+    "filter": "receivedTime gt 2026-03-20T00:00:00Z",
     "pageSize": 25
   }
 }
@@ -144,17 +156,6 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
   "tool": "abnormal_threats_get",
   "parameters": {
     "threatId": "184def76-3c28-4e1b-9ef0-a5abc123def4"
-  }
-}
-```
-
-**Remediate a threat:**
-```json
-{
-  "tool": "abnormal_threats_remediate",
-  "parameters": {
-    "threatId": "184def76-3c28-4e1b-9ef0-a5abc123def4",
-    "action": "QUARANTINE"
   }
 }
 ```
@@ -174,12 +175,14 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
    - Invoice or payment redirection
    - Urgency language ("urgent", "today", "confidential")
 4. **Assess scope:**
-   - Search for same sender across all recipients
-   - Check if other users received similar attacks
-5. **Remediate:**
-   - Quarantine message if still in inbox
-   - Alert targeted recipients directly
-   - Block sender domain if confirmed malicious
+   - Re-run `abnormal_threats_list` over the window and correlate on
+     sender in the results — there is no tenant-wide message search, so
+     scope is assembled from threat records, not from a sender query
+   - Check whether other threats in the window share the sender or domain
+5. **Remediate** - `abnormal_messages_list`, then
+   `abnormal_remediation_manage` per message (see *Remediation is
+   per-message*). Alert targeted recipients directly. Sender-domain
+   blocking is not an Abnormal action — do it at the gateway or in M365.
 6. **Document** - Record findings and IOCs
 
 ### Credential Phishing Investigation Workflow
@@ -195,10 +198,9 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 4. **Assess user interaction:**
    - Was the email read (isRead)?
    - Was it post-remediated (delivered then removed)?
-5. **Remediate:**
-   - Quarantine all instances
-   - Force password reset if credentials may have been entered
-   - Block phishing domain
+5. **Remediate** - loop `abnormal_remediation_manage` over every message
+   in the threat. Password resets and domain blocks are outside this
+   server entirely: run them through `cipp-users` or the M365 tenant.
 
 ### Malware Investigation Workflow
 
@@ -207,29 +209,65 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 3. **Assess delivery:**
    - Was the attachment opened?
    - How many users received the same attachment?
-4. **Remediate:**
-   - Quarantine all instances across the organization
-   - Block file hash at endpoint level
-   - Isolate affected endpoints if attachment was executed
+4. **Remediate** - loop `abnormal_remediation_manage` over every message
+   in the threat. Hash blocking and endpoint isolation are EDR actions,
+   not Abnormal ones.
 
 ## Severity Assessment Matrix
 
 | Factor | Low | Medium | High | Critical |
 |--------|-----|--------|------|----------|
-| Attack Type | Spam, Graymail | Scam, Extortion | Phishing, BEC | Supply Chain, ATO |
+| Attack Type | Spam, Graymail | Scam, Extortion | Phishing, BEC | Supply Chain, compromised internal sender |
 | Recipients | 1 user | 2-10 users | 10-50 users | 50+ or executives |
 | User Interaction | Not read | Read, no click | Link clicked | Credentials entered |
 | Sender Profile | Known spam | Unknown external | Impersonation | Compromised internal |
 | Financial Impact | None | Low value request | Wire/ACH request | Active fraud |
 
-## Remediation Actions
+## Remediation is per-message, not per-threat
 
-| Action | Description | When to Use |
-|--------|-------------|-------------|
-| `QUARANTINE` | Move to quarantine (user cannot access) | Confirmed malicious threats |
-| `MOVE_TO_JUNK` | Move to junk/spam folder | Spam, graymail, low-confidence threats |
-| `DELETE` | Permanently delete the message | High-severity confirmed threats |
-| `UNREMEDIATE` | Undo remediation, restore to inbox | False positives |
+Remediation does not live in this domain. The only mutating tool on the
+server is `abnormal_remediation_manage`, and it requires **both**
+`threatId` and `messageId`:
+
+| Argument | Required | Notes |
+|----------|----------|-------|
+| `threatId` | yes | UUID of the containing threat |
+| `messageId` | yes | one specific message inside that threat |
+| `action` | yes | `remediate` \| `unremediate` \| `status` |
+
+There is no "remediate this campaign" call. To act on a threat you must:
+
+1. `abnormal_threats_get` — confirm the threat is what you think it is.
+2. `abnormal_messages_list` — enumerate the messages inside it.
+3. `abnormal_remediation_manage` — **once per message**, in a loop.
+
+### Why the loop is the hazard
+
+The shape of the risk is not "one big blast radius decision". It is an
+N-call loop that can stop halfway.
+
+- **Partial failure leaves a campaign half-remediated.** Rate limiting
+  (60 req/min) or a single 4xx mid-loop means some recipients had the
+  message pulled and others still have it in the inbox. Nothing in the
+  API reports "the campaign is done" — only per-message results. Track
+  which `messageId`s succeeded; do not infer completion from the first
+  few.
+- **The message list is a point-in-time snapshot.** A live campaign can
+  land in more mailboxes while you are looping. Re-run
+  `abnormal_messages_list` after the loop rather than trusting the
+  original enumeration.
+- **`action` — not the tool name — decides the blast radius.**
+  `status` is a plain GET. `remediate` and `unremediate` are POSTs that
+  move real mail. One tool name spans a safe read and a destructive
+  write, so any allowlist keyed on tool name grants all three. An agent
+  permitted to check `status` is, mechanically, permitted to
+  `unremediate`.
+- **`unremediate` is not an undo.** It delivers a message Abnormal
+  classified as an attack back into a user's inbox. Treat it as a
+  delivery decision requiring the same approval as the original
+  remediation, not as a correction.
+
+Verify with `action: "status"` per message after the loop.
 
 ## Error Handling
 
@@ -248,15 +286,13 @@ Abnormal Security uses behavioral AI to detect email threats that bypass traditi
 1. **Prioritize by attack type** - BEC and supply chain threats first
 2. **Check user interaction** - Prioritize threats that were read or clicked
 3. **Review AI insights** - summaryInsights explains why Abnormal flagged the email
-4. **Correlate with account takeover** - A phishing campaign may lead to account compromise
-5. **Monitor remediation status** - Ensure auto-remediation is working as expected
+4. **Correlate account compromise elsewhere** - A phishing campaign may lead to account compromise, but nothing on this server detects it; pivot to `cipp-users`
+5. **Monitor remediation status** - Check `action: "status"` per message; there is no campaign-level status
 6. **Track post-remediation** - Emails remediated after delivery need immediate attention
-7. **Never release confirmed threats** - Even if users request it; escalate to management
+7. **Never release confirmed threats** - `unremediate` delivers a known attack; escalate to management instead
 
 ## Related Skills
 
 - [Abnormal Cases](../cases/SKILL.md) - Abuse mailbox case management
 - [Abnormal Messages](../messages/SKILL.md) - Message analysis
-- [Abnormal Vendors](../vendors/SKILL.md) - Vendor risk assessment
-- [Abnormal Account Takeover](../account-takeover/SKILL.md) - Account takeover detection
 - [Abnormal API Patterns](../api-patterns/SKILL.md) - API authentication and usage
