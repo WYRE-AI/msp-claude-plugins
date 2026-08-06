@@ -28,7 +28,7 @@ and QBR prep on one client.
 3. **Per-policy drift detail** — `inforcer_alignment_details(clientTenantId=...)`
    for the breakdown: which policies are aligned, which drifted, and the
    baseline-expected vs. tenant-actual state for each.
-4. **Secure score** — `inforcer_secure_scores(clientTenantId=...)` for
+4. **Secure score** — `inforcer_secure_scores_get(tenant=...)` for
    Microsoft's own posture view, read as complementary to alignment.
 
 ## What it produces
@@ -36,7 +36,7 @@ and QBR prep on one client.
 | Section | Source |
 |---------|--------|
 | Headline: alignment score + band (aligned / semi-aligned / drifted) | `inforcer_alignment_scores` + thresholds |
-| Microsoft secure score | `inforcer_secure_scores` |
+| Microsoft secure score | `inforcer_secure_scores_get` |
 | Drifted policies (baseline-expected vs. tenant-actual) | `inforcer_alignment_details` |
 | Aligned policies (count, for context) | `inforcer_alignment_details` |
 

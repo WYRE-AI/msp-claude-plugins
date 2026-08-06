@@ -127,12 +127,25 @@ Higher Attack Index = more severe threats targeting the user.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_people_get_vap` | Get Very Attacked People report | `window` (14, 30, 90 days), `size` (top N) |
-| `proofpoint_people_get_top_clickers` | Get users who click most on threats | `window` (14, 30, 90 days), `size` (top N) |
-| `proofpoint_people_get_user_risk` | Get risk profile for a specific user | `email` |
-| `proofpoint_people_get_attack_index` | Get attack index rankings | `window`, `department`, `size` |
-| `proofpoint_people_list_vip` | List users flagged as VIP | - |
-| `proofpoint_people_set_vip` | Flag a user as VIP for enhanced protection | `email`, `vip` (true/false) |
+| `proofpoint_people_get_vap` | Very Attacked People report — users ranked by attack index | `window`, `page`, `size` |
+| `proofpoint_people_get_top_clickers` | Users who clicked the most threat URLs | `window`, `page`, `size` |
+| `proofpoint_people_get_user_risk` | Risk score and attack details for one user | `email` (required), `window` |
+
+Three tools, all read-only. **The People domain changes nothing** — there
+is no write tool on this server at all.
+
+### Not available through this plugin
+
+- **A separate attack-index ranking.** The attack index *is* the ranking
+  `proofpoint_people_get_vap` returns; there is no second tool for it, and
+  no `department` filter anywhere. Departmental comparison means pulling
+  the VAP list and grouping it yourself against your own roster.
+- **Anything to do with VIP flags.** No tool lists VIPs and none sets one.
+  **VAP and VIP are different concepts** and the similarity of the acronyms
+  is the trap: VAP is computed by Proofpoint from attack volume, VIP is an
+  administrator-assigned protection flag. This plugin can read the first
+  and cannot see or touch the second. Set VIP flags in the Proofpoint
+  console.
 
 ## Common Workflows
 
@@ -155,16 +168,19 @@ Higher Attack Index = more severe threats targeting the user.
 
 ### Executive Risk Assessment
 
-1. Call `proofpoint_people_list_vip` to get all flagged VIP users
-2. For each VIP, call `proofpoint_people_get_user_risk`
-3. Assess Attack Index and click susceptibility
+1. Bring your own list of executives — the VIP flag is not readable here,
+   so the roster comes from the customer's HR or directory data, not from
+   Proofpoint
+2. For each, call `proofpoint_people_get_user_risk` with their email
+3. Assess attack index and click susceptibility
 4. Recommend enhanced controls: browser isolation, advanced MFA, dedicated monitoring
 5. Present risk summary to leadership
 
 ### Department Risk Comparison
 
-1. Call `proofpoint_people_get_attack_index` with `department=Finance`
-2. Repeat for other departments: IT, Executive, HR, Sales
+1. Call `proofpoint_people_get_vap` with a large `size` to get the ranked
+   attack-index list — there is no `department` filter
+2. Join the returned users against your own department roster
 3. Compare average attack index across departments
 4. Identify which departments are most targeted
 5. Allocate security resources proportionally

@@ -8,7 +8,7 @@ This plugin provides Claude with deep knowledge of Sherweb, enabling:
 
 - **Customer Management** - List and manage customers in the Sherweb distributor platform
 - **Subscription Lifecycle** - View subscriptions, change seat quantities, and monitor provisioning status
-- **Distributor Billing** - Analyze payable charges, pricing breakdowns, deductions, fees, taxes, and invoices
+- **Distributor Billing** - Analyze payable charges, pricing breakdowns, deductions, fees, and taxes. Charges are fetched by explicit date range; there is no billing-period list and no invoice retrieval — see [GOVERNANCE.md](GOVERNANCE.md)
 - **API Patterns** - OAuth 2.0 client credentials flow, subscription key authentication, rate limiting, and error handling
 
 ## Prerequisites
@@ -64,7 +64,7 @@ Add to your Claude Desktop or Claude Code MCP config:
 | Skill | Description |
 |-------|-------------|
 | `api-patterns` | Sherweb API authentication, OAuth 2.0, endpoints, rate limiting, and best practices |
-| `billing` | Distributor billing: payable charges, pricing breakdown, deductions, fees, taxes, invoices |
+| `billing` | Distributor billing: payable charges by date range, pricing breakdown, deductions, fees, taxes |
 | `customers` | Customer management and the distributor > service provider > customer hierarchy |
 | `subscriptions` | Subscription lifecycle, quantity changes, and license management |
 
@@ -72,7 +72,7 @@ Add to your Claude Desktop or Claude Code MCP config:
 
 | Command | Description |
 |---------|-------------|
-| `/billing-summary` | View payable charges for a billing period with pricing breakdown |
+| `/billing-summary` | View payable charges for a billing date range with pricing breakdown |
 | `/list-customers` | List all customers under the service provider account |
 | `/subscription-status` | Check subscription details and quantities for a customer |
 | `/change-quantity` | Change subscription seat/license quantity |

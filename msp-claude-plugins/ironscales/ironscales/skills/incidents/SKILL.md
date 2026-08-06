@@ -37,8 +37,9 @@ Ironscales combines AI-powered threat detection with crowdsourced employee phish
   tenant; use `cipp-users`.
 - **A phish caught by the other API-based platform on the tenant** —
   Check Point Harmony Email (Avanan) inspects the same mailboxes and
-  raises its own incident objects with their own IDs; use
-  `checkpoint-avanan-incidents`.
+  detects the same mail independently. It has no incident object to
+  correlate against — its API surfaces the offending mail itself — so use
+  `checkpoint-avanan-threats` and match on the message, not on an ID.
 
 ## Key Concepts
 

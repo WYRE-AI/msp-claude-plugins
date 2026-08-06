@@ -24,7 +24,7 @@ summaries.
    to completion. A partial tenant list silently drops clients from the
    report, so this always pages fully before reporting.
 2. **Per-tenant scores** — for each tenant's **integer Client Tenant ID**, pull
-   `inforcer_alignment_scores` and `inforcer_secure_scores`.
+   `inforcer_alignment_scores` and `inforcer_secure_scores_get`.
 3. **Classify** — apply `aligned_threshold` / `semi_aligned_threshold` to the
    alignment value to band each tenant aligned / semi-aligned / drifted.
 4. **Drill where it matters** — pull `inforcer_alignment_details` only for
@@ -40,7 +40,7 @@ aligned**:
 |--------|--------|
 | Tenant (display name) | `inforcer_tenants_list` |
 | Alignment score + band | `inforcer_alignment_scores` + thresholds |
-| Microsoft secure score | `inforcer_secure_scores` |
+| Microsoft secure score | `inforcer_secure_scores_get` |
 | Top drifted controls (drifted/semi-aligned tenants) | `inforcer_alignment_details` |
 
 Plus a summary: counts per band, the lowest secure scores, and the **priority

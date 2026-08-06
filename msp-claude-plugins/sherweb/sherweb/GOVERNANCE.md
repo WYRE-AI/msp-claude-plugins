@@ -133,10 +133,28 @@ change.**
   discovered through `sherweb_navigate` / `sherweb_list_categories`. A
   tool that appears "missing" is usually just not yet discovered — an
   agent should not conclude the capability does not exist.
-- **Documented tool names drift from the served surface.** Some skill
-  examples in this plugin reference billing-period and invoice tools that
-  the deployed server does not expose. Trust `sherweb_list_category_tools`
-  over prose.
+- **Two billing capabilities do not exist, and earlier revisions of this
+  plugin claimed both.** The tool names have been corrected throughout, but
+  the absences are permanent and worth stating plainly, because an operator
+  will ask for each of them by name.
+
+  *No billing-period enumeration.* Nothing on this server lists billing
+  periods, their IDs, or their open/closed status. `sherweb_billing_payable_charges`
+  takes `periodFrom`/`periodTo` plus `billingCycleType`
+  (`sherweb-mcp/src/domains/billing.ts:20-52`) — you supply the window, and
+  nothing validates it against a real period. An agent that "looks up the
+  latest period first" is calling a tool that has never existed.
+
+  *No invoice surface whatsoever.* No tool lists invoices, fetches one by ID,
+  or returns invoice line items. Two things are invoice-adjacent and neither
+  is a substitute: `sherweb_billing_charge_details` returns the line items of
+  a single charge, and `sherweb_customers_accounts_receivable` returns one
+  customer's outstanding balance and aging. Presenting either as "the
+  invoice" misstates what the operator is looking at — the charge view omits
+  everything not on that charge, and the AR view is a balance, not a
+  document. Invoices live in the Sherweb partner portal.
+
+  Trust `sherweb_list_category_tools` over prose.
 - **Pagination is 1-based here** (`page`, `pageSize`, default 25) while
   the neighbouring Pax8 connector is 0-based. Copying a paging pattern
   between the two silently changes which records you get.

@@ -109,56 +109,83 @@ Proofpoint tracks named threat actors (e.g., TA505, TA542, TA577) that conduct p
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_threat_get_campaign` | Get details of a specific campaign | `campaignId` |
-| `proofpoint_threat_search_campaigns` | Search campaigns by criteria | `startDate`, `endDate`, `actor`, `family` |
-| `proofpoint_threat_get_indicators` | Get IOCs for a campaign or threat | `campaignId`, `threatId` |
-| `proofpoint_threat_search_indicators` | Search IOCs across all campaigns | `type`, `value`, `startDate`, `endDate` |
-| `proofpoint_threat_get_family` | Get details of a threat family | `familyName` |
-| `proofpoint_threat_get_actor` | Get details of a threat actor | `actorName` |
-| `proofpoint_threat_get_landscape` | Get threat landscape summary | `window` (7, 30, 90 days) |
+| `proofpoint_threat_get_campaign` | Campaign detail by ID — actors, malware families, techniques, associated messages | `campaign_id` (required) |
+| `proofpoint_threat_get_by_id` | Threat detail by ID — type, classification, associated indicators | `threat_id` (required) |
+| `proofpoint_threat_get_iocs` | Indicators of compromise for a campaign or time range — URLs, IPs, domains, hashes | `campaign_id`, `sinceTime`, `interval`, `threat_type` |
+| `proofpoint_threat_list_families` | Malware families Proofpoint tracks, with descriptions and associated campaigns | `sinceTime`, `interval` |
+| `proofpoint_reports_threat_summary` | Threat breakdown by type with counts and trends | `window`, `threatType` |
+
+### Not available through this plugin
+
+Everything here is a **forward lookup**: you arrive with an ID or a time
+window and get intelligence back. There is no way to arrive with a name or
+an indicator and search.
+
+- **Searching campaigns by criteria** (actor, family, date). Campaign
+  access is by ID only, and the IDs come from TAP events.
+- **Reverse IOC lookup** — "which campaigns contain this hash".
+  `proofpoint_threat_get_iocs` runs the other direction: campaign or time
+  window in, indicators out. To answer an inbound IOC question, pull the
+  IOC set for the window and match locally.
+- **Per-family or per-actor detail pages.** `proofpoint_threat_list_families`
+  lists families; there is no get-by-name. Actor names appear inside
+  campaign output and have no tool of their own.
 
 ## Common Workflows
 
 ### Investigate a Campaign from TAP Event
 
-1. From a TAP event, extract the `campaignId`
+1. From a TAP event, extract the `campaign_id`
 2. Call `proofpoint_threat_get_campaign` with the campaign ID
 3. Review the campaign description, actor attribution, and techniques
-4. Call `proofpoint_threat_get_indicators` to get all IOCs for the campaign
+4. Call `proofpoint_threat_get_iocs` with the same `campaign_id` to get all
+   IOCs for the campaign
 5. Export IOCs to your SIEM or firewall blocklists
 6. Check if other users in the organization were targeted by the same campaign
 
 ### Track a Threat Family
 
-1. Call `proofpoint_threat_get_family` with the family name (e.g., `Emotet`)
-2. Review associated campaigns and activity timeline
-3. Call `proofpoint_threat_search_campaigns` filtered by that family
+1. Call `proofpoint_threat_list_families` for the window you care about and
+   find the family (e.g. `Emotet`) in the returned list — there is no
+   get-by-name
+2. Review the campaigns the listing associates with it
+3. Call `proofpoint_threat_get_campaign` for each of those campaign IDs
 4. Assess whether the family is actively targeting your organization
 5. Review MITRE ATT&CK techniques to inform detection rules
 
 ### IOC Lookup
 
-1. Receive an IOC from an external source (URL, hash, IP)
-2. Call `proofpoint_threat_search_indicators` with the IOC value
-3. If found, review associated campaigns and threat families
-4. Determine if the IOC has been seen targeting your organization
-5. Check the threat status - `active` IOCs require immediate action
+An inbound IOC — someone hands you a hash or a URL and asks "have we seen
+this?" — **cannot be looked up directly.** There is no indicator-keyed
+search. The workable approximation:
+
+1. Call `proofpoint_threat_get_iocs` for the time window in question,
+   optionally narrowed by `threat_type`
+2. Match the indicator against the returned set yourself
+3. If it matches, call `proofpoint_threat_get_campaign` on the associated
+   campaign for context
+4. **A non-match means "not in the window you pulled", not "never seen"** —
+   say so, rather than reporting a clean result
 
 ### Threat Landscape Review
 
-1. Call `proofpoint_threat_get_landscape` with a 30-day window
-2. Review top threat families, actors, and techniques
-3. Identify trends - are attacks increasing for specific families?
+1. Call `proofpoint_reports_threat_summary` with a 30-day `window`
+2. Review the breakdown by threat type with counts and trends
+3. Add `proofpoint_threat_list_families` for the same window to see which
+   families are active
 4. Cross-reference with your organization's TAP data
 5. Update security awareness training based on active campaigns
 
 ### Correlate Across Multiple Events
 
-1. Gather `threatID` values from multiple TAP events
-2. For each, call `proofpoint_threat_get_indicators`
+1. Gather `threat_id` values from multiple TAP events
+2. For each, call `proofpoint_threat_get_by_id` for classification and its
+   associated indicators
 3. Look for shared infrastructure (common domains, IPs, C2 servers)
 4. If shared infrastructure is found, these events may be part of the same campaign
-5. Use `proofpoint_threat_search_campaigns` to confirm
+5. Confirm by calling `proofpoint_threat_get_campaign` on the campaign IDs
+   the threats carry — you cannot search campaigns to find the link, only
+   confirm one you already have
 
 ## Error Handling
 

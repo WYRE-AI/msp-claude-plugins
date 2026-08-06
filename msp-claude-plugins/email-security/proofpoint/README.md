@@ -7,11 +7,49 @@ Claude Code plugin for Proofpoint Email Protection integration.
 This plugin provides Claude with deep knowledge of Proofpoint Email Protection, enabling:
 
 - **Targeted Attack Protection (TAP)** - Monitor threat events, blocked/delivered messages, click tracking
-- **Quarantine Management** - Search, release, and delete quarantined messages
-- **Threat Intelligence** - Campaign tracking, threat families, IOCs
-- **Forensics & Threat Response** - Search and destroy, auto-pull, evidence collection
+- **Quarantine Management** - List, search, release, and delete quarantined messages
+- **Threat Intelligence** - Campaign lookup, threat families, IOCs
+- **Forensics & Threat Response** - Search and destroy (auto-pull), evidence collection
 - **People-Centric Security** - Very Attacked People reports, top clickers, user risk scoring
 - **URL Defense** - Decode and analyze Proofpoint-rewritten URLs
+- **Smart Search** - Trace messages through mail flow, retrieve headers and processing detail
+- **DLP** - Data-loss incidents and encrypted-message status
+- **Policy** - Read email security policies and routing rules
+- **Reports** - Organization, threat, mail-flow, and executive summaries
+- **Events** - Spam, phishing and malware detection events with statistics
+
+## MCP Tools
+
+The 44 tools the shipped server registers. Skills exist for the first six
+groups; the remaining groups are reachable but have no skill of their own
+yet, so consult the schemas via `proofpoint_list_category_tools`.
+
+| Group | Tools |
+|---|---|
+| TAP (SIEM) | `proofpoint_tap_get_all_threats`, `proofpoint_tap_get_messages_blocked`, `proofpoint_tap_get_messages_delivered`, `proofpoint_tap_get_clicks_permitted`, `proofpoint_tap_get_clicks_blocked` |
+| Quarantine | `proofpoint_quarantine_list`, `proofpoint_quarantine_search`, `proofpoint_quarantine_release`, `proofpoint_quarantine_delete` |
+| Threat intelligence | `proofpoint_threat_get_campaign`, `proofpoint_threat_get_by_id`, `proofpoint_threat_get_iocs`, `proofpoint_threat_list_families` |
+| Forensics | `proofpoint_forensics_get_threat`, `proofpoint_forensics_get_campaign`, `proofpoint_forensics_search_messages`, `proofpoint_forensics_pull_messages` |
+| People | `proofpoint_people_get_vap`, `proofpoint_people_get_top_clickers`, `proofpoint_people_get_user_risk` |
+| URL Defense | `proofpoint_url_decode`, `proofpoint_url_analyze` |
+| Smart Search | `proofpoint_smart_search_trace`, `proofpoint_smart_search_get_message`, `proofpoint_smart_search_get_headers` |
+| DLP | `proofpoint_dlp_list_incidents`, `proofpoint_dlp_get_incident`, `proofpoint_dlp_list_encrypted` |
+| Policy | `proofpoint_policy_list`, `proofpoint_policy_get`, `proofpoint_policy_list_routes` |
+| Reports | `proofpoint_reports_org_summary`, `proofpoint_reports_threat_summary`, `proofpoint_reports_mail_flow`, `proofpoint_reports_executive_summary` |
+| Events | `proofpoint_events_list`, `proofpoint_events_get_details`, `proofpoint_events_get_stats` |
+| Discovery / meta | `proofpoint_status`, `proofpoint_list_categories`, `proofpoint_list_category_tools`, `proofpoint_router`, `proofpoint_navigate`, `proofpoint_execute_tool` |
+
+`proofpoint_execute_tool` runs any of the above by name, so granting it
+grants the destructive tools too — see [GOVERNANCE.md](GOVERNANCE.md).
+`proofpoint_navigate` is refused by the gateway for every caller.
+
+**Not available through this plugin** — each was documented as a tool in an
+earlier revision and does not exist: organization enumeration, VIP flag
+read/write, quarantine message preview or get-by-ID, bulk quarantine
+release/delete, remediation operation status or history, TRAP auto-pull
+configuration, campaign search, reverse IOC lookup, threat-actor and
+per-family lookup, and per-URL click attribution. GOVERNANCE.md lists what
+to use instead.
 
 ## Configuration
 

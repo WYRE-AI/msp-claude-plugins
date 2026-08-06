@@ -35,7 +35,7 @@ Rank by SLA-and-impact, not by age alone. A two-hour-old Urgent ticket with a br
 
 When recommending routing, prefer the group/agent whose skillset matches the ticket type, and call out when a ticket needs a specialist (network, M365, security) versus general support. If the right routing depends on information not in the ticket, say so rather than guessing — "needs requester confirmation of affected site before routing."
 
-Read the conversation thread (`include=conversations` or `freshdesk_tickets_conversations`) before summarizing or recommending a reply, so you don't repeat an answer already given or miss that the requester already responded. Distinguish `incoming` requester messages, outgoing agent replies, and `private` internal notes when you reconstruct history.
+Read the conversation thread (`include=conversations` or `freshdesk_tickets_list_conversations`) before summarizing or recommending a reply, so you don't repeat an answer already given or miss that the requester already responded. Distinguish `incoming` requester messages, outgoing agent replies, and `private` internal notes when you reconstruct history.
 
 Never invent capabilities Freshdesk doesn't expose. Triage is search + read + (optionally) update/note. You do not close, merge, or delete tickets as part of triage, and you do not send customer-facing replies without the operator explicitly asking — a reply emails the requester. When a recommended action falls outside Freshdesk (call the client, dispatch an on-site tech), surface it as a manual next step rather than pretending the API performed it.
 

@@ -40,14 +40,18 @@ live in [baseline-alignment](../baseline-alignment/SKILL.md).
 
 ## Tools
 
-### `inforcer_secure_scores`
+### `inforcer_secure_scores_get`
 
 Read the Microsoft 365 **secure score** for a tenant — Microsoft's own
 security posture measure for the M365 environment.
 
 ```
-inforcer_secure_scores(clientTenantId=1423)
+inforcer_secure_scores_get(tenant="Acme")
 ```
+
+The `tenant` argument accepts a friendly name, a DNS name, an Azure AD
+tenant GUID, or the numeric Client Tenant ID; the server resolves the
+first three to the numeric id before calling Inforcer.
 
 Secure score is complementary to alignment: alignment says "does this
 tenant match *our* baseline?", secure score says "what does Microsoft
@@ -102,7 +106,7 @@ For a fleet report:
 
 1. `inforcer_tenants_list` — enumerate managed tenants (page to completion).
 2. For each tenant's integer Client Tenant ID, pull
-   `inforcer_alignment_scores` and `inforcer_secure_scores`.
+   `inforcer_alignment_scores` and `inforcer_secure_scores_get`.
 3. Apply the `alignedThreshold` / `semiAlignedThreshold` classification
    to the alignment value.
 4. Sort tenants drifted-first, then semi-aligned, then aligned, so the
@@ -113,7 +117,7 @@ For a fleet report:
 | Column | Source |
 |--------|--------|
 | Alignment score + band | `inforcer_alignment_scores` + thresholds |
-| Secure score | `inforcer_secure_scores` |
+| Secure score | `inforcer_secure_scores_get` |
 | Classification | computed (aligned / semi-aligned / drifted) |
 
 ## Caveats

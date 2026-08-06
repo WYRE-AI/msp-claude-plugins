@@ -83,15 +83,19 @@ Returns, per policy, the baseline-expected state and the tenant's actual
 state so you can pinpoint exactly what diverged. This is the primary
 input to any drift report.
 
-### `inforcer_tenant_policies_list`
+### `inforcer_policies_list`
 
 List the **deployed policy state** for a tenant (read-only). Shows what
 policies are actually in place on the tenant, independent of the
 baseline comparison.
 
 ```
-inforcer_tenant_policies_list(clientTenantId=1423)
+inforcer_policies_list(tenant="Acme")
 ```
+
+The `tenant` argument accepts a friendly name, a DNS name, an Azure AD
+tenant GUID, or the numeric Client Tenant ID; the server resolves the
+first three to the numeric id before calling Inforcer.
 
 Use this to inspect the tenant's real configuration when an alignment
 detail is ambiguous, or to confirm what is actually deployed.
@@ -118,7 +122,7 @@ drifted = [p for p in details if p['aligned'] is False]
 ```
 
 Start from the score for the headline, then read `alignment_details` to
-list the drifted policies. Cross-reference `inforcer_tenant_policies_list`
+list the drifted policies. Cross-reference `inforcer_policies_list`
 when you need the tenant's actual deployed value for a policy.
 
 ### Portfolio drift sweep

@@ -6,11 +6,16 @@ Claude Code plugin for SpamTitan email security by TitanHQ.
 
 This plugin provides Claude with deep knowledge of SpamTitan, enabling:
 
-- **Quarantine Management** - Review and act on held emails in the quarantine queue
-- **Email Statistics** - Monitor inbound/outbound email flow, spam rates, and trends
-- **Allowlist Management** - Add and remove trusted senders to prevent false positives
-- **Blocklist Management** - Add and remove blocked senders to stop unwanted mail
-- **Mass Release** - Bulk release or delete quarantined messages
+- **Quarantine Management** - Review and act on held emails in the quarantine queue, one message at a time
+- **Email Statistics** - Monitor inbound email flow, spam rates, and trends, optionally scoped to a single customer domain
+- **Allowlist Management** - Add, remove, and list trusted senders to prevent false positives
+- **Blocklist Management** - Add, remove, and list blocked senders to stop unwanted mail
+
+> **Two limits worth knowing before you start.** The quarantine listing
+> (`spamtitan_get_queue`) takes **no domain filter**, so on a multi-tenant
+> appliance it spans every customer and has to be narrowed client-side on the
+> recipient — see [GOVERNANCE.md](GOVERNANCE.md). And there is **no bulk
+> release or bulk delete**: both act on a single message ID per call.
 
 ## Prerequisites
 
@@ -53,14 +58,14 @@ export SPAMTITAN_API_KEY="your-api-key"
 |-------|-------------|
 | `api-patterns` | Authentication, API structure, pagination, rate limiting, error handling |
 | `quarantine` | Quarantine queue management — listing, releasing, and deleting held messages |
-| `lists` | Sender allowlist and blocklist management |
+| `lists` | Sender allowlist and blocklist management via the `action` argument (`add`/`remove`/`list`) |
 
 ## Available Commands
 
 | Command | Description |
 |---------|-------------|
 | `/review-quarantine` | Review quarantine queue, show stats summary, list recent held messages |
-| `/manage-lists` | Add or remove entries from sender allowlists and blocklists |
+| `/manage-lists` | Add, remove, or review entries in sender allowlists and blocklists |
 
 ## Quick Start
 
