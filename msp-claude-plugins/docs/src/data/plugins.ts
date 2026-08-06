@@ -50,32 +50,26 @@ export const plugins: Plugin[] = [
     vendor: 'Abnormal',
     description: 'Abnormal Security - AI-powered email security, phishing detection, account takeover prevention',
     category: 'email-security',
-    maturity: 'production',
+    maturity: 'beta',
     features: [
-      'Account Takeover',
       'Cases',
       'Messages',
-      'Threats',
-      'Vendors'
+      'Threats'
     ],
     skills: [
-      { name: 'account-takeover', description: 'Abnormal Security account takeover (ATO) detection: suspicious sign-in signals, impossible travel, mailbox rule changes, lateral-movement indicators, ATO case structure, investigation workflows, and remediation actions.' },
       { name: 'cases', description: 'Abnormal Security abuse mailbox cases: user-reported email submissions, case statuses and judgments, the case lifecycle, bulk and remediation actions, and phishing simulation handling.' },
       { name: 'messages', description: 'Abnormal Security message analysis: message retrieval, email header inspection, attachments, sender reputation, delivery context, and SPF/DKIM/DMARC authentication results.' },
       { name: 'threats', description: 'Abnormal Security threat detection: threat types (BEC, phishing, malware, socially-engineered attacks, spam, graymail, credential theft), attack vectors, severity assessment, remediation actions, and investigation workflows.' },
-      { name: 'vendors', description: 'Abnormal Security VendorBase vendor risk: vendor risk scores and levels, risk factors, compromised-vendor detection, vendor domain analysis, and supply-chain email threat workflows.' },
       { name: 'api-patterns', description: 'Abnormal Security REST API fundamentals: Bearer token authentication, base URLs, rate limiting, pagination, OData filtering, request/response formats, and error handling.' }
     ],
     agents: [
-      { name: 'email-threat-analyst', description: 'Use this agent when investigating email threats detected by Abnormal Security, analyzing attack chains, assessing user exposure, or managing remediation across client tenants.' },
+      { name: 'email-threat-analyst', description: 'Use this agent when investigating email threats detected by Abnormal Security, analyzing attack chains, assessing user exposure, or managing per-message remediation across client tenants.' },
       { name: 'threat-report-generator', description: 'Use this agent when generating periodic threat landscape reports from Abnormal Security data across the MSP client portfolio — not for live threat investigation, but for summarizing attack trends, most targeted organizations, most common attack types, BEC attempt volumes, and remediation effectiveness over time.' }
     ],
     commands: [
-      { name: '/account-audit', description: 'Audit for account takeover indicators and suspicious sign-ins in Abnormal Security' },
       { name: '/case-review', description: 'Review and triage abuse mailbox cases in Abnormal Security' },
       { name: '/search-threats', description: 'Search for specific threat patterns in Abnormal Security by sender, recipient, attack type, or keywords' },
-      { name: '/threat-triage', description: 'Triage recent email threats detected by Abnormal Security by severity and attack type' },
-      { name: '/vendor-risk', description: 'Check vendor risk scores and compromised vendor activity in Abnormal Security VendorBase' }
+      { name: '/threat-triage', description: 'Triage recent email threats detected by Abnormal Security by severity and attack type' }
     ],
     apiInfo: {
       baseUrl: '',
@@ -365,17 +359,15 @@ export const plugins: Plugin[] = [
     category: 'email-security',
     maturity: 'production',
     features: [
-      'Incident Management',
-      'Policies',
+      'Exceptions',
       'Quarantine',
       'Threats'
     ],
     skills: [
-      { name: 'incidents', description: 'Checkpoint Harmony Email & Collaboration (Avanan) incident management: incident lifecycle and status transitions, severity levels, investigation and remediation workflows, notes and evidence collection, and the incident field reference for email security events.' },
-      { name: 'policies', description: 'Checkpoint Harmony Email & Collaboration (Avanan) policy management: policy types (DLP, anti-phishing, anti-malware, anti-BEC, ATO protection), actions and scope, allow/block list administration, and policy tuning across managed customer tenants.' },
-      { name: 'quarantine', description: 'Checkpoint Harmony Email & Collaboration (Avanan) quarantine management: quarantine reasons and severity mapping, the quarantine field reference, release and bulk-operation workflows, and quarantine expiry/retention behavior for held emails.' },
-      { name: 'threats', description: 'Checkpoint Harmony Email & Collaboration (Avanan) threat detection and analysis: threat types and detection engines, IOC extraction, timeline and severity assessment, and investigation workflows for phishing, malware, BEC, and account-takeover threats.' },
-      { name: 'api-patterns', description: 'Checkpoint Harmony Email & Collaboration (Avanan) API fundamentals: OAuth2 client-credentials authentication, regional base URLs, request and pagination patterns, rate limiting, error handling, and performance optimization for the Harmony Email API.' }
+      { name: 'exceptions', description: 'The Checkpoint Harmony Email (Avanan) whitelist and blacklist surface: the match fields and matching modes an exception accepts, the defaults that widen an entry beyond what was typed, the id mismatch between listing and editing, and the standing security consequence of a detection bypass.' },
+      { name: 'quarantine', description: 'Finding and acting on mail in Checkpoint Harmony Email (Avanan): the `hec_search_emails` attribute-filter syntax, what an entity payload carries, the asynchronous quarantine and restore actions and their task polling, and the judgement a restore requires because delivery cannot be undone.' },
+      { name: 'threats', description: 'The Checkpoint Harmony Email (Avanan) security-event surface: the event type, state, severity and SaaS enums accepted by `hec_query_events`, what a detection record does and does not carry, how `availableEventActions` governs what you can do next, and phishing, BEC and malware triage built on those fields.' },
+      { name: 'api-patterns', description: 'Shape of the Checkpoint Harmony Email (Avanan) `hec_*` tool surface: the thirteen tools and what each reaches, the event/entity split that governs which tool accepts which id, the `responseEnvelope`/`responseData` result shape, `scrollId` pagination, and the auth, regional-routing and farm-scope behaviour behind every call.' }
     ],
     agents: [
       { name: 'cloud-email-defender', description: 'Use this agent when investigating quarantined threats, managing email security events, auditing Avanan tenant configuration, or performing cross-tenant threat sweeps in Check Point Avanan (Harmony Email & Collaboration).' },
@@ -460,7 +452,7 @@ export const plugins: Plugin[] = [
     ],
     skills: [
       { name: 'contacts-companies', description: 'Freshdesk contacts and companies: contact fields and the required contact-channel rule, contact CRUD plus merge and make_agent, company fields and domain-based auto-association, search and autocomplete lookups, and the MSP workflow of resolving a ticket requester to a contact and then to its parent company through the Freshdesk REST API v2.' },
-      { name: 'knowledge-base', description: 'Freshdesk Solutions knowledge base: the three-level categories -> folders -> articles hierarchy, article fields and draft/published status, solution search, and the MSP workflow of suggesting relevant KB articles to deflect or resolve a ticket, through the Freshdesk REST API v2.' },
+      { name: 'knowledge-base', description: 'Freshdesk Solutions knowledge base: the three-level categories -> folders -> articles hierarchy, article fields and draft/published status, finding an article by walking that tree (there is no KB search tool), and the MSP workflow of suggesting relevant KB articles to deflect or resolve a ticket, through the Freshdesk REST API v2.' },
       { name: 'sla-business-hours', description: 'Freshdesk SLA policies and business-hours calendars: policy and calendar fields, per-priority respond_within / resolve_within targets, how the business-hours vs 24x7 clock computes a ticket\'s fr_due_by and due_by, and breach / at-risk detection through the Freshdesk REST API v2.' },
       { name: 'ticketing', description: 'Freshdesk ticket operations: list, get, search, create, update, reply, notes, and conversation threads.' },
       { name: 'api-patterns', description: 'Freshdesk MCP tool surface and REST API v2 fundamentals: header-based authentication via `X-Freshdesk-Domain` and `X-Freshdesk-Api-Key` (which the MCP server translates into upstream HTTP Basic `apikey:X` auth), the `/api/v2` base URL, `page`/`per_page` pagination and the `link` header, per-minute rate limits, the search query language and its 300-result cap, and the status/priority/source integer encodings.' }
@@ -498,7 +490,7 @@ export const plugins: Plugin[] = [
     ],
     skills: [
       { name: 'assessments', description: 'Inforcer assessments: listing a tenant\'s assessments (read-only) and triggering an assessment run — the one mutating action in the entire Inforcer surface.' },
-      { name: 'audit-events', description: 'Inforcer\'s read-only record of changes and activity: searching and filtering auditEvents, enumerating the event-type catalog to build valid filters, and the continuationToken paging audit searches require.' },
+      { name: 'audit-events', description: 'Inforcer\'s read-only record of changes and activity: searching and filtering auditEvents by type and date window (the search is account-wide — there is no tenant filter), enumerating the event-type catalog to build valid filters, and the continuationToken paging audit searches require.' },
       { name: 'baseline-alignment', description: 'Inforcer\'s core drift-detection surface: baseline templates, tenant alignment scores, alignment details (the per-policy breakdown of a tenant against its assigned baseline), and reading deployed tenant policy state.' },
       { name: 'compliance-reporting', description: 'Inforcer compliance and posture reporting: per-tenant Microsoft 365 secure scores, combining them with alignment scores, and the alignedThreshold / semiAlignedThreshold settings that classify each tenant or policy as aligned, semi-aligned, or drifted.' },
       { name: 'identity-governance', description: 'Inforcer\'s read-only identity inventory for a managed Microsoft 365 tenant: users, groups, and role assignments.' },
@@ -695,23 +687,21 @@ export const plugins: Plugin[] = [
       'Agent Monitoring',
       'Alert Handling',
       'Device Management',
-      'Eyes',
-      'Network'
+      'Network',
+      'Power'
     ],
     skills: [
       { name: 'agents', description: 'Domotz agents (collectors/probes) as the per-site entry point for all device and network operations: agent types, lifecycle, ONLINE/OFFLINE status, the list/get tools and their license and last-seen fields, and fleet health, site inventory, and capacity-planning workflows.' },
-      { name: 'alerts', description: 'Domotz alerting: the alert types (device status, SNMP threshold, port, Eyes, agent, speed test, new device), how alert profiles define triggers, severity, notification channels and scope, the triggered/active/resolved lifecycle, and the tools for listing alerts and profiles.' },
-      { name: 'devices', description: 'Domotz device inventory: how agents discover and classify devices, the identification attributes (IP, MAC, hostname, display name, vendor), the ONLINE/OFFLINE/UNKNOWN status model, and the list/get/search tools plus inventory and topology workflows built on them.' },
-      { name: 'eyes', description: 'Domotz Eyes, the agent-run synthetic monitoring sensors: TCP, HTTP, and custom Eye types, their UP/DOWN/WARNING status model, listing sensors and historical results, and diagnosing failed or high-latency checks.' },
-      { name: 'network', description: 'Domotz network operations: agent-driven network scanning and discovery (ARP, SNMP, DNS, MAC OUI), SNMP polling of interface and system metrics, TCP port monitoring, speed tests, and the tools and error modes for each.' },
-      { name: 'api-patterns', description: 'Domotz API and MCP fundamentals: API-key header authentication, region-specific endpoints (us-east-1 / eu-central-1), the full MCP tool catalog by domain, offset-based pagination, rate limiting, and HTTP error codes.' }
+      { name: 'alerts', description: 'Domotz alerting configuration: what an alert profile defines, the two tools that read profiles and their per-device bindings, monitoring coverage audits, and the important limit — this server exposes alert configuration only, never fired alerts.' },
+      { name: 'devices', description: 'Domotz device inventory: how agents discover and classify devices, the identification attributes (IP, MAC, hostname, display name, vendor), the ONLINE/OFFLINE/UNKNOWN status model, the five device tools — list, get, uptime, history, inventory metadata — and why device lookup is a client-side match rather than a server-side search.' },
+      { name: 'network', description: 'Domotz network observation: the collector\'s topology graph, its own interfaces, detected IP conflicts, and the two SNMP surfaces — polled variables and custom sensors — with their history endpoints and the tools and error modes for each.' },
+      { name: 'power', description: 'Domotz PDU and smart-outlet control: listing outlets and their power state, and the one non-GET tool the Domotz server exposes — switching an outlet on, off, or cycling it.' },
+      { name: 'api-patterns', description: 'Domotz API and MCP fundamentals: X-Api-Key header authentication, the region-selected base URL (us-east-1 / eu-central-1), the full 21-tool MCP catalog by domain, the agent-scoped call shape, why there are no pagination arguments, rate limiting, and HTTP error codes.' }
     ],
     agents: [],
     commands: [
-      { name: '/alert-status', description: 'Check current Domotz alerts across all agents' },
       { name: '/device-inventory', description: 'List all devices at a Domotz-monitored site' },
       { name: '/device-lookup', description: 'Find a Domotz device by name, IP address, or MAC address' },
-      { name: '/network-scan', description: 'Scan a network for devices via a Domotz agent' },
       { name: '/site-overview', description: 'Overview of a Domotz site\'s network health' }
     ],
     apiInfo: {
@@ -923,7 +913,7 @@ export const plugins: Plugin[] = [
       { name: 'api-patterns', description: 'KnowBe4 REST API fundamentals: Bearer token authentication, multi-region base URLs (US, EU, CA, UK, DE), pagination, rate limiting, error handling, and response formats.' }
     ],
     agents: [
-      { name: 'security-awareness-analyst', description: 'Use this agent when analyzing phishing simulation results, identifying high-risk users, tracking training completion, recommending targeted security awareness programs, or responding to user-reported phishing through KnowBe4 PhishER for MSP clients.' },
+      { name: 'security-awareness-analyst', description: 'Use this agent when analyzing phishing simulation results, identifying high-risk users, tracking training completion, or recommending targeted security awareness programs for MSP clients.' },
       { name: 'training-enforcer', description: 'Use this agent when tracking and enforcing security awareness training completion in KnowBe4 — identifying users who have missed deadlines, finding repeat phishing simulation clickers who represent high-risk users, drafting re-training campaigns, or generating compliance completion reports for clients.' }
     ],
     commands: [
@@ -1520,18 +1510,18 @@ export const plugins: Plugin[] = [
       'Subscription Lifecycle'
     ],
     skills: [
-      { name: 'billing', description: 'Sherweb distributor billing: billing periods, Setup/Recurring/Usage charge types, billing cycles (OneTime, Monthly, Yearly), the pricing breakdown (listPrice, netPrice, prorated, subTotal), promotional and performance deductions, fees, taxes, invoices, and MSP margin calculation.' },
+      { name: 'billing', description: 'Sherweb distributor billing: explicit billing date ranges, Setup/Recurring/Usage charge types, billing cycles (OneTime, Monthly, Yearly), the pricing breakdown (listPrice, netPrice, prorated, subTotal), promotional and performance deductions, fees, taxes, and MSP margin calculation.' },
       { name: 'customers', description: 'Sherweb customer records: the distributor > service provider > customer hierarchy and its API scoping consequences, customer lifecycle stages, core address and contact fields, accounts-receivable data with aging buckets, and cross-referencing customers with PSA, subscription, and billing data.' },
       { name: 'subscriptions', description: 'Sherweb subscription management: the subscription lifecycle and its states, seat/license quantity rules (absolute values, minimums, proration, commitment restrictions), the quantity-change workflow, subscription and change-response fields, and state-transition errors.' },
       { name: 'api-patterns', description: 'Sherweb Partner API fundamentals: OAuth 2.0 client-credentials auth, token caching, subscription-key header, scopes and base URLs, endpoint and MCP tool catalog, page-based pagination, Accept-Language localization, rate limits, and error codes.' }
     ],
     agents: [
-      { name: 'billing-reconciler', description: 'Use this agent when an MSP needs to reconcile Sherweb distributor billing — reviewing payable charges for a billing period, drilling into individual charge details, separating Setup/Recurring/Usage charge types, verifying that billed quantities match active subscriptions, and calculating MSP margin between Sherweb cost and customer price.' },
+      { name: 'billing-reconciler', description: 'Use this agent when an MSP needs to reconcile Sherweb distributor billing — reviewing payable charges for a date range, drilling into individual charge details, separating Setup/Recurring/Usage charge types, verifying that billed quantities match active subscriptions, and calculating MSP margin between Sherweb cost and customer price.' },
       { name: 'customer-account-auditor', description: 'Use this agent when an MSP needs a portfolio-wide health audit of its Sherweb customer accounts — enumerating all customers, checking accounts-receivable standing, correlating each customer\'s subscription footprint, and flagging accounts that are at financial or provisioning risk.' },
       { name: 'subscription-provisioner', description: 'Use this agent when an MSP needs to provision, right-size, or audit Sherweb customer subscriptions — listing a customer\'s active subscriptions, looking up catalog products before ordering, planning seat-quantity changes, and walking quantity adjustments through Sherweb\'s confirmation flow.' }
     ],
     commands: [
-      { name: '/billing-summary', description: 'View payable charges for a Sherweb billing period with pricing breakdown' },
+      { name: '/billing-summary', description: 'View payable charges for a Sherweb billing date range with pricing breakdown' },
       { name: '/change-quantity', description: 'Change subscription seat/license quantity for a Sherweb customer' },
       { name: '/list-customers', description: 'List all customers under the Sherweb service provider account' },
       { name: '/subscription-status', description: 'Check subscription details and quantities for a Sherweb customer' }
@@ -2049,16 +2039,16 @@ export const plugins: Plugin[] = [
       'Quarantine'
     ],
     skills: [
-      { name: 'lists', description: 'SpamTitan sender allowlists and blocklists: entry types, per-domain vs. global list scope, allowlisting trusted senders to prevent false positives, and blocking unwanted senders and domains.' },
-      { name: 'quarantine', description: 'SpamTitan quarantine queue: quarantine types, release vs. delete semantics, message aging, multi-domain scoping, bulk quarantine operations, and email flow statistics.' },
-      { name: 'api-patterns', description: 'SpamTitan MCP fundamentals: the available tool catalog, API-key header authentication, API structure, pagination, rate limiting, and error handling.' }
+      { name: 'lists', description: 'SpamTitan sender allowlists and blocklists: the add/remove/list action parameter, entry types, allowlisting trusted senders to prevent false positives, blocking unwanted senders and domains, and the scoping limit — neither manage tool takes a domain parameter.' },
+      { name: 'quarantine', description: 'SpamTitan quarantine queue: quarantine types, release vs. delete semantics, message aging, email flow statistics, and the tenant-isolation limit — the queue listing accepts no domain filter, so on a multi-tenant appliance it spans every customer.' },
+      { name: 'api-patterns', description: 'SpamTitan MCP fundamentals: the available tool catalog and its exact parameters, API-key header authentication, API structure, pagination, rate limiting, and error handling.' }
     ],
     agents: [
       { name: 'quarantine-release-reviewer', description: 'Use this agent when an MSP technician or client needs to systematically review the SpamTitan quarantine queue for false positives, release legitimate messages, identify patterns of legitimate mail being blocked, or generate a quarantine digest for client review.' },
       { name: 'spam-filter-analyst', description: 'Use this agent when analyzing spam and phishing patterns in SpamTitan, managing the quarantine queue, tuning allowlist and blocklist rules, investigating held email, or generating email filtering statistics for MSP clients.' }
     ],
     commands: [
-      { name: '/manage-lists', description: 'Add or remove entries from SpamTitan sender allowlists and blocklists' },
+      { name: '/manage-lists', description: 'Add, remove, or list entries in SpamTitan sender allowlists and blocklists' },
       { name: '/review-quarantine', description: 'Review the SpamTitan quarantine queue, show email statistics summary, and list recent held messages with release and delete actions' }
     ],
     apiInfo: {
@@ -2156,16 +2146,16 @@ export const plugins: Plugin[] = [
       'Incident Management'
     ],
     skills: [
-      { name: 'incidents', description: 'Ironscales phishing incidents end to end: incident sources and statuses, the phishing/spam/legitimate classification model and the remediation each one triggers, the response fields that drive triage decisions, daily-triage and campaign-blocking workflows, and the failure modes — already-closed incidents, partial remediation, and allowlist scope.' },
-      { name: 'api-patterns', description: 'Ironscales MCP fundamentals: API-key plus company-ID header authentication and the per-tenant scoping that follows from it, the tool surface across incidents, statistics, and allowlist management, offset/limit pagination, rate-limit behavior, and the HTTP error-code table.' }
+      { name: 'incidents', description: 'Ironscales phishing incidents end to end: incident statuses and severities, the five remediation actions and which of them are irreversible, the stateless AI email-classification tool and the message content it exports, allowlist entries for email/domain/IP, daily-triage and campaign workflows, and the failure modes — already-closed incidents, partial remediation, and allowlist scope.' },
+      { name: 'api-patterns', description: 'Ironscales MCP fundamentals: API-key plus company-ID header authentication and the per-tenant scoping that follows from it, the nine tools this server registers and what each one actually changes, offset/limit pagination without a total count, rate-limit behavior, and how API failures surface to the model.' }
     ],
     agents: [
       { name: 'crowdsourced-intel-harvester', description: 'Use this agent when harvesting and analyzing crowdsourced threat intelligence from IRONSCALES\' global network — identifying trending attack types, surfacing indicators seeing increased reports, comparing client threat profiles to industry peers, and generating intelligence briefings from the collective signal.' },
-      { name: 'phishing-responder', description: 'Use this agent when responding to user-reported phishing emails in IRONSCALES, triaging the incident queue, classifying emails, coordinating quarantine and remediation, or reviewing security statistics for MSP clients.' }
+      { name: 'phishing-responder', description: 'Use this agent when responding to user-reported phishing emails in IRONSCALES, triaging the incident queue, investigating incidents, coordinating quarantine and remediation, or reviewing security statistics for MSP clients.' }
     ],
     commands: [
-      { name: '/classify-email', description: 'Classify a specific Ironscales incident email as phishing, spam, or legitimate' },
-      { name: '/triage-incidents', description: 'Triage open Ironscales phishing incidents — list by status, classify, and remediate' }
+      { name: '/classify-email', description: 'Get an Ironscales AI verdict on a raw email, then act on it with a remediation action' },
+      { name: '/triage-incidents', description: 'Triage open Ironscales phishing incidents — list by status and severity, investigate, and remediate' }
     ],
     apiInfo: {
       baseUrl: '',
