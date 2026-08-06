@@ -16,6 +16,41 @@
  *   4. LIVE-GW     — tool names observed on the live gateway connector, supplied
  *                    via --live <json> as { vendorId: [names] }.
  *
+ * ---------------------------------------------------------------------------
+ * WHAT A STATIC-ONLY RUN CANNOT SEE
+ *
+ * RUNTIME, PROD-SCHEMA and LIVE-GW each enumerate a *complete* registered
+ * surface. STATIC does not. Two failure modes make a static-only run invent
+ * drift that is not there, and in the report both look exactly like a
+ * fabricated tool name — the reader cannot tell them apart. Both were observed
+ * in practice on this repo:
+ *
+ *   a. STALE CHECKOUT. The scan reads whatever happens to be on disk under
+ *      --servers. A local *-mcp clone that is behind its remote is missing
+ *      tools that exist upstream, so every plugin that correctly documents
+ *      those tools is reported as drifted. `kaseya/it-glue` (4 names) and
+ *      `kaseya/datto-rmm` (1 name) were reported drifted for precisely this
+ *      reason: the checkouts predated the commits that added the tools. Cloning
+ *      both repos fresh took the audit from drifted=3 to drifted=1 without a
+ *      single documentation edit. The script cannot detect this on its own —
+ *      knowing a checkout is behind requires a fetch, which this script does
+ *      not do. ALWAYS confirm the server checkouts are at origin/main before
+ *      believing a static-only drift report; the summary prints the commands.
+ *
+ *   b. GENERATOR-DRIVEN SERVERS. A server that builds its tools from a config
+ *      table writes `name: `${config.toolPrefix}_list`` rather than a string
+ *      literal, so the literal-name pass reads straight past it. qbo-mcp
+ *      registers 133 tools this way and the static scan finds 19 — which made
+ *      all 114 correctly-documented names look fabricated.
+ *
+ * Silent under-extraction is the dangerous mode, so the script now fails loud
+ * instead: when it can prove its own static extraction is incomplete (a tool
+ * name built by interpolation, or a src/ tree that yielded nothing at all) and
+ * no authoritative source is available to fill the gap, the vendor is reported
+ * as UNVERIFIABLE rather than drifted. Supply --runtime to resolve those: a
+ * stdio probe returns the real surface (qbo-mcp: 133 tools, drift 0).
+ * ---------------------------------------------------------------------------
+ *
  * Documented names are the backtick-quoted snake_case tokens in each plugin's
  * skills/**\/SKILL.md, references/*.md, agents/*.md, commands/*.md and its
  * root-level docs (README.md, GOVERNANCE.md), filtered to tokens whose first
@@ -177,6 +212,31 @@ function toolFactories(text) {
   return names;
 }
 
+/**
+ * Tool names this scanner provably cannot read: a `name:` bound to a template
+ * literal that interpolates something (`name: `${config.toolPrefix}_list``).
+ * The value is only knowable by running the code, so its presence is proof the
+ * static extraction below is incomplete — see "what a static-only run cannot
+ * see" in the header. Returns the offending snippets, for the report.
+ */
+function dynamicNameSites(text, file) {
+  const out = [];
+  const lines = text.split("\n");
+  for (let i = 0; i < lines.length; i++) {
+    // `name: `…${…}…`` as a Tool property, or .registerTool(`…${…}…`).
+    if (!/(?:name:\s*|\.(?:registerTool|tool|addTool)\(\s*)`[^`]*\$\{/.test(lines[i])) continue;
+    const win = lines.slice(Math.max(0, i - 3), i + 16).join("\n");
+    if (/inputSchema/.test(win)) out.push({ file, line: i + 1, text: lines[i].trim().slice(0, 90) });
+  }
+  return out;
+}
+
+/**
+ * Static scan of a server's src/. Returns { tools, partial, reason } or null
+ * when there is no src/ to read. `partial: true` means the scan found hard
+ * evidence it missed tools — callers must not treat `tools` as a complete
+ * surface, and must not call a documented name drifted on its strength alone.
+ */
 function staticTools(serverDir) {
   if (!SERVERS_ROOT) return null;
   const src = join(SERVERS_ROOT, serverDir, "src");
@@ -197,8 +257,11 @@ function staticTools(serverDir) {
     : null;
 
   const tools = new Set();
+  const dynamic = [];
   const REG = /\.(?:registerTool|tool|addTool)\(\s*(['"`])([a-z][a-z0-9]*(?:_[a-z0-9]+)+)\1/g;
-  for (const text of texts) {
+  for (let fi = 0; fi < texts.length; fi++) {
+    const text = texts[fi];
+    dynamic.push(...dynamicNameSites(text, relative(join(SERVERS_ROOT, serverDir), files[fi])));
     const lines = text.split("\n");
     // MCP `Tool` object literals: `name: "x"` with an adjacent inputSchema/description.
     for (let i = 0; i < lines.length; i++) {
@@ -213,7 +276,21 @@ function staticTools(serverDir) {
     // Tool-factory call sites: ro("x", …), hi("x", …), irrev("x", …).
     if (FACTORY) { FACTORY.lastIndex = 0; while ((r = FACTORY.exec(text))) tools.add(r[2]); }
   }
-  return [...tools].sort();
+  // Two proofs of incompleteness. Either one means "do not judge on this alone".
+  if (dynamic.length) {
+    const at = dynamic.slice(0, 3).map((d) => `${d.file}:${d.line}`).join(", ");
+    return {
+      tools: [...tools].sort(), partial: true,
+      reason: `${dynamic.length} tool name(s) built by interpolation the scanner cannot resolve (${at})`,
+    };
+  }
+  if (!tools.size) {
+    return {
+      tools: [], partial: true,
+      reason: `scanned ${files.length} source file(s) under src/ and extracted no tool names at all`,
+    };
+  }
+  return { tools: [...tools].sort(), partial: false, reason: null };
 }
 
 // ---------------------------------------------------------------- documented names
@@ -314,11 +391,18 @@ for (const dir of findPluginDirs(PLUGINS)) {
   if (SKIP.has(slug)) continue;
   const mapped = PLUGIN_MAP[slug] ?? { server: `${slug.split("/").pop()}-mcp`, vendor: slug.split("/").pop() };
   const serverDir = mapped.server;
-  const st = serverDir ? staticTools(serverDir) : null;
+  const scan = serverDir ? staticTools(serverDir) : null;
+  const st = scan && scan.tools.length ? scan.tools : null;
   const rt = serverDir ? runtime[serverDir] : null;
   const sc = mapped.hostedNote ? null : schemaTools(mapped.vendor);
   const lv = mapped.vendor && live[mapped.vendor] ? live[mapped.vendor] : null;
-  const truth = st || rt || sc || lv
+
+  // runtime / prod-schema / live-gw each enumerate a complete registered surface.
+  // Static alone does not, and when it knows it under-extracted, judging drift on
+  // it turns correct documentation into a false accusation. Refuse instead.
+  const authoritative = rt || sc || lv;
+  const blindStatic = Boolean(scan?.partial && !authoritative);
+  const truth = !blindStatic && (st || authoritative)
     ? [...new Set([...(st || []), ...(rt || []), ...(sc || []), ...(lv || [])])].sort()
     : null;
 
@@ -329,7 +413,11 @@ for (const dir of findPluginDirs(PLUGINS)) {
     groundTruth: truth,
     groundTruthSource: truth
       ? [st && "static", rt && "runtime", sc && "prod-schema", lv && "live-gw"].filter(Boolean).join("+")
-      : "NONE",
+      : blindStatic ? "PARTIAL-static" : "NONE",
+    unverifiableReason: blindStatic
+      ? `static scan of ${serverDir} is provably incomplete — ${scan.reason}. `
+        + "Re-run with --runtime to get the real surface; do not read this as drift."
+      : truth ? null : "no local server repo and no captured runtime/schema/live surface",
     runtimeCount: rt ? rt.length : null, staticCount: st ? st.length : null,
     schemaCount: sc ? sc.length : null, liveCount: lv ? lv.length : null,
     documented: [], drifted: [], negated: [], undocumented: [], unverified: !truth,
@@ -337,15 +425,21 @@ for (const dir of findPluginDirs(PLUGINS)) {
     staticMissed: st && rt ? rt.filter((t) => !st.includes(t)) : [],
   };
   if (!truth) {
-    // No ground truth (hosted upstream / unbuilt server). Still record what the
-    // docs claim, using the plugin slug as the namespace guess, so the vendor
-    // lands in the "unverified" bucket with its claim surface visible.
-    const guess = slug.split("/").pop().replace(/-/g, "_");
-    const alt = slug.split("/").pop().split("-")[0];
-    entry.documentedUnverified = [...docs.keys()].filter((n) => {
-      const head = n.split("_")[0];
-      return n.startsWith(guess + "_") || head === alt;
-    }).sort();
+    // No usable ground truth (hosted upstream, unbuilt server, or a static scan
+    // that knows it under-extracted). Still record what the docs claim so the
+    // vendor lands in the "unverified" bucket with its claim surface visible.
+    // A partial scan at least tells us the real namespace; otherwise guess it
+    // from the plugin slug.
+    let inNamespace;
+    if (scan?.tools.length) {
+      const known = prefixesOf(scan.tools);
+      inNamespace = (n) => known.has(n.split("_")[0]);
+    } else {
+      const guess = slug.split("/").pop().replace(/-/g, "_");
+      const alt = slug.split("/").pop().split("-")[0];
+      inNamespace = (n) => n.startsWith(guess + "_") || n.split("_")[0] === alt;
+    }
+    entry.documentedUnverified = [...docs.keys()].filter(inNamespace).sort();
     entry.allDocTokens = [...docs.keys()].sort();
     report.push(entry); continue;
   }
@@ -398,4 +492,25 @@ for (const r of report) {
 // NEG = names the docs mention only to say they do not exist ("There is no `x`").
 // Correct documentation of an absence; never drift.
 console.log(`\ndrifted=${drifted.length} clean=${clean.length} unverified=${unver.length} total=${report.length}`);
+
+// Vendors the scanner refused to judge because it caught itself under-extracting.
+// These are NOT clean and NOT drifted — they are unjudged, and saying so out loud
+// is the whole point.
+const partial = report.filter((r) => r.groundTruthSource === "PARTIAL-static");
+if (partial.length) {
+  console.log(`\ncannot verify (${partial.length}) — static extraction proved incomplete:`);
+  for (const r of partial) console.log(`  ${r.plugin}: ${r.unverifiableReason}`);
+}
+
+// A static-only drift verdict is only as current as the checkout it read.
+if (drifted.some((r) => r.groundTruthSource === "static")) {
+  const stale = drifted.filter((r) => r.groundTruthSource === "static");
+  console.log(
+    `\nBEFORE ACTING ON THE ${stale.length} STATIC-ONLY DRIFT VERDICT(S) ABOVE:\n` +
+    "  a checkout that is behind its remote is missing tools that exist upstream, and a plugin\n" +
+    "  that documents them correctly is then reported as drifted — identical in this report to a\n" +
+    "  fabricated name. This script does not fetch, so it cannot tell the two apart. Confirm:\n" +
+    stale.map((r) => `    git -C ${join(SERVERS_ROOT ?? "<servers>", r.server)} pull --ff-only`).join("\n"),
+  );
+}
 process.exitCode = drifted.length ? 1 : 0;
