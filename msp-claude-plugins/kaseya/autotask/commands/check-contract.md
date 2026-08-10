@@ -22,8 +22,8 @@ View contract status, entitlements, and remaining hours for a company or specifi
 
 2. **Query contracts**
    - If company_id: Use `autotask-mcp/autotask_search_contracts` to find all contracts
-   - If contract_id: Fetch specific contract details
-   - Apply expired filter as specified
+   - If contract_id: Use `autotask-mcp/autotask_get_contract` to fetch that contract's header
+   - If include_expired: add `autotask-mcp/autotask_list_expiring_contracts` with `includeExpired: true` scoped to the company
 
 3. **Get contract details**
    - Fetch contract type and terms
@@ -281,7 +281,9 @@ Contact your Autotask administrator for access.
 ## MCP Tool Usage
 
 This command uses the following autotask-mcp tools:
-- `autotask_search_contracts` - Search contracts by company
+- `autotask_search_contracts` - Search contracts by company (supports `contractType` and `endDateFrom`/`endDateTo` filters)
+- `autotask_get_contract` - Fetch a single contract by ID
+- `autotask_list_expiring_contracts` - Expiring/expired contracts report (used for `include_expired`)
 - `autotask_search_companies` - Verify company exists
 
 ## Related Commands

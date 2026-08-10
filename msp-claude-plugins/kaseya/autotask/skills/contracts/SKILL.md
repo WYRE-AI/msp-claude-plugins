@@ -78,7 +78,103 @@ Services define what's included in a contract:
 | `periodType` | Monthly, Quarterly, Annual |
 | `isOptional` | Required vs optional |
 
+## MCP Tool Reference
+
+The autotask-mcp server exposes typed contract tools — prefer these over
+`autotask_raw_request`. Read tools return contract **header fields only**
+(no service lines), keeping responses light.
+
+### Search Contracts
+
+```
+Tool: autotask_search_contracts
+Args: {
+  "companyID": 12345,
+  "status": 1,
+  "contractType": 7,
+  "endDateFrom": "2026-01-01",
+  "endDateTo": "2026-12-31",
+  "searchTerm": "Managed",
+  "pageSize": 25
+}
+```
+
+All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `contractType` (picklist ID), `endDateFrom`/`endDateTo` (ISO dates bounding the end date), `pageSize` (default 25, max 500).
+
+### Get a Single Contract
+
+```
+Tool: autotask_get_contract
+Args: { "id": 54321 }
+```
+
+### Expiring / Expired Contracts Report
+
+The renewal-pipeline tool. Lists contracts whose `endDate` falls within the next `daysAhead` days (default 60), org-wide or scoped to one company:
+
+```
+Tool: autotask_list_expiring_contracts
+Args: {
+  "daysAhead": 90,
+  "companyID": 12345,
+  "includeExpired": true,
+  "status": 1,
+  "pageSize": 100
+}
+```
+
+- Pair with `status: 1` to get "in effect but lapsing" contracts — the renewal call list.
+- `includeExpired: true` drops the today lower bound, surfacing contracts already past their end date. Autotask does **not** auto-deactivate expired contracts, so `status: 1` + `includeExpired: true` finds clients still receiving service on expired paper — the compliance-risk case.
+
+### Create a Contract
+
+```
+Tool: autotask_create_contract
+Args: {
+  "companyID": 12345,
+  "contractName": "Acme Corp - Managed Services",
+  "contractType": 1,
+  "contractCategory": 3,
+  "startDate": "2026-01-01",
+  "endDate": "2026-12-31",
+  "status": 1
+}
+```
+
+**Required:** `companyID`, `contractName`, `contractType`, `contractCategory`, `startDate`, `endDate`
+
+### Create Contract Shells in Bulk
+
+For multi-contract onboarding (e.g. one contract per client location), pass up to 50 shells in one call — same fields per item as `autotask_create_contract`:
+
+```
+Tool: autotask_create_contracts_bulk
+Args: {
+  "contracts": [
+    { "companyID": 12345, "contractName": "Acme - HQ", "contractType": 1, "contractCategory": 3, "startDate": "2026-01-01", "endDate": "2026-12-31" },
+    { "companyID": 12345, "contractName": "Acme - Branch", "contractType": 1, "contractCategory": 3, "startDate": "2026-01-01", "endDate": "2026-12-31" }
+  ]
+}
+```
+
+Shells are created sequentially (Autotask has no batch endpoint); a failure on one shell does **not** abort the rest. Each item reports `{index, contractName, success, id | error}` — retry only the failures.
+
+### Update a Contract
+
+```
+Tool: autotask_update_contract
+Args: { "id": 54321, "endDate": "2027-12-31", "status": 1 }
+```
+
+Only fields provided change — the typical renewal move is extending `endDate`.
+
+### Contract Service Lines
+
+`autotask_create_contract_service` (required: `contractID`, `serviceID`, `unitPrice`) and `autotask_update_contract_service` (required: `id`, `contractID`) manage the ContractServices line items on a contract.
+
 ## API Patterns
+
+Raw REST shapes for reference — the typed tools above cover these; reach for `autotask_raw_request` only for entities without typed tools (ContractBlocks, ContractRetainers, etc.).
 
 ### Creating a Contract
 
@@ -216,8 +312,8 @@ Calculate remaining hours:
 ### Contract Renewal
 
 1. **Identify expiring contracts**
-   - Query contracts by endDate
-   - Generate renewal report
+   - `autotask_list_expiring_contracts` with `daysAhead` 30/60/90 windows
+   - Add `includeExpired: true` to catch already-lapsed contracts still marked active
 
 2. **Review contract performance**
    - Compare budgeted vs actual hours

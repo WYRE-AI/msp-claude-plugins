@@ -33,7 +33,6 @@
     "autotask:commands/time-entry.md": "names no MCP tool; 1 HTTP endpoint(s), 6 CLI flag(s) — first at commands/time-entry.md:50 POST /v1.0/TimeEntries",
     "autotask:skills/api-patterns": "names no MCP tool; 12 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:39 GET /v1.0/Tickets",
     "autotask:skills/configuration-items": "names no MCP tool; 6 HTTP endpoint(s), 0 CLI flag(s) — first at skills/configuration-items/SKILL.md:84 POST /v1.0/ConfigurationItemTypes/query",
-    "autotask:skills/contracts": "names no MCP tool; 5 HTTP endpoint(s), 0 CLI flag(s) — first at skills/contracts/SKILL.md:86 POST /v1.0/Contracts",
     "autotask:skills/crm": "names no MCP tool; 5 HTTP endpoint(s), 0 CLI flag(s) — first at skills/crm/SKILL.md:98 POST /v1.0/Companies",
     "autotask:skills/time-entries": "names no MCP tool; 6 HTTP endpoint(s), 0 CLI flag(s) — first at skills/time-entries/SKILL.md:140 POST /TimeEntries",
     "azure-mcp:agents/azure-ops-analyst.md": "names no MCP tool; 0 HTTP endpoint(s), 1 CLI flag(s) — first at agents/azure-ops-analyst.md:12 --read-only",
