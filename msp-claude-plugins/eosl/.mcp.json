@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "eosl": {
+      "type": "http",
+      "url": "https://eosl.ai/mcp"
+    }
+  }
+}
