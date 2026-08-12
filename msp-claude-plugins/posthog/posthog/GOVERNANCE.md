@@ -152,12 +152,25 @@ write tool once that coarse gate is open.
 
 ## Recommended agent policy
 
-Because this plugin ships no write surface, **read tools are safe to grant
-to autonomous and scheduled agents** — insight review, dashboard pulls for
-QBRs, feature-flag status checks, and cohort/event lookups are the intended
-unattended use. Grant them through the gateway allowlist naming the read
-families above; do not grant `admin` on this vendor, because `admin` reaches
-the full upstream surface including everything this document excludes.
+**This section's premise no longer holds as written — read *Tool permission
+tiers* above before granting unattended access.** This plugin ships no
+*documented* write surface, but Conduit cannot actually restrict a grant to
+the read families described in this document: any grant that reaches `exec`
+at all gets PostHog's entire command surface, reads and writes alike, gated
+only by the connecting operator's own key scope. There is no "grant through
+the gateway allowlist naming the read families" action available — `exec`
+is the only name; naming it is the same as granting `admin`.
+
+Before granting an autonomous or scheduled agent access to this vendor,
+confirm independently that the connected org's PostHog key is actually
+scoped read-only (see *The scope decision happens outside Conduit*) —
+Conduit provides no backstop if it isn't. An unattended agent with a
+read-write-scoped key and any grant on this vendor has the same write reach
+an interactive admin session would, with no human in the loop to notice a
+mistaken or adversarial `call` command before it executes
+(`conversations-tickets-reply-create`, feature-flag mutations, and
+`llma-*`/`alert-simulate` spend-incurring calls all included). If the key
+scope cannot be verified, do not grant this vendor to an unattended agent.
 
 There is no write tier to propose-then-approve here, unlike Xero or
 Freshdesk. If a future version of this plugin adds write tools, that
@@ -205,9 +218,13 @@ are not persisted by this plugin.
   written into PostHog's business-knowledge store, which may include
   internal notes not meant for a support or MSP audience.
 
-Restrict the insight, dashboard, and business-knowledge tools specifically
-if agents run unattended or render output where anyone outside the client's
-own team could see it.
+**Conduit cannot restrict the insight, dashboard, or business-knowledge
+tools specifically** — see *Tool permission tiers* above; any grant
+reaching `exec` reaches all of them together, plus every write tool. If any
+of the categories above are too sensitive for an unattended agent or a
+rendering surface outside the client's own team, don't grant this vendor to
+that agent at all — the only enforcement point available today is whether
+the grant exists, not which of PostHog's commands it can reach.
 
 ## Open enforcement gap (tracked, not resolved by this plugin)
 
