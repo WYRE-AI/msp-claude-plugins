@@ -3,8 +3,9 @@ name: "PostHog API Patterns"
 description: >
   PostHog API fundamentals for this plugin: personal API key auth brokered
   through Conduit (no local key), the resource:action scope model, generic
-  REST error handling, and why this plugin's read-only posture is a
-  two-layer control rather than a single enforced boundary.
+  REST error handling, and why this plugin's read-only posture rests on the
+  key's own scopes alone — Conduit has no gateway-side fallback for this
+  vendor.
 when_to_use: >-
   When authenticating to PostHog, reasoning about key scopes, or debugging
   errors or rate limiting from the PostHog MCP server. Use when: posthog
@@ -67,12 +68,16 @@ Conduit having scoped the key correctly — see
 [GOVERNANCE.md](../../GOVERNANCE.md), *The scope decision happens outside
 Conduit, at key creation*.
 
-The second, independent layer is Conduit's own gateway-side tool allowlist
-for this vendor, which should also exclude write/mutating tool names as
-defense-in-depth — but that allowlist is a Conduit configuration, not
-something the PostHog key itself enforces. Neither layer alone is a hard
-guarantee; both together are how this plugin's read-only claim actually
-holds.
+**There is no second, independent layer for this vendor.** PostHog's MCP
+server exposes a single tool, `exec`, that dispatches every operation
+through a free-text `command` string — Conduit's gateway-side allowlist
+gates on the MCP tool NAME, and with only one name to gate on, it can only
+admit or deny `exec` wholesale, never exclude specific write commands
+within it. The key's own scope is the entire enforcement story for this
+vendor; treat a connection as read-write unless you can confirm the
+connecting operator actually scoped the key to read-only resources. See
+[GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers* and *Open
+enforcement gap*.
 
 ## Error Handling
 
@@ -102,15 +107,16 @@ multiple clients.
 
 ## Gotchas
 
-- **Read-only here is a two-layer convention, not a single enforced
-  boundary.** Both the key's scopes and Conduit's tool allowlist have to be
-  configured correctly for this plugin's read-only posture to actually
-  hold. See [GOVERNANCE.md](../../GOVERNANCE.md).
-- **`posthog` is not yet classified in Conduit's `VENDOR_TOOL_CONFIG`.**
-  Until it is, there is no coarse `read` tier grant that admits only this
-  plugin's read families — access has to go through the gateway allowlist.
-  See [GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers*, and
-  `wyre-gateway/GOVERNANCE.md` for the mechanism this depends on.
+- **Read-only here rests on exactly one control: the key's own scopes.**
+  There is no gateway-side allowlist granularity for this vendor — `exec`
+  is reachable or it isn't, and naming it in an allowlist is the same as
+  granting `admin`. See [GOVERNANCE.md](../../GOVERNANCE.md).
+- **`posthog` is not yet classified in Conduit's `VENDOR_TOOL_CONFIG`,
+  and classifying it would not add tool-family granularity either** — it
+  would only let Conduit require a coarse tier floor before `exec` is
+  reachable at all. See [GOVERNANCE.md](../../GOVERNANCE.md), *Tool
+  permission tiers*, and `wyre-gateway/GOVERNANCE.md` for the mechanism
+  this depends on.
 - **A key from the wrong PostHog organization doesn't error — it just
   returns that org's data.** If results look implausibly empty or
   unfamiliar, check which organization the connected key actually belongs
