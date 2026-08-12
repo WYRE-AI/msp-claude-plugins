@@ -377,6 +377,18 @@
       ]
     },
     {
+      "name": "posthog",
+      "source": "./msp-claude-plugins/posthog/posthog",
+      "description": "PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)",
+      "category": "productivity",
+      "tags": [
+        "posthog",
+        "analytics",
+        "productivity",
+        "read-only"
+      ]
+    },
+    {
       "name": "proofpoint",
       "source": "./msp-claude-plugins/email-security/proofpoint",
       "description": "Proofpoint Email Protection - TAP, quarantine, threat intel, forensics, URL defense, VAP reports",
