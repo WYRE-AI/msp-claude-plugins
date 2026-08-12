@@ -177,6 +177,15 @@ process and must update [GOVERNANCE.md](GOVERNANCE.md) accordingly.
 
 ## Changelog
 
+### 0.1.1 (2026-08-12)
+
+- GOVERNANCE.md, README.md, and skills/api-patterns/SKILL.md corrected: the
+  documented "two-layer" read-only enforcement (key scope + gateway
+  allowlist) was factually wrong — PostHog's MCP server exposes a single
+  `exec` tool, so the gateway allowlist can only admit or deny it wholesale,
+  never exclude write commands within it. Read-only now documented
+  correctly as resting on the key's own scope alone. No behavior change.
+
 ### 0.1.0 (2026-08-12)
 
 - Initial release — read-only at v1
