@@ -113,12 +113,14 @@ client** — `.mcp.json` declares only the gateway URL:
 
 ## Security Considerations
 
-- **Read-only is a two-layer control, not one.** It depends on (1) the
-  PostHog personal API key being scoped to read-only resources at creation,
-  and (2) Conduit's gateway-side tool allowlist for this vendor excluding
-  write tool names. See [GOVERNANCE.md](GOVERNANCE.md) — neither layer is
-  automatic, and this document does not control Conduit's actual per-tool
-  permission-tier enforcement.
+- **Read-only rests on exactly one real control: the PostHog personal API
+  key being scoped to read-only resources at creation.** There is no
+  gateway-side second layer for this vendor — PostHog's MCP server exposes
+  a single `exec` tool, so Conduit's tool allowlist can only admit or deny
+  it wholesale, not exclude write tool names from within it. See
+  [GOVERNANCE.md](GOVERNANCE.md), *Tool permission tiers* and *Open
+  enforcement gap*, for the full detail. If you cannot verify the connecting
+  operator scoped the key read-only, assume this connection can write.
 - Never paste a PostHog personal API key into a technician's local
   environment, a `.env` file, or this repo. It is entered once, in Conduit's
   connect UI, and stored server-side.
@@ -174,6 +176,15 @@ extend it (including any future write-tool tier) should follow the normal
 process and must update [GOVERNANCE.md](GOVERNANCE.md) accordingly.
 
 ## Changelog
+
+### 0.1.1 (2026-08-12)
+
+- GOVERNANCE.md, README.md, and skills/api-patterns/SKILL.md corrected: the
+  documented "two-layer" read-only enforcement (key scope + gateway
+  allowlist) was factually wrong — PostHog's MCP server exposes a single
+  `exec` tool, so the gateway allowlist can only admit or deny it wholesale,
+  never exclude write commands within it. Read-only now documented
+  correctly as resting on the key's own scope alone. No behavior change.
 
 ### 0.1.0 (2026-08-12)
 
