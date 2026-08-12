@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "posthog": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/posthog/mcp"
+    }
+  }
+}

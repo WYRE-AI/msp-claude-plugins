@@ -1,0 +1,11 @@
+{
+  "name": "posthog",
+  "version": "0.1.0",
+  "description": "Claude plugin for PostHog product analytics — insights, dashboards, feature flags, cohorts, events (read-only)",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
