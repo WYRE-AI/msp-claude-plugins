@@ -197,6 +197,32 @@ Restrict the insight, dashboard, and business-knowledge tools specifically
 if agents run unattended or render output where anyone outside the client's
 own team could see it.
 
+## Open enforcement gap (tracked, not resolved by this plugin)
+
+**"Read-only" for this vendor rests on two operator-configured layers, and
+neither is enforced automatically today:**
+
+1. The PostHog personal API key must be scoped to read-only `resource:action`
+   pairs at creation (see *The scope decision happens outside Conduit*
+   above) — Conduit does not inspect or verify this.
+2. The connection must use a gateway-side `customTools` allowlist naming
+   only the read families in this document, not an `admin` grant — Conduit
+   has no `VENDOR_TOOL_CONFIG` entry for `posthog` yet, so there is no
+   coarse `read` tier to fall back on if the allowlist is skipped or
+   misconfigured.
+
+**Neither layer is a hard boundary — both are instructions the connecting
+operator has to follow correctly.** An operator who pastes in a
+full-access key AND grants `admin` gets the complete, unrestricted
+upstream PostHog tool surface, including every write tool this document
+excludes, with nothing in Conduit stopping it. This is a real gap between
+what this document calls "read-only" and what Conduit actually enforces
+for a first adopt-vendor plugin — flagged to Aaron (2026-08-12) as an open
+question: whether adopt-vendor plugins like this one need a default-deny
+`VENDOR_TOOL_CONFIG` entry (or equivalent enforced default) shipped
+alongside the plugin itself, rather than relying on setup instructions
+alone. Not resolved by this PR; tracking here so it isn't lost.
+
 ## Known sharp edges
 
 - **The tool surface is bigger than this document, on purpose.** This
@@ -206,7 +232,8 @@ own team could see it.
 - **A key minted without explicit read-only scopes is read-write by
   default.** PostHog does not force an operator to narrow scopes at key
   creation; the read-only posture this document describes depends on the
-  connecting operator having done that deliberately.
+  connecting operator having done that deliberately. See *Open enforcement
+  gap* above — this is not a hypothetical, it's the actual current state.
 - **Feature-flag and early-access-feature reads are two different families
   with overlapping vocabulary.** `early-access-feature-list` /
   `early-access-feature-retrieve` is the confirmed read surface for
