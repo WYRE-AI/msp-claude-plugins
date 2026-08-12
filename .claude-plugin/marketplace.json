@@ -402,6 +402,19 @@
       ]
     },
     {
+      "name": "netsuite",
+      "source": "./msp-claude-plugins/netsuite/netsuite",
+      "description": "Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)",
+      "category": "accounting",
+      "tags": [
+        "netsuite",
+        "accounting",
+        "erp",
+        "read-only",
+        "msp"
+      ]
+    },
+    {
       "name": "quickbooks-online",
       "source": "./msp-claude-plugins/quickbooks/quickbooks-online",
       "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
