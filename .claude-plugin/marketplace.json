@@ -1016,6 +1016,20 @@
       ]
     },
     {
+      "name": "eosl",
+      "source": "./msp-claude-plugins/eosl",
+      "description": "EOSL Hardware Lifecycle — hardware end-of-service-life lookups backed by the public EOSL.ai MCP: per-part and product-family EOSL status, end-of-sale/EOSL dates, support-runway scoring, and bulk inventory audits with vendor-bulletin sourcing. Uses the public EOSL.ai endpoint; not a WYRE-operated or WYRE-endorsed service.",
+      "category": "workflow-pack",
+      "tags": [
+        "eosl",
+        "asset-lifecycle",
+        "end-of-service-life",
+        "hardware-refresh",
+        "mcp",
+        "msp"
+      ]
+    },
+    {
       "name": "clio",
       "source": "./msp-claude-plugins/clio/clio",
       "description": "Clio Manage \u2014 legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
