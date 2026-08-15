@@ -1,0 +1,31 @@
+---
+// Site-wide retirement notice. Rendered from BaseLayout so it appears on every
+// page (index, docs, plugin detail pages). Deliberately NOT dismissible: the
+// gateway stops serving MCP traffic on the cutoff date, so a banner someone can
+// hide is a migration they can miss.
+//
+// Kept as a single component so the copy and the cutoff date live in one place.
+const migrationUrl = import.meta.env.BASE_URL + 'migration/';
+---
+
+<div
+  class="bg-amber-50 dark:bg-amber-950/40 border-b border-amber-300 dark:border-amber-800/60 text-amber-950 dark:text-amber-100"
+  role="region"
+  aria-label="Platform retirement notice"
+>
+  <div class="container py-2.5 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-center text-sm">
+    <span class="font-semibold uppercase tracking-wide text-xs bg-amber-200 dark:bg-amber-900/70 px-2 py-0.5 rounded">
+      Retiring
+    </span>
+    <span>
+      This version of the WYRE MCP Gateway is being retired on
+      <strong>30 September 2026</strong> — <code class="font-mono">mcp.wyre.ai</code> redirects to Conduit from that date.
+    </span>
+    <a
+      href={migrationUrl}
+      class="font-semibold underline underline-offset-2 hover:text-amber-700 dark:hover:text-amber-300"
+    >
+      What to expect &rarr;
+    </a>
+  </div>
+</div>

@@ -1,0 +1,275 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+
+const conduitUrl = 'https://conduit.wyre.ai';
+const conduitMcpUrl = 'https://conduit.wyre.ai/v1/mcp';
+
+const migrated = [
+  {
+    title: 'Your organisation',
+    detail: 'Name, plan, and settings move across. You do not create a new org or a new subscription.'
+  },
+  {
+    title: 'Members and roles',
+    detail: 'Everyone on your team comes with you, keeping the role they have today. No re-inviting.'
+  },
+  {
+    title: 'Service accounts',
+    detail: 'Your service clients are recreated on Conduit against the same organisation.'
+  }
+];
+
+const notMigrated = [
+  {
+    title: 'Vendor credentials',
+    detail: 'API keys, tokens, and OAuth grants for Autotask, IT Glue, Huntress, and every other connection are not transferred. You enter them once in Conduit.'
+  },
+  {
+    title: 'MCP client connections',
+    detail: 'Claude and any other MCP client hold an access token issued by the old gateway. Each connection has to be added again pointing at Conduit.'
+  }
+];
+
+const faqs = [
+  {
+    question: 'Do I need a new subscription?',
+    answer: 'No. Your plan and billing move with your organisation. Nothing to re-purchase, and you are not billed twice during the changeover.'
+  },
+  {
+    question: 'Can I move before 30 September?',
+    answer: 'Yes, and we would rather you did. Both platforms run side by side until the cutoff, so you can set up Conduit, confirm your connections work, and switch your team over at your own pace.'
+  },
+  {
+    question: 'What happens to my usage history and audit log?',
+    answer: 'Historical request logs and audit entries stay on the old platform and are not carried into Conduit. If you need a copy for compliance, email us before 30 September and we will export it for you.'
+  },
+  {
+    question: 'Will my automations break?',
+    answer: 'Anything calling https://mcp.wyre.ai/v1/mcp stops working at the cutoff, so update the URL and re-authenticate before then. Treat this the same as any other endpoint change in your automation stack.'
+  },
+  {
+    question: 'Is Conduit the same product?',
+    answer: 'Same connections, same MCP tooling, same team. Conduit is where the platform is being developed from here, which is why we are consolidating onto it rather than running two gateways.'
+  }
+];
+---
+
+<BaseLayout
+  title="Migrating to Conduit — WYRE MCP Gateway"
+  description="The WYRE MCP Gateway at mcp.wyre.ai retires on 30 September 2026. What moves automatically, what you need to do, and the new URLs for logging in and for your MCP clients."
+>
+  <Header />
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="py-16 lg:py-24 bg-gradient-to-b from-amber-50 to-transparent dark:from-amber-950/20">
+      <div class="container max-w-3xl">
+        <p class="text-sm font-semibold uppercase tracking-wide text-[var(--muted)] mb-3">
+          Platform migration
+        </p>
+        <h1 class="text-4xl lg:text-5xl font-bold mb-6 tracking-tight">Moving to Conduit</h1>
+        <p class="text-xl text-[var(--muted)]">
+          The WYRE MCP Gateway at <code class="font-mono">mcp.wyre.ai</code> is being retired on
+          <strong class="text-[var(--text)]">30 September 2026</strong>. Your organisation, your team,
+          and your service accounts move to Conduit. This page covers what we do for you, what you
+          need to do yourself, and by when.
+        </p>
+      </div>
+    </section>
+
+    <!-- The two URLs that change -->
+    <section class="py-12">
+      <div class="container max-w-3xl">
+        <h2 class="text-2xl font-bold mb-6">The two addresses that change</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-[var(--border)]">
+                <th class="py-3 pr-4 font-semibold"></th>
+                <th class="py-3 pr-4 font-semibold">Today</th>
+                <th class="py-3 font-semibold">From 30 September</th>
+              </tr>
+            </thead>
+            <tbody class="align-top">
+              <tr class="border-b border-[var(--border)]">
+                <td class="py-4 pr-4 font-semibold">Signing in</td>
+                <td class="py-4 pr-4 font-mono text-sm text-[var(--muted)]">mcp.wyre.ai</td>
+                <td class="py-4 font-mono text-sm">
+                  <a href={conduitUrl} class="text-[var(--accent)] hover:underline">conduit.wyre.ai</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="py-4 pr-4 font-semibold">MCP client URL</td>
+                <td class="py-4 pr-4 font-mono text-sm text-[var(--muted)]">mcp.wyre.ai/v1/mcp</td>
+                <td class="py-4 font-mono text-sm">{conduitMcpUrl.replace('https://', '')}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- What moves -->
+    <section class="py-12 bg-neutral-50 dark:bg-neutral-900/50">
+      <div class="container max-w-3xl">
+        <h2 class="text-2xl font-bold mb-2">What we migrate for you</h2>
+        <p class="text-[var(--muted)] mb-8">No action needed on any of this.</p>
+        <div class="space-y-6">
+          {migrated.map((item) => (
+            <div class="flex gap-4">
+              <span class="text-[var(--success)] font-bold text-lg leading-7" aria-hidden="true">&check;</span>
+              <div>
+                <h3 class="font-semibold mb-1">{item.title}</h3>
+                <p class="text-[var(--muted)]">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <h2 class="text-2xl font-bold mt-14 mb-2">What does not come across</h2>
+        <p class="text-[var(--muted)] mb-8">These are the pieces you re-do yourself, once.</p>
+        <div class="space-y-6">
+          {notMigrated.map((item) => (
+            <div class="flex gap-4">
+              <span class="text-amber-600 dark:text-amber-400 font-bold text-lg leading-7" aria-hidden="true">!</span>
+              <div>
+                <h3 class="font-semibold mb-1">{item.title}</h3>
+                <p class="text-[var(--muted)]">{item.detail}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="py-16">
+      <div class="container max-w-3xl">
+        <h2 class="text-2xl font-bold mb-8">What you need to do</h2>
+        <ol class="space-y-8">
+          <li class="flex gap-5">
+            <span class="shrink-0 w-9 h-9 rounded-full bg-[var(--accent)] text-black font-bold flex items-center justify-center">1</span>
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Sign in at conduit.wyre.ai</h3>
+              <p class="text-[var(--muted)] mb-3">
+                Use the same email address you use today. Your organisation is already there waiting
+                for you, with your team and their roles in place.
+              </p>
+              <a href={conduitUrl} class="btn btn-primary">Go to Conduit</a>
+            </div>
+          </li>
+          <li class="flex gap-5">
+            <span class="shrink-0 w-9 h-9 rounded-full bg-[var(--accent)] text-black font-bold flex items-center justify-center">2</span>
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Re-enter your vendor credentials</h3>
+              <p class="text-[var(--muted)]">
+                Open each connection in Conduit and enter its API key, token, or OAuth login again.
+                We do not transfer credentials between platforms, so this is the one piece of real
+                work in the move. Have your PSA, RMM, and security tool credentials to hand before
+                you start, and set up shared org connections first so your team is not blocked.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-5">
+            <span class="shrink-0 w-9 h-9 rounded-full bg-[var(--accent)] text-black font-bold flex items-center justify-center">3</span>
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Repoint your MCP clients</h3>
+              <p class="text-[var(--muted)] mb-3">
+                In Claude, or wherever you use the gateway, add the connector again using the new URL
+                and complete the sign-in prompt:
+              </p>
+              <pre class="text-sm"><code>{conduitMcpUrl}</code></pre>
+              <p class="text-[var(--muted)] mt-3">
+                Remove the old <code class="font-mono">mcp.wyre.ai</code> connector once the new one
+                is listing tools, so nobody is left calling the platform that is going away.
+              </p>
+            </div>
+          </li>
+          <li class="flex gap-5">
+            <span class="shrink-0 w-9 h-9 rounded-full bg-[var(--accent)] text-black font-bold flex items-center justify-center">4</span>
+            <div>
+              <h3 class="text-lg font-semibold mb-2">Update anything running unattended</h3>
+              <p class="text-[var(--muted)]">
+                Service accounts are recreated for you on Conduit, but expect to re-verify their
+                credentials and update the endpoint in whatever runs them — scheduled agents, scripts,
+                or integrations built on the gateway. Check each one actually authenticates against
+                Conduit rather than assuming it carried over.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Cutoff -->
+    <section class="py-12 bg-neutral-50 dark:bg-neutral-900/50">
+      <div class="container max-w-3xl">
+        <h2 class="text-2xl font-bold mb-6">What happens on 30 September</h2>
+        <p class="text-[var(--muted)] mb-4">
+          <code class="font-mono">mcp.wyre.ai</code> starts redirecting to
+          <code class="font-mono">conduit.wyre.ai</code>, and the old gateway stops serving MCP
+          traffic.
+        </p>
+        <div class="card p-6 border-l-4 border-l-amber-500">
+          <p class="font-semibold mb-2">Do not rely on the redirect.</p>
+          <p class="text-[var(--muted)]">
+            It is a safety net for browser traffic, not a migration path. Your MCP client holds an
+            access token issued by the old gateway, and Conduit will not accept it — the connection
+            has to be added again and re-authorised regardless of where the old URL points. Anything
+            still calling <code class="font-mono">mcp.wyre.ai/v1/mcp</code> at the cutoff stops
+            working.
+          </p>
+        </div>
+        <p class="text-[var(--muted)] mt-6">
+          Both platforms run in parallel until then, so there is no forced switchover day. Move when
+          it suits you, verify it works, and leave yourself room before the end of September.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-16">
+      <div class="container max-w-3xl">
+        <h2 class="text-2xl font-bold mb-8">Questions</h2>
+        <div class="space-y-4">
+          {faqs.map((faq) => (
+            <details class="card p-6 group">
+              <summary class="font-semibold cursor-pointer list-none flex justify-between items-center gap-4">
+                {faq.question}
+                <span class="text-[var(--muted)] group-open:rotate-180 transition-transform" aria-hidden="true">&darr;</span>
+              </summary>
+              <p class="text-[var(--muted)] mt-4">{faq.answer}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Help -->
+    <section class="py-16 bg-neutral-50 dark:bg-neutral-900/50">
+      <div class="container max-w-3xl">
+        <div class="card max-w-2xl mx-auto text-center p-10">
+          <h2 class="text-2xl font-bold mb-4">Need a hand with the move?</h2>
+          <p class="text-[var(--muted)] mb-8">
+            If you have a lot of connections, unattended automations, or a compliance export to sort
+            out, tell us and we will walk it through with you.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a href="mailto:hello@wyre.ai?subject=Conduit%20migration" class="btn btn-primary">Email hello@wyre.ai</a>
+            <a href={conduitUrl} class="btn btn-secondary">Go to Conduit</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+</style>
