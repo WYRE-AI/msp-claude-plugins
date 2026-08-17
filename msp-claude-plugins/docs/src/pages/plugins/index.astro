@@ -16,6 +16,7 @@ const crmPlugins = getPluginsByCategory('crm');
 const marketplacePlugins = getPluginsByCategory('marketplace');
 const accountingPlugins = getPluginsByCategory('accounting');
 const productivityPlugins = getPluginsByCategory('productivity');
+const infrastructurePlugins = getPluginsByCategory('infrastructure');
 ---
 
 <DocsLayout title="Plugin Catalog">
@@ -160,6 +161,20 @@ const productivityPlugins = getPluginsByCategory('productivity');
     </>
   )}
 
+  {infrastructurePlugins.length > 0 && (
+    <>
+      <h2>Infrastructure ({infrastructurePlugins.length})</h2>
+
+      <p>Infrastructure and virtualization plugins for hyperconverged platforms, hypervisors, and datacenter management.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+        {infrastructurePlugins.map(plugin => (
+          <PluginCard plugin={plugin} />
+        ))}
+      </div>
+    </>
+  )}
+
   <h2>All Plugins at a Glance</h2>
 
   <table>
@@ -177,7 +192,7 @@ const productivityPlugins = getPluginsByCategory('productivity');
         <tr>
           <td><a href={`${import.meta.env.BASE_URL}plugins/${plugin.id}/`}>{plugin.name}</a></td>
           <td>{plugin.vendor}</td>
-          <td>{{psa: 'PSA', rmm: 'RMM', documentation: 'IT Documentation', security: 'Security', 'email-security': 'Email Security', monitoring: 'Monitoring', network: 'Network', 'incident-management': 'Incident Management', crm: 'CRM', sales: 'Sales & Distribution', marketplace: 'Marketplace', accounting: 'Accounting & Finance', productivity: 'Productivity'}[plugin.category]}</td>
+          <td>{{psa: 'PSA', rmm: 'RMM', documentation: 'IT Documentation', security: 'Security', 'email-security': 'Email Security', monitoring: 'Monitoring', network: 'Network', 'incident-management': 'Incident Management', crm: 'CRM', sales: 'Sales & Distribution', marketplace: 'Marketplace', accounting: 'Accounting & Finance', productivity: 'Productivity', infrastructure: 'Infrastructure'}[plugin.category]}</td>
           <td>{plugin.skills.length}</td>
           <td>{plugin.commands.length}</td>
         </tr>

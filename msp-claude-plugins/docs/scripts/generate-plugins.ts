@@ -19,7 +19,7 @@ const OUTPUT_PATH_SHARED = path.join(DOCS_DIR, 'src', 'data', 'sharedSkills.ts')
 const VALID_CATEGORIES = new Set([
   'psa', 'rmm', 'documentation', 'security', 'sales', 'accounting',
   'productivity', 'email-security', 'incident-management', 'monitoring',
-  'network', 'crm', 'marketplace', 'marketing',
+  'network', 'crm', 'marketplace', 'marketing', 'infrastructure',
 ]);
 
 function normalizeCategory(raw: string): string {
