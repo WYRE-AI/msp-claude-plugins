@@ -33,7 +33,7 @@ Passwords in Hudu (called "asset passwords" in the API) provide secure credentia
   Those are not `asset_passwords`; use `hudu-assets`.
 - **The same credential in IT Glue** — the other documentation platform in
   this marketplace stores passwords too, with its own permission model.
-  Start from `it-glue-api-patterns`.
+  Start from `itglue-api-patterns`.
 - **Resetting or rotating the credential on the actual system** — this
   skill updates the documented value only. Changing the real password is a
   tenant or directory operation; use `cipp-users` or `m365-users`. Editing

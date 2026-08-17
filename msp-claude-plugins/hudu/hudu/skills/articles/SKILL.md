@@ -20,7 +20,7 @@ Articles in Hudu serve as the knowledge base, providing a place for runbooks, pr
 ## Anti-triggers
 
 - **The same knowledge base in IT Glue** — IT Glue calls these Documents;
-  use `it-glue-documents`. Both platforms say "article", "document", and
+  use `itglue-documents`. Both platforms say "article", "document", and
   "runbook" interchangeably, so the vendor name is the only signal.
 - **A structured record rather than prose** — if the thing has fields
   (make, model, IP, expiry) it belongs on an asset layout, not in article

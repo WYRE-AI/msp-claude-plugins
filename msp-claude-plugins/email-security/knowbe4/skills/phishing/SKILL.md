@@ -23,11 +23,11 @@ KnowBe4 phishing simulations are the core mechanism for testing and improving an
 - **A real phishing email that reached a user** — every campaign,
   click, and "failure" here is a simulation the MSP sent on purpose.
   Genuine inbound phishing is detected by the mail-security vendor:
-  `proofpoint-tap`, `checkpoint-avanan-threats`, or
+  `proofpoint-tap`, `avanan-threats`, or
   `abnormal-security-threats`.
 - **Finding, releasing, or pulling a message out of a mailbox** —
   KnowBe4 never touches production mail flow. Use
-  `proofpoint-quarantine` or `checkpoint-avanan-quarantine` to release,
+  `proofpoint-quarantine` or `avanan-quarantine` to release,
   and `proofpoint-forensics` to remove delivered mail.
 - **"Phish Alert Button" reports as a threat-intake queue** — this
   skill counts PAB reports as a pass/fail signal on a simulation; the

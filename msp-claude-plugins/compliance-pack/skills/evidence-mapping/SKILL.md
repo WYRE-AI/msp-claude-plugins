@@ -39,7 +39,7 @@ Treat these as different evidentiary weights, not interchangeable sources.
   to be connected.
 - **Reading a single evidence source** — pulling standards results,
   inspection state, or a document is that connector's surface; use
-  `cipp-standards`, `liongard-systems`, or `it-glue-documents`.
+  `cipp-standards`, `liongard-systems`, or `itglue-documents`.
 
 ## Key Concept: Configured vs. Documented Evidence
 

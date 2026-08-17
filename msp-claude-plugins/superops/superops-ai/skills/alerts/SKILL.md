@@ -23,7 +23,7 @@ SuperOps.ai RMM generates alerts when monitored conditions are triggered on mana
   `superops-tickets`; the conversion is described here but the ticket
   lifecycle is not.
 - **Alerts from a different RMM** — `atera-alerts`,
-  `ninjaone-rmm-alerts`, `datto-rmm-alerts`, and N-central active issues
+  `ninjaone-alerts`, `datto-rmm-alerts`, and N-central active issues
   (`ncentral-monitoring-tasks`) are separate stores with their own
   severity scales.
 - **Security detections** — EDR and MDR findings are not RMM alerts; use

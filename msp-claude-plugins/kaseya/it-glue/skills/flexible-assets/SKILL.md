@@ -22,11 +22,11 @@ Flexible Assets in IT Glue provide customizable, structured documentation templa
 
 - **Servers, workstations, and network gear** — those are
   configurations, which IT Glue also calls "assets"; use
-  `it-glue-configurations`.
-- **Free-form runbooks and procedures** — use `it-glue-documents`.
+  `itglue-configurations`.
+- **Free-form runbooks and procedures** — use `itglue-documents`.
 - **A credential held in a password-type field** — it is not a
   Passwords record and `search_passwords` will not find it; see
-  `it-glue-passwords` for how the two stores differ.
+  `itglue-passwords` for how the two stores differ.
 
 ## Key Concepts
 

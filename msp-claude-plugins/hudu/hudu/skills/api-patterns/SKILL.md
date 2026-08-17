@@ -22,7 +22,7 @@ The Hudu API is a RESTful JSON API that provides access to companies, assets, as
 - **IT Glue's request model** — the other documentation platform here uses
   a JSON:API envelope with `data`/`attributes` wrappers and its own
   pagination, against Hudu's flat JSON and `x-api-key` header. Use
-  `it-glue-api-patterns`. Request shapes do not transfer between them.
+  `itglue-api-patterns`. Request shapes do not transfer between them.
 - **A 403 on a password endpoint** — that is Hudu's per-API-key password
   toggle, not a bad key or an expired token, and the same key works
   everywhere else. Use `hudu-passwords`.

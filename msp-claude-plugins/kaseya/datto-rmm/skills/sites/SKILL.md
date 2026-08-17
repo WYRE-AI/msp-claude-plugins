@@ -18,7 +18,7 @@ Sites in Datto RMM represent client organizations or locations. Each site contai
 ## Anti-triggers
 
 - **The client as a billing entity** — use `autotask-crm`; as a
-  documentation entity, `it-glue-organizations`; as a SOC tenant,
+  documentation entity, `itglue-organizations`; as a SOC tenant,
   `rocketcyber-accounts`. None of these share IDs with a Datto RMM site.
 - **The endpoints themselves rather than the grouping** — use
   `datto-rmm-devices`.

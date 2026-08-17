@@ -1,7 +1,7 @@
 {
   "name": "clio",
-  "version": "0.1.5",
-  "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing.",
+  "version": "0.1.6",
+  "description": "Clio Manage \u2014 legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing.",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

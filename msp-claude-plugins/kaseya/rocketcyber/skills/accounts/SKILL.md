@@ -26,7 +26,7 @@ Understanding the account hierarchy is essential for:
 ## Anti-triggers
 
 - **The client as a billing entity** — use `autotask-crm`; as a
-  documentation entity, `it-glue-organizations`; as an RMM grouping,
+  documentation entity, `itglue-organizations`; as an RMM grouping,
   `datto-rmm-sites`. RocketCyber account IDs are shared with none of
   them.
 - **The endpoints inside an account** — use `rocketcyber-agents`.

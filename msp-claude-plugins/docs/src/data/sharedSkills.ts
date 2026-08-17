@@ -23,5 +23,5 @@ export const sharedSkills: SharedSkill[] = [
 export const sharedSkillsMeta = {
   installSlug: 'shared-skills',
   description: 'Vendor-agnostic MSP skills — terminology, ticket triage, incident correlation, and billing reconciliation',
-  version: '1.1.6',
+  version: '1.1.7',
 };

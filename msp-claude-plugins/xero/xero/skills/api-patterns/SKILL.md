@@ -24,7 +24,7 @@ The Xero API is a RESTful JSON API covering contacts, invoices, payments, accoun
   `xero-invoices`, `xero-payments`, `xero-accounts`, or `xero-reports`.
 - **QuickBooks Online's auth and query model** — also OAuth2, but a different
   grant, a different query language, and different limits; use
-  `quickbooks-online-api-patterns`.
+  `qbo-api-patterns`.
 
 ## Authentication
 

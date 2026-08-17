@@ -21,8 +21,8 @@ Contacts in IT Glue represent people associated with organizations, including cl
 - **The contact record that drives tickets and invoices** — the PSA is
   the system of record; use `autotask-crm`.
 - **The organization rather than the people in it** — use
-  `it-glue-organizations`.
-- **A credential belonging to a person** — use `it-glue-passwords`.
+  `itglue-organizations`.
+- **A credential belonging to a person** — use `itglue-passwords`.
 
 ## Key Concepts
 

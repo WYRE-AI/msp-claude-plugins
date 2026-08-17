@@ -1,6 +1,6 @@
 {
-  "name": "it-glue",
-  "version": "1.2.2",
+  "name": "itglue",
+  "version": "1.2.3",
   "description": "Claude plugins for IT Glue documentation platform - organizations, assets, passwords, documents",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -92,7 +92,12 @@ function humanize(slug: string): string {
 
 // ── Display name derivation ────────────────────────────────────────────
 /** Derive a short display name from plugin.json name or marketplace name. */
-function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: string, sourcePath: string): string {
+function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: string, sourcePath: string, marketplaceDisplayName?: string): string {
+  // A marketplace entry's explicit displayName wins over any derivation —
+  // entries whose name must match an external slug (e.g. a Conduit vendor
+  // slug like "qbo") carry their human name here.
+  if (marketplaceDisplayName) return marketplaceDisplayName;
+
   // If plugin.json has a scoped name like "kaseya-autotask", make it readable
   if (pluginJsonName) {
     // Strip common prefixes like "kaseya-" for the display
@@ -376,6 +381,7 @@ function deriveMaturity(skills: SkillEntry[], commands: CommandEntry[]): 'produc
 // ── Main ───────────────────────────────────────────────────────────────
 interface MarketplacePlugin {
   name: string;
+  displayName?: string;
   source: string;
   description: string;
   version: string;
@@ -438,7 +444,7 @@ function main(): void {
     allCategories.add(category);
 
     const id = entry.name;
-    const name = deriveDisplayName(pluginJson?.name, entry.name, entry.source);
+    const name = deriveDisplayName(pluginJson?.name, entry.name, entry.source, entry.displayName);
     const vendor = deriveVendor(entry.source);
     const description = entry.description;
     const maturity = deriveMaturity(skills, commands);

@@ -70,7 +70,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>security-posture-reviewer</td><td>cipp</td><td>✅</td><td>cipp</td><td>monthly</td><td>M365 portfolio posture sweep; auditor. CIPP posture is now partly covered by the Compliance Drift Reporter.</td></tr>
       <tr><td>automation-health-checker</td><td>connectwise-automate</td><td>✅</td><td>connectwise-automate</td><td>weekly</td><td>RMM environment health audit.</td></tr>
       <tr><td>project-tracker</td><td>connectwise-psa</td><td>✅</td><td>connectwise-manage</td><td>weekly</td><td>Open-project health review; reporter.</td></tr>
-      <tr><td>exception-hygiene-auditor</td><td>checkpoint-avanan</td><td>✅</td><td>checkpoint-avanan</td><td>monthly</td><td>Reviews standing allow/block-list exceptions — scope, justification, age, and what each one suppresses. Replaces tenant-policy-auditor: Harmony Email exposes no policy tools, so a policy-completeness audit was never possible.</td></tr>
+      <tr><td>exception-hygiene-auditor</td><td>avanan</td><td>✅</td><td>avanan</td><td>monthly</td><td>Reviews standing allow/block-list exceptions — scope, justification, age, and what each one suppresses. Replaces tenant-policy-auditor: Harmony Email exposes no policy tools, so a policy-completeness audit was never possible.</td></tr>
       <tr><td>security-awareness-analyst</td><td>knowbe4</td><td>✅</td><td>knowbe4</td><td>monthly</td><td>Phishing-sim and training results analysis.</td></tr>
       <tr><td>email-security-auditor</td><td>proofpoint</td><td>✅</td><td>proofpoint</td><td>monthly</td><td>Per-org email security posture report.</td></tr>
       <tr><td>vap-reporter</td><td>proofpoint</td><td>✅</td><td>proofpoint</td><td>monthly</td><td>Very-Attacked-Persons report; reporter.</td></tr>
@@ -83,20 +83,20 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>crowdsourced-intel-harvester</td><td>ironscales</td><td>✅</td><td>ironscales</td><td>monthly</td><td>Threat-intel briefing from network signal.</td></tr>
       <tr><td>contract-renewal-tracker</td><td>autotask</td><td>✅</td><td>autotask</td><td>weekly</td><td>✅ built — batch 2 (Contract Renewal Tracker).</td></tr>
       <tr><td>rmm-health-auditor</td><td>datto-rmm</td><td>✅</td><td>datto-rmm</td><td>daily</td><td>✅ built — batch 1 (Device Health Auditor).</td></tr>
-      <tr><td>asset-documentation-linker</td><td>it-glue</td><td>✅</td><td>itglue</td><td>monthly</td><td>Finds broken IT Glue object linkages.</td></tr>
-      <tr><td>documentation-auditor</td><td>it-glue</td><td>✅</td><td>itglue</td><td>monthly</td><td>✅ built — batch 3 (IT Glue Documentation Auditor).</td></tr>
+      <tr><td>asset-documentation-linker</td><td>itglue</td><td>✅</td><td>itglue</td><td>monthly</td><td>Finds broken IT Glue object linkages.</td></tr>
+      <tr><td>documentation-auditor</td><td>itglue</td><td>✅</td><td>itglue</td><td>monthly</td><td>✅ built — batch 3 (IT Glue Documentation Auditor).</td></tr>
       <tr><td>compliance-drift-reporter</td><td>liongard</td><td>✅</td><td>liongard, cipp</td><td>weekly</td><td>✅ built — batch 1, expanded to CIPP baseline + posture drift.</td></tr>
       <tr><td>identity-auditor</td><td>m365</td><td>✅</td><td>m365</td><td>monthly</td><td>✅ built — batch 3 (M365 Identity Auditor), via CIPP; identity-posture snapshot distinct from the Compliance Drift Reporter's standards-drift view.</td></tr>
       <tr><td>license-auditor</td><td>m365</td><td>✅</td><td>m365</td><td>monthly</td><td>✅ built — batch 1 (M365 License Auditor).</td></tr>
       <tr><td>email-continuity-checker</td><td>mimecast</td><td>✅</td><td>mimecast</td><td>daily</td><td>Continuity/archive health check.</td></tr>
-      <tr><td>device-health-auditor</td><td>ninjaone-rmm</td><td>✅</td><td>ninjaone-rmm</td><td>daily</td><td>NinjaOne fleet health audit; auditor.</td></tr>
-      <tr><td>patch-compliance-reporter</td><td>ninjaone-rmm</td><td>✅</td><td>ninjaone-rmm</td><td>weekly</td><td>✅ built — batch 1 (Patch Drift Reporter).</td></tr>
+      <tr><td>device-health-auditor</td><td>ninjaone</td><td>✅</td><td>ninjaone</td><td>daily</td><td>NinjaOne fleet health audit; auditor.</td></tr>
+      <tr><td>patch-compliance-reporter</td><td>ninjaone</td><td>✅</td><td>ninjaone</td><td>weekly</td><td>✅ built — batch 1 (Patch Drift Reporter).</td></tr>
       <tr><td>on-call-scheduler</td><td>pagerduty</td><td>⚠️</td><td>pagerduty</td><td>weekly</td><td>Schedule-health audit fits; rota edits would need scoping out.</td></tr>
       <tr><td>contract-tracker</td><td>pandadoc</td><td>✅</td><td>pandadoc</td><td>weekly</td><td>✅ built — batch 2 (Pending-Proposal Tracker).</td></tr>
       <tr><td>license-optimizer</td><td>pax8</td><td>✅</td><td>pax8</td><td>monthly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with renewal-calendar into one guide.</td></tr>
       <tr><td>renewal-calendar</td><td>pax8</td><td>✅</td><td>pax8</td><td>weekly</td><td>✅ built — batch 2 (Pax8 Renewal &amp; License Optimizer); combined with license-optimizer into one guide.</td></tr>
-      <tr><td>billing-reconciler</td><td>quickbooks-online</td><td>✅</td><td>quickbooks</td><td>weekly</td><td>✅ built — batch 1 (Billing Reconciler).</td></tr>
-      <tr><td>profitability-reporter</td><td>quickbooks-online</td><td>✅</td><td>quickbooks</td><td>monthly</td><td>✅ built — batch 2 (Client Profitability Reporter); revenue-ranked from QBO (true cost-allocated margin lives in the service-profitability-auditor portfolio agent).</td></tr>
+      <tr><td>billing-reconciler</td><td>qbo</td><td>✅</td><td>quickbooks</td><td>weekly</td><td>✅ built — batch 1 (Billing Reconciler).</td></tr>
+      <tr><td>profitability-reporter</td><td>qbo</td><td>✅</td><td>quickbooks</td><td>monthly</td><td>✅ built — batch 2 (Client Profitability Reporter); revenue-ranked from QBO (true cost-allocated margin lives in the service-profitability-auditor portfolio agent).</td></tr>
       <tr><td>margin-analyzer</td><td>salesbuildr</td><td>✅</td><td>salesbuildr</td><td>weekly</td><td>Quote-margin health analysis; reporter.</td></tr>
       <tr><td>endpoint-hardening-auditor</td><td>sentinelone</td><td>✅</td><td>sentinelone</td><td>weekly</td><td>Endpoint config-hardening audit.</td></tr>
       <tr><td>billing-reconciler</td><td>sherweb</td><td>✅</td><td>sherweb</td><td>monthly</td><td>Distributor billing reconciliation; reporter.</td></tr>
@@ -159,7 +159,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td>uptime-incident-responder</td><td>betterstack</td><td>❌</td><td>betterstack</td><td>n/a</td><td>Responds to a fired uptime incident.</td></tr>
       <tr><td>detection-investigator</td><td>blackpoint</td><td>❌</td><td>blackpoint</td><td>n/a</td><td>MDR detection deep-dive; event-triggered forensics.</td></tr>
       <tr><td>siem-investigator</td><td>blumira</td><td>❌</td><td>blumira</td><td>n/a</td><td>SIEM finding investigation; human-in-loop.</td></tr>
-      <tr><td>cloud-email-defender</td><td>checkpoint-avanan</td><td>❌</td><td>checkpoint-avanan</td><td>n/a</td><td>Quarantine/threat-event investigation.</td></tr>
+      <tr><td>cloud-email-defender</td><td>avanan</td><td>❌</td><td>avanan</td><td>n/a</td><td>Quarantine/threat-event investigation.</td></tr>
       <tr><td>incident-responder</td><td>huntress</td><td>❌</td><td>huntress</td><td>n/a</td><td>SOC-escalation triage and live incident response.</td></tr>
       <tr><td>soc-alert-investigator</td><td>rocketcyber</td><td>❌</td><td>rocketcyber</td><td>n/a</td><td>SOC incident investigation; event-triggered.</td></tr>
       <tr><td>threat-correlation-analyst</td><td>rocketcyber</td><td>❌</td><td>rocketcyber, datto-rmm, itglue, autotask</td><td>n/a</td><td>Cross-platform threat correlation; investigation.</td></tr>

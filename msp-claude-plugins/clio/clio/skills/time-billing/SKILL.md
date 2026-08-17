@@ -39,7 +39,7 @@ outside Clio:
   billable legal work against a matter, not service-desk labour.
 - **An invoice on the accounting system** — a Clio bill is generated
   inside Clio from unbilled activities and is read-only here. Accounting
-  invoices are `quickbooks-online-invoices` or `xero-invoices`, and a Clio bill
+  invoices are `qbo-invoices` or `xero-invoices`, and a Clio bill
   never appears in either until someone posts it.
 - **Editing or voiding a bill, or correcting a logged activity** — neither
   is possible through this integration, by design. See

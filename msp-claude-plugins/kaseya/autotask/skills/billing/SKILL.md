@@ -34,7 +34,7 @@ produced one:
   Autotask; use `pax8-invoices` or `sherweb-billing`.
 - **The invoice as the accounting system holds it** — Autotask billing
   items are the source for an invoice, not the posted ledger entry; use
-  `quickbooks-online-invoices` or `xero-invoices`.
+  `qbo-invoices` or `xero-invoices`.
 
 ## API Patterns
 

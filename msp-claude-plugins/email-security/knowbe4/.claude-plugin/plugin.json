@@ -1,6 +1,6 @@
 {
   "name": "knowbe4",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Claude plugins for KnowBe4 - security awareness training, phishing simulation, user risk management",
   "author": {
     "name": "MSP Claude Plugins Community"

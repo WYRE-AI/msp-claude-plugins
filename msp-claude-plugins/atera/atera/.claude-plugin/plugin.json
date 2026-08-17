@@ -1,6 +1,6 @@
 {
   "name": "atera",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Claude Code plugin for Atera RMM/PSA - tickets, agents, customers, alerts",
   "author": {
     "name": "MSP Claude Plugins Community"

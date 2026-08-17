@@ -21,10 +21,10 @@ Syncro invoices are the core of your billing workflow. Invoices can be created m
 - **The invoice in the accounting system** — Syncro usually sits
   upstream of QuickBooks or Xero and the same invoice exists in both.
   Raising or editing it on the ledger side is
-  `quickbooks-online-invoices` or `xero-invoices`; doing it in the wrong
+  `qbo-invoices` or `xero-invoices`; doing it in the wrong
   place produces two versions of one document.
 - **Recording the payment against the ledger** — Syncro marks its own
-  invoice paid; the accounting entry is `quickbooks-online-payments` or
+  invoice paid; the accounting entry is `qbo-payments` or
   `xero-payments`.
 - **The unbilled work behind an invoice** — ticket timers and time
   entries are `syncro-tickets`.

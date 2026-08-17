@@ -29,7 +29,7 @@ Systems are the entities discovered during Liongard inspections. When a launchpo
   `immybot-endpoint-management`.
 - **The MSP's documentation of record** — Liongard auto-discovers.
   Hand-maintained documentation, passwords, and CIs live in
-  `hudu-assets` or `it-glue-configurations`.
+  `hudu-assets` or `itglue-configurations`.
 - **Why a system's data is stale or missing** — that is an inspection
   problem; use `liongard-inspections`.
 - **What changed between two snapshots** — use `liongard-detections`.

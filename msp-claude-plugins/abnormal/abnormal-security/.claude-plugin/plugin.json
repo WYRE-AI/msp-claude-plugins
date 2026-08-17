@@ -1,6 +1,6 @@
 {
   "name": "abnormal-security",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Claude plugins for Abnormal Security - AI-powered email security, threat detection, abuse mailbox cases, message and header forensics, and per-message remediation for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"

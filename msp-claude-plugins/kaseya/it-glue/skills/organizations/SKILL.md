@@ -24,7 +24,7 @@ Organizations are the foundational entity in IT Glue, representing companies, cl
 - **The client's grouping in monitoring or SOC tooling** — use
   `datto-rmm-sites` or `rocketcyber-accounts`; neither shares IDs with
   an IT Glue organization.
-- **The people at the organization** — use `it-glue-contacts`.
+- **The people at the organization** — use `itglue-contacts`.
 
 ## Key Concepts
 

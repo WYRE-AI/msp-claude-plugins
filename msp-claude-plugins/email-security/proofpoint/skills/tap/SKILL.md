@@ -36,7 +36,7 @@ TAP identifies three primary threat vectors:
 - **Which people are most targeted** — TAP returns per-event rows; the
   per-user rollup, Attack Index, and VAP list are `proofpoint-people`.
 - **Another vendor's threat events** — Checkpoint Harmony is
-  `checkpoint-avanan-threats`, Abnormal is `abnormal-security-threats`,
+  `avanan-threats`, Abnormal is `abnormal-security-threats`,
   and Mimecast message-level delivery tracking is
   `mimecast-message-tracking`.
 - **A rewritten link and what happened when it was clicked** — URL

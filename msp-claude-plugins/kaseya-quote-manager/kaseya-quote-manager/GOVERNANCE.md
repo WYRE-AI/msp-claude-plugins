@@ -155,7 +155,7 @@ ever renders output where a customer might see it.
   transition until it queries `kqm_sales_order_list` as well.
 - **Payments recorded here are not accounting entries.**
   `kqm_sales_order_payment_*` is what Quote Manager captured against an order.
-  Reconcile against `xero-payments` or `quickbooks-online-payments`; do not
+  Reconcile against `xero-payments` or `qbo-payments`; do not
   treat either as authoritative for the other.
 - **`modifiedAfter` covers the parent, not the children.** A quote whose line
   items changed may not surface if the quote header's own timestamp did not

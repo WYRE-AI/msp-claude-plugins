@@ -24,7 +24,7 @@ Deals in HubSpot represent sales opportunities -- potential or active revenue fr
   live in `salesbuildr-quotes` or `connectwise-cpq-quotes`.
 - **Sending the customer something to sign** — use `pandadoc-documents`.
 - **Billing a won deal** — moving a deal to Closed Won invoices nobody; use
-  `xero-invoices` or `quickbooks-online-invoices`.
+  `xero-invoices` or `qbo-invoices`.
 - **Salesbuildr opportunities** — a different vendor's pipeline object with
   identical vocabulary; use `salesbuildr-opportunities`.
 

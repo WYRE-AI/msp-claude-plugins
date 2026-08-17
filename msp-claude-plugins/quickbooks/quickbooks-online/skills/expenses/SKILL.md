@@ -21,7 +21,7 @@ Expenses in QuickBooks Online are tracked through two primary entities: **Purcha
 ## Anti-triggers
 
 - **Money coming in** — this skill is accounts payable. Client billing and
-  cash receipts are `quickbooks-online-invoices` and `quickbooks-online-payments`.
+  cash receipts are `qbo-invoices` and `qbo-payments`.
   "Bill" is the trap: a QBO Bill is something the MSP owes, while a PSA
   "bill" is usually something a client owes.
 - **The books are in Xero, not QuickBooks** — use `xero-accounts` and
@@ -33,7 +33,7 @@ Expenses in QuickBooks Online are tracked through two primary entities: **Purcha
   time originates in the PSA (`autotask-time-entries`,
   `connectwise-psa-time-entries`) and lands here only as payroll.
 - **The profitability answer itself** — per-client margin is a report over
-  these records, not a query against them; use `quickbooks-online-reports`.
+  these records, not a query against them; use `qbo-reports`.
 
 ## Key Concepts
 

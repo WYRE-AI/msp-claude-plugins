@@ -22,10 +22,10 @@ Passwords in IT Glue provide secure credential storage with organization-level a
 
 - **A credential stored in a flexible asset's password-type field** —
   those are not Passwords records and will not appear in
-  `search_passwords`; use `it-glue-flexible-assets`.
+  `search_passwords`; use `itglue-flexible-assets`.
 - **A password embedded in a runbook** — the document references the
-  record rather than holding it; use `it-glue-documents`.
-- **The device the credential opens** — use `it-glue-configurations`.
+  record rather than holding it; use `itglue-documents`.
+- **The device the credential opens** — use `itglue-configurations`.
 
 ## Key Concepts
 

@@ -27,7 +27,7 @@ Manage Huntress SOC-confirmed security incidents across client organizations. Qu
   `pagerduty-incidents` or `rootly-incidents` for a paged response.
 - **A mail-borne threat** — Harmony Email has no incident object at all;
   its detections are events, not cases. Use
-  `checkpoint-avanan-threats`.
+  `avanan-threats`.
 
 ## API Tools
 

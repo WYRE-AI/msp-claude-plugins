@@ -20,7 +20,7 @@ SuperOps.ai provides automation through scripts (runbooks) that execute on manag
 
 - **A written procedure or checklist** — SuperOps runbooks are
   executable scripts, not documentation. Prose runbooks live in
-  `hudu-articles` or `it-glue-documents`.
+  `hudu-articles` or `itglue-documents`.
 - **Running a script on an endpoint managed by another RMM** — "run a
   script on this device" matches five other plugins here just as well.
   Confirm which RMM owns the endpoint, then use `atera-agents`,

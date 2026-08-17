@@ -1,6 +1,6 @@
 {
   "name": "xero",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Claude plugins for Xero accounting - contacts, invoices, payments, accounts, reports",
   "author": {
     "name": "MSP Claude Plugins Community"

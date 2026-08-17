@@ -23,7 +23,7 @@ Xero exposes its financial reports through the API as structured, programmatical
   summarized rows with no drill-through; the underlying records are
   `xero-invoices` and `xero-payments`.
 - **The GL structure a report groups by** — use `xero-accounts`.
-- **The same reports in QuickBooks** — use `quickbooks-online-reports`.
+- **The same reports in QuickBooks** — use `qbo-reports`.
 
 ## Core Concepts
 

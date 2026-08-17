@@ -34,7 +34,7 @@ collect from a customer, generate a hosted payment link or payment request — s
   read-only; hosted payment links and payment requests are
   `alternative-payments-invoicing`.
 - **Recording a receipt against an invoice in the books** — use
-  `xero-payments` or `quickbooks-online-payments`.
+  `xero-payments` or `qbo-payments`.
 - **A payment captured against a Quote Manager sales order** — use
   `kaseya-quote-manager-quotes`.
 

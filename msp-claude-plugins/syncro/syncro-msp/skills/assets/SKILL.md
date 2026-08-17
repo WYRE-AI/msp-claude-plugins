@@ -27,7 +27,7 @@ Syncro assets represent the hardware, software, and devices you manage for custo
   `datto-rmm-jobs` equally well. Confirm the endpoint is Syncro-managed
   before executing anything.
 - **An "asset" that is a documentation record** — in `hudu-assets` and
-  `it-glue-configurations` an asset is a documented CI with no agent.
+  `itglue-configurations` an asset is a documented CI with no agent.
   Syncro assets are live RMM endpoints.
 - **Hardware refresh programmes** — Syncro stores `warranty_expires` but
   does no lifecycle planning; use `scalepad-lifecycle-manager`.

@@ -151,7 +151,7 @@ Look the vendor up under `itglue` when checking classification.
 
 ## Tool surface is narrower than the skills
 
-The plugin ships an `it-glue-contacts` skill, but **there are no contact
+The plugin ships an `itglue-contacts` skill, but **there are no contact
 tools**. Contact data is reachable only as a side effect of other
 queries. The skill is API reference; treat it as such.
 

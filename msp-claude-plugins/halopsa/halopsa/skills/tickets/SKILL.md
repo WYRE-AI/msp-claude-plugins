@@ -40,7 +40,7 @@ page a responder, or approve a remediation on a compromised endpoint.
 - **A ticket raised in an RMM's own helpdesk** — Atera, NinjaOne,
   Syncro, and SuperOps each ship a queue alongside the agent, and a
   shop running Halo for service desk often still has tickets sitting
-  there. Use `atera-tickets`, `ninjaone-rmm-tickets`,
+  there. Use `atera-tickets`, `ninjaone-tickets`,
   `syncro-tickets`, or `superops-tickets`.
 
 ## Core API Operations

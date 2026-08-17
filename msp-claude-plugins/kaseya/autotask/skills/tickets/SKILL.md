@@ -36,7 +36,7 @@ Autotask tickets are the core unit of service delivery in the PSA. Every client 
   them and none of them read Autotask. Confirm the system of record
   first, then use `connectwise-psa-tickets`, `halopsa-tickets`,
   `atera-tickets`, `syncro-tickets`, `superops-tickets`, or
-  `ninjaone-rmm-tickets`.
+  `ninjaone-tickets`.
 
 ## Ticket Status Codes
 

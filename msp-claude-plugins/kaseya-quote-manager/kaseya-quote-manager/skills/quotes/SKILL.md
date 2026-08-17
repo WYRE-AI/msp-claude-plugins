@@ -34,7 +34,7 @@ never create or modify records.
   cost sit on the buy side in `kaseya-quote-manager-purchasing`.
 - **Recording the payment in the books** — `kqm_sales_order_payment_*` reports
   what Quote Manager captured, not the accounting ledger; use `xero-payments`
-  or `quickbooks-online-payments`.
+  or `qbo-payments`.
 - **An Autotask quote** — the other Kaseya PSA holds its own quote and
   quote-item entities that Quote Manager never sees, despite the shared
   vendor name; use `autotask-quotes`.

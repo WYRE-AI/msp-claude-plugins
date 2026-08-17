@@ -30,7 +30,7 @@ Computers are the core managed entities in ConnectWise Automate. Each computer r
   and reading execution results are `connectwise-automate-scripts`.
 - **Another RMM's device list** — Datto RMM, NinjaOne and Atera all speak
   of devices and endpoints; use `datto-rmm-devices`,
-  `ninjaone-rmm-devices` or `atera-devices`.
+  `ninjaone-devices` or `atera-devices`.
 
 ## Key Concepts
 

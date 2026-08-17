@@ -22,7 +22,7 @@ Atera agents are lightweight software installed on managed endpoints that provid
 - **Atera's own "devices"** — an Atera *device* is an agentless HTTP,
   SNMP, or TCP monitor with no agent behind it; use `atera-devices`.
   Atera is the odd one out: in `ncentral-devices`,
-  `ninjaone-rmm-devices`, and `datto-rmm-devices` "device" means the
+  `ninjaone-devices`, and `datto-rmm-devices` "device" means the
   managed endpoint, which here is an agent.
 - **Claude subagents** — "agent" here is an Atera endpoint sensor, never
   an AI subagent definition under `agents/*.md`. In `halopsa-agents` it

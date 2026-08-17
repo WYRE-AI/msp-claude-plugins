@@ -20,12 +20,12 @@ Syncro customers are the foundation of your service delivery. Every ticket, asse
 
 - **The same client in another PSA or the accounting ledger** —
   `connectwise-psa-companies`, `autotask-crm`, `superops-clients`,
-  `atera-customers`, `quickbooks-online-customers`, and `xero-contacts`
+  `atera-customers`, `qbo-customers`, and `xero-contacts`
   are separate records of the same company. Creating a duplicate in the
   wrong one is a reconciliation problem later.
 - **A customer's devices** — use `syncro-assets`.
 - **Documentation about the client** — `hudu-companies` or
-  `it-glue-organizations`.
+  `itglue-organizations`.
 
 ## Key Concepts
 

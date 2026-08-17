@@ -352,8 +352,8 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'checkpoint-avanan',
-    name: 'Checkpoint Avanan',
+    id: 'avanan',
+    name: 'Checkpoint Harmony Email (Avanan)',
     vendor: 'Email Security',
     description: 'Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions',
     category: 'email-security',
@@ -848,7 +848,7 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'it-glue',
+    id: 'itglue',
     name: 'IT Glue',
     vendor: 'Kaseya',
     description: 'IT Glue - organizations, assets, passwords, flexible assets',
@@ -1014,8 +1014,8 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'ninjaone-rmm',
-    name: 'NinjaOne (NinjaRMM)',
+    id: 'ninjaone',
+    name: 'NinjaOne',
     vendor: 'NinjaOne',
     description: 'NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets',
     category: 'rmm',
@@ -1313,7 +1313,7 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'quickbooks-online',
+    id: 'qbo',
     name: 'QuickBooks Online',
     vendor: 'Intuit',
     description: 'QuickBooks Online - customers, invoices, expenses, payments, reports',

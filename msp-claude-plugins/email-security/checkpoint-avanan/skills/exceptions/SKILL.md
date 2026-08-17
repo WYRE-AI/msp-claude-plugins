@@ -31,8 +31,8 @@ is adding narrow, justified entries and auditing the ones that accumulated.
   it**, and no sibling skill covers it; that work is console-only. Exceptions
   are not policies.
 - **Delivering one held message** — a release is a message action, not a list
-  entry. Use `checkpoint-avanan-quarantine`.
-- **Which policy or engine fired** — use `checkpoint-avanan-threats`.
+  entry. Use `avanan-quarantine`.
+- **Which policy or engine fired** — use `avanan-threats`.
 - **Microsoft 365 tenant policy** — conditional access, transport rules and
   security baselines are not Harmony Email exceptions. Use `cipp-standards`
   or `cipp-mailboxes`.

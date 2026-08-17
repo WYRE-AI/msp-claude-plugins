@@ -66,7 +66,7 @@ invoice line."
   `autotask-contracts` or `halopsa-contracts`.
 - **Working an invoice itself** — creating, sending, or querying invoices is
   the accounting connector's surface; use `xero-invoices` or
-  `quickbooks-online-invoices`.
+  `qbo-invoices`.
 
 ## Connected Systems
 

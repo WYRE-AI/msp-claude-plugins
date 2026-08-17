@@ -26,7 +26,7 @@ model, and service-monitor triage.
   fix is `ncentral-monitoring-tasks` and its direct-task tool.
 - **The same endpoint under a different RMM** — `atera-agents`,
   `syncro-assets`, `superops-assets`, `immybot-endpoint-management`,
-  `ninjaone-rmm-devices`, `datto-rmm-devices`, and
+  `ninjaone-devices`, `datto-rmm-devices`, and
   `connectwise-automate-computers` each see only their own fleet. Watch
   for `atera-devices` in particular, where "device" means an agentless
   SNMP or HTTP monitor rather than an endpoint.

@@ -45,7 +45,7 @@ to catch before it becomes a support problem.
 - **ScalePad Lifecycle Manager's warranty product** — LM holds its own
   hardware lifecycle records and warranty pricing; use
   `scalepad-lifecycle-manager` for anything scoped to that tool.
-- **Looking up one asset's record** — use `it-glue-configurations` or
+- **Looking up one asset's record** — use `itglue-configurations` or
   `hudu-assets`; this skill sweeps warranty state across a fleet.
 
 ## Discovering available tools first

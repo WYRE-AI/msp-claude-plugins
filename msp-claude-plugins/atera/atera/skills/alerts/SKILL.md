@@ -24,7 +24,7 @@ Alerts in Atera are notifications generated when monitored systems exceed define
   `atera-devices` for agentless monitors and `atera-agents` for
   endpoint health.
 - **Alerts from a different RMM** — `superops-alerts`,
-  `ninjaone-rmm-alerts`, `datto-rmm-alerts`,
+  `ninjaone-alerts`, `datto-rmm-alerts`,
   `connectwise-automate-alerts`, and N-central active issues
   (`ncentral-monitoring-tasks`) are separate stores with their own
   severity scales. Nothing here reads them, and the counts are not

@@ -29,10 +29,10 @@ Anything that lives inside one platform belongs to that platform's skill.
   `pax8-subscriptions`, `pax8-invoices`, `sherweb-subscriptions`, or
   `sherweb-billing`.
 - **Reading or creating an accounting invoice** — use
-  `quickbooks-online-invoices`, `quickbooks-online-reports`, `xero-invoices`, or
+  `qbo-invoices`, `qbo-reports`, `xero-invoices`, or
   `xero-reports`.
 - **Chasing an invoice the client has not paid** — that is collections
-  against a single system, not a reconciliation; use `quickbooks-online-reports`
+  against a single system, not a reconciliation; use `qbo-reports`
   or `xero-reports` for the aged-receivables view.
 - **Recovering the gap once it is found** — this skill identifies unbilled
   and mispriced subscriptions. Issuing the corrected invoice is a write

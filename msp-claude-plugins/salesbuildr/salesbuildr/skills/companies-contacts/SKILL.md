@@ -21,7 +21,7 @@ Companies and contacts are the foundation of the Salesbuildr CRM. Companies repr
 - **The same organization in the CRM of record** — use `hubspot-companies` or
   `hubspot-contacts`.
 - **The organization as a billing entity** — Salesbuildr holds no AR balance
-  or payment method; use `xero-contacts`, `quickbooks-online-customers`, or
+  or payment method; use `xero-contacts`, `qbo-customers`, or
   `alternative-payments-customers`.
 - **What the company has been quoted or is in the pipeline for** — use
   `salesbuildr-quotes` or `salesbuildr-opportunities`.
