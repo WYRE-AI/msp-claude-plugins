@@ -1,6 +1,6 @@
 {
   "name": "nutanix",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugins for Nutanix - Prism Central v4 API infrastructure management via the official Nutanix MCP server: VM inventory, cluster operations, storage, networking, and AIOps capacity insight",
   "author": {
     "name": "WYRE Technology"

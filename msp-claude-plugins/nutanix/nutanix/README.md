@@ -23,7 +23,7 @@ This is **not** a per-entity CRUD tool catalog. The server exposes:
 - **4 discovery tools** — `listOperations`, `getOperationSchema`,
   `getCodeSample`, `getOperationPermissions` — that query an index of
   every available v4 operation
-- **Up to 19 namespace executors**, one per v4 API namespace, each named
+- **Up to 20 namespace executors**, one per v4 API namespace, each named
   `<namespace>_execute` (`vmm_execute`, `clustermgmt_execute`,
   `storage_execute`, `monitoring_execute`, ...)
 
