@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
+  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'infrastructure' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -1201,6 +1201,39 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'posthog',
+    name: 'Posthog',
+    vendor: 'Posthog',
+    description: 'PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Cohorts And Events',
+      'Feature Flags And Experiments',
+      'Insights And Dashboards'
+    ],
+    skills: [
+      { name: 'cohorts-and-events', description: 'PostHog cohorts (saved user/group segments), raw analytics events, and timeline annotations.' },
+      { name: 'feature-flags-and-experiments', description: 'Read-only lookups of PostHog early-access feature flags and experiments — rollout status, targeting, and configuration.' },
+      { name: 'insights-and-dashboards', description: 'PostHog saved insights (trends, funnels, retention, and similar analytics queries) and the dashboards that group them into a single view.' },
+      { name: 'api-patterns', description: 'PostHog API fundamentals for this plugin: personal API key auth brokered through Conduit (no local key), the resource:action scope model, generic REST error handling, and why this plugin\'s read-only posture rests on the key\'s own scopes alone — Conduit has no gateway-side fallback for this vendor.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/check-insight', description: 'Look up a PostHog insight by ID or name and report its current result' },
+      { name: '/list-dashboards', description: 'List a PostHog project\'s dashboards, or retrieve one by ID' },
+      { name: '/list-feature-flags', description: 'List PostHog early-access feature flags and their current status' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'posthog/posthog',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'proofpoint',
     name: 'Proofpoint',
     vendor: 'Email Security',
@@ -1243,6 +1276,40 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'email-security/proofpoint',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'netsuite',
+    name: 'Netsuite',
+    vendor: 'Netsuite',
+    description: 'Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)',
+    category: 'accounting',
+    maturity: 'beta',
+    features: [
+      'Records And Metadata',
+      'Reports And Saved Searches',
+      'Suiteql Queries'
+    ],
+    skills: [
+      { name: 'records-and-metadata', description: 'Retrieving individual NetSuite records by type and internal ID, and discovering a record type\'s available fields via record-type metadata.' },
+      { name: 'reports-and-saved-searches', description: 'Running NetSuite\'s standard and custom reports and saved searches, plus the filter-lookup helpers (accounting books, accounting contexts, nexuses, subsidiaries) many of them need.' },
+      { name: 'suiteql-queries', description: 'Running read-only SuiteQL queries against NetSuite data and discovering queryable fields and joins via SuiteQL metadata.' },
+      { name: 'api-patterns', description: 'NetSuite MCP fundamentals for this plugin: OAuth 2.0 Client Credentials (JWT-bearer) machine-to-machine auth brokered through Conduit, the per-tenant vendor-hosted MCP endpoint model, generic error handling, and how NetSuite\'s own role-based permissions — not this plugin — enforce the read-only posture.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/get-record', description: 'Retrieve a NetSuite record by type and internal ID' },
+      { name: '/query-records', description: 'Run a read-only SuiteQL query against NetSuite' },
+      { name: '/run-report', description: 'List available NetSuite reports, or run one by name or ID' },
+      { name: '/run-saved-search', description: 'Run a NetSuite saved search by name or ID' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'netsuite/netsuite',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
@@ -2416,6 +2483,48 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'ncentral/ncentral',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'nutanix',
+    name: 'Nutanix',
+    vendor: 'Nutanix',
+    description: 'Nutanix - Prism Central v4 API: VM management, cluster operations, storage, networking via official Nutanix MCP server',
+    category: 'infrastructure',
+    maturity: 'production',
+    features: [
+      'Cluster Operations',
+      'Monitoring Aiops',
+      'Networking',
+      'Storage',
+      'Vm Management'
+    ],
+    skills: [
+      { name: 'cluster-operations', description: 'Working the clustermgmt namespace through `clustermgmt_execute` — cluster and host inventory, configuration and health state — plus the adjacent read surfaces: `prism_execute` for Prism Central tasks and categories, and `lifecycle_execute` for LCM upgrade inventory and recommendations.' },
+      { name: 'monitoring-aiops', description: 'The Nutanix operational-intelligence read surface: `monitoring_execute` for alerts, alert policies, events, and audit logs, and `aiops_execute` for capacity planning, VM rightsizing recommendations, and workload performance analysis — the namespaces behind health checks and capacity reports.' },
+      { name: 'networking', description: 'The Nutanix networking read surface: `networking_execute` for AHV network configuration (subnets, VPCs, vSwitch, BGP — coverage varies by artifact set, down to a minimal capabilities/AWS-VPC slice) and `microseg_execute` for Flow Network Security policies, service groups, and address groups.' },
+      { name: 'storage', description: 'The Nutanix storage read surface across four namespaces: `storage_execute` for storage containers and volume groups, `volumes_execute` for iSCSI / NVMe-TCP volume group attachment state, `objects_execute` for the S3-compatible object store, and `files_execute` for virtual file servers and NFS/SMB shares — capacity, configuration, and attachment queries.' },
+      { name: 'vm-management', description: 'Working the vmm namespace through `vmm_execute`: VM inventory and lookup on AHV clusters, resolving names to extId UUIDs, reading VM configuration (disks, NICs, GPUs, power state), OData filters for VM queries, and the read-only boundaries around VM lifecycle actions.' },
+      { name: 'api-patterns', description: 'Nutanix MCP fundamentals: the discovery-driven tool surface (4 discovery tools plus one `<namespace>_execute` tool per v4 API namespace — not per-entity CRUD tools), the listOperations → getOperationSchema → execute workflow, Conduit gateway credential configuration for Prism Central, OData query parameters, the read-only enforcement mode, and namespace availability rules.' }
+    ],
+    agents: [
+      { name: 'nutanix-capacity-planner', description: 'Use this agent for Nutanix capacity planning, VM rightsizing analysis, storage runway assessment, and hardware refresh planning across Nutanix clusters.' },
+      { name: 'nutanix-infra-expert', description: 'Use this agent when navigating the Nutanix Prism Central v4 API surface, answering questions about Nutanix infrastructure state, or investigating clusters, hosts, VMs, storage, networking, or alerts across a Nutanix estate.' }
+    ],
+    commands: [
+      { name: '/capacity-report', description: 'Capacity runway and VM rightsizing report from Nutanix AIOps analysis' },
+      { name: '/cluster-health', description: 'Health check for Nutanix clusters covering nodes, alerts, and recent failed tasks' },
+      { name: '/find-vm', description: 'Find a VM by name across Nutanix clusters and show its configuration' },
+      { name: '/storage-usage', description: 'Storage container and volume group usage across Nutanix clusters' },
+      { name: '/vm-inventory', description: 'Inventory all VMs across Nutanix clusters with sizing and power state' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'nutanix/nutanix',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
