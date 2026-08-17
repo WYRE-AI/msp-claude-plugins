@@ -25,6 +25,7 @@ mode: only GET operations execute.
 | `prism` | `prism_execute` | Tasks, categories, batch operations, domain managers, backup targets, external storage |
 | `security` | `security_execute` | Encryption, certificates, platform hardening |
 | `storage` | `storage_execute` | Storage containers, volume groups, iSCSI client management |
+| `tenancy` | `tenancy_execute` | SP Central tenant administration, resource allocation and utilization, tenant user management |
 | `vmm` | `vmm_execute` | VM lifecycle on AHV clusters |
 | `volumes` | `volumes_execute` | Volume group lifecycle with iSCSI and NVMe-TCP client attachment |
 

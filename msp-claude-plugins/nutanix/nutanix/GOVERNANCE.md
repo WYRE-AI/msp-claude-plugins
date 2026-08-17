@@ -46,7 +46,7 @@ Consequences worth reading twice:
 ## Tool granularity is coarse — plan grants accordingly
 
 The tool surface is 4 discovery tools plus one `<namespace>_execute`
-executor per v4 namespace (up to 19). A grant on an executor tool is a
+executor per v4 namespace (up to 20). A grant on an executor tool is a
 grant on **every operation in that namespace** the server will execute
 — there is no per-operation tool boundary. Under the current read-only
 deployment every executable operation is a GET, so the practical blast

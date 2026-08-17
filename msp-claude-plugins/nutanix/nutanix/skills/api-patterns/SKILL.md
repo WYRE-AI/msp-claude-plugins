@@ -29,7 +29,7 @@ The tool surface is **not** a flat catalog of per-entity CRUD tools. It is:
 
 - **4 discovery tools** that query an in-memory index of every available
   operation (no Nutanix API call is made)
-- **Up to 19 namespace executor tools**, one per v4 API namespace, each
+- **Up to 20 namespace executor tools**, one per v4 API namespace, each
   named `<namespace>_execute` (e.g. `vmm_execute`, `clustermgmt_execute`,
   `networking_execute`)
 
@@ -126,7 +126,7 @@ deployed or not exposed on the connected PC; it is expected behavior,
 not an error. Confirm what is actually available with
 `listOperations` before promising coverage.
 
-See [REFERENCE.md](REFERENCE.md) for the full 19-namespace table and
+See [REFERENCE.md](REFERENCE.md) for the full 20-namespace table and
 what each namespace covers.
 
 ## Error handling
