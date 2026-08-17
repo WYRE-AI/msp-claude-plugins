@@ -25,7 +25,7 @@ Quotes are proposals sent to customers containing one or more products as line i
   CPQ use identical vocabulary for their own records; use
   `kaseya-quote-manager-quotes` or `connectwise-cpq-quotes`.
 - **Billing for a quote the customer accepted** — an accepted quote is not an
-  invoice; use `xero-invoices` or `quickbooks-online-invoices`.
+  invoice; use `xero-invoices` or `qbo-invoices`.
 - **The pipeline record the quote hangs off** — stage, value, and close date
   belong to the opportunity; use `salesbuildr-opportunities`.
 

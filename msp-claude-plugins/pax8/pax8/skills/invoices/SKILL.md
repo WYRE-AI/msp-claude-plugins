@@ -20,7 +20,7 @@ Invoices in Pax8 represent the MSP's cost for cloud subscriptions procured throu
 
 - **An invoice the MSP sends to a client** — a Pax8 invoice is money the
   MSP *owes*, in the opposite direction to everything in the accounting
-  and PSA plugins. Client-facing invoices are `quickbooks-online-invoices`,
+  and PSA plugins. Client-facing invoices are `qbo-invoices`,
   `xero-invoices`, `autotask-billing`, or `halopsa-invoices`. Getting the
   direction wrong inverts every margin calculation.
 - **The equivalent cost from the other CSP marketplace** — use

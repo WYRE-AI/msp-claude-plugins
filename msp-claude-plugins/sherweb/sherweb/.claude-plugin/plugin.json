@@ -1,6 +1,6 @@
 {
   "name": "sherweb",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "Claude plugins for Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
   "author": {
     "name": "MSP Claude Plugins Community"

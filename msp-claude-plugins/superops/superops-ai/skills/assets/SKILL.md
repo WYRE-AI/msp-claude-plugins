@@ -25,11 +25,11 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
   you whether a target is online and what is installed; execution,
   batching, and exit codes are `superops-runbooks`.
 - **An "asset" that is a documentation record** — in `hudu-assets` and
-  `it-glue-configurations` an asset is a documented configuration item
+  `itglue-configurations` an asset is a documented configuration item
   with no agent behind it. SuperOps assets are live RMM endpoints.
 - **Endpoints under a different RMM** — `atera-agents`, `syncro-assets`,
   `ncentral-devices`, `immybot-endpoint-management`,
-  `ninjaone-rmm-devices`, and `datto-rmm-devices` each see only their
+  `ninjaone-devices`, and `datto-rmm-devices` each see only their
   own fleet. Patch and software inventory counts are not comparable
   across them.
 - **Hardware refresh and warranty programmes** — asset lifecycle

@@ -24,7 +24,7 @@ Billing in Sherweb represents the financial data flowing from the distributor to
 
 - **An invoice the MSP sends to a client** — Sherweb charges are money the
   MSP *owes* the distributor, the opposite direction to the accounting and
-  PSA plugins. Client-facing invoices are `quickbooks-online-invoices`,
+  PSA plugins. Client-facing invoices are `qbo-invoices`,
   `xero-invoices`, `autotask-billing`, or `halopsa-invoices`. Getting the
   direction wrong inverts every margin calculation.
 - **The equivalent cost from the other CSP marketplace** — use
@@ -33,7 +33,7 @@ Billing in Sherweb represents the financial data flowing from the distributor to
   cross-vendor reconciliation itself; use `shared-skills-billing-reconciliation`.
 - **Aged receivables on the MSP's own books** — Sherweb's per-customer AR
   view is the distributor platform's ledger, not the accounting system's.
-  Collections work runs off `quickbooks-online-reports` or `xero-reports`; see
+  Collections work runs off `qbo-reports` or `xero-reports`; see
   `sherweb-customers` for what Sherweb's own AR data covers.
 
 ## MCP Tools

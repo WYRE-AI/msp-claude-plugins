@@ -26,10 +26,10 @@ right, and either leaving it held or delivering it.
 ## Anti-triggers
 
 - **Why the message was flagged** — the engine verdict, type, severity and
-  confidence are on the detection record. Use `checkpoint-avanan-threats`.
+  confidence are on the detection record. Use `avanan-threats`.
 - **Stopping a sender being flagged again** — a release delivers one message
   and changes nothing standing. Sender allow entries are
-  `checkpoint-avanan-exceptions`.
+  `avanan-exceptions`.
 - **Search-and-destroy in a delivered mailbox on another stack** — Proofpoint
   TRAP is `proofpoint-forensics`; Microsoft 365 mailbox operations are
   `cipp-mailboxes`.

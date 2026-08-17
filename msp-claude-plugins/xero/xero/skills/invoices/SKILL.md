@@ -27,7 +27,7 @@ Invoices are the core transaction entity in Xero for billing and accounts payabl
   the receipt is `xero-payments`.
 - **Aged receivables or revenue totals** — do not aggregate invoice rows by
   hand; use `xero-reports`.
-- **The same operation in QuickBooks** — use `quickbooks-online-invoices`.
+- **The same operation in QuickBooks** — use `qbo-invoices`.
 - **An invoice raised outside the ledger** — a PSA bills from
   agreements and time, and a distributor bills the MSP for licences;
   neither posts to Xero until it is entered. Use `halopsa-invoices`,

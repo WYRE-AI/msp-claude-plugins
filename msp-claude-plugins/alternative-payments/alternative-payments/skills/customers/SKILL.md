@@ -29,7 +29,7 @@ There is no direct money-movement operation here.
 
 - **The same client in the accounting ledger** — an Alternative Payments
   customer is a billing target on the payment rail with no GL contact record;
-  use `xero-contacts` or `quickbooks-online-customers`.
+  use `xero-contacts` or `qbo-customers`.
 - **The same client in the CRM** — use `hubspot-companies` or
   `salesbuildr-companies-contacts`.
 - **Billing that customer** — use `alternative-payments-invoicing`.

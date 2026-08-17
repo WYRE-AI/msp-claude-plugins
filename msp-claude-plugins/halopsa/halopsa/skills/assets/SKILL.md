@@ -32,7 +32,7 @@ device's live state.
   `scalepad-lifecycle-manager`; Halo's warranty fields are a local copy
   that drifts.
 - **Documentation about the asset** — runbooks, diagrams, and
-  configuration notes are `hudu-assets` or `it-glue-configurations`.
+  configuration notes are `hudu-assets` or `itglue-configurations`.
 - **What the asset costs or is covered by** — contract coverage and
   billing are `halopsa-contracts`; the client and site it belongs to are
   `halopsa-clients`.

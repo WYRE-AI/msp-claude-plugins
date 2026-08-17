@@ -28,7 +28,7 @@ Detections are Liongard's automated change and anomaly detection system. Every t
 - **RMM threshold and availability alerts** — disk-full, offline, and
   service-down alerts come from the RMM: `atera-alerts`,
   `superops-alerts`, `ncentral-monitoring-tasks`,
-  `ninjaone-rmm-alerts`, or `datto-rmm-alerts`.
+  `ninjaone-alerts`, or `datto-rmm-alerts`.
 - **Compliance frameworks** — Liongard metrics are custom JMESPath
   measurements over inspection data; mapping evidence to CIS, NIST, or
   SOC 2 controls is `scalepad-controlmap`.

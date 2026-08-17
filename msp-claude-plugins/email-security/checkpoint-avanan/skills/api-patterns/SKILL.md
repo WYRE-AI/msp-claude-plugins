@@ -27,16 +27,16 @@ Harmony Email Smart API v1.50.
 
 ## Anti-triggers
 
-- **`avanan_*` tool names** — a separate `avanan-legacy-mcp` server serves
+- **`avanan_*` tool names** — a separate legacy Avanan MCP server serves
   MSP-partner, tenant and licence management under `avanan_*` names
   (`avanan_create_tenant`, `avanan_assign_license`). None of them reach
   quarantine, events or exceptions. This vendor's security surface is
   `hec_*` only; if you want tenant or licence administration, that is the
   legacy server, not this plugin.
-- **Detection records and their verdicts** — use `checkpoint-avanan-threats`.
+- **Detection records and their verdicts** — use `avanan-threats`.
 - **Finding or acting on the message itself** — use
-  `checkpoint-avanan-quarantine`.
-- **Sender allow/block entries** — use `checkpoint-avanan-exceptions`.
+  `avanan-quarantine`.
+- **Sender allow/block entries** — use `avanan-exceptions`.
 - **Another vendor's auth** — "client id and secret against a regional
   gateway" describes most of the email-security stack. Mimecast is
   `mimecast-api-patterns`, Proofpoint is `proofpoint-api-patterns`.

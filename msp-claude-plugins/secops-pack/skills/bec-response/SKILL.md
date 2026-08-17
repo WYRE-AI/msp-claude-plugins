@@ -38,7 +38,7 @@ confirmed or strongly suspected.
   object, so an ATO investigation is an ordinary case.
 - **The inbound phishing message itself** — quarantine, release, and
   message-level forensics are the email-security connector's surface; use
-  `checkpoint-avanan-quarantine`, `ironscales-incidents`,
+  `avanan-quarantine`, `ironscales-incidents`,
   `proofpoint-forensics`, or `mimecast-message-tracking`.
 - **The individual CIPP calls behind each step** — session revocation,
   mailbox rules, and user state are `cipp-users`, `cipp-mailboxes`, and

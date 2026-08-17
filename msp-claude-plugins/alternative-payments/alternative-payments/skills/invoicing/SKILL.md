@@ -35,7 +35,7 @@ simply produces a URL. This integration never executes a direct charge. See
 
 - **The invoice as an accounting document** — these invoices are collection
   artefacts with no GL coding, tax treatment, or aging; use `xero-invoices` or
-  `quickbooks-online-invoices`.
+  `qbo-invoices`.
 - **Whether the invoice was paid and where the money settled** — use
   `alternative-payments-payments`.
 - **Charging a card or bank account directly** — no such tool exists here by

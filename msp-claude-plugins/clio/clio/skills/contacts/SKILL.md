@@ -31,7 +31,7 @@ that's no longer relevant doesn't get removed through this integration.
   other plugin here says "contact", "client", and "company" too, and none
   of them mean a party to a legal matter. Use `autotask-crm`,
   `connectwise-psa-contacts`, `halopsa-clients`, `hubspot-contacts`, or
-  `quickbooks-online-customers`.
+  `qbo-customers`.
 - **Everyone connected to a case** — a contact is a party record, not the
   case file. The relationship (client, opposing party, witness) is carried
   on the matter; use `clio-matters` to resolve the matter first.

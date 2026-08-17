@@ -25,7 +25,7 @@ Contacts are the foundational entity in Xero, representing customers (clients yo
   `alternative-payments-customers`.
 - **Chart-of-accounts entries** — a Xero "account" is a general ledger code,
   not a customer account; use `xero-accounts`.
-- **The same operation in QuickBooks** — use `quickbooks-online-customers`.
+- **The same operation in QuickBooks** — use `qbo-customers`.
 
 ## Core Concepts
 

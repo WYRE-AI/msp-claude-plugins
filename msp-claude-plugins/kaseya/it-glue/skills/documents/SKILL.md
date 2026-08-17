@@ -21,11 +21,11 @@ Documents in IT Glue provide structured documentation storage for organizations,
 
 - **Documentation with a fixed field schema** — repeatable, filterable
   records are flexible assets, not free-form documents; use
-  `it-glue-flexible-assets`.
+  `itglue-flexible-assets`.
 - **The credential a runbook refers to** — passwords are separate
-  records that documents embed by reference; use `it-glue-passwords`.
+  records that documents embed by reference; use `itglue-passwords`.
 - **Device facts rather than narrative** — use
-  `it-glue-configurations`.
+  `itglue-configurations`.
 
 ## Key Concepts
 

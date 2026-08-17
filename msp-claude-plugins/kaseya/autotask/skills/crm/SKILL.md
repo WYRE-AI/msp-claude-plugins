@@ -19,7 +19,7 @@ Autotask CRM manages the core entities that define your client relationships: co
 ## Anti-triggers
 
 - **The same client as a documentation record** — use
-  `it-glue-organizations`, and `it-glue-contacts` for the people.
+  `itglue-organizations`, and `itglue-contacts` for the people.
 - **The client's grouping in monitoring or SOC tooling** — Datto RMM
   calls it a site (`datto-rmm-sites`), RocketCyber calls it an account
   (`rocketcyber-accounts`). Neither shares IDs with an Autotask company.

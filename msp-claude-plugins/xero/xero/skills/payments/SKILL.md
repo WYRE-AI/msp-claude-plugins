@@ -23,7 +23,7 @@ Payments in Xero record the movement of money against invoices, credit notes, an
   happened; the collection rail is `alternative-payments-invoicing`.
 - **What is owed rather than what was paid** — `AmountDue` and invoice status
   are `xero-invoices`; aging summaries are `xero-reports`.
-- **The same operation in QuickBooks** — use `quickbooks-online-payments`.
+- **The same operation in QuickBooks** — use `qbo-payments`.
 
 ## Core Concepts
 

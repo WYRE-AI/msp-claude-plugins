@@ -35,7 +35,7 @@ Quarantine operates at two levels:
   `proofpoint-url-defense`.
 - **Another vendor's quarantine** — release and delete vocabulary is
   shared across the stack. Checkpoint Harmony is
-  `checkpoint-avanan-quarantine`, SpamTitan is `spamtitan-quarantine`,
+  `avanan-quarantine`, SpamTitan is `spamtitan-quarantine`,
   and Mimecast calls it the held queue: `mimecast-queue-management`.
 
 ## Key Concepts

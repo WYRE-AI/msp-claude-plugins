@@ -24,7 +24,7 @@ Alerts in NinjaOne indicate conditions on devices that require attention. They'r
   `datto-rmm-alerts`, or `connectwise-automate-alerts`. All of them say
   "alert" and "critical"; only the source platform disambiguates.
 - **Turning an alert into work someone owns** — an alert is not a ticket.
-  Use `ninjaone-rmm-tickets` for NinjaOne's own queue, or the PSA's skill
+  Use `ninjaone-tickets` for NinjaOne's own queue, or the PSA's skill
   (`autotask-tickets`, `connectwise-psa-tickets`, `halopsa-tickets`) when
   the ticket lives there.
 - **Deciding priority and routing for an incoming ticket** — that is

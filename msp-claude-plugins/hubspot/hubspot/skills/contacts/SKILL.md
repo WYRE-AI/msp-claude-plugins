@@ -23,7 +23,7 @@ Contacts in HubSpot represent individual people -- clients, prospects, vendors, 
   company record; use `hubspot-companies`.
 - **The organization as an entity you invoice** — a HubSpot contact carries no
   balance, terms, or tax details; the AR-side record is `xero-contacts` or
-  `quickbooks-online-customers`.
+  `qbo-customers`.
 - **A company or person detected on the website but not yet in the CRM** —
   that is intent data, not a contact record; use
   `warmly-visitor-intelligence`.

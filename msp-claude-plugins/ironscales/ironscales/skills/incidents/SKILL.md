@@ -40,7 +40,7 @@ Ironscales combines AI-powered threat detection with crowdsourced employee phish
   Check Point Harmony Email (Avanan) inspects the same mailboxes and
   detects the same mail independently. It has no incident object to
   correlate against — its API surfaces the offending mail itself — so use
-  `checkpoint-avanan-threats` and match on the message, not on an ID.
+  `avanan-threats` and match on the message, not on an ID.
 
 ## Key Concepts
 

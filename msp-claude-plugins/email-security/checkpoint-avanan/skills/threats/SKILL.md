@@ -28,11 +28,11 @@ following the ones that are through to the message.
 
 - **The message behind the detection** — subject, sender, recipients,
   attachments, and the quarantine and restore actions all live on the entity,
-  not the event. Use `checkpoint-avanan-quarantine`.
+  not the event. Use `avanan-quarantine`.
 - **Exempting a sender so the engines stop firing** — use
-  `checkpoint-avanan-exceptions`.
+  `avanan-exceptions`.
 - **Which id a tool wants, paging, or an auth failure** — use
-  `checkpoint-avanan-api-patterns`.
+  `avanan-api-patterns`.
 - **Another vendor's detections** — "threat", "BEC", "phishing" and "IOC" are
   shared currency across the email-security stack. Abnormal is
   `abnormal-security-threats`, Proofpoint is `proofpoint-tap`, Mimecast is
@@ -166,11 +166,11 @@ keep it out of anything long-lived.
   rather than broadens and is rarely what is meant.
 - **An empty result is not an all-clear.** A wrong region, a scopeless key or
   a window outside retention all return zero records without an error. See
-  `checkpoint-avanan-api-patterns`.
+  `avanan-api-patterns`.
 - **Event state is not agent-settable.** `dismissed` and `exception` are
   filterable states, but no tool transitions an event into them. Closing a
   detection as a false positive is a console action, or an exception via
-  `checkpoint-avanan-exceptions`.
+  `avanan-exceptions`.
 
 ## Capability gaps
 

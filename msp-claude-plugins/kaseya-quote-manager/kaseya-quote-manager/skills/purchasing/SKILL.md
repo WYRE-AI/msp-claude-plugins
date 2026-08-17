@@ -28,7 +28,7 @@ All access here is **read-only**.
   side is `kaseya-quote-manager-quotes`.
 - **Supplier bills as accounting entries** — a Quote Manager purchase order is
   not an ACCPAY bill and never posts to a GL; use `xero-invoices` or
-  `quickbooks-online-expenses`.
+  `qbo-expenses`.
 - **Sell price and catalog descriptions for quoting** — use
   `salesbuildr-products`.
 

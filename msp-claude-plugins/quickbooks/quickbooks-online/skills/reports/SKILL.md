@@ -24,7 +24,7 @@ QuickBooks Online provides a comprehensive set of financial reports accessible v
 - **A specific transaction** — reports are aggregates with their own
   nested row structure and their own rounding. Pulling one invoice,
   payment, or bill out of a report is the wrong path; use
-  `quickbooks-online-invoices`, `quickbooks-online-payments`, or `quickbooks-online-expenses`.
+  `qbo-invoices`, `qbo-payments`, or `qbo-expenses`.
 - **The books are in Xero, not QuickBooks** — use `xero-reports`. Both
   produce "P&L" and "aged receivables" under those exact names.
 - **Margin on resold cloud licences** — the cost side sits with the

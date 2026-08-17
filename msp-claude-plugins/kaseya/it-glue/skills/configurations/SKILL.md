@@ -22,7 +22,7 @@ Configurations in IT Glue represent trackable assets such as servers, workstatio
 
 - **Custom structured documentation** — anything with a per-tenant
   field schema is a flexible asset, not a configuration; use
-  `it-glue-flexible-assets`.
+  `itglue-flexible-assets`.
 - **The asset as a billable or contracted item** — use
   `autotask-configuration-items`.
 - **Live state — reachability, patch level, installed software** — IT

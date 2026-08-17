@@ -26,7 +26,7 @@ Audit data in Datto RMM provides detailed hardware and software inventory for ma
 - **Whether the device is reachable right now** — audit data is a
   periodic snapshot and goes stale; use `datto-rmm-devices`.
 - **Inventory as documentation of record** — use
-  `it-glue-configurations`.
+  `itglue-configurations`.
 
 ## Key Concepts
 

@@ -21,7 +21,7 @@ Devices are the core managed entities in Datto RMM. Each device represents an en
 - **The billable or contracted record for the same machine** — use
   `autotask-configuration-items`.
 - **The documentation record for the same machine** — use
-  `it-glue-configurations`.
+  `itglue-configurations`.
 - **Hardware specs or installed software** — those come from the
   periodic audit, not the device record; use `datto-rmm-audit`.
 - **A security sensor rather than the RMM agent** — an endpoint
@@ -29,7 +29,7 @@ Devices are the core managed entities in Datto RMM. Each device represents an en
 - **The same endpoint under a different RMM** — "device" means the
   managed endpoint in most of them, so the wording never disambiguates;
   confirm which agent is enrolled, then use `ncentral-devices`,
-  `ninjaone-rmm-devices`, or `atera-agents` (Atera reserves
+  `ninjaone-devices`, or `atera-agents` (Atera reserves
   "device" for agentless monitors).
 
 ## Key Concepts

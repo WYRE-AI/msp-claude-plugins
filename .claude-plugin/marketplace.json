@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.29.1",
+  "version": "1.29.2",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -100,7 +100,8 @@
       ]
     },
     {
-      "name": "checkpoint-avanan",
+      "name": "avanan",
+      "displayName": "Checkpoint Harmony Email (Avanan)",
       "source": "./msp-claude-plugins/email-security/checkpoint-avanan",
       "description": "Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions",
       "category": "email-security",
@@ -260,7 +261,8 @@
       ]
     },
     {
-      "name": "it-glue",
+      "name": "itglue",
+      "displayName": "IT Glue",
       "source": "./msp-claude-plugins/kaseya/it-glue",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
       "category": "documentation",
@@ -312,7 +314,8 @@
       ]
     },
     {
-      "name": "ninjaone-rmm",
+      "name": "ninjaone",
+      "displayName": "NinjaOne",
       "source": "./msp-claude-plugins/ninjaone/ninjaone-rmm",
       "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
       "category": "rmm",
@@ -415,7 +418,8 @@
       ]
     },
     {
-      "name": "quickbooks-online",
+      "name": "qbo",
+      "displayName": "QuickBooks Online",
       "source": "./msp-claude-plugins/quickbooks/quickbooks-online",
       "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
       "category": "accounting",

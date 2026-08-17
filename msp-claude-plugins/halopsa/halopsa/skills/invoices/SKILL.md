@@ -35,7 +35,7 @@ satisfied by this skill.
 - **The billable time behind a line** — time entries are logged as ticket
   actions; use `halopsa-tickets`.
 - **The books are in QuickBooks rather than Xero** — use
-  `quickbooks-online-invoices`.
+  `qbo-invoices`.
 - **A distributor invoice** — licence cost the MSP owes runs in the
   opposite direction to a client invoice and inverts margin if the two
   are mixed; use `pax8-invoices`.

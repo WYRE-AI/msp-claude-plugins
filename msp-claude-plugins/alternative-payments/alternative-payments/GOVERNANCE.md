@@ -170,7 +170,7 @@ half of that on this connector (see *What Conduit actually classifies*).
 - No bank account or payment-method management. Stored payment credentials are
   neither readable nor writable here.
 - No accounting ledger. Nothing here posts to a GL; that is `xero-payments` or
-  `quickbooks-online-payments`.
+  `qbo-payments`.
 
 ## Data handling
 

@@ -26,7 +26,7 @@ Customers in Atera represent the organizations you provide IT services to. Each 
 - **The endpoints a customer owns** — a customer owns agents; list them
   with `atera-agents` filtered by `CustomerID`.
 - **Documentation about the client** — passwords, configurations, and
-  procedures live in `hudu-companies` or `it-glue-organizations`.
+  procedures live in `hudu-companies` or `itglue-organizations`.
 
 ## Customer Fields
 

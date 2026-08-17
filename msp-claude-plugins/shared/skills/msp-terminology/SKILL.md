@@ -27,7 +27,7 @@ cannot look any of them up.
 - **Any question about a real record** — "how many seats does Acme have",
   "what is the SLA on this ticket", "which agent is on that server" are
   data questions. Load the vendor's skill: `pax8-subscriptions`,
-  `autotask-contracts`, `ninjaone-rmm-devices`, and so on.
+  `autotask-contracts`, `ninjaone-devices`, and so on.
 - **What a term means inside one platform** — vendor status values,
   priority enums, and entity names are that vendor's own vocabulary and
   frequently contradict the generic definition here. Use that vendor's

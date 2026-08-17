@@ -32,10 +32,10 @@ customers.
 
 - **Internal runbooks, network diagrams, and client documentation** —
   those belong in an MSP documentation platform; use `hudu-articles` or
-  `it-glue-documents`. Never draft an internal procedure into a
+  `itglue-documents`. Never draft an internal procedure into a
   Solutions article.
 - **Credentials or secrets referenced by a procedure** — use
-  `hudu-passwords` or `it-glue-passwords`; nothing in the
+  `hudu-passwords` or `itglue-passwords`; nothing in the
   Solutions hierarchy is a safe place for them.
 - **Attaching the article to a ticket or replying with it** — ticket
   replies and notes are `freshdesk-ticketing`; this skill finds the

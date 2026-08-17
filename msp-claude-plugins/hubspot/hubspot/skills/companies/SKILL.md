@@ -23,7 +23,7 @@ Companies in HubSpot represent organizations -- MSP clients, prospects, vendors,
 - **The revenue opportunity with that organization** — amount, stage, and
   close date live on a deal, not the company; use `hubspot-deals`.
 - **The organization as a billing entity** — HubSpot companies hold no AR
-  balance; use `xero-contacts` or `quickbooks-online-customers`.
+  balance; use `xero-contacts` or `qbo-customers`.
 - **Companies seen visiting the website but not yet in the CRM** — use
   `warmly-visitor-intelligence`.
 

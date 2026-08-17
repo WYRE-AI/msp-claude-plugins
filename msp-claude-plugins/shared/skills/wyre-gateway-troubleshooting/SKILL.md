@@ -37,8 +37,8 @@ limits, and error codes.
 
 - **A tool that runs but returns an error from the vendor** — a 4xx with a
   vendor-shaped error body is not a gateway fault. Use
-  `ninjaone-rmm-api-patterns`, `hudu-api-patterns`,
-  `quickbooks-online-api-patterns`, `pax8-api-patterns`, `sherweb-api-patterns`,
+  `ninjaone-api-patterns`, `hudu-api-patterns`,
+  `qbo-api-patterns`, `pax8-api-patterns`, `sherweb-api-patterns`,
   `clio-api-patterns`, or the equivalent for that vendor.
 - **A vendor-specific permission model** — Hudu's per-API-key password
   toggle, Clio's decision-tree navigation, Sherweb's progressive tool
