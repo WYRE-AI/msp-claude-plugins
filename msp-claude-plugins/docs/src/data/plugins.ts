@@ -2269,6 +2269,46 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'mailprotector',
+    name: 'Mailprotector',
+    vendor: 'Mailprotector',
+    description: 'Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs',
+    category: 'email-security',
+    maturity: 'production',
+    features: [
+      'Allow Block Rules',
+      'Customers And Domains',
+      'Quarantine And Messages',
+      'Users And Groups'
+    ],
+    skills: [
+      { name: 'allow-block-rules', description: 'Sender allow/block rules at all five scopes: downward inheritance (reseller rules apply to everything beneath), the listing that returns only directly-attached rules, create with `rule_type: allow|block` and address-or-domain values, and the flat delete endpoint.' },
+      { name: 'customers-and-domains', description: 'Customer lifecycle (create/edit/delete under the reseller), domain creation with the Pending → Active verification flow and verification_token, domain aliases, moving domains between customers, address discovery, and mail routing via email destinations and email sources.' },
+      { name: 'quarantine-and-messages', description: 'Quarantine triage across all five scopes (reseller/customer/domain/ user_group/user): message fields (`quarantine_type`, `decision`, `score`, scoring `results`), releasing a single message via `/deliver`, bulk release via `/deliver_many` with its silent scope-mismatch skip and the `all_selected` release-everything switch, and the release permission flags in configuration.' },
+      { name: 'users-and-groups', description: 'User groups as the service container (services get/update with its deactivate-what-you-omit semantics), user CRUD including create_many and find_by_address, user aliases, password resets, and user syncs — LDAP/AD source creation, Entra/Google console-only sources, sync schedules, and comparison-type filters.' },
+      { name: 'api-patterns', description: 'Mailprotector MCP fundamentals: gateway header authentication (`X-Mailprotector-Api-Key` / `X-Mailprotector-Reseller-Id`) and its translation to the upstream Bearer token, the Provider → Reseller → Customer → Domain → User Group → User entity hierarchy, the router-pattern tool surface with `mailprotector_execute_tool` for the long tail, scope/scope_id consolidation, field-based list filtering, `page` pagination (max 50 on messages), and error handling.' }
+    ],
+    agents: [
+      { name: 'mailprotector-mailflow-auditor', description: 'Use this agent when auditing Mailprotector mail flow, configuration, or allow/block posture across customers and reporting anomalies.' },
+      { name: 'mailprotector-onboarder', description: 'Use this agent when onboarding a new customer onto Mailprotector end to end: creating the customer, creating and verifying domains, provisioning user groups and services, and populating users manually or via directory sync.' },
+      { name: 'mailprotector-quarantine-triager', description: 'Use this agent when reviewing quarantined Mailprotector messages at any scope, hunting false positives, releasing held mail safely, or proposing allow rules for repeat offenders.' }
+    ],
+    commands: [
+      { name: '/block-sender', description: 'Create a Mailprotector block rule for a sender address or domain at a chosen scope' },
+      { name: '/check-quarantine', description: 'Review the Mailprotector quarantine at any scope and summarize held messages' },
+      { name: '/onboard-customer', description: 'Onboard a new customer onto Mailprotector - customer, domain, user group, services, users' },
+      { name: '/release-message', description: 'Release one or more quarantined Mailprotector messages to their recipients' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'mailprotector/mailprotector',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'wyre-gateway',
     name: 'Wyre Gateway',
     vendor: 'Wyre-gateway',
