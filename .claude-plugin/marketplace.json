@@ -1070,6 +1070,20 @@
         "controlmap",
         "msp"
       ]
+    },
+    {
+      "name": "axcient",
+      "source": "./msp-claude-plugins/axcient/axcient",
+      "description": "Axcient x360Recover - BCDR clients, devices, backup jobs, vaults, and appliances",
+      "category": "bcdr",
+      "tags": [
+        "axcient",
+        "x360recover",
+        "bcdr",
+        "backup",
+        "disaster-recovery",
+        "msp"
+      ]
     }
   ]
 }

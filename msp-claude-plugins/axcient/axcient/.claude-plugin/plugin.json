@@ -1,0 +1,11 @@
+{
+  "name": "axcient",
+  "version": "0.1.0",
+  "description": "Claude plugins for Axcient x360Recover - clients, devices, backup jobs, vaults, and appliances for BCDR operations",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
