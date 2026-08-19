@@ -14,7 +14,7 @@ enabling:
 - **Appliance Inventory** - Hardware detail and device rosters for appliance-based protection
 - **API Integration** - x360Recover API authentication, error handling, and pagination patterns
 
-This is a young, mostly-read-only public API. Of the 19 tools this server
+This is a young, mostly-read-only public API. Of the 20 tools this server
 registers, only two mutate anything: setting a vault's connectivity
 threshold, and minting a new direct-to-cloud agent enrollment token.
 
@@ -80,7 +80,7 @@ export AXCIENT_API_KEY="your-api-key"
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | Authentication, the 19-tool catalog, call scoping, error handling |
+| `api-patterns` | Authentication, the 20-tool catalog, call scoping, error handling |
 | `clients` | Client health, protected-system counters, D2C enrollment |
 | `devices` | Device inventory, health status, recovery points, AutoVerify |
 | `jobs` | Backup job status, thresholds, and run history |
@@ -138,7 +138,7 @@ If you see "401 Unauthorized":
 ### Job History Looks Empty or Wrong
 
 x360Recover's job-history endpoint has documented upstream reliability
-issues. Corroborate against `axcient_devices_get_restore_points` before
+issues. Corroborate against `axcient_get_device_restore_points` before
 concluding a job has never run.
 
 ### Connection Issues

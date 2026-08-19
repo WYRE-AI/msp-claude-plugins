@@ -29,20 +29,20 @@ jobs running against them.
   protecting*.
 - **A specific backup run's pass/fail history** — device-level
   `latest_*_rp` fields are point-in-time snapshots, not history. Use the
-  `jobs` skill's `axcient_jobs_get_history` for that.
+  `jobs` skill's `axcient_get_job_history` for that.
 
 ## Tools
 
 | Tool | Description | Arguments |
 |------|-------------|-----------|
-| `axcient_devices_list` | Every device across the organization | `limit?`, `offset?` |
-| `axcient_devices_list_by_client` | Devices for one client | `client_id`, `service_id?`, `d2c_only?` |
-| `axcient_devices_get` | Full detail for one device | `device_id` |
-| `axcient_devices_get_autoverify` | Latest AutoVerify (screenshot boot-test) results | `device_id` |
-| `axcient_devices_get_restore_points` | Available restore points | `device_id` |
+| `axcient_list_devices` | Every device across the organization | `limit?`, `offset?` |
+| `axcient_list_devices_by_client` | Devices for one client | `client_id`, `service_id?`, `d2c_only?` |
+| `axcient_get_device` | Full detail for one device | `device_id` |
+| `axcient_get_device_autoverify` | Latest AutoVerify (screenshot boot-test) results | `device_id` |
+| `axcient_get_device_restore_points` | Available restore points | `device_id` |
 
-`axcient_devices_list` is the only device tool with pagination
-(`limit`/`offset`, in pages of ~100). `axcient_devices_list_by_client`
+`axcient_list_devices` is the only device tool with pagination
+(`limit`/`offset`, in pages of ~100). `axcient_list_devices_by_client`
 returns a client's full device set in one call — no pagination arguments.
 
 ### Device Type & Product
@@ -87,7 +87,7 @@ treating "backed up" as a single boolean.
 ### AutoVerify
 
 ```
-axcient_devices_get_autoverify
+axcient_get_device_autoverify
 ```
 
 Returns the most recent automated screenshot-boot-test result: whether the
@@ -100,7 +100,7 @@ succeed while producing an image that fails to boot.
 ### Restore Points
 
 ```
-axcient_devices_get_restore_points
+axcient_get_device_restore_points
 ```
 
 Lists available recovery points for the device across its storage tiers.
@@ -112,17 +112,17 @@ looks like.
 
 ### Backup Health Check for One Device
 
-1. `axcient_devices_get` — pull `current_health_status`, all three
+1. `axcient_get_device` — pull `current_health_status`, all three
    `latest_*_rp` timestamps, and `jobs` (list of job IDs/names)
-2. `axcient_devices_get_autoverify` — confirm the latest recovery point
+2. `axcient_get_device_autoverify` — confirm the latest recovery point
    actually boots, not just that it exists
-3. For any `latest_*_rp` older than expected, `axcient_jobs_get_history`
+3. For any `latest_*_rp` older than expected, `axcient_get_job_history`
    (see the `jobs` skill) on the relevant job to see whether it's been
    failing or simply hasn't run
 
 ### Fleet-Wide Backup Audit
 
-1. `axcient_devices_list` (paginate with `limit`/`offset` if the
+1. `axcient_list_devices` (paginate with `limit`/`offset` if the
    organization is large)
 2. Filter/sort by `current_health_status.status` and `latest_local_rp` /
    `latest_cloud_rp` age
@@ -132,8 +132,8 @@ looks like.
 
 ### Verifying a Recovery Is Actually Possible
 
-1. `axcient_devices_get_restore_points` for the candidate device
-2. `axcient_devices_get_autoverify` — do not proceed on a device whose
+1. `axcient_get_device_restore_points` for the candidate device
+2. `axcient_get_device_autoverify` — do not proceed on a device whose
    most recent AutoVerify failed or is stale, even if `latest_local_rp`
    looks current
 3. Confirm target vault/appliance capacity before a real restore — see
@@ -145,8 +145,8 @@ looks like.
 
 **Cause:** Invalid `device_id`, or a numeric-looking ID for a device the
 credential's organization doesn't own
-**Solution:** Verify against `axcient_devices_list` or
-`axcient_devices_list_by_client`.
+**Solution:** Verify against `axcient_list_devices` or
+`axcient_list_devices_by_client`.
 
 ### AutoVerify Returns Empty/Null
 
@@ -158,7 +158,7 @@ check whether the device type supports it before escalating.
 
 ## Best Practices
 
-- Prefer `axcient_devices_get_autoverify` over `latest_local_rp` alone when
+- Prefer `axcient_get_device_autoverify` over `latest_local_rp` alone when
   the question is "can we actually recover this," not just "did a backup
   run."
 - A device's `jobs` array on the full-detail response gives you job IDs

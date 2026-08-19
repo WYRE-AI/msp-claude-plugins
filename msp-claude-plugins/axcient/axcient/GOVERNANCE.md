@@ -28,47 +28,42 @@ Consequences worth stating plainly:
 
 ## Tool permission groups
 
-**As of this plugin's initial release, `axcient-mcp` is not yet a
-staging-deployed vendor in Conduit, and none of its 19 tools are classified
-in `VENDOR_TOOL_CONFIG`.** Conduit's enforcement is fail-closed on
-unclassified tools — every Axcient tool currently requires `admin`
-regardless of whether it reads or writes, identical to the situation
-`domotz`'s plugin documents in detail before that vendor was classified.
-
-This means, today:
+`axcient-mcp` is deployed in Conduit-prod and all 20 tools are classified in
+`VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`):
 
 | Group | What it can do | Enforcement tier |
 |---|---|---|
-| **Read** | Nothing — no Axcient tool is classified `read` | n/a |
-| **Write** | Nothing — no Axcient tool is classified `write` | n/a |
-| **Admin** | Every Axcient tool, including read-only lookups | `admin` |
+| **Read** | The 18 lookups below | `read` |
+| **Write** | `axcient_set_vault_threshold` | `write` |
+| **Admin** | `axcient_get_d2c_agent_token` | `admin` |
 
-A technician granted only `read` on Axcient today can call **zero**
-Axcient tools. Anything useful — client lookup, device status, backup
-history — currently requires `admin`. Classifying this vendor's tools
-(splitting the 17 genuine reads from the 2 writes below) is the
-single highest-value follow-up for this plugin, mirroring the fix already
-identified for `domotz`.
+A technician granted only `read` can call all 18 lookup tools — client,
+device, job, vault, and appliance data, AutoVerify results, and restore
+points — but not either mutation.
 
-### The two tools that are not reads, regardless of classification
+### The two tools that are not plain reads
 
-Whenever classification does land, these two should **not** be grouped
-with the 17 read-only lookups:
-
-- **`axcient_vaults_set_threshold`** — changes a vault's connectivity-loss
+- **`axcient_set_vault_threshold`** — changes a vault's connectivity-loss
   alert threshold. Not destructive to data, but it changes what technicians
-  and monitoring see as "healthy." Should classify `isWrite: true`.
-- **`axcient_clients_get_d2c_agent_token`** — mints new direct-to-cloud
-  agent enrollment credential material via `POST`. Does not affect any
-  already-enrolled agent, but it is a provisioning action with real
-  side effects (a live, usable token is created), not a read. Should
-  classify `isWrite: true`.
+  and monitoring see as "healthy." Classified `isWrite: true`.
+- **`axcient_get_d2c_agent_token`** — mints a new direct-to-cloud agent
+  enrollment token via `POST`. Classified `isWrite: true, isAdmin: true`:
+  it doesn't touch any already-enrolled agent or existing data, but the
+  token itself is access-granting bearer material (whoever holds it can
+  enroll a new protected system into that vault), the same class as
+  ScalePad's `scalepad_lm_enrollment_tokens_create` — Conduit's
+  tool-naming guard enforces this precedent for any tool whose name
+  contains `token`.
 
-The remaining 17 tools (`axcient_status`, `axcient_organization_get`,
-`axcient_clients_list`, `axcient_clients_get`, `axcient_devices_*`,
-`axcient_jobs_*`, `axcient_vaults_list`/`get`/`get_threshold`,
-`axcient_appliances_*`) are `GET` requests against the x360Recover API with
-no mutating side effects.
+The remaining 18 tools (`axcient_test_connection`, `axcient_get_organization`,
+`axcient_list_clients`, `axcient_get_client`, `axcient_list_devices`,
+`axcient_list_devices_by_client`, `axcient_get_device`,
+`axcient_get_device_autoverify`, `axcient_get_device_restore_points`,
+`axcient_list_jobs_by_device`, `axcient_get_job`, `axcient_get_job_history`,
+`axcient_list_vaults`, `axcient_get_vault`, `axcient_get_vault_threshold`,
+`axcient_list_appliances`, `axcient_list_appliances_by_client`,
+`axcient_get_appliance`) are `GET` requests against the x360Recover API with
+no mutating side effects, classified `read`.
 
 ### Conduit has no approval step
 
@@ -80,21 +75,21 @@ carries it.
 ## Recommended agent policy
 
 The safe default is **read autonomously, propose writes, never
-self-approve mutations** — with the caveat that, until this vendor is
-classified in Conduit, "read" and "admin" are the same grant in practice.
+self-approve mutations**.
 
-- Read tools: intend to allow autonomously once classified. Until then,
-  any grant sufficient to use this plugin at all is `admin`-equivalent —
-  factor that into who you give it to.
-- Write tools (`axcient_vaults_set_threshold`,
-  `axcient_clients_get_d2c_agent_token`): require explicit human
-  confirmation of the target ID and new value/vault before calling, every
-  time. Do not let a scheduled or unattended agent call either of these.
-- If you need to grant a technician the read surface without the two write
-  tools before classification lands, use a granular `customTools`
-  allowlist naming the 17 read tools explicitly and omitting the two
-  writes — the same mechanism `domotz`'s governance doc documents for its
-  power-control tool.
+- Read tools: safe to allow autonomously — a `read`-tier grant gets a
+  technician exactly the 18 lookup tools and nothing more.
+- `axcient_set_vault_threshold` (write): require explicit human
+  confirmation of the target vault ID and new threshold value before
+  calling, every time. Do not let a scheduled or unattended agent call it.
+- `axcient_get_d2c_agent_token` (admin): requires an `admin` grant in
+  Conduit already, on top of any agent-side confirmation discipline —
+  treat minting an enrollment token with the same care as any other
+  bearer-credential mint.
+- If you need to grant a technician the read surface without either
+  mutation, Conduit's `read` tier already does this — a granular
+  `customTools` allowlist is only needed if you want to carve out a
+  subset of the 18 reads.
 
 ## What it cannot reach
 
@@ -117,7 +112,7 @@ classified in Conduit, "read" and "admin" are the same grant in practice.
   names, codes) and infrastructure detail (IP addresses, OS versions,
   volume lists) — treat it as customer environment data, not public
   information, when deciding what to include in a shared report.
-- `axcient_devices_get_autoverify` returns screenshot URLs of a recovered
+- `axcient_get_device_autoverify` returns screenshot URLs of a recovered
   system's boot screen. These can reveal what's on-screen at boot
   (desktop wallpaper, login prompts, occasionally visible file names) —
   be judicious about resharing them outside the technician context that
@@ -133,10 +128,7 @@ classified in Conduit, "read" and "admin" are the same grant in practice.
   (documented by community API clients, not just this plugin). An
   unexpectedly empty result deserves corroboration against restore points
   before being reported as "job has never run."
-- **`axcient_vaults_set_threshold` has no confirmation prompt of its
+- **`axcient_set_vault_threshold` has no confirmation prompt of its
   own.** The upstream API accepts the change immediately on a valid
   request; Conduit does not add one. The agent-side confirmation
   discipline above is the only gate.
-- **This vendor is unclassified in Conduit as of this release.** See
-  *Tool permission groups* above — do not assume a `read`-tier grant gets
-  a technician anything until classification lands.

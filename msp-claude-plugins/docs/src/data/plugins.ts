@@ -3023,8 +3023,8 @@ export const plugins: Plugin[] = [
       { name: 'clients', description: 'Axcient x360Recover clients: the health_status model, client_code, the three-way protected-system counter breakdown (appliance_based, d2c, cloud_archive), and minting direct-to-cloud agent enrollment tokens.' },
       { name: 'devices', description: 'Axcient x360Recover protected devices (servers and workstations): SERVER/WORKSTATION typing, the current/previous health-status model, local vs vault vs cloud usage and recovery-point timestamps, AutoVerify screenshot verification, and restore points.' },
       { name: 'jobs', description: 'Axcient x360Recover backup jobs: the BRC vs Replibit job-type split, per-job protection thresholds, and job run history with its starttime_begin pagination floor.' },
-      { name: 'vaults', description: 'Axcient x360Recover vaults: Private vs Cloud vault types, storage capacity, and the connectivity-loss alert threshold — including axcient_vaults_set_threshold, the one tool in this plugin that changes alerting configuration rather than just reading it.' },
-      { name: 'api-patterns', description: 'Axcient x360Recover API and MCP fundamentals: x-api-key header authentication, the single production base URL, the full 19-tool MCP catalog by domain, why most list endpoints return bare arrays with no pagination, and the five distinct error response shapes the upstream API actually returns.' }
+      { name: 'vaults', description: 'Axcient x360Recover vaults: Private vs Cloud vault types, storage capacity, and the connectivity-loss alert threshold — including axcient_set_vault_threshold, the one tool in this plugin that changes alerting configuration rather than just reading it.' },
+      { name: 'api-patterns', description: 'Axcient x360Recover API and MCP fundamentals: x-api-key header authentication, the single production base URL, the full 20-tool MCP catalog by domain, why most list endpoints return bare arrays with no pagination, and the five distinct error response shapes the upstream API actually returns.' }
     ],
     agents: [],
     commands: [

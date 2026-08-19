@@ -17,16 +17,16 @@ when_to_use: >-
 A job is one configured backup task running against a device — the thing
 that actually produces recovery points. Jobs always nest under a specific
 `client_id` and `device_id`; there is no organization-wide job list. Get a
-device's job IDs from `axcient_devices_get` (the `jobs` array) or
-`axcient_devices_list_by_client` first.
+device's job IDs from `axcient_get_device` (the `jobs` array) or
+`axcient_list_devices_by_client` first.
 
 ## Tools
 
 | Tool | Description | Arguments |
 |------|-------------|-----------|
-| `axcient_jobs_list_by_device` | All jobs for a device | `client_id`, `device_id` |
-| `axcient_jobs_get` | One job's detail | `client_id`, `device_id`, `job_id` |
-| `axcient_jobs_get_history` | Run history for a job | `client_id`, `device_id`, `job_id`, `limit?`, `offset?`, `starttime_begin?` |
+| `axcient_list_jobs_by_device` | All jobs for a device | `client_id`, `device_id` |
+| `axcient_get_job` | One job's detail | `client_id`, `device_id`, `job_id` |
+| `axcient_get_job_history` | Run history for a job | `client_id`, `device_id`, `job_id`, `limit?`, `offset?`, `starttime_begin?` |
 
 There is no job-level list at the organization or client level — jobs are
 always reached through a specific device.
@@ -52,7 +52,7 @@ device-level threshold applies uniformly across all its jobs.
 ### Job History
 
 ```
-axcient_jobs_get_history
+axcient_get_job_history
 ```
 
 Parameters:
@@ -64,7 +64,7 @@ Parameters:
 **Known upstream caveat:** community testing against Axcient's API found
 this endpoint unreliable in some environments — treat an empty or
 unexpected result here as worth double-checking against
-`axcient_devices_get_restore_points` (which reflects what actually landed,
+`axcient_get_device_restore_points` (which reflects what actually landed,
 regardless of what the history endpoint reports) before concluding a job
 has never run.
 
@@ -72,10 +72,10 @@ has never run.
 
 ### Diagnosing a Stale Recovery Point
 
-1. From `axcient_devices_get`, note which `latest_*_rp` timestamp is stale
+1. From `axcient_get_device`, note which `latest_*_rp` timestamp is stale
    and pull the relevant job ID from the device's `jobs` array
-2. `axcient_jobs_get` for the job's current configuration and thresholds
-3. `axcient_jobs_get_history` with a `starttime_begin` a few days back to
+2. `axcient_get_job` for the job's current configuration and thresholds
+3. `axcient_get_job_history` with a `starttime_begin` a few days back to
    see whether the job has been running and failing, or not running at all
 4. A job that's running but failing points at a data/connectivity problem
    on the source system; a job that isn't running at all points at
@@ -83,10 +83,10 @@ has never run.
 
 ### Auditing Threshold Overrides
 
-1. `axcient_jobs_list_by_device` for the device in question
+1. `axcient_list_jobs_by_device` for the device in question
 2. For each job, check `thresholds.*.overridden` — flag any job whose
    effective SLA differs from what the client or org default implies
-3. Cross-reference with `axcient_vaults_get_threshold` (see the `vaults`
+3. Cross-reference with `axcient_get_vault_threshold` (see the `vaults`
    skill) for the vault-side connectivity threshold, which is separate
    from a job's own `vault_rp_threshold`
 
@@ -96,7 +96,7 @@ has never run.
 
 **Cause:** Invalid `job_id`, or a `job_id` that belongs to a different
 `client_id`/`device_id` pair than supplied
-**Solution:** Re-derive the job ID from `axcient_jobs_list_by_device`
+**Solution:** Re-derive the job ID from `axcient_list_jobs_by_device`
 rather than guessing — job IDs are not guaranteed unique outside their
 parent device.
 
@@ -105,7 +105,7 @@ parent device.
 **Cause:** Either the job genuinely hasn't run in the queried window, or
 the known history-endpoint unreliability noted above
 **Solution:** Widen or drop `starttime_begin`; corroborate with
-`axcient_devices_get_restore_points` before reporting "never ran."
+`axcient_get_device_restore_points` before reporting "never ran."
 
 ## Best Practices
 

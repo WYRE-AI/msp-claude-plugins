@@ -24,14 +24,14 @@ devices underneath it, not a value you set.
 
 | Tool | Description | Arguments |
 |------|-------------|-----------|
-| `axcient_clients_list` | Every client visible to this credential | `include_appliances?` |
-| `axcient_clients_get` | One client's detail | `client_id`, `include_appliances?` |
-| `axcient_clients_get_d2c_agent_token` | Mint a D2C agent enrollment token | `client_id`, `vault_id` |
+| `axcient_list_clients` | Every client visible to this credential | `include_appliances?` |
+| `axcient_get_client` | One client's detail | `client_id`, `include_appliances?` |
+| `axcient_get_d2c_agent_token` | Mint a D2C agent enrollment token | `client_id`, `vault_id` |
 
 ### List Clients
 
 ```
-axcient_clients_list
+axcient_list_clients
 ```
 
 **Example response (one client):**
@@ -81,13 +81,13 @@ total protected-system count; do not assume they're mutually exclusive.
 presumably `WARNED`/`CRITICAL` mirroring the device-level status model — see
 the `devices` skill). It reflects the worst device under that client, not an
 independently-computed value. To find *which* device is dragging a client's
-health down, call `axcient_devices_list_by_client` and inspect each
+health down, call `axcient_list_devices_by_client` and inspect each
 device's own `current_health_status`.
 
 ### Minting a D2C Agent Token
 
 ```
-axcient_clients_get_d2c_agent_token
+axcient_get_d2c_agent_token
 ```
 
 Parameters:
@@ -104,22 +104,22 @@ existing agent's credentials.
 
 ### Client Health Triage
 
-1. `axcient_clients_list` — scan `health_status` across all clients
-2. For any client not `NORMAL`, `axcient_devices_list_by_client` on that
+1. `axcient_list_clients` — scan `health_status` across all clients
+2. For any client not `NORMAL`, `axcient_list_devices_by_client` on that
    `client_id` to find the specific device(s) failing
-3. `axcient_devices_get` on the failing device(s) for
+3. `axcient_get_device` on the failing device(s) for
    `current_health_status.reason` and timestamps
-4. Cross-reference with `axcient_jobs_list_by_device` /
-   `axcient_jobs_get_history` — a device can be "healthy" by its own status
+4. Cross-reference with `axcient_list_jobs_by_device` /
+   `axcient_get_job_history` — a device can be "healthy" by its own status
    while its most recent job run failed
 
 ### Enrolling a New D2C Agent
 
-1. Confirm the target client with `axcient_clients_get`
-2. Confirm the target vault exists and is reachable with `axcient_vaults_get`
+1. Confirm the target client with `axcient_get_client`
+2. Confirm the target vault exists and is reachable with `axcient_get_vault`
    (see the `vaults` skill — private vaults may have connectivity
    constraints a cloud vault doesn't)
-3. `axcient_clients_get_d2c_agent_token` with that `client_id`/`vault_id`
+3. `axcient_get_d2c_agent_token` with that `client_id`/`vault_id`
 4. Hand the returned token to whoever is installing the agent — it is not
    something this tool surface can retrieve again after the fact
 
@@ -129,7 +129,7 @@ existing agent's credentials.
 
 **Cause:** Invalid `client_id`, or the client belongs to a different
 organization than the API key's
-**Solution:** Verify against `axcient_clients_list`. A non-numeric
+**Solution:** Verify against `axcient_list_clients`. A non-numeric
 `client_id` surfaces as a 401, not a 400 — see the `api-patterns` skill.
 
 ### D2C Token Request Fails with 403
@@ -145,7 +145,7 @@ needs elevated permissions, not a retry.
 - `client_code` is the short human identifier used elsewhere in Axcient's
   UI and reports; surface it alongside `name` when presenting client lists
   to a technician who already knows the codes.
-- Don't call `axcient_clients_get_d2c_agent_token` speculatively — each
+- Don't call `axcient_get_d2c_agent_token` speculatively — each
   call provisions real enrollment material. Confirm the client and vault
   first.
 

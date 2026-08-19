@@ -3,7 +3,7 @@ name: "Axcient Vaults"
 description: >
   Axcient x360Recover vaults: Private vs Cloud vault types, storage
   capacity, and the connectivity-loss alert threshold — including
-  axcient_vaults_set_threshold, the one tool in this plugin that changes
+  axcient_set_vault_threshold, the one tool in this plugin that changes
   alerting configuration rather than just reading it.
 when_to_use: >-
   When looking up Axcient vault capacity, connectivity status, or adjusting
@@ -24,10 +24,10 @@ much of its capacity is in use.
 
 | Tool | Description | Arguments |
 |------|-------------|-----------|
-| `axcient_vaults_list` | Every vault visible to this credential | `vault_type?` (`Private`\|`Cloud`), `active?`, `with_url?`, `limit?`, `include_devices?` |
-| `axcient_vaults_get` | One vault's detail | `vault_id` |
-| `axcient_vaults_get_threshold` | Current connectivity-loss threshold | `vault_id` |
-| `axcient_vaults_set_threshold` | **Changes** the connectivity-loss threshold | `vault_id`, `threshold` (minutes) |
+| `axcient_list_vaults` | Every vault visible to this credential | `vault_type?` (`Private`\|`Cloud`), `active?`, `with_url?`, `limit?`, `include_devices?` |
+| `axcient_get_vault` | One vault's detail | `vault_id` |
+| `axcient_get_vault_threshold` | Current connectivity-loss threshold | `vault_id` |
+| `axcient_set_vault_threshold` | **Changes** the connectivity-loss threshold | `vault_id`, `threshold` (minutes) |
 
 ### Vault Type & Capacity
 
@@ -45,7 +45,7 @@ does on a Private vault.
 ### Connectivity Threshold
 
 ```
-axcient_vaults_get_threshold
+axcient_get_vault_threshold
 ```
 
 Returns `connectivity_threshold` — the number of minutes a vault can be
@@ -56,7 +56,7 @@ skill), which governs recovery-point age rather than reachability.
 ### Changing the Threshold
 
 ```
-axcient_vaults_set_threshold
+axcient_set_vault_threshold
 ```
 
 ⚠ **HIGH-IMPACT.** Raising this threshold delays how quickly a vault
@@ -79,20 +79,20 @@ behavior differs from what was configured before.
 
 ### Capacity Check Before a Large Restore or New Enrollment
 
-1. `axcient_vaults_get` for the target vault
+1. `axcient_get_vault` for the target vault
 2. Compare `storage_details.used_size` against `drive_size` (Private vaults
    only — Cloud vaults don't need this check)
 3. For a Private vault near capacity, flag it before recommending new
-   device enrollment (`axcient_clients_get_d2c_agent_token`) against it
+   device enrollment (`axcient_get_d2c_agent_token`) against it
 
 ### Investigating a Vault Connectivity Alert
 
-1. `axcient_vaults_get` for current state
-2. `axcient_vaults_get_threshold` to confirm what threshold is actually
+1. `axcient_get_vault` for current state
+2. `axcient_get_vault_threshold` to confirm what threshold is actually
    configured — an alert firing "too eagerly" is often a threshold that
    doesn't match the site's real network characteristics, not a genuine
    fault
-3. Only call `axcient_vaults_set_threshold` after confirming with the
+3. Only call `axcient_set_vault_threshold` after confirming with the
    requester that adjusting sensitivity (rather than fixing connectivity)
    is the intended response
 
@@ -102,7 +102,7 @@ behavior differs from what was configured before.
 
 **Cause:** Invalid `vault_id`, or the vault belongs to a different
 organization
-**Solution:** Verify against `axcient_vaults_list`.
+**Solution:** Verify against `axcient_list_vaults`.
 
 ### Set Threshold Returns 403
 
@@ -113,9 +113,9 @@ situation.
 
 ## Best Practices
 
-- Never call `axcient_vaults_set_threshold` without an explicit, confirmed
+- Never call `axcient_set_vault_threshold` without an explicit, confirmed
   target value from the requester — see the destructive-tool note above.
-- Filter `axcient_vaults_list` by `vault_type` when the question is
+- Filter `axcient_list_vaults` by `vault_type` when the question is
   specifically about on-prem capacity or specifically about cloud
   replication; the combined list mixes both and capacity semantics differ
   between them.
