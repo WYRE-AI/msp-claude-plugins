@@ -1,6 +1,6 @@
 {
   "name": "kaseya-autotask",
-  "version": "0.4.1",
+  "version": "0.6.1",
   "description": "Kaseya Autotask PSA skills and commands for tickets, CRM, projects, contracts, expenses, quotes, and billing.",
   "author": {
     "name": "MSP Claude Plugins Community"
