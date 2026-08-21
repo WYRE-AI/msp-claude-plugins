@@ -1,0 +1,20 @@
+{
+  "name": "msp-claude-plugins",
+  "interface": {
+    "displayName": "MSP Claude Plugins"
+  },
+  "plugins": [
+    {
+      "name": "kaseya-autotask",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/autotask"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    }
+  ]
+}

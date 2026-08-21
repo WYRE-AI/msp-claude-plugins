@@ -174,6 +174,19 @@ Want just one vendor? Add the marketplace once, then install plugins individuall
 /plugin install liongard@msp-claude-plugins
 ```
 
+### Codex example
+
+This PR adds Codex metadata for the Autotask plugin as a first representative
+pattern for cross-harness distribution:
+
+```bash
+codex plugin marketplace add https://github.com/wyre-technology/msp-claude-plugins
+```
+
+Then install **Kaseya Autotask** from the Codex Plugins UI. The same
+`.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` pattern can
+be repeated for the other vendor plugins over time.
+
 ---
 
 ## Configuration
@@ -206,6 +219,21 @@ Each plugin uses environment variables for authentication. See the plugin's READ
 
 We welcome contributions at every level — from typo fixes to new platform plugins.
 See [CONTRIBUTING.md](CONTRIBUTING.md) for our tiered contribution guide.
+
+## Evals and production telemetry
+
+The `evals/autotask-psa/` directory contains a small human-review eval set for
+ticket triage, time-entry drafting, and contract checks. The cases are
+harness-neutral so the same plugin behavior can be checked in Claude Code,
+Codex, or another agent workspace before expanding the pattern to other vendor
+plugins.
+
+If you publish plugins through Telvine, keep runtime telemetry metadata-only:
+`skill.invocation.start`, `skill.invocation.end`, and `skill.invocation.error`
+for skill behavior, plus `plugin.component.invoked` and
+`plugin.component.error` for commands, MCP tools, or other non-skill components.
+Do not emit prompts, customer records, tenant data, connector payloads, tool
+arguments, credentials, browser captures, or model outputs.
 
 ## Community
 
