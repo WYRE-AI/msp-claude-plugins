@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated 2026-07-13. Maintained by [WYRE Technology](https://wyretechnology.com).
+> Last updated 2026-08-21. Maintained by [WYRE Technology](https://wyretechnology.com).
 > Live project board: [github.com/orgs/wyre-technology/projects/1](https://github.com/orgs/wyre-technology/projects/1)
 
 This document is the public strategy and roadmap for `msp-claude-plugins`. It says
@@ -22,7 +22,7 @@ by construction. Nothing is removed silently — deprecations are called out in
 user-visible change lands in [CHANGELOG.md](CHANGELOG.md) following
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) conventions.
 
-Today the marketplace carries **63 plugins** — 300+ skills, 250+ slash commands,
+Today the marketplace carries **81 plugins** — 300+ skills, 250+ slash commands,
 115+ subagents — across PSA, RMM, documentation, security, email security,
 monitoring, networking, accounting, CRM, and sales tooling. All of it is
 maintained under that same standard, whether it was written by WYRE or by a
@@ -74,12 +74,12 @@ governance layer that MSP organizations need, not a different install experience
   workflow with a drift check and a **version bump-gate** (see
   [Versioning](#versioning-and-releases) below).
 - **Frontmatter modernization** ([#137](https://github.com/wyre-technology/msp-claude-plugins/pull/137),
-  in review). Every command, skill, and agent migrates to the official Claude Code
+  merged). Every command, skill, and agent migrates to the official Claude Code
   frontmatter formats — 252 commands, 301 skills, and a repo-wide fix for invalid
-  agent YAML. Once merged, per-plugin validation flips from advisory to hard-fail
-  in CI.
+  agent YAML. Per-plugin validation in CI is still advisory pending a follow-up
+  cleanup pass, ahead of flipping to hard-fail.
 - **Conduit marketplace ingestion** ([conduit#917](https://github.com/wyre-technology/conduit/pull/917),
-  in review). Conduit learns to load skills directly from an official Claude Code
+  merged). Conduit learns to load skills directly from an official Claude Code
   plugin-marketplace repo — this one. Single pinned SHA per sync, pre-ingestion
   security scanning, provenance recorded. This is what makes "one marketplace, two
   consumers" real rather than aspirational.
