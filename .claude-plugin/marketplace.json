@@ -2,12 +2,27 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.30.0",
+  "version": "1.31.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
   },
   "plugins": [
+    {
+      "name": "3cx",
+      "displayName": "3CX",
+      "source": "./msp-claude-plugins/3cx/3cx",
+      "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
+      "category": "productivity",
+      "tags": [
+        "3cx",
+        "pbx",
+        "voip",
+        "telephony",
+        "unified-communications",
+        "msp"
+      ]
+    },
     {
       "name": "abnormal-security",
       "source": "./msp-claude-plugins/abnormal/abnormal-security",
