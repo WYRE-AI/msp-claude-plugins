@@ -147,6 +147,57 @@ const baseUrl = import.meta.env.BASE_URL;
 
   <hr class="my-8" />
 
+  <h2 id="egress-ip">Vendor tool calls time out after enabling IP restrictions</h2>
+  <p>
+    If your vendor restricts API access to an allowlist of source IP addresses — IT Glue, Autotask,
+    Kaseya VSA, and CIPP all support this — you need to allow the address WYRE's traffic arrives from.
+  </p>
+
+  <p>
+    Every request the WYRE Hosted Gateway makes to a vendor API leaves from a single static IP:
+  </p>
+
+  <pre><code>52.252.116.6</code></pre>
+
+  <p>
+    Add it as <code>52.252.116.6/32</code>. That's the only address you need — there's no range and no
+    secondary IP, and it covers every vendor integration, so you allowlist it once rather than per-vendor.
+    The address is static and doesn't rotate; if we ever need to change it, we'll contact you first.
+  </p>
+
+  <h3>Symptoms</h3>
+  <ul>
+    <li>
+      <strong>Connecting works, but every tool call hangs for ~30 seconds and times out.</strong> This is the
+      signature symptom. Autotask and Kaseya VSA <em>silently drop</em> requests from unapproved IPs — no
+      <code>403</code>, no error message, just a timeout.
+    </li>
+    <li>
+      Tool discovery succeeds but tool calls fail — discovery often doesn't touch the vendor API, so it can
+      pass while every real call is blocked.
+    </li>
+    <li>A flat <code>403</code> on every call, from the more polite vendors.</li>
+  </ul>
+
+  <h3>Fix</h3>
+  <ol>
+    <li>Add <code>52.252.116.6/32</code> to the vendor's API IP allowlist (in Autotask and Kaseya VSA, this is set on the API <em>user</em>, not the account).</li>
+    <li>Retry a tool call — the change usually takes effect immediately.</li>
+    <li>
+      To confirm it's correct, open a recent gateway-originated request in your vendor's audit log and check
+      the source IP reads <code>52.252.116.6</code>. That's the same address the vendor's firewall evaluates.
+    </li>
+  </ol>
+
+  <p class="text-sm text-[var(--muted)]">
+    Note: don't allowlist the gateway's <em>inbound</em> address (<code>132.196.176.48</code>). That's for traffic
+    <em>to</em> the gateway and is never what a vendor's firewall sees. Mixing these up is the most common
+    mistake here, and it fails exactly like a missing allowlist entry. Running your own gateway rather than the
+    hosted service? Your egress IP is whatever your own infrastructure uses — not this address.
+  </p>
+
+  <hr class="my-8" />
+
   <h2 id="triage-with-claude">Triage with Claude (the <code>wyre-gateway-troubleshooting</code> skill)</h2>
   <p>
     If you'd rather not walk through this page yourself, the WYRE skill set includes a
