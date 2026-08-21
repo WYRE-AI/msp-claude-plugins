@@ -73,6 +73,7 @@ function deriveVendor(sourcePath: string): string {
     sherweb: 'Sherweb',
     'email-security': 'Email Security',
     'saas-alerts': 'SaaS Alerts',
+    '3cx': '3CX',
   };
 
   return vendorMap[topLevel] ?? capitalize(topLevel);
@@ -134,6 +135,7 @@ function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: 
     'm365': 'Microsoft 365',
     'rootly': 'Rootly',
     'cipp': 'CIPP',
+    '3cx': '3CX',
   };
 
   return nameMap[marketplaceName] ?? humanize(marketplaceName);

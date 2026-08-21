@@ -11,6 +11,7 @@
   ],
   "_seeded": "2026-08-06, from the state left by #181/#195/#196/#202/#204/#205.",
   "units": {
+    "3cx:skills/api-patterns": "names no MCP tool; 0 HTTP endpoint(s), 1 CLI flag(s) — first at skills/api-patterns/SKILL.md:84 --scope",
     "abnormal-security:commands/search-threats.md": "names no MCP tool; 1 HTTP endpoint(s), 7 CLI flag(s) — first at commands/search-threats.md:25 GET /v1/threats",
     "abnormal-security:commands/threat-triage.md": "names no MCP tool; 1 HTTP endpoint(s), 6 CLI flag(s) — first at commands/threat-triage.md:25 GET /v1/threats",
     "atera:commands/create-monitor.md": "names no MCP tool; 4 HTTP endpoint(s), 6 CLI flag(s) — first at commands/create-monitor.md:284 GET /api/v3/agents/{agentId}",

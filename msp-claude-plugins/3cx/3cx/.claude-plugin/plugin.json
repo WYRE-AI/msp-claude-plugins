@@ -1,0 +1,11 @@
+{
+  "name": "3cx",
+  "version": "0.1.0",
+  "description": "Claude plugins for 3CX's native PBX MCP server - directory and contacts, calls/recordings/voicemail, queues and profiles, and PBX admin/diagnostics",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

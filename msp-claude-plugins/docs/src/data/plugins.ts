@@ -45,6 +45,39 @@ export interface ApiInfo {
 
 export const plugins: Plugin[] = [
   {
+    id: '3cx',
+    name: '3CX',
+    vendor: '3CX',
+    description: '3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Calls Queues',
+      'Directory',
+      'Pbx Admin'
+    ],
+    skills: [
+      { name: 'calls-queues', description: '3CX\'s live-operations surface: read-only visibility into active calls, recordings, voicemail, department and queue membership, and forwarding/presence profiles, plus the write actions that change live call routing — dropping a call, switching a profile, and logging a queue agent in or out.' },
+      { name: 'directory', description: '3CX\'s read-only directory surface: resolving a caller by email or by exact extension, searching the PBX\'s own phonebooks, searching contacts synced from an integrated CRM, and listing PBX users/extensions.' },
+      { name: 'pbx-admin', description: '3CX\'s system-and-configuration surface: server time, PBX event log and application log search, service status, database schema and the read-only SELECT-only Query tool, DIDs, IP and phone blocklists, SIP trunks, call flow apps, and the configuration write/delete actions that change what calls the PBX accepts or how they route.' },
+      { name: 'api-patterns', description: '3CX\'s native PBX MCP server: the per-PBX endpoint shape (every PBX is its own FQDN and its own OAuth authorization server — there is no shared mcp.3cx.com), the Admin Console + client setup flow, the permission model (fully inherited from the 3CX account that approved the connection), and how to discover the live tool surface since 3CX has not published exact tool-name strings.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/find-contact', description: 'Resolve a 3CX contact or extension by email, extension, or name' },
+      { name: '/pbx-health-check', description: 'Quick health check for a connected 3CX PBX' },
+      { name: '/queue-status', description: 'Snapshot of 3CX queue staffing and active call load' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: '3cx/3cx',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'abnormal-security',
     name: 'Abnormal Security',
     vendor: 'Abnormal',
