@@ -218,6 +218,71 @@ const claudeDesktopPerVendor = `// claude_desktop_config.json — per-vendor (le
     After setup, all your connected vendors are available immediately in any conversation.
   </p>
 
+  <h3 id="claude-team-enterprise">Claude Team &amp; Enterprise — Organization-Wide Setup</h3>
+  <p>
+    On Claude <strong>Team</strong> and <strong>Enterprise</strong> plans, an organization owner
+    adds the gateway once and every member can use it:
+  </p>
+  <ol>
+    <li><strong>Admin:</strong> go to <strong>Organization settings → Connectors</strong></li>
+    <li>Click <strong>Add</strong>, then <strong>Custom → Web</strong></li>
+    <li>Enter a name (e.g. <code>MCP Gateway</code>) and the Remote MCP server URL: <code>https://mcp.wyretechnology.com/v1/mcp</code></li>
+    <li><strong>Leave the Advanced settings (OAuth Client ID / Client Secret) empty</strong> — see the warning below</li>
+    <li>Click <strong>Add</strong></li>
+    <li><strong>Each member:</strong> go to <strong>Customize → Connectors</strong>, find the connector, click <strong>Connect</strong>, and complete the browser sign-in to the gateway</li>
+  </ol>
+  <p>
+    Every member authenticates to the gateway individually with their own account. The gateway
+    resolves that member&apos;s personal vendor credentials first, then falls back to the team&apos;s
+    shared credentials. The typical Team rollout is: the gateway team owner adds shared vendor
+    credentials once, the Claude org admin adds the connector once, and every member just clicks
+    <strong>Connect</strong> — no credentials are ever typed into Claude itself.
+  </p>
+
+  <div style="border:1px solid #b45309;background:rgba(180,83,9,0.08);border-radius:8px;padding:16px 20px;margin:24px 0;">
+    <p class="font-semibold" style="margin-top:0;">
+      ⚠️ Do not paste service client credentials into the connector&apos;s OAuth fields
+    </p>
+    <p style="margin-bottom:0;">
+      The optional <strong>OAuth Client ID / Client Secret</strong> fields in the &ldquo;Add custom
+      connector&rdquo; dialog exist for MCP servers that don&apos;t support automatic client
+      registration. The gateway does support it, so these fields must stay <strong>blank</strong>.
+      Gateway <strong>service clients</strong> (<code>svc_&hellip;</code> IDs) use a different OAuth
+      flow entirely (<code>client_credentials</code>) and will fail with
+      <code>invalid_client: Unknown client_id</code> if entered here. Service clients are for
+      headless and API use only — see below.
+    </p>
+  </div>
+
+  <h3 id="service-clients">Service Clients — API &amp; Automation Access</h3>
+  <p>
+    Service client credentials (a <code>svc_&hellip;</code> client ID plus secret) are for
+    <strong>machine-to-machine</strong> access where no browser sign-in is possible: the Claude API&apos;s
+    MCP connector, CI pipelines, scheduled agents, and scripts. They are <em>not</em> usable in
+    Claude Desktop or claude.ai connectors. Mint a short-lived access token (1 hour) with the
+    OAuth <code>client_credentials</code> grant:
+  </p>
+  <pre><code class="language-bash">{`curl -X POST https://mcp.wyretechnology.com/oauth/token \\
+  --data-urlencode 'grant_type=client_credentials' \\
+  --data-urlencode 'client_id=svc_YOUR_CLIENT_ID' \\
+  --data-urlencode 'client_secret=YOUR_CLIENT_SECRET'`}</code></pre>
+  <p>
+    Then pass the returned <code>access_token</code> as a Bearer token. For example, with the
+    Claude API&apos;s MCP connector:
+  </p>
+  <pre><code class="language-json">{`{
+  "mcp_servers": [{
+    "type": "url",
+    "url": "https://mcp.wyretechnology.com/v1/mcp",
+    "name": "mcp-gateway",
+    "authorization_token": "<access_token from /oauth/token>"
+  }]
+}`}</code></pre>
+  <p class="text-sm text-[var(--muted)] mt-2">
+    Tokens expire after one hour — automation should mint a fresh token per run rather than
+    storing one. Service clients act with your team&apos;s shared credentials.
+  </p>
+
   <h2 id="per-vendor-legacy">Per-Vendor Endpoints (Legacy)</h2>
   <p>
     The per-vendor endpoints (<code>/v1/{'{vendor}'}/mcp</code>) are still available but <strong>deprecated</strong>.
