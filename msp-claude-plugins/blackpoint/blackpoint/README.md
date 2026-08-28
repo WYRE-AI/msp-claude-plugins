@@ -17,7 +17,7 @@ Claude Code plugin for [Blackpoint Cyber](https://blackpointcyber.com) (the Comp
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install blackpoint
 ```
 

@@ -2,7 +2,7 @@
   "name": "backup-pack",
   "displayName": "Backup & DR Assurance",
   "description": "Cross-vendor backup and disaster-recovery assurance \u2014 job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

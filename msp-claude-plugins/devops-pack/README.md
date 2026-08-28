@@ -102,7 +102,7 @@ retrospective once it's contained.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install devops-pack@msp-claude-plugins
 ```
 

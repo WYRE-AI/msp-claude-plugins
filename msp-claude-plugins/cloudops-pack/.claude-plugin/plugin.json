@@ -2,7 +2,7 @@
   "name": "cloudops-pack",
   "displayName": "Cloud & Network Infrastructure",
   "description": "Cross-vendor network and cloud infrastructure operations \u2014 device/network health, capacity planning, and cost management across whatever network monitoring (Auvik, Meraki, Domotz) and cloud platforms (Azure, DigitalOcean) you have connected.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

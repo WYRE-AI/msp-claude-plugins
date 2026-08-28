@@ -1,6 +1,6 @@
 {
   "name": "netsuite",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Claude plugin for Oracle NetSuite ERP — records, reports, saved searches, and SuiteQL queries (read-only)",
   "author": {
     "name": "MSP Claude Plugins Community"

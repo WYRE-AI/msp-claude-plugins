@@ -1,6 +1,6 @@
 {
   "name": "mailprotector",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow log analysis for MSPs",
   "author": {
     "name": "WYRE Technology"

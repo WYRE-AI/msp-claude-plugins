@@ -57,7 +57,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `CONNECTWISE_MANAGE_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CONNECTWISE_MANAGE_MCP_URL` to your gateway's endpoint:
 
 ```
 CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-manage/mcp

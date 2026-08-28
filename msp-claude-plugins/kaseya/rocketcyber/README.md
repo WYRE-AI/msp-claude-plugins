@@ -47,7 +47,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `ROCKETCYBER_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ROCKETCYBER_MCP_URL` to your gateway's endpoint:
 
 ```
 ROCKETCYBER_MCP_URL=https://your-gateway-domain/v1/rocketcyber/mcp
@@ -93,7 +93,7 @@ curl -s "https://api-${ROCKETCYBER_REGION:-us}.rocketcyber.com/v3/accounts" \
 
 ```bash
 # Clone the repository
-git clone https://github.com/wyre-technology/msp-claude-plugins.git
+git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/kaseya/rocketcyber

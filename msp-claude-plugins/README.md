@@ -18,7 +18,7 @@ Community-driven Claude Code plugins for Managed Service Providers.
 ## Quick Start
 
 ```bash
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 ```
 
 ## Available Plugins
@@ -54,7 +54,7 @@ docker run -p 8080:8080 \
   -e MCP_TRANSPORT=http \
   -e AUTH_MODE=env \
   -e VENDOR_API_KEY=your-key \
-  ghcr.io/wyre-technology/{vendor}-mcp:latest
+  ghcr.io/WYRE-AI/{vendor}-mcp:latest
 ```
 
 ### Cloud deployment
@@ -63,7 +63,7 @@ Each MCP server includes configs for:
 - **Cloudflare Workers** — `wrangler.json` in each repo
 - **DigitalOcean App Platform** — `.do/app.yaml` in each repo
 
-See the [deployment docs](https://wyre-technology.github.io/msp-claude-plugins/deployment/) for full guides.
+See the [deployment docs](https://wyre-ai.github.io/msp-claude-plugins/deployment/) for full guides.
 
 ## Commands (71 total)
 
@@ -218,7 +218,7 @@ Each plugin requires API credentials. See the individual plugin READMEs for conf
 
 ## Documentation
 
-Full documentation: [https://wyre-technology.github.io/msp-claude-plugins/](https://wyre-technology.github.io/msp-claude-plugins/)
+Full documentation: [https://wyre-ai.github.io/msp-claude-plugins/](https://wyre-ai.github.io/msp-claude-plugins/)
 
 ## Contributing
 

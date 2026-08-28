@@ -14,7 +14,7 @@ Claude Code plugin for [ImmyBot](https://immy.bot) - desired-state Windows softw
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install immybot
 ```
 

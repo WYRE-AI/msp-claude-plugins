@@ -49,7 +49,7 @@ explicitly rather than guessing.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install ops-pack@msp-claude-plugins
 ```
 

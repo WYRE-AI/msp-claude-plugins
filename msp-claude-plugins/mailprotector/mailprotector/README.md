@@ -60,7 +60,7 @@ Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API key
 
 ### Self-Hosted (Docker)
 
-Run the Mailprotector MCP server (`ghcr.io/wyre-technology/mailprotector-mcp`) with the environment variables above. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
+Run the Mailprotector MCP server (`ghcr.io/WYRE-AI/mailprotector-mcp`) with the environment variables above. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
 
 ## Available Skills
 

@@ -114,7 +114,7 @@ This marketplace already ships several pieces of sales-relevant tooling.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install sales-pack@msp-claude-plugins
 ```
 

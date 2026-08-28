@@ -2,7 +2,7 @@
 
 Claude plugins for **CIPP (CyberDrain Improved Partner Portal)** — the open-source Microsoft 365 multi-tenant management platform widely used by MSPs.
 
-This plugin orients Claude around the [`cipp-mcp`](https://github.com/wyre-technology/cipp-mcp) server, which exposes ~37 typed tools across the CIPP REST API. Skills and agents in this plugin embed MSP workflow knowledge: how to onboard a tenant, drive a Secure Score review, run an offboarding sequence, and detect standards drift across a portfolio.
+This plugin orients Claude around the [`cipp-mcp`](https://github.com/WYRE-AI/cipp-mcp) server, which exposes ~37 typed tools across the CIPP REST API. Skills and agents in this plugin embed MSP workflow knowledge: how to onboard a tenant, drive a Secure Score review, run an offboarding sequence, and detect standards drift across a portfolio.
 
 ## What's in this plugin
 
@@ -34,7 +34,7 @@ This plugin orients Claude around the [`cipp-mcp`](https://github.com/wyre-techn
 
 ## Setup
 
-1. Stand up the [cipp-mcp](https://github.com/wyre-technology/cipp-mcp) server (Docker, npx, or Smithery).
+1. Stand up the [cipp-mcp](https://github.com/WYRE-AI/cipp-mcp) server (Docker, npx, or Smithery).
 2. Issue API credentials in CIPP at **Settings → API Client Management**.
 3. Copy `.env.example` to `.env` and fill in `CIPP_BASE_URL` plus either a bearer token or OAuth client-credentials.
    `CIPP_BASE_URL` must be the CIPP-API **Azure Function App** URL (`https://<function-app-name>.azurewebsites.net`, named like `cippXXXXX` in your CIPP resource group) — **not** the Static Web App / custom-domain UI URL. The SWA redirects bearer-token requests to its interactive login page, so API calls fail.
@@ -55,5 +55,5 @@ If you connect through the [Wyre MCP Gateway](https://conduit.wyre.ai), CIPP too
 
 - CIPP project: https://docs.cipp.app
 - CIPP API docs: https://docs.cipp.app/api-documentation/endpoints
-- cipp-mcp server: https://github.com/wyre-technology/cipp-mcp
+- cipp-mcp server: https://github.com/WYRE-AI/cipp-mcp
 - CIPP repo: https://github.com/KelvinTegelaar/CIPP

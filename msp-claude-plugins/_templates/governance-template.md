@@ -6,9 +6,9 @@
 > developer. Delete this blockquote.
 >
 > Every claim in a governance document must be checkable against
-> Conduit's source (`wyre-technology/conduit`), which is what serves
+> Conduit's source (`WYRE-AI/conduit`), which is what serves
 > `conduit.wyre.ai` — the endpoint every plugin's `.mcp.json` points at.
-> Do **not** verify against `wyre-technology/mcp-gateway`: that is a
+> Do **not** verify against `WYRE-AI/mcp-gateway`: that is a
 > separate repository serving `mcp.wyre.ai`, and the two have drifted.
 > `wyre-gateway/GOVERNANCE.md` substantiates every claim below,
 > including the places where it does not hold.

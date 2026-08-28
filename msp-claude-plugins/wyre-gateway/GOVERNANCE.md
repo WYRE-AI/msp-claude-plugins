@@ -14,11 +14,11 @@ the per-vendor documents** at the end.
 
 ## Which system this describes, and a naming problem
 
-**Claims here are grounded in `wyre-technology/conduit`**, which serves
+**Claims here are grounded in `WYRE-AI/conduit`**, which serves
 `https://conduit.wyre.ai/v1/mcp`. Conduit is the product.
 
 An earlier revision of this document was written against
-`wyre-technology/mcp-gateway`, which serves `mcp.wyre.ai`. Those are two
+`WYRE-AI/mcp-gateway`, which serves `mcp.wyre.ai`. Those are two
 separate repositories that share ancestry and have since drifted, and
 several of that revision's findings turned out to describe only the older
 system. This revision re-derives every claim from Conduit's source and
@@ -453,7 +453,7 @@ Its real limits, and one genuine strength:
 
 ### 4. Revocation that revokes — holds, with one residual gap
 
-This section was rewritten against `wyre-technology/conduit#1303` (merged
+This section was rewritten against `WYRE-AI/conduit#1303` (merged
 2026-08-06), which closed most of what an earlier revision listed here as
 four exceptions. Two of the four — unrevoked refresh tokens, and a
 `users.active` flag nothing read — are simply gone. One, the unrevocable
@@ -649,7 +649,7 @@ Several can take a site off the network — replacing a firewall ruleset or
 changing an uplink port is not a routine update — and the annotation
 saying so was precisely the part not enforced.
 
-Fixed in `wyre-technology/meraki-mcp#3` (merged 2026-08-04): all six are
+Fixed in `WYRE-AI/meraki-mcp#3` (merged 2026-08-04): all six are
 now gated, and a surface-wide test asserts every tool annotated
 `destructiveHint: true` both declares `confirm_destructive_action` and is
 refused without it. The enumeration was the wrong fix — the PR originally
@@ -732,7 +732,7 @@ correctly:
 | `meraki_raw_request` | 1496 | `isWrite`, `isAdmin` | **admin** |
 
 **`meraki_raw_request` was the one outlier, and it has been fixed**
-(`wyre-technology/conduit#1274`, merged 2026-08-04). It was `isWrite`
+(`WYRE-AI/conduit#1274`, merged 2026-08-04). It was `isWrite`
 only, so a `write`-tier caller could issue arbitrary Meraki API calls —
 including the DELETEs that `meraki_networks_delete` and
 `meraki_devices_remove` pin to `admin` twelve lines above it — and no

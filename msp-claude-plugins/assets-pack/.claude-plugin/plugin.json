@@ -2,7 +2,7 @@
   "name": "assets-pack",
   "displayName": "IT Asset Lifecycle",
   "description": "Cross-vendor IT asset lifecycle management \u2014 warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

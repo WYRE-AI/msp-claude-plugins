@@ -74,7 +74,7 @@ you to Clio directly, rather than attempting a workaround.
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install clio@msp-claude-plugins
 ```
 

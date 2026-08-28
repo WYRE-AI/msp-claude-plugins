@@ -16,7 +16,7 @@ MCP server for HaloPSA, enabling Claude to interact with your HaloPSA instance.
 
 ### Via MCP Gateway (Recommended)
 
-This server is designed to work with the [MCP Gateway](https://github.com/wyre-technology/mcp-gateway) which handles authentication and credential management.
+This server is designed to work with the [MCP Gateway](https://github.com/WYRE-AI/mcp-gateway) which handles authentication and credential management.
 
 ### Local Development
 
