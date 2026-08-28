@@ -38,7 +38,7 @@ export HUNTRESS_API_SECRET="your-api-secret"
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `HUNTRESS_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `HUNTRESS_MCP_URL` to your gateway's endpoint:
 
 ```
 HUNTRESS_MCP_URL=https://your-gateway-domain/v1/huntress/mcp

@@ -104,7 +104,7 @@ you have connected into one normalized view.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install cloudops-pack@msp-claude-plugins
 ```
 

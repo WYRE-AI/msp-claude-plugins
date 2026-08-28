@@ -47,7 +47,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `SYNCRO_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `SYNCRO_MCP_URL` to your gateway's endpoint:
 
 ```
 SYNCRO_MCP_URL=https://your-gateway-domain/v1/syncro/mcp
@@ -92,7 +92,7 @@ curl -s "https://${SYNCRO_SUBDOMAIN}.syncromsp.com/api/v1/me?api_key=${SYNCRO_AP
 
 ```bash
 # Clone the repository
-git clone https://github.com/wyre-technology/msp-claude-plugins.git
+git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/syncro/syncro-msp

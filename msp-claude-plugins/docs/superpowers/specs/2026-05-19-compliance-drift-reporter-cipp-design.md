@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-19
 **Status:** Approved design (revised after gateway probe) — ready for implementation plan
-**Affects:** `wyre-technology/msp-claude-plugins` (Advanced Workflows docs + live routine)
+**Affects:** `WYRE-AI/msp-claude-plugins` (Advanced Workflows docs + live routine)
 
 ## Summary
 
@@ -61,7 +61,7 @@ problem worth surfacing weekly.
 
 ## Scope of changes
 
-Four artifacts change in `wyre-technology/msp-claude-plugins`:
+Four artifacts change in `WYRE-AI/msp-claude-plugins`:
 
 | Artifact | Change |
 |---|---|

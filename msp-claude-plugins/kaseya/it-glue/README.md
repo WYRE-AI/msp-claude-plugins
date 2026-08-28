@@ -122,7 +122,7 @@ IT Glue operates in multiple regions:
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `ITGLUE_MCP_URL` to your gateway's IT Glue endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ITGLUE_MCP_URL` to your gateway's IT Glue endpoint:
 
 
 

@@ -42,7 +42,7 @@ export DOMOTZ_REGION="us-east-1"
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `DOMOTZ_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `DOMOTZ_MCP_URL` to your gateway's endpoint:
 
 ```
 DOMOTZ_MCP_URL=https://your-gateway-domain/v1/domotz/mcp

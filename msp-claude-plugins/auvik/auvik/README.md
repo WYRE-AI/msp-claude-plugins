@@ -20,10 +20,10 @@ Auvik is a SaaS network monitoring and management product used by MSPs to discov
 
 ## Installation
 
-Install via the [MSP Claude Plugins marketplace](https://github.com/wyre-technology/msp-claude-plugins):
+Install via the [MSP Claude Plugins marketplace](https://github.com/WYRE-AI/msp-claude-plugins):
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install auvik
 ```
 

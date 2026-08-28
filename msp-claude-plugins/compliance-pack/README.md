@@ -25,7 +25,7 @@ This pack connects through the [Conduit](https://conduit.wyre.ai) gateway — on
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install compliance-pack@msp-claude-plugins
 ```
 

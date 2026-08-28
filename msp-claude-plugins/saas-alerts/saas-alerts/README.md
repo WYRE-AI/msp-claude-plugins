@@ -17,7 +17,7 @@ Claude Code plugin for [SaaS Alerts](https://saasalerts.com) — SaaS security m
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install saas-alerts
 ```
 

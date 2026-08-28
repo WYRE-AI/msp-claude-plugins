@@ -12,7 +12,7 @@ Claude Code plugin for [Freshdesk](https://www.freshworks.com/freshdesk/) - clou
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install freshdesk
 ```
 

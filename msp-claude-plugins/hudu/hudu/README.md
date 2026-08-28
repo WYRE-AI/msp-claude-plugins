@@ -40,7 +40,7 @@ export HUDU_API_KEY="your-api-key-here"
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `HUDU_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `HUDU_MCP_URL` to your gateway's endpoint:
 
 ```
 HUDU_MCP_URL=https://your-gateway-domain/v1/hudu/mcp

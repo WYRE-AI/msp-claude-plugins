@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- **Repo/paths:** All files are under `msp-claude-plugins/docs/` in the `wyre-technology/msp-claude-plugins` repo. Work on branch `docs/surface-connections-security-anchors` (already created off `origin/main`; the spec is already committed on it).
+- **Repo/paths:** All files are under `msp-claude-plugins/docs/` in the `WYRE-AI/msp-claude-plugins` repo. Work on branch `docs/surface-connections-security-anchors` (already created off `origin/main`; the spec is already committed on it).
 - **No new dependencies**, no `astro.config` changes, no route renames (`/plugins/` stays `/plugins/`).
 - **Internal links** use `baseUrl` (`const baseUrl = import.meta.env.BASE_URL`) — never hardcode a leading `/`, because `BASE_PATH` is `/` for the standalone build and `/docs/` for the gateway-embedded build.
 - **Runtime deep-links** (the anchor script) use `location.pathname` so they are correct under both base paths.

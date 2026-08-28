@@ -35,7 +35,7 @@ Just fork, branch, and open a PR.
 
 ### Tier 2 — Feature Enhancements (lightweight proposal)
 
-Open a [Feature Enhancement issue](https://github.com/wyre-technology/msp-claude-plugins/issues/new?template=feature-enhancement.yml) describing what you want to add. Get a maintainer thumbs-up, then submit a PR.
+Open a [Feature Enhancement issue](https://github.com/WYRE-AI/msp-claude-plugins/issues/new?template=feature-enhancement.yml) describing what you want to add. Get a maintainer thumbs-up, then submit a PR.
 
 **Examples:**
 - New commands for existing plugins
@@ -88,7 +88,7 @@ git clone https://github.com/YOUR-USERNAME/msp-claude-plugins.git
 cd msp-claude-plugins
 
 # 3. Add upstream remote for syncing
-git remote add upstream https://github.com/wyre-technology/msp-claude-plugins.git
+git remote add upstream https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # 4. Verify remotes
 git remote -v
@@ -603,8 +603,8 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 
 | Channel | Use Case |
 |---------|----------|
-| [GitHub Issues](https://github.com/wyre-technology/msp-claude-plugins/issues) | Bug reports, feature requests |
-| [GitHub Discussions](https://github.com/wyre-technology/msp-claude-plugins/discussions) | Questions, ideas, community chat |
+| [GitHub Issues](https://github.com/WYRE-AI/msp-claude-plugins/issues) | Bug reports, feature requests |
+| [GitHub Discussions](https://github.com/WYRE-AI/msp-claude-plugins/discussions) | Questions, ideas, community chat |
 | PR Comments | Code review, implementation questions |
 
 ### Getting API Access
@@ -636,6 +636,6 @@ We are committed to providing a welcoming and inclusive environment for all cont
 <p align="center">
   <strong>Questions?</strong> Open an issue or start a discussion.
   <br>
-  <a href="https://github.com/wyre-technology/msp-claude-plugins/issues">Issues</a> &bull;
-  <a href="https://github.com/wyre-technology/msp-claude-plugins/discussions">Discussions</a>
+  <a href="https://github.com/WYRE-AI/msp-claude-plugins/issues">Issues</a> &bull;
+  <a href="https://github.com/WYRE-AI/msp-claude-plugins/discussions">Discussions</a>
 </p>

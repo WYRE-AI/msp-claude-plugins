@@ -74,7 +74,7 @@ curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments/count
 
 ```bash
 # Clone the repository
-git clone https://github.com/wyre-technology/msp-claude-plugins.git
+git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # Navigate to plugin
 cd msp-claude-plugins/liongard/liongard

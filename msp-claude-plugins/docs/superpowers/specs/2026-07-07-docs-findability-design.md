@@ -1,7 +1,7 @@
 # Docs Findability: Connections, Security & Anchor Links
 
 **Date:** 2026-07-07
-**Repo:** `wyre-technology/msp-claude-plugins` (builds the docs site at https://mcp.wyre.ai from `msp-claude-plugins/docs/`)
+**Repo:** `WYRE-AI/msp-claude-plugins` (builds the docs site at https://mcp.wyre.ai from `msp-claude-plugins/docs/`)
 **Branch:** `docs/surface-connections-security-anchors`
 
 ## Problem

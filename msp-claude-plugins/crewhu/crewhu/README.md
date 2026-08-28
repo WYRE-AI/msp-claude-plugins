@@ -12,7 +12,7 @@ Claude Code plugin for [Crewhu](https://crewhu.com) - CSAT/NPS surveys, recognit
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install crewhu
 ```
 

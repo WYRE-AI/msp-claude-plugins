@@ -9,7 +9,7 @@ endorsed by, or sponsored by the vendor.
 > this document.** `warmly` has no entry in Conduit's
 > `src/credentials/vendor-config.ts` — not a hidden one, not a disabled one,
 > none at all. The connector is wired only in the older
-> `wyre-technology/mcp-gateway` registry (`warmly:` in that repo's own
+> `WYRE-AI/mcp-gateway` registry (`warmly:` in that repo's own
 > `src/credentials/vendor-config.ts`), a separate system this marketplace has
 > otherwise moved off. There is no `warmly` slug to reach at
 > `https://conduit.wyre.ai/v1/mcp`, so a connect attempt there 404s.

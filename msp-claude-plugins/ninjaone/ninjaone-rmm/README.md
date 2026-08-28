@@ -5,7 +5,7 @@ Claude Code plugin for NinjaOne Remote Monitoring and Management.
 ## Installation
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins --plugin ninjaone-rmm
+/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin ninjaone-rmm
 ```
 
 ## Configuration
@@ -23,7 +23,7 @@ Get credentials from **Administration > Apps > API** in NinjaOne.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/wyre-technology/mcp-gateway), set `NINJAONE_MCP_URL` to your gateway's endpoint:
+If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `NINJAONE_MCP_URL` to your gateway's endpoint:
 
 ```
 NINJAONE_MCP_URL=https://your-gateway-domain/v1/ninjaone/mcp
@@ -85,5 +85,5 @@ NINJAONE_MCP_URL=https://your-gateway-domain/v1/ninjaone/mcp
 
 ## Related
 
-- [MCP Server](https://github.com/wyre-technology/ninjaone-mcp) - Full API access via MCP
+- [MCP Server](https://github.com/WYRE-AI/ninjaone-mcp) - Full API access via MCP
 - [Node Library](https://github.com/asachs01/node-ninjaone) - TypeScript client library

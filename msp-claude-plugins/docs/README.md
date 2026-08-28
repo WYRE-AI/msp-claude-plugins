@@ -59,6 +59,6 @@ Plugin data is defined in `src/data/plugins.ts` and sourced from the plugin READ
 
 ## Deployment
 
-The site is deployed to GitHub Pages at `https://wyre-technology.github.io/msp-claude-plugins/`.
+The site is deployed to GitHub Pages at `https://wyre-ai.github.io/msp-claude-plugins/`.
 
 Build output goes to `dist/` directory.

@@ -56,7 +56,7 @@ typically runs both.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install finance-pack@msp-claude-plugins
 ```
 

@@ -3,7 +3,7 @@
 > One command to supercharge Claude Code for MSP workflows.
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 ```
 
 Then restart Claude Code. That's it.
@@ -58,39 +58,39 @@ Plus shared skills for MSP terminology, ticket triage, cross-vendor incident cor
 
 | Plugin | Status | MCP Server |
 |--------|--------|------------|
-| **Autotask PSA** | ✅ Production | [autotask-mcp](https://github.com/wyre-technology/autotask-mcp) |
-| **Datto RMM** | ✅ Production | [datto-rmm-mcp](https://github.com/wyre-technology/datto-rmm-mcp) |
-| **IT Glue** | ✅ Production | [itglue-mcp](https://github.com/wyre-technology/itglue-mcp) |
-| **Hudu** | 🔨 Beta | [hudu-mcp](https://github.com/wyre-technology/hudu-mcp) |
-| **RocketCyber** | 🔨 Beta | [rocketcyber-mcp](https://github.com/wyre-technology/rocketcyber-mcp) |
-| **Syncro** | 🔨 Beta | [syncro-mcp](https://github.com/wyre-technology/syncro-mcp) |
-| **Atera** | 🔨 Beta | [atera-mcp](https://github.com/wyre-technology/atera-mcp) |
-| **SuperOps.ai** | 🔨 Beta | [superops-mcp](https://github.com/wyre-technology/superops-mcp) |
-| **HaloPSA** | 🔨 Beta | [halopsa-mcp](https://github.com/wyre-technology/halopsa-mcp) |
-| **Liongard** | ✅ Production | [liongard-mcp](https://github.com/wyre-technology/liongard-mcp) |
-| **ConnectWise Manage** | 🔨 Beta | [connectwise-manage-mcp](https://github.com/wyre-technology/connectwise-manage-mcp) |
-| **ConnectWise Automate** | 🔨 Beta | [connectwise-automate-mcp](https://github.com/wyre-technology/connectwise-automate-mcp) |
-| **NinjaOne** | 🔨 Beta | [ninjaone-mcp](https://github.com/wyre-technology/ninjaone-mcp) |
-| **SalesBuildr** | 🚧 Alpha | [salesbuildr-mcp](https://github.com/wyre-technology/salesbuildr-mcp) |
+| **Autotask PSA** | ✅ Production | [autotask-mcp](https://github.com/WYRE-AI/autotask-mcp) |
+| **Datto RMM** | ✅ Production | [datto-rmm-mcp](https://github.com/WYRE-AI/datto-rmm-mcp) |
+| **IT Glue** | ✅ Production | [itglue-mcp](https://github.com/WYRE-AI/itglue-mcp) |
+| **Hudu** | 🔨 Beta | [hudu-mcp](https://github.com/WYRE-AI/hudu-mcp) |
+| **RocketCyber** | 🔨 Beta | [rocketcyber-mcp](https://github.com/WYRE-AI/rocketcyber-mcp) |
+| **Syncro** | 🔨 Beta | [syncro-mcp](https://github.com/WYRE-AI/syncro-mcp) |
+| **Atera** | 🔨 Beta | [atera-mcp](https://github.com/WYRE-AI/atera-mcp) |
+| **SuperOps.ai** | 🔨 Beta | [superops-mcp](https://github.com/WYRE-AI/superops-mcp) |
+| **HaloPSA** | 🔨 Beta | [halopsa-mcp](https://github.com/WYRE-AI/halopsa-mcp) |
+| **Liongard** | ✅ Production | [liongard-mcp](https://github.com/WYRE-AI/liongard-mcp) |
+| **ConnectWise Manage** | 🔨 Beta | [connectwise-manage-mcp](https://github.com/WYRE-AI/connectwise-manage-mcp) |
+| **ConnectWise Automate** | 🔨 Beta | [connectwise-automate-mcp](https://github.com/WYRE-AI/connectwise-automate-mcp) |
+| **NinjaOne** | 🔨 Beta | [ninjaone-mcp](https://github.com/WYRE-AI/ninjaone-mcp) |
+| **SalesBuildr** | 🚧 Alpha | [salesbuildr-mcp](https://github.com/WYRE-AI/salesbuildr-mcp) |
 | **Pax8** | ✅ Production | [Pax8 Hosted](https://mcp.pax8.com/v1/mcp) (official) |
-| **Xero** | 🔨 Beta | [xero-mcp](https://github.com/wyre-technology/xero-mcp) |
-| **QuickBooks Online** | 🔨 Beta | [qbo-mcp](https://github.com/wyre-technology/qbo-mcp) |
+| **Xero** | 🔨 Beta | [xero-mcp](https://github.com/WYRE-AI/xero-mcp) |
+| **QuickBooks Online** | 🔨 Beta | [qbo-mcp](https://github.com/WYRE-AI/qbo-mcp) |
 | **Microsoft 365** | 🔨 Beta | [ms-365-mcp-server](https://github.com/softeria/ms-365-mcp-server) (Softeria) |
 | **Rootly** | 🔨 Beta | [Rootly Hosted](https://mcp.rootly.com) (official) |
-| **Huntress** | 🔨 Beta | [huntress-mcp](https://github.com/wyre-technology/huntress-mcp) |
-| **Blumira** | 🔨 Beta | [blumira-mcp](https://github.com/wyre-technology/blumira-mcp) |
-| **SentinelOne** | 🔨 Beta | [sentinelone-mcp](https://github.com/wyre-technology/sentinelone-mcp) |
-| **Abnormal Security** | 🔨 Beta | [abnormal-mcp](https://github.com/wyre-technology/abnormal-mcp) |
-| **Avanan** | 🔨 Beta | [avanan-mcp](https://github.com/wyre-technology/avanan-mcp) |
-| **Ironscales** | 🔨 Beta | [ironscales-mcp](https://github.com/wyre-technology/ironscales-mcp) |
-| **Mimecast** | 🔨 Beta | [mimecast-mcp](https://github.com/wyre-technology/mimecast-mcp) |
-| **SpamTitan** | 🔨 Beta | [spamtitan-mcp](https://github.com/wyre-technology/spamtitan-mcp) |
-| **Proofpoint** | 🔨 Beta | [proofpoint-mcp](https://github.com/wyre-technology/proofpoint-mcp) |
-| **KnowBe4** | 🔨 Beta | [knowbe4-mcp](https://github.com/wyre-technology/knowbe4-mcp) |
-| **HubSpot** | 🔨 Beta | [hubspot-mcp](https://github.com/wyre-technology/hubspot-mcp) |
-| **PandaDoc** | 🔨 Beta | [pandadoc-mcp](https://github.com/wyre-technology/pandadoc-mcp) |
-| **BetterStack** | 🔨 Beta | [betterstack-mcp](https://github.com/wyre-technology/betterstack-mcp) |
-| **PagerDuty** | 🔨 Beta | [pagerduty-mcp](https://github.com/wyre-technology/pagerduty-mcp) |
+| **Huntress** | 🔨 Beta | [huntress-mcp](https://github.com/WYRE-AI/huntress-mcp) |
+| **Blumira** | 🔨 Beta | [blumira-mcp](https://github.com/WYRE-AI/blumira-mcp) |
+| **SentinelOne** | 🔨 Beta | [sentinelone-mcp](https://github.com/WYRE-AI/sentinelone-mcp) |
+| **Abnormal Security** | 🔨 Beta | [abnormal-mcp](https://github.com/WYRE-AI/abnormal-mcp) |
+| **Avanan** | 🔨 Beta | [avanan-mcp](https://github.com/WYRE-AI/avanan-mcp) |
+| **Ironscales** | 🔨 Beta | [ironscales-mcp](https://github.com/WYRE-AI/ironscales-mcp) |
+| **Mimecast** | 🔨 Beta | [mimecast-mcp](https://github.com/WYRE-AI/mimecast-mcp) |
+| **SpamTitan** | 🔨 Beta | [spamtitan-mcp](https://github.com/WYRE-AI/spamtitan-mcp) |
+| **Proofpoint** | 🔨 Beta | [proofpoint-mcp](https://github.com/WYRE-AI/proofpoint-mcp) |
+| **KnowBe4** | 🔨 Beta | [knowbe4-mcp](https://github.com/WYRE-AI/knowbe4-mcp) |
+| **HubSpot** | 🔨 Beta | [hubspot-mcp](https://github.com/WYRE-AI/hubspot-mcp) |
+| **PandaDoc** | 🔨 Beta | [pandadoc-mcp](https://github.com/WYRE-AI/pandadoc-mcp) |
+| **BetterStack** | 🔨 Beta | [betterstack-mcp](https://github.com/WYRE-AI/betterstack-mcp) |
+| **PagerDuty** | 🔨 Beta | [pagerduty-mcp](https://github.com/WYRE-AI/pagerduty-mcp) |
 
 > Maturity levels: ✅ **Production** — used in real MSP environments with comprehensive coverage. 🔨 **Beta** — functional with core features, feedback welcome. 🚧 **Alpha** — early implementation, expect gaps.
 
@@ -111,13 +111,13 @@ claude mcp add --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp
 **Claude Desktop (macOS / Linux):**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/wyre-technology/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.sh | bash
 ```
 
 **Claude Desktop (Windows):**
 
 ```powershell
-irm https://raw.githubusercontent.com/wyre-technology/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.ps1 | iex
+irm https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.ps1 | iex
 ```
 
 The installer scripts preserve your existing config, create a backup, and only append the gateway entry.
@@ -167,7 +167,7 @@ and benefit from familiarity with the vendor's API.
 Want just one vendor? Add the marketplace once, then install plugins individually:
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install autotask@msp-claude-plugins
 /plugin install syncro@msp-claude-plugins
 /plugin install halopsa@msp-claude-plugins
@@ -180,7 +180,7 @@ This PR adds Codex metadata for the Autotask plugin as a first representative
 pattern for cross-harness distribution:
 
 ```bash
-codex plugin marketplace add https://github.com/wyre-technology/msp-claude-plugins
+codex plugin marketplace add https://github.com/WYRE-AI/msp-claude-plugins
 ```
 
 Then install **Kaseya Autotask** from the Codex Plugins UI. The same
@@ -240,8 +240,8 @@ arguments, credentials, browser captures, or model outputs.
 This project is maintained by [WYRE AI](https://wyretechnology.com), a Chattanooga-based
 MSP focused on AI enablement.
 
-- **Questions or feedback?** Open a [Discussion](https://github.com/wyre-technology/msp-claude-plugins/discussions)
-- **Found a bug?** File an [Issue](https://github.com/wyre-technology/msp-claude-plugins/issues)
+- **Questions or feedback?** Open a [Discussion](https://github.com/WYRE-AI/msp-claude-plugins/discussions)
+- **Found a bug?** File an [Issue](https://github.com/WYRE-AI/msp-claude-plugins/issues)
 - **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Using this in your MSP?** We'd love to hear about it — drop us a note in Discussions
 

@@ -46,7 +46,7 @@ pack reports what it can verify and calls out, explicitly, what it can't.
 ## Install
 
 ```
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install secops-pack@msp-claude-plugins
 ```
 
