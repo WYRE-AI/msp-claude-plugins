@@ -1,0 +1,11 @@
+{
+  "name": "proofpoint-essentials",
+  "version": "0.1.0",
+  "description": "Claude plugins for Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

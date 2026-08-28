@@ -1312,6 +1312,38 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'proofpoint-essentials',
+    name: 'Proofpoint Essentials',
+    vendor: 'Email Security',
+    description: 'Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management',
+    category: 'email-security',
+    maturity: 'beta',
+    features: [
+      'Org Management',
+      'Reporting',
+      'User Management'
+    ],
+    skills: [
+      { name: 'org-management', description: 'Proofpoint Essentials organization lifecycle: get an org and its domains, activate/deactivate, delete, manage domains, toggle features, adjust licensing allocation, change package/subscription tier, and mint an Odin-based SSO token for console handoff.' },
+      { name: 'reporting', description: 'Proofpoint Essentials inbound and outbound email flow reporting: time-series mail volume and disposition metrics for a customer org, how to interpret them, and how to build recurring MSP status reports from them.' },
+      { name: 'user-management', description: 'Proofpoint Essentials mailbox user management within a customer org: list, get, create (including batch create), update, and delete mailbox-protected users.' },
+      { name: 'api-patterns', description: 'Proofpoint Essentials API fundamentals: X-User/X-Password header authentication with org-admin credentials, regional pod resolution via the endpoint discovery API, base URL construction, batch-create 207 multi-status handling, and error codes.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/org-health-check', description: 'Full health check for one Proofpoint Essentials customer org' },
+      { name: '/search-org', description: 'Resolve a Proofpoint Essentials customer org by name or domain and show its details' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'email-security/proofpoint-essentials',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'netsuite',
     name: 'Netsuite',
     vendor: 'Netsuite',

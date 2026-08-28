@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.31.0",
+  "version": "1.32.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -416,6 +416,18 @@
         "email-security",
         "tap",
         "threat-intel",
+        "msp"
+      ]
+    },
+    {
+      "name": "proofpoint-essentials",
+      "source": "./msp-claude-plugins/email-security/proofpoint-essentials",
+      "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
+      "category": "email-security",
+      "tags": [
+        "proofpoint",
+        "proofpoint-essentials",
+        "email-security",
         "msp"
       ]
     },
