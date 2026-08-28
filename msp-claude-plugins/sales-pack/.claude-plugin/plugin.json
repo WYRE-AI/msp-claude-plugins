@@ -2,7 +2,7 @@
   "name": "sales-pack",
   "displayName": "Sales & Deal Desk",
   "description": "Cross-vendor sales pipeline operations \u2014 deal health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

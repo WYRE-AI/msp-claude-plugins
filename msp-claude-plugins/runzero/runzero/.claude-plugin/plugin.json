@@ -1,6 +1,6 @@
 {
   "name": "runzero",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Claude plugins for RunZero - asset discovery, network scanning, service inventory, OS fingerprinting, wireless detection, and vulnerability reporting for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
