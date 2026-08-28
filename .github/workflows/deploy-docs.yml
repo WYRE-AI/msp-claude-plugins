@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'msp-claude-plugins/docs/**'
+      - '.claude-plugin/marketplace.json'
+      - 'msp-claude-plugins/**/.claude-plugin/plugin.json'
+      - 'msp-claude-plugins/**/README.md'
       - '.github/workflows/deploy-docs.yml'
   workflow_dispatch:
 
