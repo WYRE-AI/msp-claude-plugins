@@ -91,40 +91,19 @@ Tool: autotask_search_contracts
 Args: {
   "companyID": 12345,
   "status": 1,
-  "contractType": 7,
-  "endDateFrom": "2026-01-01",
-  "endDateTo": "2026-12-31",
   "searchTerm": "Managed",
   "pageSize": 25
 }
 ```
 
-All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `contractType` (picklist ID), `endDateFrom`/`endDateTo` (ISO dates bounding the end date), `pageSize` (default 25, max 500).
+All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `pageSize` (default 25, max 500). This is the only read tool for contracts — there is no `contractType` or end-date filter; filter on `contractType`/`endDate` client-side from the returned records.
 
-### Get a Single Contract
+### Fetch a Single Contract or Build a Renewal Pipeline
 
-```
-Tool: autotask_get_contract
-Args: { "id": 54321 }
-```
+There is no `autotask_get_contract` tool. There is no `autotask_list_expiring_contracts` tool either — `autotask_search_contracts` is the only read path for contracts. To fetch one contract, call `autotask_search_contracts` (scoped by `companyID` when known) and match the target `id` from the results. To build a 30/60/90-day renewal pipeline or find contracts already past their end date, call `autotask_search_contracts` with `status: 1` (scoped by `companyID` when reviewing one account, otherwise paged across the portfolio) and filter/sort the returned records client-side by `endDate`:
 
-### Expiring / Expired Contracts Report
-
-The renewal-pipeline tool. Lists contracts whose `endDate` falls within the next `daysAhead` days (default 60), org-wide or scoped to one company:
-
-```
-Tool: autotask_list_expiring_contracts
-Args: {
-  "daysAhead": 90,
-  "companyID": 12345,
-  "includeExpired": true,
-  "status": 1,
-  "pageSize": 100
-}
-```
-
-- Pair with `status: 1` to get "in effect but lapsing" contracts — the renewal call list.
-- `includeExpired: true` drops the today lower bound, surfacing contracts already past their end date. Autotask does **not** auto-deactivate expired contracts, so `status: 1` + `includeExpired: true` finds clients still receiving service on expired paper — the compliance-risk case.
+- `endDate` on or before today → expired but still Active — the compliance-risk case. Autotask does **not** auto-deactivate expired contracts, so this is how clients still receiving service on expired paper are found.
+- `endDate` within the next 30/60/90 days → the renewal call list, in ascending urgency order.
 
 ### Create a Contract
 
@@ -312,8 +291,8 @@ Calculate remaining hours:
 ### Contract Renewal
 
 1. **Identify expiring contracts**
-   - `autotask_list_expiring_contracts` with `daysAhead` 30/60/90 windows
-   - Add `includeExpired: true` to catch already-lapsed contracts still marked active
+   - `autotask_search_contracts` with `status: 1`, windowed client-side by `endDate` into 30/60/90-day buckets
+   - Filter for `endDate` before today to catch already-lapsed contracts still marked active
 
 2. **Review contract performance**
    - Compare budgeted vs actual hours

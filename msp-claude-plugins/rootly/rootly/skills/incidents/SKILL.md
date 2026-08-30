@@ -63,12 +63,14 @@ endpoint, or answer a customer under an SLA clock.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `incidents_get` | List and search incidents | `status`, `severity`, `page[number]`, `page[size]` |
-| `incidents_post` | Create a new incident | `title`, `severity_id`, `team_ids`, `service_ids` |
-| `incidents_by_incident_id_alerts_post` | Attach an alert to an incident | `incident_id`, alert data |
-| `incidents_by_incident_id_alerts_get` | List alerts attached to an incident | `incident_id` |
-| `incidents_by_incident_id_action_items_post` | Create an action item on an incident | `incident_id`, `summary`, `assignee_id` |
-| `incidents_by_incident_id_action_items_get` | List action items on an incident | `incident_id` |
+| `list_incidents` / `search_incidents` | List and search incidents | `filter[status]`, `filter[severity]`, `page[number]`, `page[size]` |
+| `get_incident` | Get a single incident | Incident ID |
+| `create_incident` | Create a new incident | `title`, `severity_id`, `team_ids`, `service_ids` |
+| `update_incident` | Update an incident's fields | Incident ID |
+| `attach_alert` | Attach an alert to an incident | `incident_id`, alert data |
+| `list_incident_alerts` | List alerts attached to an incident | `incident_id` |
+| `create_incident_action_item` | Create an action item on an incident | `incident_id`, `summary`, `assigned_to` |
+| `list_incident_action_items` | List action items on an incident | `incident_id` |
 
 ### AI Analysis Tools
 
@@ -81,12 +83,12 @@ endpoint, or answer a customer under an SLA clock.
 
 | Tool | Description |
 |------|-------------|
-| `severities_get` | List configured severity levels (ID, slug, color) |
-| `services_get` | List services to scope incident to the right owner |
-| `teams_get` | List teams for incident assignment and routing |
-| `incident_types_get` | List incident types (bug, outage, performance, etc.) |
-| `environments_get` | List environments (production, staging, etc.) |
-| `users_get` | List users for assignment |
+| `list_severities` | List configured severity levels (ID, slug, color) |
+| `list_services` | List services to scope incident to the right owner |
+| `list_teams` | List teams for incident assignment and routing |
+| `list_incident_types` | List incident types (bug, outage, performance, etc.) |
+| `list_environments` | List environments (production, staging, etc.) |
+| `list_users` | List users for assignment |
 
 ### Discover Available Tools
 
@@ -138,7 +140,7 @@ Severities are configurable per Rootly organization. Common conventions:
 | SEV-3 / Medium | P3 | Partial degradation; workaround available | 2 hours |
 | SEV-4 / Low | P4 | Minor issue; minimal user impact | Next business day |
 
-> **Note:** Severity IDs are UUIDs in Rootly. Always call `severities_get` to map severity slugs to IDs before creating an incident.
+> **Note:** Severity IDs are UUIDs in Rootly. Always call `list_severities` to map severity slugs to IDs before creating an incident.
 
 ### Incident Status Values
 
@@ -173,32 +175,32 @@ Rootly uses free-text status descriptors alongside timestamps. Common values:
 
 ### Triage New Incidents
 
-1. Call `incidents_get` with `status=in_triage` or `status=detected`, sorted by severity
+1. Call `list_incidents` with `filter[status]=in_triage` or `filter[status]=detected`, sorted by severity
 2. For each high-severity incident, review title and summary
 3. Call `find_related_incidents` with the `incident_id` to surface similar past incidents
 4. Call `suggest_solutions` with the `incident_id` to get AI-generated remediation suggestions
-5. Create action items via `incidents_by_incident_id_action_items_post` for each remediation step
-6. Update status as the incident progresses
+5. Create action items via `create_incident_action_item` for each remediation step
+6. Update status as the incident progresses via `update_incident`
 
 ### Create an Incident
 
-1. Call `severities_get` to find the correct severity ID for the impact level
-2. Call `services_get` to identify which service is affected
-3. Call `teams_get` to find the on-call team to assign
-4. Call `incidents_post` with `title`, `severity_id`, `service_ids`, `team_ids`
-5. Attach any triggering alerts via `incidents_by_incident_id_alerts_post`
+1. Call `list_severities` to find the correct severity ID for the impact level
+2. Call `list_services` to identify which service is affected
+3. Call `list_teams` to find the on-call team to assign
+4. Call `create_incident` with `title`, `severity_id`, `service_ids`, `team_ids`
+5. Attach any triggering alerts via `attach_alert`
 
 ### Investigate a Specific Incident
 
-1. Find the incident via `incidents_get` or by `sequential_id`
+1. Find the incident via `get_incident` or `list_incidents` filtered by `sequential_id`
 2. Call `find_related_incidents` — look for recurring patterns (same service, same time of day, same symptoms)
 3. Call `suggest_solutions` — surface past resolutions that worked for similar incidents
-4. Review action items via `incidents_by_incident_id_action_items_get`
-5. Review attached alerts via `incidents_by_incident_id_alerts_get`
+4. Review action items via `list_incident_action_items`
+5. Review attached alerts via `list_incident_alerts`
 
 ### Daily Incident Review
 
-1. Call `incidents_get` with a 24-hour window and `status=resolved`
+1. Call `list_incidents` with a 24-hour window and `filter[status]=resolved`
 2. Count by severity for a daily health summary
 3. Identify incidents that exceeded SLA targets (compare `detected_at` vs `resolved_at`)
 4. Flag any incidents without postmortem action items for follow-up
@@ -218,7 +220,7 @@ Rootly incidents often correspond to PSA service tickets for MSP billing:
 Before handing off to the next on-call engineer:
 
 1. Call `get_oncall_handoff_summary` to see current and next on-call status plus open incidents
-2. Call `incidents_get` with `status=in_triage` to review any actively open incidents
+2. Call `list_incidents` with `filter[status]=in_triage` to review any actively open incidents
 3. Add handoff notes as action items on open incidents
 4. See the [oncall skill](../oncall/SKILL.md) for full on-call workflows
 
@@ -230,8 +232,8 @@ Before handing off to the next on-call engineer:
 |-------|-----------|------------|
 | Invalid API token | 401 | Regenerate at Account > Manage API Keys |
 | Insufficient permissions | 403 | Token may be Team-scoped; use an Account or Global token |
-| Incident not found | 404 | Verify `incident_id`; use `incidents_get` to list active incidents |
-| Severity ID invalid | 422 | Call `severities_get` to get valid IDs before creating |
+| Incident not found | 404 | Verify `incident_id`; use `list_incidents` to list active incidents |
+| Severity ID invalid | 422 | Call `list_severities` to get valid IDs before creating |
 | Rate limited | 429 | Back off 30 seconds; retry with exponential backoff |
 
 ### Authentication Error
@@ -251,7 +253,7 @@ Verify your Rootly API token:
 2. **Track action items** — Every resolved incident should have at least one follow-up action item
 3. **Attach alerts** — Link the triggering alert to the incident for audit trail completeness
 4. **Scope to the right team** — Include `team_ids` when creating incidents so on-call routing works correctly
-5. **Map severity consistently** — Use `severities_get` to confirm slug-to-ID mapping rather than hardcoding
+5. **Map severity consistently** — Use `list_severities` to confirm slug-to-ID mapping rather than hardcoding
 6. **Use sequential IDs in external tools** — Reference `INC-{sequential_id}` in PSA tickets and Slack
 7. **Check on-call health** — Use `check_oncall_health_risk` before major deployments or planned maintenance
 
