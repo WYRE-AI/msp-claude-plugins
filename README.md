@@ -14,7 +14,7 @@ Then restart Claude Code. That's it.
 
 ## What you get
 
-Thirty-three vendor-specific plugins with domain knowledge for PSA, RMM, documentation, security, accounting, CRM, and productivity tools:
+83 vendor-specific plugins with domain knowledge for PSA, RMM, documentation, security, accounting, CRM, and productivity tools — the count keeps growing, so treat [`marketplace.json`](.claude-plugin/marketplace.json) as the source of truth and [mcp.wyre.ai](https://mcp.wyre.ai) as the browsable catalog. The table below highlights the most commonly used integrations, not the full list:
 
 | Plugin | Description |
 |--------|-------------|
@@ -55,6 +55,8 @@ Thirty-three vendor-specific plugins with domain knowledge for PSA, RMM, documen
 Plus shared skills for MSP terminology, ticket triage, cross-vendor incident correlation, and billing reconciliation.
 
 ### Plugin Maturity
+
+Maturity status for the plugins listed above (not the full catalog — see [`marketplace.json`](.claude-plugin/marketplace.json) for all 83):
 
 | Plugin | Status | MCP Server |
 |--------|--------|------------|
