@@ -11,25 +11,25 @@ Create a new incident in Rootly with the specified title, severity, and affected
 ## Prerequisites
 
 - Rootly MCP server connected with valid API credentials
-- MCP tools `incidents_post`, `severities_get`, `services_get`, and `teams_get` available
+- MCP tools `create_incident`, `list_severities`, `list_services`, and `list_teams` available
 
 ## Steps
 
 1. **Look up severity ID**
 
-   Call `severities_get` to list available severity levels. Match the specified severity name or slug to get the UUID.
+   Call `list_severities` to list available severity levels. Match the specified severity name or slug to get the UUID.
 
 2. **Look up service IDs**
 
-   If `services` is provided, call `services_get` to find matching service records by name. Collect the UUIDs for each.
+   If `services` is provided, call `list_services` to find matching service records by name. Collect the UUIDs for each.
 
 3. **Look up team IDs**
 
-   If services have owning teams, include the team IDs for proper routing and on-call paging.
+   If services have owning teams (`owner_group_ids`), include the team IDs for proper routing and on-call paging.
 
 4. **Create the incident**
 
-   Call `incidents_post` with:
+   Call `create_incident` with:
    - `title` -- the provided title
    - `severity_id` -- the UUID from step 1
    - `service_ids` -- the UUIDs from step 2 (if provided)
@@ -75,8 +75,8 @@ Create a new incident in Rootly with the specified title, severity, and affected
 
 ## Error Handling
 
-- **Severity Not Found:** Verify the severity slug matches configured severities; call `severities_get` to list valid options
-- **Service Not Found:** Verify service names match the service catalog; call `services_get` to list valid services
+- **Severity Not Found:** Verify the severity slug matches configured severities; call `list_severities` to list valid options
+- **Service Not Found:** Verify service names match the service catalog; call `list_services` to list valid services
 - **Authentication Error:** Verify `ROOTLY_API_TOKEN` is set correctly
 
 ## Related Commands

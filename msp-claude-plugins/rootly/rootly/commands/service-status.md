@@ -11,38 +11,37 @@ Check the health status of services in the Rootly service catalog by cross-refer
 ## Prerequisites
 
 - Rootly MCP server connected with valid API credentials
-- MCP tools `services_get` and `incidents_get` available
+- MCP tools `list_services` and `list_incidents` available
 
 ## Steps
 
 1. **Fetch services from the catalog**
 
-   Call `services_get` to list all services (or filter by name or team if specified). Include service tier, owner team, and description.
+   Call `list_services` to list all services (optionally filtered by `filter[name]`). Include owner team (`owner_group_ids`) and description. Rootly has no built-in tier/criticality field -- if your org tracks one, it lives in a custom field, not on the service record itself.
 
 2. **Fetch active incidents**
 
-   Call `incidents_get` with `status=in_triage` and `status=detected` to find all active incidents. Also include `status=mitigated` for partially resolved issues.
+   Call `list_incidents` with `filter[status]=in_triage` and `filter[status]=detected` to find all active incidents. Also include `filter[status]=mitigated` for partially resolved issues.
 
 3. **Map incidents to services**
 
-   Cross-reference active incidents with their affected services to determine which services currently have open incidents.
+   Cross-reference active incidents' `service_ids` with the fetched services to determine which services currently have open incidents.
 
 4. **Build service health table**
 
    For each service, show:
-   - Service name and tier
-   - Current status (operational, degraded, outage)
+   - Service name and owning team
+   - Current status (operational, degraded, outage) inferred from open incidents
    - Number and severity of active incidents
-   - Owning team
-   - Dependency count
+   - Dependency count (`service_ids` on the record)
 
 5. **Identify cascading impact**
 
-   For services with active incidents, check downstream dependencies to flag services that may be indirectly affected.
+   For services with active incidents, check their `service_ids` (dependent services) to flag services that may be indirectly affected.
 
 6. **Provide summary**
 
-   Show overall health metrics: total services, services with active incidents, services at risk from dependencies, and a breakdown by tier.
+   Show overall health metrics: total services, services with active incidents, and services at risk from dependencies.
 
 ## Parameters
 
@@ -75,7 +74,7 @@ Check the health status of services in the Rootly service catalog by cross-refer
 
 - **No Services Found:** Verify the service catalog has been populated in Rootly
 - **Authentication Error:** Verify `ROOTLY_API_TOKEN` is set correctly
-- **Service Name Not Found:** Check the exact service name; call `services_get` to list available services
+- **Service Name Not Found:** Check the exact service name; call `list_services` to list available services
 
 ## Related Commands
 
