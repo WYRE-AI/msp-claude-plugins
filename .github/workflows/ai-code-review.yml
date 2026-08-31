@@ -1,0 +1,46 @@
+#
+# Automated first-pass PR review via alibaba/open-code-review, wired in as
+# part of the SOC2 change-management control (see issue tracking in
+# WYRE-AI/msp-claude-plugins). This is a REVIEW ASSIST, not the merge gate —
+# branch protection separately requires a human approval before merge.
+#
+# Deliberately uses `pull_request` (not `pull_request_target`): this repo
+# accepts community/fork PRs (see CONTRIBUTING.md tiers), and pull_request_target
+# would expose repo secrets to workflow runs triggered from a fork. Until the
+# action's internal steps have been reviewed for safe fork-PR handling, fork
+# PRs simply won't get the automated pass — a human reviewer still covers them.
+
+name: AI Code Review (pilot)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ai-code-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Run OpenCodeReview
+        uses: alibaba/open-code-review@8d023aafcec05f8ba5628fca3eaba88078e5d201  # v1.11.1
+        with:
+          llm_url: ${{ secrets.OCR_LLM_URL }}
+          llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
+          llm_model: ${{ secrets.OCR_LLM_MODEL }}
+          llm_use_anthropic: ${{ secrets.OCR_LLM_USE_ANTHROPIC }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          sticky_summary: 'true'
+          incremental: 'true'
+          upload_artifacts: 'true'
