@@ -19,7 +19,7 @@ const OUTPUT_PATH_SHARED = path.join(DOCS_DIR, 'src', 'data', 'sharedSkills.ts')
 const VALID_CATEGORIES = new Set([
   'psa', 'rmm', 'documentation', 'security', 'sales', 'accounting',
   'productivity', 'email-security', 'incident-management', 'monitoring',
-  'network', 'crm', 'marketplace', 'marketing', 'infrastructure',
+  'network', 'crm', 'marketplace', 'marketing', 'infrastructure', 'automation',
 ]);
 
 function normalizeCategory(raw: string): string {
@@ -32,8 +32,12 @@ function normalizeCategory(raw: string): string {
 // ── Vendor derivation ──────────────────────────────────────────────────
 /** Derive a display-friendly vendor name from the source path. */
 function deriveVendor(sourcePath: string): string {
-  // sourcePath looks like "./msp-claude-plugins/kaseya/autotask"
-  const parts = sourcePath.replace('./msp-claude-plugins/', '').split('/');
+  // sourcePath looks like "./msp-claude-plugins/kaseya/autotask" for a
+  // nested vendor plugin, or "./advanced-workflows/advanced-workflows" for
+  // a cross-vendor plugin family living directly at the repo root — strip
+  // the msp-claude-plugins/ segment only when present, but always strip the
+  // leading "./" so the repo-root case doesn't leave "." as the top level.
+  const parts = sourcePath.replace(/^\.\/(msp-claude-plugins\/)?/, '').split('/');
   const topLevel = parts[0];
 
   const vendorMap: Record<string, string> = {
@@ -293,7 +297,8 @@ function scanApiInfo(_pluginDir: string): ApiInfo {
 // ── Derive path from source ────────────────────────────────────────────
 function derivePath(source: string): string {
   // "./msp-claude-plugins/kaseya/autotask" → "kaseya/autotask"
-  return source.replace('./msp-claude-plugins/', '');
+  // "./advanced-workflows/advanced-workflows" → "advanced-workflows/advanced-workflows"
+  return source.replace(/^\.\/(msp-claude-plugins\/)?/, '');
 }
 
 // ── Features from skills ───────────────────────────────────────────────
@@ -427,7 +432,12 @@ function main(): void {
     }
 
     const pluginRelPath = derivePath(entry.source);
-    const pluginDir = path.join(REPO_ROOT, 'msp-claude-plugins', pluginRelPath);
+    // entry.source is already a path relative to REPO_ROOT (e.g.
+    // "./msp-claude-plugins/kaseya/autotask" or, for a repo-root plugin
+    // family like advanced-workflows, "./advanced-workflows/advanced-workflows") —
+    // join it directly rather than assuming every plugin nests under
+    // msp-claude-plugins/.
+    const pluginDir = path.join(REPO_ROOT, entry.source);
 
     // Read plugin.json if it exists
     const pluginJsonPath = path.join(pluginDir, '.claude-plugin', 'plugin.json');
