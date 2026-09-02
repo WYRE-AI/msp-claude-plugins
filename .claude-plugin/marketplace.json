@@ -37,7 +37,7 @@
     },
     {
       "name": "advanced-workflows",
-      "source": "./advanced-workflows/advanced-workflows",
+      "source": "./msp-claude-plugins/advanced-workflows/advanced-workflows",
       "description": "Vendor-generic MSP automation workflows that adapt to the customer's connected stack.",
       "category": "automation",
       "tags": ["workflows", "automation", "msp"]
