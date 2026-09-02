@@ -2,5 +2,5 @@
   "name": "advanced-workflows",
   "version": "1.0.0",
   "description": "Vendor-generic MSP automation workflows: ticket triage, patch drift reporting, QBR prep, and more — each detects the customer's connected PSA/RMM/chat stack and adapts.",
-  "author": "WYRE Technology"
+  "author": { "name": "WYRE Technology" }
 }
