@@ -18,6 +18,14 @@ content, updates the record, moves it to In Progress, and posts a
 one-line summary to chat. Can run as a one-off right now, or be installed
 as an hourly Claude-managed scheduled routine.
 
+## Source
+
+Generalizes the `ticket-dispatcher` agent (`autotask` plugin, Archetype
+B — "the canonical archetype-B fit") plus the equivalent
+`service-desk-ops` agents the catalog lists for `halopsa` and
+`connectwise-psa` — the same three PSAs `psa-tool-map` curates tool
+names for.
+
 ## Prerequisites
 
 | Requirement | Notes |
