@@ -37,17 +37,20 @@ silently.
 
 ### IT Glue document
 - **Connector**: Conduit (`itglue` vendor connection).
-- **permitted_tools**: `search_documents`, `create_document`,
-  `update_document_section`, `publish_document`.
+- **permitted_tools**: `itglue__search_documents`, `itglue__create_document`,
+  `itglue__update_document_section`, `itglue__publish_document`.
 - **Write snippet**: search for an existing document named `<report name>`
   in the target IT Glue org; if found, update its section, else create it;
-  then call `publish_document` — section edits are invisible to a human
-  until the document is published.
+  then call `itglue__publish_document` — section edits are invisible to a
+  human until the document is published.
 - **Limits**: needs a target org ID baked in. Updates in place, so reruns
   converge on a single document rather than accumulating artefacts.
-  IT Glue's tools carry no vendor prefix (verified against the `itglue`
-  plugin's `GOVERNANCE.md`) — don't guess an `itglue_`-style name for any
-  tool not listed here.
+  Conduit prefixes every served tool name with `{vendor}__` at the gateway
+  (`itglue__` here) regardless of what the vendor's own internal
+  classification table calls it — the `itglue` plugin's `GOVERNANCE.md`
+  documents bare names like `create_document` for its internal
+  permission-tier lookup, but the servable/callable name always carries
+  the `itglue__` prefix, same as every other vendor.
 
 ## Blocked
 
