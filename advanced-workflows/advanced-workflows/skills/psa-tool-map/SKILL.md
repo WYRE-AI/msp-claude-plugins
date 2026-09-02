@@ -21,12 +21,12 @@ this vendor isn't fully vetted yet.
 
 | Abstract operation | Autotask | HaloPSA | ConnectWise PSA |
 |---|---|---|---|
-| List new/untriaged tickets | `autotask__autotask_search_tickets` | `halopsa__halopsa_tickets_list` | not yet verified — use guided discovery |
-| Get ticket detail | `autotask__autotask_get_ticket_details` | `halopsa__halopsa_tickets_get` | not yet verified — use guided discovery |
-| Update ticket (priority/status/etc.) | `autotask__autotask_update_ticket` | `halopsa__halopsa_tickets_update` | not yet verified — use guided discovery |
-| Add a ticket note/action | `autotask__autotask_create_ticket_note` | `halopsa__halopsa_tickets_add_action` | not yet verified — use guided discovery |
-| List valid ticket statuses (discover once, don't call per-run) | `autotask__autotask_list_ticket_statuses` | no dedicated list tool observed — confirm via `halopsa__halopsa_tickets_list` field values before baking in IDs | not yet verified |
-| List valid ticket priorities (discover once, don't call per-run) | `autotask__autotask_list_ticket_priorities` | no dedicated list tool observed — confirm via ticket field values before baking in IDs | not yet verified |
+| List new/untriaged tickets | `autotask__autotask_search_tickets` | `halopsa__halopsa_tickets_list` | `connectwise-psa__cw_search_tickets` |
+| Get ticket detail | `autotask__autotask_get_ticket_details` | `halopsa__halopsa_tickets_get` | `connectwise-psa__cw_get_ticket` |
+| Update ticket (priority/status/etc.) | `autotask__autotask_update_ticket` | `halopsa__halopsa_tickets_update` | `connectwise-psa__cw_update_ticket` |
+| Add a ticket note/action | `autotask__autotask_create_ticket_note` | `halopsa__halopsa_tickets_add_action` | `connectwise-psa__cw_add_ticket_note` |
+| List valid ticket statuses (discover once, don't call per-run) | `autotask__autotask_list_ticket_statuses` | no dedicated list tool observed — confirm via `halopsa__halopsa_tickets_list` field values before baking in IDs | `connectwise-psa__cw_list_statuses` |
+| List valid ticket priorities (discover once, don't call per-run) | `autotask__autotask_list_ticket_priorities` | no dedicated list tool observed — confirm via ticket field values before baking in IDs | `connectwise-psa__cw_list_priorities` |
 
 ## Vendor-specific gotchas
 
@@ -46,6 +46,26 @@ this vendor isn't fully vetted yet.
   into a routine, don't assume symmetry with Autotask's shape.
 
 ### ConnectWise PSA
-- Tool surface not yet verified against a live connection. Treat as
-  guided-discovery-only until confirmed; do not present this vendor as
-  equally vetted to Autotask/HaloPSA in any workflow skill that cites it.
+- Tool names are `cw_`-prefixed, not `connectwise_manage_`-prefixed —
+  verified against `connectwise/manage/GOVERNANCE.md`'s `VENDOR_TOOL_CONFIG`
+  listing, registered under the gateway slug `connectwise-psa` (so gateway
+  names are `connectwise-psa__cw_*`, e.g. `connectwise-psa__cw_search_tickets`).
+- `cw_add_ticket_note` writes a **customer-visible** note by default —
+  pass `internalAnalysisFlag: true` explicitly for an internal-only note,
+  or an agent's internal analysis gets emailed to the contact immediately.
+  There is no delete-note tool to undo a mistaken send.
+- `cw_update_ticket` is the **only** route to closing a ticket (it takes
+  raw JSON Patch, so `op: "remove"` can strip a field outright). Closing
+  stops the SLA clock and can fire close notifications/satisfaction
+  surveys, and Conduit's access tiers gate the whole tool at `write`
+  regardless of which field the patch touches — there's no way to allow
+  priority/owner patches while blocking status/closure patches at the
+  gateway level. Treat `cw_update_ticket` as requiring a named human
+  approver per invocation; never grant it to unattended/nightly
+  automation.
+- Closure must pass through `Completed` before `Closed`, with a populated
+  `resolution` field, or the patch fails with an error that reads like a
+  permissions failure rather than a workflow-ordering one.
+- The 60-requests/minute rate limit is shared across all operators on the
+  same ConnectWise API member — a wide `cw_search_*` discovery sweep by
+  one routine can 429 everyone else's concurrent calls.
