@@ -1,5 +1,5 @@
 ---
-name: psa-tool-map
+name: "PSA Tool Map"
 description: >
   Maps abstract PSA/ticketing operations (list new tickets, get ticket
   detail, update priority + status, list statuses, list priorities) to

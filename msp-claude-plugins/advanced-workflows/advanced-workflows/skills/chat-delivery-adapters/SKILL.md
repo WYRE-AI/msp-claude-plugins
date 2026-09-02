@@ -1,5 +1,5 @@
 ---
-name: chat-delivery-adapters
+name: "Chat Delivery Adapters"
 description: >
   The delivery-adapter contract every advanced-workflow skill uses to post
   its finished report somewhere a human will see it — Slack, an IT Glue

@@ -1,5 +1,5 @@
 ---
-name: ticket-triage-agent
+name: "Ticket Triage Agent"
 description: >
   Build (or run once) a ticket-triage agent that classifies new PSA
   tickets by priority, advances them to In Progress, and posts a summary
