@@ -3,16 +3,16 @@ name: "3CX API Patterns"
 description: >
   3CX's native PBX MCP server: the per-PBX endpoint shape (every PBX is its
   own FQDN and its own OAuth authorization server — there is no shared
-  mcp.3cx.com), the Admin Console + client setup flow, the permission model
-  (fully inherited from the 3CX account that approved the connection), and
-  how to discover the live tool surface since 3CX has not published exact
-  tool-name strings.
+  mcp.3cx.com), how Conduit's catalog connects one anyway, the Admin Console
+  + client setup flow, the permission model (fully inherited from the 3CX
+  account that approved the connection), and how to discover the live tool
+  surface since 3CX has not published exact tool-name strings.
 when_to_use: >-
   When connecting Claude to a 3CX PBX for the first time, troubleshooting a
   3CX MCP connection or authorization failure, or figuring out which 3CX MCP
   tools are actually available before calling one. Use when: 3cx connect,
   3cx mcp, 3cx setup, 3cx oauth, 3cx authenticate, 3cx admin console, 3cx
-  mcp client, 3cx byo, or 3cx pbx url.
+  mcp client, 3cx catalog, 3cx conduit, or 3cx pbx url.
 ---
 
 # 3CX API Patterns
@@ -43,11 +43,9 @@ project and is **not** confirmed for 3CX's native MCP server.
   the PSA, not a 3CX MCP call. Use `halopsa-tickets`, `connectwise-psa-tickets`,
   or `autotask-tickets` to work the ticket itself; come back to this plugin
   once you need the PBX-side facts.
-- **WYRE's Conduit vendor catalog** — 3CX has no catalog entry there and,
-  structurally, cannot: Conduit's catalog vendors share one fixed endpoint
-  per vendor, and every 3CX PBX is its own origin with its own authorization
-  server. See *Connection & Authentication* below for the two ways this
-  plugin actually reaches a PBX.
+- **Conduit's BYO MCP feature** (`/connect/byo`) — that path is for MCP
+  servers with *no* catalog entry. 3CX has one (`/connect/3cx`), so BYO is
+  no longer the route to take here. See *Connection & Authentication* below.
 
 ## Connection & Authentication
 
@@ -66,6 +64,19 @@ call a tool always does so against whichever PBX endpoint the current
 session is already connected to — nothing here can assume a fixed URL
 across customers.
 
+This does **not** put 3CX outside Conduit's vendor catalog. Conduit's
+catalog supports per-tenant vendors whose every customer runs their own
+instance at their own URL: the vendor entry carries a `resolveContainerUrl`
+that derives the proxy target from the stored credential instead of naming
+one fixed endpoint. **3CX is a catalog vendor** — slug `3cx`, category
+`communications`, shown as *Communications & Telephony*.
+
+3CX pairs that with `oauthConfig.perTenantOAuth`, which additionally makes
+each tenant its own OAuth authorization server. That combination is shared
+with exactly one other vendor, `hudu-official`. (`netsuite` is per-tenant by
+URL too, but authenticates with a non-interactive client-credentials grant
+rather than per-tenant OAuth, so it is not the same shape.)
+
 ### Admin-side setup (on the PBX)
 
 An admin enables the connection from inside that PBX's own console:
@@ -75,10 +86,44 @@ An admin enables the connection from inside that PBX's own console:
 3. 3CX displays the MCP Server URL for that PBX — copy it for the client-side
    step below.
 
+### Client-side setup — through Conduit's vendor catalog (recommended)
+
+An MSP already using WYRE's Conduit gateway connects a PBX from the catalog
+like any other vendor: go to `/connect/3cx` directly, or find **3CX** under
+*Communications & Telephony* in the org catalog at `/org/catalog`.
+
+There is one field — **MCP Server URL**. Paste the URL **exactly as the 3CX
+console shows it** in the admin step above (`https://<pbx-fqdn>/mcp`).
+Conduit proxies to that URL verbatim; it does not append a path.
+
+Requirements Conduit checks or states up front:
+
+- The PBX must run **3CX V20 Update 10 or later** with the MCP Server
+  enabled (Admin → Integrations → MCP Clients).
+- The PBX must be **reachable from the internet on port 443** — Conduit
+  has to fetch the PBX's own discovery metadata before the redirect.
+
+On submit, Conduit:
+
+1. Discovers the PBX's OAuth endpoints from the PBX's own metadata —
+   RFC 9728 protected-resource metadata, then RFC 8414
+   authorization-server metadata — and persists what it found, so later
+   token refreshes resolve the same endpoints without re-discovering.
+2. Registers a client dynamically against that authorization server
+   (RFC 7591 DCR) as a public client using PKCE (S256).
+3. Runs the authorization-code flow. **You sign in as a 3CX user**, and the
+   connection can do only what that user's 3CX role allows.
+
+Connecting through the catalog is what gets you Conduit's access grants,
+per-tool allowlists, `conduit__my_access`, and the org audit views. A direct
+connection gets none of those — see *Permission Model* and `GOVERNANCE.md`.
+
 ### Client-side setup — direct connection (no gateway)
 
 For a technician working standalone in Claude Code, with no MSP gateway in
-front of it:
+front of it. This is the right choice only when there is no Conduit org to
+connect through — it gets none of the grants, allowlists, `conduit__my_access`
+or audit views the catalog path provides:
 
 ```bash
 claude mcp add --scope project --transport http 3CX "https://yourpbx.3cx.eu/mcp"
@@ -97,26 +142,12 @@ The new connection also then shows up in that PBX's own
 **Admin → Integrations → MCP Clients** list — the authorization is visible
 and revocable from both sides.
 
-### Client-side setup — through Conduit's BYO MCP feature
+### What about Conduit's BYO MCP feature?
 
-An MSP already using WYRE's Conduit gateway for other vendors does not need
-a separate direct connection per PBX. Conduit has a generic
-**"Bring Your Own (BYO) MCP server"** feature (`/connect/byo`) built for
-exactly this shape — a vendor with no fixed shared endpoint. Paste the
-PBX's MCP URL from the admin step above into that form; Conduit then:
-
-1. Discovers the PBX's own OAuth authorization server at runtime —
-   RFC 9728 protected-resource metadata, then RFC 8414 authorization-server
-   metadata.
-2. Registers a client dynamically against that authorization server
-   (RFC 7591 DCR).
-3. Runs the normal authorization-code + PKCE flow, validating the callback's
-   `iss` against the discovered issuer (RFC 9207) before persisting tokens.
-
-No 3CX-specific code exists in Conduit for this — the same generic BYO path
-handles any MCP server shaped this way. See *Tool permission tiers under
-Conduit BYO* below for how Conduit decides what an operator may call once
-connected, and this plugin's `GOVERNANCE.md` for the full picture.
+`/connect/byo` is still the right path for an MCP server that has **no**
+catalog entry. 3CX has one, so BYO is no longer the recommended route for a
+PBX, and it should not be used to work around the classification gap
+described in *Tool permission tiers under Conduit* below.
 
 ## Permission Model
 
@@ -146,30 +177,36 @@ only reliable way to know what changed between the Update 10 Alpha and any
 later release — the tool surface described here is a snapshot, not a
 guarantee.
 
-## Tool Permission Tiers Under Conduit BYO
+## Tool Permission Tiers Under Conduit
 
-If a PBX is reached through Conduit's BYO path rather than a direct
-connection, Conduit still has to decide a permission tier for each tool it
-has never seen before — there is no hand-curated `VENDOR_TOOL_CONFIG` entry
-for 3CX to draw from. It does this with a name-and-description heuristic
-that is deliberately conservative:
+Conduit derives each tool's tier from `VENDOR_TOOL_CONFIG`, and **3CX has
+no entry there yet** — 3CX documents its ~42 tools by display name only and
+has not published the wire names, so nothing has been classified.
 
-- A leading verb from a fixed read-shaped set (`get`, `list`, `search`,
-  `find`, `query`, and similar) tiers the tool `read`.
-- Any other leading verb — including one the heuristic has simply never
-  seen before — tiers the tool `write`. Unrecognized verbs are never
-  silently treated as read.
-- A secret/credential noun anywhere in the name or description escalates
-  to `admin`, and a mutating verb on a privileged-account noun (roles,
-  members, billing, API keys, org settings) does too.
+Conduit is fail-closed: an unclassified tool falls back to requiring tier
+`admin`. The practical effect today:
 
-This matters concretely for one 3CX tool: the read-only `Query` tool is
-enforced `SELECT`-only *inside the PBX*, but Conduit's heuristic tiers
-purely on the tool's name. If that tool's real name is built around a
-generic "run" or "execute" action rather than a `get`/`list`/`query`-style
-read verb, Conduit will tier it `write` despite the PBX-side restriction.
-Don't assume `read` for it; check the tool's actual granted tier after
-connecting.
+- **Org owners are unaffected** — owner access bypasses the tier gate, so
+  an owner sees and can call every 3CX tool.
+- **Non-owner members see none of them** until the tools are classified,
+  no matter which tier they have been granted. A `read` grant does not
+  reach a 3CX tool while it is unclassified.
+
+This is a **known, tracked gap, not a permanent design** — 3CX sits in
+Conduit's unclassified-vendor backlog until a real connection confirms the
+wire names, at which point the read tools drop from `admin` to `read`.
+Classifying a vendor *reduces* privilege; it does not add any.
+
+Do **not** route around this by connecting the PBX through `/connect/byo`.
+That trades the catalog's grants, allowlists and audit views for a
+name-guessing heuristic, which is a worse security posture, not a better
+one. If a non-owner needs access before classification lands, grant it
+deliberately (an `admin` grant or an explicit per-tool `customTools`
+allowlist) rather than leaving the catalog.
+
+See `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
+not classified*, for the enforcement detail, and this plugin's
+`GOVERNANCE.md` for the 3CX-specific picture.
 
 ## Gotchas
 
