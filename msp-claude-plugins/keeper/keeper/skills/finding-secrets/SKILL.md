@@ -134,7 +134,9 @@ substrings, so it catches real business names:
 All of them fail with `search query contains suspicious patterns`. That
 is input validation, not a permissions problem and not evidence the
 record is missing — never report it as either. Search a different token
-from the same record: a hostname, a folder name, part of a URL.
+from the same record: a hostname, a login, part of a URL. Not a folder
+name — `search_secrets` never matches those (see the match list above);
+to narrow by folder use `list_secrets` with `folder_uids`.
 
 **A hit does not mean the title matched.** Matching on notes and on
 `login` / `url` / `hostname` / `address` values means a result can look

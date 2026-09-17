@@ -98,7 +98,7 @@ different jobs and most people only need the first.
 
 ## Data handling
 
-Values returned by the five admin-tier tools pass into model context for
+Values returned by the four admin-tier tools pass into model context for
 the session. This plugin persists nothing, but the transcript is a
 disclosure surface, and the skills state the handling rules the agent is
 expected to follow: prefer `get_field` over `get_secret`, do not echo a

@@ -172,7 +172,7 @@ by UID. That is correct behaviour, not a failure:
 |---------|---------|--------|
 | HTTP 401 from the gateway | `configBase64` missing, not base64, or missing a required key | Re-submit the connection in Conduit with a fresh device config |
 | `no active session` | The upstream server has no usable KSM configuration | Connection-level problem; re-submit the credential |
-| Tool absent from `tools/list` | Blocked by the read-only allowlist | Not recoverable client-side — see the blocked table above |
+| Tool absent from `tools/list` | Either blocked by the read-only allowlist (policy) or broken in the pinned upstream — the two are not the same and only one could ever be revisited | Not recoverable client-side — check the blocked table above for which reason applies |
 | `record not found` | Out of the application's scope, or the UID is wrong | `list_folders`, then `search_secrets` by title |
 | `field '<name>' not found` | Field name is not on the record | Inspect the record with a masked `get_secret`; its keys are the field names |
 | `failed to parse notation: …` | Malformed KSM notation | See [notation-queries](../notation-queries/SKILL.md) |

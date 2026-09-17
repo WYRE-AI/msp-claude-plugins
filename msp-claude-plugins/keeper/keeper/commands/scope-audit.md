@@ -43,11 +43,25 @@ defeated its own purpose.
    folder with `folder_uids` to attribute records to folders. Each entry
    gives `uid`, `title`, `type` and `folder` — no values.
 
+   A KSM application can be granted **individual records** as well as
+   shared folders, and a directly-granted record belongs to no folder —
+   it appears in the unfiltered call and in none of the per-folder ones.
+   Subtract the folder-attributed records from the unfiltered total to
+   get that set; do not let it vanish between the two calls.
+
 4. **Report**
 
    - Total folders and total records in scope
    - A table per folder: folder name, record count, and the record types
      present (`login`, `serverCredentials`, `pamMachine`, …)
+   - **Directly-granted records, listed separately** — record-level
+     shares are invisible in the folder view, so a folder-only report
+     under-states the blast radius, which is the one error a scope audit
+     must not make. State the count even when it is zero, so a reader
+     knows it was checked rather than omitted.
+   - The reconciliation: folder-attributed + directly-granted should
+     equal the unfiltered total. If it does not, say so rather than
+     presenting either number as the scope.
    - A flag on anything that reads as over-broad: a folder with a
      generic name like "IT Passwords", a record count far larger than
      the connection's purpose implies, or PAM record types where none
