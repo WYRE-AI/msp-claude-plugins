@@ -1,0 +1,11 @@
+{
+  "name": "keeper",
+  "version": "1.0.1",
+  "description": "Claude plugins for Keeper Secrets Manager - read-only secret retrieval through Conduit: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
