@@ -20,8 +20,8 @@ part of periodic access review.
 - Tools available: `health_check`, `list_folders`, `list_secrets`
 
 This command reads metadata only. It must not call `get_secret`,
-`get_field`, `get_totp_code` or `download_file` — a scope audit that
-reads credentials has defeated its own purpose.
+`get_field` or `get_totp_code` — a scope audit that reads credentials has
+defeated its own purpose.
 
 ## Steps
 

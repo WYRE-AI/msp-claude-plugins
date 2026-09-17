@@ -48,7 +48,7 @@ with `unknown notation type: <selector>`.
 |----------|---------|
 | `field` | A standard typed field on the record (`password`, `login`, `url`, `notes`, …) |
 | `custom_field` | A user-added field, addressed by its **label** |
-| `file` | A file attachment, addressed by filename — the third segment is taken whole, no path syntax. `download_file` is the documented way to retrieve attachment bytes |
+| `file` | A file attachment, addressed by filename — the third segment is taken whole, no path syntax. Note that attachment *contents* are not retrievable through this connection at all |
 
 **`<field-path>`** — four accepted forms, tried in this order:
 
@@ -98,9 +98,12 @@ The reliable way to see them is **`get_secret` on the record with
 addresses, and sensitive values come back masked. Read the keys, then
 compose notation against the one you want.
 
-`get_record_type_schema` is the tool that *should* answer this from the
-record type alone, but it does not work in the deployed upstream — see
-[api-patterns](../api-patterns/SKILL.md). Do not route users to it.
+There is no separate schema tool to consult: the upstream's
+`get_record_type_schema` is blocked because it never works. A masked
+`get_secret` is not a workaround for its absence — it is the better
+source, because it reports the fields this record actually has rather
+than the ones its type could have. See
+[api-patterns](../api-patterns/SKILL.md).
 
 Custom fields are the exception to all of this: they are addressed by the
 label the vault shows, through the `custom_field` selector, and appear

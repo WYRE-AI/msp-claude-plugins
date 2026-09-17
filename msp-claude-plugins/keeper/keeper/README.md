@@ -19,15 +19,23 @@ without turning a transcript into a credential dump.
 
 ## Read-only, by allowlist
 
-v1 exposes eleven tools. Six return metadata only; five can return
-credential material. Eight upstream tools — every write, plus
-`get_all_secrets_unmasked` and `ksm_execute_confirmed_action` — are
-blocked at the bridge, absent from `tools/list`, and refused on direct
-call. There is no setting that re-enables them.
+v1 serves **nine tools** — five metadata-only, four that can return
+credential material. **Ten upstream tools are blocked**, absent from
+`tools/list` and refused on direct call:
 
-Two allowed tools have their write-capable arguments stripped before the
-model ever sees them: `generate_password` loses `save_to_secret` and
-`folder_uid`; `download_file` loses `save_path`.
+- **Eight withheld by policy** — every write (`create_secret`,
+  `update_secret`, `delete_secret`, `create_folder`, `delete_folder`,
+  `upload_file`) plus `get_all_secrets_unmasked` and
+  `ksm_execute_confirmed_action`, the last two permanently.
+- **Two broken upstream** — `get_record_type_schema`, which returns
+  `record templates not loaded` on every call at the pinned version, and
+  `download_file`, which writes bytes to a server-side path and can
+  never hand a file to the caller. Neither is withheld by policy; no
+  policy change would make them work. **Attachments are therefore not
+  retrievable through this connection.**
+
+`generate_password` has `save_to_secret` and `folder_uid` stripped before
+the model ever sees them, because they write.
 
 See `GOVERNANCE.md` for the full safety model, including why the
 enforcement lives in the allowlist rather than in a confirmation prompt.
@@ -122,10 +130,12 @@ which resolves to `get_field` with notation
 - **Masking is a name match, not a redaction guarantee.** Notes are never
   masked, a custom field called `Recovery Code` is not masked, and a
   masked value still shows six real characters.
+- **`unmask: true` on an MFA record returns the TOTP seed, not a code.**
+  Use `get_totp_code`, which returns a code that expires.
 - **Prefer `get_field` over `get_secret`.** One value into context beats
   a whole record.
 - **Rotate by add-swap-revoke.** Add a device, re-submit the connection,
   then revoke the old device — never delete first.
 - See `GOVERNANCE.md` for the full model and the known upstream sharp
-  edges, including two exposed tools that do not do what their names
-  suggest.
+  edges, including why two tools are blocked for being broken rather
+  than for being dangerous.

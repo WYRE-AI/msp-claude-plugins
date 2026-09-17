@@ -54,8 +54,8 @@ Response — `count` plus one entry per record:
 
 Four fields, and that is the whole surface: `uid`, `title`, `type`,
 `folder`. `type` is the Keeper record type — it tells you which fields
-the record can carry, which is what `get_record_type_schema` expands and
-what KSM notation addresses.
+the record can carry, and so which field names KSM notation is likely to
+address. To see the actual names, read them off a masked `get_secret`.
 
 ### `list_folders`
 
@@ -115,15 +115,26 @@ carries an explicit TODO to that effect. A record whose only mention of
 searching `Azure`. Fall back to `list_secrets` over the likely folder and
 read titles.
 
-**Some perfectly ordinary queries are rejected.** The query validator
-refuses, case-insensitively, any query *containing* `union`, `select`,
-`insert`, `update`, `delete`, `drop`, `xp_`, `sp_`, `--`, `/*`, `*/`,
-`';` or `";` — plus shell metacharacters and queries over 256
-characters. Real titles collide with this: `Union Bank`, `Updates
-Server`, `Select Insurance` all fail with
-`search query contains suspicious patterns`. That is an input-validation
-refusal, not a permissions problem. Search a different token from the
-same record.
+**Some perfectly ordinary queries are rejected, and client names are the
+usual casualty.** The query validator refuses, case-insensitively, any
+query *containing* `union`, `select`, `insert`, `update`, `delete`,
+`drop`, `xp_`, `sp_`, `--`, `/*`, `*/`, `';` or `";` — plus shell
+metacharacters and queries over 256 characters. It is a SQL-injection
+filter applied to a search that never touches SQL, and it matches on
+substrings, so it catches real business names:
+
+| Query | Rejected because it contains |
+|-------|------------------------------|
+| `Union Bank` | `union` |
+| `Updates Server` | `update` |
+| `Select Insurance` | `select` |
+| `Dropbox` | `drop` |
+| `Insertech` | `insert` |
+
+All of them fail with `search query contains suspicious patterns`. That
+is input validation, not a permissions problem and not evidence the
+record is missing — never report it as either. Search a different token
+from the same record: a hostname, a folder name, part of a URL.
 
 **A hit does not mean the title matched.** Matching on notes and on
 `login` / `url` / `hostname` / `address` values means a result can look

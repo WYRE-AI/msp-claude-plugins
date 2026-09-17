@@ -4,13 +4,13 @@ description: >
   Reading credential material out of Keeper safely: what `get_secret`
   returns and exactly which parts of it masking covers, the `fields`
   parameter, `unmask` semantics under a container deployment with no
-  confirmation prompt, `get_totp_code`, why `download_file` cannot return
-  attachment bytes here, and the handling rules for secret material once
-  it is in an agent transcript.
+  confirmation prompt, why a record's field list is not guaranteed
+  complete, `get_totp_code` versus unmasking a TOTP seed, and the
+  handling rules for secret material once it is in an agent transcript.
 when_to_use: >-
   When a Keeper value is about to be read, revealed, or passed on to
   something else. Use when: get_secret, unmask, keeper password, keeper
-  totp, get_totp_code, download_file, keeper attachment, reveal secret,
+  totp, get_totp_code, reveal secret, unmask keeper, keeper attachment,
   or "give me the password for".
 ---
 
@@ -18,7 +18,7 @@ when_to_use: >-
 
 ## Overview
 
-Four of the eleven tools return credential material. Everything in this
+Four of the nine served tools return credential material. Everything in this
 skill follows from one property of the environment: **a secret read into
 an agent transcript has been disclosed**, to the transcript, to whatever
 stores it, and to anything downstream the transcript reaches. Masking
@@ -31,7 +31,7 @@ least, as late as possible, and to move it onward without copying it.
 |------|-----|-----|
 | One value | `get_field` with notation | Returns exactly that value |
 | A live second factor | `get_totp_code` | Returns a code, not the seed |
-| Field names / record shape | `get_secret` **masked** | Reveals structure without values (`get_record_type_schema` is non-functional upstream) |
+| Field names / record shape | `get_secret` **masked** | The response keys *are* the field names, read from the real record |
 | A genuinely whole record | `get_secret` with `unmask: true` | Last resort — see below |
 
 Reaching for `get_secret` because it is fewer keystrokes than composing
@@ -120,10 +120,15 @@ view plus the record's title and location.
 With no `fields` argument, `get_secret` iterates a **hard-coded list of
 field types per record type** — for a `login` record that is `login`,
 `password`, `url`, `oneTimeCode`, `otp`, and nothing else. A standard
-field outside its type's list is simply absent from the response. If a
-field you can see in the vault UI does not appear, it was not omitted for
-security; address it directly with `get_field` notation or name it in
-`fields`.
+field outside its type's list is simply absent from the response, and a
+record type the list does not recognise falls back to a broad generic
+sweep instead. If a field you can see in the vault UI does not appear, it
+was not omitted for security; address it directly with `get_field`
+notation or name it in `fields`.
+
+So do not tell a user "that record has no such field" on the strength of
+a `get_secret` response. Say the field did not come back, and query it by
+name.
 
 ## `get_totp_code`
 
@@ -142,25 +147,27 @@ Deliver a code, its `time_left`, and stop. Do not cache it, restate it
 later in the conversation, or write it anywhere — by the time it is read
 twice it is usually expired anyway.
 
-## `download_file` does not return file contents here
+**Never substitute an unmasked record read for this.** `get_secret` with
+`unmask: true` on an MFA record returns the `oneTimeCode` / `otp` field,
+and that field holds the full `otpauth://` URI — the seed, not a code.
+A code expires in seconds; a seed is the account's permanent second
+factor, and putting one in a transcript is a materially different
+incident. If someone asks for "the MFA code", `get_totp_code` is the
+answer and unmasking is not.
 
-Upstream, `download_file` writes the attachment to a path on the server's
-filesystem and returns a status message — it never returns bytes to the
-caller. Conduit strips the `save_path` argument, because a
-tenant-controlled write path inside a shared container is not something
-to hand out, so there is no destination left to write to.
+## Attachments cannot be retrieved
 
-The practical position: **attachments cannot be retrieved through this
-connection.** Use `get_secret` to confirm an attachment exists and report
-its name, size and which record holds it, then point the user at the
-Keeper vault to download it themselves. Do not report a success message
-as a delivered file.
+`download_file` is not served — it is blocked, because upstream writes
+attachment bytes to a path on the server's filesystem and returns only a
+status, so no argument makes it hand a file to the caller. See
+[api-patterns](../api-patterns/SKILL.md).
 
-If you call it anyway, `file_uid` matches the attachment's UID or its
-**title** — exact, case-sensitive, and never its filename. `get_secret`
-lists `name`, `title`, `size` and `type` per attachment but no UID, so
-`title` is the only handle available, and a mismatch returns
-`file not found`.
+`get_secret` still lists a record's attachments (`name`, `title`, `size`,
+`type` — metadata, never content). So the correct answer to "send me the
+VPN profile off that record" is to confirm the attachment exists, name it
+and its size, say which record holds it, and send the user to the Keeper
+vault. Do not promise a download, and do not look for another tool that
+might do it; there isn't one.
 
 ## `generate_password`
 

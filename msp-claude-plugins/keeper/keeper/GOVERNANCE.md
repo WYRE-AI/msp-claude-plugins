@@ -34,22 +34,29 @@ folder gives a read-only connection read access to everything in it —
 which is the whole blast radius, and it is decided before the connection
 exists. See `skills/application-setup/SKILL.md`.
 
-**Capability is set at the bridge.** v1 exposes eleven read tools. Eight
-upstream tools are blocked: `create_secret`, `update_secret`,
+**Capability is set at the bridge.** v1 serves nine read tools. Ten
+upstream tools are blocked — omitted from `tools/list`, refused on direct
+call, with no flag, env var or prompt that re-enables them. The reason
+differs, and the difference matters to anyone deciding whether to ask for
+one to be turned on.
+
+*Withheld by policy (8):* `create_secret`, `update_secret`,
 `delete_secret`, `create_folder`, `delete_folder`, `upload_file`,
-`ksm_execute_confirmed_action`, and `get_all_secrets_unmasked`. They are
-omitted from `tools/list` and refused on direct call. There is no flag,
-env var or prompt that re-enables them; enabling writes would be a
-reviewed, versioned change to the allowlist.
+`get_all_secrets_unmasked`, `ksm_execute_confirmed_action`. Enabling
+writes would be a reviewed, versioned change to the allowlist. The last
+two stay blocked permanently regardless: the first dumps every secret in
+scope, unmasked, in one call; the second is upstream's
+confirmation-bypass executor.
 
-Two allowed tools have their write-capable arguments stripped from both
-the advertised schema and the inbound call: `generate_password` loses
-`save_to_secret` and `folder_uid`; `download_file` loses `save_path`.
+*Broken at the pinned upstream version (2):* `get_record_type_schema` and
+`download_file`. These are not a policy position and no policy change
+would make them functional — see the sharp edges below. They were exposed
+in an earlier draft of this integration and removed once the upstream
+source was read.
 
-`get_all_secrets_unmasked` and `ksm_execute_confirmed_action` stay
-blocked permanently, independent of any future write posture. The first
-dumps every secret in scope, unmasked, in one call; the second is
-upstream's confirmation-bypass executor.
+`generate_password` has its write-capable arguments stripped from both
+the advertised schema and the inbound call: `save_to_secret` and
+`folder_uid`.
 
 ## Why the blocking is at the bridge and not a prompt
 
@@ -65,14 +72,13 @@ confirmation" is never an accurate description of what happened here.
 
 ## Tool tiers
 
-Six tools return metadata only and are classified `read`:
-`list_secrets`, `search_secrets`, `list_folders`,
-`get_record_type_schema`, `health_check`, `get_server_version`.
+Five tools return metadata only and are classified `read`:
+`list_secrets`, `search_secrets`, `list_folders`, `health_check`,
+`get_server_version`.
 
-Five can return credential material and are classified `admin`, which
+Four can return credential material and are classified `admin`, which
 outranks write in Conduit's model — a Keeper read *is* a credential
-read: `get_secret`, `get_field`, `get_totp_code`, `download_file`,
-`generate_password`.
+read: `get_secret`, `get_field`, `get_totp_code`, `generate_password`.
 
 Grant the two tiers separately. Finding a record and reading it are
 different jobs and most people only need the first.
@@ -84,6 +90,8 @@ different jobs and most people only need the first.
 - No writes of any kind: no record, folder or attachment is created,
   modified or deleted through this integration.
 - No bulk unmasked export.
+- No attachment contents — `download_file` is blocked and nothing else
+  can fetch them.
 - No Keeper admin console, no enterprise policy, no user or role
   administration.
 - No filesystem, no shell, no other vendor's data.
@@ -114,17 +122,29 @@ sharp edges below.
   or `******` for values of six characters or fewer.
 - **`unmask: true` on an MFA record exposes the TOTP seed**, not just a
   code. `get_totp_code` returns a code that expires; the seed does not.
-- **`get_record_type_schema` is non-functional upstream** (v2.5.0): the
-  embedded templates are loaded by a function the server never calls, so
-  every call returns `record templates not loaded`. It is listed as an
-  available read tool because it is exposed, not because it works.
-- **`download_file` cannot return file contents** here: upstream writes
-  to a server-side path and `save_path` is stripped. Attachments are not
-  retrievable through this connection.
+- **`get_record_type_schema` is non-functional upstream** (v2.5.0):
+  `LoadRecordTemplates` has no non-test caller and the package has no
+  `init`, so every call returns `record templates not loaded` — a message
+  naming an internal function, which reads like a server fault. Blocked
+  for that reason. Nothing is lost: a masked `get_secret` reports the
+  fields a record actually has, which is the better answer anyway.
+- **`download_file` cannot return file contents in any configuration.**
+  Upstream's signature is `DownloadFile(uid, fileUID, savePath) error` —
+  it returns an error and writes bytes to a server-side path. Passing
+  `save_path` through would let one tenant write attacker-chosen paths
+  into a container shared with every other tenant's child process;
+  stripping it leaves no destination. Blocked for that reason.
+  **Attachments are not retrievable through this connection.**
+- **`get_secret` does not guarantee a complete field list.** With no
+  `fields` argument it iterates a hard-coded list per record type, so a
+  standard field outside that list is simply absent. "Not in the
+  response" never means "not on the record".
 - **`search_secrets` rejects ordinary words.** Its input validator
   refuses any query containing `union`, `select`, `insert`, `update`,
-  `delete` or `drop`, among others. `Union Bank` cannot be searched by
-  name. That is input validation, not access control.
+  `delete` or `drop`, among others — a SQL-injection filter on a search
+  that never touches SQL. `Union Bank`, `Updates Server` and `Dropbox`
+  cannot be searched by name. That is input validation, not access
+  control, and not evidence a record is missing.
 
 ## No agents ship with this plugin
 

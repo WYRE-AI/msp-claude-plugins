@@ -2,11 +2,11 @@
 name: "Keeper Secrets Manager API Patterns"
 description: >
   The Keeper Secrets Manager tool surface as exposed through Conduit: the
-  eleven read-only tools and their access tiers, the eight write and
-  bulk-disclosure tools that are deliberately not exposed, the two tools
-  whose write-capable arguments are stripped, how the KSM application
-  bounds everything the connection can see, the `configBase64` credential,
-  and the error vocabulary.
+  nine read-only tools and their access tiers, the ten blocked tools and
+  whether each is withheld by policy or broken upstream, the arguments
+  stripped from `generate_password`, how the KSM application bounds
+  everything the connection can see, the `configBase64` credential, and
+  the error vocabulary.
 when_to_use: >-
   When calling any Keeper tool, deciding whether an operation is possible
   at all, or diagnosing a Keeper connection failure. Use when: keeper
@@ -34,57 +34,99 @@ Two boundaries govern everything here, and they sit in different places:
 - **What the connection can do** is set at the bridge: v1 is
   **read-only**, enforced by an allowlist, not by a setting.
 
-## The v1 tool surface — eleven tools
+## The v1 tool surface — nine tools
 
 | Tool | Tier | Returns |
 |------|------|---------|
 | `list_secrets` | read | Record metadata for the application's scope; optional folder filter |
 | `search_secrets` | read | Record metadata matching a query |
 | `list_folders` | read | Folders shared to the application |
-| `get_record_type_schema` | read | Static field schema for a record type — **non-functional upstream, see below** |
 | `health_check` | read | Server and KSM connectivity status |
 | `get_server_version` | read | Upstream server version |
 | `get_secret` | **admin** | A full record; sensitive fields masked unless `unmask: true` |
 | `get_field` | **admin** | One value, addressed by KSM notation |
 | `get_totp_code` | **admin** | A live TOTP code for a record carrying a TOTP field |
-| `download_file` | **admin** | An attachment's contents |
 | `generate_password` | **admin** | A generated password string |
 
 The tier is Conduit's access classification, not a Keeper concept. Every
 tool that can return credential material is **admin**, which outranks
-write in Conduit's model — a Keeper read *is* a credential read. Six
+write in Conduit's model — a Keeper read *is* a credential read. Five
 metadata tools sit at read. Grant accordingly: a technician who needs to
-find records does not need the admin five.
+find records does not need the admin four.
 
 ## What is not exposed, and why
 
-Eight upstream tools are blocked at the bridge. They are absent from
+Ten upstream tools are blocked at the bridge. They are absent from
 `tools/list`, and a direct call returns an error rather than executing.
-Do not plan around them, offer them, or suggest a flag that re-enables
-them — there isn't one.
+Do not plan around them or offer them.
 
-| Blocked tool | Reason |
-|--------------|--------|
-| `create_secret`, `update_secret`, `delete_secret` | Vault writes |
-| `create_folder`, `delete_folder` | Vault structure writes |
-| `upload_file` | Vault writes |
-| `get_all_secrets_unmasked` | One call dumps every secret in the application's scope, unmasked, into model context |
-| `ksm_execute_confirmed_action` | Upstream's confirmation-bypass executor |
+The **reason** column matters when someone asks for one to be turned on.
+Eight are withheld by policy — a decision that could in principle be
+revisited. Two are blocked because they do not work at the pinned
+upstream version; no policy change would make them functional.
 
-The last two stay blocked even if a later version enables writes. When a
-user asks for a bulk export of their vault, the answer is that the
-capability is deliberately absent — then offer the read-side equivalent:
-`list_secrets` for the inventory, and `get_field` per value actually
-needed.
+| Blocked tool | Why | Category |
+|--------------|-----|----------|
+| `create_secret`, `update_secret`, `delete_secret` | Vault writes | Policy |
+| `create_folder`, `delete_folder` | Vault structure writes | Policy |
+| `upload_file` | Vault writes | Policy |
+| `get_all_secrets_unmasked` | One call dumps every secret in the application's scope, unmasked, into model context | Policy — permanent |
+| `ksm_execute_confirmed_action` | Upstream's confirmation-bypass executor | Policy — permanent |
+| `get_record_type_schema` | Returns `record templates not loaded` on every call at the pinned version | **Broken upstream** |
+| `download_file` | Cannot return file contents, in any configuration | **Broken upstream** |
 
-Two allowed tools have their write-capable arguments **stripped from
-both the advertised schema and the inbound call**, so the affordance is
-never visible:
+The two permanent entries stay blocked even if a later version enables
+writes. When a user asks for a bulk export of their vault, the answer is
+that the capability is deliberately absent — then offer the read-side
+equivalent: `list_secrets` for the inventory, and `get_field` per value
+actually needed.
+
+### The two broken-upstream entries, in detail
+
+Both were exposed in an earlier draft of this integration and removed
+after the upstream source was read. Knowing *why* saves a technician from
+diagnosing a healthy connection, and saves anyone from filing a request
+to re-enable them.
+
+**`get_record_type_schema`** would have returned a record type's field
+schema. The embedded templates are loaded by a function the shipped
+server never calls — `LoadRecordTemplates` has no non-test caller and the
+package has no `init` — so `GetSchema` always takes its
+templates-are-nil branch and every call fails with
+`record templates not loaded. Call LoadRecordTemplates first`. A message
+naming an internal function reads like a server fault; it is not one, and
+it is not fixable from the client.
+
+Nothing is lost: **`get_secret` with `unmask` unset is the better answer
+anyway.** Its response keys *are* the field names KSM notation addresses,
+read from the actual record rather than from a type template, with
+sensitive values masked. Skills route field-name discovery there not as a
+workaround but because it is the correct tool for the question.
+
+**`download_file`** would have fetched an attachment. Upstream's client
+signature is `DownloadFile(uid, fileUID, savePath string) error` — it
+returns only an error and writes the bytes to `savePath` on the server's
+filesystem, so the caller never receives file content under any
+argument. Passing `save_path` through would let one tenant write
+attacker-chosen paths into a container shared with every other tenant's
+child process; stripping it leaves no destination. There is no
+configuration of this tool that both works and is safe, so it is out.
+
+**Attachments are therefore not retrievable through this connection at
+all.** `get_secret` still lists them — `name`, `title`, `size`, `type` —
+so the correct response to "send me the VPN profile from that record" is
+to confirm the attachment exists, name it and its size, say which record
+holds it, and send the user to the Keeper vault to download it.
+
+### Stripped arguments
+
+One allowed tool has its write-capable arguments **stripped from both the
+advertised schema and the inbound call**, so the affordance is never
+visible:
 
 | Tool | Stripped | Would otherwise |
 |------|----------|-----------------|
 | `generate_password` | `save_to_secret`, `folder_uid` | Create a record |
-| `download_file` | `save_path` | Write a tenant-controlled path into the shared container filesystem |
 
 `generate_password` therefore always returns the password to the caller.
 It cannot be used as Keeper's "generate without showing the AI" flow —
@@ -124,34 +166,6 @@ by UID. That is correct behaviour, not a failure:
 - Do not conclude a vault is empty because `list_secrets` came back
   short. It reflects one application's grants.
 
-## Two allowed tools that do not do what their name suggests
-
-Both are upstream behaviours, not Conduit restrictions. Knowing them
-saves a technician from diagnosing a working connection.
-
-**`get_record_type_schema` returns an error, always.** The embedded
-record templates are loaded by a function the shipped server never calls
-(verified in upstream v2.5.0: `LoadRecordTemplates` has no non-test
-caller and the package has no `init`). Every call fails with:
-
-```
-failed to get schema for record type '<type>': record templates not loaded.
-Call LoadRecordTemplates first (ensure templates are loaded correctly and the type exists)
-```
-
-That message names an internal function and reads like a server fault.
-It is not fixable from the client, and it is not a credential or scope
-problem. To learn a record's field names, call `get_secret` on the record
-with `unmask` unset — the response keys are the field names, and the
-values come back masked.
-
-**`download_file` cannot deliver file contents.** Upstream writes the
-attachment to a path on the server's filesystem and returns a status
-message; it never returns bytes. Conduit strips `save_path`, so there is
-no destination. Report attachment metadata from `get_secret` and send the
-user to the vault. See
-[retrieving-credentials](../retrieving-credentials/SKILL.md).
-
 ## Error handling
 
 | Symptom | Meaning | Action |
@@ -160,11 +174,11 @@ user to the vault. See
 | `no active session` | The upstream server has no usable KSM configuration | Connection-level problem; re-submit the credential |
 | Tool absent from `tools/list` | Blocked by the read-only allowlist | Not recoverable client-side — see the blocked table above |
 | `record not found` | Out of the application's scope, or the UID is wrong | `list_folders`, then `search_secrets` by title |
-| `field '<name>' not found` | Field name is not on the record | `get_record_type_schema`, or inspect the record masked |
+| `field '<name>' not found` | Field name is not on the record | Inspect the record with a masked `get_secret`; its keys are the field names |
 | `failed to parse notation: …` | Malformed KSM notation | See [notation-queries](../notation-queries/SKILL.md) |
 | `invalid UID: UID must be between 16 and 32 characters` | A title was passed where a UID is required | Resolve the title to a UID first |
 | `search query contains suspicious patterns` | The query contains a word the input validator rejects | Search a different token — see [finding-secrets](../finding-secrets/SKILL.md) |
-| `record templates not loaded…` | `get_record_type_schema` is non-functional upstream | Read field names from a masked `get_secret` instead |
+| Tool named in a request is not in the list above | Blocked — see the table for whether it is policy or broken upstream | Do not retry; say which it is |
 | `no TOTP field found in secret` | The record carries no TOTP seed | Record content, not permissions |
 
 Tool failures arrive as JSON-RPC error code `-32002`; a rate-limit
