@@ -925,6 +925,40 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'keeper',
+    name: 'Keeper Secrets Manager',
+    vendor: 'Keeper',
+    description: 'Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Application Setup',
+      'Finding Secrets',
+      'Notation Queries',
+      'Retrieving Credentials'
+    ],
+    skills: [
+      { name: 'application-setup', description: 'Building the Keeper Secrets Manager application that a Conduit connection authenticates as: what an application, a share and a client device are, how folder and record grants bound everything the connection can ever see, read-only vs editable shares, generating the base64 device configuration in the Vault UI or Keeper Commander, verifying the realised scope from the client side, and rotating or revoking a device.' },
+      { name: 'finding-secrets', description: 'Locating the right Keeper record without reading any of them: the metadata returned by `list_secrets`, `search_secrets` and `list_folders`, how record UIDs, titles and folders relate, what `search_secrets` actually matches on (and what it silently does not), the query strings its validator rejects, and why an empty result set usually means scope rather than absence.' },
+      { name: 'notation-queries', description: 'The KSM notation string grammar accepted by `get_field`: the three-part `<record>/<type>/<field-path>` shape, the four field-path forms (plain, indexed, property, indexed-property), `field` vs `custom_field` vs `file` selectors, how the record segment is classified as a UID or a title, which characters the validator rejects outright, and how the returned value is masked.' },
+      { name: 'retrieving-credentials', description: 'Reading credential material out of Keeper safely: what `get_secret` returns and exactly which parts of it masking covers, the `fields` parameter, `unmask` semantics under a container deployment with no confirmation prompt, `get_totp_code`, why `download_file` cannot return attachment bytes here, and the handling rules for secret material once it is in an agent transcript.' },
+      { name: 'api-patterns', description: 'The Keeper Secrets Manager tool surface as exposed through Conduit: the eleven read-only tools and their access tiers, the eight write and bulk-disclosure tools that are deliberately not exposed, the two tools whose write-capable arguments are stripped, how the KSM application bounds everything the connection can see, the `configBase64` credential, and the error vocabulary.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/find-secret', description: 'Locate a Keeper record by description and return its UID and metadata without revealing any credential' },
+      { name: '/scope-audit', description: 'Report exactly what the connected Keeper KSM application can reach - folders, record counts, and record types - reading no credential values' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'keeper/keeper',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'knowbe4',
     name: 'Knowbe4',
     vendor: 'Email Security',
