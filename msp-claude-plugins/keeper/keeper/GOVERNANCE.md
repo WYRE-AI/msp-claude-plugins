@@ -72,13 +72,21 @@ confirmation" is never an accurate description of what happened here.
 
 ## Tool tiers
 
-Five tools return metadata only and are classified `read`:
-`list_secrets`, `search_secrets`, `list_folders`, `health_check`,
-`get_server_version`.
+Four tools return metadata only and are classified `read`:
+`list_secrets`, `list_folders`, `health_check`, `get_server_version`.
 
-Four can return credential material and are classified `admin`, which
-outranks write in Conduit's model — a Keeper read *is* a credential
-read: `get_secret`, `get_field`, `get_totp_code`, `generate_password`.
+Five are classified `admin`, which outranks write in Conduit's model — a
+Keeper read *is* a credential read: `get_secret`, `get_field`,
+`get_totp_code`, `generate_password`, and `search_secrets`.
+
+`search_secrets` is the one that does not follow from its return value. It
+returns metadata and nothing else, but it matches case-insensitively against
+the record's notes and the values of its `login`, `url`, `hostname` and
+`address` fields. A caller who never receives a secret can therefore ask
+"does any record in scope contain this substring?" and get a reliable yes/no
+— a confirmation oracle over credential material. The matching happens inside
+Keeper's own binary and cannot be narrowed from this side, so the grant tier
+is the only control, and it is set accordingly.
 
 Grant the two tiers separately. Finding a record and reading it are
 different jobs and most people only need the first.
@@ -98,8 +106,10 @@ different jobs and most people only need the first.
 
 ## Data handling
 
-Values returned by the four admin-tier tools pass into model context for
-the session. This plugin persists nothing, but the transcript is a
+Values returned by the four value-returning admin tools — `get_secret`,
+`get_field`, `get_totp_code`, `generate_password` — pass into model context
+for the session. (`search_secrets`, the fifth admin tool, returns no values;
+what it discloses is whether a queried substring appears in one.) This plugin persists nothing, but the transcript is a
 disclosure surface, and the skills state the handling rules the agent is
 expected to follow: prefer `get_field` over `get_secret`, do not echo a
 value that was not asked for, never write secret material into tickets,

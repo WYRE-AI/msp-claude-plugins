@@ -39,14 +39,24 @@ Two boundaries govern everything here, and they sit in different places:
 | Tool | Tier | Returns |
 |------|------|---------|
 | `list_secrets` | read | Record metadata for the application's scope; optional folder filter |
-| `search_secrets` | read | Record metadata matching a query |
 | `list_folders` | read | Folders shared to the application |
 | `health_check` | read | Server and KSM connectivity status |
 | `get_server_version` | read | Upstream server version |
+| `search_secrets` | **admin** | Record metadata matching a query — but the *match* runs over notes and field values, so a hit reveals that the query string appears in a secret |
 | `get_secret` | **admin** | A full record; sensitive fields masked unless `unmask: true` |
 | `get_field` | **admin** | One value, addressed by KSM notation |
 | `get_totp_code` | **admin** | A live TOTP code for a record carrying a TOTP field |
 | `generate_password` | **admin** | A generated password string |
+
+`search_secrets` is the one whose tier does not follow from its return
+value. It returns metadata — `uid`, `title`, `type`, `folder` — and nothing
+else. But it matches case-insensitively against the record's notes and the
+values of its `login`, `url`, `hostname` and `address` fields, so a caller
+who never receives a secret can still ask "does any record in scope contain
+this substring?" and get a reliable yes/no. That is a confirmation oracle
+over credential material, so it is classified **admin** even though its
+response carries no secret. Read the tier from what a tool can *reveal*, not
+from what it returns.
 
 The tier is Conduit's access classification, not a Keeper concept. Every
 tool that can return credential material is **admin**, which outranks
