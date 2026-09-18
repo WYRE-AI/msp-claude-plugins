@@ -60,14 +60,14 @@ statements, regardless of the connecting account's 3CX role — this holds
 even for an account that could otherwise change configuration. That
 restriction is enforced inside the PBX itself.
 
-It is *not* automatically safe from a Conduit-permission standpoint,
-though, if this PBX is reached through Conduit's BYO connector rather than
-a direct connection: Conduit's tiering heuristic reads the tool's *name*,
-not the PBX's server-side enforcement. See the `api-patterns` skill's
-section on BYO tool tiering — if the tool's real name doesn't start with a
-recognized read verb, Conduit will still gate it as `write`. Check the
-tool's actual granted tier rather than assuming `SELECT`-only implies
-`read`.
+That PBX-side guarantee is separate from what Conduit will let you call,
+though. On a Conduit catalog connection, 3CX is not yet classified in
+`VENDOR_TOOL_CONFIG`, and Conduit fails closed to the `admin` tier for
+unclassified tools — so today the `Query` tool is reachable by org owners
+and by nobody else, regardless of it being `SELECT`-only. See the
+`api-patterns` skill's *Tool Permission Tiers Under Conduit* section, and
+check the tool's actual granted tier rather than assuming `SELECT`-only
+implies `read`.
 
 ## Write/Delete Capabilities — Read This Before Calling Any of Them
 
@@ -119,8 +119,8 @@ calling, and don't let a scheduled or unattended agent apply them.
 ## Gotchas
 
 - **`Query` is `SELECT`-only inside the PBX no matter what** — but don't
-  assume that guarantees a `read` tier if this PBX is reached through
-  Conduit's BYO connector (see above).
+  assume that guarantees a `read` tier through Conduit. While 3CX is
+  unclassified, it requires `admin` like every other 3CX tool (see above).
 - **The call-flow "edit URL" tool hands back a link into the PBX's own web
   UI.** Treat it like any other admin-console link — something a human
   reviews and clicks, not something to feed into further automation
@@ -131,5 +131,5 @@ calling, and don't let a scheduled or unattended agent apply them.
 
 ## Related Skills
 
-- [API Patterns](../api-patterns/SKILL.md) — connection setup, permission inheritance, and BYO tool tiering
+- [API Patterns](../api-patterns/SKILL.md) — connection setup, permission inheritance, and Conduit tool tiering
 - [Calls, Queues & Profiles](../calls-queues/SKILL.md) — department/queue membership this configuration feeds into
