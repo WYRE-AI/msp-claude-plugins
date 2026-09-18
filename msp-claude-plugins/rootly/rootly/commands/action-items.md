@@ -11,13 +11,13 @@ List and summarize outstanding action items from Rootly incidents and postmortem
 ## Prerequisites
 
 - Rootly MCP server connected with valid API credentials
-- MCP tools `incidents_get` and `incidents_by_incident_id_action_items_get` available
+- MCP tools `list_all_incident_action_items`, `list_incident_action_items`, and `list_incidents` available
 
 ## Steps
 
 1. **Fetch incidents with action items**
 
-   If `incident_id` is specified, fetch action items for that specific incident using `incidents_by_incident_id_action_items_get`. Otherwise, fetch recent resolved incidents with `incidents_get` and iterate through them to collect action items.
+   If `incident_id` is specified, fetch action items for that specific incident using `list_incident_action_items`. Otherwise, fetch action items across all incidents with `list_all_incident_action_items` (or fetch recent resolved incidents with `list_incidents` and iterate through them).
 
 2. **Filter by status**
 
@@ -31,8 +31,8 @@ List and summarize outstanding action items from Rootly incidents and postmortem
 
    For each action item, display:
    - Action item summary
-   - Priority (critical, high, medium, low)
-   - Status (open, in_progress, completed)
+   - Priority (high, medium, low)
+   - Status (open, in_progress, cancelled, done)
    - Assignee
    - Due date
    - Source incident (sequential ID and title)
@@ -53,7 +53,7 @@ List and summarize outstanding action items from Rootly incidents and postmortem
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| status | string | No | open | Filter by status (open, in_progress, completed) |
+| status | string | No | open | Filter by status (open, in_progress, cancelled, done) |
 | incident_id | string | No | all | Filter to a specific incident |
 | assignee | string | No | all | Filter by assignee name or email |
 
@@ -80,7 +80,7 @@ List and summarize outstanding action items from Rootly incidents and postmortem
 ### List Completed Action Items
 
 ```
-/action-items --status completed
+/action-items --status done
 ```
 
 ## Error Handling

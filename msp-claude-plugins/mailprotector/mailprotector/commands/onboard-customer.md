@@ -14,7 +14,7 @@ Create a new Mailprotector customer end to end under the bound reseller. For any
 2. **Create the domain** — `mailprotector_domains_create` under the customer
    - The domain arrives in **Pending** status with a `verification_token`
    - Surface the token immediately: mail is not filtered until the domain is verified
-3. **Create the user group** — via `mailprotector_execute_tool` (`user_groups_create` under the domain), then set services (`user_groups_services_update`) from `services`
+3. **Create the user group** — via `mailprotector_execute_tool` (the `user_groups` category's `create`, under the domain), then set services (the `user_groups` category's `services_update`) from `services`
    - The services update deactivates anything omitted — on a brand-new group send exactly the desired set
 4. **Create users** (optional) — parse `users` (comma-separated usernames or `First Last <user@domain>` entries) and call `users_create_many` under the group
 5. **Verify and report** — re-fetch the customer, domain, group, and user count; report the domain status and remaining manual steps (domain verification, MX cutover, email destinations)

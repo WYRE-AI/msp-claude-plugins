@@ -11,13 +11,13 @@ Generate a comprehensive postmortem summary for a resolved incident, including t
 ## Prerequisites
 
 - Rootly MCP server connected with valid API credentials
-- MCP tools `incidents_get`, `find_related_incidents`, `suggest_solutions`, `incidents_by_incident_id_action_items_get`, and `incidents_by_incident_id_alerts_get` available
+- MCP tools `get_incident`, `find_related_incidents`, `suggest_solutions`, `list_incident_action_items`, and `list_incident_alerts` available
 
 ## Steps
 
 1. **Get incident details**
 
-   Call `incidents_get` to retrieve the full incident record including title, severity, status, summary, affected services, timeline timestamps, and assigned teams.
+   Call `get_incident` to retrieve the full incident record including title, severity, status, summary, affected services, timeline timestamps, and assigned teams.
 
 2. **Verify incident is resolved**
 
@@ -25,7 +25,7 @@ Generate a comprehensive postmortem summary for a resolved incident, including t
 
 3. **Get attached alerts**
 
-   Call `incidents_by_incident_id_alerts_get` to retrieve the triggering alerts, including source (Datadog, PagerDuty, etc.) and alert metadata.
+   Call `list_incident_alerts` to retrieve the triggering alerts, including source (Datadog, PagerDuty, etc.) and alert metadata.
 
 4. **Find related incidents**
 
@@ -37,7 +37,7 @@ Generate a comprehensive postmortem summary for a resolved incident, including t
 
 6. **Get existing action items**
 
-   Call `incidents_by_incident_id_action_items_get` to list follow-up tasks already created.
+   Call `list_incident_action_items` to list follow-up tasks already created. If a retrospective process is configured for this incident, also check its steps with `get_incident_retrospective_step` (see the [postmortems skill](../skills/postmortems/SKILL.md)).
 
 7. **Build postmortem summary**
 

@@ -11,13 +11,13 @@ Triage active incidents across all services and environments. Lists incidents fi
 ## Prerequisites
 
 - Rootly MCP server connected with valid API credentials
-- MCP tools `incidents_get`, `find_related_incidents`, and `suggest_solutions` available
+- MCP tools `list_incidents`, `find_related_incidents`, and `suggest_solutions` available
 
 ## Steps
 
 1. **Fetch active incidents sorted by severity**
 
-   Call `incidents_get` with `status=in_triage` (or the specified status filter). If `severity` is provided, include it as a filter. Use `page[size]` set to the specified `limit`.
+   Call `list_incidents` with `filter[status]=in_triage` (or the specified status filter). If `severity` is provided, include it as `filter[severity]`. Use `page[size]` set to the specified `limit`.
 
 2. **Count incidents by severity**
 
