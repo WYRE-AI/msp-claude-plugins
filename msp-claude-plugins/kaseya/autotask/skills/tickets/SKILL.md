@@ -179,18 +179,20 @@ Args: {
 
 ### Search Tickets
 
+`searchTerm` is a **ticket-number prefix**, not free-text title search. Title words such as `"email"` return 0 results; prefixes such as `"T20260917"` match ticket numbers that start with that string.
+
 ```
 Tool: autotask_search_tickets
 Args: {
-  "companyId": 12345,
+  "companyID": 12345,
   "status": 1,
-  "assignedResourceId": 29744150,
-  "searchTerm": "email",
+  "assignedResourceID": 29744150,
+  "searchTerm": "T20260917",
   "pageSize": 25
 }
 ```
 
-**Filters:** `companyId`, `status`, `priority`, `queueId`, `assignedResourceId`, `searchTerm`, `pageSize`
+**Filters:** `companyID`, `status`, `priority`, `queueID`, `assignedResourceID`, `searchTerm` (ticket-number prefix only — not title or description text), `pageSize`
 
 ### Get Ticket Details
 
@@ -294,7 +296,7 @@ See [references/api.md](references/api.md) for additional query patterns (SLA-br
 ### Ticket Creation Flow
 
 1. **Validate company exists** and has active contract
-2. **Check for duplicates** - search open tickets with similar title
+2. **Check for duplicates** - list the company's open tickets with `companyID`/`status`. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
 3. **Auto-set defaults:**
    - Status → NEW (1)
    - Priority → MEDIUM (2) if not specified
