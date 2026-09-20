@@ -182,21 +182,20 @@ Args: {
 ```
 Tool: autotask_search_tickets
 Args: {
-  "companyId": 12345,
+  "companyID": 12345,
   "status": 1,
-  "assignedResourceId": 29744150,
-  "searchTerm": "email",
+  "assignedResourceID": 29744150,
   "pageSize": 25
 }
 ```
 
-**Filters:** `companyId`, `status`, `priority`, `queueId`, `assignedResourceId`, `searchTerm`, `pageSize`
+**Filters:** `companyID`, `status`, `priority`, `queueID`, `assignedResourceID`, `pageSize`
 
 ### Get Ticket Details
 
 ```
 Tool: autotask_get_ticket_details
-Args: { "ticketId": 54321 }
+Args: { "ticketID": 54321 }
 ```
 
 ### Get Ticket History (Audit Trail)

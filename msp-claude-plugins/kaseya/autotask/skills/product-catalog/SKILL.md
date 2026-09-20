@@ -85,10 +85,7 @@ Tool: autotask_search_products
 Args: { searchTerm: "firewall", isActive: true }
 ```
 
-```
-Tool: autotask_search_products
-Args: { productCategory: 5, pageSize: 50 }
-```
+**Note:** `productCategory` is a field on the Product entity (see table above) but is **not** an accepted filter on `autotask_search_products` — the tool only supports `searchTerm`, `isActive`, and `pageSize`.
 
 ### Getting Product Details
 
@@ -108,37 +105,14 @@ Tool: autotask_search_services
 Args: { searchTerm: "managed", isActive: true }
 ```
 
-### Checking Inventory
+### Inventory and Price List Lookups — not currently available
 
-Look up inventory levels for a product:
-
-```
-Tool: autotask_search_inventory_items
-Args: { productID: 12345 }
-```
-
-Filter by location:
-
-```
-Tool: autotask_search_inventory_items
-Args: { inventoryLocationID: 1 }
-```
-
-### Price List Lookups
-
-Get pricing for a specific product:
-
-```
-Tool: autotask_search_price_list_products
-Args: { productID: 12345 }
-```
-
-Get pricing for a service:
-
-```
-Tool: autotask_search_price_list_services
-Args: { serviceID: 678 }
-```
+There is no MCP tool to search Inventory Items or Price Lists directly (no
+`autotask_search_inventory_items` / `autotask_search_price_list_products` /
+`autotask_search_price_list_services` exist in the live tool set, despite
+both being real Autotask entities — see the field references above). Until
+one is added, inventory levels and price-list overrides must be checked
+directly in the Autotask UI.
 
 ## Common Workflows
 
@@ -148,7 +122,7 @@ Verify that a product's quote price matches the price list:
 
 1. Search for the product: `autotask_search_products { searchTerm: "product name" }`
 2. Get the product details: `autotask_get_product { productId: <id> }`
-3. Check price list: `autotask_search_price_list_products { productID: <id> }`
+3. Check the price list directly in the Autotask UI (no MCP tool for this yet — see note above)
 4. Compare unitPrice from product vs price list entry
 5. Calculate margin: `(priceListPrice - unitCost) / priceListPrice * 100`
 
@@ -166,7 +140,7 @@ Analyze margins across products:
 Before quoting hardware, verify stock:
 
 1. Find the product: `autotask_search_products { searchTerm: "laptop" }`
-2. Check inventory: `autotask_search_inventory_items { productID: <id> }`
+2. Check inventory directly in the Autotask UI (no MCP tool for this yet — see note above)
 3. Review `quantityOnHand` vs `quantityMinimum`
 4. If low stock, note in quote or suggest alternatives
 
@@ -175,7 +149,7 @@ Before quoting hardware, verify stock:
 Review recurring service pricing for contract renewals:
 
 1. Search services: `autotask_search_services { isActive: true }`
-2. For key services, check price list: `autotask_search_price_list_services { serviceID: <id> }`
+2. For key services, check the price list directly in the Autotask UI (no MCP tool for this yet — see note above)
 3. Compare current pricing to contract rates
 4. Identify services where pricing has drifted
 
@@ -185,7 +159,6 @@ Review recurring service pricing for contract renewals:
 |-------|-------|------------|
 | Product not found | Invalid product ID | Verify ID with search first |
 | Empty results | No matching products | Broaden search term, check isActive filter |
-| Price list empty | No pricing configured | Product may use default unitPrice |
 | Permission denied | API user lacks access | Check API integration security level |
 
 ## Best Practices

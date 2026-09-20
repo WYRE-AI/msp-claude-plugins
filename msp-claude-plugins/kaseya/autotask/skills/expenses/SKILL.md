@@ -82,7 +82,7 @@ NEW (1) ──────────> SUBMITTED (2) ────────�
 | `expenseDate` | date | Yes | Date expense was incurred (YYYY-MM-DD) |
 | `expenseCategory` | int | Yes | Expense category picklist ID |
 | `amount` | decimal | Yes | Expense amount |
-| `companyId` | int | No | Associated company ID (0 for internal) |
+| `companyID` | int | No | Associated company ID (0 for internal) |
 | `paymentType` | int | No | Payment type picklist ID |
 | `isBillableToCompany` | boolean | No | Whether billable to client |
 | `isReimbursable` | boolean | No | Whether reimbursable to employee |
@@ -90,7 +90,7 @@ NEW (1) ──────────> SUBMITTED (2) ────────�
 
 ### Expense Categories (Common)
 
-Use `autotask_get_field_info` with entity `ExpenseItem` to get the full picklist for your instance. Common categories include:
+Use `autotask_get_field_info` with entityType `ExpenseItem` to get the full picklist for your instance. Common categories include:
 
 | Category | Typical Use |
 |----------|-------------|
@@ -141,7 +141,7 @@ Args: {
   "expenseDate": "2026-02-15",
   "expenseCategory": 1,
   "amount": 45.50,
-  "companyId": 67890,
+  "companyID": 67890,
   "isBillableToCompany": true,
   "isReimbursable": true,
   "haveReceipt": false
@@ -194,7 +194,7 @@ autotask_create_expense_item: {
   "expenseDate": "2026-02-15",
   "expenseCategory": <mileage_category_id>,
   "amount": 30.15,
-  "companyId": <contoso_company_id>,
+  "companyID": <contoso_company_id>,
   "isBillableToCompany": true,
   "isReimbursable": true
 }
@@ -208,7 +208,7 @@ autotask_create_expense_item: {
   "expenseDate": "2026-02-15",
   "expenseCategory": <parking_category_id>,
   "amount": 12.00,
-  "companyId": <contoso_company_id>,
+  "companyID": <contoso_company_id>,
   "isBillableToCompany": true,
   "isReimbursable": true,
   "haveReceipt": true
@@ -253,12 +253,12 @@ To find valid expense category and payment type IDs for your instance:
 
 ```
 Tool: autotask_get_field_info
-Args: { "entity": "ExpenseItem", "field": "expenseCategory" }
+Args: { "entityType": "ExpenseItem", "fieldName": "expenseCategory" }
 ```
 
 ```
 Tool: autotask_get_field_info
-Args: { "entity": "ExpenseItem", "field": "paymentType" }
+Args: { "entityType": "ExpenseItem", "fieldName": "paymentType" }
 ```
 
 ## Error Handling
@@ -275,7 +275,7 @@ Args: { "entity": "ExpenseItem", "field": "paymentType" }
 
 1. **Name reports descriptively** - Include period and purpose (e.g., "Mar 2026 - Contoso Migration")
 2. **One report per period** - Group by week or month for easier approval
-3. **Always set companyId** - Even for internal expenses, set to 0 so billing is clear
+3. **Always set companyID** - Even for internal expenses, set to 0 so billing is clear
 4. **Mark receipts accurately** - `haveReceipt` helps auditing; attach receipts in Autotask UI
 5. **Use billable flags** - Set `isBillableToCompany` for client-recoverable costs
 6. **Discover picklists first** - Use `autotask_get_field_info` before creating items to get valid category/payment IDs
