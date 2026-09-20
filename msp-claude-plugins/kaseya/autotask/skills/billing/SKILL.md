@@ -57,7 +57,7 @@ Key fields returned:
 Tool: `autotask_search_billing_items`
 
 Key parameters:
-- `companyId` — Filter by client company
+- `companyID` — Filter by client company
 - `invoiceId` — Filter by invoice
 - `approvalStatus` — Filter by approval state
 - `startDate` / `endDate` — Date range filter
@@ -74,7 +74,7 @@ Returns the configured approval workflow steps for billing items in your Autotas
 Tool: `autotask_search_invoices`
 
 Key parameters:
-- `companyId` — Filter by client company
+- `companyID` — Filter by client company
 - `startDate` / `endDate` — Invoice date range
 - `page` / `pageSize` — Pagination
 
