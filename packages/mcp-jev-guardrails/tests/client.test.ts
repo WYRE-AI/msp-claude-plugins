@@ -26,6 +26,41 @@ describe("answersFromSystemOne", () => {
     expect(answers.in_role_allowlist).toBe(0.8);
     expect(answers.blast_radius).toBe(0.4);
   });
+
+  it("rejects non-finite and out-of-range noul/confidence/score values", () => {
+    const base = {
+      action_class: { choice: "read", confidence: 0.9, type: "choice" },
+      in_role_allowlist: { noul: 0.8, type: "noul" },
+      hits_deny_policy: { noul: 0.1, type: "noul" },
+      exposes_secrets: { noul: 0.1, type: "noul" },
+      matches_user_intent: { noul: 0.8, type: "noul" },
+      looks_like_injection: { noul: 0.1, type: "noul" },
+      blast_radius: { score: 0.4, type: "score" },
+      next_action: { choice: "allow", confidence: 0.7, type: "choice" },
+    };
+
+    expect(() =>
+      answersFromSystemOne({ ...base, action_class: { choice: "read", confidence: Number.NaN } }),
+    ).toThrow(/finite number/);
+    expect(() =>
+      answersFromSystemOne({
+        ...base,
+        in_role_allowlist: { noul: Number.POSITIVE_INFINITY },
+      }),
+    ).toThrow(/finite number/);
+    expect(() =>
+      answersFromSystemOne({ ...base, exposes_secrets: { noul: 1.01 } }),
+    ).toThrow(/\[0, 1\]/);
+    expect(() =>
+      answersFromSystemOne({ ...base, looks_like_injection: { noul: -0.01 } }),
+    ).toThrow(/\[0, 1\]/);
+    expect(() =>
+      answersFromSystemOne({ ...base, blast_radius: { score: 3.01 } }),
+    ).toThrow(/\[0, 3\]/);
+    expect(() =>
+      answersFromSystemOne({ ...base, blast_radius: { score: Number.NEGATIVE_INFINITY } }),
+    ).toThrow(/finite number/);
+  });
 });
 
 describe("evaluateToolCall", () => {

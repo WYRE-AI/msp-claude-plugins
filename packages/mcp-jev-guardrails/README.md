@@ -12,15 +12,17 @@ Pattern: atomic Nouls + code owns routing ([TypeSafe LLM guardrails cookbook](ht
 npm install @wyre-ai/mcp-jev-guardrails @typesafe-ai/sdk
 ```
 
-Until this is published, consume from git/path:
+Until this is published, path-depend the PR branch from a workspace or `file:` spec (npm does not support GitHub `#path:`):
 
 ```json
 {
   "dependencies": {
-    "@wyre-ai/mcp-jev-guardrails": "github:WYRE-AI/msp-claude-plugins#path:packages/mcp-jev-guardrails"
+    "@wyre-ai/mcp-jev-guardrails": "file:../msp-claude-plugins/packages/mcp-jev-guardrails"
   }
 }
 ```
+
+In this repo, the same package is a workspace-style folder at `packages/mcp-jev-guardrails`. After publish, switch to the npm name above.
 
 `TYPESAFE_API_KEY` is read by `@typesafe-ai/sdk` from the environment. Store it in Infisical (Internal). Never commit keys.
 
@@ -131,7 +133,8 @@ First match wins:
 4. else if `matches_user_intent < 0.4` → **escalate_human**
 5. else if `action_class` in `{write, destructive}` **and** `blast_radius >= 2` → **allow_with_confirm**
 6. else if `action_class.confidence < 0.6` → **escalate_human**
-7. else **allow**
+7. else if `action_class` is `unknown` → **escalate_human**
+8. else **allow**
 
 `next_action` never overrides these gates (Sample D: advisory `allow` still **blocks** when a deny/secrets noul fires).
 
@@ -143,13 +146,13 @@ Default is **blast ≥ 2 only**, not every write. A `write` with `blast_radius` 
 
 ## Logging redaction
 
-Do not log raw `tool_call.arguments` or extra `context` fields. Use:
+Do not log raw `tool_call.arguments`, `policy`, or extra `context` fields. Use:
 
-- `redactGuardState(state)` — copy with arguments and context secrets replaced by `[REDACTED]`
+- `redactGuardState(state)` — copy with arguments, **policy**, and context walked through `redactUnknown` (nested secret keys/values become `[REDACTED]`)
 - `redactForLog(value)` — same walk for arbitrary payloads
 - `evaluateToolCall` returns `logState` already redacted
 
-Keys matching password/token/secret/api_key/authorization/credential (and similar) are stripped. Bearer, `sk-`/`rk-` prefixes, and JWT-shaped strings are stripped even when the key name is innocuous. Role allowlists and `policy.deny` names are kept for audit.
+Keys matching password/token/secret/api_key/authorization/credential (and similar) are stripped. Bearer, `sk-`/`rk-` prefixes, and JWT-shaped strings are stripped even when the key name is innocuous. Role allowlists and `policy.deny` tool names are kept for audit unless they themselves look like secrets.
 
 ## Tests
 

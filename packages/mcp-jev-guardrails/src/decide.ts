@@ -102,7 +102,8 @@ function result(
  * 5. else if action_class in {write, destructive} AND blast_radius >= 2 → allow_with_confirm
  *    (optional strictEveryWrite confirms every write/destructive here)
  * 6. else if action_class.confidence < 0.6 → escalate_human
- * 7. else allow
+ * 7. else if action_class is unknown → escalate_human
+ * 8. else allow
  */
 export function decide(answers: ToolCallAnswers, options?: DecideOptions): Decision {
   const t = DECISION_THRESHOLDS;
@@ -180,6 +181,15 @@ export function decide(answers: ToolCallAnswers, options?: DecideOptions): Decis
       [
         `action_class.confidence ${action.confidence} < ${t.actionClassConfidenceMin}`,
       ],
+      advisoryNextAction,
+    );
+  }
+
+  if (action.choice === "unknown") {
+    return result(
+      "escalate_human",
+      "escalate_unknown_action_class",
+      ["action_class is unknown"],
       advisoryNextAction,
     );
   }

@@ -13,7 +13,11 @@ const state = (): GuardState => ({
     },
   },
   role: { name: "Technician", allowlist: ["passwords.get"] },
-  policy: { deny: ["billing.refund"] },
+  policy: {
+    deny: ["billing.refund"],
+    notes: "Bearer leaked-policy-token",
+    nested: { api_key: "policy-secret", label: "keep" },
+  } as GuardState["policy"],
   context: {
     user_intent: "get the wifi password",
     tenant: "acme",
@@ -37,6 +41,11 @@ describe("redactGuardState", () => {
     expect(redacted.context.user_intent).toBe("get the wifi password");
     expect(redacted.role.allowlist).toEqual(["passwords.get"]);
     expect(redacted.policy.deny).toEqual(["billing.refund"]);
+    expect(redacted.policy.notes).toBe("[REDACTED]");
+    expect(
+      (redacted.policy as GuardState["policy"] & { nested: { api_key: string; label: string } })
+        .nested,
+    ).toEqual({ api_key: "[REDACTED]", label: "keep" });
 
     expect((input.tool_call.arguments as { api_key: string }).api_key).toBe("super-secret");
   });

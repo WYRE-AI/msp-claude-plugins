@@ -50,8 +50,9 @@ export function redactForLog(value: unknown): unknown {
 }
 
 /**
- * Copy of GuardState safe to log. Tool arguments and context extras are redacted;
- * role allowlists and policy names are kept so audits can see which gate applied.
+ * Copy of GuardState safe to log. Tool arguments, policy, and context extras are
+ * walked recursively so nested secret keys/values cannot leak. Role allowlists
+ * stay intact so audits can see which gate applied.
  */
 export function redactGuardState(state: GuardState): GuardState {
   return {
@@ -61,7 +62,7 @@ export function redactGuardState(state: GuardState): GuardState {
       arguments: redactUnknown(state.tool_call.arguments) as GuardState["tool_call"]["arguments"],
     },
     role: { ...state.role },
-    policy: { ...state.policy },
+    policy: redactUnknown(state.policy) as GuardState["policy"],
     context: redactUnknown(state.context) as GuardState["context"],
   };
 }

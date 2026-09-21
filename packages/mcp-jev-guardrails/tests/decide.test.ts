@@ -121,6 +121,14 @@ describe("decide()", () => {
     expect(decision.matchedRule).toBe("escalate_action_class_confidence");
   });
 
+  it("escalates when action_class is unknown before allow (high confidence)", () => {
+    const decision = decide(
+      clean({ action_class: { choice: "unknown", confidence: 0.95 } }),
+    );
+    expect(decision.outcome).toBe("escalate_human");
+    expect(decision.matchedRule).toBe("escalate_unknown_action_class");
+  });
+
   it("Sample D: advisory next_action=allow never overrides a deny/secrets hard block", () => {
     const decision = decide(
       clean({

@@ -33,6 +33,7 @@ export type DecisionRule =
   | "escalate_user_intent"
   | "confirm_write_blast"
   | "escalate_action_class_confidence"
+  | "escalate_unknown_action_class"
   | "allow";
 
 export type NoulLike = number | { noul: number };

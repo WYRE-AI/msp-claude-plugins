@@ -33,6 +33,31 @@ export type EvaluateToolCallResult = {
   logState: GuardState;
 };
 
+function requireFiniteNumber(value: unknown, field: string): number {
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new TypeError(`evaluateToolCall(): ${field} must be a finite number`);
+  }
+  return value;
+}
+
+function requireUnitInterval(value: unknown, field: string): number {
+  const n = requireFiniteNumber(value, field);
+  if (n < 0 || n > 1) {
+    throw new TypeError(`evaluateToolCall(): ${field} must be in [0, 1]`);
+  }
+  return n;
+}
+
+function unwrapNumericField(value: unknown, field: string, key: "noul" | "score"): unknown {
+  if (typeof value === "number") {
+    return value;
+  }
+  if (value && typeof value === "object") {
+    return (value as Record<string, unknown>)[key];
+  }
+  throw new TypeError(`evaluateToolCall(): missing ${field} ${key}`);
+}
+
 function requireChoice<T extends string>(
   value: unknown,
   field: string,
@@ -44,12 +69,9 @@ function requireChoice<T extends string>(
   if (typeof rec.choice !== "string") {
     throw new TypeError(`evaluateToolCall(): ${field}.choice must be a string`);
   }
-  if (typeof rec.confidence !== "number") {
-    throw new TypeError(`evaluateToolCall(): ${field}.confidence must be a number`);
-  }
   return {
     choice: rec.choice as T,
-    confidence: rec.confidence,
+    confidence: requireUnitInterval(rec.confidence, `${field}.confidence`),
     probabilities:
       rec.probabilities && typeof rec.probabilities === "object"
         ? (rec.probabilities as Readonly<Record<string, number>>)
@@ -58,23 +80,15 @@ function requireChoice<T extends string>(
 }
 
 function requireNoul(value: unknown, field: string): number {
-  if (typeof value === "number") {
-    return value;
-  }
-  if (value && typeof value === "object" && typeof (value as { noul?: unknown }).noul === "number") {
-    return (value as { noul: number }).noul;
-  }
-  throw new TypeError(`evaluateToolCall(): missing ${field} noul`);
+  return requireUnitInterval(unwrapNumericField(value, field, "noul"), `${field}.noul`);
 }
 
 function requireScore(value: unknown, field: string): number {
-  if (typeof value === "number") {
-    return value;
+  const n = requireFiniteNumber(unwrapNumericField(value, field, "score"), `${field}.score`);
+  if (n < 0 || n > 3) {
+    throw new TypeError(`evaluateToolCall(): ${field}.score must be in [0, 3]`);
   }
-  if (value && typeof value === "object" && typeof (value as { score?: unknown }).score === "number") {
-    return (value as { score: number }).score;
-  }
-  throw new TypeError(`evaluateToolCall(): missing ${field} score`);
+  return n;
 }
 
 /** Map a TypeSafe `systemOne` answers object onto `ToolCallAnswers`. */
