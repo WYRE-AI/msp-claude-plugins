@@ -3,28 +3,23 @@
   "version": "0.1.0",
   "description": "Fleet-wide TypeSafe/Jev question map and decide() composition for MCP tool-call guardrails.",
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./packages/mcp-jev-guardrails/dist/index.js",
+  "types": "./packages/mcp-jev-guardrails/dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./packages/mcp-jev-guardrails/dist/index.d.ts",
+      "import": "./packages/mcp-jev-guardrails/dist/index.js"
     }
   },
   "files": [
-    "dist",
-    "README.md"
+    "packages/mcp-jev-guardrails/dist",
+    "packages/mcp-jev-guardrails/README.md"
   ],
   "scripts": {
-    "build": "tsc",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test",
-    "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "prepare": "npm run build --prefix packages/mcp-jev-guardrails",
+    "build": "npm run build --prefix packages/mcp-jev-guardrails",
+    "test": "npm test --prefix packages/mcp-jev-guardrails",
+    "prepublishOnly": "node scripts/refuse-root-npm-publish.mjs"
   },
   "repository": {
     "type": "git",
@@ -49,8 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
-    "vitest": "^1.6.0"
+    "typescript": "^5.3.3"
   },
   "engines": {
     "node": ">=20.0.0"
