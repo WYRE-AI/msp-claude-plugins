@@ -5,7 +5,60 @@
   },
   "plugins": [
     {
-      "name": "kaseya-autotask",
+      "name": "3cx",
+      "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/3cx/3cx"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "abnormal-security",
+      "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/abnormal/abnormal-security"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "atera",
+      "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/atera/atera"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA RMM"
+    },
+    {
+      "name": "auvik",
+      "description": "Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/auvik/auvik"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Network"
+    },
+    {
+      "name": "autotask",
+      "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/kaseya/autotask"
@@ -15,6 +68,1020 @@
         "authentication": "ON_INSTALL"
       },
       "category": "PSA"
+    },
+    {
+      "name": "kaseya-quote-manager",
+      "description": "Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Sales"
+    },
+    {
+      "name": "betterstack",
+      "description": "Better Stack - uptime monitoring, logging, incident management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/betterstack/betterstack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Monitoring"
+    },
+    {
+      "name": "blumira",
+      "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/blumira/blumira"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "avanan",
+      "description": "Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/email-security/checkpoint-avanan"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "cipp",
+      "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/cipp/cipp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "freshdesk",
+      "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/freshdesk/freshdesk"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "inforcer",
+      "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/inforcer/inforcer"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "connectwise-automate",
+      "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/connectwise/automate"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "connectwise-cpq",
+      "description": "ConnectWise CPQ (Sell/Quosal) - quotes, line items, templates, quote customers, payment terms",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/connectwise/cpq"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Sales"
+    },
+    {
+      "name": "connectwise-psa",
+      "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/connectwise/manage"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "datto-rmm",
+      "description": "Datto RMM - devices, alerts, jobs, patches, monitoring",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/datto-rmm"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "domotz",
+      "description": "Domotz - network monitoring, SNMP discovery, device management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/domotz/domotz"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Network"
+    },
+    {
+      "name": "halopsa",
+      "description": "HaloPSA - tickets, clients, assets, contracts (OAuth 2.0)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/halopsa/halopsa"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "hudu",
+      "description": "Hudu IT documentation - companies, assets, articles, passwords, websites",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/hudu/hudu"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Documentation"
+    },
+    {
+      "name": "huntress",
+      "description": "Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/huntress/huntress"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "itglue",
+      "description": "IT Glue - organizations, assets, passwords, flexible assets",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/it-glue"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Documentation"
+    },
+    {
+      "name": "knowbe4",
+      "description": "KnowBe4 - phishing simulation, security awareness training, user risk management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/email-security/knowbe4"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "liongard",
+      "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/liongard/liongard"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "m365",
+      "description": "Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/m365/m365"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "ninjaone",
+      "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/ninjaone/ninjaone-rmm"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "pagerduty",
+      "description": "PagerDuty - incident management, on-call scheduling, alerting",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/pagerduty/pagerduty"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Incident Management"
+    },
+    {
+      "name": "pandadoc",
+      "description": "PandaDoc - documents, templates, e-signatures, and proposal management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/pandadoc/pandadoc"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Sales"
+    },
+    {
+      "name": "warmly",
+      "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/warmly/warmly"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Sales"
+    },
+    {
+      "name": "pax8",
+      "description": "Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/pax8/pax8"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Marketplace"
+    },
+    {
+      "name": "posthog",
+      "description": "PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/posthog/posthog"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "proofpoint",
+      "description": "Proofpoint Email Protection - TAP, quarantine, threat intel, forensics, URL defense, VAP reports",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/email-security/proofpoint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "proofpoint-essentials",
+      "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/email-security/proofpoint-essentials"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "netsuite",
+      "description": "Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/netsuite/netsuite"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
+    },
+    {
+      "name": "qbo",
+      "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/quickbooks/quickbooks-online"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
+    },
+    {
+      "name": "rocketcyber",
+      "description": "RocketCyber managed SOC - incidents, agents, events, threat detection",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/rocketcyber"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "rootly",
+      "description": "Rootly - incident management, postmortems, SRE automation",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/rootly/rootly"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Incident Management"
+    },
+    {
+      "name": "runzero",
+      "description": "runZero - asset discovery, network scanning, inventory management",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/runzero/runzero"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "salesbuildr",
+      "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/salesbuildr/salesbuildr"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "CRM"
+    },
+    {
+      "name": "sentinelone",
+      "description": "SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/sentinelone/sentinelone"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "shared-skills",
+      "description": "Vendor-agnostic MSP skills - terminology and ticket triage",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/shared"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Knowledge"
+    },
+    {
+      "name": "sherweb",
+      "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/sherweb/sherweb"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Marketplace"
+    },
+    {
+      "name": "superops",
+      "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/superops/superops-ai"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA RMM"
+    },
+    {
+      "name": "syncro",
+      "description": "Syncro MSP - tickets, customers, assets, invoicing",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/syncro/syncro-msp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA RMM"
+    },
+    {
+      "name": "blackpoint",
+      "description": "Blackpoint Cyber / CompassOne MDR - tenants, assets, detections, vulnerabilities (dark web, external, scans)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/blackpoint/blackpoint"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "saas-alerts",
+      "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/saas-alerts/saas-alerts"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "crewhu",
+      "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/crewhu/crewhu"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "immybot",
+      "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/immybot/immybot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "timezest",
+      "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/timezest/timezest"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "threatlocker",
+      "description": "ThreatLocker - zero-trust application allowlisting, approval triage, audit log investigation, computer inventory",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/threatlocker/threatlocker"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "kaseya-vsa",
+      "description": "Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/kaseya-vsa"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "datto-bcdr",
+      "description": "Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, recovery points (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/datto-bcdr"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "kaseya-bms",
+      "description": "Kaseya BMS PSA - tickets, accounts, contracts, time entries, billing (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/kaseya-bms"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "datto-saas-protection",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/datto-saas-protection"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "unitrends",
+      "description": "Unitrends - appliances, backup jobs, recovery points, replication, alerts (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/unitrends"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "spanning",
+      "description": "Spanning Cloud Backup - SaaS backup for M365 / Google Workspace / Salesforce (scaffolding)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kaseya/spanning"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "hubspot",
+      "description": "HubSpot CRM - contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP server)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/hubspot/hubspot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "CRM"
+    },
+    {
+      "name": "spamtitan",
+      "description": "SpamTitan by TitanHQ - quarantine queue management, email flow stats, sender allowlist/blocklist for MSPs",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/spamtitan/spamtitan"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "xero",
+      "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/xero/xero"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
+    },
+    {
+      "name": "alternative-payments",
+      "description": "Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/alternative-payments/alternative-payments"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
+    },
+    {
+      "name": "ironscales",
+      "description": "Claude plugins for IRONSCALES - AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/ironscales/ironscales"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "mimecast",
+      "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/mimecast/mimecast"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "mailprotector",
+      "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/mailprotector/mailprotector"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Email Security"
+    },
+    {
+      "name": "wyre-gateway",
+      "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/wyre-gateway"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "microsoft-graph",
+      "description": "Microsoft Graph Enterprise MCP - read-only natural-language queries over Microsoft Entra identity and directory data: users, groups, applications, devices, and admin reporting (public preview)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/microsoft-graph/microsoft-graph"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "azure-mcp",
+      "description": "Azure MCP Server - read-only Azure observability, cost, and resource-health analysis in natural language: monitoring, pricing, quota, advisor, resource health, diagnostics",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/azure-mcp/azure-mcp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Monitoring"
+    },
+    {
+      "name": "stripe",
+      "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/stripe/stripe"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
+    },
+    {
+      "name": "slack",
+      "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/slack/slack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "meraki",
+      "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/meraki/meraki"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Network"
+    },
+    {
+      "name": "ncentral",
+      "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/ncentral/ncentral"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "nutanix",
+      "description": "Nutanix - Prism Central v4 API: VM management, cluster operations, storage, networking via official Nutanix MCP server",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/nutanix/nutanix"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Infrastructure"
+    },
+    {
+      "name": "ops-pack",
+      "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/ops-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "secops-pack",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/secops-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "finance-pack",
+      "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/finance-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "compliance-pack",
+      "description": "Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/compliance-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "sales-pack",
+      "description": "Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/sales-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "devops-pack",
+      "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/devops-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "cloudops-pack",
+      "description": "Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/cloudops-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "awareness-pack",
+      "description": "Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/awareness-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "backup-pack",
+      "description": "Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/backup-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "assets-pack",
+      "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/assets-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
+      "name": "clio",
+      "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/clio/clio"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Legal"
+    },
+    {
+      "name": "scalepad",
+      "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/scalepad/scalepad"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "axcient",
+      "description": "Axcient x360Recover - BCDR clients, devices, backup jobs, vaults, and appliances",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/axcient/axcient"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
     }
   ]
 }

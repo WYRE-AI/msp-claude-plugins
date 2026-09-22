@@ -1,0 +1,5463 @@
+{
+  "schemaVersion": 1,
+  "name": "msp-claude-plugins",
+  "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
+  "generator": {
+    "script": "scripts/generate-agents-manifest.mjs",
+    "derivedFrom": [
+      ".claude-plugin/marketplace.json",
+      "<pack>/.claude-plugin/plugin.json",
+      "<pack>/.mcp.json",
+      "<pack>/skills/, <pack>/commands/, <pack>/agents/"
+    ],
+    "note": "Generated file — do not edit by hand. Regenerate with `node scripts/generate-agents-manifest.mjs`."
+  },
+  "owner": {
+    "name": "WYRE Technology",
+    "email": "aaron@sachshaus.net"
+  },
+  "mcp": {
+    "server": "msp-mcp-gateway",
+    "type": "http",
+    "url": "https://conduit.wyre.ai/v1/mcp",
+    "skills": {
+      "extension": "io.modelcontextprotocol/skills",
+      "tools": [
+        "conduit__list_skills",
+        "conduit__get_skill"
+      ],
+      "resourceUriTemplate": "skill://{pack}/{skill}/SKILL.md"
+    }
+  },
+  "totals": {
+    "packs": 83,
+    "skills": 374,
+    "commands": 313,
+    "agents": 154
+  },
+  "packs": [
+    {
+      "name": "3cx",
+      "displayName": "3CX",
+      "version": "0.1.0",
+      "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
+      "category": "productivity",
+      "tags": [
+        "3cx",
+        "pbx",
+        "voip",
+        "telephony",
+        "unified-communications",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/3cx/3cx",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/3cx/3cx/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "calls-queues",
+          "path": "msp-claude-plugins/3cx/3cx/skills/calls-queues/SKILL.md"
+        },
+        {
+          "id": "directory",
+          "path": "msp-claude-plugins/3cx/3cx/skills/directory/SKILL.md"
+        },
+        {
+          "id": "pbx-admin",
+          "path": "msp-claude-plugins/3cx/3cx/skills/pbx-admin/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "find-contact",
+          "path": "msp-claude-plugins/3cx/3cx/commands/find-contact.md"
+        },
+        {
+          "id": "pbx-health-check",
+          "path": "msp-claude-plugins/3cx/3cx/commands/pbx-health-check.md"
+        },
+        {
+          "id": "queue-status",
+          "path": "msp-claude-plugins/3cx/3cx/commands/queue-status.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "abnormal-security",
+      "displayName": "Abnormal Security",
+      "version": "0.2.11",
+      "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
+      "category": "email-security",
+      "tags": [
+        "abnormal",
+        "email-security",
+        "phishing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/abnormal/abnormal-security",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "cases",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/skills/cases/SKILL.md"
+        },
+        {
+          "id": "messages",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/skills/messages/SKILL.md"
+        },
+        {
+          "id": "threats",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/skills/threats/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "case-review",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/commands/case-review.md"
+        },
+        {
+          "id": "search-threats",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/commands/search-threats.md"
+        },
+        {
+          "id": "threat-triage",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/commands/threat-triage.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "email-threat-analyst",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/agents/email-threat-analyst.md"
+        },
+        {
+          "id": "threat-report-generator",
+          "path": "msp-claude-plugins/abnormal/abnormal-security/agents/threat-report-generator.md"
+        }
+      ]
+    },
+    {
+      "name": "atera",
+      "displayName": "Atera",
+      "version": "0.2.8",
+      "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
+      "category": "psa-rmm",
+      "tags": [
+        "atera",
+        "rmm",
+        "psa",
+        "monitoring",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/atera/atera",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/atera/atera/skills/agents/SKILL.md"
+        },
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/atera/atera/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/atera/atera/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "customers",
+          "path": "msp-claude-plugins/atera/atera/skills/customers/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/atera/atera/skills/devices/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/atera/atera/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-monitor",
+          "path": "msp-claude-plugins/atera/atera/commands/create-monitor.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/atera/atera/commands/create-ticket.md"
+        },
+        {
+          "id": "get-kb-articles",
+          "path": "msp-claude-plugins/atera/atera/commands/get-kb-articles.md"
+        },
+        {
+          "id": "list-alerts",
+          "path": "msp-claude-plugins/atera/atera/commands/list-alerts.md"
+        },
+        {
+          "id": "log-time",
+          "path": "msp-claude-plugins/atera/atera/commands/log-time.md"
+        },
+        {
+          "id": "resolve-alert",
+          "path": "msp-claude-plugins/atera/atera/commands/resolve-alert.md"
+        },
+        {
+          "id": "run-powershell",
+          "path": "msp-claude-plugins/atera/atera/commands/run-powershell.md"
+        },
+        {
+          "id": "search-agents",
+          "path": "msp-claude-plugins/atera/atera/commands/search-agents.md"
+        },
+        {
+          "id": "search-customers",
+          "path": "msp-claude-plugins/atera/atera/commands/search-customers.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/atera/atera/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "customer-health-scorer",
+          "path": "msp-claude-plugins/atera/atera/agents/customer-health-scorer.md"
+        },
+        {
+          "id": "msp-ops-assistant",
+          "path": "msp-claude-plugins/atera/atera/agents/msp-ops-assistant.md"
+        }
+      ]
+    },
+    {
+      "name": "auvik",
+      "displayName": "Auvik",
+      "version": "0.1.7",
+      "description": "Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants",
+      "category": "network",
+      "tags": [
+        "auvik",
+        "network-monitoring",
+        "snmp",
+        "msp",
+        "rmm"
+      ],
+      "path": "msp-claude-plugins/auvik/auvik",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "auvik": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/auvik/mcp",
+          "headers": {
+            "X-Auvik-Username": "${AUVIK_USERNAME}",
+            "X-Auvik-Api-Key": "${AUVIK_API_KEY}",
+            "X-Auvik-Region": "${AUVIK_REGION}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/auvik/auvik/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/auvik/auvik/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/auvik/auvik/skills/devices/SKILL.md"
+        },
+        {
+          "id": "networks",
+          "path": "msp-claude-plugins/auvik/auvik/skills/networks/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "alert-triage",
+          "path": "msp-claude-plugins/auvik/auvik/commands/alert-triage.md"
+        },
+        {
+          "id": "capacity-check",
+          "path": "msp-claude-plugins/auvik/auvik/commands/capacity-check.md"
+        },
+        {
+          "id": "device-inventory",
+          "path": "msp-claude-plugins/auvik/auvik/commands/device-inventory.md"
+        },
+        {
+          "id": "network-audit",
+          "path": "msp-claude-plugins/auvik/auvik/commands/network-audit.md"
+        },
+        {
+          "id": "tenant-overview",
+          "path": "msp-claude-plugins/auvik/auvik/commands/tenant-overview.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "alert-responder",
+          "path": "msp-claude-plugins/auvik/auvik/agents/alert-responder.md"
+        },
+        {
+          "id": "capacity-planner",
+          "path": "msp-claude-plugins/auvik/auvik/agents/capacity-planner.md"
+        },
+        {
+          "id": "network-analyst",
+          "path": "msp-claude-plugins/auvik/auvik/agents/network-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "autotask",
+      "displayName": "Autotask",
+      "version": "0.6.2",
+      "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
+      "category": "psa",
+      "tags": [
+        "kaseya",
+        "autotask",
+        "psa",
+        "tickets",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kaseya/autotask",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "billing",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/billing/SKILL.md"
+        },
+        {
+          "id": "configuration-items",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/configuration-items/SKILL.md"
+        },
+        {
+          "id": "contracts",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/contracts/SKILL.md"
+        },
+        {
+          "id": "crm",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/crm/SKILL.md"
+        },
+        {
+          "id": "expenses",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/expenses/SKILL.md"
+        },
+        {
+          "id": "picklists",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/picklists/SKILL.md"
+        },
+        {
+          "id": "product-catalog",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/product-catalog/SKILL.md"
+        },
+        {
+          "id": "projects",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/projects/SKILL.md"
+        },
+        {
+          "id": "quotes",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/quotes/SKILL.md"
+        },
+        {
+          "id": "service-calls",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/service-calls/SKILL.md"
+        },
+        {
+          "id": "ticket-notes-attachments",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/ticket-notes-attachments/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/tickets/SKILL.md"
+        },
+        {
+          "id": "time-entries",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/time-entries/SKILL.md"
+        },
+        {
+          "id": "tool-discovery",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/tool-discovery/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "add-note",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/add-note.md"
+        },
+        {
+          "id": "check-contract",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/check-contract.md"
+        },
+        {
+          "id": "check-pricing",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/check-pricing.md"
+        },
+        {
+          "id": "create-quote",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/create-quote.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/create-ticket.md"
+        },
+        {
+          "id": "expenses",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/expenses.md"
+        },
+        {
+          "id": "lookup-asset",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/lookup-asset.md"
+        },
+        {
+          "id": "lookup-company",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/lookup-company.md"
+        },
+        {
+          "id": "lookup-contact",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/lookup-contact.md"
+        },
+        {
+          "id": "my-tickets",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/my-tickets.md"
+        },
+        {
+          "id": "reassign-ticket",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/reassign-ticket.md"
+        },
+        {
+          "id": "search-products",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/search-products.md"
+        },
+        {
+          "id": "search-tickets",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/search-tickets.md"
+        },
+        {
+          "id": "time-entry",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/time-entry.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/kaseya/autotask/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "contract-renewal-tracker",
+          "path": "msp-claude-plugins/kaseya/autotask/agents/contract-renewal-tracker.md"
+        },
+        {
+          "id": "ticket-dispatcher",
+          "path": "msp-claude-plugins/kaseya/autotask/agents/ticket-dispatcher.md"
+        }
+      ]
+    },
+    {
+      "name": "kaseya-quote-manager",
+      "displayName": "Kaseya Quote Manager",
+      "version": "1.0.10",
+      "description": "Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org",
+      "category": "sales",
+      "tags": [
+        "kaseya",
+        "kaseya-quote-manager",
+        "datto-commerce",
+        "sales",
+        "quotes",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "purchasing",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/skills/purchasing/SKILL.md"
+        },
+        {
+          "id": "quotes",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/skills/quotes/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "get-quote",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/commands/get-quote.md"
+        },
+        {
+          "id": "get-sales-order",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/commands/get-sales-order.md"
+        },
+        {
+          "id": "list-quotes",
+          "path": "msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager/commands/list-quotes.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "betterstack",
+      "displayName": "Betterstack",
+      "version": "0.2.9",
+      "description": "Better Stack - uptime monitoring, logging, incident management",
+      "category": "monitoring",
+      "tags": [
+        "betterstack",
+        "uptime",
+        "monitoring",
+        "logging",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/betterstack/betterstack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/incidents/SKILL.md"
+        },
+        {
+          "id": "logging",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/logging/SKILL.md"
+        },
+        {
+          "id": "monitors",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/monitors/SKILL.md"
+        },
+        {
+          "id": "oncall",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/oncall/SKILL.md"
+        },
+        {
+          "id": "status-pages",
+          "path": "msp-claude-plugins/betterstack/betterstack/skills/status-pages/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-monitor",
+          "path": "msp-claude-plugins/betterstack/betterstack/commands/create-monitor.md"
+        },
+        {
+          "id": "incident-triage",
+          "path": "msp-claude-plugins/betterstack/betterstack/commands/incident-triage.md"
+        },
+        {
+          "id": "monitor-status",
+          "path": "msp-claude-plugins/betterstack/betterstack/commands/monitor-status.md"
+        },
+        {
+          "id": "search-logs",
+          "path": "msp-claude-plugins/betterstack/betterstack/commands/search-logs.md"
+        },
+        {
+          "id": "status-page-update",
+          "path": "msp-claude-plugins/betterstack/betterstack/commands/status-page-update.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "sla-uptime-reporter",
+          "path": "msp-claude-plugins/betterstack/betterstack/agents/sla-uptime-reporter.md"
+        },
+        {
+          "id": "uptime-incident-responder",
+          "path": "msp-claude-plugins/betterstack/betterstack/agents/uptime-incident-responder.md"
+        }
+      ]
+    },
+    {
+      "name": "blumira",
+      "displayName": "Blumira",
+      "version": "0.2.8",
+      "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
+      "category": "security",
+      "tags": [
+        "blumira",
+        "siem",
+        "security",
+        "detection",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/blumira/blumira",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/blumira/blumira/skills/agents/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/blumira/blumira/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "findings",
+          "path": "msp-claude-plugins/blumira/blumira/skills/findings/SKILL.md"
+        },
+        {
+          "id": "msp",
+          "path": "msp-claude-plugins/blumira/blumira/skills/msp/SKILL.md"
+        },
+        {
+          "id": "resolutions",
+          "path": "msp-claude-plugins/blumira/blumira/skills/resolutions/SKILL.md"
+        },
+        {
+          "id": "users",
+          "path": "msp-claude-plugins/blumira/blumira/skills/users/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "agent-inventory",
+          "path": "msp-claude-plugins/blumira/blumira/commands/agent-inventory.md"
+        },
+        {
+          "id": "finding-triage",
+          "path": "msp-claude-plugins/blumira/blumira/commands/finding-triage.md"
+        },
+        {
+          "id": "investigate-finding",
+          "path": "msp-claude-plugins/blumira/blumira/commands/investigate-finding.md"
+        },
+        {
+          "id": "msp-overview",
+          "path": "msp-claude-plugins/blumira/blumira/commands/msp-overview.md"
+        },
+        {
+          "id": "resolve-finding",
+          "path": "msp-claude-plugins/blumira/blumira/commands/resolve-finding.md"
+        },
+        {
+          "id": "security-posture",
+          "path": "msp-claude-plugins/blumira/blumira/commands/security-posture.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "compliance-reporter",
+          "path": "msp-claude-plugins/blumira/blumira/agents/compliance-reporter.md"
+        },
+        {
+          "id": "siem-investigator",
+          "path": "msp-claude-plugins/blumira/blumira/agents/siem-investigator.md"
+        }
+      ]
+    },
+    {
+      "name": "avanan",
+      "displayName": "Checkpoint Harmony Email (Avanan)",
+      "version": "0.4.4",
+      "description": "Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions",
+      "category": "email-security",
+      "tags": [
+        "checkpoint",
+        "avanan",
+        "email-security",
+        "anti-phishing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/email-security/checkpoint-avanan",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "exceptions",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/skills/exceptions/SKILL.md"
+        },
+        {
+          "id": "quarantine",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/skills/quarantine/SKILL.md"
+        },
+        {
+          "id": "threats",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/skills/threats/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-threat",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/commands/check-threat.md"
+        },
+        {
+          "id": "release-quarantine",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/commands/release-quarantine.md"
+        },
+        {
+          "id": "search-quarantine",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/commands/search-quarantine.md"
+        },
+        {
+          "id": "search-threats",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/commands/search-threats.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "cloud-email-defender",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/agents/cloud-email-defender.md"
+        },
+        {
+          "id": "exception-hygiene-auditor",
+          "path": "msp-claude-plugins/email-security/checkpoint-avanan/agents/exception-hygiene-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "cipp",
+      "displayName": "Cipp",
+      "version": "0.1.7",
+      "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
+      "category": "security",
+      "tags": [
+        "cipp",
+        "m365",
+        "microsoft-365",
+        "multi-tenant",
+        "security",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/cipp/cipp",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/cipp/cipp/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "groups",
+          "path": "msp-claude-plugins/cipp/cipp/skills/groups/SKILL.md"
+        },
+        {
+          "id": "licenses",
+          "path": "msp-claude-plugins/cipp/cipp/skills/licenses/SKILL.md"
+        },
+        {
+          "id": "mailboxes",
+          "path": "msp-claude-plugins/cipp/cipp/skills/mailboxes/SKILL.md"
+        },
+        {
+          "id": "ops",
+          "path": "msp-claude-plugins/cipp/cipp/skills/ops/SKILL.md"
+        },
+        {
+          "id": "security",
+          "path": "msp-claude-plugins/cipp/cipp/skills/security/SKILL.md"
+        },
+        {
+          "id": "standards",
+          "path": "msp-claude-plugins/cipp/cipp/skills/standards/SKILL.md"
+        },
+        {
+          "id": "tenants",
+          "path": "msp-claude-plugins/cipp/cipp/skills/tenants/SKILL.md"
+        },
+        {
+          "id": "users",
+          "path": "msp-claude-plugins/cipp/cipp/skills/users/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "offboard-user",
+          "path": "msp-claude-plugins/cipp/cipp/commands/offboard-user.md"
+        },
+        {
+          "id": "secure-score-report",
+          "path": "msp-claude-plugins/cipp/cipp/commands/secure-score-report.md"
+        },
+        {
+          "id": "standards-drift",
+          "path": "msp-claude-plugins/cipp/cipp/commands/standards-drift.md"
+        },
+        {
+          "id": "tenant-health",
+          "path": "msp-claude-plugins/cipp/cipp/commands/tenant-health.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "security-posture-reviewer",
+          "path": "msp-claude-plugins/cipp/cipp/agents/security-posture-reviewer.md"
+        },
+        {
+          "id": "user-offboarding-runner",
+          "path": "msp-claude-plugins/cipp/cipp/agents/user-offboarding-runner.md"
+        }
+      ]
+    },
+    {
+      "name": "freshdesk",
+      "displayName": "Freshdesk",
+      "version": "1.0.11",
+      "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
+      "category": "psa",
+      "tags": [
+        "freshdesk",
+        "helpdesk",
+        "ticketing",
+        "psa",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/freshdesk/freshdesk",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "freshdesk": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/freshdesk/mcp",
+          "headers": {
+            "X-Freshdesk-Domain": "${FRESHDESK_DOMAIN}",
+            "X-Freshdesk-Api-Key": "${FRESHDESK_API_KEY}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "contacts-companies",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/skills/contacts-companies/SKILL.md"
+        },
+        {
+          "id": "knowledge-base",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/skills/knowledge-base/SKILL.md"
+        },
+        {
+          "id": "sla-business-hours",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/skills/sla-business-hours/SKILL.md"
+        },
+        {
+          "id": "ticketing",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/skills/ticketing/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "search-tickets",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/commands/search-tickets.md"
+        },
+        {
+          "id": "ticket-summary",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/commands/ticket-summary.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "freshdesk-triage",
+          "path": "msp-claude-plugins/freshdesk/freshdesk/agents/freshdesk-triage.md"
+        }
+      ]
+    },
+    {
+      "name": "inforcer",
+      "displayName": "Inforcer",
+      "version": "1.0.9",
+      "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
+      "category": "security",
+      "tags": [
+        "inforcer",
+        "m365",
+        "governance",
+        "security",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/inforcer/inforcer",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "inforcer": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/inforcer/mcp",
+          "headers": {
+            "X-Inforcer-Region": "${INFORCER_REGION}",
+            "X-Inforcer-Api-Key": "${INFORCER_API_KEY}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "assessments",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/assessments/SKILL.md"
+        },
+        {
+          "id": "audit-events",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/audit-events/SKILL.md"
+        },
+        {
+          "id": "baseline-alignment",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/baseline-alignment/SKILL.md"
+        },
+        {
+          "id": "compliance-reporting",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/compliance-reporting/SKILL.md"
+        },
+        {
+          "id": "identity-governance",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/identity-governance/SKILL.md"
+        },
+        {
+          "id": "tenant-management",
+          "path": "msp-claude-plugins/inforcer/inforcer/skills/tenant-management/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "drift-report",
+          "path": "msp-claude-plugins/inforcer/inforcer/commands/drift-report.md"
+        },
+        {
+          "id": "tenant-posture",
+          "path": "msp-claude-plugins/inforcer/inforcer/commands/tenant-posture.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "inforcer-drift-reporter",
+          "path": "msp-claude-plugins/inforcer/inforcer/agents/inforcer-drift-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "connectwise-automate",
+      "displayName": "Connectwise Automate",
+      "version": "1.2.5",
+      "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
+      "category": "rmm",
+      "tags": [
+        "connectwise",
+        "automate",
+        "rmm",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/connectwise/automate",
+      "license": "MIT",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/connectwise/automate/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/connectwise/automate/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "clients",
+          "path": "msp-claude-plugins/connectwise/automate/skills/clients/SKILL.md"
+        },
+        {
+          "id": "computers",
+          "path": "msp-claude-plugins/connectwise/automate/skills/computers/SKILL.md"
+        },
+        {
+          "id": "monitors",
+          "path": "msp-claude-plugins/connectwise/automate/skills/monitors/SKILL.md"
+        },
+        {
+          "id": "scripts",
+          "path": "msp-claude-plugins/connectwise/automate/skills/scripts/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "list-computers",
+          "path": "msp-claude-plugins/connectwise/automate/commands/list-computers.md"
+        },
+        {
+          "id": "run-script",
+          "path": "msp-claude-plugins/connectwise/automate/commands/run-script.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "automation-health-checker",
+          "path": "msp-claude-plugins/connectwise/automate/agents/automation-health-checker.md"
+        }
+      ]
+    },
+    {
+      "name": "connectwise-cpq",
+      "displayName": "Connectwise CPQ",
+      "version": "1.1.5",
+      "description": "ConnectWise CPQ (Sell/Quosal) - quotes, line items, templates, quote customers, payment terms",
+      "category": "sales",
+      "tags": [
+        "connectwise",
+        "cpq",
+        "sell",
+        "quosal",
+        "quotes",
+        "sales",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/connectwise/cpq",
+      "license": "MIT",
+      "homepage": "https://developer.connectwise.com/Products/ConnectWise_CPQ",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/connectwise/cpq/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "quote-items",
+          "path": "msp-claude-plugins/connectwise/cpq/skills/quote-items/SKILL.md"
+        },
+        {
+          "id": "quotes",
+          "path": "msp-claude-plugins/connectwise/cpq/skills/quotes/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-quote",
+          "path": "msp-claude-plugins/connectwise/cpq/commands/create-quote.md"
+        },
+        {
+          "id": "get-quote",
+          "path": "msp-claude-plugins/connectwise/cpq/commands/get-quote.md"
+        },
+        {
+          "id": "list-templates",
+          "path": "msp-claude-plugins/connectwise/cpq/commands/list-templates.md"
+        },
+        {
+          "id": "search-quotes",
+          "path": "msp-claude-plugins/connectwise/cpq/commands/search-quotes.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "connectwise-psa",
+      "displayName": "Connectwise PSA",
+      "version": "0.3.6",
+      "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
+      "category": "psa",
+      "tags": [
+        "connectwise",
+        "psa",
+        "tickets",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/connectwise/manage",
+      "license": "MIT",
+      "homepage": "https://developer.connectwise.com/Products/ConnectWise_PSA",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/connectwise/manage/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "companies",
+          "path": "msp-claude-plugins/connectwise/manage/skills/companies/SKILL.md"
+        },
+        {
+          "id": "contacts",
+          "path": "msp-claude-plugins/connectwise/manage/skills/contacts/SKILL.md"
+        },
+        {
+          "id": "product-catalog",
+          "path": "msp-claude-plugins/connectwise/manage/skills/product-catalog/SKILL.md"
+        },
+        {
+          "id": "projects",
+          "path": "msp-claude-plugins/connectwise/manage/skills/projects/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/connectwise/manage/skills/tickets/SKILL.md"
+        },
+        {
+          "id": "time-entries",
+          "path": "msp-claude-plugins/connectwise/manage/skills/time-entries/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "add-note",
+          "path": "msp-claude-plugins/connectwise/manage/commands/add-note.md"
+        },
+        {
+          "id": "check-agreement",
+          "path": "msp-claude-plugins/connectwise/manage/commands/check-agreement.md"
+        },
+        {
+          "id": "close-ticket",
+          "path": "msp-claude-plugins/connectwise/manage/commands/close-ticket.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/connectwise/manage/commands/create-ticket.md"
+        },
+        {
+          "id": "get-ticket",
+          "path": "msp-claude-plugins/connectwise/manage/commands/get-ticket.md"
+        },
+        {
+          "id": "log-time",
+          "path": "msp-claude-plugins/connectwise/manage/commands/log-time.md"
+        },
+        {
+          "id": "lookup-config",
+          "path": "msp-claude-plugins/connectwise/manage/commands/lookup-config.md"
+        },
+        {
+          "id": "schedule-entry",
+          "path": "msp-claude-plugins/connectwise/manage/commands/schedule-entry.md"
+        },
+        {
+          "id": "search-tickets",
+          "path": "msp-claude-plugins/connectwise/manage/commands/search-tickets.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/connectwise/manage/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "procurement-specialist",
+          "path": "msp-claude-plugins/connectwise/manage/agents/procurement-specialist.md"
+        },
+        {
+          "id": "project-tracker",
+          "path": "msp-claude-plugins/connectwise/manage/agents/project-tracker.md"
+        },
+        {
+          "id": "service-desk-ops",
+          "path": "msp-claude-plugins/connectwise/manage/agents/service-desk-ops.md"
+        }
+      ]
+    },
+    {
+      "name": "datto-rmm",
+      "displayName": "Datto RMM",
+      "version": "1.2.5",
+      "description": "Datto RMM - devices, alerts, jobs, patches, monitoring",
+      "category": "rmm",
+      "tags": [
+        "kaseya",
+        "datto",
+        "rmm",
+        "monitoring",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kaseya/datto-rmm",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "audit",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/audit/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/devices/SKILL.md"
+        },
+        {
+          "id": "jobs",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/jobs/SKILL.md"
+        },
+        {
+          "id": "sites",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/sites/SKILL.md"
+        },
+        {
+          "id": "variables",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/skills/variables/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "device-lookup",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/commands/device-lookup.md"
+        },
+        {
+          "id": "resolve-alert",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/commands/resolve-alert.md"
+        },
+        {
+          "id": "run-job",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/commands/run-job.md"
+        },
+        {
+          "id": "site-devices",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/commands/site-devices.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "backup-health-monitor",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/agents/backup-health-monitor.md"
+        },
+        {
+          "id": "rmm-health-auditor",
+          "path": "msp-claude-plugins/kaseya/datto-rmm/agents/rmm-health-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "domotz",
+      "displayName": "Domotz",
+      "version": "0.2.8",
+      "description": "Domotz - network monitoring, SNMP discovery, device management",
+      "category": "network",
+      "tags": [
+        "domotz",
+        "network",
+        "monitoring",
+        "snmp",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/domotz/domotz",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/domotz/domotz/skills/agents/SKILL.md"
+        },
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/domotz/domotz/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/domotz/domotz/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/domotz/domotz/skills/devices/SKILL.md"
+        },
+        {
+          "id": "network",
+          "path": "msp-claude-plugins/domotz/domotz/skills/network/SKILL.md"
+        },
+        {
+          "id": "power",
+          "path": "msp-claude-plugins/domotz/domotz/skills/power/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "device-inventory",
+          "path": "msp-claude-plugins/domotz/domotz/commands/device-inventory.md"
+        },
+        {
+          "id": "device-lookup",
+          "path": "msp-claude-plugins/domotz/domotz/commands/device-lookup.md"
+        },
+        {
+          "id": "site-overview",
+          "path": "msp-claude-plugins/domotz/domotz/commands/site-overview.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "halopsa",
+      "displayName": "Halopsa",
+      "version": "0.2.10",
+      "description": "HaloPSA - tickets, clients, assets, contracts (OAuth 2.0)",
+      "category": "psa",
+      "tags": [
+        "halopsa",
+        "psa",
+        "tickets",
+        "oauth",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/halopsa/halopsa",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/agents/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "assets",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/assets/SKILL.md"
+        },
+        {
+          "id": "clients",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/clients/SKILL.md"
+        },
+        {
+          "id": "contracts",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/contracts/SKILL.md"
+        },
+        {
+          "id": "invoices",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/invoices/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/halopsa/halopsa/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "add-action",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/add-action.md"
+        },
+        {
+          "id": "contract-status",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/contract-status.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/create-ticket.md"
+        },
+        {
+          "id": "kb-search",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/kb-search.md"
+        },
+        {
+          "id": "search-assets",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/search-assets.md"
+        },
+        {
+          "id": "search-clients",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/search-clients.md"
+        },
+        {
+          "id": "search-tickets",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/search-tickets.md"
+        },
+        {
+          "id": "show-ticket",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/show-ticket.md"
+        },
+        {
+          "id": "sla-dashboard",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/sla-dashboard.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/halopsa/halopsa/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "service-desk-ops",
+          "path": "msp-claude-plugins/halopsa/halopsa/agents/service-desk-ops.md"
+        },
+        {
+          "id": "sla-performance-reporter",
+          "path": "msp-claude-plugins/halopsa/halopsa/agents/sla-performance-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "hudu",
+      "displayName": "Hudu",
+      "version": "0.2.10",
+      "description": "Hudu IT documentation - companies, assets, articles, passwords, websites",
+      "category": "documentation",
+      "tags": [
+        "hudu",
+        "documentation",
+        "assets",
+        "passwords",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/hudu/hudu",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/hudu/hudu/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "articles",
+          "path": "msp-claude-plugins/hudu/hudu/skills/articles/SKILL.md"
+        },
+        {
+          "id": "assets",
+          "path": "msp-claude-plugins/hudu/hudu/skills/assets/SKILL.md"
+        },
+        {
+          "id": "companies",
+          "path": "msp-claude-plugins/hudu/hudu/skills/companies/SKILL.md"
+        },
+        {
+          "id": "passwords",
+          "path": "msp-claude-plugins/hudu/hudu/skills/passwords/SKILL.md"
+        },
+        {
+          "id": "websites",
+          "path": "msp-claude-plugins/hudu/hudu/skills/websites/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "find-company",
+          "path": "msp-claude-plugins/hudu/hudu/commands/find-company.md"
+        },
+        {
+          "id": "get-password",
+          "path": "msp-claude-plugins/hudu/hudu/commands/get-password.md"
+        },
+        {
+          "id": "lookup-asset",
+          "path": "msp-claude-plugins/hudu/hudu/commands/lookup-asset.md"
+        },
+        {
+          "id": "search-articles",
+          "path": "msp-claude-plugins/hudu/hudu/commands/search-articles.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "documentation-auditor",
+          "path": "msp-claude-plugins/hudu/hudu/agents/documentation-auditor.md"
+        },
+        {
+          "id": "runbook-freshness-auditor",
+          "path": "msp-claude-plugins/hudu/hudu/agents/runbook-freshness-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "huntress",
+      "displayName": "Huntress",
+      "version": "0.3.7",
+      "description": "Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports",
+      "category": "security",
+      "tags": [
+        "huntress",
+        "edr",
+        "security",
+        "incidents",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/huntress/huntress",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/huntress/huntress/skills/agents/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/huntress/huntress/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "billing",
+          "path": "msp-claude-plugins/huntress/huntress/skills/billing/SKILL.md"
+        },
+        {
+          "id": "escalations",
+          "path": "msp-claude-plugins/huntress/huntress/skills/escalations/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/huntress/huntress/skills/incidents/SKILL.md"
+        },
+        {
+          "id": "organizations",
+          "path": "msp-claude-plugins/huntress/huntress/skills/organizations/SKILL.md"
+        },
+        {
+          "id": "signals",
+          "path": "msp-claude-plugins/huntress/huntress/skills/signals/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "agent-inventory",
+          "path": "msp-claude-plugins/huntress/huntress/commands/agent-inventory.md"
+        },
+        {
+          "id": "billing-report",
+          "path": "msp-claude-plugins/huntress/huntress/commands/billing-report.md"
+        },
+        {
+          "id": "incident-triage",
+          "path": "msp-claude-plugins/huntress/huntress/commands/incident-triage.md"
+        },
+        {
+          "id": "investigate-incident",
+          "path": "msp-claude-plugins/huntress/huntress/commands/investigate-incident.md"
+        },
+        {
+          "id": "org-health",
+          "path": "msp-claude-plugins/huntress/huntress/commands/org-health.md"
+        },
+        {
+          "id": "resolve-escalation",
+          "path": "msp-claude-plugins/huntress/huntress/commands/resolve-escalation.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "client-onboarding-validator",
+          "path": "msp-claude-plugins/huntress/huntress/agents/client-onboarding-validator.md"
+        },
+        {
+          "id": "incident-responder",
+          "path": "msp-claude-plugins/huntress/huntress/agents/incident-responder.md"
+        }
+      ]
+    },
+    {
+      "name": "itglue",
+      "displayName": "IT Glue",
+      "version": "1.2.4",
+      "description": "IT Glue - organizations, assets, passwords, flexible assets",
+      "category": "documentation",
+      "tags": [
+        "kaseya",
+        "it-glue",
+        "documentation",
+        "passwords",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kaseya/it-glue",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "configurations",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/configurations/SKILL.md"
+        },
+        {
+          "id": "contacts",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/contacts/SKILL.md"
+        },
+        {
+          "id": "documents",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/documents/SKILL.md"
+        },
+        {
+          "id": "flexible-assets",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/flexible-assets/SKILL.md"
+        },
+        {
+          "id": "organizations",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/organizations/SKILL.md"
+        },
+        {
+          "id": "passwords",
+          "path": "msp-claude-plugins/kaseya/it-glue/skills/passwords/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "edit-doc-sections",
+          "path": "msp-claude-plugins/kaseya/it-glue/commands/edit-doc-sections.md"
+        },
+        {
+          "id": "find-organization",
+          "path": "msp-claude-plugins/kaseya/it-glue/commands/find-organization.md"
+        },
+        {
+          "id": "get-password",
+          "path": "msp-claude-plugins/kaseya/it-glue/commands/get-password.md"
+        },
+        {
+          "id": "lookup-asset",
+          "path": "msp-claude-plugins/kaseya/it-glue/commands/lookup-asset.md"
+        },
+        {
+          "id": "search-docs",
+          "path": "msp-claude-plugins/kaseya/it-glue/commands/search-docs.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "asset-documentation-linker",
+          "path": "msp-claude-plugins/kaseya/it-glue/agents/asset-documentation-linker.md"
+        },
+        {
+          "id": "documentation-auditor",
+          "path": "msp-claude-plugins/kaseya/it-glue/agents/documentation-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "knowbe4",
+      "displayName": "Knowbe4",
+      "version": "0.2.9",
+      "description": "KnowBe4 - phishing simulation, security awareness training, user risk management",
+      "category": "email-security",
+      "tags": [
+        "knowbe4",
+        "security-awareness",
+        "phishing",
+        "training",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/email-security/knowbe4",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/email-security/knowbe4/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "phishing",
+          "path": "msp-claude-plugins/email-security/knowbe4/skills/phishing/SKILL.md"
+        },
+        {
+          "id": "reporting",
+          "path": "msp-claude-plugins/email-security/knowbe4/skills/reporting/SKILL.md"
+        },
+        {
+          "id": "training",
+          "path": "msp-claude-plugins/email-security/knowbe4/skills/training/SKILL.md"
+        },
+        {
+          "id": "users",
+          "path": "msp-claude-plugins/email-security/knowbe4/skills/users/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "campaign-summary",
+          "path": "msp-claude-plugins/email-security/knowbe4/commands/campaign-summary.md"
+        },
+        {
+          "id": "group-report",
+          "path": "msp-claude-plugins/email-security/knowbe4/commands/group-report.md"
+        },
+        {
+          "id": "phishing-results",
+          "path": "msp-claude-plugins/email-security/knowbe4/commands/phishing-results.md"
+        },
+        {
+          "id": "training-status",
+          "path": "msp-claude-plugins/email-security/knowbe4/commands/training-status.md"
+        },
+        {
+          "id": "user-risk",
+          "path": "msp-claude-plugins/email-security/knowbe4/commands/user-risk.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "security-awareness-analyst",
+          "path": "msp-claude-plugins/email-security/knowbe4/agents/security-awareness-analyst.md"
+        },
+        {
+          "id": "training-enforcer",
+          "path": "msp-claude-plugins/email-security/knowbe4/agents/training-enforcer.md"
+        }
+      ]
+    },
+    {
+      "name": "liongard",
+      "displayName": "Liongard",
+      "version": "0.2.7",
+      "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
+      "category": "rmm",
+      "tags": [
+        "liongard",
+        "rmm",
+        "monitoring",
+        "inspections",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/liongard/liongard",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "detections",
+          "path": "msp-claude-plugins/liongard/liongard/skills/detections/SKILL.md"
+        },
+        {
+          "id": "environments",
+          "path": "msp-claude-plugins/liongard/liongard/skills/environments/SKILL.md"
+        },
+        {
+          "id": "inspections",
+          "path": "msp-claude-plugins/liongard/liongard/skills/inspections/SKILL.md"
+        },
+        {
+          "id": "overview",
+          "path": "msp-claude-plugins/liongard/liongard/skills/overview/SKILL.md"
+        },
+        {
+          "id": "systems",
+          "path": "msp-claude-plugins/liongard/liongard/skills/systems/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "liongard-environment-summary",
+          "path": "msp-claude-plugins/liongard/liongard/commands/liongard-environment-summary.md"
+        },
+        {
+          "id": "liongard-health-check",
+          "path": "msp-claude-plugins/liongard/liongard/commands/liongard-health-check.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "change-detective",
+          "path": "msp-claude-plugins/liongard/liongard/agents/change-detective.md"
+        },
+        {
+          "id": "compliance-drift-reporter",
+          "path": "msp-claude-plugins/liongard/liongard/agents/compliance-drift-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "m365",
+      "displayName": "M365",
+      "version": "0.2.6",
+      "description": "Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
+      "category": "productivity",
+      "tags": [
+        "microsoft",
+        "m365",
+        "office365",
+        "azure-ad",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/m365/m365",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/m365/m365/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "calendar",
+          "path": "msp-claude-plugins/m365/m365/skills/calendar/SKILL.md"
+        },
+        {
+          "id": "files",
+          "path": "msp-claude-plugins/m365/m365/skills/files/SKILL.md"
+        },
+        {
+          "id": "licensing",
+          "path": "msp-claude-plugins/m365/m365/skills/licensing/SKILL.md"
+        },
+        {
+          "id": "mailboxes",
+          "path": "msp-claude-plugins/m365/m365/skills/mailboxes/SKILL.md"
+        },
+        {
+          "id": "security",
+          "path": "msp-claude-plugins/m365/m365/skills/security/SKILL.md"
+        },
+        {
+          "id": "teams",
+          "path": "msp-claude-plugins/m365/m365/skills/teams/SKILL.md"
+        },
+        {
+          "id": "users",
+          "path": "msp-claude-plugins/m365/m365/skills/users/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-mfa-status",
+          "path": "msp-claude-plugins/m365/m365/commands/check-mfa-status.md"
+        },
+        {
+          "id": "get-user",
+          "path": "msp-claude-plugins/m365/m365/commands/get-user.md"
+        },
+        {
+          "id": "list-licenses",
+          "path": "msp-claude-plugins/m365/m365/commands/list-licenses.md"
+        },
+        {
+          "id": "offboard-user",
+          "path": "msp-claude-plugins/m365/m365/commands/offboard-user.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "identity-auditor",
+          "path": "msp-claude-plugins/m365/m365/agents/identity-auditor.md"
+        },
+        {
+          "id": "license-auditor",
+          "path": "msp-claude-plugins/m365/m365/agents/license-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "ninjaone",
+      "displayName": "NinjaOne",
+      "version": "0.2.10",
+      "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
+      "category": "rmm",
+      "tags": [
+        "ninjaone",
+        "ninjarmm",
+        "rmm",
+        "monitoring",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/ninjaone/ninjaone-rmm",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/devices/SKILL.md"
+        },
+        {
+          "id": "organizations",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/organizations/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/commands/create-ticket.md"
+        },
+        {
+          "id": "device-info",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/commands/device-info.md"
+        },
+        {
+          "id": "list-alerts",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/commands/list-alerts.md"
+        },
+        {
+          "id": "search-devices",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/commands/search-devices.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "device-health-auditor",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/agents/device-health-auditor.md"
+        },
+        {
+          "id": "patch-compliance-reporter",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/agents/patch-compliance-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "pagerduty",
+      "displayName": "Pagerduty",
+      "version": "0.2.10",
+      "description": "PagerDuty - incident management, on-call scheduling, alerting",
+      "category": "incident-management",
+      "tags": [
+        "pagerduty",
+        "incidents",
+        "alerting",
+        "oncall",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/pagerduty/pagerduty",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "analytics",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/analytics/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/incidents/SKILL.md"
+        },
+        {
+          "id": "oncall",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/oncall/SKILL.md"
+        },
+        {
+          "id": "services",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/skills/services/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-incident",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/commands/create-incident.md"
+        },
+        {
+          "id": "escalate-incident",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/commands/escalate-incident.md"
+        },
+        {
+          "id": "incident-triage",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/commands/incident-triage.md"
+        },
+        {
+          "id": "oncall-schedule",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/commands/oncall-schedule.md"
+        },
+        {
+          "id": "service-health",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/commands/service-health.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "incident-commander",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/agents/incident-commander.md"
+        },
+        {
+          "id": "on-call-scheduler",
+          "path": "msp-claude-plugins/pagerduty/pagerduty/agents/on-call-scheduler.md"
+        }
+      ]
+    },
+    {
+      "name": "pandadoc",
+      "displayName": "Pandadoc",
+      "version": "0.2.7",
+      "description": "PandaDoc - documents, templates, e-signatures, and proposal management",
+      "category": "sales",
+      "tags": [
+        "pandadoc",
+        "documents",
+        "proposals",
+        "esign",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/pandadoc/pandadoc",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "documents",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/skills/documents/SKILL.md"
+        },
+        {
+          "id": "proposals",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/skills/proposals/SKILL.md"
+        },
+        {
+          "id": "recipients",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/skills/recipients/SKILL.md"
+        },
+        {
+          "id": "templates",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/skills/templates/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-document",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/commands/create-document.md"
+        },
+        {
+          "id": "document-status",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/commands/document-status.md"
+        },
+        {
+          "id": "list-templates",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/commands/list-templates.md"
+        },
+        {
+          "id": "proposal-pipeline",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/commands/proposal-pipeline.md"
+        },
+        {
+          "id": "send-document",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/commands/send-document.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "contract-tracker",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/agents/contract-tracker.md"
+        },
+        {
+          "id": "template-standardizer",
+          "path": "msp-claude-plugins/pandadoc/pandadoc/agents/template-standardizer.md"
+        }
+      ]
+    },
+    {
+      "name": "warmly",
+      "displayName": "Warmly",
+      "version": "0.1.7",
+      "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
+      "category": "sales",
+      "tags": [
+        "warmly",
+        "sales",
+        "visitor-intelligence",
+        "prospecting",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/warmly/warmly",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/warmly/warmly/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "visitor-intelligence",
+          "path": "msp-claude-plugins/warmly/warmly/skills/visitor-intelligence/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "pax8",
+      "displayName": "Pax8",
+      "version": "0.2.9",
+      "description": "Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
+      "category": "marketplace",
+      "tags": [
+        "pax8",
+        "marketplace",
+        "subscriptions",
+        "cloud",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/pax8/pax8",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/pax8/pax8/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "companies",
+          "path": "msp-claude-plugins/pax8/pax8/skills/companies/SKILL.md"
+        },
+        {
+          "id": "invoices",
+          "path": "msp-claude-plugins/pax8/pax8/skills/invoices/SKILL.md"
+        },
+        {
+          "id": "orders",
+          "path": "msp-claude-plugins/pax8/pax8/skills/orders/SKILL.md"
+        },
+        {
+          "id": "products",
+          "path": "msp-claude-plugins/pax8/pax8/skills/products/SKILL.md"
+        },
+        {
+          "id": "subscriptions",
+          "path": "msp-claude-plugins/pax8/pax8/skills/subscriptions/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-order",
+          "path": "msp-claude-plugins/pax8/pax8/commands/create-order.md"
+        },
+        {
+          "id": "license-summary",
+          "path": "msp-claude-plugins/pax8/pax8/commands/license-summary.md"
+        },
+        {
+          "id": "search-products",
+          "path": "msp-claude-plugins/pax8/pax8/commands/search-products.md"
+        },
+        {
+          "id": "subscription-status",
+          "path": "msp-claude-plugins/pax8/pax8/commands/subscription-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "license-optimizer",
+          "path": "msp-claude-plugins/pax8/pax8/agents/license-optimizer.md"
+        },
+        {
+          "id": "renewal-calendar",
+          "path": "msp-claude-plugins/pax8/pax8/agents/renewal-calendar.md"
+        }
+      ]
+    },
+    {
+      "name": "posthog",
+      "displayName": "Posthog",
+      "version": "0.1.2",
+      "description": "PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)",
+      "category": "productivity",
+      "tags": [
+        "posthog",
+        "analytics",
+        "productivity",
+        "read-only"
+      ],
+      "path": "msp-claude-plugins/posthog/posthog",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "posthog": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/posthog/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/posthog/posthog/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "cohorts-and-events",
+          "path": "msp-claude-plugins/posthog/posthog/skills/cohorts-and-events/SKILL.md"
+        },
+        {
+          "id": "feature-flags-and-experiments",
+          "path": "msp-claude-plugins/posthog/posthog/skills/feature-flags-and-experiments/SKILL.md"
+        },
+        {
+          "id": "insights-and-dashboards",
+          "path": "msp-claude-plugins/posthog/posthog/skills/insights-and-dashboards/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-insight",
+          "path": "msp-claude-plugins/posthog/posthog/commands/check-insight.md"
+        },
+        {
+          "id": "list-dashboards",
+          "path": "msp-claude-plugins/posthog/posthog/commands/list-dashboards.md"
+        },
+        {
+          "id": "list-feature-flags",
+          "path": "msp-claude-plugins/posthog/posthog/commands/list-feature-flags.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "proofpoint",
+      "displayName": "Proofpoint",
+      "version": "0.2.10",
+      "description": "Proofpoint Email Protection - TAP, quarantine, threat intel, forensics, URL defense, VAP reports",
+      "category": "email-security",
+      "tags": [
+        "proofpoint",
+        "email-security",
+        "tap",
+        "threat-intel",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/email-security/proofpoint",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "forensics",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/forensics/SKILL.md"
+        },
+        {
+          "id": "people",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/people/SKILL.md"
+        },
+        {
+          "id": "quarantine",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/quarantine/SKILL.md"
+        },
+        {
+          "id": "tap",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/tap/SKILL.md"
+        },
+        {
+          "id": "threat-intel",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/threat-intel/SKILL.md"
+        },
+        {
+          "id": "url-defense",
+          "path": "msp-claude-plugins/email-security/proofpoint/skills/url-defense/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-threats",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/check-threats.md"
+        },
+        {
+          "id": "decode-url",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/decode-url.md"
+        },
+        {
+          "id": "investigate-threat",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/investigate-threat.md"
+        },
+        {
+          "id": "release-quarantine",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/release-quarantine.md"
+        },
+        {
+          "id": "search-quarantine",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/search-quarantine.md"
+        },
+        {
+          "id": "vap-report",
+          "path": "msp-claude-plugins/email-security/proofpoint/commands/vap-report.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "email-security-auditor",
+          "path": "msp-claude-plugins/email-security/proofpoint/agents/email-security-auditor.md"
+        },
+        {
+          "id": "vap-reporter",
+          "path": "msp-claude-plugins/email-security/proofpoint/agents/vap-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "proofpoint-essentials",
+      "displayName": "Proofpoint Essentials",
+      "version": "0.1.0",
+      "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
+      "category": "email-security",
+      "tags": [
+        "proofpoint",
+        "proofpoint-essentials",
+        "email-security",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/email-security/proofpoint-essentials",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "org-management",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/skills/org-management/SKILL.md"
+        },
+        {
+          "id": "reporting",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/skills/reporting/SKILL.md"
+        },
+        {
+          "id": "user-management",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/skills/user-management/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "org-health-check",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/commands/org-health-check.md"
+        },
+        {
+          "id": "search-org",
+          "path": "msp-claude-plugins/email-security/proofpoint-essentials/commands/search-org.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "netsuite",
+      "displayName": "Netsuite",
+      "version": "0.1.1",
+      "description": "Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)",
+      "category": "accounting",
+      "tags": [
+        "netsuite",
+        "accounting",
+        "erp",
+        "read-only",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/netsuite/netsuite",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "netsuite": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/netsuite/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/netsuite/netsuite/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "records-and-metadata",
+          "path": "msp-claude-plugins/netsuite/netsuite/skills/records-and-metadata/SKILL.md"
+        },
+        {
+          "id": "reports-and-saved-searches",
+          "path": "msp-claude-plugins/netsuite/netsuite/skills/reports-and-saved-searches/SKILL.md"
+        },
+        {
+          "id": "suiteql-queries",
+          "path": "msp-claude-plugins/netsuite/netsuite/skills/suiteql-queries/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "get-record",
+          "path": "msp-claude-plugins/netsuite/netsuite/commands/get-record.md"
+        },
+        {
+          "id": "query-records",
+          "path": "msp-claude-plugins/netsuite/netsuite/commands/query-records.md"
+        },
+        {
+          "id": "run-report",
+          "path": "msp-claude-plugins/netsuite/netsuite/commands/run-report.md"
+        },
+        {
+          "id": "run-saved-search",
+          "path": "msp-claude-plugins/netsuite/netsuite/commands/run-saved-search.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "qbo",
+      "displayName": "QuickBooks Online",
+      "version": "0.2.10",
+      "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
+      "category": "accounting",
+      "tags": [
+        "quickbooks",
+        "accounting",
+        "invoices",
+        "expenses",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/quickbooks/quickbooks-online",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "customers",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/customers/SKILL.md"
+        },
+        {
+          "id": "expenses",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/expenses/SKILL.md"
+        },
+        {
+          "id": "invoices",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/invoices/SKILL.md"
+        },
+        {
+          "id": "payments",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/payments/SKILL.md"
+        },
+        {
+          "id": "reports",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/skills/reports/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-invoice",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/commands/create-invoice.md"
+        },
+        {
+          "id": "expense-summary",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/commands/expense-summary.md"
+        },
+        {
+          "id": "get-balance",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/commands/get-balance.md"
+        },
+        {
+          "id": "search-customers",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/commands/search-customers.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "billing-reconciler",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/agents/billing-reconciler.md"
+        },
+        {
+          "id": "profitability-reporter",
+          "path": "msp-claude-plugins/quickbooks/quickbooks-online/agents/profitability-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "rocketcyber",
+      "displayName": "Rocketcyber",
+      "version": "0.3.4",
+      "description": "RocketCyber managed SOC - incidents, agents, events, threat detection",
+      "category": "security",
+      "tags": [
+        "kaseya",
+        "rocketcyber",
+        "soc",
+        "security",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kaseya/rocketcyber",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "accounts",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/skills/accounts/SKILL.md"
+        },
+        {
+          "id": "agents",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/skills/agents/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "apps",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/skills/apps/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/skills/incidents/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "account-summary",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/commands/account-summary.md"
+        },
+        {
+          "id": "search-incidents",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/commands/search-incidents.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "soc-alert-investigator",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/agents/soc-alert-investigator.md"
+        },
+        {
+          "id": "threat-correlation-analyst",
+          "path": "msp-claude-plugins/kaseya/rocketcyber/agents/threat-correlation-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "rootly",
+      "displayName": "Rootly",
+      "version": "0.2.11",
+      "description": "Rootly - incident management, postmortems, SRE automation",
+      "category": "incident-management",
+      "tags": [
+        "rootly",
+        "incidents",
+        "postmortem",
+        "sre",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/rootly/rootly",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/rootly/rootly/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/rootly/rootly/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/rootly/rootly/skills/incidents/SKILL.md"
+        },
+        {
+          "id": "oncall",
+          "path": "msp-claude-plugins/rootly/rootly/skills/oncall/SKILL.md"
+        },
+        {
+          "id": "postmortems",
+          "path": "msp-claude-plugins/rootly/rootly/skills/postmortems/SKILL.md"
+        },
+        {
+          "id": "services",
+          "path": "msp-claude-plugins/rootly/rootly/skills/services/SKILL.md"
+        },
+        {
+          "id": "workflows",
+          "path": "msp-claude-plugins/rootly/rootly/skills/workflows/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "action-items",
+          "path": "msp-claude-plugins/rootly/rootly/commands/action-items.md"
+        },
+        {
+          "id": "create-incident",
+          "path": "msp-claude-plugins/rootly/rootly/commands/create-incident.md"
+        },
+        {
+          "id": "incident-triage",
+          "path": "msp-claude-plugins/rootly/rootly/commands/incident-triage.md"
+        },
+        {
+          "id": "postmortem-summary",
+          "path": "msp-claude-plugins/rootly/rootly/commands/postmortem-summary.md"
+        },
+        {
+          "id": "service-status",
+          "path": "msp-claude-plugins/rootly/rootly/commands/service-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "incident-commander",
+          "path": "msp-claude-plugins/rootly/rootly/agents/incident-commander.md"
+        },
+        {
+          "id": "post-mortem-writer",
+          "path": "msp-claude-plugins/rootly/rootly/agents/post-mortem-writer.md"
+        }
+      ]
+    },
+    {
+      "name": "runzero",
+      "displayName": "Runzero",
+      "version": "0.2.9",
+      "description": "runZero - asset discovery, network scanning, inventory management",
+      "category": "security",
+      "tags": [
+        "runzero",
+        "asset-discovery",
+        "network",
+        "scanning",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/runzero/runzero",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/runzero/runzero/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "assets",
+          "path": "msp-claude-plugins/runzero/runzero/skills/assets/SKILL.md"
+        },
+        {
+          "id": "services",
+          "path": "msp-claude-plugins/runzero/runzero/skills/services/SKILL.md"
+        },
+        {
+          "id": "sites",
+          "path": "msp-claude-plugins/runzero/runzero/skills/sites/SKILL.md"
+        },
+        {
+          "id": "tasks",
+          "path": "msp-claude-plugins/runzero/runzero/skills/tasks/SKILL.md"
+        },
+        {
+          "id": "wireless",
+          "path": "msp-claude-plugins/runzero/runzero/skills/wireless/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "asset-search",
+          "path": "msp-claude-plugins/runzero/runzero/commands/asset-search.md"
+        },
+        {
+          "id": "scan-network",
+          "path": "msp-claude-plugins/runzero/runzero/commands/scan-network.md"
+        },
+        {
+          "id": "service-inventory",
+          "path": "msp-claude-plugins/runzero/runzero/commands/service-inventory.md"
+        },
+        {
+          "id": "site-overview",
+          "path": "msp-claude-plugins/runzero/runzero/commands/site-overview.md"
+        },
+        {
+          "id": "vuln-report",
+          "path": "msp-claude-plugins/runzero/runzero/commands/vuln-report.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "salesbuildr",
+      "displayName": "Salesbuildr",
+      "version": "1.1.9",
+      "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
+      "category": "crm",
+      "tags": [
+        "salesbuildr",
+        "crm",
+        "sales",
+        "quotes",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/salesbuildr/salesbuildr",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "companies-contacts",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/skills/companies-contacts/SKILL.md"
+        },
+        {
+          "id": "opportunities",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/skills/opportunities/SKILL.md"
+        },
+        {
+          "id": "products",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/skills/products/SKILL.md"
+        },
+        {
+          "id": "quotes",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/skills/quotes/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-contact",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/create-contact.md"
+        },
+        {
+          "id": "create-opportunity",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/create-opportunity.md"
+        },
+        {
+          "id": "create-quote",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/create-quote.md"
+        },
+        {
+          "id": "get-quote",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/get-quote.md"
+        },
+        {
+          "id": "search-companies",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/search-companies.md"
+        },
+        {
+          "id": "search-contacts",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/search-contacts.md"
+        },
+        {
+          "id": "search-opportunities",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/search-opportunities.md"
+        },
+        {
+          "id": "search-products",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/search-products.md"
+        },
+        {
+          "id": "search-quotes",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/search-quotes.md"
+        },
+        {
+          "id": "update-opportunity",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/commands/update-opportunity.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "margin-analyzer",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/agents/margin-analyzer.md"
+        },
+        {
+          "id": "quote-builder",
+          "path": "msp-claude-plugins/salesbuildr/salesbuildr/agents/quote-builder.md"
+        }
+      ]
+    },
+    {
+      "name": "sentinelone",
+      "displayName": "Sentinelone",
+      "version": "0.2.8",
+      "description": "SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
+      "category": "security",
+      "tags": [
+        "sentinelone",
+        "edr",
+        "security",
+        "threat-hunting",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/sentinelone/sentinelone",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "inventory",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/inventory/SKILL.md"
+        },
+        {
+          "id": "misconfigurations",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/misconfigurations/SKILL.md"
+        },
+        {
+          "id": "purple-ai",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/purple-ai/SKILL.md"
+        },
+        {
+          "id": "threat-hunting",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/threat-hunting/SKILL.md"
+        },
+        {
+          "id": "vulnerabilities",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/vulnerabilities/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "alert-triage",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/alert-triage.md"
+        },
+        {
+          "id": "asset-inventory",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/asset-inventory.md"
+        },
+        {
+          "id": "hunt-threat",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/hunt-threat.md"
+        },
+        {
+          "id": "investigate-alert",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/investigate-alert.md"
+        },
+        {
+          "id": "posture-review",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/posture-review.md"
+        },
+        {
+          "id": "vuln-report",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/commands/vuln-report.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "endpoint-hardening-auditor",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/agents/endpoint-hardening-auditor.md"
+        },
+        {
+          "id": "threat-hunter",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/agents/threat-hunter.md"
+        }
+      ]
+    },
+    {
+      "name": "shared-skills",
+      "displayName": "Shared Skills",
+      "version": "1.1.7",
+      "description": "Vendor-agnostic MSP skills - terminology and ticket triage",
+      "category": "knowledge",
+      "tags": [
+        "msp",
+        "terminology",
+        "triage",
+        "shared"
+      ],
+      "path": "msp-claude-plugins/shared",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "billing-reconciliation",
+          "path": "msp-claude-plugins/shared/skills/billing-reconciliation/SKILL.md"
+        },
+        {
+          "id": "incident-correlation",
+          "path": "msp-claude-plugins/shared/skills/incident-correlation/SKILL.md"
+        },
+        {
+          "id": "msp-terminology",
+          "path": "msp-claude-plugins/shared/skills/msp-terminology/SKILL.md"
+        },
+        {
+          "id": "ticket-triage",
+          "path": "msp-claude-plugins/shared/skills/ticket-triage/SKILL.md"
+        },
+        {
+          "id": "wyre-gateway-troubleshooting",
+          "path": "msp-claude-plugins/shared/skills/wyre-gateway-troubleshooting/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "correlate-incident",
+          "path": "msp-claude-plugins/shared/commands/correlate-incident.md"
+        },
+        {
+          "id": "reconcile-billing",
+          "path": "msp-claude-plugins/shared/commands/reconcile-billing.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "sherweb",
+      "displayName": "Sherweb",
+      "version": "0.3.9",
+      "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
+      "category": "marketplace",
+      "tags": [
+        "sherweb",
+        "marketplace",
+        "billing",
+        "subscriptions",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/sherweb/sherweb",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/sherweb/sherweb/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "billing",
+          "path": "msp-claude-plugins/sherweb/sherweb/skills/billing/SKILL.md"
+        },
+        {
+          "id": "customers",
+          "path": "msp-claude-plugins/sherweb/sherweb/skills/customers/SKILL.md"
+        },
+        {
+          "id": "subscriptions",
+          "path": "msp-claude-plugins/sherweb/sherweb/skills/subscriptions/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "billing-summary",
+          "path": "msp-claude-plugins/sherweb/sherweb/commands/billing-summary.md"
+        },
+        {
+          "id": "change-quantity",
+          "path": "msp-claude-plugins/sherweb/sherweb/commands/change-quantity.md"
+        },
+        {
+          "id": "list-customers",
+          "path": "msp-claude-plugins/sherweb/sherweb/commands/list-customers.md"
+        },
+        {
+          "id": "subscription-status",
+          "path": "msp-claude-plugins/sherweb/sherweb/commands/subscription-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "billing-reconciler",
+          "path": "msp-claude-plugins/sherweb/sherweb/agents/billing-reconciler.md"
+        },
+        {
+          "id": "customer-account-auditor",
+          "path": "msp-claude-plugins/sherweb/sherweb/agents/customer-account-auditor.md"
+        },
+        {
+          "id": "subscription-provisioner",
+          "path": "msp-claude-plugins/sherweb/sherweb/agents/subscription-provisioner.md"
+        }
+      ]
+    },
+    {
+      "name": "superops",
+      "displayName": "Superops",
+      "version": "0.2.9",
+      "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
+      "category": "psa-rmm",
+      "tags": [
+        "superops",
+        "psa",
+        "rmm",
+        "graphql",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/superops/superops-ai",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alerts",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/alerts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "assets",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/assets/SKILL.md"
+        },
+        {
+          "id": "clients",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/clients/SKILL.md"
+        },
+        {
+          "id": "runbooks",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/runbooks/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/superops/superops-ai/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "acknowledge-alert",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/acknowledge-alert.md"
+        },
+        {
+          "id": "add-ticket-note",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/add-ticket-note.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/create-ticket.md"
+        },
+        {
+          "id": "get-asset",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/get-asset.md"
+        },
+        {
+          "id": "list-alerts",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/list-alerts.md"
+        },
+        {
+          "id": "list-assets",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/list-assets.md"
+        },
+        {
+          "id": "log-time",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/log-time.md"
+        },
+        {
+          "id": "resolve-alert",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/resolve-alert.md"
+        },
+        {
+          "id": "run-script",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/run-script.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/superops/superops-ai/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "automation-opportunity-finder",
+          "path": "msp-claude-plugins/superops/superops-ai/agents/automation-opportunity-finder.md"
+        },
+        {
+          "id": "msp-service-ops",
+          "path": "msp-claude-plugins/superops/superops-ai/agents/msp-service-ops.md"
+        }
+      ]
+    },
+    {
+      "name": "syncro",
+      "displayName": "Syncro",
+      "version": "0.2.8",
+      "description": "Syncro MSP - tickets, customers, assets, invoicing",
+      "category": "psa-rmm",
+      "tags": [
+        "syncro",
+        "psa",
+        "rmm",
+        "tickets",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/syncro/syncro-msp",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/syncro/syncro-msp/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "assets",
+          "path": "msp-claude-plugins/syncro/syncro-msp/skills/assets/SKILL.md"
+        },
+        {
+          "id": "customers",
+          "path": "msp-claude-plugins/syncro/syncro-msp/skills/customers/SKILL.md"
+        },
+        {
+          "id": "invoices",
+          "path": "msp-claude-plugins/syncro/syncro-msp/skills/invoices/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/syncro/syncro-msp/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "add-ticket-comment",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/add-ticket-comment.md"
+        },
+        {
+          "id": "create-appointment",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/create-appointment.md"
+        },
+        {
+          "id": "create-ticket",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/create-ticket.md"
+        },
+        {
+          "id": "get-customer",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/get-customer.md"
+        },
+        {
+          "id": "list-alerts",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/list-alerts.md"
+        },
+        {
+          "id": "log-time",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/log-time.md"
+        },
+        {
+          "id": "resolve-alert",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/resolve-alert.md"
+        },
+        {
+          "id": "search-assets",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/search-assets.md"
+        },
+        {
+          "id": "search-tickets",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/search-tickets.md"
+        },
+        {
+          "id": "update-ticket",
+          "path": "msp-claude-plugins/syncro/syncro-msp/commands/update-ticket.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "billing-auditor",
+          "path": "msp-claude-plugins/syncro/syncro-msp/agents/billing-auditor.md"
+        },
+        {
+          "id": "msp-service-ops",
+          "path": "msp-claude-plugins/syncro/syncro-msp/agents/msp-service-ops.md"
+        }
+      ]
+    },
+    {
+      "name": "blackpoint",
+      "displayName": "Blackpoint",
+      "version": "1.1.8",
+      "description": "Blackpoint Cyber / CompassOne MDR - tenants, assets, detections, vulnerabilities (dark web, external, scans)",
+      "category": "security",
+      "tags": [
+        "blackpoint",
+        "compassone",
+        "security",
+        "mdr",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/blackpoint/blackpoint",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "blackpoint": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/blackpoint/mcp",
+          "headers": {
+            "X-Blackpoint-Api-Token": "${BLACKPOINT_API_TOKEN}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "asset-inventory",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/skills/asset-inventory/SKILL.md"
+        },
+        {
+          "id": "incident-response",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/skills/incident-response/SKILL.md"
+        },
+        {
+          "id": "multi-tenant-operations",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/skills/multi-tenant-operations/SKILL.md"
+        },
+        {
+          "id": "vulnerability-management",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/skills/vulnerability-management/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "investigate-detection",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/commands/investigate-detection.md"
+        },
+        {
+          "id": "partner-overview",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/commands/partner-overview.md"
+        },
+        {
+          "id": "search-detections",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/commands/search-detections.md"
+        },
+        {
+          "id": "tenant-exposure",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/commands/tenant-exposure.md"
+        },
+        {
+          "id": "triage-detections",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/commands/triage-detections.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "alert-response-coordinator",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/agents/alert-response-coordinator.md"
+        },
+        {
+          "id": "detection-investigator",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/agents/detection-investigator.md"
+        },
+        {
+          "id": "exposure-analyst",
+          "path": "msp-claude-plugins/blackpoint/blackpoint/agents/exposure-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "saas-alerts",
+      "displayName": "SAAS Alerts",
+      "version": "1.0.8",
+      "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
+      "category": "security",
+      "tags": [
+        "saas-alerts",
+        "security",
+        "saas-security",
+        "m365",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/saas-alerts/saas-alerts",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "saas-alerts": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/saas-alerts/mcp",
+          "headers": {
+            "X-SaaS-Alerts-API-Key": "${SAAS_ALERTS_API_KEY}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/saas-alerts/saas-alerts/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "triage",
+          "path": "msp-claude-plugins/saas-alerts/saas-alerts/skills/triage/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "saas-alerts-analyst",
+          "path": "msp-claude-plugins/saas-alerts/saas-alerts/agents/saas-alerts-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "crewhu",
+      "displayName": "Crewhu",
+      "version": "1.0.8",
+      "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",
+      "category": "productivity",
+      "tags": [
+        "crewhu",
+        "csat",
+        "engagement",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/crewhu/crewhu",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "crewhu": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/crewhu/mcp",
+          "headers": {
+            "X-Crewhu-Api-Token": "${X_CREWHU_APITOKEN}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/crewhu/crewhu/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "surveys",
+          "path": "msp-claude-plugins/crewhu/crewhu/skills/surveys/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "search-surveys",
+          "path": "msp-claude-plugins/crewhu/crewhu/commands/search-surveys.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "immybot",
+      "displayName": "Immybot",
+      "version": "1.1.8",
+      "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth)",
+      "category": "rmm",
+      "tags": [
+        "immybot",
+        "rmm",
+        "deployment",
+        "windows",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/immybot/immybot",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "immybot": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/immybot/mcp",
+          "headers": {
+            "X-Immybot-Instance-Subdomain": "${IMMYBOT_INSTANCE_SUBDOMAIN}",
+            "X-Immybot-Tenant-Id": "${IMMYBOT_TENANT_ID}",
+            "X-Immybot-Client-Id": "${IMMYBOT_CLIENT_ID}",
+            "X-Immybot-Client-Secret": "${IMMYBOT_CLIENT_SECRET}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/immybot/immybot/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "endpoint-management",
+          "path": "msp-claude-plugins/immybot/immybot/skills/endpoint-management/SKILL.md"
+        },
+        {
+          "id": "maintenance-sessions",
+          "path": "msp-claude-plugins/immybot/immybot/skills/maintenance-sessions/SKILL.md"
+        },
+        {
+          "id": "script-execution",
+          "path": "msp-claude-plugins/immybot/immybot/skills/script-execution/SKILL.md"
+        },
+        {
+          "id": "software-deployment",
+          "path": "msp-claude-plugins/immybot/immybot/skills/software-deployment/SKILL.md"
+        },
+        {
+          "id": "tenant-compliance",
+          "path": "msp-claude-plugins/immybot/immybot/skills/tenant-compliance/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "compliance-report",
+          "path": "msp-claude-plugins/immybot/immybot/commands/compliance-report.md"
+        },
+        {
+          "id": "deploy-software",
+          "path": "msp-claude-plugins/immybot/immybot/commands/deploy-software.md"
+        },
+        {
+          "id": "list-computers",
+          "path": "msp-claude-plugins/immybot/immybot/commands/list-computers.md"
+        },
+        {
+          "id": "maintenance-status",
+          "path": "msp-claude-plugins/immybot/immybot/commands/maintenance-status.md"
+        },
+        {
+          "id": "run-script",
+          "path": "msp-claude-plugins/immybot/immybot/commands/run-script.md"
+        },
+        {
+          "id": "search-software",
+          "path": "msp-claude-plugins/immybot/immybot/commands/search-software.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "compliance-auditor",
+          "path": "msp-claude-plugins/immybot/immybot/agents/compliance-auditor.md"
+        },
+        {
+          "id": "endpoint-remediation-specialist",
+          "path": "msp-claude-plugins/immybot/immybot/agents/endpoint-remediation-specialist.md"
+        },
+        {
+          "id": "software-deployment-orchestrator",
+          "path": "msp-claude-plugins/immybot/immybot/agents/software-deployment-orchestrator.md"
+        }
+      ]
+    },
+    {
+      "name": "timezest",
+      "displayName": "Timezest",
+      "version": "1.1.9",
+      "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
+      "category": "productivity",
+      "tags": [
+        "timezest",
+        "scheduling",
+        "psa",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/timezest/timezest",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "timezest": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/timezest/mcp",
+          "headers": {
+            "X-Timezest-Api-Token": "${TIMEZEST_API_TOKEN}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "agents-and-teams",
+          "path": "msp-claude-plugins/timezest/timezest/skills/agents-and-teams/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/timezest/timezest/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "appointment-types",
+          "path": "msp-claude-plugins/timezest/timezest/skills/appointment-types/SKILL.md"
+        },
+        {
+          "id": "psa-integration",
+          "path": "msp-claude-plugins/timezest/timezest/skills/psa-integration/SKILL.md"
+        },
+        {
+          "id": "resources",
+          "path": "msp-claude-plugins/timezest/timezest/skills/resources/SKILL.md"
+        },
+        {
+          "id": "scheduling",
+          "path": "msp-claude-plugins/timezest/timezest/skills/scheduling/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "book-tech",
+          "path": "msp-claude-plugins/timezest/timezest/commands/book-tech.md"
+        },
+        {
+          "id": "resource-roster",
+          "path": "msp-claude-plugins/timezest/timezest/commands/resource-roster.md"
+        },
+        {
+          "id": "scheduling-pipeline",
+          "path": "msp-claude-plugins/timezest/timezest/commands/scheduling-pipeline.md"
+        },
+        {
+          "id": "search-scheduling",
+          "path": "msp-claude-plugins/timezest/timezest/commands/search-scheduling.md"
+        },
+        {
+          "id": "stale-requests",
+          "path": "msp-claude-plugins/timezest/timezest/commands/stale-requests.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "booking-pipeline-auditor",
+          "path": "msp-claude-plugins/timezest/timezest/agents/booking-pipeline-auditor.md"
+        },
+        {
+          "id": "psa-integration-specialist",
+          "path": "msp-claude-plugins/timezest/timezest/agents/psa-integration-specialist.md"
+        },
+        {
+          "id": "scheduling-dispatcher",
+          "path": "msp-claude-plugins/timezest/timezest/agents/scheduling-dispatcher.md"
+        }
+      ]
+    },
+    {
+      "name": "threatlocker",
+      "displayName": "Threatlocker",
+      "version": "0.1.8",
+      "description": "ThreatLocker - zero-trust application allowlisting, approval triage, audit log investigation, computer inventory",
+      "category": "security",
+      "tags": [
+        "threatlocker",
+        "security",
+        "msp",
+        "zero-trust",
+        "application-control"
+      ],
+      "path": "msp-claude-plugins/threatlocker/threatlocker",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "threatlocker": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/threatlocker/mcp",
+          "headers": {
+            "X-Threatlocker-Api-Key": "${THREATLOCKER_API_KEY}",
+            "X-Threatlocker-Organization-Id": "${THREATLOCKER_ORGANIZATION_ID}"
+          }
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "approval-requests",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/approval-requests/SKILL.md"
+        },
+        {
+          "id": "audit-log",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/audit-log/SKILL.md"
+        },
+        {
+          "id": "computer-groups",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/computer-groups/SKILL.md"
+        },
+        {
+          "id": "computers",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/computers/SKILL.md"
+        },
+        {
+          "id": "organizations",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/skills/organizations/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "approval-triage",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/commands/approval-triage.md"
+        },
+        {
+          "id": "audit-investigation",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/commands/audit-investigation.md"
+        },
+        {
+          "id": "computer-inventory",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/commands/computer-inventory.md"
+        },
+        {
+          "id": "offline-agents",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/commands/offline-agents.md"
+        },
+        {
+          "id": "tenant-overview",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/commands/tenant-overview.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "approval-triage-analyst",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/agents/approval-triage-analyst.md"
+        },
+        {
+          "id": "fleet-health-auditor",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/agents/fleet-health-auditor.md"
+        },
+        {
+          "id": "threat-investigator",
+          "path": "msp-claude-plugins/threatlocker/threatlocker/agents/threat-investigator.md"
+        }
+      ]
+    },
+    {
+      "name": "kaseya-vsa",
+      "displayName": "Kaseya Vsa",
+      "version": "0.2.2",
+      "description": "Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control (scaffolding)",
+      "category": "rmm",
+      "tags": [
+        "kaseya",
+        "vsa",
+        "rmm",
+        "patch-management",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/kaseya-vsa",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/kaseya-vsa/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "datto-bcdr",
+      "displayName": "Datto BCDR",
+      "version": "0.2.2",
+      "description": "Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, recovery points (scaffolding)",
+      "category": "bcdr",
+      "tags": [
+        "kaseya",
+        "datto",
+        "bcdr",
+        "backup",
+        "siris",
+        "alto",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/datto-bcdr",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/datto-bcdr/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "kaseya-bms",
+      "displayName": "Kaseya Bms",
+      "version": "0.2.2",
+      "description": "Kaseya BMS PSA - tickets, accounts, contracts, time entries, billing (scaffolding)",
+      "category": "psa",
+      "tags": [
+        "kaseya",
+        "bms",
+        "psa",
+        "tickets",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/kaseya-bms",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/kaseya-bms/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "datto-saas-protection",
+      "displayName": "Datto SAAS Protection",
+      "version": "0.2.2",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "category": "bcdr",
+      "tags": [
+        "kaseya",
+        "datto",
+        "backupify",
+        "saas-backup",
+        "m365",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/datto-saas-protection",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/datto-saas-protection/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "unitrends",
+      "displayName": "Unitrends",
+      "version": "0.2.2",
+      "description": "Unitrends - appliances, backup jobs, recovery points, replication, alerts (scaffolding)",
+      "category": "bcdr",
+      "tags": [
+        "kaseya",
+        "unitrends",
+        "backup",
+        "bcdr",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/unitrends",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/unitrends/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "spanning",
+      "displayName": "Spanning",
+      "version": "0.2.2",
+      "description": "Spanning Cloud Backup - SaaS backup for M365 / Google Workspace / Salesforce (scaffolding)",
+      "category": "bcdr",
+      "tags": [
+        "kaseya",
+        "spanning",
+        "saas-backup",
+        "m365",
+        "salesforce",
+        "msp",
+        "scaffolding"
+      ],
+      "path": "msp-claude-plugins/kaseya/spanning",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kaseya/spanning/skills/api-patterns/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "hubspot",
+      "displayName": "Hubspot",
+      "version": "0.2.8",
+      "description": "HubSpot CRM - contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP server)",
+      "category": "crm",
+      "tags": [
+        "hubspot",
+        "crm",
+        "sales",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/hubspot/hubspot",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "activities",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/activities/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "companies",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/companies/SKILL.md"
+        },
+        {
+          "id": "contacts",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/contacts/SKILL.md"
+        },
+        {
+          "id": "deals",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/deals/SKILL.md"
+        },
+        {
+          "id": "tickets",
+          "path": "msp-claude-plugins/hubspot/hubspot/skills/tickets/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-deal",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/create-deal.md"
+        },
+        {
+          "id": "log-activity",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/log-activity.md"
+        },
+        {
+          "id": "lookup-company",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/lookup-company.md"
+        },
+        {
+          "id": "pipeline-summary",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/pipeline-summary.md"
+        },
+        {
+          "id": "search-contacts",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/search-contacts.md"
+        },
+        {
+          "id": "search-deals",
+          "path": "msp-claude-plugins/hubspot/hubspot/commands/search-deals.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "client-relationship-manager",
+          "path": "msp-claude-plugins/hubspot/hubspot/agents/client-relationship-manager.md"
+        },
+        {
+          "id": "pipeline-health-reporter",
+          "path": "msp-claude-plugins/hubspot/hubspot/agents/pipeline-health-reporter.md"
+        }
+      ]
+    },
+    {
+      "name": "spamtitan",
+      "displayName": "Spamtitan",
+      "version": "0.2.8",
+      "description": "SpamTitan by TitanHQ - quarantine queue management, email flow stats, sender allowlist/blocklist for MSPs",
+      "category": "email-security",
+      "tags": [
+        "spamtitan",
+        "titanhq",
+        "email-security",
+        "spam",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/spamtitan/spamtitan",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "lists",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/skills/lists/SKILL.md"
+        },
+        {
+          "id": "quarantine",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/skills/quarantine/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "manage-lists",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/commands/manage-lists.md"
+        },
+        {
+          "id": "review-quarantine",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/commands/review-quarantine.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "quarantine-release-reviewer",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/agents/quarantine-release-reviewer.md"
+        },
+        {
+          "id": "spam-filter-analyst",
+          "path": "msp-claude-plugins/spamtitan/spamtitan/agents/spam-filter-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "xero",
+      "displayName": "Xero",
+      "version": "0.2.9",
+      "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
+      "category": "accounting",
+      "tags": [
+        "xero",
+        "accounting",
+        "billing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/xero/xero",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "accounts",
+          "path": "msp-claude-plugins/xero/xero/skills/accounts/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/xero/xero/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "contacts",
+          "path": "msp-claude-plugins/xero/xero/skills/contacts/SKILL.md"
+        },
+        {
+          "id": "invoices",
+          "path": "msp-claude-plugins/xero/xero/skills/invoices/SKILL.md"
+        },
+        {
+          "id": "payments",
+          "path": "msp-claude-plugins/xero/xero/skills/payments/SKILL.md"
+        },
+        {
+          "id": "reports",
+          "path": "msp-claude-plugins/xero/xero/skills/reports/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "create-invoice",
+          "path": "msp-claude-plugins/xero/xero/commands/create-invoice.md"
+        },
+        {
+          "id": "payment-status",
+          "path": "msp-claude-plugins/xero/xero/commands/payment-status.md"
+        },
+        {
+          "id": "reconciliation-summary",
+          "path": "msp-claude-plugins/xero/xero/commands/reconciliation-summary.md"
+        },
+        {
+          "id": "search-contacts",
+          "path": "msp-claude-plugins/xero/xero/commands/search-contacts.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "billing-reconciler",
+          "path": "msp-claude-plugins/xero/xero/agents/billing-reconciler.md"
+        },
+        {
+          "id": "cash-flow-analyzer",
+          "path": "msp-claude-plugins/xero/xero/agents/cash-flow-analyzer.md"
+        }
+      ]
+    },
+    {
+      "name": "alternative-payments",
+      "displayName": "Alternative Payments",
+      "version": "1.0.7",
+      "description": "Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)",
+      "category": "accounting",
+      "tags": [
+        "alternative-payments",
+        "accounting",
+        "payments",
+        "billing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/alternative-payments/alternative-payments",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "customers",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/skills/customers/SKILL.md"
+        },
+        {
+          "id": "invoicing",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/skills/invoicing/SKILL.md"
+        },
+        {
+          "id": "payments",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/skills/payments/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "list-overdue-invoices",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/commands/list-overdue-invoices.md"
+        },
+        {
+          "id": "reconcile-payout",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/commands/reconcile-payout.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "payment-reconciler",
+          "path": "msp-claude-plugins/alternative-payments/alternative-payments/agents/payment-reconciler.md"
+        }
+      ]
+    },
+    {
+      "name": "ironscales",
+      "displayName": "Ironscales",
+      "version": "0.1.10",
+      "description": "Claude plugins for IRONSCALES - AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence",
+      "category": "email-security",
+      "tags": [
+        "ironscales",
+        "email-security",
+        "phishing",
+        "anti-phishing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/ironscales/ironscales",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/ironscales/ironscales/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "incidents",
+          "path": "msp-claude-plugins/ironscales/ironscales/skills/incidents/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "classify-email",
+          "path": "msp-claude-plugins/ironscales/ironscales/commands/classify-email.md"
+        },
+        {
+          "id": "triage-incidents",
+          "path": "msp-claude-plugins/ironscales/ironscales/commands/triage-incidents.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "crowdsourced-intel-harvester",
+          "path": "msp-claude-plugins/ironscales/ironscales/agents/crowdsourced-intel-harvester.md"
+        },
+        {
+          "id": "phishing-responder",
+          "path": "msp-claude-plugins/ironscales/ironscales/agents/phishing-responder.md"
+        }
+      ]
+    },
+    {
+      "name": "mimecast",
+      "displayName": "Mimecast",
+      "version": "0.1.7",
+      "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
+      "category": "email-security",
+      "tags": [
+        "mimecast",
+        "email-security",
+        "message-tracking",
+        "threat-intelligence",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/mimecast/mimecast",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/mimecast/mimecast/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "message-tracking",
+          "path": "msp-claude-plugins/mimecast/mimecast/skills/message-tracking/SKILL.md"
+        },
+        {
+          "id": "queue-management",
+          "path": "msp-claude-plugins/mimecast/mimecast/skills/queue-management/SKILL.md"
+        },
+        {
+          "id": "threat-intelligence",
+          "path": "msp-claude-plugins/mimecast/mimecast/skills/threat-intelligence/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-queue",
+          "path": "msp-claude-plugins/mimecast/mimecast/commands/check-queue.md"
+        },
+        {
+          "id": "review-threats",
+          "path": "msp-claude-plugins/mimecast/mimecast/commands/review-threats.md"
+        },
+        {
+          "id": "trace-message",
+          "path": "msp-claude-plugins/mimecast/mimecast/commands/trace-message.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "email-continuity-checker",
+          "path": "msp-claude-plugins/mimecast/mimecast/agents/email-continuity-checker.md"
+        },
+        {
+          "id": "email-threat-investigator",
+          "path": "msp-claude-plugins/mimecast/mimecast/agents/email-threat-investigator.md"
+        }
+      ]
+    },
+    {
+      "name": "mailprotector",
+      "displayName": "Mailprotector",
+      "version": "1.0.1",
+      "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs",
+      "category": "email-security",
+      "tags": [
+        "mailprotector",
+        "email-security",
+        "cloudfilter",
+        "quarantine",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/mailprotector/mailprotector",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "allow-block-rules",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/skills/allow-block-rules/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "customers-and-domains",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/skills/customers-and-domains/SKILL.md"
+        },
+        {
+          "id": "quarantine-and-messages",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/skills/quarantine-and-messages/SKILL.md"
+        },
+        {
+          "id": "users-and-groups",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/skills/users-and-groups/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "block-sender",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/commands/block-sender.md"
+        },
+        {
+          "id": "check-quarantine",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/commands/check-quarantine.md"
+        },
+        {
+          "id": "onboard-customer",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/commands/onboard-customer.md"
+        },
+        {
+          "id": "release-message",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/commands/release-message.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "mailprotector-mailflow-auditor",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/agents/mailprotector-mailflow-auditor.md"
+        },
+        {
+          "id": "mailprotector-onboarder",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/agents/mailprotector-onboarder.md"
+        },
+        {
+          "id": "mailprotector-quarantine-triager",
+          "path": "msp-claude-plugins/mailprotector/mailprotector/agents/mailprotector-quarantine-triager.md"
+        }
+      ]
+    },
+    {
+      "name": "wyre-gateway",
+      "displayName": "Wyre MSP Gateway",
+      "version": "1.4.4",
+      "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
+      "category": "productivity",
+      "tags": [
+        "wyre",
+        "gateway",
+        "orchestration",
+        "cross-vendor",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/wyre-gateway",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "msp-mcp-gateway": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [],
+      "commands": [],
+      "agents": [
+        {
+          "id": "asset-reconciliation-auditor",
+          "path": "msp-claude-plugins/wyre-gateway/agents/asset-reconciliation-auditor.md"
+        },
+        {
+          "id": "book-of-business-pulse",
+          "path": "msp-claude-plugins/wyre-gateway/agents/book-of-business-pulse.md"
+        },
+        {
+          "id": "change-drift-sentinel",
+          "path": "msp-claude-plugins/wyre-gateway/agents/change-drift-sentinel.md"
+        },
+        {
+          "id": "client-360-briefer",
+          "path": "msp-claude-plugins/wyre-gateway/agents/client-360-briefer.md"
+        },
+        {
+          "id": "client-discovery-agent",
+          "path": "msp-claude-plugins/wyre-gateway/agents/client-discovery-agent.md"
+        },
+        {
+          "id": "compliance-evidence-packager",
+          "path": "msp-claude-plugins/wyre-gateway/agents/compliance-evidence-packager.md"
+        },
+        {
+          "id": "dr-readiness-auditor",
+          "path": "msp-claude-plugins/wyre-gateway/agents/dr-readiness-auditor.md"
+        },
+        {
+          "id": "gateway-ops",
+          "path": "msp-claude-plugins/wyre-gateway/agents/gateway-ops.md"
+        },
+        {
+          "id": "incident-war-room-coordinator",
+          "path": "msp-claude-plugins/wyre-gateway/agents/incident-war-room-coordinator.md"
+        },
+        {
+          "id": "license-true-up-reconciler",
+          "path": "msp-claude-plugins/wyre-gateway/agents/license-true-up-reconciler.md"
+        },
+        {
+          "id": "offboarding-orchestrator",
+          "path": "msp-claude-plugins/wyre-gateway/agents/offboarding-orchestrator.md"
+        },
+        {
+          "id": "onboarding-completeness-checker",
+          "path": "msp-claude-plugins/wyre-gateway/agents/onboarding-completeness-checker.md"
+        },
+        {
+          "id": "portfolio-threat-sweep",
+          "path": "msp-claude-plugins/wyre-gateway/agents/portfolio-threat-sweep.md"
+        },
+        {
+          "id": "qbr-prep-agent",
+          "path": "msp-claude-plugins/wyre-gateway/agents/qbr-prep-agent.md"
+        },
+        {
+          "id": "renewal-risk-analyzer",
+          "path": "msp-claude-plugins/wyre-gateway/agents/renewal-risk-analyzer.md"
+        },
+        {
+          "id": "security-posture-scorer",
+          "path": "msp-claude-plugins/wyre-gateway/agents/security-posture-scorer.md"
+        },
+        {
+          "id": "service-profitability-auditor",
+          "path": "msp-claude-plugins/wyre-gateway/agents/service-profitability-auditor.md"
+        },
+        {
+          "id": "technician-performance-coach",
+          "path": "msp-claude-plugins/wyre-gateway/agents/technician-performance-coach.md"
+        },
+        {
+          "id": "ticket-deflection-analyzer",
+          "path": "msp-claude-plugins/wyre-gateway/agents/ticket-deflection-analyzer.md"
+        },
+        {
+          "id": "user-lifecycle-orchestrator",
+          "path": "msp-claude-plugins/wyre-gateway/agents/user-lifecycle-orchestrator.md"
+        },
+        {
+          "id": "vulnerability-remediation-prioritizer",
+          "path": "msp-claude-plugins/wyre-gateway/agents/vulnerability-remediation-prioritizer.md"
+        }
+      ]
+    },
+    {
+      "name": "microsoft-graph",
+      "displayName": "Microsoft Graph",
+      "version": "1.0.7",
+      "description": "Microsoft Graph Enterprise MCP - read-only natural-language queries over Microsoft Entra identity and directory data: users, groups, applications, devices, and admin reporting (public preview)",
+      "category": "productivity",
+      "tags": [
+        "microsoft-graph",
+        "entra",
+        "identity",
+        "m365",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/microsoft-graph/microsoft-graph",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "connection",
+          "path": "msp-claude-plugins/microsoft-graph/microsoft-graph/skills/connection/SKILL.md"
+        },
+        {
+          "id": "querying",
+          "path": "msp-claude-plugins/microsoft-graph/microsoft-graph/skills/querying/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "entra-audit",
+          "path": "msp-claude-plugins/microsoft-graph/microsoft-graph/commands/entra-audit.md"
+        },
+        {
+          "id": "entra-report",
+          "path": "msp-claude-plugins/microsoft-graph/microsoft-graph/commands/entra-report.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "entra-reporting-analyst",
+          "path": "msp-claude-plugins/microsoft-graph/microsoft-graph/agents/entra-reporting-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "azure-mcp",
+      "displayName": "Azure Mcp",
+      "version": "1.0.6",
+      "description": "Azure MCP Server - read-only Azure observability, cost, and resource-health analysis in natural language: monitoring, pricing, quota, advisor, resource health, diagnostics",
+      "category": "monitoring",
+      "tags": [
+        "azure",
+        "cloud",
+        "observability",
+        "cost",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/azure-mcp/azure-mcp",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "connection",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/skills/connection/SKILL.md"
+        },
+        {
+          "id": "cost-and-capacity",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/skills/cost-and-capacity/SKILL.md"
+        },
+        {
+          "id": "observability",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/skills/observability/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "azure-cost",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/commands/azure-cost.md"
+        },
+        {
+          "id": "azure-diagnostics",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/commands/azure-diagnostics.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "azure-ops-analyst",
+          "path": "msp-claude-plugins/azure-mcp/azure-mcp/agents/azure-ops-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "stripe",
+      "displayName": "Stripe",
+      "version": "0.1.0",
+      "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
+      "category": "accounting",
+      "tags": [
+        "stripe",
+        "payments",
+        "subscriptions",
+        "invoices",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/stripe/stripe",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "slack",
+      "displayName": "Slack",
+      "version": "0.1.0",
+      "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
+      "category": "productivity",
+      "tags": [
+        "slack",
+        "messaging",
+        "collaboration",
+        "channels",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/slack/slack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [],
+      "commands": [],
+      "agents": []
+    },
+    {
+      "name": "meraki",
+      "displayName": "Meraki",
+      "version": "0.1.7",
+      "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
+      "category": "network",
+      "tags": [
+        "meraki",
+        "cisco",
+        "network",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/meraki/meraki",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/meraki/meraki/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/meraki/meraki/skills/devices/SKILL.md"
+        },
+        {
+          "id": "security-appliance",
+          "path": "msp-claude-plugins/meraki/meraki/skills/security-appliance/SKILL.md"
+        },
+        {
+          "id": "troubleshooting",
+          "path": "msp-claude-plugins/meraki/meraki/skills/troubleshooting/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "meraki-find-device",
+          "path": "msp-claude-plugins/meraki/meraki/commands/meraki-find-device.md"
+        },
+        {
+          "id": "meraki-firewall-review",
+          "path": "msp-claude-plugins/meraki/meraki/commands/meraki-firewall-review.md"
+        },
+        {
+          "id": "meraki-network-health",
+          "path": "msp-claude-plugins/meraki/meraki/commands/meraki-network-health.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "meraki-network-auditor",
+          "path": "msp-claude-plugins/meraki/meraki/agents/meraki-network-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "ncentral",
+      "displayName": "Ncentral",
+      "version": "1.0.7",
+      "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
+      "category": "rmm",
+      "tags": [
+        "ncentral",
+        "n-able",
+        "rmm",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/ncentral/ncentral",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "ncentral": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/ncentral/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/ncentral/ncentral/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/ncentral/ncentral/skills/devices/SKILL.md"
+        },
+        {
+          "id": "monitoring-tasks",
+          "path": "msp-claude-plugins/ncentral/ncentral/skills/monitoring-tasks/SKILL.md"
+        },
+        {
+          "id": "organizations",
+          "path": "msp-claude-plugins/ncentral/ncentral/skills/organizations/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "device-inventory",
+          "path": "msp-claude-plugins/ncentral/ncentral/commands/device-inventory.md"
+        },
+        {
+          "id": "issue-sweep",
+          "path": "msp-claude-plugins/ncentral/ncentral/commands/issue-sweep.md"
+        },
+        {
+          "id": "task-status",
+          "path": "msp-claude-plugins/ncentral/ncentral/commands/task-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "device-auditor",
+          "path": "msp-claude-plugins/ncentral/ncentral/agents/device-auditor.md"
+        },
+        {
+          "id": "issue-triager",
+          "path": "msp-claude-plugins/ncentral/ncentral/agents/issue-triager.md"
+        }
+      ]
+    },
+    {
+      "name": "nutanix",
+      "displayName": "Nutanix",
+      "version": "1.0.2",
+      "description": "Nutanix - Prism Central v4 API: VM management, cluster operations, storage, networking via official Nutanix MCP server",
+      "category": "infrastructure",
+      "tags": [
+        "nutanix",
+        "infrastructure",
+        "virtualization",
+        "hci",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/nutanix/nutanix",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "cluster-operations",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/cluster-operations/SKILL.md"
+        },
+        {
+          "id": "monitoring-aiops",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/monitoring-aiops/SKILL.md"
+        },
+        {
+          "id": "networking",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/networking/SKILL.md"
+        },
+        {
+          "id": "storage",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/storage/SKILL.md"
+        },
+        {
+          "id": "vm-management",
+          "path": "msp-claude-plugins/nutanix/nutanix/skills/vm-management/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "capacity-report",
+          "path": "msp-claude-plugins/nutanix/nutanix/commands/capacity-report.md"
+        },
+        {
+          "id": "cluster-health",
+          "path": "msp-claude-plugins/nutanix/nutanix/commands/cluster-health.md"
+        },
+        {
+          "id": "find-vm",
+          "path": "msp-claude-plugins/nutanix/nutanix/commands/find-vm.md"
+        },
+        {
+          "id": "storage-usage",
+          "path": "msp-claude-plugins/nutanix/nutanix/commands/storage-usage.md"
+        },
+        {
+          "id": "vm-inventory",
+          "path": "msp-claude-plugins/nutanix/nutanix/commands/vm-inventory.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "nutanix-capacity-planner",
+          "path": "msp-claude-plugins/nutanix/nutanix/agents/nutanix-capacity-planner.md"
+        },
+        {
+          "id": "nutanix-infra-expert",
+          "path": "msp-claude-plugins/nutanix/nutanix/agents/nutanix-infra-expert.md"
+        }
+      ]
+    },
+    {
+      "name": "ops-pack",
+      "displayName": "MSP Operations",
+      "version": "0.1.3",
+      "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "operations",
+        "psa",
+        "rmm",
+        "sla",
+        "dispatch",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/ops-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "board-hygiene",
+          "path": "msp-claude-plugins/ops-pack/skills/board-hygiene/SKILL.md"
+        },
+        {
+          "id": "dispatch-prioritization",
+          "path": "msp-claude-plugins/ops-pack/skills/dispatch-prioritization/SKILL.md"
+        },
+        {
+          "id": "sla-escalation-playbooks",
+          "path": "msp-claude-plugins/ops-pack/skills/sla-escalation-playbooks/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "eod-handoff",
+          "path": "msp-claude-plugins/ops-pack/commands/eod-handoff.md"
+        },
+        {
+          "id": "morning-huddle",
+          "path": "msp-claude-plugins/ops-pack/commands/morning-huddle.md"
+        },
+        {
+          "id": "sla-breaches",
+          "path": "msp-claude-plugins/ops-pack/commands/sla-breaches.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "board-health-auditor",
+          "path": "msp-claude-plugins/ops-pack/agents/board-health-auditor.md"
+        },
+        {
+          "id": "dispatch-coordinator",
+          "path": "msp-claude-plugins/ops-pack/agents/dispatch-coordinator.md"
+        },
+        {
+          "id": "stale-ticket-chaser",
+          "path": "msp-claude-plugins/ops-pack/agents/stale-ticket-chaser.md"
+        }
+      ]
+    },
+    {
+      "name": "secops-pack",
+      "displayName": "Security Operations",
+      "version": "0.1.5",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "security",
+        "edr",
+        "mdr",
+        "incident-response",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/secops-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "alert-severity-normalization",
+          "path": "msp-claude-plugins/secops-pack/skills/alert-severity-normalization/SKILL.md"
+        },
+        {
+          "id": "bec-response",
+          "path": "msp-claude-plugins/secops-pack/skills/bec-response/SKILL.md"
+        },
+        {
+          "id": "containment-playbooks",
+          "path": "msp-claude-plugins/secops-pack/skills/containment-playbooks/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "incident-report",
+          "path": "msp-claude-plugins/secops-pack/commands/incident-report.md"
+        },
+        {
+          "id": "portfolio-sweep",
+          "path": "msp-claude-plugins/secops-pack/commands/portfolio-sweep.md"
+        },
+        {
+          "id": "tenant-exposure",
+          "path": "msp-claude-plugins/secops-pack/commands/tenant-exposure.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "incident-timeline-builder",
+          "path": "msp-claude-plugins/secops-pack/agents/incident-timeline-builder.md"
+        },
+        {
+          "id": "overnight-alert-summarizer",
+          "path": "msp-claude-plugins/secops-pack/agents/overnight-alert-summarizer.md"
+        },
+        {
+          "id": "tenant-exposure-ranker",
+          "path": "msp-claude-plugins/secops-pack/agents/tenant-exposure-ranker.md"
+        }
+      ]
+    },
+    {
+      "name": "finance-pack",
+      "displayName": "Finance & Billing",
+      "version": "0.1.4",
+      "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "finance",
+        "billing",
+        "psa",
+        "accounting",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/finance-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "agreement-reconciliation",
+          "path": "msp-claude-plugins/finance-pack/skills/agreement-reconciliation/SKILL.md"
+        },
+        {
+          "id": "license-true-up",
+          "path": "msp-claude-plugins/finance-pack/skills/license-true-up/SKILL.md"
+        },
+        {
+          "id": "margin-analysis",
+          "path": "msp-claude-plugins/finance-pack/skills/margin-analysis/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "month-end-recon",
+          "path": "msp-claude-plugins/finance-pack/commands/month-end-recon.md"
+        },
+        {
+          "id": "renewals",
+          "path": "msp-claude-plugins/finance-pack/commands/renewals.md"
+        },
+        {
+          "id": "true-up",
+          "path": "msp-claude-plugins/finance-pack/commands/true-up.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "billing-drift-detector",
+          "path": "msp-claude-plugins/finance-pack/agents/billing-drift-detector.md"
+        },
+        {
+          "id": "profitability-ranker",
+          "path": "msp-claude-plugins/finance-pack/agents/profitability-ranker.md"
+        },
+        {
+          "id": "renewal-calendar-builder",
+          "path": "msp-claude-plugins/finance-pack/agents/renewal-calendar-builder.md"
+        }
+      ]
+    },
+    {
+      "name": "compliance-pack",
+      "displayName": "Compliance",
+      "version": "0.1.4",
+      "description": "Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "compliance",
+        "cis",
+        "soc2",
+        "hipaa",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/compliance-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "evidence-mapping",
+          "path": "msp-claude-plugins/compliance-pack/skills/evidence-mapping/SKILL.md"
+        },
+        {
+          "id": "insurance-questionnaires",
+          "path": "msp-claude-plugins/compliance-pack/skills/insurance-questionnaires/SKILL.md"
+        },
+        {
+          "id": "standards-drift",
+          "path": "msp-claude-plugins/compliance-pack/skills/standards-drift/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "drift-report",
+          "path": "msp-claude-plugins/compliance-pack/commands/drift-report.md"
+        },
+        {
+          "id": "evidence-pack",
+          "path": "msp-claude-plugins/compliance-pack/commands/evidence-pack.md"
+        },
+        {
+          "id": "questionnaire",
+          "path": "msp-claude-plugins/compliance-pack/commands/questionnaire.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "control-drift-reporter",
+          "path": "msp-claude-plugins/compliance-pack/agents/control-drift-reporter.md"
+        },
+        {
+          "id": "evidence-packager",
+          "path": "msp-claude-plugins/compliance-pack/agents/evidence-packager.md"
+        },
+        {
+          "id": "questionnaire-autofiller",
+          "path": "msp-claude-plugins/compliance-pack/agents/questionnaire-autofiller.md"
+        }
+      ]
+    },
+    {
+      "name": "sales-pack",
+      "displayName": "Sales & Deal Desk",
+      "version": "0.1.3",
+      "description": "Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "sales",
+        "crm",
+        "pipeline",
+        "quotes",
+        "proposals",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/sales-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "pipeline-health",
+          "path": "msp-claude-plugins/sales-pack/skills/pipeline-health/SKILL.md"
+        },
+        {
+          "id": "quote-to-close-tracking",
+          "path": "msp-claude-plugins/sales-pack/skills/quote-to-close-tracking/SKILL.md"
+        },
+        {
+          "id": "warm-lead-routing",
+          "path": "msp-claude-plugins/sales-pack/skills/warm-lead-routing/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "pipeline-pulse",
+          "path": "msp-claude-plugins/sales-pack/commands/pipeline-pulse.md"
+        },
+        {
+          "id": "stalled-deals",
+          "path": "msp-claude-plugins/sales-pack/commands/stalled-deals.md"
+        },
+        {
+          "id": "warm-leads",
+          "path": "msp-claude-plugins/sales-pack/commands/warm-leads.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "pipeline-auditor",
+          "path": "msp-claude-plugins/sales-pack/agents/pipeline-auditor.md"
+        },
+        {
+          "id": "proposal-follow-up-tracker",
+          "path": "msp-claude-plugins/sales-pack/agents/proposal-follow-up-tracker.md"
+        },
+        {
+          "id": "warm-lead-router",
+          "path": "msp-claude-plugins/sales-pack/agents/warm-lead-router.md"
+        }
+      ]
+    },
+    {
+      "name": "devops-pack",
+      "displayName": "DevOps & Reliability",
+      "version": "0.1.3",
+      "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "devops",
+        "reliability",
+        "on-call",
+        "incident-management",
+        "observability",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/devops-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "error-budget-tracking",
+          "path": "msp-claude-plugins/devops-pack/skills/error-budget-tracking/SKILL.md"
+        },
+        {
+          "id": "incident-postmortem",
+          "path": "msp-claude-plugins/devops-pack/skills/incident-postmortem/SKILL.md"
+        },
+        {
+          "id": "oncall-handoff",
+          "path": "msp-claude-plugins/devops-pack/skills/oncall-handoff/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "error-budget",
+          "path": "msp-claude-plugins/devops-pack/commands/error-budget.md"
+        },
+        {
+          "id": "oncall-brief",
+          "path": "msp-claude-plugins/devops-pack/commands/oncall-brief.md"
+        },
+        {
+          "id": "postmortem",
+          "path": "msp-claude-plugins/devops-pack/commands/postmortem.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "oncall-handoff-builder",
+          "path": "msp-claude-plugins/devops-pack/agents/oncall-handoff-builder.md"
+        },
+        {
+          "id": "postmortem-drafter",
+          "path": "msp-claude-plugins/devops-pack/agents/postmortem-drafter.md"
+        },
+        {
+          "id": "reliability-scorecard",
+          "path": "msp-claude-plugins/devops-pack/agents/reliability-scorecard.md"
+        }
+      ]
+    },
+    {
+      "name": "cloudops-pack",
+      "displayName": "Cloud & Network Infrastructure",
+      "version": "0.1.3",
+      "description": "Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "network",
+        "cloud",
+        "capacity-planning",
+        "cost-management",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/cloudops-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "cloud-capacity-planning",
+          "path": "msp-claude-plugins/cloudops-pack/skills/cloud-capacity-planning/SKILL.md"
+        },
+        {
+          "id": "cloud-cost-management",
+          "path": "msp-claude-plugins/cloudops-pack/skills/cloud-cost-management/SKILL.md"
+        },
+        {
+          "id": "network-health-sweep",
+          "path": "msp-claude-plugins/cloudops-pack/skills/network-health-sweep/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "capacity-check",
+          "path": "msp-claude-plugins/cloudops-pack/commands/capacity-check.md"
+        },
+        {
+          "id": "cost-report",
+          "path": "msp-claude-plugins/cloudops-pack/commands/cost-report.md"
+        },
+        {
+          "id": "network-sweep",
+          "path": "msp-claude-plugins/cloudops-pack/commands/network-sweep.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "capacity-forecaster",
+          "path": "msp-claude-plugins/cloudops-pack/agents/capacity-forecaster.md"
+        },
+        {
+          "id": "cost-anomaly-detector",
+          "path": "msp-claude-plugins/cloudops-pack/agents/cost-anomaly-detector.md"
+        },
+        {
+          "id": "network-health-auditor",
+          "path": "msp-claude-plugins/cloudops-pack/agents/network-health-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "awareness-pack",
+      "displayName": "Security Awareness & Training",
+      "version": "0.1.3",
+      "description": "Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "security-awareness",
+        "training",
+        "phishing-simulation",
+        "risk-scoring",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/awareness-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "phishing-simulation-analysis",
+          "path": "msp-claude-plugins/awareness-pack/skills/phishing-simulation-analysis/SKILL.md"
+        },
+        {
+          "id": "risk-scoring",
+          "path": "msp-claude-plugins/awareness-pack/skills/risk-scoring/SKILL.md"
+        },
+        {
+          "id": "training-completion-tracking",
+          "path": "msp-claude-plugins/awareness-pack/skills/training-completion-tracking/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "phishing-results",
+          "path": "msp-claude-plugins/awareness-pack/commands/phishing-results.md"
+        },
+        {
+          "id": "risk-report",
+          "path": "msp-claude-plugins/awareness-pack/commands/risk-report.md"
+        },
+        {
+          "id": "training-status",
+          "path": "msp-claude-plugins/awareness-pack/commands/training-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "human-risk-scorer",
+          "path": "msp-claude-plugins/awareness-pack/agents/human-risk-scorer.md"
+        },
+        {
+          "id": "phishing-simulation-analyst",
+          "path": "msp-claude-plugins/awareness-pack/agents/phishing-simulation-analyst.md"
+        },
+        {
+          "id": "training-compliance-auditor",
+          "path": "msp-claude-plugins/awareness-pack/agents/training-compliance-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "backup-pack",
+      "displayName": "Backup & DR Assurance",
+      "version": "0.1.3",
+      "description": "Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "backup",
+        "bcdr",
+        "disaster-recovery",
+        "retention",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/backup-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "backup-job-health",
+          "path": "msp-claude-plugins/backup-pack/skills/backup-job-health/SKILL.md"
+        },
+        {
+          "id": "restore-test-verification",
+          "path": "msp-claude-plugins/backup-pack/skills/restore-test-verification/SKILL.md"
+        },
+        {
+          "id": "retention-rpo-compliance",
+          "path": "msp-claude-plugins/backup-pack/skills/retention-rpo-compliance/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "backup-status",
+          "path": "msp-claude-plugins/backup-pack/commands/backup-status.md"
+        },
+        {
+          "id": "restore-check",
+          "path": "msp-claude-plugins/backup-pack/commands/restore-check.md"
+        },
+        {
+          "id": "retention-audit",
+          "path": "msp-claude-plugins/backup-pack/commands/retention-audit.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "backup-health-auditor",
+          "path": "msp-claude-plugins/backup-pack/agents/backup-health-auditor.md"
+        },
+        {
+          "id": "restore-readiness-checker",
+          "path": "msp-claude-plugins/backup-pack/agents/restore-readiness-checker.md"
+        },
+        {
+          "id": "retention-compliance-auditor",
+          "path": "msp-claude-plugins/backup-pack/agents/retention-compliance-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "assets-pack",
+      "displayName": "IT Asset Lifecycle",
+      "version": "0.1.4",
+      "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "asset-lifecycle",
+        "warranty",
+        "eol-eos",
+        "refresh-planning",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/assets-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "eol-eos-flagging",
+          "path": "msp-claude-plugins/assets-pack/skills/eol-eos-flagging/SKILL.md"
+        },
+        {
+          "id": "refresh-cycle-planning",
+          "path": "msp-claude-plugins/assets-pack/skills/refresh-cycle-planning/SKILL.md"
+        },
+        {
+          "id": "warranty-tracking",
+          "path": "msp-claude-plugins/assets-pack/skills/warranty-tracking/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "eol-report",
+          "path": "msp-claude-plugins/assets-pack/commands/eol-report.md"
+        },
+        {
+          "id": "refresh-calendar",
+          "path": "msp-claude-plugins/assets-pack/commands/refresh-calendar.md"
+        },
+        {
+          "id": "warranty-status",
+          "path": "msp-claude-plugins/assets-pack/commands/warranty-status.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "eol-risk-assessor",
+          "path": "msp-claude-plugins/assets-pack/agents/eol-risk-assessor.md"
+        },
+        {
+          "id": "refresh-planner",
+          "path": "msp-claude-plugins/assets-pack/agents/refresh-planner.md"
+        },
+        {
+          "id": "warranty-status-auditor",
+          "path": "msp-claude-plugins/assets-pack/agents/warranty-status-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "clio",
+      "displayName": "Clio",
+      "version": "0.1.7",
+      "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
+      "category": "legal",
+      "tags": [
+        "clio",
+        "legal",
+        "practice-management",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/clio/clio",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/clio/clio/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "contacts",
+          "path": "msp-claude-plugins/clio/clio/skills/contacts/SKILL.md"
+        },
+        {
+          "id": "matters",
+          "path": "msp-claude-plugins/clio/clio/skills/matters/SKILL.md"
+        },
+        {
+          "id": "time-billing",
+          "path": "msp-claude-plugins/clio/clio/skills/time-billing/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "log-time",
+          "path": "msp-claude-plugins/clio/clio/commands/log-time.md"
+        },
+        {
+          "id": "matter-summary",
+          "path": "msp-claude-plugins/clio/clio/commands/matter-summary.md"
+        },
+        {
+          "id": "search-contacts",
+          "path": "msp-claude-plugins/clio/clio/commands/search-contacts.md"
+        },
+        {
+          "id": "search-matters",
+          "path": "msp-claude-plugins/clio/clio/commands/search-matters.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "scalepad",
+      "displayName": "Scalepad",
+      "version": "1.1.3",
+      "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
+      "category": "productivity",
+      "tags": [
+        "scalepad",
+        "lifecycle",
+        "warranty",
+        "quoter",
+        "controlmap",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/scalepad/scalepad",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "backup-radar",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/backup-radar/SKILL.md"
+        },
+        {
+          "id": "controlmap",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/controlmap/SKILL.md"
+        },
+        {
+          "id": "core",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/core/SKILL.md"
+        },
+        {
+          "id": "lifecycle-manager",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/lifecycle-manager/SKILL.md"
+        },
+        {
+          "id": "quoter",
+          "path": "msp-claude-plugins/scalepad/scalepad/skills/quoter/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "asset-lifecycle-report",
+          "path": "msp-claude-plugins/scalepad/scalepad/commands/asset-lifecycle-report.md"
+        },
+        {
+          "id": "backup-health",
+          "path": "msp-claude-plugins/scalepad/scalepad/commands/backup-health.md"
+        },
+        {
+          "id": "compliance-status",
+          "path": "msp-claude-plugins/scalepad/scalepad/commands/compliance-status.md"
+        },
+        {
+          "id": "create-quote",
+          "path": "msp-claude-plugins/scalepad/scalepad/commands/create-quote.md"
+        },
+        {
+          "id": "warranty-lookup",
+          "path": "msp-claude-plugins/scalepad/scalepad/commands/warranty-lookup.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "compliance-auditor",
+          "path": "msp-claude-plugins/scalepad/scalepad/agents/compliance-auditor.md"
+        },
+        {
+          "id": "lifecycle-analyst",
+          "path": "msp-claude-plugins/scalepad/scalepad/agents/lifecycle-analyst.md"
+        },
+        {
+          "id": "quote-builder",
+          "path": "msp-claude-plugins/scalepad/scalepad/agents/quote-builder.md"
+        }
+      ]
+    },
+    {
+      "name": "axcient",
+      "displayName": "Axcient",
+      "version": "0.1.1",
+      "description": "Axcient x360Recover - BCDR clients, devices, backup jobs, vaults, and appliances",
+      "category": "bcdr",
+      "tags": [
+        "axcient",
+        "x360recover",
+        "bcdr",
+        "backup",
+        "disaster-recovery",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/axcient/axcient",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/axcient/axcient/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "appliances",
+          "path": "msp-claude-plugins/axcient/axcient/skills/appliances/SKILL.md"
+        },
+        {
+          "id": "clients",
+          "path": "msp-claude-plugins/axcient/axcient/skills/clients/SKILL.md"
+        },
+        {
+          "id": "devices",
+          "path": "msp-claude-plugins/axcient/axcient/skills/devices/SKILL.md"
+        },
+        {
+          "id": "jobs",
+          "path": "msp-claude-plugins/axcient/axcient/skills/jobs/SKILL.md"
+        },
+        {
+          "id": "vaults",
+          "path": "msp-claude-plugins/axcient/axcient/skills/vaults/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "backup-health-check",
+          "path": "msp-claude-plugins/axcient/axcient/commands/backup-health-check.md"
+        },
+        {
+          "id": "client-backup-overview",
+          "path": "msp-claude-plugins/axcient/axcient/commands/client-backup-overview.md"
+        }
+      ],
+      "agents": []
+    }
+  ]
+}
