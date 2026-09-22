@@ -2,8 +2,8 @@
 name: "Rootly API Patterns"
 description: >
   The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs.
-  Team token types and how the gateway injects credentials, the catalog of 25
-  dynamically generated tools by category, page-number pagination and relationship
+  Team token types and how the gateway injects credentials, the catalog of roughly
+  253 dynamically generated tools by category, page-number pagination and relationship
   includes, filter syntax, rate limits, and error handling.
 when_to_use: >-
   When authenticating to Rootly, discovering which MCP tool to call, or debugging Rootly
@@ -16,7 +16,7 @@ when_to_use: >-
 
 ## Overview
 
-Rootly exposes a hosted MCP server at `mcp.rootly.com` built with FastMCP. When accessed through the MCP Gateway, credentials are injected automatically via the `Authorization: Bearer` header — no manual token handling is required. The MCP server generates its 25 tools dynamically from Rootly's OpenAPI specification and exposes a curated subset of the full REST API.
+Rootly exposes a hosted MCP server at `mcp.rootly.com` built with FastMCP. When accessed through the MCP Gateway, credentials are injected automatically via the `Authorization: Bearer` header — no manual token handling is required. The MCP server generates its tools dynamically from Rootly's OpenAPI specification -- roughly 253 tools as served by the hosted endpoint (a handful of hand-written "agentic" tools like `find_related_incidents` plus the bulk generated one-per-endpoint from the REST API, e.g. `list_incidents`, `create_incident`, `list_services`).
 
 The Rootly REST API follows the **JSON:API specification** (`application/vnd.api+json`), using page-number-based pagination and relationship includes.
 
@@ -66,45 +66,50 @@ No additional configuration is needed in the MCP tool calls.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `incidents_get` | List and search incidents | `status`, `severity`, `page[number]`, `page[size]` |
-| `incidents_post` | Create a new incident | `title`, `severity_id`, `team_ids`, `service_ids` |
-| `incidents_by_incident_id_alerts_post` | Attach an alert to an incident | `incident_id`, alert payload |
-| `incidents_by_incident_id_alerts_get` | List alerts attached to an incident | `incident_id` |
-| `incidents_by_incident_id_action_items_post` | Create a follow-up action item | `incident_id`, `summary`, `assignee_id` |
-| `incidents_by_incident_id_action_items_get` | List action items on an incident | `incident_id` |
+| `list_incidents` / `search_incidents` | List and search incidents | `filter[status]`, `filter[severity]`, `page[number]`, `page[size]` |
+| `get_incident` | Get a single incident | Incident ID |
+| `create_incident` | Create a new incident | `title`, `severity_id`, `team_ids`, `service_ids` |
+| `update_incident` | Update an incident's fields | Incident ID |
+| `attach_alert` | Attach an alert to an incident | `incident_id`, alert payload |
+| `list_incident_alerts` | List alerts attached to an incident | `incident_id` |
+| `create_incident_action_item` | Create a follow-up action item | `incident_id`, `summary`, `assigned_to` |
+| `list_incident_action_items` | List action items on an incident | `incident_id` |
+| `list_all_incident_action_items` | List action items across every incident | -- |
 
 ### Alerts
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `alerts_get` | List alerts from integrations | `page[number]`, `page[size]` |
-| `alerts_post` | Create an alert | alert payload |
+| `list_alerts` | List alerts from integrations | `filter[status]`, `page[number]`, `page[size]` |
+| `get_alert` | Get a single alert | Alert ID |
+| `create_alert` | Create an alert | alert payload |
+| `acknowledge_alert` / `resolve_alert` | Acknowledge or resolve an alert | Alert ID |
 
 ### Configuration & Metadata
 
 | Tool | Description |
 |------|-------------|
-| `severities_get` | List severity levels (slug, color, description) |
-| `severities_post` | Create a severity level |
-| `services_get` | List services in the service catalog |
-| `services_post` | Create a service |
-| `environments_get` | List environments (production, staging, etc.) |
-| `environments_post` | Create an environment |
-| `functionalities_get` | List business functionalities mapped to services |
-| `functionalities_post` | Create a functionality |
-| `incident_types_get` | List incident types (bug, outage, performance, etc.) |
-| `incident_types_post` | Create an incident type |
-| `workflows_get` | List automation workflows |
-| `workflows_post` | Create an automation workflow |
+| `list_severities` | List severity levels (slug, color, description) |
+| `create_severity` | Create a severity level |
+| `list_services` | List services in the service catalog |
+| `create_service` | Create a service |
+| `list_environments` | List environments (production, staging, etc.) |
+| `create_environment` | Create an environment |
+| `list_functionalities` | List business functionalities mapped to services |
+| `create_functionality` | Create a functionality |
+| `list_incident_types` | List incident types (bug, outage, performance, etc.) |
+| `create_incident_type` | Create an incident type |
+| `list_workflows` | List automation workflows |
+| `create_workflow` | Create an automation workflow |
 
 ### Teams & Users
 
 | Tool | Description |
 |------|-------------|
-| `teams_get` | List teams |
-| `teams_post` | Create a team |
-| `users_get` | List organization users |
-| `users_me_get` | Get the current authenticated user's profile |
+| `list_teams` | List teams |
+| `create_team` | Create a team |
+| `list_users` | List organization users |
+| `get_current_user` | Get the current authenticated user's profile |
 | `list_endpoints` | Discover all available API endpoints dynamically |
 
 ## JSON:API Pagination
@@ -127,7 +132,7 @@ Rootly's REST API uses **page-number-based pagination** following the JSON:API s
 4. Continue fetching until `page[number] > total_pages`
 
 **Example: Fetch all open incidents:**
-- Call `incidents_get` with `page[number]=1`, `page[size]=50`
+- Call `list_incidents` with `page[number]=1`, `page[size]=50`
 - Check `meta.total_count`; if 120 total, you need 3 pages (50 + 50 + 20)
 - Repeat with `page[number]=2` and `page[number]=3`
 
@@ -162,18 +167,18 @@ Rootly's REST API uses **page-number-based pagination** following the JSON:API s
 
 ### Filter Active Incidents by Status
 
-Call `incidents_get` with `status=in_triage` or `status=detected` to find open incidents.
+Call `list_incidents` with `filter[status]=in_triage` or `filter[status]=detected` to find open incidents.
 
 ### Filter by Severity
 
-Call `incidents_get` with `severity=critical` (use the slug from `severities_get`) to focus on the highest-priority incidents.
+Call `list_incidents` with `filter[severity]=critical` (use the slug from `list_severities`) to focus on the highest-priority incidents.
 
 ### Lookup IDs Before Creating Resources
 
 Rootly uses UUIDs for all resource IDs. Before creating an incident, always:
-1. Call `severities_get` → use the matching severity's `id`
-2. Call `services_get` → use the affected service's `id`
-3. Call `teams_get` → use the responding team's `id`
+1. Call `list_severities` → use the matching severity's `id`
+2. Call `list_services` → use the affected service's `id`
+3. Call `list_teams` → use the responding team's `id`
 
 ### Discover Endpoints Dynamically
 
@@ -204,10 +209,10 @@ Rootly applies rate limits at the API level. The MCP server does not expose rate
 ## Best Practices
 
 1. **Use `list_endpoints` to discover tools** — The MCP server generates tools dynamically; new endpoints appear automatically after Rootly API updates
-2. **Look up IDs, don't guess** — Always call `severities_get`, `services_get`, and `teams_get` before creating incidents
+2. **Look up IDs, don't guess** — Always call `list_severities`, `list_services`, and `list_teams` before creating incidents
 3. **Paginate large datasets** — Set `page[size]=50` and iterate pages rather than fetching all at once
 4. **Use AI tools first** — `find_related_incidents` and `suggest_solutions` often resolve incidents faster than manual investigation
-5. **Filter server-side** — Use status and severity parameters in `incidents_get` rather than fetching all and filtering locally
+5. **Filter server-side** — Use `filter[status]` and `filter[severity]` in `list_incidents` rather than fetching all and filtering locally
 6. **Use Global tokens in the gateway** — Team tokens will cause 403 errors for cross-team incident queries
 
 ## Related Skills
