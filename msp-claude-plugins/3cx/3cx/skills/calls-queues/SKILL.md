@@ -66,7 +66,7 @@ else with no obvious warning to either party. Logging the wrong agent out
 of a queue during business hours quietly reduces staffing for everyone
 still waiting in it. 3CX's own MCP Tools and Permissions Reference groups
 these separately from the read tools for exactly this reason; this
-plugin's `GOVERNANCE.md` covers how Conduit's BYO connector tiers them.
+plugin's `GOVERNANCE.md` covers how Conduit's tier gate treats them.
 
 **Confirm the target call, extension, or queue ID with the requester
 before calling any of these**, and don't let a scheduled or unattended
