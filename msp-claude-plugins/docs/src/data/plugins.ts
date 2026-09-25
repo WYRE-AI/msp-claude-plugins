@@ -3138,6 +3138,36 @@ export const plugins: Plugin[] = [
     },
     path: 'axcient/axcient',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'kpn',
+    name: 'KPN',
+    vendor: 'Kpn',
+    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace',
+    category: 'network',
+    maturity: 'beta',
+    features: [
+      'Mobile Fleet',
+      'Network Checks'
+    ],
+    skills: [
+      { name: 'mobile-fleet', description: 'KPN business mobile through Mobile Services Management (MSM v11): subscribers, contracts (lines/SIMs), allowed operations per contract, orders and service requests, invoices and invoice PDFs, the customer\'s organisation tree and usage thresholds; plus the confirmed writes (SIM block, unblock, replace; order authorize and cancel) and PIN/PUK handling.' },
+      { name: 'network-checks', description: 'Address- and number-level lookups against KPN: current and planned outages at a Dutch address (Disturbance Check), available access technology and speeds at an address (Speed Check), and the date of the last SIM swap on a KPN mobile number as a fraud signal.' },
+      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the X-KPN-* credential headers and the two OAuth token realms (API Store vs Mobile Services Management), why a valid key can still fail with 401/403 (product entitlement), quota headers and 429 handling, the write-confirmation flow, and why failed MSM writes are never retried automatically.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/check-outage', description: 'Check a Dutch address for KPN outages and report what connectivity is available there' },
+      { name: '/lost-phone', description: 'Find the KPN business-mobile contract for a lost or stolen phone and block its SIM after confirmation' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'kpn/kpn',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 
