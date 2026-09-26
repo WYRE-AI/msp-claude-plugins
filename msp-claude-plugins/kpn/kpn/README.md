@@ -13,6 +13,7 @@ unconfirmed until a real customer connection completes a live call.
 
 | Product | What an MSP uses it for | Tools |
 |---|---|---|
+| Connection test | Verify a customer's KPN credentials mint and report account tier/quota | `kpn_test_connection` |
 | Disturbance Check | "Is KPN down at this customer's office?" | `kpn_disturbances_check` |
 | Internet Speed Check | Which access technology and speeds a Dutch address can get | `kpn_availability_check` |
 | SIM Swap | Fraud check before resetting SMS-based MFA | `kpn_sim_swap_get_date` |
