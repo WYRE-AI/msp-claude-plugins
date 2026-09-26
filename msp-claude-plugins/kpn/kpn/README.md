@@ -4,6 +4,13 @@ Claude plugin for **KPN**, the Dutch incumbent telco, through the Conduit gatewa
 Backed by [`WYRE-AI/kpn-mcp`](https://github.com/WYRE-AI/kpn-mcp): 23 tools over four
 KPN developer-portal products.
 
+**Alpha**: no KPN developer-portal project has been created yet — creating one
+needs a human at developer.kpn.com (its login blocks automated browsers), so
+nothing here has been exercised against a real, authenticated KPN account. The
+connector's own live re-verification confirmed the token mint is rejected
+outright against a placeholder credential pair. Treat every tool's behavior as
+unconfirmed until a real customer connection completes a live call.
+
 | Product | What an MSP uses it for | Tools |
 |---|---|---|
 | Disturbance Check | "Is KPN down at this customer's office?" | `kpn_disturbances_check` |

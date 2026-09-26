@@ -3143,7 +3143,7 @@ export const plugins: Plugin[] = [
     id: 'kpn',
     name: 'KPN',
     vendor: 'Kpn',
-    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace',
+    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)',
     category: 'network',
     maturity: 'beta',
     features: [
