@@ -103,10 +103,10 @@ When you write, two proof points they will recognize beat a dashboard. Every mai
 
 ## Output
 
-Produce this, in this order: title, who is in the room, Open, executive narrative, then level 3, level 4, level 5, looking ahead, and the appendix last. No ticket table above the appendix.
+Produce this, in this order: title, who is in the room, Open, executive narrative, then level 3, level 4, level 5, looking ahead, Gaps, and the appendix last. No ticket table above the appendix.
 
 **QBR — [Client]**
-**Who is in the room:** [owner or operator] | **Period:** [quarter] | **Their goal:** [from brain-mcp or notes, or "unknown — asked"]
+**Who is in the room:** [owner or operator] | **Period:** [quarter] | **Their goal:** [from `conduit__memory_search` or notes, or "unknown — asked"]
 
 **Open.** One or two sentences the AM says first: this hour is ease, emotion, and what the business does next. The operating numbers are in the back.
 
@@ -132,6 +132,6 @@ Produce this, in this order: title, who is in the room, Open, executive narrativ
 
 **Looking ahead / asks.** What you are asking them to decide or tell you before you leave the room. The next-quarter outcome. What would change how they invest. This is the close of the meeting, not a parts list.
 
-**Appendix — levels 1 and 2, if challenged.** Label it: do not lead with this, do not project it, answer from it only when they ask. Then the operational pack you actually pulled: tickets opened and closed, SLA % by priority, resolution time, device count, patch %, backup success, threats blocked, MFA or Secure Score if you retrieved them. Busy metrics live here.
-
 **Gaps.** Tools not connected, or a goal you still need.
+
+**Appendix — levels 1 and 2, if challenged.** Label it: do not lead with this, do not project it, answer from it only when they ask. Then the operational pack you actually pulled: tickets opened and closed, SLA % by priority, resolution time, device count, patch %, backup success, threats blocked, MFA or Secure Score if you retrieved them. Busy metrics live here.
