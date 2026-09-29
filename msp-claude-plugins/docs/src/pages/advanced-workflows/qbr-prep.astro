@@ -9,7 +9,7 @@ const buildPrompt = `Build me a scheduled QBR Prep agent. Do all of this end to 
 
 1. Confirm the WYRE MCP Gateway works and the systems are reachable: it must
    expose the autotask_*, datto_*, cipp_*, liongard_* and IT Glue tools.
-2. Pick ONE designated client to prepare the QBR brief for, and discover its
+2. Pick ONE designated client to prepare the QBR pack for, and discover its
    five IDs - these get baked into the routine prompt so the routine never runs
    discovery itself:
    - Autotask companyID via autotask_search_companies.
@@ -32,27 +32,15 @@ const buildPrompt = `Build me a scheduled QBR Prep agent. Do all of this end to 
          search_documents, create_document, update_document_section
        * Slack: slack_send_message
      An empty permitted_tools list = the routine runs with no tools.
-   - Routine prompt: every run, draft a QBR conversation brief for the
-     designated client at levels 3–5 of the MSP Value Pyramid (Ease of Doing
-     Business, Emotional Value, Transformational Value). Do not produce a
-     ticket review. Operational reads are optional proof for those levels, and
-     raw figures go in an appendix labeled "do not present as the agenda."
-     Write the brief to an IT Glue document, and post a one-line summary to
-     Slack. Use the exact routine prompt below, with your client's five IDs
-     baked in.
+   - Routine prompt: every run, assemble a QBR pack for the designated client
+     by composing tickets, devices, identity and configuration-change data,
+     write it to an IT Glue document, and post a one-line summary to Slack.
+     Use the exact routine prompt below, with your client's five IDs baked in.
 5. Confirm the create response echoes both connectors with the correct
    permitted_tools and the routine prompt verbatim. Do not trigger a run -
    routine runs need a one-time approval handled separately.`;
 
-const routinePrompt = `You are the QBR Prep routine for WYRE. Once a week you draft a Quarterly Business Review conversation brief for one designated client. The brief is for an account manager talking to an SMB owner. Coach levels 3–5 of the MSP Value Pyramid (Pisces Consulting, adapted from Bain & Company's B2B Elements of Value):
-
-- Level 3, Ease of Doing Business: working with the MSP cost the owner less time, effort, and surprise.
-- Level 4, Emotional Value: the owner worries less, looks competent, and trusts that someone competent already has this.
-- Level 5, Transformational Value: technology lets the business do something it could not do before.
-
-You do not produce a ticket review. Most MSPs communicate only level 1 (Table Stakes) and level 2 (Functional Value): ticket counts, SLA percentages, patch percentages, threats blocked. Those numbers are not the agenda. Pull operational data only as optional proof for a higher-level point. File raw figures in an appendix so they are not presented.
-
-All IDs are baked in below - do NOT call any list_*/search_* discovery tool to find IDs (the only allowed search is search_documents to find-or-create the IT Glue doc).
+const routinePrompt = `You are the QBR Prep routine for WYRE. Once a week you assemble a Quarterly Business Review pack for one designated client. All IDs are baked in below - do NOT call any list_*/search_* discovery tool to find IDs (the only allowed search is search_documents to find-or-create the IT Glue doc).
 
 Designated client: <client name>
 - Autotask companyID: <autotask-company-id>
@@ -61,107 +49,44 @@ Designated client: <client name>
 - Liongard environment ID: <liongard-environment-id>
 - IT Glue organization ID: <itglue-org-id>
 
-Read the four signals below. If a call fails, put "data not available" in the appendix only - never omit the appendix line silently, and never promote a failure into a talking point you invented.
+Build the pack from four areas. If any area cannot be read, put a 'data not available' note in that section - never omit a section silently.
 
-1. Tickets. Call autotask_search_tickets with companyID <autotask-company-id> and createdAfter set to 90 days ago. Do not report volume, priority mix, or open count as a finding. Keep at most one pattern that shows the owner had to chase, ask twice, or manage a change themselves (level 3). If you cannot name what the owner had to do, write "no level 3 proof in tickets."
+1. Tickets. Call autotask_search_tickets with companyID <autotask-company-id> and createdAfter set to 90 days ago. Report total ticket volume, counts by priority, and how many are still open.
 
-2. Devices. Call datto_list_devices with siteUid <datto-site-uid>. Ignore the large udf block on each device. Keep a device fact only when it shows something that never became the owner's problem (level 4) or a constraint blocking a business move you can name (level 5). Otherwise it stays in the appendix.
+2. Devices. Call datto_list_devices with siteUid <datto-site-uid>. Ignore the large udf block on each device. Report device count and any devices with health concerns: antivirus not RunningAndUpToDate, offline/stale check-in, or reboot pending.
 
-3. Identity. Call cipp_list_users and cipp_list_mfa_users with tenantFilter <cipp-tenant-id>. Keep an identity fact only as level 4 (an exposure that did not land on the owner) or level 5 (a control standing between them and a customer, a hire, or a site). A coverage percentage is not a talking point.
+3. Identity. Call cipp_list_users and cipp_list_mfa_users with tenantFilter <cipp-tenant-id>. Report user count and MFA coverage (how many users have MFA enabled vs not).
 
-4. Configuration changes. Call liongard_detections_list with a startDate 90 days ago, pageSize 5, and a filter for EnvironmentID <liongard-environment-id>. Read only the most recent ~15 detections and only their small metadata fields (ID, SystemName, Name, Date, SystemType). Never read the large ChangeDetection field. Keep a change only when it is a surprise the owner would have felt (level 3) or drift that blocks a named business move (level 5).
+4. Configuration changes. Call liongard_detections_list with a startDate 90 days ago, pageSize 5, and a filter for EnvironmentID <liongard-environment-id>. Read only the most recent ~15 detections and only their small metadata fields (ID, SystemName, Name, Date, SystemType). Never read the large ChangeDetection field. Produce a short list of recent configuration changes.
 
-5. Assemble the conversation brief, in this order. This is the document. The appendix is last and is not the QBR.
-   - Floor check (levels 1–2): one sentence. "The floor held. Do not walk tickets, SLA, patch, or threat counts." Or name the single thing the owner would have felt. No tables.
-   - Level 3 — Ease of Doing Business: at most four sentences in owner language, at most one proof point, and two questions. One question is always "Where did you still have to chase us?"
-   - Level 4 — Emotional Value: one moment that did not become the owner's problem, and two questions. One question is always "What about IT still wakes you up?"
-   - Level 5 — Transformational Value: questions that ask what the business is trying to make true this year, plus at most one roadmap item in this shape — the business move, what becomes true for the owner, what we would change in one paragraph (not a SKU list), what we need from them, the horizon, and what we will not do. If these reads do not reveal a business goal, say the goal is unknown and do not invent a transformation, an AI roadmap, or a hardware refresh.
-   - Do not say: the metrics and openers that would collapse the meeting back into a ticket review.
-   - Appendix — Supporting evidence, do not present as the agenda: ticket volume and how many are still open, device count and health concerns (antivirus not RunningAndUpToDate, offline/stale check-in, reboot pending), user count and MFA coverage, and a short list of recent configuration changes.
+5. Assemble a QBR pack: an executive summary paragraph, then one section per area above (Tickets, Devices, Identity, Configuration Changes).
 
-6. Deliver. Call search_documents with organization_id <itglue-org-id> and name 'QBR Pack - <client name>'. If a matching document is found, use update_document_section to write the new brief into it. If not found, use create_document with organization_id <itglue-org-id>, name 'QBR Pack - <client name>', and the brief as HTML content. If the IT Glue org or document step fails, fall back to including the full brief inline in the Slack message. Then call slack_send_message to channel <channel-id> (#sw-dev) with: 'QBR conversation brief ready for <client name> — levels 3–5 drafted; floor: <one line>'. Do not put ticket, device, or MFA counts in the Slack line.
+6. Deliver. Call search_documents with organization_id <itglue-org-id> and name 'QBR Pack - <client name>'. If a matching document is found, use update_document_section to write the new pack into it. If not found, use create_document with organization_id <itglue-org-id>, name 'QBR Pack - <client name>', and the pack as HTML content. If the IT Glue org or document step fails, fall back to including the full pack inline in the Slack message. Then call slack_send_message to channel <channel-id> (#sw-dev) with: 'QBR pack ready for <client name> - <ticket/device/MFA headline>'.
 
-Do not invent data or a business goal. If a tool returns nothing or errors, say so in the appendix.`;
+Keep the prompt lean and factual. Do not invent data - if a tool returns nothing or errors, say so in that section.`;
 ---
-<DocsLayout title="QBR Prep" description="Build a weekly QBR conversation brief for one client — levels 3–5 of the MSP Value Pyramid, not a ticket review. Operational reads from Autotask, Datto RMM, CIPP, and Liongard are an evidence appendix. The brief is written to IT Glue and a one-line summary goes to Slack.">
+<DocsLayout title="QBR Prep" description="Build a Claude-managed scheduled agent that assembles a Quarterly Business Review pack for one designated client every week by composing data from four systems — Autotask, Datto RMM, CIPP and Liongard — writes it to IT Glue, and posts a summary to Slack. No servers, no code.">
   <h1>QBR Prep</h1>
 
   <p class="lead text-lg text-[var(--muted)] mb-8">
     A worked example of an <a href={`${baseUrl}advanced-workflows/`}>advanced workflow</a>:
-    a Claude-managed scheduled agent that, once a week, drafts a Quarterly Business
-    Review <em>conversation</em> for one designated client. The meeting spine is levels
-    3–5 of the MSP Value Pyramid — Ease of Doing Business, Emotional Value, and
-    Transformational Value — not a ticket review. Reads from Autotask, Datto RMM, CIPP,
-    and Liongard are optional proof for those levels. Raw counts sit in an appendix
-    labeled so nobody presents them. The brief is written to an IT Glue document, and a
-    one-line summary goes to Slack. There are no servers and no code to deploy: the
-    agent is a saved prompt plus a schedule plus two MCP connectors, running in Claude's
-    cloud.
+    a Claude-managed scheduled agent that, once a week, assembles a Quarterly Business
+    Review pack for one designated client by composing data from four systems — ticket
+    history from Autotask, device health from Datto RMM, identity and MFA coverage from
+    CIPP, and configuration changes from Liongard — writes the pack to an IT Glue
+    document, and posts a one-line summary to Slack. There are no servers and no code to
+    deploy: the agent is a saved prompt plus a schedule plus two MCP connectors, running
+    in Claude's cloud.
   </p>
 
   <h2 id="what-it-builds">What it builds</h2>
   <p>
-    The finished workflow runs unattended on a weekly cron. Each run it drafts the
-    brief an account manager can take to an SMB owner: a one-sentence floor check,
-    a level 3 story and questions, a level 4 story and questions, and a level 5
-    question set with at most one business-move roadmap item. Ticket volume, device
-    health, MFA coverage, and configuration changes are gathered only to support or
-    reject those points, then filed in an appendix. The same four sections always
-    appear in that appendix, so a reader can tell "nothing to cite" from "we could
-    not check."
+    The finished workflow runs unattended on a weekly cron. Each run it reads the
+    designated client's tickets, devices, users and configuration changes, reasons
+    about what matters, assembles an executive summary plus a section per area, and
+    saves it as a QBR pack, turning four separate systems into a single review
+    document with a Slack trail.
   </p>
-  <p>
-    The in-room coaching for this brief — including when to refuse a metric, and when
-    to stop and ask a human — lives in the gateway agent
-    <code>qbr-prep-agent</code>. This page is the scheduled collector that must follow
-    the same rule: do not run a ticket review.
-  </p>
-
-  <hr class="my-8" />
-
-  <h2 id="pyramid">The meeting this brief is for</h2>
-  <p>
-    The MSP Value Pyramid (Pisces Consulting, adapted from Bain &amp; Company's B2B
-    Elements of Value) scores how an MSP talks about value. Most quarterly reviews
-    never leave the first two levels.
-  </p>
-  <table>
-    <thead>
-      <tr><th>Level</th><th>Name</th><th>What the owner hears</th><th>In this brief</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>1</td>
-        <td>Table Stakes</td>
-        <td>You showed up. Tickets were answered, systems were watched.</td>
-        <td>One sentence, or silence. Not a section.</td>
-      </tr>
-      <tr>
-        <td>2</td>
-        <td>Functional Value</td>
-        <td>The service did its job. Uptime held, threats were blocked.</td>
-        <td>One sentence, or silence. Not a section.</td>
-      </tr>
-      <tr>
-        <td>3</td>
-        <td>Ease of Doing Business</td>
-        <td>Working with you cost me less time, effort, and surprise.</td>
-        <td>Story, one proof point, questions.</td>
-      </tr>
-      <tr>
-        <td>4</td>
-        <td>Emotional Value</td>
-        <td>I worry less. Someone competent already has this.</td>
-        <td>One moment that did not become theirs, questions.</td>
-      </tr>
-      <tr>
-        <td>5</td>
-        <td>Transformational Value</td>
-        <td>The business can do something it could not do before.</td>
-        <td>Questions, and a roadmap item only if a business move is real.</td>
-      </tr>
-    </tbody>
-  </table>
 
   <hr class="my-8" />
 
@@ -178,7 +103,7 @@ Do not invent data or a business goal. If a tool returns nothing or errors, say 
       </tr>
       <tr>
         <td><strong>Autotask, Datto RMM, CIPP, Liongard &amp; IT Glue enabled in the gateway</strong></td>
-        <td>The gateway's API users must be able to <strong>read</strong> tickets, devices, users/MFA, detections and organizations — and to <strong>create</strong> and <strong>update</strong> IT Glue documents. These reads feed the appendix and the occasional proof point. They are not the agenda.</td>
+        <td>The gateway's API users must be able to <strong>read</strong> tickets, devices, users/MFA, detections and organizations — and to <strong>create</strong> and <strong>update</strong> IT Glue documents.</td>
       </tr>
       <tr>
         <td><strong>Slack connector</strong></td>
@@ -209,7 +134,7 @@ Do not invent data or a business goal. If a tool returns nothing or errors, say 
   <ul>
     <li>
       <strong>The cadence floor is hourly.</strong> Scheduled routines reject
-      faster-than-hourly cron expressions. A QBR brief is a weekly artifact anyway —
+      faster-than-hourly cron expressions. A QBR pack is a weekly artifact anyway —
       <code>0 14 * * 1</code> runs it every Monday morning.
     </li>
     <li>
@@ -221,21 +146,14 @@ Do not invent data or a business goal. If a tool returns nothing or errors, say 
     <li>
       <strong>QBRs are quarterly and staggered per client — a routine is a cron.</strong>
       Real QBRs land on a per-client cadence, not all at once. This POC sidesteps that by
-      preparing a brief for <em>one designated client</em> every week. The production
+      preparing a pack for <em>one designated client</em> every week. The production
       pattern is a "QBR radar" routine that scans the PSA for clients with a QBR due in
-      roughly two weeks and drafts a brief for each — but that needs a source of QBR dates
+      roughly two weeks and preps a pack for each — but that needs a source of QBR dates
       to scan, which is out of scope here.
     </li>
     <li>
-      <strong>A scheduled run cannot know the owner's business goal.</strong> Level 5
-      without that goal is fiction. The routine must say the goal is unknown and stop
-      at the questions, rather than invent a transformation from ticket or device data.
-      The account manager adds the goal before the meeting. That coaching is
-      <code>qbr-prep-agent</code>, not this cron.
-    </li>
-    <li>
       <strong>Liongard's metric-evaluation endpoint is unavailable.</strong> The
-      configuration read uses <code>liongard_detections_list</code> — recent change
+      configuration section uses <code>liongard_detections_list</code> — recent change
       detections — instead. Window it to the last ~90 days with a small page size, read
       only the most recent ~15 detections' metadata, and never read the large
       <code>ChangeDetection</code> field.
@@ -267,43 +185,37 @@ Do not invent data or a business goal. If a tool returns nothing or errors, say 
   <h2 id="routine-prompt">The resulting routine prompt</h2>
   <p>
     This is the lean prompt the build process installs into the scheduled routine itself.
-    Substitute your designated client's five IDs and destination channel. The prompt
-    tells the routine to draft levels 3–5 and to keep operational counts in the appendix.
+    Substitute your designated client's five IDs and destination channel.
   </p>
   <pre class="not-prose"><code>{routinePrompt}</code></pre>
 
   <hr class="my-8" />
 
   <h2 id="how-it-works">How it works</h2>
-  <h3>The brief is the pyramid, not the four systems</h3>
+  <h3>Four connectors composed into one pack</h3>
   <p>
-    A QBR that leads with ticket volume, device health, MFA coverage, and configuration
-    changes is a level 1–2 status report. The routine still calls those systems —
-    Autotask, Datto RMM, CIPP, and Liongard — because a higher-level point sometimes
-    needs one concrete proof. Each read is kept in the brief only when it answers
-    "what did the owner have to do?" (level 3), "what never became their problem?"
-    (level 4), or "what business move does this block?" (level 5). Everything else
-    is appendix. All five client IDs are baked into the routine prompt, so the routine
-    never spends a run on discovery.
+    A QBR pack pulls from four systems that normally need four separate logins. The
+    routine calls each in turn — Autotask for ticket volume, Datto RMM for device health,
+    CIPP for identity and MFA coverage, Liongard for configuration changes — and reasons
+    over the combined picture to write an executive summary plus a section per area. All
+    five client IDs are baked into the routine prompt, so the routine never spends a run
+    on discovery.
   </p>
   <h3>The IT Glue document is updated in place</h3>
   <p>
     Each run the routine searches the client's IT Glue organization for a document
     named "QBR Pack - &lt;client name&gt;". If it exists, the routine updates it; if not,
     it creates it. Reruns therefore converge on a single living document rather than
-    piling up new ones — the latest brief is always at the same place, and the Slack
-    message is just a pointer to it. The Slack line names the floor check, not a
-    ticket or MFA count.
+    piling up new ones — the latest pack is always at the same place, and the Slack
+    message is just a pointer to it.
   </p>
   <h3>Graceful per-section degradation</h3>
   <p>
     If any one system can't be read — a client unmatched in CIPP, a Liongard timeout —
-    that line of the appendix carries a "data not available" note instead of vanishing.
-    The appendix always has the same four lines, so a reader can tell the difference
-    between "nothing to cite" and "we couldn't check." A missing read is not filled
-    with a different metric, and it is not promoted into a level 3–5 story. If the
-    IT Glue step itself fails, the routine falls back to posting the full brief inline
-    in Slack.
+    that section of the pack carries a "data not available" note instead of vanishing.
+    The pack always has the same four sections, so a reader can tell the difference
+    between "nothing to report" and "we couldn't check." If the IT Glue step itself
+    fails, the routine falls back to posting the full pack inline in Slack.
     See <a href={`${baseUrl}advanced-workflows/delivery-adapters/`}>delivery adapters</a>
     for other ways to surface a routine's output.
   </p>
@@ -314,13 +226,11 @@ Do not invent data or a business goal. If a tool returns nothing or errors, say 
   <p>
     The natural next step is the <strong>QBR radar</strong>: instead of one designated
     client on a fixed weekly cron, a routine that scans the PSA for clients with a QBR
-    due in roughly two weeks and drafts a level 3–5 brief for each one. That needs a
-    source of QBR dates to scan against — a custom field, a calendar, a tracking sheet —
-    which is why it is out of scope for this POC. Widen the appendix only when the new
-    read can prove a higher level. A financials section, via the <code>qbo</code>
-    connector, belongs here only as evidence for a level 5 move the owner already
-    named (a second site, a hire, a customer that requires a control) — not as another
-    dashboard in the meeting.
+    due in roughly two weeks and preps a pack for each one. That needs a source of QBR
+    dates to scan against — a custom field, a calendar, a tracking sheet — which is why
+    it is out of scope for this POC. The pack itself is also easy to widen: add a
+    financials section by attaching the <code>qbo</code> connector and pulling the
+    client's recent invoices and balance alongside the operational data.
   </p>
   <p class="text-sm text-[var(--muted)]">
     Questions or a workflow you'd like documented?

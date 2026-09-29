@@ -47,17 +47,18 @@ export const prompts: Prompt[] = [
     description: 'Meeting prep for levels 3–5 of the MSP Value Pyramid: ease of doing business, emotional value, and transformational value.',
     plugins: [],
     mcpServers: ['autotask', 'halopsa', 'connectwise-manage', 'ninjaone', 'atera'],
-    prompt: `Prepare a QBR conversation for [CLIENT NAME] covering [QUARTER]. The audience is the SMB owner. Do not run a ticket review.
+    prompt: `Prepare me to run the [CLIENT NAME] QBR for [QUARTER] with the business owner. Open by saying this hour is level 3–5 coaching plus an evidence pack. Tickets are not the story.
 
-Coach levels 3–5 of the MSP Value Pyramid (Pisces Consulting, adapted from Bain & Company's B2B Elements of Value). Most MSPs only communicate level 1 (table stakes: we showed up) and level 2 (functional value: the service did its job). This meeting does not.
+Read prior commitments and their goals before any ticket volume. Then write, in this order:
 
-- Level 3 — Ease of Doing Business (3 points): where working with us cost them less time, effort, and surprise, and where they still had to chase us. Include the questions to ask.
-- Level 4 — Emotional Value (4 points): one moment that did not become their problem, and what they still worry about.
-- Level 5 — Transformational Value (5 points): what the business is trying to make true this year, and at most one roadmap item shaped as a business move — what becomes true for the owner, what we would change, what we need from them, the horizon, and what we will not do. If you do not know the business goal, ask. Do not invent a transformation.
+1. Executive narrative covering Ease of Doing Business, Emotional Value, and Transformational Value. No SLA, no volume, no "we closed N."
+2. Level 3 — what I say, what I ask ("Where did we create friction? Where did we remove it? What would make next quarter easier for your ops?"), and support metrics that answer "so what for ease?" Aging, reopens, time-to-first-response, and escalations qualify only as friction. Volume does not.
+3. Level 4 — what I say, what I ask ("What kept you up at night? Did we reduce or add worry? Which moment built or burned trust?"), and support metrics as reassurance or confidence, not scare theater.
+4. Level 5 — their goal, the questions before any proposal, and one business move tied to that goal. Not a SKU push.
+5. Looking ahead / asks — what I need them to decide before we leave.
+6. Appendix — level 1 and 2 operating numbers (tickets opened and closed, SLA %, devices, patch %). Label it if-challenged only.
 
-Floor check: one sentence. If the quarter was clean, say the floor held and do not walk ticket counts, SLA %, patch %, or threats blocked. Use a metric only when you can finish the sentence "this matters because the owner ___."
-
-Output a story, proof points, and questions for each level, plus a short "do not say" list.`,
+Refuse a ticket-volume lead, an SLA% headline, a device inventory dump, and "we closed N tickets" as proof of value. A metric that only says how busy we were goes in the appendix or gets dropped.`,
   },
 
   {
@@ -899,7 +900,7 @@ Use this prompt immediately after taking on a new site to generate the baseline 
 
 Keep in the brief, and only these:
 - One PSA pattern where the owner had to chase, ask twice, or manage a change themselves. If you cannot name what the owner had to do, say "no level 3 proof."
-- Any P1 the owner would have felt — title, date, and what they experienced. This may need to open the meeting. Do not bury it under a compliance rate.
+- Any P1 the owner would have felt — title, date, and what they experienced. That belongs in level 4 as transparency ("we missed, here is what you felt"), not as the opening headline and not buried under an SLA percent.
 - One RMM or security fact that shows something never became the owner's problem, or a constraint blocking a business move you can already name. If you cannot name that, omit it.
 
 Under the heading "Appendix — do not present as the agenda", list tickets opened and closed, SLA compliance, top categories, device count, patch compliance, and any device offline more than 4 hours. Do not turn that list into talking points, an executive summary, or a slide outline.
