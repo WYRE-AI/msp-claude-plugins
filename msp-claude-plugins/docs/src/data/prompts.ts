@@ -896,7 +896,7 @@ Use this prompt immediately after taking on a new site to generate the baseline 
     description: 'Optional supporting numbers for a level 3–5 QBR. Not the meeting agenda.',
     plugins: [],
     mcpServers: ['autotask', 'halopsa', 'connectwise-manage', 'ninjaone', 'datto-rmm', 'atera'],
-    prompt: `Pull a short evidence appendix for the [CLIENT NAME] QBR covering [START DATE] to [END DATE, e.g. "January 1 – March 31 2025"]. This is not the QBR deck. The meeting is a level 3–5 conversation: ease of doing business, emotional value, and transformational value. Return numbers only so the account manager can support or reject a higher-level point.
+    prompt: `Pull a short evidence appendix for the [CLIENT NAME] QBR covering [START DATE] to [END DATE, e.g. "January 1 – March 31 2025"]. This is not the QBR deck. The meeting is a level 3–5 conversation: ease of doing business, emotional value, and transformational value. Return each figure with a short clause of context so the account manager can support or reject a higher-level point. Brief context with the number is required. A bare number with no context is not enough.
 
 Keep in the brief, and only these:
 - One PSA pattern where the owner had to chase, ask twice, or manage a change themselves. If you cannot name what the owner had to do, say "no level 3 proof."

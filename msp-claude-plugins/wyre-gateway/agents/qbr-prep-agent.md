@@ -103,7 +103,7 @@ When you write, two proof points they will recognize beat a dashboard. Every mai
 
 ## Output
 
-Produce this, in this order. The first thing under the title is the executive narrative. No ticket table above it.
+Produce this, in this order: title, who is in the room, Open, executive narrative, then level 3, level 4, level 5, looking ahead, and the appendix last. No ticket table above the appendix.
 
 **QBR — [Client]**
 **Who is in the room:** [owner or operator] | **Period:** [quarter] | **Their goal:** [from brain-mcp or notes, or "unknown — asked"]
