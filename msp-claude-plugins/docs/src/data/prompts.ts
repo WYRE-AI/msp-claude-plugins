@@ -31,7 +31,7 @@ export const roleDescriptions: Record<PromptRole, string> = {
   incident:      'P1 war rooms, post-incident reviews, client communications, and timeline reconstruction.',
   security:      'Account compromise triage, endpoint investigation, phishing intel, and threat hunting.',
   documentation: 'Doc audits, runbook generation, asset discovery, and password rotation tracking.',
-  bizops:        'QBR data, contract renewals, license waste analysis, and executive reporting.',
+  bizops:        'QBR evidence appendices, contract renewals, license waste analysis, and executive reporting.',
 };
 
 export const roleOrder: PromptRole[] = ['account', 'finance', 'sales', 'support', 'noc', 'incident', 'security', 'documentation', 'bizops'];
@@ -43,21 +43,21 @@ export const prompts: Prompt[] = [
   {
     id: 'account-qbr-prep',
     role: 'account',
-    title: 'QBR Client Summary',
-    description: 'Full quarter recap: ticket volume, SLA performance, recurring issues, and open risks.',
+    title: 'QBR Conversation Brief',
+    description: 'Meeting prep for levels 3–5 of the MSP Value Pyramid: ease of doing business, emotional value, and transformational value.',
     plugins: [],
     mcpServers: ['autotask', 'halopsa', 'connectwise-manage', 'ninjaone', 'atera'],
-    prompt: `Pull together a QBR summary for [CLIENT NAME] covering the past 90 days.
+    prompt: `Prepare a QBR conversation for [CLIENT NAME] covering [QUARTER]. The audience is the SMB owner. Do not run a ticket review.
 
-Include:
-- Total ticket volume, broken down by category (hardware, software, network, user, other)
-- SLA compliance rate — how many tickets were resolved within SLA vs breached
-- Top 3 recurring issue types with ticket counts
-- Any open tickets older than 14 days
-- Any open or recent security incidents
-- Notable wins or improvements since last QBR
+Coach levels 3–5 of the MSP Value Pyramid (Pisces Consulting, adapted from Bain & Company's B2B Elements of Value). Most MSPs only communicate level 1 (table stakes: we showed up) and level 2 (functional value: the service did its job). This meeting does not.
 
-Format as a structured report I can use as talking points in the meeting.`,
+- Level 3 — Ease of Doing Business (3 points): where working with us cost them less time, effort, and surprise, and where they still had to chase us. Include the questions to ask.
+- Level 4 — Emotional Value (4 points): one moment that did not become their problem, and what they still worry about.
+- Level 5 — Transformational Value (5 points): what the business is trying to make true this year, and at most one roadmap item shaped as a business move — what becomes true for the owner, what we would change, what we need from them, the horizon, and what we will not do. If you do not know the business goal, ask. Do not invent a transformation.
+
+Floor check: one sentence. If the quarter was clean, say the floor held and do not walk ticket counts, SLA %, patch %, or threats blocked. Use a metric only when you can finish the sentence "this matters because the owner ___."
+
+Output a story, proof points, and questions for each level, plus a short "do not say" list.`,
   },
 
   {
@@ -583,22 +583,20 @@ Always err on the side of caution — if there's any doubt, don't release.`,
     id: 'account-email-security-posture',
     role: 'account',
     title: 'Email Security Posture for QBR',
-    description: 'Client-facing email security summary — threats blocked, user risk, and training progress.',
+    description: 'One level-4 proof point for a QBR: a threat story the owner did not have to live through. Not the meeting agenda.',
     plugins: ['proofpoint', 'avanan', 'abnormal', 'mimecast', 'knowbe4'],
     mcpServers: ['proofpoint', 'avanan', 'abnormal', 'mimecast', 'knowbe4'],
-    prompt: `Prepare an email security posture summary for [CLIENT NAME] to use in our upcoming QBR.
+    prompt: `Prepare one email-security proof point for the [CLIENT NAME] QBR. The meeting itself is a level 3–5 conversation (ease of doing business, how the owner feels, and what the business can do next). This note is optional evidence for level 4 — emotional value — not a section of the agenda. Do not open the meeting with a blocked-threat count.
 
-The audience is their leadership team — keep it business-focused, not technical.
+The audience is the SMB owner. Keep it business-focused.
 
-Cover:
-- Total threats blocked in the past quarter (phishing, malware, BEC, spam) and what that would have meant if unprotected
-- Any threats that got through — how they were detected and resolved
-- User risk: what percentage of users are clicking phishing simulations, how has it improved?
-- Training completion rate — is the team keeping up with security awareness training?
-- Top 3 threat types targeting their organization this quarter
-- Any recommended improvements or upcoming threats to be aware of
+Return:
+- One moment from the past quarter that did not become the owner's problem (what was stopped, what they did not have to do, what they did not have to explain to staff or customers). A single number is allowed only inside that story.
+- Anything that did reach a user, told as what the owner felt and what is already different.
+- One question to ask: "What about email still wakes you up?"
+- Training or phishing-simulation movement only if it changes that story. Otherwise leave the percentages out.
 
-Frame it as value delivered: "we blocked X attacks this quarter that could have cost you Y." Keep the language accessible for non-technical executives.`,
+If the quarter has no story an owner would recognize, say so. Do not fill the gap with category totals.`,
   },
 
   // ── Incident Response ─────────────────────────────────────────────
@@ -893,36 +891,21 @@ Use this prompt immediately after taking on a new site to generate the baseline 
   {
     id: 'bizops-qbr-data-pull',
     role: 'bizops',
-    title: 'QBR Data Pull',
-    description: 'Pull all quantitative data needed for a client QBR — tickets, SLAs, devices, alerts, and trends.',
+    title: 'QBR Evidence Appendix',
+    description: 'Optional supporting numbers for a level 3–5 QBR. Not the meeting agenda.',
     plugins: [],
     mcpServers: ['autotask', 'halopsa', 'connectwise-manage', 'ninjaone', 'datto-rmm', 'atera'],
-    prompt: `Pull all the data I need to prepare a QBR for [CLIENT NAME] covering the period [START DATE] to [END DATE, e.g. "January 1 – March 31 2025"].
+    prompt: `Pull a short evidence appendix for the [CLIENT NAME] QBR covering [START DATE] to [END DATE, e.g. "January 1 – March 31 2025"]. This is not the QBR deck. The meeting is a level 3–5 conversation: ease of doing business, emotional value, and transformational value. Return numbers only so the account manager can support or reject a higher-level point.
 
-From the PSA:
-- Total tickets opened and closed in the period
-- Ticket breakdown by category (hardware, software, network, user error, security, other)
-- SLA compliance rate: % of tickets resolved within SLA, and total breach count
-- Average time to first response and average time to resolution
-- Top 5 ticket categories by volume
-- Open tickets at the end of the period (carryover)
-- Any critical or P1 incidents — title, date, and resolution time
+Keep in the brief, and only these:
+- One PSA pattern where the owner had to chase, ask twice, or manage a change themselves. If you cannot name what the owner had to do, say "no level 3 proof."
+- Any P1 the owner would have felt — title, date, and what they experienced. This may need to open the meeting. Do not bury it under a compliance rate.
+- One RMM or security fact that shows something never became the owner's problem, or a constraint blocking a business move you can already name. If you cannot name that, omit it.
 
-From the RMM (if connected):
-- Total managed device count at start and end of period (growth?)
-- Devices with persistent alerts or recurring issues
-- Patch compliance rate at end of period
-- Any devices that went offline for more than 4 hours during the period
+Under the heading "Appendix — do not present as the agenda", list tickets opened and closed, SLA compliance, top categories, device count, patch compliance, and any device offline more than 4 hours. Do not turn that list into talking points, an executive summary, or a slide outline.
 
-Formatting:
-- Present numbers in a clear table where possible
-- Highlight improvements vs the previous period if prior data is available
-- Flag any metrics that are worse than industry benchmarks (SLA <95%, patch compliance <90%)
-
-I'll use this raw data to build the QBR deck — just get me the numbers.
-
-Variation — multi-client QBR data:
-Run for all clients and sort results by SLA compliance rate ascending (worst performers first) so I can prioritise conversations.`,
+Variation — portfolio scan before QBR season:
+Run for clients with a QBR in the next two weeks. Sort by "owner would have felt this" first, not by SLA percent. The output is still an appendix per client, not a ticket review.`,
   },
 
   {
