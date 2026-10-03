@@ -10,7 +10,7 @@ description: >-
   post-mortem for the incident we resolved this morning", "Generate the PIR for INC-247", "Help me
   write a blameless post-incident review for last night's database outage", "Pull together the
   postmortem document for our SEV-1 from yesterday"
-tools: ["Bash", "Read", "Write", "Glob", "Grep"]
+tools: ["mcp__rootly__get_incident", "mcp__rootly__list_incidents", "mcp__rootly__find_related_incidents", "mcp__rootly__suggest_solutions", "mcp__rootly__list_incident_action_items", "mcp__rootly__list_incident_alerts", "Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---
 
@@ -43,13 +43,13 @@ You follow a standard blameless PIR format but you adapt it to the incident. A 1
 
 Generate a post-incident review in this sequence:
 
-1. **Retrieve the incident record** — Call `incidents_get` filtered to the specific incident (by `sequential_id` or `id`). Pull the full incident object: title, summary, severity, status, all lifecycle timestamps, affected services, environments, and teams. This is the foundation of the PIR.
+1. **Retrieve the incident record** — Call `get_incident` by `id` (or `list_incidents` filtered by `sequential_id`). Pull the full incident object: title, summary, severity, status, all lifecycle timestamps, affected services, environments, and teams. This is the foundation of the PIR.
 
 2. **Pull AI analysis** — Immediately call `find_related_incidents` with the incident ID. This surfaces similar past incidents, which is valuable for the "Has this happened before?" section and for calibrating the action items. Also call `suggest_solutions` for any AI-generated insights about contributing factors or preventive measures.
 
-3. **Retrieve action items** — Call `incidents_by_incident_id_action_items_get` to pull all action items created during the incident. These represent the actual remediation steps taken. Review their status (completed vs. open) and use them to reconstruct the resolution story.
+3. **Retrieve action items** — Call `list_incident_action_items` to pull all action items created during the incident. These represent the actual remediation steps taken. Review their status (`open`, `in_progress`, `cancelled`, `done`) and use them to reconstruct the resolution story.
 
-4. **Retrieve attached alerts** — Call `incidents_by_incident_id_alerts_get` to get the monitoring signals that triggered or contributed to the incident. The alert timestamps and descriptions help reconstruct the detection sequence and identify any monitoring gaps (symptoms that occurred without corresponding alerts).
+4. **Retrieve attached alerts** — Call `list_incident_alerts` to get the monitoring signals that triggered or contributed to the incident. The alert timestamps and descriptions help reconstruct the detection sequence and identify any monitoring gaps (symptoms that occurred without corresponding alerts).
 
 5. **Calculate key metrics** — From the timestamps: MTTA (detected_at → acknowledged_at), Time to Triage (acknowledged_at → in_triage_at), Time to Mitigate (in_triage_at → mitigated_at), Time to Resolve (mitigated_at → resolved_at), Total Incident Duration (detected_at → resolved_at). If any timestamps are missing, note the gap in the PIR rather than fabricating data.
 

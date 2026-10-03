@@ -30,13 +30,18 @@ operator is authorised for.
 
 IT Glue is classified in Conduit's `VENDOR_TOOL_CONFIG`
 (`src/proxy/result-cache.ts`) under the slug **`itglue`** — no hyphen,
-unlike the plugin directory name. All 24 tools are classified; none fall
+unlike the plugin directory name. All 20 tools are classified; none fall
 through to the unclassified-means-`admin` rule.
+
+There is no locations domain on this server — no `get_location`,
+`search_locations`, `create_location`, or `update_location` tool exists.
+Location data is reached through `search_organizations` /
+`get_organization` instead.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change IT Glue state. Safe for autonomous agents — but see the flexible-asset caveat below. | `read` | `search_organizations`, `get_organization`, `search_configurations`, `get_configuration`, `search_documents`, `get_document`, `list_document_folders`, `list_document_sections`, `list_flexible_asset_types`, `search_flexible_assets`, `search_locations`, `get_location`, `itglue_health_check` |
-| **Write** | Creates or modifies documentation. Reversible, visible to everyone with tenant access. | `write` | `create_document`, `create_document_section`, `update_document_section`, `publish_document`, `create_location`, `update_location`, `unarchive_document` |
+| **Read** | Cannot change IT Glue state. Safe for autonomous agents — but see the flexible-asset caveat below. | `read` | `search_organizations`, `get_organization`, `search_configurations`, `get_configuration`, `search_documents`, `get_document`, `list_document_folders`, `list_document_sections`, `list_flexible_asset_types`, `search_flexible_assets`, `itglue_health_check` |
+| **Write** | Creates or modifies documentation. Reversible, visible to everyone with tenant access. | `write` | `create_document`, `create_document_section`, `update_document_section`, `publish_document`, `unarchive_document` |
 | **Delete** | Removes documentation, irreversibly or near-irreversibly. | `write` — **not** a tier of its own | `delete_document_section`, `archive_document` |
 | **Admin** | Reads stored credentials, or the list of them. | `admin` | `get_password`, `search_passwords` |
 

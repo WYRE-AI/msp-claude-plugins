@@ -80,11 +80,11 @@ express that rule; only your agent configuration can.
 
 **`cw_create_time_entry`** is billing, not bookkeeping. An entry against a
 `ServiceTicket` or `ProjectTicket` lands on the customer's next invoice at
-the work role's rate. There is no `cw_delete_time_entry` and no
-`cw_update_time_entry` in this plugin, so an agent that logs the wrong
-hours to the wrong ticket has created a correction that has to be made by
-hand in the PSA — and once the owning time sheet is submitted, by someone
-with approval rights.
+the work role's rate. `cw_create_time_entry` is the only time-entry tool
+this plugin exposes — there is no delete or update counterpart — so an
+agent that logs the wrong hours to the wrong ticket has created a
+correction that has to be made by hand in the PSA — and once the owning
+time sheet is submitted, by someone with approval rights.
 
 ## Recommended agent policy
 

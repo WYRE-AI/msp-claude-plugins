@@ -39,25 +39,44 @@ disagreement is not cosmetic.
 
 ### Three tool-name schemes, none of which line up
 
+**Update, 2026-08-30 (issue #178 corrective pass):** this plugin's skills,
+agents, and commands have been rewritten to use the third scheme below —
+Conduit's real, unprefixed, OpenAPI-generated names (`list_incidents`,
+`create_incident`, `list_alerts`, `list_retrospective_processes`, and so
+on). The table and the "not one tool name" claim that follow describe the
+*prior* state, kept for the historical record and because the sidecar
+scheme (row 1) is still real and still not what Conduit serves. The vendor's
+`hidden: true` / SSE-transport status below this section was **not**
+verified as part of that corrective pass — it was out of scope (a
+gateway-repo question, not a plugin-doc one) and may itself be stale, since
+it is dated over a month before this note. Re-verify against
+`mcp-gateway`'s current `vendor-config.ts` before relying on it.
+
 | Where | Naming scheme | Example |
 |---|---|---|
 | This plugin's `GOVERNANCE.md` (before this revision) | domain-then-verb, `rootly_` prefixed | `rootly_incidents_list` |
-| This plugin's skills, agents, and commands | verb-then-domain, `rootly_` prefixed | `rootly_list_alerts` |
-| Conduit's `VENDOR_TOOL_CONFIG` | unprefixed, generated from Rootly's OpenAPI spec | `list_alerts` |
+| This plugin's skills, agents, and commands (before the 2026-08-30 corrective pass) | mixed: unprefixed domain-then-verb in some files (`incidents_get`), `rootly_`-prefixed verb-then-domain in others (`rootly_list_alerts`) | `rootly_list_alerts`, `incidents_get` |
+| Conduit's `VENDOR_TOOL_CONFIG`, and this plugin's skills/agents/commands as of 2026-08-30 | unprefixed, generated from Rootly's OpenAPI spec | `list_alerts` |
 
 The first scheme is the WYRE-built `rootly-mcp` sidecar's surface. **Conduit
 does not route to it.** `src/credentials/vendor-config.ts` sets
 `containerUrl: "https://mcp.rootly.com"` with `mcpPath: "/sse"` — Rootly's
 own first-party hosted server — and `VENDOR_TOOL_CONFIG` is keyed to that
-server's 251 generated tool names. The second scheme matches nothing at all;
-it appears only in this plugin's own prose.
+server's 251-253 generated tool names (counts have drifted slightly across
+audits; treat either as approximate). The second scheme, as it existed
+before the 2026-08-30 pass, matched nothing at all — it appeared only in
+this plugin's own prose.
 
-The consequence: **not one tool name this plugin documents or references
-appears in `VENDOR_TOOL_CONFIG`.** Conduit is fail-closed per tool, not per
-vendor — the enforcement gate coerces an unclassified tool to the highest
-tier, `const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). So every `rootly_*` name would
-require tier `admin`, read tools included, if it were reachable at all.
+The consequence, as of the prior revision: **not one tool name this plugin
+documented or referenced appeared in `VENDOR_TOOL_CONFIG`.** Conduit is
+fail-closed per tool, not per vendor — the enforcement gate coerces an
+unclassified tool to the highest tier, `const requiredTier: PermissionTier =
+classified ?? 'admin';` (`src/access/access-enforcement.ts:63`). Every
+`rootly_*` name would have required tier `admin`, read tools included, if it
+were reachable at all. After the 2026-08-30 pass, the plugin's documented
+names now match `VENDOR_TOOL_CONFIG`'s scheme directly — but confirm the
+vendor is actually un-hidden before assuming that closes the gap in
+practice, not just on paper.
 
 ### It is not currently reachable at all
 
@@ -193,15 +212,20 @@ configuration.
   cannot speak its transport (see *Tool permission groups*), so the
   connector is not currently serving any tool.
 - The two bullets that follow describe the WYRE-built `rootly-mcp`
-  sidecar's surface, which Conduit does not route to. They are retained
-  because this plugin's skills were written against it, and they are
-  **not** a description of the hosted surface Conduit classifies — which
-  does expose postmortem, action-item, workflow, service-catalog, and
-  schedule tools.
+  sidecar's surface, which Conduit does not route to. Before the
+  2026-08-30 corrective pass, this plugin's `postmortems`, `services`,
+  `alerts`, and `workflows` skills were written against an invented
+  tool surface that matched neither the sidecar nor the hosted server —
+  they are retained here as a description of the sidecar's real,
+  narrower capability, not of what this plugin currently documents. The
+  hosted surface Conduit classifies has real write paths for all of
+  these: `create_incident_action_item`, `update_incident_retrospective_step`,
+  `create_workflow`, and `create_service`, among others — see this
+  plugin's `postmortems`, `workflows`, and `services` skills as of
+  2026-08-30 for the corrected tool names.
 - **No postmortem, action-item, workflow, or service-catalog write
-  path** *in the sidecar surface*. This plugin's `postmortems`,
-  `workflows`, and `services` skills describe Rootly REST API endpoints
-  that the sidecar does not expose as tools.
+  path** *in the sidecar surface*. The sidecar does not expose these as
+  tools at all; this is a sidecar limitation, not a hosted-surface one.
 - **No schedule authoring** *in the sidecar surface*. Schedules can be
   listed and read but not created, edited, or overridden.
 - No filesystem, no shell, no other vendor's data.
@@ -212,38 +236,40 @@ configuration.
 
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
-- `rootly_org_teams_*` and `rootly_org_current_user` return staff
-  identity — names, email addresses, and team membership.
-  `rootly_schedules_*` returns who is on-call and when, which is a
-  roster of your responders' working patterns.
-- `rootly_incidents_get` returns incident titles, summaries, and
-  timelines. In practice these carry infrastructure detail — service
+- `list_teams` and `get_current_user` return staff identity — names,
+  email addresses, and team membership. `list_schedules` and related
+  on-call tools return who is on-call and when, which is a roster of
+  your responders' working patterns.
+- `list_incidents` / `get_incident` return incident titles, summaries,
+  and timelines. In practice these carry infrastructure detail — service
   names, hostnames, error output — and, on customer-impacting incidents,
   a description of which customers were affected.
-- `rootly_alerts_list` returns the raw monitoring payloads behind an
+- `list_alerts` returns the raw monitoring payloads behind an
   incident, with the same disclosure profile.
 - Restrict these if your agents run unattended.
 
 ## Known sharp edges
 
-- **Two upstreams exist, they expose different tools, and Conduit routes
-  to the one this plugin's skills were not written against.** The
-  WYRE-built `rootly-mcp` sidecar serves the `rootly_*` names those skills
-  use. Conduit's `containerUrl` for this vendor is `https://mcp.rootly.com`
+- **Two upstreams exist and they expose different tools.** The
+  WYRE-built `rootly-mcp` sidecar serves `rootly_*`-prefixed names.
+  Conduit's `containerUrl` for this vendor is `https://mcp.rootly.com`
   — Rootly's own hosted server, which generates a different, larger set
   from their OpenAPI spec (`list_incidents`, `find_related_incidents`, and
-  similar). Tool names are not interchangeable; a runbook written against
-  one fails against the other with "unknown tool", not with a permissions
-  error. This plugin ships no `.mcp.json`, so nothing in it pins an
-  endpoint — check the connection before trusting any tool name on this
-  page.
+  similar). As of the 2026-08-30 corrective pass this plugin's skills,
+  agents, and commands are written against the hosted surface Conduit
+  actually routes to, not the sidecar — but tool names across the two
+  upstreams are still not interchangeable, so if you ever point this
+  plugin at the sidecar directly, a runbook written against one fails
+  against the other with "unknown tool", not a permissions error. This
+  plugin ships no `.mcp.json`, so nothing in it pins an endpoint — check
+  the connection before trusting any tool name on this page.
 - **Acknowledging pauses the escalation clock.** An agent that
   acknowledges an alert it cannot resolve has stopped it reaching the
   human who could.
 - **Severity IDs are UUIDs and are per-organisation.** Nothing can be
-  hardcoded; `rootly_org_severities_list` is a required lookup before any
-  create. An agent guessing a severity ID gets a 422 whose message does
-  not explain why.
+  hardcoded; `list_severities` is a required lookup before any create. An
+  agent guessing a severity ID gets a 422 whose message does not explain
+  why.
 - **Rootly's model is internal-first.** It is built for one engineering
   organisation's own infrastructure, not per-client MSP ticketing. If you
   route multiple customers through team-based scoping, be explicit that
