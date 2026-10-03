@@ -12,8 +12,8 @@ back to phonebook and CRM-integrated contact search.
 
 ## Prerequisites
 
-- A 3CX PBX connected (directly or through Conduit's BYO connector) with a
-  valid, authenticated MCP session — see the `api-patterns` skill
+- A 3CX PBX connected (through Conduit's vendor catalog, or directly) with
+  a valid, authenticated MCP session — see the `api-patterns` skill
 - The identifier's type known ahead of time if possible: email, extension
   number, or name — this changes which lookup to try first
 
