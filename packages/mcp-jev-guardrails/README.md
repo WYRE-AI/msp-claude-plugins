@@ -8,21 +8,35 @@ Pattern: atomic Nouls + code owns routing ([TypeSafe LLM guardrails cookbook](ht
 
 ## Install
 
-```bash
-npm install @wyre-ai/mcp-jev-guardrails @typesafe-ai/sdk
-```
+`npm install @wyre-ai/mcp-jev-guardrails` against the public npm registry 404s. This package is not published there. npm also ignores GitHub `#path:` subdirectory specs (`gitSubdir` is parsed and never applied), so a spec that points at `packages/mcp-jev-guardrails` still reads the repository root. The root `package.json` is this library's install manifest. `prepare` compiles TypeScript on install. `dist/` stays gitignored.
 
-Until this is published, path-depend the PR branch from a workspace or `file:` spec (npm does not support GitHub `#path:`):
+Pin a commit. Do not use `--ignore-scripts`; that skips `prepare` and leaves `dist/` missing.
+
+```bash
+npm install github:WYRE-AI/msp-claude-plugins#<40-character-commit-sha>
+```
 
 ```json
 {
   "dependencies": {
-    "@wyre-ai/mcp-jev-guardrails": "file:../msp-claude-plugins/packages/mcp-jev-guardrails"
+    "@wyre-ai/mcp-jev-guardrails": "github:WYRE-AI/msp-claude-plugins#<40-character-commit-sha>"
   }
 }
 ```
 
-In this repo, the same package is a workspace-style folder at `packages/mcp-jev-guardrails`. After publish, switch to the npm name above.
+A sibling checkout can use the repository root (same manifest):
+
+```json
+{
+  "dependencies": {
+    "@wyre-ai/mcp-jev-guardrails": "file:../msp-claude-plugins"
+  }
+}
+```
+
+`file:../msp-claude-plugins/packages/mcp-jev-guardrails` also works. That directory has its own `prepare` script.
+
+GitHub Packages is the registry other `@wyre-ai` libraries use. After the **Publish mcp-jev-guardrails** workflow succeeds, a consumer that already authenticates to `https://npm.pkg.github.com` can switch to `"@wyre-ai/mcp-jev-guardrails": "0.1.0"`. Public packages on that registry still require a token with `read:packages`. Until that publish exists, use the git spec above.
 
 `TYPESAFE_API_KEY` is read by `@typesafe-ai/sdk` from the environment. Store it in Infisical (Internal). Never commit keys.
 
@@ -158,10 +172,11 @@ Keys matching password/token/secret/api_key/authorization/credential (and simila
 
 ```bash
 cd packages/mcp-jev-guardrails
-npm install
+npm ci
 npm test
-npm run build
 ```
+
+`npm ci` runs `prepare`, which compiles `dist/`. `npm test` covers the decision rules and checks the root install manifest still matches this package.
 
 Live `evaluateToolCall` coverage is skipped unless `TYPESAFE_API_KEY` is set in the environment. Unit tests never need the key.
 

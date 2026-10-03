@@ -162,6 +162,10 @@ Each plugin consists of three layers:
 Most contributions touch skills and commands. MCP server changes are more involved
 and benefit from familiarity with the vendor's API.
 
+`packages/mcp-jev-guardrails` is a shared library, not a plugin. The repository
+root `package.json` exists so Conduit can `npm install` it from GitHub. See
+that package's README for the dependency spec.
+
 ---
 
 ## Individual plugins

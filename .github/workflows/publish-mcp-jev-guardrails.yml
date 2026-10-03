@@ -1,0 +1,38 @@
+name: Publish mcp-jev-guardrails
+
+# Manual. Merging does not publish. Does not create a GitHub Release or tag.
+# Publishes packages/mcp-jev-guardrails (exports ./dist) to GitHub Packages
+# with the job's GITHUB_TOKEN. No extra repo secret.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    name: Publish @wyre-ai/mcp-jev-guardrails
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test and publish
+        working-directory: packages/mcp-jev-guardrails
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          npm ci
+          npm test
+          NAME="$(node -p "require('./package.json').name")"
+          VERSION="$(node -p "require('./package.json').version")"
+          if npm view "${NAME}@${VERSION}" version >/dev/null 2>&1; then
+            echo "${NAME}@${VERSION} is already on GitHub Packages."
+            exit 0
+          fi
+          npm publish

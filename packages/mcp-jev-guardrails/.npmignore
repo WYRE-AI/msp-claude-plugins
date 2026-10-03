@@ -1,0 +1,8 @@
+# Root `npm pack` walks this directory and would otherwise honor .gitignore,
+# which ignores dist/. This file is what lets the repository-root install
+# manifest include the build. The package's own `files` field still wins
+# when packing this directory directly.
+*
+!dist
+!dist/**
+!README.md
