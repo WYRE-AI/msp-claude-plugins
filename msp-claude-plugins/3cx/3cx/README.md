@@ -23,24 +23,39 @@ This is **not** the same project as the community *SSIG-IT/3cx-mcp-server*
 on GitHub — that's a separate, third-party server talking to 3CX's REST
 API. Don't carry claims (including licensing requirements) between the two.
 
-## How This Is Different From Other Plugins Here
+## How This Plugin Reaches a PBX
 
 Every 3CX PBX is its own endpoint with its own OAuth authorization server —
-there's no shared `mcp.3cx.com` the way there's a shared
-`mcp.pax8.com`. That means this plugin doesn't fit WYRE Conduit's usual
-single-shared-endpoint vendor catalog, and there's no `.mcp.json` shipped
-with it. Two real connection paths exist instead:
+there's no shared `mcp.3cx.com` the way there's a shared `mcp.pax8.com`.
+WYRE Conduit's vendor catalog supports exactly that shape, so **3CX is a
+catalog vendor** (slug `3cx`, category *Communications & Telephony*): the
+catalog entry resolves the proxy target from the MCP URL you connect with,
+and treats each PBX as its own authorization server rather than assuming
+one fixed endpoint for every customer.
 
-1. **Direct**, standalone — connect Claude straight to a specific PBX.
-2. **Through Conduit's BYO MCP feature** (`/connect/byo`) — for MSPs who
-   want this PBX alongside their other Conduit-brokered vendors.
+Two connection paths:
 
-Both are covered below and in the `api-patterns` skill.
+1. **Through Conduit's vendor catalog** (recommended) — `/connect/3cx`, or
+   **3CX** under *Communications & Telephony* in the org catalog at
+   `/org/catalog`.
+2. **Direct**, standalone — connect Claude straight to a specific PBX with
+   no gateway in between.
+
+Conduit's **BYO MCP** path (`/connect/byo`) is for MCP servers that have
+*no* catalog entry. 3CX has one, so BYO is not the route to use here.
+
+This plugin ships no `.mcp.json`: a catalog connection is made once in the
+Conduit web UI rather than declared per-project.
+
+Both supported paths are covered below and in the `api-patterns` skill.
 
 ## Prerequisites
 
-- A 3CX PBX running **V20 Update 10** (Alpha or later) with the MCP server
-  feature available
+- A 3CX PBX running **V20 Update 10 or later** with the MCP Server enabled
+  (Admin → Integrations → MCP Clients)
+- For a catalog connection, the PBX **reachable from the internet on port
+  443** — Conduit fetches the PBX's own OAuth discovery metadata before the
+  browser redirect
 - An account on that PBX with the 3CX role appropriate for what you want
   Claude to be able to do — tool access is entirely inherited from
   whichever account approves the connection
@@ -53,6 +68,28 @@ Both are covered below and in the `api-patterns` skill.
    `https://yourpbx.3cx.eu/mcp` — the actual FQDN is specific to that PBX).
 
 ## Installation
+
+### Via WYRE Conduit's Vendor Catalog (recommended)
+
+If your organization uses [Conduit](https://conduit.wyre.ai), connect the
+PBX from the catalog like any other vendor: go to `/connect/3cx`, or find
+**3CX** under *Communications & Telephony* at `/org/catalog`.
+
+There is one field, **MCP Server URL**. Paste the URL exactly as the 3CX
+console showed it in the admin step above — Conduit proxies to it verbatim
+and does not append a path.
+
+Conduit then discovers that PBX's OAuth endpoints from its own metadata
+(RFC 9728, then RFC 8414), registers a client dynamically (RFC 7591), and
+sends you to the PBX to sign in. **You sign in as a 3CX user**, and the
+connection can do only what that user's 3CX role allows.
+
+> **Read this before connecting for a non-owner.** 3CX is not yet
+> classified in Conduit's tool table, and Conduit fails closed: every 3CX
+> tool currently requires the `admin` tier. Org **owners** are unaffected
+> and see all tools; **non-owner members see none**, whatever grant they
+> hold, until WYRE classifies the tool surface. This is a known, tracked
+> gap — see `GOVERNANCE.md`. Don't work around it by switching to BYO.
 
 ### Direct Connection (Claude Code, no gateway)
 
@@ -71,14 +108,9 @@ Then inside Claude:
 The connection then also appears in that PBX's own
 **Admin → Integrations → MCP Clients** list.
 
-### Via WYRE Conduit's BYO MCP Feature
-
-If your organization already uses [Conduit](https://conduit.wyre.ai) for
-other vendors, paste the PBX's MCP URL from the admin step above into
-Conduit's BYO MCP registration form at `/connect/byo`. Conduit
-auto-discovers the PBX's OAuth flow and completes the authorization —
-no vendor-specific setup is needed on Conduit's side. See `GOVERNANCE.md`
-for exactly how Conduit tiers this PBX's tools once connected this way.
+A direct connection is the right choice for a standalone technician with
+no gateway. Note that it gets none of Conduit's access grants, per-tool
+allowlists, `conduit__my_access`, or org audit views — see `GOVERNANCE.md`.
 
 ## Available Skills
 
@@ -87,7 +119,7 @@ for exactly how Conduit tiers this PBX's tools once connected this way.
 | `directory` | Contact and extension lookups — email, exact extension, phonebook, CRM-synced |
 | `calls-queues` | Active calls, recordings, voicemail, queue/department/profile visibility, and the write actions that change live routing |
 | `pbx-admin` | System diagnostics, PBX inventory/database, the read-only `Query` tool, call flow apps, and blocklist/blacklist/DID writes |
-| `api-patterns` | Connection setup (direct and Conduit BYO), the inherited permission model, and how to discover the live tool surface |
+| `api-patterns` | Connection setup (Conduit catalog and direct), the inherited permission model, Conduit's tier gate, and how to discover the live tool surface |
 
 ## Available Commands
 
@@ -131,10 +163,13 @@ for exactly how Conduit tiers this PBX's tools once connected this way.
 - 3CX has not published exact MCP tool-name strings publicly. This plugin
   describes tools by capability rather than inventing identifiers; always
   confirm the live tool set with `tools/list` against the actual PBX.
+- On a Conduit catalog connection, 3CX is not yet classified in
+  `VENDOR_TOOL_CONFIG`, and Conduit fails closed to the `admin` tier for
+  unclassified tools. Org owners are unaffected; non-owner members reach no
+  3CX tool until classification lands. Tracked and temporary.
 
-See `GOVERNANCE.md` for the full trust model, including how Conduit's BYO
-connector tiers this vendor's tools when there's no hand-curated
-classification to draw from.
+See `GOVERNANCE.md` for the full trust model, including what Conduit's tier
+gate does and does not enforce on each connection path.
 
 ## Troubleshooting
 
@@ -155,9 +190,21 @@ identifiers.
 
 ### No tools available after connecting
 
-Confirm the PBX is running V20 Update 10 (or later) with the MCP server
-feature enabled, and that the connecting 3CX account has a role that
-grants at least read access to the areas you're trying to use.
+If you connected through Conduit and you are **not** an org owner, this is
+almost certainly the classification gap, not a broken connection: every 3CX
+tool requires the `admin` tier until WYRE classifies the tool surface. Check
+`conduit__my_access`, and see `GOVERNANCE.md`, *Tool permission tiers*.
+
+Otherwise, confirm the PBX is running V20 Update 10 (or later) with the MCP
+Server enabled, and that the connecting 3CX account has a role that grants
+at least read access to the areas you're trying to use.
+
+### Conduit can't discover the PBX's OAuth settings
+
+The connect form rejects the URL before redirecting if discovery fails.
+Confirm the MCP Server is enabled on the PBX (Admin → Integrations → MCP
+Clients — needs V20 Update 10+), that the URL is exactly what the console
+shows, and that the PBX is reachable from the internet on port 443.
 
 ## API Documentation
 
@@ -172,6 +219,27 @@ grants at least read access to the areas you're trying to use.
 See the main [CONTRIBUTING.md](../../CONTRIBUTING.md) for guidelines.
 
 ## Changelog
+
+### 0.2.0 (2026-09-14)
+
+- **Corrected**: 3CX **is** a WYRE Conduit catalog vendor (slug `3cx`,
+  category *Communications & Telephony*), added 2026-09-09. The previous
+  release asserted it had no catalog entry and structurally could not have
+  one — wrong on both counts; Conduit's catalog supports per-tenant vendors
+  whose customers each run their own instance at their own URL.
+- **Corrected**: the recommended connection path is now Conduit's catalog
+  (`/connect/3cx` or `/org/catalog`), not the BYO MCP form
+  (`/connect/byo`). BYO remains correct only for MCP servers with no
+  catalog entry.
+- **Corrected**: replaced the BYO name-heuristic tier tables in
+  `api-patterns` and `GOVERNANCE.md` with the real catalog behavior — 3CX
+  has no `VENDOR_TOOL_CONFIG` entry yet, so Conduit fails closed to the
+  `admin` tier: owners see every tool, non-owner members see none until
+  classification lands. Documented as a tracked, temporary gap.
+- Documented the catalog connect requirements (V20 Update 10+, PBX
+  reachable on 443, paste the MCP URL exactly as the console shows it) and
+  the RFC 9728 → RFC 8414 discovery plus RFC 7591 dynamic client
+  registration Conduit performs at connect time.
 
 ### 0.1.0 (2026-08-21)
 

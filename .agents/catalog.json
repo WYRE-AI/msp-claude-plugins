@@ -39,7 +39,7 @@
     {
       "name": "3cx",
       "displayName": "3CX",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
       "category": "productivity",
       "tags": [
