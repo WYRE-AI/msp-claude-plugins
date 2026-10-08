@@ -188,9 +188,11 @@ Conduit is fail-closed: an unclassified tool falls back to requiring tier
 
 - **Org owners are unaffected** — owner access bypasses the tier gate, so
   an owner sees and can call every 3CX tool.
-- **Non-owner members see none of them** until the tools are classified,
-  no matter which tier they have been granted. A `read` grant does not
-  reach a 3CX tool while it is unclassified.
+- **With an ordinary `read` or `write` grant, non-owner members see none
+  of these tools** until they are classified — that grant does not reach
+  a tool requiring `admin`. A deliberate `admin` grant, or an explicit
+  per-tool `customTools` allowlist entry, does reach it; this gap is about
+  the ordinary-grant default, not an absolute block on non-owner access.
 
 This is a **known, tracked gap, not a permanent design** — 3CX sits in
 Conduit's unclassified-vendor backlog until a real connection confirms the
