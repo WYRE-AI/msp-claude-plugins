@@ -30,9 +30,9 @@
     }
   },
   "totals": {
-    "packs": 83,
-    "skills": 374,
-    "commands": 313,
+    "packs": 85,
+    "skills": 382,
+    "commands": 317,
     "agents": 154
   },
   "packs": [
@@ -325,7 +325,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.2",
+      "version": "0.6.3",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -1633,6 +1633,57 @@
           "path": "msp-claude-plugins/kaseya/it-glue/agents/documentation-auditor.md"
         }
       ]
+    },
+    {
+      "name": "keeper",
+      "displayName": "Keeper Secrets Manager",
+      "version": "1.0.1",
+      "description": "Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping",
+      "category": "security",
+      "tags": [
+        "keeper",
+        "secrets-manager",
+        "ksm",
+        "security",
+        "credentials",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/keeper/keeper",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/keeper/keeper/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "application-setup",
+          "path": "msp-claude-plugins/keeper/keeper/skills/application-setup/SKILL.md"
+        },
+        {
+          "id": "finding-secrets",
+          "path": "msp-claude-plugins/keeper/keeper/skills/finding-secrets/SKILL.md"
+        },
+        {
+          "id": "notation-queries",
+          "path": "msp-claude-plugins/keeper/keeper/skills/notation-queries/SKILL.md"
+        },
+        {
+          "id": "retrieving-credentials",
+          "path": "msp-claude-plugins/keeper/keeper/skills/retrieving-credentials/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "find-secret",
+          "path": "msp-claude-plugins/keeper/keeper/commands/find-secret.md"
+        },
+        {
+          "id": "scope-audit",
+          "path": "msp-claude-plugins/keeper/keeper/commands/scope-audit.md"
+        }
+      ],
+      "agents": []
     },
     {
       "name": "knowbe4",
@@ -4177,7 +4228,7 @@
     {
       "name": "wyre-gateway",
       "displayName": "Wyre MSP Gateway",
-      "version": "1.4.4",
+      "version": "1.4.5",
       "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
       "category": "productivity",
       "tags": [
@@ -5455,6 +5506,49 @@
         {
           "id": "client-backup-overview",
           "path": "msp-claude-plugins/axcient/axcient/commands/client-backup-overview.md"
+        }
+      ],
+      "agents": []
+    },
+    {
+      "name": "kpn",
+      "displayName": "KPN",
+      "version": "1.0.0",
+      "description": "KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)",
+      "category": "network",
+      "tags": [
+        "kpn",
+        "telecom",
+        "netherlands",
+        "mobile",
+        "network",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/kpn/kpn",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/kpn/kpn/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "mobile-fleet",
+          "path": "msp-claude-plugins/kpn/kpn/skills/mobile-fleet/SKILL.md"
+        },
+        {
+          "id": "network-checks",
+          "path": "msp-claude-plugins/kpn/kpn/skills/network-checks/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "check-outage",
+          "path": "msp-claude-plugins/kpn/kpn/commands/check-outage.md"
+        },
+        {
+          "id": "lost-phone",
+          "path": "msp-claude-plugins/kpn/kpn/commands/lost-phone.md"
         }
       ],
       "agents": []

@@ -278,6 +278,19 @@
       "category": "Documentation"
     },
     {
+      "name": "keeper",
+      "description": "Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/keeper/keeper"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
       "name": "knowbe4",
       "description": "KnowBe4 - phishing simulation, security awareness training, user risk management",
       "source": {
@@ -1082,6 +1095,19 @@
         "authentication": "ON_INSTALL"
       },
       "category": "BCDR"
+    },
+    {
+      "name": "kpn",
+      "description": "KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/kpn/kpn"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Network"
     }
   ]
 }
