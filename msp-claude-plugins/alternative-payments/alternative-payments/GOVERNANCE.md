@@ -39,12 +39,11 @@ Conduit's access editor presents four groups — Read, Write, Delete, Admin — 
 `ap_list_customers`, `ap_get_customer`, `ap_list_invoices`,
 `ap_list_transactions`, and `ap_navigate`.
 
-Two consequences follow, and the second is the one to act on:
+One consequence follows:
 
 1. **A read-only agent cannot do the job this connector exists for.** A `read` grant reaches four tools. Reconciliation needs `ap_list_payouts`, `ap_list_payout_transactions`, and `ap_get_transaction`, and all three require `admin` — which also admits every money-moving tool.
-2. 
 
-`conduit__my_access` replaces it. `ap_status` is deliberately kept.
+`conduit__my_access` replaces `ap_navigate`. `ap_status` is deliberately kept.
 
 ### Where the mechanical tier disagrees with the judgement
 

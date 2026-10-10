@@ -40,7 +40,7 @@ Conduit's access editor presents four groups — Read, Write, Delete, Admin — 
 
 **Two of the four groups are empty, which makes this vendor's grant model unusually blunt.** There is no delete tool for the delete-group rule to apply to, and no admin tool to hold back — so for ConnectWise PSA the whole access editor collapses to one real decision: `read`, or `write`. There is no tier between them.
 
-It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### This plugin exposes no delete tool. That is not the same as being safe.
 

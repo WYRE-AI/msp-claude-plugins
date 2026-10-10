@@ -76,8 +76,7 @@ admit or deny `exec` wholesale, never exclude specific write commands
 within it. The key's own scope is the entire enforcement story for this
 vendor; treat a connection as read-write unless you can confirm the
 connecting operator actually scoped the key to read-only resources. See
-[GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers* and *Open
-enforcement gap*.
+[GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers* and *The scope decision happens outside Conduit*.
 
 ## Error Handling
 

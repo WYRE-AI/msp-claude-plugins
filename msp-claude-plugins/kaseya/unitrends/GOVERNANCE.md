@@ -27,7 +27,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 ## Tool permission tiers
 
-`unitrends` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` grant on this vendor admits nothing; an `admin` grant > admits everything, including `unitrends_queue_restore`. The grouping > becomes what Conduit actually enforces once the vendor is classified, and > classifying it is a privilege *reduction*, not an expansion. No other part of this document depends on > it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|

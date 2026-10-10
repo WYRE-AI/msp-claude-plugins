@@ -45,7 +45,7 @@ Admin classification lifts them out of the write-tier bucket the Delete group is
 
 That is the good news. **The bad news is what `write` does include**: the four site-outage-capable config tools in the Write row. Granting a technician `write` for Meraki grants them the firewall replace, the switch port update, the SSID update, and the device reboot, alongside the benign `meraki_networks_update`.
 
-It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### Why the passthrough is admin-pinned
 

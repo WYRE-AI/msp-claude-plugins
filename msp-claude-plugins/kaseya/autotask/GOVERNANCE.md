@@ -62,7 +62,7 @@ control.
 
 ### Where the enforced tier is stronger than the old table said
 
-- **`autotask_router` enforces at `admin`**, not `read`. It was previously documented as a read tool. Conduit groups it with `autotask_raw_request` and `autotask_execute_tool` under *"Passthrough surfaces (arbitrary method/path/body, arbitrary tool dispatch, NL routing) -> ADMIN"*. Plan around the tier as stated — a technician with `read` or `write` on Autotask cannot call it — but be aware this looks like an over-classification: the handler resolves an intent string and returns `{ suggestedTool, ... The other two passthrough tools do dispatch, and their `admin` tier is earned.
+- **`autotask_router` enforces at `admin`**, not `read`. It was previously documented as a read tool. Conduit groups it with `autotask_raw_request` and `autotask_execute_tool` under *"Passthrough surfaces (arbitrary method/path/body, arbitrary tool dispatch, NL routing) -> ADMIN"*. Plan around the tier as stated — a technician with `read` or `write` on Autotask cannot call it — but be aware this looks like an over-classification: the handler resolves an intent string and returns a suggested tool and does not dispatch the call. The other two passthrough tools do dispatch, and their `admin` tier is earned.
 - **`autotask_update_company_site_configuration` enforces at `admin`**,
   not `write`. Its request body is freeform
   (`additionalProperties: true`), so Conduit cannot bound what it

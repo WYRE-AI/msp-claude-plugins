@@ -71,7 +71,7 @@ steps 1-5 above cannot be connected through this plugin.
 
 ## Tool permission tiers
 
-Until `netsuite` is classified > there, the grouping below carries no tier-enforcement meaning at all on > the Conduit side — a `read` or `write` grant on this vendor admits > nothing, and an `admin` grant admits every tool the upstream MCP server > exposes, including the two write tools this plugin deliberately does not > document or recommend. Classifying a vendor is always a privilege *reduction*, > never an expansion. Configure the allowlist when connecting this > plugin — an `admin` grant with no allowlist restores the full upstream > surface, including the two write tools this document excludes.
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table. Keep write tools out of this connection by giving the NetSuite role view-only permissions. See *Customer-side setup is heavier than a typical API-key vendor*.
 
 The **MCP Standard Tools SuiteApp** exposes a confirmed catalog of 14
 tools, documented by Oracle at
@@ -129,8 +129,7 @@ shortcut taken during setup), NetSuite itself will honor
 plugin's "read-only" framing becomes aspirational documentation, not an
 enforced boundary — exactly the same shape of gap PostHog's GOVERNANCE.md
 describes for its own key-scoping convention, just enforced by NetSuite
-role permissions instead of PostHog API key scopes. See *Open enforcement
-gap* below.
+role permissions instead of PostHog API key scopes. See *Customer-side setup is heavier than a typical API-key vendor* for the view-only role, and confirm that role before you treat this plugin as read-only.
 
 ### The read-only tool families this plugin grants
 

@@ -45,7 +45,7 @@ So **granting a technician `write` for CPQ also grants all five delete tools abo
 With the Admin group empty, `write` is the ceiling for this vendor, and it
 is a wide ceiling: twelve tools, five of them destructive, one decision.
 
-It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### Where blast radius and tier diverge
 

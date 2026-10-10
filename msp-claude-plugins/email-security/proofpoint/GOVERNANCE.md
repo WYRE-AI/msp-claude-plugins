@@ -30,13 +30,12 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 ## Tool permission tiers
 
-`proofpoint` has no entry there, > so the grouping below carries no enforcement meaning at present — read > tools included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including the search-and-destroy surface. > The grouping becomes what Conduit actually enforces once the vendor is > classified, and classifying it is a privilege *reduction*, not an > expansion. No other part of this document > depends on it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 > **The tool names this table previously listed were largely invented.**
 > Thirty-one of the names in the earlier revision — including the marquee
 > "forensics search-and-destroy" entry — are absent from the shipped
-> server. Conduit routes this vendor to `http://proofpoint-mcp`
-> (`conduit/the gateway vendor registry:3128`), which registers
+> server. Conduit routes this vendor to `http://proofpoint-mcp`, which registers
 > **44 tools**; the table below is that surface, tool for tool. Fourteen
 > capabilities the old table advertised do not exist at all and are
 > listed under *What it cannot reach*. The risk reasoning is preserved

@@ -40,7 +40,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 Grouped by blast radius, not HTTP verb. Two of the three destructive
 entries are GET requests.
 
-`ncentral` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including `ncentral_create_direct_task`. > The grouping becomes what Conduit actually enforces once the vendor is > classified, and classifying it is a privilege *reduction*, not an > expansion. No other part of this document depends on > it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|

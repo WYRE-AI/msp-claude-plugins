@@ -33,7 +33,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 > **The tool names this document previously listed do not exist.** Every
 > `avanan_*` name in the earlier revision of this table — 34 of them —
 > is absent from both shipped servers. Conduit routes this vendor to
-> `http://avanan-mcp` (`conduit/the gateway vendor registry:3035`),
+> `http://avanan-mcp`,
 > whose tools are named `hec_*`. The separate `avanan-legacy-mcp` uses
 > `avanan_*` names, but for MSP-partner, tenant and licence management —
 > not quarantine, threats, incidents or policies. The table below is the

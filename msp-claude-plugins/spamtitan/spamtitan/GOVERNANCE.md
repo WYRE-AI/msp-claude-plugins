@@ -26,7 +26,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 ## Tool permission tiers
 
-`spamtitan` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` grant on this vendor admits nothing; an `admin` grant > admits everything, including `spamtitan_delete_message`. The grouping > becomes what Conduit actually enforces once the vendor is classified, and > classifying it is a privilege *reduction*, not an expansion. No other part of this document depends on > it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -137,9 +137,28 @@ Earlier revisions of this plugin's skills documented a `domain` parameter. There
   is scoped only by `message_id`, so a cross-tenant listing leads directly to
   a cross-tenant action on mail belonging to a customer nobody was looking at.
 
-It does not.
+The sibling `spamtitan_get_stats` accepts a `domain` filter, so a reader
+  who has just scoped statistics to one customer reasonably assumes the
+  queue beside it behaves the same way. It does not.
 
-There is no workaround the server can perform. Use `recipient` filters deliberately, treat every listing as cross-tenant until narrowed, never let an agent act on "the first result" from an unfiltered listing, and never label an unfiltered listing as one customer's quarantine. - **Virus-quarantined messages refuse to release.** SpamTitan blocks it server-side. Treat a release failure on a virus item as the control working, not as an error to route around. - **Deleted means gone.** There is no soft delete and no retention fallback once the message is removed from quarantine storage. - **The retention window is a deadline.** Quarantined mail is purged automatically after the configured period, typically 30 days. A false positive nobody reviewed in time is unrecoverable, and its absence looks identical to a message that never arrived. - **Listing is an argument, not a tool — and that changes what a grant buys.** Earlier revisions of the skills named three tools that do not exist — a list-allowlist tool, a list-blocklist tool, and a get-domain-stats tool. There is no separate tool for any of the three. The tool names in this document are the real ones and are what to tier.
+  There is no workaround the server can perform. Use `recipient` filters
+  deliberately, treat every listing as cross-tenant until narrowed, never let
+  an agent act on "the first result" from an unfiltered listing, and never
+  label an unfiltered listing as one customer's quarantine.
+- **Virus-quarantined messages refuse to release.** SpamTitan blocks it
+  server-side. Treat a release failure on a virus item as the control
+  working, not as an error to route around.
+- **Deleted means gone.** There is no soft delete and no retention
+  fallback once the message is removed from quarantine storage.
+- **The retention window is a deadline.** Quarantined mail is purged
+  automatically after the configured period, typically 30 days. A
+  false positive nobody reviewed in time is unrecoverable, and its
+  absence looks identical to a message that never arrived.
+- **Listing is an argument, not a tool — and that changes what a grant
+  buys.** Earlier revisions of the skills named three tools that do not
+  exist — a list-allowlist tool, a list-blocklist tool, and a
+  get-domain-stats tool. There is no separate tool for any of the three.
+  The tool names in this document are the real ones and are what to tier.
 
   The consequence for tiering is above, under *Why each of the four is
   destructive*: because reading a list means calling the tool that can also

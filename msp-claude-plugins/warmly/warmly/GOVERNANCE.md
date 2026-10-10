@@ -6,12 +6,10 @@ endorsed by, or sponsored by the vendor.
 ## What it connects as
 
 > **Conduit does not broker this vendor. Read this before anything else in
-> this document.** `warmly` has no entry in Conduit's
-> the gateway vendor registry — not a hidden one, not a disabled one,
-> none at all. The connector is wired only in the older
-> `WYRE-AI/mcp-gateway` registry (`warmly:` in that repo's own
-> the gateway vendor registry), a separate system this marketplace has
-> otherwise moved off. There is no `warmly` slug to reach at
+> this document.** `warmly` has no entry in the gateway vendor registry —
+> not a hidden one, not a disabled one, none at all. The connector is wired
+> only in the older `WYRE-AI/mcp-gateway` registry, a separate system this
+> marketplace has otherwise moved off. There is no `warmly` slug to reach at
 > `https://conduit.wyre.ai/v1/mcp`, so a connect attempt there 404s.
 >
 > Nothing is silently misrouted: this plugin ships no `.mcp.json`, so it wires
@@ -21,7 +19,7 @@ endorsed by, or sponsored by the vendor.
 > and the tool reference are accurate about Warmly's own API now, and are why
 > the plugin is still listed.
 >
-> *Editor's note: when `warmly` gains a Conduit the gateway vendor registry entry,
+> *Editor's note: when `warmly` gains a gateway vendor registry entry,
 > delete this blockquote and the matching note in `README.md`. The rest of
 > this document is written to be true from that point on.*
 
@@ -50,7 +48,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 **This plugin is read-only.** Warmly exposes three tools and none of them
 changes vendor state.
 
-`warmly` has no entry there, so > the grouping below carries no enforcement meaning at present — and no > grant of any tier reaches this vendor today, because Conduit has no > `warmly` slug at all (see *What it connects as*). Once it is brokered, the > missing classification bites harder on a read-only plugin than on most: a > `read` grant would admit nothing, so the only way to use this plugin would > be an `admin` grant, and the recommendation below to hand these tools to > unattended agents could not be followed at a lower tier. The grouping > becomes what Conduit actually > enforces once the vendor is classified, and classifying it is a privilege > *reduction*, not an expansion. No other part of this document depends on > it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. This vendor is not brokered today: there is no `warmly` slug, and a connect attempt returns 404. See *What it connects as*.
 
 | Tier | What it can do | Tools |
 |---|---|---|

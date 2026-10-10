@@ -53,7 +53,7 @@ own settings UI.
 
 ## Tool permission tiers
 
-Until `posthog` is classified > there, the grouping below carries no tier-enforcement meaning at all — a > `read` or `write` grant on this vendor admits nothing, and an `admin` > grant admits every tool the upstream MCP server exposes, including the > write tools this plugin deliberately does not document or recommend. Classifying a > vendor is always a privilege *reduction*, never an expansion. There is no per-family tool name to allow or deny: `exec` > either reaches the connection (the entire upstream command surface, > reads and writes alike) or it doesn't. Naming `exec` in the allowlist is > operationally identical to granting `admin` with no allowlist at all — > both admit every command PostHog's `exec` accepts, including every > write tool this document excludes. The family table below documents > PostHog's own command vocabulary for this plugin's skills to use > responsibly; it is not a Conduit-enforceable boundary.
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of PostHog's own command vocabulary. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table, and confirm the personal API key was scoped to read-only resources. See *The scope decision happens outside Conduit*.
 
 PostHog's own MCP server exposes a very large tool surface — north of 200
 tools spanning nearly every product area, with substantial create/update/
@@ -199,8 +199,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 - **A key minted without explicit read-only scopes is read-write by
   default.** PostHog does not force an operator to narrow scopes at key
   creation; the read-only posture this document describes depends on the
-  connecting operator having done that deliberately. See *Open enforcement
-  gap* above — this is not a hypothetical, it's the actual current state.
+  connecting operator having done that deliberately. See *The scope decision happens outside Conduit* — this is not a hypothetical, it's the actual current state.
 - **Feature-flag and early-access-feature reads are two different families
   with overlapping vocabulary.** `early-access-feature-list` /
   `early-access-feature-retrieve` is the confirmed read surface for

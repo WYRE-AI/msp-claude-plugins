@@ -51,7 +51,7 @@ It answers with the container's full domain tool list and the sentence "You can 
 
 For this vendor there is no delete tool for that rule to apply to — but the rule that matters here is the same shape: **granting a technician `write` for Automate grants them `cwautomate_computers_reboot` along with the three record-edit tools.** There is no setting that separates them.
 
-It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### Blast radius and tier do not line up here, in both directions
 

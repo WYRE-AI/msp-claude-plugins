@@ -356,7 +356,7 @@ In `src/layouts/DocsLayout.astro`, append this `<script>` block at the very end 
       anchor.href = `#${id}`;
       anchor.setAttribute('aria-label', `Link to this section: ${label}`);
       anchor.textContent = '#';
-      anchor.addEventListener('click', => {
+      anchor.addEventListener('click', () => {
         // Let the browser update the hash + scroll natively (graceful default);
         // additionally copy the full deep link when the clipboard is available.
         const url = `${location.origin}${location.pathname}#${id}`;

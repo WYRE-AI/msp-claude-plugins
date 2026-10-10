@@ -58,7 +58,7 @@ over credential material, so it is classified **admin** even though its
 response carries no secret. Read the tier from what a tool can *reveal*, not
 from what it returns.
 
-The tier is Conduit's access classification, not a Keeper concept. Five metadata tools sit at read. Grant accordingly: a technician who needs to find records does not need the admin four.
+The tier is Conduit's access classification, not a Keeper concept. Four tools sit at read: `list_secrets`, `list_folders`, `health_check`, and `get_server_version`. Five tools require admin, including `search_secrets`. Finding records by searching secret contents needs that admin grant.
 
 ## What is not exposed, and why
 

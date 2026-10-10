@@ -43,7 +43,7 @@ one connects to.
 | **Delete** | *Empty.* Nothing here can remove a ticket, client, asset, contract, or invoice. | — | — |
 | **Admin** | *Empty.* No passthrough, dispatcher, or credential-reading tool. | — | — |
 
-`conduit__my_access` replaces it. `halopsa_status` is deliberately kept.
+`conduit__my_access` replaces `halopsa_navigate`. `halopsa_status` is deliberately kept.
 
 ### Where the mechanical tier disagrees with the judgement
 

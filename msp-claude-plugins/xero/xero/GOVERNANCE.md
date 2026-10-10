@@ -24,13 +24,13 @@ authorised for.
   authorised this invoice". Xero's own history attributes every change to the
   connected app, which is one name for your whole team — and that matters
   more here than in most connectors, because these are accounting records.
-- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request. A user only removed from the organisation keeps an already-issued access token for up to an hour, but it reaches only a personal Xero connection made with their own key, never the organisation's.
 
 Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-`xero` has no entry there, so the > grouping below carries no enforcement meaning at present — read tools > included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including `xero_payments_create`. The > grouping becomes what Conduit actually enforces once the vendor is > classified, and classifying it is a privilege *reduction*, not an > expansion. No other part of this document depends on it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|

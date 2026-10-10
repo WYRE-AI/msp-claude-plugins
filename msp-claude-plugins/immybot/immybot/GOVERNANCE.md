@@ -39,7 +39,7 @@ Grouped by blast radius, not HTTP verb. Several tools that look like
 reads or harmless writes are classified destructive below, with the
 reasoning stated.
 
-`immybot` has no entry, so the > grouping below carries no enforcement weight right now — read tools > require `admin` exactly as the rest do, and there is no narrower grant > that admits them. The grouping is still the right *risk* reading, and it > becomes the enforcement reading on the day this vendor is classified. > > *This blockquote is the whole of the not-classified caveat.
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
