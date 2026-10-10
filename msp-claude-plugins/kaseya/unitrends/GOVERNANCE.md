@@ -21,33 +21,13 @@ console the operator is authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers
   "who restored onto this customer's server".
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Unitrends connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `unitrends` has no entry there, so
-> the grouping below carries no enforcement meaning at present — read tools
-> included. A `read` grant on this vendor admits nothing; an `admin` grant
-> admits everything, including `unitrends_queue_restore`. The grouping
-> becomes what Conduit actually enforces once the vendor is classified, and
-> classifying it is a privilege *reduction*, not an expansion. For the live
-> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
-> *Fail-closed, and the vendors Conduit has not classified* — it is stated
-> once there because it moves.
->
-> *Editor's note: when `unitrends` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -71,11 +51,7 @@ The MCP server marks this tool DESTRUCTIVE and prompts for confirmation.
 Do not treat that prompt as the control — an agent granted the tool can
 answer it.
 
-**Conduit does not enforce per-call approval either.** It compares tiers —
-there is no approval step, no per-call confirmation, and no interactive
-prompt anywhere in its enforcement path. Where this document asks for a
-named human approver, that is a policy you impose on your agents, and it
-is only as good as the agent configuration that carries it.
+Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

@@ -20,33 +20,13 @@ authorised for.
 - Every call carries operator identity, so the gateway audit log answers "who
   changed this record". HubSpot's own history attributes the change to the
   integration's app user, not to a person.
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. A user only
-  removed from the org keeps an already-issued access token for up to an
-  hour, but it reaches only a personal HubSpot connection made with their own
-  key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires
-> tier `admin` today.** Conduit derives each tool's tier from
-> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
-> anything absent from it:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `hubspot` has no entry, so the
-> grouping below carries no enforcement weight right now — read tools
-> require `admin` exactly as the rest do, and there is no narrower grant
-> that admits them. The grouping is still the right *risk* reading, and it
-> becomes the enforcement reading on the day this vendor is classified.
-> The list of unclassified vendors moves whenever one of them is
-> classified, so it is stated in one place only:
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified*.
->
-> *This blockquote is the whole of the not-classified caveat. When
-> `hubspot` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
-> change nothing else.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -66,10 +46,7 @@ HubSpot does, on the strength of the write — and a sent email cannot be
 recalled. Company, deal, and ticket objects carry no email address of their
 own, which is why they stay in the write tier.
 
-Conduit does not enforce any of that as an approval requirement. It compares
-tiers — it has no approval step, no per-call confirmation, and no interactive
-prompt. Per-call approval is a workflow you impose on your agents, and it is
-only as good as the agent configuration that carries it.
+Conduit does not enforce any of that as an approval requirement. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

@@ -53,13 +53,7 @@ arguments on the tools below.
 | `spamtitan_release_message` | `message_id` (required) | Release a quarantined message to the recipient |
 | `spamtitan_delete_message` | `message_id` (required) | ⚠ Permanently delete a quarantined message. Irreversible |
 
-> **⚠ `spamtitan_get_queue` cannot be scoped to a customer domain.** Its
-> shipped input schema is exactly `page`, `per_page`, `sender`, `recipient`,
-> `subject`, `reason` (`spamtitan-mcp/src/domains/quarantine.ts:21-53`). On a
-> multi-tenant appliance the listing therefore spans every tenant, and
-> per-customer filtering has to be done client-side on `recipient` after the
-> fetch. This is easy to miss because the sibling `spamtitan_get_stats` *does*
-> take `domain`. See the quarantine skill and `GOVERNANCE.md`.
+On a multi-tenant appliance the listing therefore spans every tenant, and per-customer filtering has to be done client-side on `recipient` after the fetch. This is easy to miss because the sibling `spamtitan_get_stats` *does* take `domain`. See the quarantine skill and `GOVERNANCE.md`.
 
 ### Email Statistics
 

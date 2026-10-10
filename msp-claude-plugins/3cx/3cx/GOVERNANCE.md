@@ -5,13 +5,7 @@ affiliated with, endorsed by, or sponsored by 3CX.
 
 ## What it connects as
 
-3CX doesn't fit this marketplace's usual shape. Every other "reaches
-through the WYRE Conduit gateway" plugin points at one vendor-config entry
-and one fixed proxy URL. 3CX can't: every PBX is its own origin
-(`https://yourpbx.3cx.eu/mcp`, or whatever FQDN that customer's PBX
-actually uses) with its own OAuth authorization server, so there is no
-single endpoint for a `VENDOR_TOOL_CONFIG` entry to describe — and none
-exists. `src/credentials/vendor-config.ts` carries no `3cx` entry.
+3CX is not a catalog vendor on the gateway, so there is no fixed proxy URL for it.
 
 Two real connection paths exist instead, and this plugin's `api-patterns`
 skill documents both:
@@ -23,17 +17,7 @@ skill documents both:
    that PBX's own authorization server, and 3CX's own Admin Console
    (**Admin → Integrations → MCP Clients**) is the audit and revocation
    surface for it — not Conduit.
-2. **Through Conduit's BYO MCP feature** (`/connect/byo`), for an MSP who
-   wants this PBX's tools alongside their other Conduit-brokered vendors.
-   This is generic, vendor-agnostic code (`src/byo/*`), not anything
-   3CX-specific: Conduit discovers the PBX's own authorization server at
-   request time — RFC 9728 protected-resource metadata, then RFC 8414
-   authorization-server metadata (`src/byo/byo-oauth.ts:8-11`) — registers
-   a client dynamically (RFC 7591 DCR), and validates the callback's `iss`
-   against the discovered issuer before persisting tokens (RFC 9207,
-   `byo-oauth.ts:22-25`). `src/byo/byo-registration-routes.ts` is the real
-   route table: `GET`/`POST /connect/byo`, `POST /connect/byo/:id/delete`,
-   `POST /connect/byo/:id/tools/tier`.
+2. **Through Conduit's BYO MCP feature** (`/connect/byo`), for an MSP who wants this PBX's tools alongside their other Conduit-brokered vendors.
 
 Consequences worth stating plainly, for whichever path is used:
 
@@ -42,73 +26,28 @@ Consequences worth stating plainly, for whichever path is used:
   that one PBX, revocable from that PBX's own Admin Console. There is no
   org-wide audit log across technicians for this path — each connection is
   its own island.
-- **Conduit BYO connection:** the PBX's OAuth tokens are stored at Conduit
-  like any other credential (see `wyre-gateway/GOVERNANCE.md`), so an org
-  gets the usual centrally-brokered story — no per-technician secret, one
-  place to see who's connected, and Conduit's usual
-  revocation-on-org-removal behavior applies. But Conduit is standing in
-  front of a vendor it has never specifically classified, which is the
-  point of the next section.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-**3CX has no `VENDOR_TOOL_CONFIG` entry, and structurally cannot get the
-normal kind** — that table is keyed by a fixed vendor slug pointing at a
-fixed endpoint, and 3CX has neither. That puts it in a different bucket
-than the classified-vs-unclassified catalog-vendor list in
-`wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
-classified* — that list is catalog vendors that merely haven't been
-classified yet. 3CX isn't a catalog vendor at all.
+**Direct connection:** no gateway tier gate sits in this path. What Claude
+can call is bounded only by the 3CX account's own role inside that PBX
+(see *Permission Model* in the `api-patterns` skill).
 
-**Direct connection:** no Conduit tier gate sits in this path at all. What
-Claude can call is bounded only by the 3CX account's own role inside that
-PBX (see *Permission Model* in the `api-patterns` skill) — there is no
-read/write/admin layer on top of it.
+Treat the lists below as descriptions of capability, not as verified tool
+names. Confirm the live grant after connecting.
 
-**Conduit BYO connection:** every BYO tool instead goes through
-`classifyByoTool` (`src/byo/byo-tool-classifier.ts:115`), a heuristic that
-infers a tier from the tool's name and description because there is no
-hand-curated config to read for an uncataloged vendor. It is deliberately
-conservative:
-
-| Signal | Effect | Source |
-|---|---|---|
-| Leading verb in a fixed read-shaped set (`get`, `list`, `search`, `find`, `query`, `read`, `fetch`, `describe`, `show`, `view`, `lookup`, `count`, `export`, `download`, `status`, `check`, and a few more) | tiers `read` | `byo-tool-classifier.ts:41-46` |
-| Any other leading verb, including one the heuristic has simply never seen | tiers `write` — **unrecognized verbs are never silently treated as read** | `byo-tool-classifier.ts:132-134` |
-| A secret/credential noun anywhere in the name or description (`secret`, `password`, `credential`, `token`, `apikey`, …) | escalates to `admin` regardless of verb | `byo-tool-classifier.ts:76-80, 129` |
-| A mutating verb on a privileged-account noun (`role`, `member`, `billing`, `apikey`, `org`, `setting`, …) | escalates to `admin` | `byo-tool-classifier.ts:62-69, 130` |
-
-Mapped against the tool groups this plugin's skills document:
-
-- The read-only lookups (find/search/list/get/describe-shaped capabilities —
-  contacts, calls, recordings, voicemail, queues, departments, profiles,
-  server time, event log, services, app logs, DIDs, blocklists, peers,
-  tables, SIP trunks, call flow apps) tier `read` **as long as 3CX's real
-  tool names actually lead with one of the recognized read verbs.** This
-  plugin describes them by capability, not by an exact name, precisely
-  because that hasn't been verified — see the `api-patterns` skill.
-- The write actions (drop a call, select/activate a profile, set/clear a
+- Read-only lookups: contacts, calls, recordings, voicemail, queues,
+  departments, profiles, server time, event log, services, app logs, DIDs,
+  blocklists, peers, tables, SIP trunks, call flow apps.
+- Write actions: drop a call, select or activate a profile, set or clear a
   profile message, apply a temporary override, log an agent or the current
-  user in/out of queues, add/remove a blocklist or blacklist entry, assign
-  a DID) all use non-read-shaped verbs, so they tier `write` under this
-  heuristic — conservatively correct, not something this plugin had to
-  argue for.
-- **The `Query` tool is the one genuine ambiguity in this table.** 3CX
-  enforces `SELECT`-only server-side no matter what (see the `pbx-admin`
-  skill), but the BYO classifier tiers on the tool's *name*, not the PBX's
-  own enforcement. If 3CX's real tool name for it is built around a
-  generic "run" or "execute" action rather than a `get`/`list`/`query`-style
-  read verb, Conduit will tier it `write` despite it being incapable of
-  writing anything, and it would never
-  escalate to `admin` either way since no privileged/secret noun applies.
-  That is a usability gap (a `read`-tier grant might not reach it), not a
-  safety gap — the PBX's own `SELECT`-only enforcement is the real
-  backstop regardless of how Conduit tiers the name.
+  user in or out of queues, add or remove a blocklist entry, assign a DID.
+- **`Query` is SELECT-only on the PBX** (see the `pbx-admin` skill). Do not
+  describe a workaround that reaches past that restriction.
 
-Conduit compares tiers; it has no approval step, no per-call confirmation,
-and no interactive prompt on the BYO path any more than on the catalog
-path. Per-call approval is a workflow imposed on agent configuration, not
-something Conduit enforces.
+Per-call approval is a workflow you impose on your agents, and it is only
+as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -126,11 +65,7 @@ self-approve a call-affecting action.**
   assignment): the same discipline as any production network-ACL or
   call-routing change — a named human approver, the exact value confirmed,
   never unattended.
-- If connected via Conduit BYO, remember the `Query`-tool tiering gap
-  above: a `read`-tier grant may not reach it even though it can never
-  write anything. Use a `customTools` allowlist if a read-only analyst
-  needs the `Query` tool specifically without also granting `write` on
-  this PBX.
+- If connected via Conduit BYO, remember the `Query`-tool tiering gap above: a `read`-tier grant may not reach it even though it can never write anything.
 
 ## What it cannot reach
 

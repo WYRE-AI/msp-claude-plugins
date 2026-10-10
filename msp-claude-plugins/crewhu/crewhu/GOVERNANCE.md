@@ -21,38 +21,21 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who pulled this manager's scorecard" — Crewhu's own log records only
   the API account.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Crewhu connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-**Read this table's third column before its first.** Conduit classifies
-only **4 of this plugin's 18 tools**. The other 14 are absent from
-`VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts:1029`) and therefore
-fail closed to `admin` —
-`const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). That is not a judgement about
-those tools; it is what Conduit does with a tool name it does not
-recognise.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
 | **Read** | Cannot change Crewhu state. | `read` | `crewhu_surveys_list`, `crewhu_surveys_detractors`, `crewhu_users_list`, `crewhu_badges_list` (4) |
-| **Read (unclassified)** | Also cannot change Crewhu state — but Conduit does not know that, so it demands the top tier. | `admin`, by fail-closed default | `crewhu_surveys_get`, `crewhu_surveys_search`, `crewhu_surveys_promoters`, `crewhu_users_get`, `crewhu_users_search`, `crewhu_badges_get`, `crewhu_badges_history_list`, `crewhu_badges_user_recognition`, `crewhu_prizes_list`, `crewhu_prizes_get`, `crewhu_prizes_history_list`, `crewhu_prizes_user_redemptions`, `crewhu_prizes_pending_redemptions` (13) |
-| **Write** | Creates or modifies records. Reversible, but visible to staff. | `admin`, by fail-closed default | `crewhu_badges_update_contest` (1) |
+| **Read** | Cannot change Crewhu state. | confirm the live grant | `crewhu_surveys_get`, `crewhu_surveys_search`, `crewhu_surveys_promoters`, `crewhu_users_get`, `crewhu_users_search`, `crewhu_badges_get`, `crewhu_badges_history_list`, `crewhu_badges_user_recognition`, `crewhu_prizes_list`, `crewhu_prizes_get`, `crewhu_prizes_history_list`, `crewhu_prizes_user_redemptions`, `crewhu_prizes_pending_redemptions` (13) |
+| **Write** | Creates or modifies records. Reversible, but visible to staff. | confirm the live grant | `crewhu_badges_update_contest` (1) |
 | **Delete** | *Empty.* | — | None. |
-| **Admin** | *Empty by classification* — no Crewhu tool is marked `isAdmin`. Fourteen tools nonetheless require `admin`, for the reason above. | — | None. |
-
-The "Read (unclassified)" row is not one of the four groups Conduit's
-access editor presents. It is drawn out separately because the honest
-answer for those 13 tools is neither "read" nor "admin" — they *are*
-reads, and they *enforce* at admin — and collapsing that into either
-column would mislead an owner deciding what to grant.
+| **Admin** | None beyond the grant you confirm in the access editor. | — | None. |
 
 **This plugin is read-only except for one tool.** Seventeen of the
 eighteen tools cannot change anything; `crewhu_badges_update_contest` is
@@ -66,25 +49,7 @@ queue, the user list, and the badge list. Trend reporting works;
 per-technician roll-ups mostly work. Every prize tool, every search,
 every `_get`, and the whole recognition-history surface returns a denial.
 
-The workaround an operator will reach for is granting `admin` — and
-`admin` is the only tier that admits those 13 reads. **It also admits
-`crewhu_badges_update_contest`, the one tool that changes anything.**
-There is no tier between the two. The only mechanism that admits the
-unclassified reads while excluding the write is a granular per-tool
-grant, which compiles to an explicit `customTools` allowlist
-(`src/access/tier-group-mapping.ts`, `selectionToGrant`); note that such
-a grant still stores tier `admin`, because the compiled tier is the
-highest any listed tool requires, and enforcement is the intersection of
-that tier with the allowlist.
-
-This is worth flagging to whoever maintains `VENDOR_TOOL_CONFIG`.
-Classifying the remaining 14 tools is a **privilege reduction**: it moves
-13 reads down from `admin` to `read` and the contest write down to
-`write`, and it removes the only reason an operator has to hand out
-`admin` on this vendor at all. Note also that `wyre-gateway/GOVERNANCE.md`
-lists `crewhu` in its *classified* column — true at the slug level, and
-misleading at the tool level, which is the granularity that gets
-enforced.
+The workaround an operator will reach for is granting `admin` — and `admin` is the only tier that admits those 13 reads. **It also admits `crewhu_badges_update_contest`, the one tool that changes anything.** There is no tier between the two.
 
 That single write still deserves a human. A recognition contest is
 staff-facing gamification: changing its parameters mid-run alters who is
@@ -100,18 +65,11 @@ the one write, never grant it unattended.**
 - The four classified read tools: allow at tier `read`. Trend reporting,
   detractor queues, and per-tech roll-ups are the intended autonomous
   use and they are reachable without elevation.
-- The 13 unclassified read tools: reaching them means granting `admin`,
-  which also grants the contest write. Decide whether the reporting is
-  worth that, or use a granular `customTools` grant that lists the reads
-  and omits `crewhu_badges_update_contest`.
 - `crewhu_badges_update_contest`: agent drafts the exact call, a human
   approves, then it runs.
 - Delete tools: none exist, so there is nothing to withhold.
 
-Conduit does not enforce that approval. It compares tiers — it has no
-approval step, no per-call confirmation, and no interactive prompt. "A
-human approves, then it runs" is a workflow you impose on your agents,
-and it is only as good as the agent configuration that carries it.
+Conduit does not enforce that approval. "A human approves, then it runs" is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## What it cannot reach
 

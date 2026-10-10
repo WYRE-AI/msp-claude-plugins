@@ -25,12 +25,9 @@ account the operator connected.
 - Every call carries operator identity, so the gateway audit log answers
   "who read that matter" — Clio's own log records the connected
   application.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated in
-  your identity provider is refused on their very next request. A user
-  only removed from the org keeps an already-issued access token for up to
-  an hour, but it reaches only a personal Clio connection made with their
-  own key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -41,11 +38,7 @@ is a **server-side workflow, not an access control** — Conduit knows
 nothing about it, enforces nothing about it, and would admit any of
 these tools in any order. Do not treat navigation as a safety boundary.
 
-These are the four groups Conduit's access editor presents. All 26 tools
-are classified in `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts:1515`),
-so every tier below is the tier Conduit actually enforces — this is one
-of the few plugins in the fleet where the document and the gate agree
-tool-for-tool.
+These are the four groups Conduit's access editor presents.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -60,28 +53,9 @@ subject to retention obligations, malpractice-insurance requirements, or
 discovery. Deletion, when genuinely needed, happens in Clio directly, by a
 human, inside Clio's own audit trail.
 
-The empty Delete group is worth a sentence because of what it means
-elsewhere. Conduit's enforcement tiers are only `read`, `write`, and
-`admin` (plus `none`, meaning deny) — `src/access/permission-tier.ts:27`.
-"Delete" is a presentation group in the access editor, and a
-delete-group tool compiles to and enforces at tier `write`
-(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`), so on
-most vendors a `write` grant silently admits every delete tool as well.
-Here it does not, because there are none: granting a technician `write`
-on Clio admits exactly the seven create/update tools above and nothing
-else. That is an unusually clean grant, and it is a property of this
-vendor rather than of the tier model.
+The empty Delete group is worth a sentence because of what it means elsewhere. Here it does not, because there are none: granting a technician `write` on Clio admits exactly the seven create/update tools above and nothing else. That is an unusually clean grant, and it is a property of this vendor rather than of the tier model.
 
-**Where the mechanical tier and the real risk disagree.** Conduit's
-model grades one thing: can this call change vendor state. It has no
-opinion about what a call *discloses*. So
-`clio_communications_get` — logged emails, calls, and notes on a matter,
-the clearest case of privileged attorney-client communication in the
-whole marketplace — sits at tier `read`, identical to `clio_status`,
-which returns where you are in a menu. A tier-based grant cannot
-separate them. If you need that separation it has to be a granular
-per-tool grant, which compiles to an explicit `customTools` allowlist,
-or a rule in the agent's own configuration.
+**Where the mechanical tier and the real risk disagree.** Conduit's model grades one thing: can this call change vendor state. It has no opinion about what a call *discloses*. So `clio_communications_get` — logged emails, calls, and notes on a matter, the clearest case of privileged attorney-client communication in the whole marketplace — sits at tier `read`, identical to `clio_status`, which returns where you are in a menu. A tier-based grant cannot separate them.
 
 `clio_activities_create` is the write tool that deserves a second look. It
 is **create-only — there is no update or delete for activities.** A time
@@ -100,13 +74,7 @@ communications and documents domains as off by default.**
 - Read tools: allow for matters, contacts, tasks, activities, calendar
   entries, and bills — attended. These are the domains a matter summary
   needs.
-- **`clio_communications_list` / `clio_communications_get`: restrict.**
-  Logged emails, calls, and notes on a matter are frequently the most
-  sensitive record in the file and the clearest case of privileged
-  attorney-client communication. Grant only where the operator has a
-  specific reason. Conduit will not do this for you — both tools are
-  tier `read`, so a plain `read` grant already admits them, and the only
-  mechanism that excludes them is a granular `customTools` allowlist.
+- **`clio_communications_list` / `clio_communications_get`: restrict.** Logged emails, calls, and notes on a matter are frequently the most sensitive record in the file and the clearest case of privileged attorney-client communication. Grant only where the operator has a specific reason.
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Treat `clio_activities_create` as requiring a human every time, because
   it is not correctable afterwards.
@@ -114,11 +82,7 @@ communications and documents domains as off by default.**
   a matter that should not exist gets its status changed to closed, never
   worked around through another domain.
 
-Conduit does not enforce any of the approval steps above. It compares
-tiers; it has no approval step, no per-call confirmation, and no
-interactive prompt. "Human approves, then it runs" is a workflow you
-impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Conduit does not enforce any of the approval steps above. "Human approves, then it runs" is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## What it cannot reach
 

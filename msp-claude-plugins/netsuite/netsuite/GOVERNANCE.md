@@ -38,10 +38,7 @@ authentication centrally, per NetSuite account.
   attributes API activity to the integration role's user, which is fine for
   a single dedicated integration user but says nothing about which agent or
   session made the call.
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 ## Customer-side setup is heavier than a typical API-key vendor
 
@@ -74,27 +71,7 @@ steps 1-5 above cannot be connected through this plugin.
 
 ## Tool permission tiers
 
-> **`netsuite` has no entry in `VENDOR_TOOL_CONFIG` — this is a new vendor
-> connector.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). Until `netsuite` is classified
-> there, the grouping below carries no tier-enforcement meaning at all on
-> the Conduit side — a `read` or `write` grant on this vendor admits
-> nothing, and an `admin` grant admits every tool the upstream MCP server
-> exposes, including the two write tools this plugin deliberately does not
-> document or recommend. For the live list of unclassified vendors see
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified*. Classifying a vendor is always a privilege *reduction*,
-> never an expansion.
->
-> Because tiering does nothing for this vendor yet on the Conduit side, the
-> operational enforcement for "read-only at v1" is **NetSuite's own native
-> role-based access control** (see below), reinforced by a gateway-side
-> tool allowlist (a `customTools` grant naming only the read-tool families
-> below) as defense-in-depth. Configure the allowlist when connecting this
-> plugin — an `admin` grant with no allowlist restores the full upstream
-> surface, including the two write tools this document excludes.
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table. Keep write tools out of this connection by giving the NetSuite role view-only permissions. See *Customer-side setup is heavier than a typical API-key vendor*.
 
 The **MCP Standard Tools SuiteApp** exposes a confirmed catalog of 14
 tools, documented by Oracle at
@@ -152,8 +129,7 @@ shortcut taken during setup), NetSuite itself will honor
 plugin's "read-only" framing becomes aspirational documentation, not an
 enforced boundary — exactly the same shape of gap PostHog's GOVERNANCE.md
 describes for its own key-scoping convention, just enforced by NetSuite
-role permissions instead of PostHog API key scopes. See *Open enforcement
-gap* below.
+role permissions instead of PostHog API key scopes. See *Customer-side setup is heavier than a typical API-key vendor* for the view-only role, and confirm that role before you treat this plugin as read-only.
 
 ### The read-only tool families this plugin grants
 
@@ -169,13 +145,7 @@ Standard Tools SuiteApp as of this writing — not a subset. The full
 14-tool catalog (including the 2 excluded write tools) is documented at
 the Oracle link above.
 
-**Conduit does not enforce per-call approval.** It compares tiers and,
-where configured, checks the tool allowlist — there is no approval step,
-no per-call confirmation, and no interactive prompt anywhere in its
-enforcement path. The read-only posture above is a combination of (1) the
-connected role's NetSuite permissions and (2) the gateway allowlist;
-nothing in Conduit stops a misconfigured role or grant from reaching a
-write tool if either of those is set up wrong.
+The read-only posture above is a combination of (1) the connected role's NetSuite permissions and (2) the gateway allowlist; nothing in Conduit stops a misconfigured role or grant from reaching a write tool if either of those is set up wrong.
 
 ## Recommended agent policy
 
@@ -234,37 +204,7 @@ Restrict the record, report, and SuiteQL tools specifically if agents run
 unattended or render output where anyone outside the client's own team
 could see it.
 
-## Open enforcement gap (tracked, not resolved by this plugin)
-
-**"Read-only" for this vendor rests on two operator-configured layers, and
-neither is enforced automatically by this plugin today:**
-
-1. The dedicated NetSuite integration role must be provisioned view-only —
-   no create/update/delete permissions on any record type it can reach
-   (see *How read-only is actually enforced here* above). This is a setup
-   instruction given to the client's NetSuite admin; this plugin has no way
-   to inspect the role's actual permission grants after the fact.
-2. The connection should also use a gateway-side `customTools` allowlist
-   naming only the read families in this document, not an `admin` grant —
-   Conduit has no `VENDOR_TOOL_CONFIG` entry for `netsuite` yet, so there
-   is no coarse `read` tier to fall back on if the allowlist is skipped or
-   misconfigured.
-
-**Neither layer is a hard boundary enforced by this plugin — layer 1 is
-enforced by NetSuite itself (which is a real, platform-level backstop
-PostHog's key-scoping convention does not have), but only if the admin
-followed the setup instructions correctly. A role provisioned with full
-CRUD permissions, connected with an `admin` grant, gives this plugin's
-"read-only" framing no teeth at all** — NetSuite will honor
-`ns_createRecord` / `ns_updateRecord` calls against anything that role can
-reach. This is a real gap between what this document calls "read-only" and
-what is verified at connect time for a fast-tracked adopt-vendor plugin —
-flagged to Aaron (2026-08-12) as the same open question raised in
-PostHog's GOVERNANCE.md: whether adopt-vendor plugins like this one need a
-default-deny `VENDOR_TOOL_CONFIG` entry (or equivalent enforced default)
-shipped alongside the plugin itself, rather than relying on setup
-instructions alone. Not resolved by this PR; tracking here so it isn't
-lost.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Known sharp edges
 
@@ -280,17 +220,9 @@ lost.
   accurate as of this plugin's build (2026-08-12, against Oracle's
   published tool list) and should be reconfirmed against a live connection
   if Oracle ships a SuiteApp update that changes the catalog.
-- **A misconfigured role is the single biggest risk in this integration,**
-  more than for a typical API-key vendor, because the "read-only" promise
-  depends entirely on a NetSuite admin doing five setup steps correctly
-  (see *Customer-side setup* above) rather than on a single field like an
-  API key's scope. See *Open enforcement gap*.
+- **A misconfigured role is the single biggest risk in this integration,** more than for a typical API-key vendor, because the "read-only" promise depends entirely on a NetSuite admin doing five setup steps correctly (see *Customer-side setup* above) rather than on a single field like an API key's scope.
 - **`ns_runCustomSuiteQL` is documented as read-only-queries-only by
   Oracle**, but this plugin does not independently verify that constraint
   — it is stated in Oracle's own documentation, not something this plugin
   or Conduit tests against.
-- **Not yet classified means not yet safely grantable at a coarse tier.**
-  Until `netsuite` gets a `VENDOR_TOOL_CONFIG` entry, there is no `read`
-  grant that admits only the families above — it is allowlist or `admin`,
-  nothing in between. Classifying the vendor, when it happens, is what
-  turns the family table above into an actual `read` tier.
+- Classifying the vendor, when it happens, is what turns the family table above into an actual `read` tier.

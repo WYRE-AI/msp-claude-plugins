@@ -51,9 +51,7 @@ current resource and no history, so there is no "back" tool — every tool
 below is callable directly at any time, and `huntress_navigate` is never
 a prerequisite for calling one.
 
-Through Conduit, `huntress_navigate` is refused for every caller by the
-discovery-tool suppression gate, so a workflow that begins by calling it
-will fail at step one. Read the catalog below instead.
+Read the catalog below instead.
 
 ### Account
 

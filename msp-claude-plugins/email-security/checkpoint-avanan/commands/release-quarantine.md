@@ -15,7 +15,7 @@ Restoring delivers a message the security stack already judged malicious into a 
 ## Prerequisites
 
 - A working Harmony Email connection (see [README](../README.md) for configuration)
-- Restore sits at the `admin` tier in Conduit — see [GOVERNANCE.md](../GOVERNANCE.md). Conduit compares tiers; it does **not** enforce per-call approval, so the approval discipline below is a policy you impose, not one the platform guarantees.
+- Restore sits at the `admin` tier in Conduit — see [GOVERNANCE.md](../GOVERNANCE.md).
 - Entity ids from `/search-quarantine`, or event ids from `/search-threats`
 
 ## Steps

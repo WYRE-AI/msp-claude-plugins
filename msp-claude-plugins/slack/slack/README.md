@@ -23,7 +23,7 @@ Slack does NOT support RFC 7591 Dynamic Client Registration. Each operator must 
 2. Name your app (e.g. "WYRE Gateway — <your org>") and choose a workspace
 3. Under **OAuth & Permissions** → **Redirect URLs**, add your gateway's vendor callback:
    `https://<your-gateway>/oauth/vendor/slack/callback`
-4. Under **OAuth & Permissions** → **User Token Scopes**, enable the scopes your tenants should be able to grant (Slack uses operator-side downscope — see `src/credentials/vendor-config.ts` `slack:` entry for the full scope list the gateway requests)
+4. Under **OAuth & Permissions** → **User Token Scopes**, enable the scopes your tenants should be able to grant (Slack uses operator-side downscope — see the gateway vendor registry `slack:` entry for the full scope list the gateway requests)
 5. Copy your app's `Client ID` and `Client Secret` from **Basic Information** → **App Credentials**
 6. Set as `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET` in the WYRE Gateway environment
 
@@ -37,6 +37,6 @@ Each tenant authorizes their own Slack workspace through the gateway's OAuth flo
 
 ## See also
 
-- WYRE MCP Gateway vendor config: `src/credentials/vendor-config.ts` (`slack:` entry)
+- WYRE MCP Gateway vendor config: the gateway vendor registry (`slack:` entry)
 - Slack MCP docs: https://docs.slack.dev/ai/slack-mcp-server/
 - Hosted endpoint: https://mcp.slack.com/mcp

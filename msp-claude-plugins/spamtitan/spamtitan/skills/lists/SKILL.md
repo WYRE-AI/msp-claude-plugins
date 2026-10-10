@@ -60,10 +60,7 @@ The `sender` parameter on both tools accepts:
 - **Email address** — e.g., `sender@example.com` — matches only that exact address
 - **Domain** — e.g., `@example.com` — matches all senders from that domain
 
-The appliance also supports IP-based entries, but this connector's `sender`
-parameter is documented for addresses and domains only
-(`spamtitan-mcp/src/domains/lists.ts:30-34`). Add IP entries in the SpamTitan
-admin interface.
+Add IP entries in the SpamTitan admin interface.
 
 ### Per-Domain vs. Global Lists
 
@@ -71,13 +68,7 @@ The SpamTitan appliance itself distinguishes global entries from per-domain
 ones, and per-domain entries are what you want in an MSP environment — a
 global entry affects every client the gateway filters for.
 
-**But this connector cannot express that distinction.**
-`spamtitan_manage_allowlist` and `spamtitan_manage_blocklist` take only
-`action`, `sender`, and `note` (`spamtitan-mcp/src/domains/lists.ts:15-79`).
-There is no `domain` or `scope` parameter, so an entry added through these
-tools lands at whatever default scope the appliance and API key give it. If a
-client-scoped entry is required, add it in the SpamTitan admin interface and
-record the reason there; do not claim a per-domain scope you did not set.
+There is no `domain` or `scope` parameter, so an entry added through these tools lands at whatever default scope the appliance and API key give it. If a client-scoped entry is required, add it in the SpamTitan admin interface and record the reason there; do not claim a per-domain scope you did not set.
 
 ## API Patterns
 

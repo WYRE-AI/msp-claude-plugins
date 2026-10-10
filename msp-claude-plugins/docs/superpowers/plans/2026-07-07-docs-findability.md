@@ -210,7 +210,7 @@ git commit -m "feat(docs): add homepage CTAs for security model and connections 
 - Consumes: nothing from other tasks.
 - Produces: nothing other tasks depend on.
 
-**Background:** The current hand-maintained 19-row table drifts from the auto-generated `/plugins/` catalog and cannot be regenerated from `marketplace.json` (no gateway flag, no tool-prefix data there — its true source of truth is `vendor-config.ts` in the separate `mcp-gateway` repo). Collapsing it into a catalog link removes the parallel hand-list entirely. `baseUrl` is already in this file's frontmatter (line 4). The `#supported-vendors` anchor is preserved so existing deep links keep working.
+**Background:** The current hand-maintained 19-row table drifts from the auto-generated `/plugins/` catalog and cannot be regenerated from `marketplace.json` (no gateway flag, no tool-prefix data there — its true source of truth is the gateway vendor registry in the separate `mcp-gateway` repo). Collapsing it into a catalog link removes the parallel hand-list entirely. `baseUrl` is already in this file's frontmatter (line 4). The `#supported-vendors` anchor is preserved so existing deep links keep working.
 
 - [ ] **Step 1: Replace the table with a summary + catalog link**
 
@@ -440,5 +440,5 @@ git commit -m "feat(docs): auto-generate copyable anchor links for all docs head
 
 ## Notes / out of scope
 
-- No "On this page" TOC/scroll-spy, no rehype/remark plugin, no route renames, no cross-repo pipeline to export `vendor-config.ts` — all deliberately deferred (see spec §Non-goals).
+- No "On this page" TOC/scroll-spy, no rehype/remark plugin, no route renames, no cross-repo pipeline to export the gateway vendor registry — all deliberately deferred (see spec §Non-goals).
 - The mobile menu's detailed **"Plugins"** section header (Header.astro `sidebarSections`) and the `/plugins/` page's own "Plugin Catalog" H1 are left unchanged; only the primary **nav item** is relabeled "Connections". Full terminology unification can be a follow-up if desired.

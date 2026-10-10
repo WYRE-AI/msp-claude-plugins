@@ -21,18 +21,11 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who raised this charge" — Autotask's own audit trail records only the
   API user.
-- Removing a technician's Conduit org membership stops their Autotask
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
-
-Autotask is classified in Conduit's `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`), so the tiers below are the ones actually
-enforced. All 98 tools are classified; none fall through to the
-unclassified-means-`admin` rule.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -41,28 +34,11 @@ unclassified-means-`admin` rule.
 | **Delete** | Removes a record. No recycle bin, no undo tool. | `write` — **not** a tier of its own | `autotask_delete_quote_item`, `autotask_delete_service_call`, `autotask_delete_service_call_ticket`, `autotask_delete_service_call_ticket_resource`, `autotask_delete_ticket_charge`, `autotask_delete_ticket_checklist_item` |
 | **Admin** | Unbounded passthrough, arbitrary tool dispatch, or a freeform request body. | `admin` | `autotask_raw_request`, `autotask_execute_tool`, `autotask_router`, `autotask_update_company_site_configuration` |
 
-**The Delete row is the one to read twice.** Conduit's enforcement tiers
-are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
-the access editor, and a delete-group tool compiles to and enforces at
-tier `write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
-So **granting a technician `write` on Autotask also grants all six
-`autotask_delete_*` tools.** There is no setting that separates them; the
-only way to admit some write tools but not the deletes is a granular
-per-tool grant, which compiles to an explicit `customTools` allowlist.
-
-Conduit compares tiers. It has no approval step, no per-call
-confirmation, and no interactive prompt — its source contains no
-elicitation handling at all. Per-call approval for anything below is a
-policy you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Per-call approval for anything below is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### Where the enforced tier is weaker than the risk
 
-The tools below enforce at `write`, which is the same tier as creating a
-ticket note. The mechanical tier is a function of `isWrite`/`isAdmin`;
-it is not a judgement about blast radius in a customer's tenant. These
-three groups deserve the care the tier does not give them:
+The tools below enforce at `write`, which is the same tier as creating a ticket note. These three groups deserve the care the tier does not give them:
 
 - **Ticket charges** (`autotask_create_ticket_charge`,
   `autotask_update_ticket_charge`, `autotask_delete_ticket_charge`) post
@@ -77,9 +53,7 @@ three groups deserve the care the tier does not give them:
 - **The six `autotask_delete_*` tools** remove the record outright. They
   are in the Delete presentation group, which still enforces at `write`.
 
-If you need any of these held back from a technician who otherwise needs
-`write`, that has to be a per-tool `customTools` allowlist. A tier
-cannot express it.
+A tier cannot express it.
 
 `autotask_create_time_entry` is a genuine `write` in both senses.
 Entries land in DRAFT and must be submitted and approved before they
@@ -88,18 +62,7 @@ control.
 
 ### Where the enforced tier is stronger than the old table said
 
-- **`autotask_router` enforces at `admin`**, not `read`. It was
-  previously documented as a read tool. Conduit groups it with
-  `autotask_raw_request` and `autotask_execute_tool` under
-  *"Passthrough surfaces (arbitrary method/path/body, arbitrary tool
-  dispatch, NL routing) -> ADMIN"*. Plan around the tier as stated — a
-  technician with `read` or `write` on Autotask cannot call it — but be
-  aware this looks like an over-classification: the handler resolves an
-  intent string and returns `{ suggestedTool, ... }`, executing nothing
-  (`autotask-mcp`, `src/handlers/tool.handler.ts:1432`).
-  `wyre-gateway/GOVERNANCE.md` reached the same conclusion about the
-  router independently. The other two passthrough tools do dispatch, and
-  their `admin` tier is earned.
+- **`autotask_router` enforces at `admin`**, not `read`. It was previously documented as a read tool. Conduit groups it with `autotask_raw_request` and `autotask_execute_tool` under *"Passthrough surfaces (arbitrary method/path/body, arbitrary tool dispatch, NL routing) -> ADMIN"*. Plan around the tier as stated — a technician with `read` or `write` on Autotask cannot call it — but be aware this looks like an over-classification: the handler resolves an intent string and returns a suggested tool and does not dispatch the call. The other two passthrough tools do dispatch, and their `admin` tier is earned.
 - **`autotask_update_company_site_configuration` enforces at `admin`**,
   not `write`. Its request body is freeform
   (`additionalProperties: true`), so Conduit cannot bound what it
@@ -152,11 +115,7 @@ self-approve deletes.**
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Treat the charge and contract tools as a stricter class than the rest
   of the group even though Conduit does not.
-- Delete tools: require a named human approver per invocation. Do not
-  grant these to scheduled or unattended agents. Remember that Conduit
-  cannot enforce this separation for you — a `write` grant on Autotask
-  already admits all six — so it has to live in the agent's own
-  configuration, or in a per-tool `customTools` allowlist.
+- Delete tools: require a named human approver per invocation. Do not grant these to scheduled or unattended agents.
 - Admin tools: treat the grant as equivalent to full Autotask
   administrator, because for `autotask_raw_request`, `autotask_router`,
   and `autotask_execute_tool` that is exactly what it is. Do not grant

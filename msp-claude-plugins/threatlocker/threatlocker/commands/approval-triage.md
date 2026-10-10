@@ -31,7 +31,6 @@ Triage pending ThreatLocker application approval requests across the managed fle
 
    Split into two buckets:
 
-   - **High confidence (auto-approve candidates):** signed by well-known publisher (Microsoft, Adobe, Google, Citrix, etc.), known good hash, common business app
    - **Needs review:** unsigned, novel/uncommon hash, unusual install path (`%TEMP%`, `%APPDATA%`), unfamiliar publisher, request justification missing or suspicious
 
 5. **Surface the key fields per request**

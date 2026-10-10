@@ -21,31 +21,21 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who pulled this customer's incident data" — RocketCyber's own log
   records only the provider API key.
-- Removing a technician's Conduit org membership stops their RocketCyber
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-RocketCyber is classified in Conduit's `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`), but the entry covers only **eight** of
-the plugin's ten tools. Conduit is fail-closed, and the enforcement gate
-coerces an unclassified tool to the *highest* tier:
-
-```ts
-const requiredTier: PermissionTier = classified ?? 'admin'; // UNCLASSIFIED -> ADMIN
-```
-— `src/access/access-enforcement.ts:63`. So two read-only tools require
-tier `admin` to invoke.
+Gateway configuration source is omitted from this repository.
+So two read-only tools require tier `admin` to invoke.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
 | **Read** | Cannot change RocketCyber or endpoint state. | `read` | `rocketcyber_get_account`, `rocketcyber_list_agents`, `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_get_event_summary`, `rocketcyber_get_defender`, `rocketcyber_get_office`, `rocketcyber_test_connection` |
-| **Write** | — | — | **None.** No tool in this plugin is classified `isWrite`. |
+| **Write** | — | — |confirm the live grant|
 | **Delete** | — | — | **None.** |
-| **Admin** | Nothing dangerous — these are reads Conduit has not classified. | `admin` (by fail-closed coercion, not by classification) | `rocketcyber_list_apps`, `rocketcyber_list_firewalls` |
+| **Admin** | Nothing dangerous — these are reads Conduit has not classified. |confirm the live grant| `rocketcyber_list_apps`, `rocketcyber_list_firewalls` |
 
 **This plugin is still read-only in blast-radius terms.** Every tool it
 exposes is an observation. An agent granted the full surface cannot
@@ -53,18 +43,9 @@ resolve an incident, change an account, deploy or remove an agent, or
 alter a security policy. For an MSP owner deciding what to allow, that
 remains the main answer: the worst case is disclosure, not damage.
 
-But read-only is not the same as reachable at tier `read`.
-`rocketcyber_list_apps` and `rocketcyber_list_firewalls` are absent from
-`VENDOR_TOOL_CONFIG`, so a technician granted `read` on RocketCyber will
-be denied on both. Getting them requires `admin` on this vendor — which,
-here, admits nothing worse, because there is nothing worse to admit.
-This is classification drift rather than a security decision, and
-classifying the two tools would be a privilege *reduction*: it would
-move them down from `admin` to `read`.
+But read-only is not the same as reachable at tier `read`. Getting them requires `admin` on this vendor — which, here, admits nothing worse, because there is nothing worse to admit. This is classification drift rather than a security decision, and classifying the two tools would be a privilege *reduction*: it would move them down from `admin` to `read`.
 
-Conduit compares tiers. It has no approval step, no per-call
-confirmation, and no interactive prompt — its source contains no
-elicitation handling at all. There is nothing here to approve anyway.
+There is nothing here to approve anyway.
 
 ## Recommended agent policy
 
@@ -73,11 +54,7 @@ elicitation handling at all. There is nothing here to approve anyway.
   summarisation are the intended autonomous use.
 - Write and delete policies are not applicable — do not configure
   approval workflows for tools that do not exist.
-- If a workflow needs `rocketcyber_list_apps` or
-  `rocketcyber_list_firewalls`, prefer a per-tool `customTools` grant
-  over a blanket `admin` grant on the vendor. The blanket grant is
-  harmless today only because this plugin has no mutating tool; a future
-  one would inherit it.
+- The blanket grant is harmless today only because this plugin has no mutating tool; a future one would inherit it.
 
 Because the whole surface is read-only, the governance question shifts
 from "what can it break" to "who should see this". Incident and event

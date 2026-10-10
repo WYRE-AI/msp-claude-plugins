@@ -24,19 +24,13 @@ operator is authorised for.
   usually a shared service account. Conduit records *who called what*,
   never with what arguments — for `meraki_raw_request`, the method and
   path are exactly what the log will not show you.
-- Removing a technician's Conduit org membership stops their Meraki
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin
-— so these are the buckets an owner actually clicks. Enforcement knows
-only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
-— `src/access/permission-tier.ts:27`. All 27 tools below are classified in
-`VENDOR_TOOL_CONFIG` under the slug `meraki`.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -45,38 +39,13 @@ only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
 | **Delete** | **Empty** — and not because Meraki has no delete tools. Both are pinned to `admin` instead, so they sit in the Admin row rather than here. | `write` — **not** a tier of its own | *(none)* |
 | **Admin** | Removes Dashboard objects, or reaches the whole API surface. | `admin` | `meraki_networks_delete`, `meraki_devices_remove`, `meraki_raw_request` |
 
-† `meraki_navigate` is classified `read`, but Conduit refuses it for
-**everyone** — owners and personal connections included — before any tier
-check runs (`src/proxy/discovery-tools.ts:48`,
-`src/proxy/tool-call-enforcement.ts:125`). It answers with the container's
-full tool list without knowing the caller's tier, so it advertises tools
-the session may be forbidden to call. Use `conduit__my_access` for the
-tier-true answer. `meraki_status` is deliberately kept — it reports
-credential health and enumerates nothing.
+It answers with the container's full tool list without knowing the caller's tier, so it advertises tools the session may be forbidden to call. Use `conduit__my_access` for the tier-true answer. `meraki_status` is deliberately kept — it reports credential health and enumerates nothing.
 
-**The empty Delete row is doing real work here.** Delete is a presentation
-group, and a delete-group tool normally compiles to and enforces at tier
-`write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`) —
-which would mean a `write` grant carried every delete. Meraki avoids that
-because `meraki_networks_delete` and `meraki_devices_remove` carry
-`isAdmin`, and `isAdmin` outranks `isWrite`
-(`src/access/tool-classification.ts:33-38`). Admin classification lifts
-them out of the write-tier bucket the Delete group is drawn from, so they
-land in Admin. **A `write` grant on Meraki therefore does *not* include
-the deletes** — one of the few vendors where that holds.
+Admin classification lifts them out of the write-tier bucket the Delete group is drawn from, so they land in Admin. **A `write` grant on Meraki therefore does *not* include the deletes** — one of the few vendors where that holds.
 
-That is the good news. **The bad news is what `write` does include**: the
-four site-outage-capable config tools in the Write row. Granting a
-technician `write` for Meraki grants them the firewall replace, the switch
-port update, the SSID update, and the device reboot, alongside the benign
-`meraki_networks_update`. There is no setting that separates them; the
-only way to admit some write tools but not those four is a granular
-per-tool grant, which compiles to an explicit `customTools` allowlist.
+That is the good news. **The bad news is what `write` does include**: the four site-outage-capable config tools in the Write row. Granting a technician `write` for Meraki grants them the firewall replace, the switch port update, the SSID update, and the device reboot, alongside the benign `meraki_networks_update`.
 
-Conduit has no approval step, no per-call confirmation, and no interactive
-prompt. It compares tiers. Any per-call human approval described below is
-a workflow you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### Why the passthrough is admin-pinned
 
@@ -86,25 +55,9 @@ on the surface — including the DELETEs that `meraki_networks_delete` and
 `meraki_devices_remove` pin to admin, and org-administrator surfaces that
 have no curated tool at all.
 
-Conduit's policy matches on tool name only; arguments are never inspected
-(`ToolCallGateInput` carries no `arguments` field, and the only component
-that reads arguments is the observe-only security tap, which never
-denies). So the general rule, now enforced by a guard test across the
-fleet: **every arbitrary-request passthrough is admin-pinned, because a
-tool whose blast radius is chosen by its arguments cannot be gated by its
-name.** `meraki_raw_request` was for a period classified `isWrite` only —
-a `write`-tier caller could issue arbitrary DELETEs and bypass the admin
-pin on the two curated delete tools. It is now `isWrite` **and**
-`isAdmin`, consistent with `autotask_raw_request` and every sibling
-passthrough.
+Conduit's policy matches on tool name only; arguments are never inspected (`ToolCallGateInput` carries no `arguments` field, and the only component that reads arguments is the observe-only security tap, which never denies).
 
-Two consequences worth acting on. **Never put `meraki_raw_request` in a
-`customTools` list you are using to restrict anything** — admitting it
-grants the entire Meraki surface, including every tool you deliberately
-left out of that same list, and the restriction becomes decorative. And
-because argument capture is off unconditionally, `meraki_raw_request` is
-the *only* thing the audit trail will ever show you, never what it
-dispatched.
+Two consequences worth acting on. And because argument capture is off unconditionally, `meraki_raw_request` is the *only* thing the audit trail will ever show you, never what it dispatched.
 
 ### Four write-tier tools that can take a site offline
 
@@ -175,19 +128,8 @@ self-approve a config change that can break connectivity.**
 - **Read tools: allow.** Offline-device sweeps, firmware and lifecycle
   audits, firewall rule *reviews*, and VPN health checks are the intended
   autonomous use.
-- **Write tools: agent drafts the exact call, human approves, then it
-  runs.** For the four site-outage-capable tools, the approval must
-  include a before/after diff — fetch current state with the matching
-  `_get` or `_list` tool and show it. Do not grant these to scheduled or
-  unattended agents. Conduit cannot enforce that separation for you — a
-  `write` grant already admits all six — so it has to live in the agent's
-  own configuration, or in a granular `customTools` grant that admits
-  `meraki_networks_update` and `meraki_clients_update_policy` only.
-- **Admin tools: treat the grant as equivalent to full Meraki
-  administrator**, because for an arbitrary passthrough that is exactly
-  what it is. If `meraki_raw_request` is genuinely needed, give it its own
-  grant whose `customTools` contains that tool and nothing else. Never
-  grant it to a scheduled agent or a service client, at any tier.
+- **Write tools: agent drafts the exact call, human approves, then it runs.** For the four site-outage-capable tools, the approval must include a before/after diff — fetch current state with the matching `_get` or `_list` tool and show it. Do not grant these to scheduled or unattended agents.
+- **Admin tools: treat the grant as equivalent to full Meraki administrator**, because for an arbitrary passthrough that is exactly what it is. Never grant it to a scheduled agent or a service client, at any tier.
 - Leave `READ_ONLY_MODE=true` unless a specific change window needs
   otherwise — but treat it as a coarse safety catch, not as policy.
 
@@ -224,7 +166,6 @@ self-approve a config change that can break connectivity.**
 - `meraki_appliance_vpn_status_get` maps inter-site topology and
   exported subnets.
 - All three are `read`-tier, so a plain `read` grant includes them.
-  Separating them requires a granular `customTools` grant.
 
 ## Known sharp edges
 

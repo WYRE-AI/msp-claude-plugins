@@ -39,7 +39,7 @@
     {
       "name": "3cx",
       "displayName": "3CX",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
       "category": "productivity",
       "tags": [
@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.11",
+      "version": "0.2.12",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -148,7 +148,7 @@
     {
       "name": "atera",
       "displayName": "Atera",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
       "category": "psa-rmm",
       "tags": [
@@ -243,7 +243,7 @@
     {
       "name": "auvik",
       "displayName": "Auvik",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants",
       "category": "network",
       "tags": [
@@ -325,7 +325,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.3",
+      "version": "0.6.4",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -476,7 +476,7 @@
     {
       "name": "kaseya-quote-manager",
       "displayName": "Kaseya Quote Manager",
-      "version": "1.0.10",
+      "version": "1.0.11",
       "description": "Kaseya Quote Manager (Datto Commerce) - read-only quotes, sales orders, purchasing, catalog, CRM, org",
       "category": "sales",
       "tags": [
@@ -521,7 +521,7 @@
     {
       "name": "betterstack",
       "displayName": "Betterstack",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Better Stack - uptime monitoring, logging, incident management",
       "category": "monitoring",
       "tags": [
@@ -596,7 +596,7 @@
     {
       "name": "blumira",
       "displayName": "Blumira",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
       "category": "security",
       "tags": [
@@ -675,7 +675,7 @@
     {
       "name": "avanan",
       "displayName": "Checkpoint Harmony Email (Avanan)",
-      "version": "0.4.4",
+      "version": "0.4.5",
       "description": "Checkpoint Harmony Email & Collaboration (Avanan) - quarantine and restore, threat event search, and allow/block-list exceptions",
       "category": "email-security",
       "tags": [
@@ -738,7 +738,7 @@
     {
       "name": "cipp",
       "displayName": "Cipp",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
       "tags": [
@@ -822,7 +822,7 @@
     {
       "name": "freshdesk",
       "displayName": "Freshdesk",
-      "version": "1.0.11",
+      "version": "1.0.12",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
       "category": "psa",
       "tags": [
@@ -887,7 +887,7 @@
     {
       "name": "inforcer",
       "displayName": "Inforcer",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
       "category": "security",
       "tags": [
@@ -960,7 +960,7 @@
     {
       "name": "connectwise-automate",
       "displayName": "Connectwise Automate",
-      "version": "1.2.5",
+      "version": "1.2.6",
       "description": "ConnectWise Automate - computers, clients, scripts, monitors, alerts",
       "category": "rmm",
       "tags": [
@@ -1018,7 +1018,7 @@
     {
       "name": "connectwise-cpq",
       "displayName": "Connectwise CPQ",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "ConnectWise CPQ (Sell/Quosal) - quotes, line items, templates, quote customers, payment terms",
       "category": "sales",
       "tags": [
@@ -1070,7 +1070,7 @@
     {
       "name": "connectwise-psa",
       "displayName": "Connectwise PSA",
-      "version": "0.3.6",
+      "version": "0.3.7",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
       "category": "psa",
       "tags": [
@@ -1172,7 +1172,7 @@
     {
       "name": "datto-rmm",
       "displayName": "Datto RMM",
-      "version": "1.2.5",
+      "version": "1.2.6",
       "description": "Datto RMM - devices, alerts, jobs, patches, monitoring",
       "category": "rmm",
       "tags": [
@@ -1247,7 +1247,7 @@
     {
       "name": "domotz",
       "displayName": "Domotz",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Domotz - network monitoring, SNMP discovery, device management",
       "category": "network",
       "tags": [
@@ -1305,7 +1305,7 @@
     {
       "name": "halopsa",
       "displayName": "Halopsa",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "HaloPSA - tickets, clients, assets, contracts (OAuth 2.0)",
       "category": "psa",
       "tags": [
@@ -1404,7 +1404,7 @@
     {
       "name": "hudu",
       "displayName": "Hudu",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Hudu IT documentation - companies, assets, articles, passwords, websites",
       "category": "documentation",
       "tags": [
@@ -1475,7 +1475,7 @@
     {
       "name": "huntress",
       "displayName": "Huntress",
-      "version": "0.3.7",
+      "version": "0.3.8",
       "description": "Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports",
       "category": "security",
       "tags": [
@@ -1558,7 +1558,7 @@
     {
       "name": "itglue",
       "displayName": "IT Glue",
-      "version": "1.2.4",
+      "version": "1.2.5",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
       "category": "documentation",
       "tags": [
@@ -1637,7 +1637,7 @@
     {
       "name": "keeper",
       "displayName": "Keeper Secrets Manager",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping",
       "category": "security",
       "tags": [
@@ -1688,7 +1688,7 @@
     {
       "name": "knowbe4",
       "displayName": "Knowbe4",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "KnowBe4 - phishing simulation, security awareness training, user risk management",
       "category": "email-security",
       "tags": [
@@ -1759,7 +1759,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -1818,7 +1818,7 @@
     {
       "name": "m365",
       "displayName": "M365",
-      "version": "0.2.6",
+      "version": "0.2.7",
       "description": "Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
       "category": "productivity",
       "tags": [
@@ -1897,7 +1897,7 @@
     {
       "name": "ninjaone",
       "displayName": "NinjaOne",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
       "category": "rmm",
       "tags": [
@@ -1964,7 +1964,7 @@
     {
       "name": "pagerduty",
       "displayName": "Pagerduty",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "PagerDuty - incident management, on-call scheduling, alerting",
       "category": "incident-management",
       "tags": [
@@ -2039,7 +2039,7 @@
     {
       "name": "pandadoc",
       "displayName": "Pandadoc",
-      "version": "0.2.7",
+      "version": "0.2.8",
       "description": "PandaDoc - documents, templates, e-signatures, and proposal management",
       "category": "sales",
       "tags": [
@@ -2110,7 +2110,7 @@
     {
       "name": "warmly",
       "displayName": "Warmly",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
       "category": "sales",
       "tags": [
@@ -2139,7 +2139,7 @@
     {
       "name": "pax8",
       "displayName": "Pax8",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
       "category": "marketplace",
       "tags": [
@@ -2210,7 +2210,7 @@
     {
       "name": "posthog",
       "displayName": "Posthog",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)",
       "category": "productivity",
       "tags": [
@@ -2265,7 +2265,7 @@
     {
       "name": "proofpoint",
       "displayName": "Proofpoint",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Proofpoint Email Protection - TAP, quarantine, threat intel, forensics, URL defense, VAP reports",
       "category": "email-security",
       "tags": [
@@ -2393,7 +2393,7 @@
     {
       "name": "netsuite",
       "displayName": "Netsuite",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)",
       "category": "accounting",
       "tags": [
@@ -2453,7 +2453,7 @@
     {
       "name": "qbo",
       "displayName": "QuickBooks Online",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
       "category": "accounting",
       "tags": [
@@ -2524,7 +2524,7 @@
     {
       "name": "rocketcyber",
       "displayName": "Rocketcyber",
-      "version": "0.3.4",
+      "version": "0.3.5",
       "description": "RocketCyber managed SOC - incidents, agents, events, threat detection",
       "category": "security",
       "tags": [
@@ -2583,7 +2583,7 @@
     {
       "name": "rootly",
       "displayName": "Rootly",
-      "version": "0.2.11",
+      "version": "0.2.12",
       "description": "Rootly - incident management, postmortems, SRE automation",
       "category": "incident-management",
       "tags": [
@@ -2662,7 +2662,7 @@
     {
       "name": "runzero",
       "displayName": "Runzero",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "runZero - asset discovery, network scanning, inventory management",
       "category": "security",
       "tags": [
@@ -2728,7 +2728,7 @@
     {
       "name": "salesbuildr",
       "displayName": "Salesbuildr",
-      "version": "1.1.9",
+      "version": "1.1.10",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
       "category": "crm",
       "tags": [
@@ -2817,7 +2817,7 @@
     {
       "name": "sentinelone",
       "displayName": "Sentinelone",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
       "category": "security",
       "tags": [
@@ -2948,7 +2948,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.9",
+      "version": "0.3.10",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
@@ -3015,7 +3015,7 @@
     {
       "name": "superops",
       "displayName": "Superops",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
       "category": "psa-rmm",
       "tags": [
@@ -3110,7 +3110,7 @@
     {
       "name": "syncro",
       "displayName": "Syncro",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Syncro MSP - tickets, customers, assets, invoicing",
       "category": "psa-rmm",
       "tags": [
@@ -3201,7 +3201,7 @@
     {
       "name": "blackpoint",
       "displayName": "Blackpoint",
-      "version": "1.1.8",
+      "version": "1.1.9",
       "description": "Blackpoint Cyber / CompassOne MDR - tenants, assets, detections, vulnerabilities (dark web, external, scans)",
       "category": "security",
       "tags": [
@@ -3285,7 +3285,7 @@
     {
       "name": "saas-alerts",
       "displayName": "SAAS Alerts",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
       "category": "security",
       "tags": [
@@ -3328,7 +3328,7 @@
     {
       "name": "crewhu",
       "displayName": "Crewhu",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",
       "category": "productivity",
       "tags": [
@@ -3370,7 +3370,7 @@
     {
       "name": "immybot",
       "displayName": "Immybot",
-      "version": "1.1.8",
+      "version": "1.1.9",
       "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth)",
       "category": "rmm",
       "tags": [
@@ -3465,7 +3465,7 @@
     {
       "name": "timezest",
       "displayName": "Timezest",
-      "version": "1.1.9",
+      "version": "1.1.10",
       "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
       "category": "productivity",
       "tags": [
@@ -3552,7 +3552,7 @@
     {
       "name": "threatlocker",
       "displayName": "Threatlocker",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "description": "ThreatLocker - zero-trust application allowlisting, approval triage, audit log investigation, computer inventory",
       "category": "security",
       "tags": [
@@ -3641,7 +3641,7 @@
     {
       "name": "kaseya-vsa",
       "displayName": "Kaseya Vsa",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control (scaffolding)",
       "category": "rmm",
       "tags": [
@@ -3667,7 +3667,7 @@
     {
       "name": "datto-bcdr",
       "displayName": "Datto BCDR",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, recovery points (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3695,7 +3695,7 @@
     {
       "name": "kaseya-bms",
       "displayName": "Kaseya Bms",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Kaseya BMS PSA - tickets, accounts, contracts, time entries, billing (scaffolding)",
       "category": "psa",
       "tags": [
@@ -3721,7 +3721,7 @@
     {
       "name": "datto-saas-protection",
       "displayName": "Datto SAAS Protection",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3748,7 +3748,7 @@
     {
       "name": "unitrends",
       "displayName": "Unitrends",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Unitrends - appliances, backup jobs, recovery points, replication, alerts (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3774,7 +3774,7 @@
     {
       "name": "spanning",
       "displayName": "Spanning",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "description": "Spanning Cloud Backup - SaaS backup for M365 / Google Workspace / Salesforce (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3801,7 +3801,7 @@
     {
       "name": "hubspot",
       "displayName": "Hubspot",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "HubSpot CRM - contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP server)",
       "category": "crm",
       "tags": [
@@ -3879,7 +3879,7 @@
     {
       "name": "spamtitan",
       "displayName": "Spamtitan",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "SpamTitan by TitanHQ - quarantine queue management, email flow stats, sender allowlist/blocklist for MSPs",
       "category": "email-security",
       "tags": [
@@ -3930,7 +3930,7 @@
     {
       "name": "xero",
       "displayName": "Xero",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
       "category": "accounting",
       "tags": [
@@ -4000,7 +4000,7 @@
     {
       "name": "alternative-payments",
       "displayName": "Alternative Payments",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "description": "Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)",
       "category": "accounting",
       "tags": [
@@ -4051,7 +4051,7 @@
     {
       "name": "ironscales",
       "displayName": "Ironscales",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "description": "Claude plugins for IRONSCALES - AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence",
       "category": "email-security",
       "tags": [
@@ -4098,7 +4098,7 @@
     {
       "name": "mimecast",
       "displayName": "Mimecast",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
       "category": "email-security",
       "tags": [
@@ -4228,7 +4228,7 @@
     {
       "name": "wyre-gateway",
       "displayName": "Wyre MSP Gateway",
-      "version": "1.4.5",
+      "version": "1.4.6",
       "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
       "category": "productivity",
       "tags": [
@@ -4339,7 +4339,7 @@
     {
       "name": "microsoft-graph",
       "displayName": "Microsoft Graph",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "description": "Microsoft Graph Enterprise MCP - read-only natural-language queries over Microsoft Entra identity and directory data: users, groups, applications, devices, and admin reporting (public preview)",
       "category": "productivity",
       "tags": [
@@ -4382,7 +4382,7 @@
     {
       "name": "azure-mcp",
       "displayName": "Azure Mcp",
-      "version": "1.0.6",
+      "version": "1.0.7",
       "description": "Azure MCP Server - read-only Azure observability, cost, and resource-health analysis in natural language: monitoring, pricing, quota, advisor, resource health, diagnostics",
       "category": "monitoring",
       "tags": [
@@ -4429,7 +4429,7 @@
     {
       "name": "stripe",
       "displayName": "Stripe",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Stripe - payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com)",
       "category": "accounting",
       "tags": [
@@ -4449,7 +4449,7 @@
     {
       "name": "slack",
       "displayName": "Slack",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Slack - messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com)",
       "category": "productivity",
       "tags": [
@@ -4469,7 +4469,7 @@
     {
       "name": "meraki",
       "displayName": "Meraki",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
       "category": "network",
       "tags": [
@@ -4523,7 +4523,7 @@
     {
       "name": "ncentral",
       "displayName": "Ncentral",
-      "version": "1.0.7",
+      "version": "1.0.8",
       "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
       "category": "rmm",
       "tags": [
@@ -5325,7 +5325,7 @@
     {
       "name": "clio",
       "displayName": "Clio",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
       "category": "legal",
       "tags": [
@@ -5378,7 +5378,7 @@
     {
       "name": "scalepad",
       "displayName": "Scalepad",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
       "category": "productivity",
       "tags": [
@@ -5458,7 +5458,7 @@
     {
       "name": "axcient",
       "displayName": "Axcient",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Axcient x360Recover - BCDR clients, devices, backup jobs, vaults, and appliances",
       "category": "bcdr",
       "tags": [

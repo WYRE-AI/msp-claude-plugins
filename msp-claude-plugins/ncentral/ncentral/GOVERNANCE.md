@@ -33,28 +33,14 @@ a standing, non-MFA account whose role and access groups determine
 everything an agent can see or do. Create a dedicated least-privilege
 API user; do not attach the token to a technician's own account.
 
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
+
 ## Tool permission tiers
 
 Grouped by blast radius, not HTTP verb. Two of the three destructive
 entries are GET requests.
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `ncentral` has no entry there, so
-> the grouping below carries no enforcement meaning at present — read tools
-> included. A `read` or `write` grant on this vendor admits nothing; an
-> `admin` grant admits everything, including `ncentral_create_direct_task`.
-> The grouping becomes what Conduit actually enforces once the vendor is
-> classified, and classifying it is a privilege *reduction*, not an
-> expansion. For the live list of unclassified vendors see
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
-> classified* — it is stated once there because it moves.
->
-> *Editor's note: when `ncentral` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -111,13 +97,7 @@ dates, purchase cost, expected replacement. It touches no monitoring and
 no endpoint. It still overwrites without history, so a bulk stamp from a
 vendor export can quietly destroy hand-entered data.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there
-is no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and
-`ncentral_create_direct_task` once the tier is granted. Where this
-document asks for a named human approver, that is a policy you impose on
-your agents, and it is only as good as the agent configuration that
-carries it.
+Nothing sits between an agent and `ncentral_create_direct_task` once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

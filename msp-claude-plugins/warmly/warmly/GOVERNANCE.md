@@ -6,11 +6,9 @@ endorsed by, or sponsored by the vendor.
 ## What it connects as
 
 > **Conduit does not broker this vendor. Read this before anything else in
-> this document.** `warmly` has no entry in Conduit's
-> `src/credentials/vendor-config.ts` — not a hidden one, not a disabled one,
-> none at all. The connector is wired only in the older
-> `WYRE-AI/mcp-gateway` registry (`warmly:` in that repo's own
-> `src/credentials/vendor-config.ts`), a separate system this marketplace has
+> this document.** `warmly` has no entry in the gateway vendor registry —
+> not a hidden one, not a disabled one, none at all. The connector is wired
+> only in the older gateway, a separate system this marketplace has
 > otherwise moved off. There is no `warmly` slug to reach at
 > `https://conduit.wyre.ai/v1/mcp`, so a connect attempt there 404s.
 >
@@ -21,7 +19,7 @@ endorsed by, or sponsored by the vendor.
 > and the tool reference are accurate about Warmly's own API now, and are why
 > the plugin is still listed.
 >
-> *Editor's note: when `warmly` gains a Conduit `vendor-config.ts` entry,
+> *Editor's note: when `warmly` gains a gateway vendor registry entry,
 > delete this blockquote and the matching note in `README.md`. The rest of
 > this document is written to be true from that point on.*
 
@@ -41,39 +39,16 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers "who
   pulled this visitor list" — which matters, because that list is third-party
   personal data (see Data handling).
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. A user only
-  removed from the org keeps an already-issued access token for up to an
-  hour, but it reaches only a personal Warmly connection made with their own
-  key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
 **This plugin is read-only.** Warmly exposes three tools and none of them
 changes vendor state.
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `warmly` has no entry there, so
-> the grouping below carries no enforcement meaning at present — and no
-> grant of any tier reaches this vendor today, because Conduit has no
-> `warmly` slug at all (see *What it connects as*). Once it is brokered, the
-> missing classification bites harder on a read-only plugin than on most: a
-> `read` grant would admit nothing, so the only way to use this plugin would
-> be an `admin` grant, and the recommendation below to hand these tools to
-> unattended agents could not be followed at a lower tier. The grouping
-> becomes what Conduit actually
-> enforces once the vendor is classified, and classifying it is a privilege
-> *reduction*, not an expansion. For the live list of unclassified vendors
-> see `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified* — it is stated once there because it moves.
->
-> *Editor's note: when `warmly` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. This vendor is not brokered today: there is no `warmly` slug, and a connect attempt returns 404. See *What it connects as*.
 
 | Tier | What it can do | Tools |
 |---|---|---|

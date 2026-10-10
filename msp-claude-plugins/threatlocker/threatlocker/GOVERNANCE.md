@@ -21,19 +21,9 @@ scopes every call to the tenant the operator is authorised for.
   "who pulled that org's auth key" — ThreatLocker's own log records only
   the partner API account. It records *who called what*, never with what
   arguments.
-- Removing a technician's Conduit org membership stops their ThreatLocker
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
 
 ## Tool permission groups
-
-Conduit derives every tool's tier from `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`), which `src/access/tool-classification.ts:4`
-declares the single source of truth. The convention is `isAdmin → admin`
-(outranks), `isWrite → write`, neither → `read`
-(`tool-classification.ts:33-38`).
 
 **ThreatLocker's block in that table contains exactly one tool.** Of the
 seventeen tools this plugin documents, sixteen have no entry at all, so
@@ -43,38 +33,11 @@ no tier is invented for them below.
 |---|---|---|---|
 | **Read** | Cannot change ThreatLocker or endpoint state. Safe for autonomous agents. | `read` | `threatlocker_approvals_get_permit_application` |
 | **Write** | *Empty for this vendor.* | `write` | *None.* Nothing in this plugin mutates ThreatLocker state. |
-| **Delete** | *Empty for this vendor.* | `write` — **not a tier of its own** | *None.* |
-| **Admin** | Nothing is deliberately classified `admin` — but everything below arrives there by fail-closed coercion. | `admin` | *No explicit entries.* See the next section. |
-| **Not classified** | Documented and server-registered, but absent from `VENDOR_TOOL_CONFIG`. **Requires `admin` today.** | `admin` (coerced) | `threatlocker_status`, `threatlocker_navigate`, `threatlocker_computers_list`, `threatlocker_computers_get`, `threatlocker_computers_get_checkins`, `threatlocker_computer_groups_list`, `threatlocker_computer_groups_dropdown`, `threatlocker_approvals_list`, `threatlocker_approvals_get`, `threatlocker_approvals_pending_count`, `threatlocker_audit_search`, `threatlocker_audit_get`, `threatlocker_audit_file_history`, `threatlocker_organizations_list_children`, `threatlocker_organizations_for_move_computers`, `threatlocker_organizations_get_auth_key` |
+| **Delete** | *Empty for this vendor.* |`write`| *None.* |
+| **Admin** |Nothing is deliberately classified `admin`| `admin` | *No explicit entries.* See the next section. |
+| **Not classified** |**Requires `admin` today.**| `admin` (coerced) | `threatlocker_status`, `threatlocker_navigate`, `threatlocker_computers_list`, `threatlocker_computers_get`, `threatlocker_computers_get_checkins`, `threatlocker_computer_groups_list`, `threatlocker_computer_groups_dropdown`, `threatlocker_approvals_list`, `threatlocker_approvals_get`, `threatlocker_approvals_pending_count`, `threatlocker_audit_search`, `threatlocker_audit_get`, `threatlocker_audit_file_history`, `threatlocker_organizations_list_children`, `threatlocker_organizations_for_move_computers`, `threatlocker_organizations_get_auth_key` |
 
-### What "not classified" costs you
-
-Conduit fails closed. The enforcement gate coerces an unclassified tool
-to the *highest* tier rather than to deny:
-
-```ts
-const requiredTier: PermissionTier = classified ?? 'admin'; // UNCLASSIFIED -> ADMIN
-```
-— `src/access/access-enforcement.ts:63`.
-
-The `tools/list` filter mirrors the same decision
-(`src/proxy/list-visibility.ts:44`), so those sixteen tools are not
-merely un-callable below `admin` — they are invisible.
-
-The practical consequence is that **a read-only agent cannot use this
-plugin at all.** Granting `read` reaches exactly one tool. Every fleet
-audit, offline-agent triage, approval-queue count, and Action Log query
-this document describes as "the intended autonomous use" requires tier
-`admin` today — which on any vendor means everything else on that vendor
-too. There is no safe middle setting until ThreatLocker is classified.
-
-Classifying it would be a privilege *reduction*, not an addition: it
-would move the read tools down from `admin` to `read`.
-
-`threatlocker_navigate` is a separate case. Discovery tools
-(`*_navigate` / `*_back`) are refused for every caller — owners and
-personal connections included — by Conduit's discovery-tool suppression
-gate (`src/proxy/tool-call-enforcement.ts:125-130`), regardless of tier.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ### `threatlocker_organizations_get_auth_key` — a GET that returns a live credential
 
@@ -86,36 +49,17 @@ and the key keeps working until someone rotates it. Treat every
 invocation as a credential checkout, exactly as you would a
 password-manager retrieval.
 
-It requires tier `admin` today, which is the right outcome — but **it is
-the right outcome by accident.** It gets there through the fail-closed
-coercion above, not through a deliberate `isAdmin` flag. Two things
-follow:
+Two things follow:
 
-- The moment somebody classifies ThreatLocker, this tool's tier is
-  whatever they write down. Conduit's own name-inference helper would
-  argue for `read`: it tokenises the name and matches `get`, a
-  `READ_TOKENS` entry, while neither `auth` nor `key` appears in
-  `ADMIN_TOKENS` (`src/access/tool-naming.ts`). Anyone classifying this
-  vendor must override that heuristic on purpose. This is the sentence
-  to quote in that review.
+- The moment somebody classifies ThreatLocker, this tool's tier is whatever they write down. Anyone classifying this vendor must override that heuristic on purpose. This is the sentence to quote in that review.
 - Until then, nobody below `admin` can call it — and nobody below
   `admin` can call the fifteen benign reads beside it either.
 
-Whoever holds `admin` on ThreatLocker holds this tool. Conduit will not
-ask them to confirm, and there is no way to admit the read tools while
-excluding this one at the tier level. If you need that separation today,
-it has to be a granular per-tool grant whose `customTools` list omits
-`threatlocker_organizations_get_auth_key`.
+Whoever holds `admin` on ThreatLocker holds this tool. Conduit will not ask them to confirm, and there is no way to admit the read tools while excluding this one at the tier level.
 
 ### There is no per-call approval step
 
-Conduit compares tiers. It has no approval mechanism, no per-call
-confirmation, and no elicitation anywhere in the request path — see
-`wyre-gateway/GOVERNANCE.md`, *The tier model*. An earlier revision of
-this document said the auth-key call "requires explicit per-call human
-approval"; nothing enforced that sentence, and it has been removed rather
-than softened. Per-call approval is a workflow you impose on your agents,
-and it is only as good as the agent configuration that carries it.
+An earlier revision of this document said the auth-key call "requires explicit per-call human approval"; nothing enforced that sentence, and it has been removed rather than softened. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### Nothing here can change a ThreatLocker policy
 
@@ -138,10 +82,7 @@ classification gap above.
   and Action Log forensics are the intended autonomous use.
 - Write tools: none exist. An agent asked to "just approve it" should
   hand the operator a reviewed recommendation and stop.
-- `threatlocker_organizations_get_auth_key`: require a named human
-  approver per invocation, and do not grant it to scheduled or unattended
-  agents at all. Conduit cannot enforce that separation for you, so it
-  has to live in the agent's own configuration or in a granular grant.
+- `threatlocker_organizations_get_auth_key`: require a named human approver per invocation, and do not grant it to scheduled or unattended agents at all.
 - Admin tools: treat any `admin` grant on ThreatLocker as equivalent to
   full partner administrator, because today it is the only grant that
   reaches anything — and it reaches the auth key.

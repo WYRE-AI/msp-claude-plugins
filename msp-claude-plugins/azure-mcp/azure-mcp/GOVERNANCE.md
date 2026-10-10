@@ -24,21 +24,13 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log
   answers "who ran that KQL query". Azure's activity log records only
   the service principal.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Azure connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-Tools here are Azure MCP Server *namespaces*, not single operations —
-`monitor` runs a KQL query, `pricing` answers a rate lookup. Conduit's
-access editor still presents the same four groups, and the **Enforcement
-tier** column is what it compares against a technician's grant, derived
-mechanically from `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`).
+Tools here are Azure MCP Server *namespaces*, not single operations — `monitor` runs a KQL query, `pricing` answers a rate lookup.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -62,26 +54,12 @@ never an outage.
 
 ### What Conduit actually classifies
 
-`VENDOR_TOOL_CONFIG` carries **four** entries for `azure-mcp`, all `read`:
-`subscription_list`, `group_list`, `group_resource_list`, and `advisor`.
-
-`monitor`, `resourcehealth`, `applens`, `pricing`, and `quota` are
-unclassified. Conduit is fail-closed per tool, not per vendor: the
-enforcement gate coerces an unclassified tool to the highest tier —
-`const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). So **a `read` grant on this vendor
-reaches inventory and Advisor, and nothing else.** Health triage and cost
-review need `admin`.
+So **a `read` grant on this vendor reaches inventory and Advisor, and nothing else.** Health triage and cost review need `admin`.
 
 Two of those five deserve a second look before anyone "fixes" this by
 classifying them all at `read`:
 
-- **`monitor` runs arbitrary KQL** against whatever a customer ingested into
-  Log Analytics. It is the closest thing this connector has to an unbounded
-  query surface, and Conduit's own classification convention puts *"unbounded
-  passthrough/query surfaces"* at `admin`
-  (`src/access/tool-classification.ts:12-17`). It arrives at `admin` today by
-  accident, but that is where the convention would put it deliberately.
+- **`monitor` runs arbitrary KQL** against whatever a customer ingested into Log Analytics. It arrives at `admin` today by accident, but that is where the convention would put it deliberately.
 - **`applens` diagnostic output can surface connection strings.** Same
   reasoning.
 
@@ -89,42 +67,19 @@ classifying them all at `read`:
 `read`. Classifying them is a privilege *reduction*: it moves them down from
 `admin`.
 
-Until then, use a granular per-tool `customTools` allowlist rather than
-granting `admin` to reach `resourcehealth` — an `admin` grant on this vendor
-also admits `monitor`, which is the one capability on this page most worth
-withholding from an unattended agent.
-
 ### There is no write surface to grant, and no delete row to misread
 
-Nothing here for a `write` grant to admit. The general rule still applies
-elsewhere and is worth carrying: Conduit's enforcement tiers are only `read`,
-`write` and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. The access editor's "Delete" group is
-presentation only and compiles to and enforces at tier `write`
-(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`), so on a
-vendor that does have delete tools, granting `write` grants every one of
-them; only a granular per-tool `customTools` allowlist separates them.
+Nothing here for a `write` grant to admit.
 
-Conduit compares tiers. It has **no approval step, no per-call confirmation,
-and no elicitation.** The `--read-only` flag and the namespace allowlist are
-container environment settings — fleet-wide on/off switches, not per-operator
-policy. They cannot express "Priya may query Log Analytics, the overnight
-agent may not." Only a Conduit grant can, and only at the granularity above.
+They cannot express "Priya may query Log Analytics, the overnight agent may not." Only a Conduit grant can, and only at the granularity above.
 
 ## Recommended agent policy
 
 The safe default for most plugins is "read autonomously, propose
 writes". Here there are no writes to propose, so:
 
-- Read tools: allow, including for scheduled and unattended agents.
-  Health triage, Advisor review, quota headroom checks, and inventory
-  reporting are all safe to automate — but note that a bare `read` grant
-  reaches only four of the nine tools today. Name the rest in a granular
-  `customTools` allowlist rather than granting `admin`.
-- **Withhold `monitor` from unattended agents specifically**, whatever tier
-  it settles at. It is the one tool here whose blast radius is chosen at call
-  time, and Conduit's policy never inspects arguments — the gate sees the
-  tool name and nothing else.
+- Read tools: allow, including for scheduled and unattended agents. Health triage, Advisor review, quota headroom checks, and inventory reporting are all safe to automate — but note that a bare `read` grant reaches only four of the nine tools today.
+- **Withhold `monitor` from unattended agents specifically**, whatever tier it settles at.
 - The two controls worth applying anyway are on **data** and **cost**,
   not on state changes — see below.
 - When a user asks for a write, provision, restart, or quota increase,

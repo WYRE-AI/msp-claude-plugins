@@ -146,30 +146,14 @@ only reliable way to know what changed between the Update 10 Alpha and any
 later release — the tool surface described here is a snapshot, not a
 guarantee.
 
-## Tool Permission Tiers Under Conduit BYO
+## Tool permission tiers when the PBX is connected through the gateway
 
-If a PBX is reached through Conduit's BYO path rather than a direct
-connection, Conduit still has to decide a permission tier for each tool it
-has never seen before — there is no hand-curated `VENDOR_TOOL_CONFIG` entry
-for 3CX to draw from. It does this with a name-and-description heuristic
-that is deliberately conservative:
+Confirm the live grant in the gateway access editor after connecting. This
+skill does not describe how the gateway classifies tools.
 
-- A leading verb from a fixed read-shaped set (`get`, `list`, `search`,
-  `find`, `query`, and similar) tiers the tool `read`.
-- Any other leading verb — including one the heuristic has simply never
-  seen before — tiers the tool `write`. Unrecognized verbs are never
-  silently treated as read.
-- A secret/credential noun anywhere in the name or description escalates
-  to `admin`, and a mutating verb on a privileged-account noun (roles,
-  members, billing, API keys, org settings) does too.
-
-This matters concretely for one 3CX tool: the read-only `Query` tool is
-enforced `SELECT`-only *inside the PBX*, but Conduit's heuristic tiers
-purely on the tool's name. If that tool's real name is built around a
-generic "run" or "execute" action rather than a `get`/`list`/`query`-style
-read verb, Conduit will tier it `write` despite the PBX-side restriction.
-Don't assume `read` for it; check the tool's actual granted tier after
-connecting.
+The read-only `Query` tool is enforced `SELECT`-only inside the PBX. Do
+not describe a workaround that reaches past that restriction, and do not
+assume a grant from the tool's name.
 
 ## Gotchas
 

@@ -25,19 +25,13 @@ is authorised for.
   looks like one shared robot. Conduit records *who called what*, never
   with what arguments — for a JSON Patch tool, the patch body is exactly
   what the log will not show you.
-- Removing a technician's Conduit org membership stops their CPQ access on
-  their next call, because membership is re-read per request. It does
-  **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than one
-  step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin
-— so these are the buckets an owner actually clicks. Enforcement knows
-only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
-— `src/access/permission-tier.ts:27`. All 25 tools below are classified in
-`VENDOR_TOOL_CONFIG` under the slug `connectwise-cpq`.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -46,28 +40,16 @@ only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
 | **Delete** | Removes priced content with no undo through this toolset. | `write` — **not** a tier of its own | `cpq_delete_quote`, `cpq_delete_quote_version`, `cpq_delete_quote_item`, `cpq_delete_quote_term`, `cpq_delete_quote_customer` |
 | **Admin** | **Empty.** No passthrough, dispatcher, or org-level tool in this surface — `PATCH /settings/user` is deliberately not exposed. | `admin` | *(none)* |
 
-**The Delete row is the one to read twice.** Delete is a presentation
-group in the access editor, and a delete-group tool compiles to and
-enforces at tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`). So **granting a technician `write` for CPQ also
-grants all five delete tools above** — including `cpq_delete_quote`, which
-cascades. There is no setting that separates them; the only way to admit
-the quote-building tools but not the deletes is a granular per-tool grant,
-which compiles to an explicit `customTools` allowlist.
+So **granting a technician `write` for CPQ also grants all five delete tools above** — including `cpq_delete_quote`, which cascades.
 
 With the Admin group empty, `write` is the ceiling for this vendor, and it
 is a wide ceiling: twelve tools, five of them destructive, one decision.
 
-Conduit has no approval step, no per-call confirmation, and no interactive
-prompt. It compares tiers. Any per-call human approval described below is
-a workflow you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
 ### Where blast radius and tier diverge
 
-The tier column is a mechanical function of `isWrite`/`isAdmin` in
-`VENDOR_TOOL_CONFIG`, not a risk judgement. Three notes on where the two
-part company.
+Three notes on where the two part company.
 
 **`cpq_update_quote` is the plugin's most consequential tool and it sits
 in the plain Write group.** It is the only route to `isSent`, `isAccepted`,
@@ -114,13 +96,7 @@ self-approve deletes.**
 - **Write tools: agent drafts the exact call, human approves, then it
   runs.** Because these move money on the page, have the agent state the
   before and after figures in its proposal, not just the patch body.
-- **Delete tools: require a named human approver per invocation.** Do not
-  grant these to scheduled or unattended agents, and specifically do not
-  let a housekeeping agent hold `cpq_delete_quote` or
-  `cpq_delete_quote_version`. Remember that Conduit cannot enforce this
-  separation for you — a `write` grant already admits them — so it has to
-  live in the agent's own configuration, or in a granular `customTools`
-  grant that lists the seven write tools and omits the five deletes.
+- **Delete tools: require a named human approver per invocation.** Do not grant these to scheduled or unattended agents, and specifically do not let a housekeeping agent hold `cpq_delete_quote` or `cpq_delete_quote_version`.
 - Treat `cpq_update_quote` as belonging to the delete policy rather than
   the write policy whenever a patch touches a status or `orderPorter*`
   field, since that is the operation you cannot walk back.
@@ -166,8 +142,7 @@ self-approve deletes.**
 - `orderPorterPasscode` is the access code for a customer's published
   proposal and is returned by `cpq_get_quote` unless `includeFields`
   excludes it.
-- All of the above are `read`-tier, so a plain `read` grant includes every
-  one of them. Separating them requires a granular `customTools` grant.
+- All of the above are `read`-tier, so a plain `read` grant includes every one of them.
 
 ## Known sharp edges
 
