@@ -16,12 +16,7 @@ Add or remove entries from SpamTitan sender allowlists and blocklists, or review
 Both lists are reached through those two tools. Listing is the tool's own
 `action: "list"` argument — there is no separate list tool.
 
-> **Neither tool takes a `domain` or `scope` parameter.** Their complete input
-> schema is `action` (required: `add` | `remove` | `list`), `sender`, and
-> `note` (`spamtitan-mcp/src/domains/lists.ts:15-79`). An entry added here
-> lands at whatever scope the appliance and API key give it; you cannot confine
-> it to one client from this command. If a client-scoped entry is required, add
-> it in the SpamTitan admin interface.
+An entry added here > lands at whatever scope the appliance and API key give it; you cannot confine > it to one client from this command. If a client-scoped entry is required, add > it in the SpamTitan admin interface.
 
 ## Steps
 

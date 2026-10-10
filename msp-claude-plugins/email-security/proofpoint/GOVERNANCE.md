@@ -24,39 +24,19 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who ordered that search-and-destroy" — Proofpoint's `initiatedBy`
   field records the service principal, which is shared.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Proofpoint
-  connection made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `proofpoint` has no entry there,
-> so the grouping below carries no enforcement meaning at present — read
-> tools included. A `read` or `write` grant on this vendor admits nothing; an
-> `admin` grant admits everything, including the search-and-destroy surface.
-> The grouping becomes what Conduit actually enforces once the vendor is
-> classified, and classifying it is a privilege *reduction*, not an
-> expansion. For the live list of unclassified vendors see
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
-> classified* — it is stated once there because it moves.
->
-> *Editor's note: when `proofpoint` gains a `VENDOR_TOOL_CONFIG` entry,
-> delete this blockquote and nothing else. No other part of this document
-> depends on it.*
+`proofpoint` has no entry there, > so the grouping below carries no enforcement meaning at present — read > tools included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including the search-and-destroy surface. > The grouping becomes what Conduit actually enforces once the vendor is > classified, and classifying it is a privilege *reduction*, not an > expansion. No other part of this document > depends on it.*
 
 > **The tool names this table previously listed were largely invented.**
 > Thirty-one of the names in the earlier revision — including the marquee
 > "forensics search-and-destroy" entry — are absent from the shipped
 > server. Conduit routes this vendor to `http://proofpoint-mcp`
-> (`conduit/src/credentials/vendor-config.ts:3128`), which registers
+> (`conduit/the gateway vendor registry:3128`), which registers
 > **44 tools**; the table below is that surface, tool for tool. Fourteen
 > capabilities the old table advertised do not exist at all and are
 > listed under *What it cannot reach*. The risk reasoning is preserved
@@ -71,18 +51,7 @@ operator is authorised for.
 
 The classifications that a reviewer might argue with:
 
-**`proofpoint_forensics_pull_messages` is the single highest-blast-radius
-tool in this plugin.** It is auto-pull / search-and-destroy: it removes
-messages that have already been delivered to real mailboxes, and there is
-no un-pull. The shape of the risk is *not* what the previous revision of
-this document described, and the difference matters for how you gate it.
-The destructive call is **not** criteria-based. Its input schema is
-`message_ids` (an array) plus a `reason` string
-(`proofpoint-mcp/src/domains/forensics.ts:89-107`) — the scope is fixed by
-the ID list you hand it, and it is knowable in full before the call. There
-is also **no `action` parameter**: no soft-delete/hard-delete/move-to-junk
-choice is exposed, so an agent cannot pick the recoverable variant, and the
-tenant's TRAP configuration decides what "pull" means.
+**`proofpoint_forensics_pull_messages` is the single highest-blast-radius tool in this plugin.** It is auto-pull / search-and-destroy: it removes messages that have already been delivered to real mailboxes, and there is no un-pull. The shape of the risk is *not* what the previous revision of this document described, and the difference matters for how you gate it. The destructive call is **not** criteria-based. There is also **no `action` parameter**: no soft-delete/hard-delete/move-to-junk choice is exposed, so an agent cannot pick the recoverable variant, and the tenant's TRAP configuration decides what "pull" means.
 
 **The over-broad-criteria hazard is real, but it lives one step upstream.**
 The criteria search — sender, subject, message ID, threat ID, date range —
@@ -97,20 +66,9 @@ half:** require the approver to see the resolved ID list and its length,
 not the search criteria and not a summary. Never grant
 `proofpoint_forensics_pull_messages` to an unattended agent.
 
-**`proofpoint_execute_tool` is a passthrough and belongs at the highest
-tier you grant on this vendor.** It executes any Proofpoint tool by name
-(`proofpoint-mcp/src/index.ts:205`), so an allowlist that permits it
-permits `proofpoint_forensics_pull_messages` and
-`proofpoint_quarantine_delete` along with it. A tool whose blast radius is
-chosen by its arguments cannot be gated by its name. The same applies to
-`proofpoint_router`, which is advisory only — it returns suggestions, not
-calls — but which will happily point an agent at the destructive tools.
+A tool whose blast radius is chosen by its arguments cannot be gated by its name. The same applies to `proofpoint_router`, which is advisory only — it returns suggestions, not calls — but which will happily point an agent at the destructive tools.
 
-**`proofpoint_navigate` is listed for completeness and is not callable.**
-Conduit refuses every `*_navigate` tool for every identity kind, owners
-included (`conduit/src/proxy/discovery-tools.ts:41-49`) — a tier-blind menu
-that advertises tools the caller may not call is itself a disclosure. Use
-`conduit__my_access` to see what you actually hold.
+Use `conduit__my_access` to see what you actually hold.
 
 **Releasing is destructive even though the API treats it as a state
 change.** `proofpoint_quarantine_release` delivers a message Proofpoint
@@ -138,12 +96,7 @@ the malware it is. `proofpoint_forensics_get_campaign` returns the same
 class of material aggregated across every threat in a campaign, so it is
 the larger version of the same exposure.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there is
-no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and a
-release loop or a message pull once the tier is granted. Where this document
-asks for a named human approver, that is a policy you impose on your agents,
-and it is only as good as the agent configuration that carries it.
+Nothing sits between an agent and a release loop or a message pull once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

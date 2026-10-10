@@ -24,33 +24,13 @@ operator is authorised for.
   "who sent that reply to the customer". Freshdesk's own activity log
   records only the API key's agent account, so without the gateway every
   action looks like it came from one shared robot.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated in
-  your identity provider is refused on their very next request. A user
-  only removed from the org keeps an already-issued access token for up
-  to an hour, but it reaches only a personal Freshdesk connection made
-  with their own key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires
-> tier `admin` today.** Conduit derives each tool's tier from
-> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
-> anything absent from it:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `freshdesk` has no entry, so
-> the grouping below carries no enforcement weight right now — read tools
-> require `admin` exactly as the rest do, and there is no narrower grant
-> that admits them. The grouping is still the right *risk* reading, and it
-> becomes the enforcement reading on the day this vendor is classified.
-> The list of unclassified vendors moves whenever one of them is
-> classified, so it is stated in one place only:
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified*.
->
-> *This blockquote is the whole of the not-classified caveat. When
-> `freshdesk` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
-> change nothing else.*
+`freshdesk` has no entry, so > the grouping below carries no enforcement weight right now — read tools > require `admin` exactly as the rest do, and there is no narrower grant > that admits them. The grouping is still the right *risk* reading, and it > becomes the enforcement reading on the day this vendor is classified. > > *This blockquote is the whole of the not-classified caveat.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -78,11 +58,7 @@ are worth justifying:
   tickets into breach retrospectively and change what your SLA reports —
   and any contractual credits derived from them — say.
 
-Conduit does not enforce any of that as an approval requirement. It
-compares tiers — it has no approval step, no per-call confirmation, and
-no interactive prompt. Per-call approval is a workflow you impose on your
-agents, and it is only as good as the agent configuration that carries
-it.
+Conduit does not enforce any of that as an approval requirement. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

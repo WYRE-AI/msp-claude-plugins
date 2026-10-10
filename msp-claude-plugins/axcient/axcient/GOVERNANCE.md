@@ -20,16 +20,11 @@ Consequences worth stating plainly:
 - Every call carries operator identity, so Conduit's audit log answers who
   called what. Axcient's own API-side logging is per API key, not per
   technician.
-- Removing a technician's Conduit org membership stops their Axcient access
-  on their next call, because membership is re-read per request. It does
-  **not** revoke an already-issued token, and it does not touch credentials
-  they connected personally. Full offboarding is more than one step — see
-  `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
-
-`axcient-mcp` is deployed in Conduit-prod and all 20 tools are classified in
-`VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`):
 
 | Group | What it can do | Enforcement tier |
 |---|---|---|
@@ -43,17 +38,8 @@ points — but not either mutation.
 
 ### The two tools that are not plain reads
 
-- **`axcient_set_vault_threshold`** — changes a vault's connectivity-loss
-  alert threshold. Not destructive to data, but it changes what technicians
-  and monitoring see as "healthy." Classified `isWrite: true`.
-- **`axcient_get_d2c_agent_token`** — mints a new direct-to-cloud agent
-  enrollment token via `POST`. Classified `isWrite: true, isAdmin: true`:
-  it doesn't touch any already-enrolled agent or existing data, but the
-  token itself is access-granting bearer material (whoever holds it can
-  enroll a new protected system into that vault), the same class as
-  ScalePad's `scalepad_lm_enrollment_tokens_create` — Conduit's
-  tool-naming guard enforces this precedent for any tool whose name
-  contains `token`.
+- **`axcient_set_vault_threshold`** — changes a vault's connectivity-loss alert threshold.
+- **`axcient_get_d2c_agent_token`** — mints a new direct-to-cloud agent enrollment token via `POST`.
 
 The remaining 18 tools (`axcient_test_connection`, `axcient_get_organization`,
 `axcient_list_clients`, `axcient_get_client`, `axcient_list_devices`,
@@ -67,10 +53,7 @@ no mutating side effects, classified `read`.
 
 ### Conduit has no approval step
 
-Conduit compares tiers; it has no per-call confirmation and no interactive
-prompt. The per-call approval discipline below is a workflow you impose on
-your own agents — it is only as good as the agent configuration that
-carries it.
+The per-call approval discipline below is a workflow you impose on your own agents — it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -86,10 +69,6 @@ self-approve mutations**.
   Conduit already, on top of any agent-side confirmation discipline —
   treat minting an enrollment token with the same care as any other
   bearer-credential mint.
-- If you need to grant a technician the read surface without either
-  mutation, Conduit's `read` tier already does this — a granular
-  `customTools` allowlist is only needed if you want to carve out a
-  subset of the 18 reads.
 
 ## What it cannot reach
 

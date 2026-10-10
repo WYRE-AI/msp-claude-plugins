@@ -26,11 +26,7 @@ operator is authorised for.
   every technician. Note that Conduit records *who called what*, never
   with what arguments — argument capture is off unconditionally, which for
   a `script_id` is exactly the field you would want.
-- Removing a technician's Conduit org membership stops their Automate
-  access on their next call, because membership is re-read per request. It
-  does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than one
-  step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
 
 Automate is usually an on-premise or hosted-per-partner server rather than
 a multi-tenant SaaS. Centralising auth at Conduit matters more here than
@@ -38,13 +34,11 @@ for a SaaS vendor: without it, integrator credentials to a server that can
 execute code on every managed endpoint end up pasted into technician
 environments.
 
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
+
 ## Tool permission groups
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin
-— so these are the buckets an owner actually clicks. Enforcement knows
-only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
-— `src/access/permission-tier.ts:27`. All 17 tools below are classified in
-`VENDOR_TOOL_CONFIG` under the slug `connectwise-automate`.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -53,39 +47,15 @@ only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
 | **Delete** | **Empty.** This plugin exposes no delete tool. | `write` — **not** a tier of its own | *(none)* |
 | **Admin** | Runs operator-chosen code on customer production endpoints. | `admin` | `cwautomate_scripts_execute`, `cwautomate_computers_run_script` |
 
-† `cwautomate_navigate` is classified `read`, but Conduit refuses it for
-**everyone** — owners and personal connections included — before any tier
-check runs (`src/proxy/discovery-tools.ts:48`,
-`src/proxy/tool-call-enforcement.ts:125`). It answers with the container's
-full domain tool list and the sentence "You can call any of these tools
-directly", which is false behind a gateway that filters by tier. This
-plugin's own history is the reason the suppression exists: an admin saw
-six write/admin-tier `cwautomate` tools advertised by `cwautomate_navigate`,
-called them, and got "not found". Use `conduit__my_access` for the
-tier-true answer. `cwautomate_status` is deliberately kept — it reports
-credential health and enumerates nothing.
+It answers with the container's full domain tool list and the sentence "You can call any of these tools directly", which is false behind a gateway that filters by tier. This plugin's own history is the reason the suppression exists: an admin saw six write/admin-tier `cwautomate` tools advertised by `cwautomate_navigate`, called them, and got "not found". Use `conduit__my_access` for the tier-true answer. `cwautomate_status` is deliberately kept — it reports credential health and enumerates nothing.
 
-**The Delete row being empty changes nothing about what `write` grants.**
-Delete is a presentation group, and a delete-group tool compiles to and
-enforces at tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`). For this vendor there is no delete tool for
-that rule to apply to — but the rule that matters here is the same shape:
-**granting a technician `write` for Automate grants them
-`cwautomate_computers_reboot` along with the three record-edit tools.**
-There is no setting that separates them. The only way to admit alert
-acknowledgement and client edits without admitting reboot is a granular
-per-tool grant, which compiles to an explicit `customTools` allowlist.
+For this vendor there is no delete tool for that rule to apply to — but the rule that matters here is the same shape: **granting a technician `write` for Automate grants them `cwautomate_computers_reboot` along with the three record-edit tools.** There is no setting that separates them.
 
-Conduit has no approval step, no per-call confirmation, and no interactive
-prompt. It compares tiers. Any per-call human approval described below is
-a workflow you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### Blast radius and tier do not line up here, in both directions
 
-The tier column is a mechanical function of `isWrite`/`isAdmin` in
-`VENDOR_TOOL_CONFIG`. It is not a risk judgement, and for this plugin the
-two diverge at two specific tools.
+It is not a risk judgement, and for this plugin the two diverge at two specific tools.
 
 **`cwautomate_scripts_execute` and `cwautomate_computers_run_script` are
 `admin`, and they are the sharpest tools in this plugin.** Here the tier
@@ -122,13 +92,7 @@ self-approve an endpoint action.**
 
 - **Read tools: allow.** Fleet health sweeps, offline/patch/disk reporting
   and alert triage across clients are the intended autonomous use.
-- **Write tools: agent drafts the exact call, human approves, then it
-  runs.** Treat `cwautomate_computers_reboot` as the exception inside this
-  group: it belongs to the endpoint-action policy below even though it
-  carries the same tier as an alert acknowledgement. Remember that Conduit
-  cannot enforce that separation for you — a `write` grant already admits
-  it — so it has to live in the agent's own configuration, or in a
-  granular `customTools` grant that omits it.
+- **Write tools: agent drafts the exact call, human approves, then it runs.** Treat `cwautomate_computers_reboot` as the exception inside this group: it belongs to the endpoint-action policy below even though it carries the same tier as an alert acknowledgement.
 - **Admin tools: treat the grant as equivalent to full Automate
   administrator**, because for a script-execution tool that is exactly
   what it is. The approver needs the script's actual content and the

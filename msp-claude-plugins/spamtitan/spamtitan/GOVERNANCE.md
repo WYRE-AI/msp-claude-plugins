@@ -20,33 +20,13 @@ operator is authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers
   "who allowlisted that domain" — SpamTitan records only the API key.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal SpamTitan connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `spamtitan` has no entry there, so
-> the grouping below carries no enforcement meaning at present — read tools
-> included. A `read` grant on this vendor admits nothing; an `admin` grant
-> admits everything, including `spamtitan_delete_message`. The grouping
-> becomes what Conduit actually enforces once the vendor is classified, and
-> classifying it is a privilege *reduction*, not an expansion. For the live
-> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
-> *Fail-closed, and the vendors Conduit has not classified* — it is stated
-> once there because it moves.
->
-> *Editor's note: when `spamtitan` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+`spamtitan` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` grant on this vendor admits nothing; an `admin` grant > admits everything, including `spamtitan_delete_message`. The grouping > becomes what Conduit actually enforces once the vendor is classified, and > classifying it is a privilege *reduction*, not an expansion. No other part of this document depends on > it.*
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -87,12 +67,7 @@ reading, and its practical consequence is that **there is no read-only view
 of either sender list**: anyone granted enough to list the blocklist is
 granted enough to add to it.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there
-is no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and a
-quarantine delete once the tier is granted. Where this document asks for a
-named human approver, that is a policy you impose on your agents, and it
-is only as good as the agent configuration that carries it.
+Nothing sits between an agent and a quarantine delete once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -152,10 +127,7 @@ self-approve destructive calls.**
   not tenant-scoped.** This is a tenant-isolation property of the connector,
   not a usage tip, and it is the sharpest thing in this document.
 
-  The tool's shipped input schema is exactly `page`, `per_page`, `sender`,
-  `recipient`, `subject`, `reason`
-  (`spamtitan-mcp/src/domains/quarantine.ts:21-53`). Earlier revisions of this
-  plugin's skills documented a `domain` parameter. There is none.
+Earlier revisions of this plugin's skills documented a `domain` parameter. There is none.
 
   On a multi-tenant appliance that means an operator who asks for "customer
   X's quarantine" receives **the appliance-wide queue, across every tenant**.
@@ -165,34 +137,9 @@ self-approve destructive calls.**
   is scoped only by `message_id`, so a cross-tenant listing leads directly to
   a cross-tenant action on mail belonging to a customer nobody was looking at.
 
-  The asymmetry is what makes this easy to miss: the sibling
-  `spamtitan_get_stats` **does** accept `domain`
-  (`spamtitan-mcp/src/domains/stats.ts:28-31`), so a reader who has just
-  scoped statistics to one customer reasonably assumes the queue beside it
-  behaves the same way. It does not.
+It does not.
 
-  There is no workaround the server can perform. Use `recipient` filters
-  deliberately, treat every listing as cross-tenant until narrowed, never let
-  an agent act on "the first result" from an unfiltered listing, and never
-  label an unfiltered listing as one customer's quarantine.
-- **Virus-quarantined messages refuse to release.** SpamTitan blocks it
-  server-side. Treat a release failure on a virus item as the control
-  working, not as an error to route around.
-- **Deleted means gone.** There is no soft delete and no retention
-  fallback once the message is removed from quarantine storage.
-- **The retention window is a deadline.** Quarantined mail is purged
-  automatically after the configured period, typically 30 days. A
-  false positive nobody reviewed in time is unrecoverable, and its
-  absence looks identical to a message that never arrived.
-- **Listing is an argument, not a tool — and that changes what a grant
-  buys.** Earlier revisions of the skills named three tools that do not
-  exist — a list-allowlist tool, a list-blocklist tool, and a
-  get-domain-stats tool. There is no separate tool for any of the three.
-  Reading a sender list is `action: "list"` on
-  `spamtitan_manage_allowlist` / `spamtitan_manage_blocklist`
-  (`spamtitan-mcp/src/domains/lists.ts:15-79`), and per-domain statistics
-  are the `domain` argument on `spamtitan_get_stats`. The tool names in this
-  document are the real ones and are what to tier.
+There is no workaround the server can perform. Use `recipient` filters deliberately, treat every listing as cross-tenant until narrowed, never let an agent act on "the first result" from an unfiltered listing, and never label an unfiltered listing as one customer's quarantine. - **Virus-quarantined messages refuse to release.** SpamTitan blocks it server-side. Treat a release failure on a virus item as the control working, not as an error to route around. - **Deleted means gone.** There is no soft delete and no retention fallback once the message is removed from quarantine storage. - **The retention window is a deadline.** Quarantined mail is purged automatically after the configured period, typically 30 days. A false positive nobody reviewed in time is unrecoverable, and its absence looks identical to a message that never arrived. - **Listing is an argument, not a tool — and that changes what a grant buys.** Earlier revisions of the skills named three tools that do not exist — a list-allowlist tool, a list-blocklist tool, and a get-domain-stats tool. There is no separate tool for any of the three. The tool names in this document are the real ones and are what to tier.
 
   The consequence for tiering is above, under *Why each of the four is
   destructive*: because reading a list means calling the tool that can also

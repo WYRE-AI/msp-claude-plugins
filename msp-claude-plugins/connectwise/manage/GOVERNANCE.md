@@ -23,19 +23,13 @@ is authorised for.
   API member the integration authenticates as, so without Conduit every
   agent action looks like one shared robot. Conduit records *who called
   what*, never with what arguments.
-- Removing a technician's Conduit org membership stops their PSA access on
-  their next call, because membership is re-read per request. It does
-  **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than one
-  step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin
-— so these are the buckets an owner actually clicks. Enforcement knows
-only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
-— `src/access/permission-tier.ts:27`. All 51 tools below are classified in
-`VENDOR_TOOL_CONFIG` under the slug `connectwise-psa`.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -44,20 +38,9 @@ only three tiers, `read`, `write` and `admin` (plus `none`, meaning deny)
 | **Delete** | **Empty.** This plugin exposes no delete tool. | `write` — **not** a tier of its own | *(none)* |
 | **Admin** | **Empty.** No passthrough, dispatcher, or org-level tool in this surface. | `admin` | *(none)* |
 
-**Two of the four groups are empty, which makes this vendor's grant model
-unusually blunt.** There is no delete tool for the delete-group rule to
-apply to, and no admin tool to hold back — so for ConnectWise PSA the
-whole access editor collapses to one real decision: `read`, or `write`.
-**Granting `write` grants all twelve write tools at once**, including the
-two that reach the customer. There is no tier between them. The only way
-to admit ticket creation and notes without admitting ticket closure and
-time entries is a granular per-tool grant, which compiles to an explicit
-`customTools` allowlist rather than a tier.
+**Two of the four groups are empty, which makes this vendor's grant model unusually blunt.** There is no delete tool for the delete-group rule to apply to, and no admin tool to hold back — so for ConnectWise PSA the whole access editor collapses to one real decision: `read`, or `write`. There is no tier between them.
 
-Conduit has no approval step, no per-call confirmation, and no interactive
-prompt. It compares tiers. Any per-call human approval described below is
-a workflow you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+It compares tiers. Any per-call human approval described below is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### This plugin exposes no delete tool. That is not the same as being safe.
 
@@ -96,13 +79,7 @@ self-approve a customer-visible change.**
 - **Write tools: agent drafts the exact call, human approves, then it
   runs.** Pay particular attention to `cw_add_ticket_note` — see sharp
   edges.
-- **Inside the write group, treat `cw_update_ticket` and
-  `cw_create_time_entry` as requiring a named human approver per
-  invocation.** Do not let a nightly "close stale tickets" agent hold
-  `cw_update_ticket`. Conduit cannot enforce this separation for you — a
-  `write` grant already admits both — so it has to live in the agent's own
-  configuration, or in a granular `customTools` grant that lists the write
-  tools you actually meant.
+- **Inside the write group, treat `cw_update_ticket` and `cw_create_time_entry` as requiring a named human approver per invocation.** Do not let a nightly "close stale tickets" agent hold `cw_update_ticket`.
 - For unattended work, prefer a `read` grant and a human in the loop for
   anything that writes. A service client with a `write` grant on this
   vendor can close tickets and bill customers.
@@ -130,12 +107,7 @@ self-approve a customer-visible change.**
 - `cw_search_contacts` / `cw_get_contact` return customer PII (names,
   email addresses, direct phone numbers, portal login state).
   `cw_search_members` / `cw_get_member` return your own staff records.
-- `cw_get_invoice`, `cw_search_invoices`, `cw_get_agreement` and
-  `cw_get_agreement_additions` return commercial terms — contract rates,
-  margins and MRR. Restrict these if your agents run unattended or if
-  transcripts are shared beyond the finance team. Because these are all
-  `read`-tier, a plain `read` grant includes them; separating them needs a
-  granular `customTools` grant.
+- `cw_get_invoice`, `cw_search_invoices`, `cw_get_agreement` and `cw_get_agreement_additions` return commercial terms — contract rates, margins and MRR. Restrict these if your agents run unattended or if transcripts are shared beyond the finance team.
 
 ## Known sharp edges
 

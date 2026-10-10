@@ -28,27 +28,13 @@ mode where the API token sits in the technician's Claude settings. That
 mode gives up all four properties above, and it matters more here than
 for most vendors because of `superops_custom_mutation` (below).
 
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
+
 ## Tool permission tiers
 
 Grouped by blast radius, not HTTP verb.
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `superops` has no entry there, so
-> the grouping below carries no enforcement meaning at present — read tools
-> included. A `read` or `write` grant on this vendor admits nothing; an
-> `admin` grant admits everything, including `superops_custom_mutation`. The
-> grouping becomes what Conduit actually enforces once the vendor is
-> classified, and classifying it is a privilege *reduction*, not an
-> expansion. For the live list of unclassified vendors see
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has not
-> classified* — it is stated once there because it moves.
->
-> *Editor's note: when `superops` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+`superops` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including `superops_custom_mutation`. The > grouping becomes what Conduit actually enforces once the vendor is > classified, and classifying it is a privilege *reduction*, not an > expansion. No other part of this document depends on > it.*
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -77,12 +63,7 @@ the API calls it.
 can read anything the token can see, including entities no typed tool
 surfaces. It is the exfiltration path, not the damage path.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there
-is no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and an
-arbitrary GraphQL mutation once the tier is granted. Where this document
-asks for a named human approver, that is a policy you impose on your
-agents, and it is only as good as the agent configuration that carries it.
+Nothing sits between an agent and an arbitrary GraphQL mutation once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -119,9 +100,7 @@ self-approve destructive calls.**
   `superops_assets_*` returns hostnames, IP and MAC addresses, serial
   numbers, installed software, and per-asset missing-patch lists — a
   ready-made target list. Restrict these if agents run unattended.
-- `superops_custom_query` can return any object in the schema,
-  including ones with no typed tool and therefore no review above. Its
-  output should be treated as unclassified until a human looks at it.
+- `superops_custom_query` can return any object in the schema, including ones with no typed tool and therefore no review above.
 
 ## Known sharp edges
 

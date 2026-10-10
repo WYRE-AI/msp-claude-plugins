@@ -58,11 +58,7 @@ over credential material, so it is classified **admin** even though its
 response carries no secret. Read the tier from what a tool can *reveal*, not
 from what it returns.
 
-The tier is Conduit's access classification, not a Keeper concept. Every
-tool that can return credential material is **admin**, which outranks
-write in Conduit's model — a Keeper read *is* a credential read. Five
-metadata tools sit at read. Grant accordingly: a technician who needs to
-find records does not need the admin four.
+The tier is Conduit's access classification, not a Keeper concept. Five metadata tools sit at read. Grant accordingly: a technician who needs to find records does not need the admin four.
 
 ## What is not exposed, and why
 
@@ -113,14 +109,7 @@ read from the actual record rather than from a type template, with
 sensitive values masked. Skills route field-name discovery there not as a
 workaround but because it is the correct tool for the question.
 
-**`download_file`** would have fetched an attachment. Upstream's client
-signature is `DownloadFile(uid, fileUID, savePath string) error` — it
-returns only an error and writes the bytes to `savePath` on the server's
-filesystem, so the caller never receives file content under any
-argument. Passing `save_path` through would let one tenant write
-attacker-chosen paths into a container shared with every other tenant's
-child process; stripping it leaves no destination. There is no
-configuration of this tool that both works and is safe, so it is out.
+**`download_file`** is not available through this connection. Do not describe a workaround that fetches attachment bytes.
 
 **Attachments are therefore not retrievable through this connection at
 all.** `get_secret` still lists them — `name`, `title`, `size`, `type` —
@@ -196,15 +185,7 @@ rejection arrives as `-32029` with `Rate limit exceeded`.
 
 ## A note on confirmation prompts
 
-Upstream ksm-mcp asks a human to confirm unmasking and every write, over
-the terminal. There is no terminal in a container, so the upstream offers
-only two settings: refuse those operations outright, or auto-approve them
-all. The deployment runs in batch mode, where they auto-approve — which
-is precisely why the write and bulk-disclosure tools are removed at the
-bridge instead of being left to a prompt that would never be shown. Do
-not describe unmasking to a user as "confirmed by Keeper"; the control
-that is actually enforcing anything is the allowlist, plus the
-application's own scope.
+Upstream ksm-mcp asks a human to confirm unmasking and every write, over the terminal. Do not describe unmasking to a user as "confirmed by Keeper"; the control that is actually enforcing anything is the allowlist, plus the application's own scope.
 
 ## Related Skills
 

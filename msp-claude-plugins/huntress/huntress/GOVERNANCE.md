@@ -18,34 +18,18 @@ operator is authorised for.
 - Every call carries operator identity, so Conduit's audit log answers
   "who approved this remediation" — Huntress's own log records only the
   API account. It records *who called what*, never with what arguments.
-- Removing a technician's Conduit org membership stops their Huntress
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
 
 ## Tool permission groups
-
-These are the four groups Conduit's access editor presents, with the
-enforcement tier each one actually compiles to. Every tier below is read
-from `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`, the `huntress`
-block), which `src/access/tool-classification.ts:4` declares the single
-source of truth. The convention is `isAdmin → admin` (outranks),
-`isWrite → write`, neither → `read` (`tool-classification.ts:33-38`).
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
 | **Read** | Cannot change Huntress or endpoint state. Safe for autonomous agents. | `read` | `huntress_accounts_get`, `huntress_accounts_actor`, `huntress_agents_list`, `huntress_agents_get`, `huntress_incidents_list`, `huntress_incidents_get`, `huntress_incidents_remediations`, `huntress_incidents_remediation_get`, `huntress_signals_list`, `huntress_signals_get`, `huntress_escalations_list`, `huntress_escalations_get`, `huntress_organizations_list`, `huntress_organizations_get`, `huntress_users_list`, `huntress_users_get`, `huntress_billing_reports_list`, `huntress_billing_reports_get`, `huntress_summary_reports_list`, `huntress_summary_reports_get`, `huntress_status` |
 | **Write** | Changes Huntress-side records — **and instructs Huntress to act on customer endpoints.** | `write` | `huntress_incidents_resolve`, `huntress_escalations_resolve`, `huntress_organizations_create`, `huntress_organizations_update`, `huntress_incidents_bulk_approve`, `huntress_incidents_bulk_reject` |
-| **Delete** | *Empty for this vendor.* Huntress's two delete tools are `isAdmin`, so they sit in the Admin row rather than here. | `write` — **not a tier of its own** | *None.* |
+| **Delete** |confirm the live grant|`write`| *None.* |
 | **Admin** | Creates, changes, or removes people and organizations in the Huntress account itself. | `admin` | `huntress_users_create`, `huntress_users_update`, `huntress_users_delete`, `huntress_organizations_delete` |
 
-One tool shipped by the server is absent from the table. `huntress_navigate`
-is classified `read` but is refused for every caller — owners and personal
-connections included — by Conduit's discovery-tool suppression gate
-(`src/proxy/tool-call-enforcement.ts:125-130`). Nothing else this plugin
-documents is missing from `VENDOR_TOOL_CONFIG`, so no Huntress tool falls
-through to the unclassified-to-`admin` coercion.
+One tool shipped by the server is absent from the table.
 
 ### The Write row is the one to read twice
 
@@ -56,15 +40,7 @@ the endpoint (terminate processes, remove persistence, isolate the host).
 The blast radius is the customer's production machine, and `bulk_` means
 it lands across many at once.
 
-Conduit's reasoning for `write` is stated in the source
-(`result-cache.ts:824-831`): the call acts on the Huntress-authored
-remediation plan for one incident, so the effect is bounded tenant-side
-and carries no operator-supplied code, which keeps it outside the
-arbitrary-execution class that pins tools to `admin`. That is a
-defensible mechanical judgement. It does not change the operational one:
-**anyone holding `write` on Huntress can order endpoint remediation
-across a customer's fleet, with no further gate.** If that is not what you
-meant by "write", use a granular per-tool selection.
+That is a defensible mechanical judgement. It does not change the operational one: **anyone holding `write` on Huntress can order endpoint remediation across a customer's fleet, with no further gate.** If that is not what you meant by "write", use a granular per-tool selection.
 
 `huntress_incidents_bulk_reject` is the same tier for the same reason,
 and rejection is not undo — see *Known sharp edges*.
@@ -75,32 +51,11 @@ The provisioning split runs the other way and is worth noticing:
 family are `admin`. Adding a Huntress user is an `admin` action here even
 though it reads like a routine write.
 
-### What a `write` grant includes
-
-Conduit's enforcement tiers are only `read`, `write` and `admin`, plus
-`none` meaning deny (`src/access/permission-tier.ts:27`). "Delete" is a
-presentation group in the access editor, and a delete-group tool compiles
-to and enforces at tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`). So granting a technician `write` on a vendor
-also grants every tool in that vendor's delete group, and the only way to
-admit some write tools but not the delete ones is a granular per-tool
-selection, which compiles to an explicit `customTools` allowlist.
-
-For Huntress that group is empty, so the mechanism is not what bites here
-— the Write row is. A `write` grant on Huntress admits exactly the six
-tools listed above, `huntress_incidents_bulk_approve` among them. It does
-**not** admit `huntress_users_delete` or `huntress_organizations_delete`;
-those need `admin`.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ### There is no per-call approval step
 
-Conduit compares tiers. It has no approval mechanism, no per-call
-confirmation, and no elicitation anywhere in the request path — see
-`wyre-gateway/GOVERNANCE.md`, *The tier model*. An earlier revision of
-this document said destructive tools "require explicit per-call human
-approval"; nothing enforced that sentence, and it has been removed rather
-than softened. Per-call approval is a workflow you impose on your agents,
-and it is only as good as the agent configuration that carries it.
+An earlier revision of this document said destructive tools "require explicit per-call human approval"; nothing enforced that sentence, and it has been removed rather than softened. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -110,12 +65,7 @@ self-approve a remediation.**
 - Read tools: allow. Cross-tenant triage sweeps and reporting are the
   intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- `huntress_incidents_bulk_approve` / `huntress_incidents_bulk_reject`:
-  require a named human approver per invocation and do not grant them to
-  scheduled or unattended agents. Conduit cannot enforce that separation
-  for you — a `write` grant already admits both — so it has to live in
-  the agent's own configuration, or in a granular grant whose
-  `customTools` list leaves them out.
+- `huntress_incidents_bulk_approve` / `huntress_incidents_bulk_reject`: require a named human approver per invocation and do not grant them to scheduled or unattended agents.
 - Admin tools: treat the grant as equivalent to full Huntress account
   administrator. It is the only tier that can delete an organization or a
   user, and it also unlocks every write tool beneath it.

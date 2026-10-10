@@ -111,12 +111,6 @@ multiple clients.
   There is no gateway-side allowlist granularity for this vendor — `exec`
   is reachable or it isn't, and naming it in an allowlist is the same as
   granting `admin`. See [GOVERNANCE.md](../../GOVERNANCE.md).
-- **`posthog` is not yet classified in Conduit's `VENDOR_TOOL_CONFIG`,
-  and classifying it would not add tool-family granularity either** — it
-  would only let Conduit require a coarse tier floor before `exec` is
-  reachable at all. See [GOVERNANCE.md](../../GOVERNANCE.md), *Tool
-  permission tiers*, and `wyre-gateway/GOVERNANCE.md` for the mechanism
-  this depends on.
 - **A key from the wrong PostHog organization doesn't error — it just
   returns that org's data.** If results look implausibly empty or
   unfamiliar, check which organization the connected key actually belongs

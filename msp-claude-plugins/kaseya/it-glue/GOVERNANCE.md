@@ -20,18 +20,11 @@ operator is authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers
   "who read this password" — IT Glue's own log records only the API key.
-- Removing a technician's Conduit org membership stops their IT Glue
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
-
-IT Glue is classified in Conduit's `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`) under the slug **`itglue`** — no hyphen,
-unlike the plugin directory name. All 24 tools are classified; none fall
-through to the unclassified-means-`admin` rule.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -40,22 +33,7 @@ through to the unclassified-means-`admin` rule.
 | **Delete** | Removes documentation, irreversibly or near-irreversibly. | `write` — **not** a tier of its own | `delete_document_section`, `archive_document` |
 | **Admin** | Reads stored credentials, or the list of them. | `admin` | `get_password`, `search_passwords` |
 
-**The Delete row is the one to read twice.** Conduit's enforcement tiers
-are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
-the access editor, and a delete-group tool compiles to and enforces at
-tier `write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
-So **granting a technician `write` on IT Glue also grants
-`archive_document` and `delete_document_section`.** There is no setting
-that separates them; the only way to admit the document-editing tools
-but not the removals is a granular per-tool grant, which compiles to an
-explicit `customTools` allowlist.
-
-Conduit compares tiers. It has no approval step, no per-call
-confirmation, and no interactive prompt — its source contains no
-elicitation handling at all. Per-call approval for anything below is a
-policy you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Per-call approval for anything below is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### The delete group, and why its two members are unequal
 
@@ -74,11 +52,6 @@ IT Glue admits it.
 
 ## The password tools enforce at `admin`
 
-Both password tools are read-only against IT Glue, so an
-`isWrite`-based reading would put them in the Read group. Conduit
-overrides that and classifies both `isAdmin`, because a credential read
-is a credential read:
-
 - `search_passwords` returns **metadata only** — names, categories,
   usernames, and IDs. No secret values. It is still `admin`: the
   username-plus-system list is a complete target list on its own.
@@ -86,13 +59,7 @@ is a credential read:
   pins its cache TTL to zero so the plaintext is never held in the
   result cache.
 
-This is the one place the mechanical tier is *stricter* than a naive
-read/write reading, and it is the right call. The consequence for
-operators: a technician granted `read` or even `write` on IT Glue cannot
-call either password tool. Granting `admin` to reach them also grants
-every other tool on this vendor, including the deletes. If you want the
-password tools without the deletes, that is a per-tool `customTools`
-allowlist.
+This is the one place the mechanical tier is *stricter* than a naive read/write reading, and it is the right call. The consequence for operators: a technician granted `read` or even `write` on IT Glue cannot call either password tool. Granting `admin` to reach them also grants every other tool on this vendor, including the deletes.
 
 Regardless of tier, assume anything `get_password` returns is exposed
 for the life of the session, and do not grant it to scheduled or
@@ -115,10 +82,7 @@ self-approve deletes.**
 - Read tools: allow, with `search_flexible_assets` reviewed separately
   for the reason above.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Delete tools: require a named human approver per invocation. Remember
-  that Conduit cannot enforce this separation for you — a `write` grant
-  already admits both — so it has to live in the agent's own
-  configuration, or in a per-tool `customTools` allowlist.
+- Delete tools: require a named human approver per invocation.
 - Admin tools: `get_password` and `search_passwords` sit here, and
   granting `admin` to reach them grants everything else on the vendor
   too. Prefer a per-tool grant to an interactive operator who is already
@@ -137,17 +101,9 @@ self-approve deletes.**
 
 ## Tool names are unprefixed, and the vendor slug is not the plugin name
 
-Unlike every sibling plugin in this family, IT Glue's tools carry no
-vendor prefix — `create_document`, not `itglue_create_document`. When
-writing allowlists, denylists, or audit queries, match on the exact
-names above; a rule keyed on an `itglue_` prefix will match only
-`itglue_health_check` and silently permit everything else. This matters
-most for a per-tool `customTools` allowlist, which is the only mechanism
-that can separate the delete tools from the rest of the write group.
+Unlike every sibling plugin in this family, IT Glue's tools carry no vendor prefix — `create_document`, not `itglue_create_document`. When writing allowlists, denylists, or audit queries, match on the exact names above; a rule keyed on an `itglue_` prefix will match only `itglue_health_check` and silently permit everything else.
 
-Two names are in play and they differ. The marketplace plugin is
-`it-glue`; Conduit's vendor slug in `VENDOR_TOOL_CONFIG` is `itglue`.
-Look the vendor up under `itglue` when checking classification.
+Two names are in play and they differ. Look the vendor up under `itglue` when checking classification.
 
 ## Tool surface is narrower than the skills
 

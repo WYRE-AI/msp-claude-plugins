@@ -17,7 +17,7 @@ Three findability gaps on the docs site:
 - **Framework:** plain Astro 5 + Tailwind. No Starlight, no content collections, no rehype/remark heading plugins. `global.css` already sets `html { scroll-behavior: smooth }`.
 - **Top nav** is a `navLinks` array in `docs/src/components/Header.astro`. The mobile slide-out uses a **separate** `sidebarSections` array in the same file (currently omits Security and any Connections entry).
 - **Connections catalog** (`/plugins/`) is generated: `docs/scripts/generate-plugins.ts` reads `.claude-plugin/marketplace.json` (63 plugins, each with `name/source/description/version/category/tags`) and writes `docs/src/data/plugins.ts` (`// Auto-generated — do not edit manually`). Homepage and sidebar both consume this array, so counts stay in sync.
-- **The gateway table** (`getting-started/gateway.astro`, `<h2 id="supported-vendors">`, ~19 rows of Vendor → tool prefix) is hand-maintained. Its true source of truth is **not** in this repo — the hosted gateway's supported vendors live in `vendor-config.ts` in the separate `mcp-gateway` repo. `marketplace.json` has **no gateway flag and no tool-prefix data**, so this table cannot be regenerated from it.
+- **The gateway table** (`getting-started/gateway.astro`, `<h2 id="supported-vendors">`, ~19 rows of Vendor → tool prefix) is hand-maintained. Its true source of truth is **not** in this repo — the hosted gateway's supported vendors live in the gateway vendor registry in the separate `mcp-gateway` repo. `marketplace.json` has **no gateway flag and no tool-prefix data**, so this table cannot be regenerated from it.
 
 ## Goals
 
@@ -30,7 +30,7 @@ Three findability gaps on the docs site:
 - No "On this page" / TOC component, no scroll-spy.
 - No rehype/remark build plugin (would only help `.md`/`.mdx`, of which there are none).
 - No route renames (`/plugins/` stays `/plugins/`; renaming would break existing links + SEO).
-- No cross-repo pipeline to export `vendor-config.ts` from `mcp-gateway` into the docs build. A truly authoritative hosted-vendor list would need that; out of scope. The `/plugins/` catalog already gives users the list they need.
+- No cross-repo pipeline to export the gateway vendor registry from `mcp-gateway` into the docs build. A truly authoritative hosted-vendor list would need that; out of scope. The `/plugins/` catalog already gives users the list they need.
 
 ## Design
 

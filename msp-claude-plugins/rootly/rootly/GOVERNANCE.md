@@ -22,13 +22,9 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who declared that incident". Rootly's own log attributes actions to
   the token, so a shared Global token makes every declaration anonymous.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Rootly connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -43,31 +39,11 @@ disagreement is not cosmetic.
 |---|---|---|
 | This plugin's `GOVERNANCE.md` (before this revision) | domain-then-verb, `rootly_` prefixed | `rootly_incidents_list` |
 | This plugin's skills, agents, and commands | verb-then-domain, `rootly_` prefixed | `rootly_list_alerts` |
-| Conduit's `VENDOR_TOOL_CONFIG` | unprefixed, generated from Rootly's OpenAPI spec | `list_alerts` |
+|confirm the live grant| unprefixed, generated from Rootly's OpenAPI spec | `list_alerts` |
 
-The first scheme is the WYRE-built `rootly-mcp` sidecar's surface. **Conduit
-does not route to it.** `src/credentials/vendor-config.ts` sets
-`containerUrl: "https://mcp.rootly.com"` with `mcpPath: "/sse"` — Rootly's
-own first-party hosted server — and `VENDOR_TOOL_CONFIG` is keyed to that
-server's 251 generated tool names. The second scheme matches nothing at all;
-it appears only in this plugin's own prose.
+The first scheme is the WYRE-built `rootly-mcp` sidecar's surface. The second scheme matches nothing at all; it appears only in this plugin's own prose.
 
-The consequence: **not one tool name this plugin documents or references
-appears in `VENDOR_TOOL_CONFIG`.** Conduit is fail-closed per tool, not per
-vendor — the enforcement gate coerces an unclassified tool to the highest
-tier, `const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). So every `rootly_*` name would
-require tier `admin`, read tools included, if it were reachable at all.
-
-### It is not currently reachable at all
-
-Conduit marks this vendor `hidden: true` as of 2026-07-31
-(`src/credentials/vendor-config.ts`, conduit#1202). Rootly is the only
-vendor in the fleet on the legacy HTTP+SSE transport; Conduit's proxy
-implements only Streamable HTTP, and POSTing to an SSE-only `GET` endpoint
-returns 405 — confirmed live in production, not just staging. The vendor is
-pulled from the catalog until the proxy grows SSE support or Rootly is
-confirmed to also serve Streamable HTTP.
+This vendor is not currently reachable through the gateway. Confirm availability in the access editor before relying on these tools.
 
 **So there is no correct tier table to write for the tool names this plugin
 uses.** What follows is Conduit's classification of the upstream it *does*
@@ -98,27 +74,11 @@ Two things in that table are worth an owner's attention:
 
 ### The Delete row, stated anyway
 
-The Delete group is empty here, but the general rule is the one readers most
-often get wrong, so it belongs on the page. Conduit's enforcement tiers are
-only `read`, `write` and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. "Delete" is a presentation group in the
-access editor and compiles to and enforces at tier `write`
-(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`). On any vendor
-that does have delete tools, **granting `write` grants every one of them**,
-and only a granular per-tool `customTools` allowlist separates them.
+The Delete group is empty here, but the general rule is the one readers most often get wrong, so it belongs on the page.
 
-Conduit compares tiers. It has **no approval step, no per-call confirmation,
-and no elicitation.** Nothing at the gateway will pause an agent before it
-declares an incident and pages a human. Per-call approval is a policy you
-impose on your agents, and it is only as good as the agent configuration that
-carries it.
+Per-call approval is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
-`rootly_navigate` and `rootly_back` appeared in the previous revision's Read
-tier and are gone from this one. Conduit refuses every `*_navigate` and
-`*_back` tool before any tier check, for every caller including org owners
-and personal connections (`src/proxy/tool-call-enforcement.ts:123-129`,
-`src/proxy/discovery-tools.ts:41-50`); `conduit__my_access` replaces them.
-`*_status` is deliberately kept.
+`rootly_navigate` and `rootly_back` appeared in the previous revision's Read tier and are gone from this one. `*_status` is deliberately kept.
 
 ### Where the mechanical tier disagrees with the judgement
 
@@ -150,12 +110,7 @@ equivalents (`create_incident`, `create_alert`, `update_incident`,
   surface exposes no team-delete tool, so this is currently unreachable
   rather than merely ungated.
 
-None of these distinctions is expressible as a Conduit grant. Conduit's
-policy matches on tool name only and never inspects arguments —
-`ToolCallGateInput` has no `arguments` field
-(`src/proxy/tool-call-enforcement.ts:69-79`) — so "may update an incident's
-title, may not resolve it" cannot be configured. It has to live in the
-agent's own configuration.
+None of these distinctions is expressible as a Conduit grant. It has to live in the agent's own configuration.
 
 ## Recommended agent policy
 
@@ -167,13 +122,7 @@ configuration.
 - Read tools: allow. Incident triage, shift handoff summaries, and
   reliability reporting are the intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Incident and alert creation and resolution: require a named human approver
-  per invocation. Do not grant them to scheduled or unattended agents.
-  Because workflows sit downstream of a create, an unattended agent holding
-  it has whatever reach your workflow actions have — including your status
-  page and your customers' inboxes. Conduit cannot separate these from the
-  other 105 write tools, so an unattended agent needs a granular
-  `customTools` allowlist, not a `write` tier.
+- Incident and alert creation and resolution: require a named human approver per invocation. Do not grant them to scheduled or unattended agents. Because workflows sit downstream of a create, an unattended agent holding it has whatever reach your workflow actions have — including your status page and your customers' inboxes.
 - Admin tools: treat the grant as equivalent to full Rootly administrator.
   `create_workflow_run` executes automation whose blast radius is chosen at
   call time, and the `create_user_*` contact tools can redirect paging.

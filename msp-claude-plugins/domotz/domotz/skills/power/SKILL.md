@@ -62,10 +62,6 @@ enforcement point:
   supplies it. A model that has decided to cycle the outlet will supply
   `true` in the same call — it is a spelling requirement, not a second
   pair of eyes.
-- Conduit is a non-interactive client. Vendor-side destructive hints and
-  confirmation flags are advisory to it; it compares permission tiers and
-  nothing else. See `wyre-gateway/GOVERNANCE.md`, *Where Conduit is the
-  only enforcement point*.
 
 Treat the real gate as the one in `GOVERNANCE.md`: a named human approver
 per invocation, and never this tool for an unattended agent.

@@ -1,6 +1,6 @@
 {
   "name": "spamtitan",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Claude plugins for SpamTitan by TitanHQ — quarantine queue management, email flow statistics, sender allowlist and blocklist management for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"

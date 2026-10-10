@@ -31,30 +31,15 @@ long-lived. Its ImmyBot RBAC role is the only thing standing between an
 agent and every endpoint in every tenant — scope it deliberately rather
 than granting the app full administrative rights for convenience.
 
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
+
 ## Tool permission tiers
 
 Grouped by blast radius, not HTTP verb. Several tools that look like
 reads or harmless writes are classified destructive below, with the
 reasoning stated.
 
-> **Not classified in Conduit — every tool in the table below requires
-> tier `admin` today.** Conduit derives each tool's tier from
-> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
-> anything absent from it:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `immybot` has no entry, so the
-> grouping below carries no enforcement weight right now — read tools
-> require `admin` exactly as the rest do, and there is no narrower grant
-> that admits them. The grouping is still the right *risk* reading, and it
-> becomes the enforcement reading on the day this vendor is classified.
-> The list of unclassified vendors moves whenever one of them is
-> classified, so it is stated in one place only:
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified*.
->
-> *This blockquote is the whole of the not-classified caveat. When
-> `immybot` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
-> change nothing else.*
+`immybot` has no entry, so the > grouping below carries no enforcement weight right now — read tools > require `admin` exactly as the rest do, and there is no narrower grant > that admits them. The grouping is still the right *risk* reading, and it > becomes the enforcement reading on the day this vendor is classified. > > *This blockquote is the whole of the not-classified caveat.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -98,11 +83,7 @@ reasoning stated.
 PowerShell syntax without executing anything. Use it before every
 `immybot_scripts_run`.
 
-Conduit does not enforce any of that as an approval requirement. It
-compares tiers — it has no approval step, no per-call confirmation, and
-no interactive prompt. Per-call approval is a workflow you impose on your
-agents, and it is only as good as the agent configuration that carries
-it.
+Conduit does not enforce any of that as an approval requirement. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

@@ -24,33 +24,13 @@ accounts) and its 66 generated tools.
   "who paged the on-call at 3am". PagerDuty's own log attributes actions
   to the token's user, so a shared General Access Token makes every
   action anonymous.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal PagerDuty connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `pagerduty` has no entry there, so
-> the grouping below carries no enforcement meaning at present — read tools
-> included. A `read` or `write` grant on this vendor admits nothing; an
-> `admin` grant admits everything, including `create_incident`. The grouping
-> becomes what Conduit actually enforces once the vendor is classified, and
-> classifying it is a privilege *reduction*, not an expansion. For the live
-> list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
-> *Fail-closed, and the vendors Conduit has not classified* — it is stated
-> once there because it moves.
->
-> *Editor's note: when `pagerduty` gains a `VENDOR_TOOL_CONFIG` entry, delete
-> this blockquote and nothing else. No other part of this document depends on
-> it.*
+`pagerduty` has no entry there, so > the grouping below carries no enforcement meaning at present — read tools > included. A `read` or `write` grant on this vendor admits nothing; an > `admin` grant admits everything, including `create_incident`. The grouping > becomes what Conduit actually enforces once the vendor is classified, and > classifying it is a privilege *reduction*, not an expansion. No other part of this document depends on > it.*
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -87,12 +67,7 @@ verb. The four groups worth justifying:
   You cannot unsend that, and customers screenshot status pages. Deleting
   the post afterwards removes the page, not the notification.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there
-is no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and
-`create_incident` once the tier is granted. Where this document asks for a
-named human approver, that is a policy you impose on your agents, and it
-is only as good as the agent configuration that carries it.
+Nothing sits between an agent and `create_incident` once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 

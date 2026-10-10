@@ -154,28 +154,8 @@ Domains:
 
 ### Gateway Integration
 
-Add to `vendor-config.ts`:
-```typescript
-liongard: {
-  label: 'Liongard',
-  fields: [
-    { name: 'instance', label: 'Instance Name', placeholder: 'yourcompany', type: 'text' },
-    { name: 'api_key', label: 'API Key', type: 'password' },
-  ],
-  containerUrl: process.env.VENDOR_URL_LIONGARD ?? 'http://liongard-mcp:8080',
-  headerMap: {
-    'x-roar-api-key': 'api_key',
-    'x-liongard-instance': 'instance',
-  },
-  async validate(creds) {
-    const res = await fetch(
-      `https://${creds.instance}.app.liongard.com/api/v1/environments/count`,
-      { headers: { 'X-ROAR-API-KEY': creds.api_key } }
-    );
-    return res.ok;
-  },
-},
-```
+Add to the gateway vendor registry:
+Gateway configuration source is omitted from this repository.
 
 ## Plugin Directory
 

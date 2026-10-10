@@ -117,13 +117,7 @@ fastest way to hit a limit during a sweep across multiple clients.
 
 ## Gotchas
 
-- **Read-only here depends on the connected role's NetSuite permissions,
-  not on anything this plugin checks.** See
-  [GOVERNANCE.md](../../GOVERNANCE.md), *Open enforcement gap*.
-- **`netsuite` is not yet classified in Conduit's `VENDOR_TOOL_CONFIG`.**
-  Until it is, there is no coarse `read` tier grant that admits only this
-  plugin's read families — access has to go through the gateway allowlist.
-  See [GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers*.
+- See [GOVERNANCE.md](../../GOVERNANCE.md), *Tool permission tiers*.
 - **Every client's NetSuite account is a fully separate MCP endpoint.**
   There is no cross-account behavior to reason about — a tool call always
   targets exactly the one account Conduit resolved for that connection.
