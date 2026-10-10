@@ -8,8 +8,8 @@ endorsed by, or sponsored by the vendor.
 > **Conduit does not broker this vendor. Read this before anything else in
 > this document.** `warmly` has no entry in the gateway vendor registry —
 > not a hidden one, not a disabled one, none at all. The connector is wired
-> only in the older `WYRE-AI/mcp-gateway` registry, a separate system this
-> marketplace has otherwise moved off. There is no `warmly` slug to reach at
+> only in the older gateway, a separate system this marketplace has
+> otherwise moved off. There is no `warmly` slug to reach at
 > `https://conduit.wyre.ai/v1/mcp`, so a connect attempt there 404s.
 >
 > Nothing is silently misrouted: this plugin ships no `.mcp.json`, so it wires
