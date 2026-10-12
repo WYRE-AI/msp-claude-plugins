@@ -325,7 +325,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.4",
+      "version": "0.6.5",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -4157,7 +4157,7 @@
     {
       "name": "mailprotector",
       "displayName": "Mailprotector",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs",
       "category": "email-security",
       "tags": [
