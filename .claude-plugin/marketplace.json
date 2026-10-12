@@ -36,6 +36,13 @@
       ]
     },
     {
+      "name": "advanced-workflows",
+      "source": "./msp-claude-plugins/advanced-workflows/advanced-workflows",
+      "description": "Vendor-generic MSP automation workflows that adapt to the customer's connected stack.",
+      "category": "automation",
+      "tags": ["workflows", "automation", "msp"]
+    },
+    {
       "name": "atera",
       "source": "./msp-claude-plugins/atera/atera",
       "description": "Atera - tickets, agents, customers, alerts, SNMP/HTTP monitors",
