@@ -354,7 +354,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.4",
+      "version": "0.6.5",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -851,7 +851,7 @@
     {
       "name": "freshdesk",
       "displayName": "Freshdesk",
-      "version": "1.0.12",
+      "version": "1.0.13",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
       "category": "psa",
       "tags": [
@@ -1099,7 +1099,7 @@
     {
       "name": "connectwise-psa",
       "displayName": "Connectwise PSA",
-      "version": "0.3.7",
+      "version": "0.3.8",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
       "category": "psa",
       "tags": [
@@ -1587,7 +1587,7 @@
     {
       "name": "itglue",
       "displayName": "IT Glue",
-      "version": "1.2.5",
+      "version": "1.2.6",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
       "category": "documentation",
       "tags": [
@@ -2612,7 +2612,7 @@
     {
       "name": "rootly",
       "displayName": "Rootly",
-      "version": "0.2.12",
+      "version": "0.2.13",
       "description": "Rootly - incident management, postmortems, SRE automation",
       "category": "incident-management",
       "tags": [
@@ -3494,7 +3494,7 @@
     {
       "name": "timezest",
       "displayName": "Timezest",
-      "version": "1.1.10",
+      "version": "1.1.11",
       "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
       "category": "productivity",
       "tags": [
@@ -4186,7 +4186,7 @@
     {
       "name": "mailprotector",
       "displayName": "Mailprotector",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs",
       "category": "email-security",
       "tags": [

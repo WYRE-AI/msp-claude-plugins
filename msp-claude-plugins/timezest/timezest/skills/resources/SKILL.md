@@ -58,9 +58,9 @@ single call surveys the whole bookable surface.
 | The dispatcher said "whoever's available" | The dispatcher named a person or team |
 | Producing a roster or capacity report | Fetching detail for one named resource |
 
-`timezest_resources_list` is list-only — there is no
-`timezest_resources_get`. To fetch full detail for one resource, drop
-into the `agents` or `teams` domain and use its `_get` tool.
+`timezest_resources_list` is list-only — it has no companion `_get`
+tool. To fetch full detail for one resource, drop into the `agents` or
+`teams` domain and use its `_get` tool.
 
 ## Common Workflows
 

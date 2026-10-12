@@ -65,12 +65,12 @@ Resource paths hang off this base — for example `/tickets`, `/contacts`,
 Tools follow `freshdesk_<domain>_<action>` across the major Freshdesk
 resources:
 
-- **tickets** — list, get, search, create, update, reply, add_note, conversations
+- **tickets** — list, get, search, create, update, reply, add_note, list_conversations
 - **contacts** — list, get, search, create, update, merge, make_agent
 - **companies** — list, get, search, create, update
 - **agents / groups** — list, get
-- **solutions** — categories_list, folders_list, articles_list, articles_get, articles_search
-- **sla_policies** — list
+- **solutions** — categories_list, folders_list, articles_list, articles_get, articles_create
+- **sla** — list
 - **business_hours** — list
 
 ## Pagination
