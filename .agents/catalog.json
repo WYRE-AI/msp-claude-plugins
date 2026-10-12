@@ -30,8 +30,8 @@
     }
   },
   "totals": {
-    "packs": 85,
-    "skills": 382,
+    "packs": 86,
+    "skills": 385,
     "commands": 317,
     "agents": 154
   },
@@ -144,6 +144,35 @@
           "path": "msp-claude-plugins/abnormal/abnormal-security/agents/threat-report-generator.md"
         }
       ]
+    },
+    {
+      "name": "advanced-workflows",
+      "displayName": "Advanced Workflows",
+      "version": "1.0.0",
+      "description": "Vendor-generic MSP automation workflows that adapt to the customer's connected stack.",
+      "category": "automation",
+      "tags": [
+        "workflows",
+        "automation",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/advanced-workflows/advanced-workflows",
+      "skills": [
+        {
+          "id": "chat-delivery-adapters",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/chat-delivery-adapters/SKILL.md"
+        },
+        {
+          "id": "psa-tool-map",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/psa-tool-map/SKILL.md"
+        },
+        {
+          "id": "ticket-triage-agent",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/ticket-triage-agent/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
     },
     {
       "name": "atera",
