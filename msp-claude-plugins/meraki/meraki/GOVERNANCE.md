@@ -1,14 +1,18 @@
 # Meraki plugin — governance and safety model
 
-Unofficial. Community-built plugin for the Cisco Meraki Dashboard API.
-Not affiliated with, endorsed by, or sponsored by the vendor.
+Unofficial. Community-built plugin: the skills, commands and agent are
+built by WYRE and the MSP community, and are not affiliated with,
+endorsed by, or sponsored by Cisco. The MCP server they use is Cisco's
+official first-party hosted Meraki MCP server
+(`https://mcp.meraki.com/mcp`).
 
 ## What it connects as
 
 This plugin does not hold credentials. It reaches Meraki through the
 WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`), which brokers
-authentication centrally and scopes every call to the tenant the
-operator is authorised for.
+authentication centrally, scopes every call to the tenant the operator
+is authorised for, and forwards the org's Dashboard API key to Cisco's
+server as `Authorization: Bearer`.
 
 - No Meraki Dashboard API key is stored on the technician's machine, in
   this repo, or in the model's context.
@@ -19,119 +23,83 @@ operator is authorised for.
   nothing tracks its age or prompts you.
 
 - Every call carries operator identity, so Conduit's audit log answers
-  "who replaced that firewall ruleset". The Meraki change log records
-  only the Dashboard account that owns the API key, which for an MSP is
-  usually a shared service account. Conduit records *who called what*,
-  never with what arguments — for `meraki_raw_request`, the method and
-  path are exactly what the log will not show you.
+  "who pulled that firewall ruleset". Meraki attributes every API call
+  to the Dashboard account that owns the API key, which for an MSP is
+  usually a shared service account. Conduit records *who called which
+  tool*, never with what arguments — for `execute_api`, the
+  `capability_id` and `parameters` are exactly what the log will not
+  show you.
 - Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
 
 Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so these are the buckets an owner actually clicks. Cisco's server exposes exactly two tools.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change Meraki or device state. Safe for autonomous agents. | `read` | `meraki_status`, `meraki_organizations_list`, `meraki_organizations_get`, `meraki_organizations_inventory_list`, `meraki_networks_list`, `meraki_networks_get`, `meraki_devices_list`, `meraki_devices_get`, `meraki_clients_list`, `meraki_clients_get`, `meraki_clients_get_policy`, `meraki_wireless_ssids_list`, `meraki_wireless_rf_profiles_list`, `meraki_switch_ports_list`, `meraki_switch_port_statuses_list`, `meraki_appliance_firewall_l3_get`, `meraki_appliance_vpn_status_get`, `meraki_navigate` † |
-| **Write** | Changes Dashboard configuration. **Four of these six can take a site off the network** — see below. | `write` | `meraki_networks_update`, `meraki_clients_update_policy`, `meraki_appliance_firewall_l3_update`, `meraki_switch_ports_update`, `meraki_wireless_ssids_update`, `meraki_devices_reboot` |
-| **Delete** | **Empty** — and not because Meraki has no delete tools. Both are pinned to `admin` instead, so they sit in the Admin row rather than here. | `write` — **not** a tier of its own | *(none)* |
-| **Admin** | Removes Dashboard objects, or reaches the whole API surface. | `admin` | `meraki_networks_delete`, `meraki_devices_remove`, `meraki_raw_request` |
+| **Read** | Searches Cisco's capability catalog. Returns capability metadata, never customer data. | `read` | `semantic_search` |
+| **Write** | **Empty.** Cisco's server has no write capabilities. | `write` | *(none)* |
+| **Delete** | **Empty**, for the same reason. | `write` — **not** a tier of its own | *(none)* |
+| **Admin** | Runs any read capability in Cisco's catalog against every organization, network, device and client the key can see. | `admin` | `execute_api` |
 
-It answers with the container's full tool list without knowing the caller's tier, so it advertises tools the session may be forbidden to call. Use `conduit__my_access` for the tier-true answer. `meraki_status` is deliberately kept — it reports credential health and enumerates nothing.
+Every task that returns Meraki data goes through `execute_api`, so
+using this plugin for real work means an admin-tier Meraki grant. A
+member with only `read` sees `semantic_search` and can find
+capabilities but not run them.
 
-Admin classification lifts them out of the write-tier bucket the Delete group is drawn from, so they land in Admin. **A `write` grant on Meraki therefore does *not* include the deletes** — one of the few vendors where that holds.
+On this vendor, admin tier means "read everything the key can read",
+not "change anything". That is the whole of the safety model:
 
-That is the good news. **The bad news is what `write` does include**: the four site-outage-capable config tools in the Write row. Granting a technician `write` for Meraki grants them the firewall replace, the switch port update, the SSID update, and the device reboot, alongside the benign `meraki_networks_update`.
+- **Cisco's server is read-only and rejects state-changing operations.**
+  Write operations are not in its catalog; asking `execute_api` for
+  one returns "Capability not found".
+- **Conduit classifies `execute_api` admin tier because it dispatches
+  to arbitrary capabilities.** The caller names the `capability_id`, so
+  one tool name reaches the whole read API.
 
-Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
+### Why the dispatcher is admin-pinned
 
-### Why the passthrough is admin-pinned
+`execute_api` takes a `capability_id` and a parameter dict, and Conduit
+grants access by tool name. Two consequences worth acting on. Conduit
+cannot grant "device status but not client data": an `execute_api`
+grant is all of Cisco's read catalog or none of it. And the audit trail
+shows `execute_api`, never which capability it dispatched.
 
-`meraki_raw_request` reaches **any** Dashboard API v1 endpoint with any
-method. The caller supplies method and path, so it reaches every operation
-on the surface — including the DELETEs that `meraki_networks_delete` and
-`meraki_devices_remove` pin to admin, and org-administrator surfaces that
-have no curated tool at all.
+### Read-only is Cisco's control, and it is beta
 
-Conduit's policy matches on tool name only; arguments are never inspected (`ToolCallGateInput` carries no `arguments` field, and the only component that reads arguments is the observe-only security tap, which never denies).
+The read-only guarantee lives upstream, in what Cisco's catalog
+contains. Two things follow.
 
-Two consequences worth acting on. And because argument capture is off unconditionally, `meraki_raw_request` is the *only* thing the audit trail will ever show you, never what it dispatched.
-
-### Four write-tier tools that can take a site offline
-
-These are `PUT`/`POST` calls that delete nothing, and they enforce at
-`write` exactly like a network rename. They deserve more care than their
-tier implies, because of a property peculiar to network management: **the
-operator applies the change over the link the change can break.**
-
-- **`meraki_appliance_firewall_l3_update` replaces the entire ruleset.**
-  It is not additive. Any rule omitted from the payload is gone, and the
-  new ruleset takes effect immediately. A mistake either cuts the site
-  off the internet or silently opens it up. If it cuts the site off, the
-  MX loses its Dashboard connection — and the Dashboard is how you would
-  push the fix. Recovery becomes a site visit or an out-of-band line.
-- **`meraki_switch_ports_update` can partition a site.** Changing a
-  port's VLAN or disabling it is a single-port operation until the port
-  in question is the uplink to the rest of the building, or the one the
-  customer's server is on. Same lockout property as the firewall.
-- **`meraki_wireless_ssids_update` can drop every wireless client at
-  once.** Changing auth mode, PSK, or VLAN on an SSID disconnects every
-  device using it, and they cannot rejoin with the old credentials. At
-  sites where wireless *is* the network — retail, warehousing, clinical
-  carts — that is a full outage, and a technician working over that SSID
-  has cut their own connection.
-- **`meraki_devices_reboot` drops the site when the target is an MX or a
-  core MS.** The vendor server's own description calls it "HIGH-IMPACT",
-  and a reboot is not selective about who was mid-call or
-  mid-transaction.
-
-`meraki_networks_update` is the one genuinely modest tool in the Write
-row: its documented surface is name, tags, and timezone. One caveat —
-Meraki tags can bind a network to a configuration template, so a tag
-change is not always cosmetic.
-
-### The vendor's own controls are advisory, not gates
-
-The Meraki MCP server ships two controls. Neither is enforcement once
-Conduit is the client.
-
-1. **`READ_ONLY_MODE`** defaults to true and blocks every write tool. It
-   is a container environment variable — a fleet-wide on/off setting, not
-   per-operator or per-org policy. It cannot express "Priya may write, the
-   overnight agent may not." While it is on, this plugin is effectively
-   read-only regardless of the grants above.
-2. **`confirm_destructive_action`** is required by only three tools:
-   `meraki_devices_remove`, `meraki_networks_delete`, and
-   `meraki_raw_request` when the method is mutating.
-
-So once `READ_ONLY_MODE` is off, the firewall replace, switch port update,
-SSID update, and device reboot execute **with no confirmation argument at
-all** — the four highest-blast-radius config changes are the ones the flag
-does not guard. The vendor server marks all four `destructiveHint: true`
-in their tool annotations while their handlers call
-`guardWrite({ destructive: false })`, so no confirmation is required and
-the call proceeds. An annotation is advice to the model, not an enforced
-gate.
-
-The general form is worth internalising: **a control that depends on the
-client being interactive, or on the client reading and acting on
-annotations, is not a control when the client is a gateway.** Conduit's
-tier model, and your approval workflow above it, are the enforcement.
+1. **Annotations and server instructions are advice, not gates.** Both
+   tools carry `readOnlyHint: true`, and the server's instructions tell
+   the model to refuse create, update, delete and reboot requests. The
+   enforcement is that no write capability exists to call. A control
+   that depends on the client reading and acting on annotations is not
+   a control when the client is a gateway.
+2. **Cisco labels the hosted server beta.** Tool schemas and supported
+   capabilities may change. If Cisco adds write capabilities, they
+   arrive under the same `execute_api` name and the same admin grant,
+   with nothing in Conduit's tier model to separate them. Revisit
+   Meraki grants when Cisco's release notes change the hosted server's
+   scope.
 
 ## Recommended agent policy
 
-The safe default is **read autonomously, propose writes, never
-self-approve a config change that can break connectivity.**
+The safe default is **read autonomously, recommend changes, let a human
+make them in the Meraki Dashboard.**
 
-- **Read tools: allow.** Offline-device sweeps, firmware and lifecycle
-  audits, firewall rule *reviews*, and VPN health checks are the intended
-  autonomous use.
-- **Write tools: agent drafts the exact call, human approves, then it runs.** For the four site-outage-capable tools, the approval must include a before/after diff — fetch current state with the matching `_get` or `_list` tool and show it. Do not grant these to scheduled or unattended agents.
-- **Admin tools: treat the grant as equivalent to full Meraki administrator**, because for an arbitrary passthrough that is exactly what it is. Never grant it to a scheduled agent or a service client, at any tier.
-- Leave `READ_ONLY_MODE=true` unless a specific change window needs
-  otherwise — but treat it as a coarse safety catch, not as policy.
+- **`semantic_search`: allow.** It returns catalog metadata only.
+- **`execute_api`: grant deliberately, per person or agent.**
+  Offline-device sweeps, firmware and lifecycle audits, firewall rule
+  *reviews*, and VPN health checks are the intended autonomous use.
+  Because the grant reaches client personal data and administrator
+  records as well, do not make it an org-wide default.
+- **Changes: nothing executes them.** The plugin reads current state
+  and writes out the exact change for a human to make. For firewall,
+  switch port, SSID or reboot recommendations, the proposal must show
+  the current state and the complete result, not a delta.
 
 ## What it cannot reach
 
@@ -142,53 +110,58 @@ self-approve a config change that can break connectivity.**
   vendor if you need a narrower boundary.
 - **Only Meraki-branded hardware.** Anything else on the customer's
   network is invisible here regardless of permissions.
-- Only the regional Meraki cloud the key belongs to; keys are not
-  shared between the global and China clouds.
+- Only Meraki.com dashboards. The China cloud, Federal, GovCloud and
+  localized dashboards are not served by Cisco's hosted server.
 - No filesystem, no shell, no other vendor's data.
-- No device CLI or SSH. All changes go through the Dashboard cloud,
-  which is also why a change that breaks connectivity cannot be undone
-  remotely.
+- No device CLI or SSH, and no writes of any kind: no reboot, no
+  configuration change, no delete, no live tools such as ping or cable
+  test.
 - The key inherits the permissions of the Dashboard account that
-  generated it. A full-org admin key gives this plugin full-org admin
-  reach — prefer a least-privilege service account.
+  generated it. A full-org admin key gives this plugin full-org read
+  reach — create the key from a read-only organization admin.
+- Cisco states the hosted server does not currently enforce the
+  organization's Dashboard API IP restrictions. Its egress IPs are
+  158.115.141.245, 158.115.141.238, 158.115.141.209, 158.115.133.170,
+  158.115.133.139 and 158.115.133.156. Organizations whose policy
+  requires IP allowlisting should not use this connection; Conduit
+  offers no self-hosted Meraki route.
 
 ## Data handling
 
-- Responses pass through Conduit into model context for the session and
-  are not persisted by this plugin.
-- **`meraki_clients_list` and `meraki_clients_get` return end-user
-  device data** — hostnames, MAC addresses, IPs, and usage. Hostnames
-  routinely identify individuals ("sarahs-iphone"), which makes this
-  personal data in most jurisdictions, not just network telemetry.
-- `meraki_appliance_firewall_l3_get` exposes the customer's security
-  posture in full. A leaked ruleset tells an attacker exactly what is
-  and is not filtered.
-- `meraki_appliance_vpn_status_get` maps inter-site topology and
+- Responses pass through Conduit and Cisco's hosted server into model
+  context for the session and are not persisted by this plugin.
+- **`getNetworkClients`, `getNetworkClient` and
+  `getOrganizationClientsSearch` return end-user device data** —
+  hostnames, MAC addresses, IPs, and usage. Hostnames routinely
+  identify individuals ("sarahs-iphone"), which makes this personal
+  data in most jurisdictions, not just network telemetry.
+- `getNetworkApplianceFirewallL3FirewallRules` and the other firewall
+  capabilities expose the customer's security posture in full. A leaked
+  ruleset tells an attacker exactly what is and is not filtered.
+- `getOrganizationApplianceVpnStatuses` maps inter-site topology and
   exported subnets.
-- All three are `read`-tier, so a plain `read` grant includes them.
+- `getOrganizationAdmins` lists dashboard administrators by name and
+  email address.
+- All of these sit behind the one `execute_api` grant.
 
 ## Known sharp edges
 
-- **Read before every write, without exception.** The firewall update
-  replaces rather than merges. An agent that constructs a ruleset from
-  its own assumptions, rather than from a fresh
-  `meraki_appliance_firewall_l3_get`, will silently drop every rule it
-  did not think to include.
-- **You cannot fix a lockout through this plugin.** Every tool depends
-  on the device reaching the Meraki cloud. A change that breaks WAN
-  connectivity removes the only path you had to revert it. Treat MX
-  and core-switch changes as requiring someone reachable on site.
-- **The rate limit is shared with the customer.** Meraki allows roughly
-  10 requests/second per organization across *all* callers — this
-  plugin, the customer's own Dashboard users, and any other MSP
-  tooling. A fan-out sweep across devices can rate-limit the
-  customer's own admins out of their dashboard. Prefer the org-wide
-  aggregate endpoints over per-device loops.
-- **Reboot is idempotent, its consequences are not.** The tool is
-  marked idempotent because rebooting twice yields the same end state.
-  It does not mean the second reboot was free — it means another
-  outage.
-- **Removal returns hardware to inventory, it does not delete it.**
-  `meraki_devices_remove` unassigns from a network. Recovering from a
-  mistaken removal means re-adding and reconfiguring the device, since
-  network-level config does not follow it back.
+- **A page is not the dataset.** `execute_api` returns one page per
+  call. An audit that reads one page of a large organization and
+  reports "no offline devices" is wrong. Agents must narrow with
+  filters and say when results may be partial.
+- **Recommended changes still need care.** A firewall ruleset
+  replacement, a switch port VLAN change, an SSID auth change or an MX
+  reboot can take a site offline, and the person applying it in the
+  Dashboard is often working over the link the change can break. Build
+  every proposal from a fresh read of current state, never from
+  assumptions.
+- **You cannot fix a lockout through this plugin.** Every capability
+  depends on the device reaching the Meraki cloud. Treat MX and
+  core-switch changes as requiring someone reachable on site.
+- **The rate limit is shared with the customer.** Meraki allows 10
+  requests/second per organization across *all* API callers — this
+  plugin, the customer's own integrations, and any other MSP tooling.
+  The hosted server backs off automatically, but a fan-out sweep across
+  devices can still starve the customer's own integrations. Prefer the
+  org-wide capabilities over per-device loops.

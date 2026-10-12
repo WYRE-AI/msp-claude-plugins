@@ -4469,8 +4469,8 @@
     {
       "name": "meraki",
       "displayName": "Meraki",
-      "version": "0.1.8",
-      "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
+      "version": "0.2.0",
+      "description": "Meraki - Cisco's hosted Meraki MCP: read-only device health, inventory, firewall & VPN review, wireless",
       "category": "network",
       "tags": [
         "meraki",

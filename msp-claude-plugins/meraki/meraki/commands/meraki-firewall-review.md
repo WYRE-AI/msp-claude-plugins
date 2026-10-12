@@ -1,40 +1,63 @@
 ---
-description: Pull and summarize a Meraki network's L3 firewall rules and flag overly-permissive (any/any allow) rules
+description: Review a Meraki MX network's L3, L7, inbound, and port-forwarding rules and flag overly permissive ones
 argument-hint: "<network_id>"
 arguments: [network_id]
 ---
 
 # Meraki Firewall Review
 
-Pull a Cisco Meraki MX network's Layer 3 outbound firewall ruleset and produce a security-focused summary. Flags overly-permissive rules -- especially any/any allows -- along with sensitive-port exposure, missing comments, and shadowed rules. This command is **read-only**; it never writes changes.
+Pull a Cisco Meraki MX network's firewall configuration — L3 outbound rules, L7 application rules, inbound rules, and port forwarding — and produce a security-focused review. Flags any/any allows, services exposed to the internet, shadowed rules, and unauditable rules. Cisco's hosted Meraki server is read-only, so this command never changes anything: each finding comes with the exact change for a human to make in the Meraki Dashboard.
 
 ## Prerequisites
 
-- Meraki MCP server connected with a valid Dashboard API key
-- The target network has an MX appliance (product type `appliance`)
-- MCP tool `meraki_appliance_firewall_l3_get` available
+- Meraki connected in Conduit (or Cisco's hosted server configured directly)
+- `execute_api` available — it is admin-tier in Conduit, see `meraki-api-patterns`
+- The target network contains an MX appliance
 
 ## Steps
 
-1. **Fetch the current ruleset**
+1. **Confirm the network**
 
-   Call `meraki_appliance_firewall_l3_get` with `network_id`. This returns the ordered outbound rule list. Rules are evaluated top-to-bottom, first match wins, with an implicit default-allow at the bottom.
+   ```
+   execute_api { "capability_id": "getNetwork", "parameters": { "networkId": "<networkId>" } }
+   ```
 
-2. **Walk the rules in order**
+   Check that `productTypes` includes `appliance`; if not, stop and say so. If `isBoundToConfigTemplate` is true, the rules come from the template, and any fix belongs on the template rather than the network.
 
-   For each rule capture its index, `policy`, `protocol`, `srcCidr`/`srcPort`, `destCidr`/`destPort`, `comment`, and `syslogEnabled`.
+2. **Fetch the rulesets**
 
-3. **Flag issues**
+   ```
+   execute_api { "capability_id": "getNetworkApplianceFirewallL3FirewallRules", "parameters": { "networkId": "<networkId>" } }
+   execute_api { "capability_id": "getNetworkApplianceFirewallL7FirewallRules", "parameters": { "networkId": "<networkId>" } }
+   execute_api { "capability_id": "getNetworkApplianceFirewallInboundFirewallRules", "parameters": { "networkId": "<networkId>" } }
+   execute_api { "capability_id": "getNetworkApplianceFirewallPortForwardingRules", "parameters": { "networkId": "<networkId>" } }
+   ```
 
-   - **Any/any allow** -- `policy: allow` with `protocol: any`, `srcCidr: any`, `destCidr: any`, `destPort: any` sitting above the default. Highest priority: this permits everything.
-   - **Sensitive-port exposure** -- allow rules to `3389` (RDP), `22` (SSH), `445` (SMB), `23` (Telnet), `3306`/`1433`/`5432` (databases) from `any` source.
-   - **Missing comments** -- unlabeled rules are unauditable.
-   - **Logging gaps** -- `syslogEnabled: false` on deny rules reduces visibility.
-   - **Shadowed rules** -- a broad allow above a more specific deny means the deny never fires.
+   If the site uses 1:1 NAT, `getNetworkApplianceFirewallOneToOneNatRules` shows those inbound exposures as well.
 
-4. **Summarize**
+3. **Walk the L3 outbound rules in order**
 
-   Present a table of all rules in evaluation order, then a findings section grouping the flags by severity with the rule index, the issue, and the risk. Recommend specific remediations but do not apply them.
+   Capture each rule's index, `policy`, `protocol`, `srcCidr`, `srcPort`, `destCidr`, `destPort`, `comment`, and `syslogEnabled`. Values such as `Any` may be capitalized; compare case-insensitively. Rules evaluate top to bottom and the first match wins. The ruleset ends in the built-in default allow (usually listed last as `Default rule`), which is expected and not a finding on its own.
+
+4. **Flag issues**
+
+   | Severity | Finding |
+   |----------|---------|
+   | Critical | A port forward with `allowedIps` including `any` whose `localPort` or `publicPort` is a sensitive service — RDP 3389, SSH 22, SMB 445, Telnet 23, databases 1433/3306/5432. This publishes the service to the whole internet; a remapped public port does not hide it. |
+   | High | An inbound rule with `policy: allow` from a `srcCidr` of any to a sensitive port. |
+   | High | An explicit L3 any/any allow (protocol, source, and destination all any) placed above deny rules — every deny below it is dead. |
+   | Medium | A port forward with `allowedIps` of `any` on a non-sensitive port; confirm it is intended and restrict sources where possible. |
+   | Medium | Shadowed rules — a broad allow above a narrower deny that it fully covers. |
+   | Medium | Outbound SMB 445 or Telnet 23 to the internet is never denied, so the default allow lets it out. |
+   | Low | Rules with no `comment` — unlabeled rules cannot be audited later. |
+   | Low | `syslogEnabled` false on deny rules, which hides blocked traffic. |
+   | Info | L7 rules are deny-only on the MX; list what is blocked. An empty L7 ruleset is a posture note, not a vulnerability. |
+
+   Most findings have a plausible reason — a forward to a mail or VPN server is often deliberate — so state what the rule allows and let the reader judge intent.
+
+5. **Write recommendations**
+
+   For each finding give the exact Dashboard change (Security & SD-WAN > Configure > Firewall, or the template for template-bound networks): which rule, by index and comment, to narrow, reorder, comment, or remove, and the replacement values. Keep rule order in mind — a new deny only works if it sits above the allow it is meant to block.
 
 ## Parameters
 
@@ -44,28 +67,24 @@ Pull a Cisco Meraki MX network's Layer 3 outbound firewall ruleset and produce a
 
 ## Output
 
-- **Ruleset table** -- every rule in evaluation order with policy, protocol, source, destination, ports, comment, logging
-- **Findings** -- flagged rules grouped by severity (any/any allow first), each with index, issue, and risk
-- **Recommendations** -- specific, ordered suggestions (tighten scope, add comments, enable logging, reorder)
+- **Ruleset tables** — L3 rules in evaluation order (policy, protocol, source, destination, ports, comment, logging); inbound rules; port forwards (name, protocol, public port, LAN IP and local port, allowed IPs); L7 blocks
+- **Findings** — grouped by severity, each with ruleset, rule index or name, the issue, and the risk
+- **Recommendations** — ordered, specific Dashboard edits for a human to apply
 
 ## Examples
 
 ### Review a network's firewall
 
 ```
-/meraki-firewall-review --network_id "L_123456789012345678"
+/meraki-firewall-review L_123456789012345678
 ```
 
 ## Error Handling
 
-- **Empty or 404 response:** The network has no MX appliance or the network ID is wrong -- confirm the network's product types include `appliance`
-- **Authentication Error (401):** Verify `MERAKI_API_KEY` and Dashboard API access
-- **Permission Error (403):** The API key's account lacks access to this network's org
-- **Rate Limit (429):** Honor `Retry-After`
-
-## Notes
-
-This command only reads rules. To change them, use `meraki_appliance_firewall_l3_update`, which **replaces the entire ruleset** -- always re-fetch, diff, and confirm before writing (see the `security-appliance` skill).
+- **Network has no appliance:** `productTypes` lacks `appliance`; the firewall capabilities will return nothing useful
+- **404:** The network ID is wrong or the key cannot see it — find it with `getOrganizationNetworks`
+- **Permission error (403):** The Dashboard admin behind the API key lacks access to this network's org
+- **Authentication error (401):** The Dashboard API key in Conduit is invalid or revoked — reconnect Meraki in Conduit
 
 ## Related Commands
 
