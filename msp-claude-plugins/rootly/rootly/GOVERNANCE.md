@@ -45,8 +45,8 @@ scheme (row 1) is still real and still not what Conduit serves. The vendor's
 `hidden: true` / SSE-transport status below this section was **not**
 verified as part of that corrective pass — it was out of scope (a
 gateway-repo question, not a plugin-doc one) and may itself be stale, since
-it is dated over a month before this note. Re-verify against
-`mcp-gateway`'s current `vendor-config.ts` before relying on it.
+it is dated over a month before this note. Confirm the vendor's current
+status in the access editor before relying on it.
 
 | Where | Naming scheme | Example |
 |---|---|---|
