@@ -12,8 +12,8 @@ failure pattern.
 
 ## Prerequisites
 
-- A 3CX PBX connected (directly or through Conduit's BYO connector) with a
-  valid, authenticated MCP session — see the `api-patterns` skill
+- A 3CX PBX connected (through Conduit's vendor catalog, or directly) with
+  a valid, authenticated MCP session — see the `api-patterns` skill
 
 ## Steps
 
