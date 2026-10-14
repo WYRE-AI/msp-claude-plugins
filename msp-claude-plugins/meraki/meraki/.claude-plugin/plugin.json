@@ -1,7 +1,7 @@
 {
   "name": "meraki",
-  "version": "0.1.8",
-  "description": "Claude plugins for Cisco Meraki - Dashboard API v1 network management, organization/network/device inventory, wireless (MR), switching (MS), security appliance (MX) firewall & VPN, camera/sensor (MV/MT) access, live troubleshooting tools, and client policy management for MSPs",
+  "version": "0.2.0",
+  "description": "Claude plugins for Cisco Meraki on Cisco's first-party hosted Meraki MCP (read-only, beta): capability search and Dashboard API reads for organization/network/device inventory, device health and uplinks, wireless (MR), switching (MS), security appliance (MX) firewall & VPN review, and sensor/cellular status for MSPs",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

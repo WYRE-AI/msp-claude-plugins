@@ -1,233 +1,187 @@
 ---
 name: "Meraki API Patterns"
 description: >
-  Cisco Meraki MCP fundamentals: the full tool catalog, gateway header
-  authentication, Dashboard API v1 structure, Link-header cursor
-  pagination, per-org rate limiting, the read-only /
-  confirm_destructive_action safety model, the meraki_raw_request escape
-  hatch, and error handling.
+  How to work with Cisco's hosted Meraki MCP server: its two tools
+  (semantic_search and execute_api), the getOrganizations to
+  getOrganizationNetworks to capability flow, passing parameters, single-page
+  results, the per-organization rate limit, Conduit access tiers, error
+  handling, and a table of verified read-only Dashboard API capability IDs.
 when_to_use: >-
-  When authenticating to Meraki, navigating its MCP tool catalog, paging results, reaching for
-  the raw-request passthrough, or interpreting a Dashboard API error. Use when: meraki api,
-  meraki authentication, meraki pagination, meraki rate limit, meraki mcp, meraki tools, meraki
-  raw request, meraki error, meraki read only, or dashboard api.
+  At the start of any Meraki task, and whenever you need to find the right
+  capability, call execute_api with the right parameters, judge whether a
+  result is complete, or recover from an execute_api error. Load this before
+  the other Meraki skills when you do not already know the capability_id.
 ---
 
-# Meraki MCP Tools & API Patterns
+# Meraki API Patterns
 
-## Overview
+## What the server is
 
-The Cisco Meraki MCP server provides AI tool integration with the Meraki cloud-managed networking platform via the **Dashboard API v1**. It exposes 27 tools spanning organizations, networks, devices, clients, wireless (MR), switching (MS), and the security appliance (MX), plus a `meraki_raw_request` passthrough that reaches any Dashboard API v1 endpoint. Meraki models everything as **organizations -> networks -> devices**, where a device is identified by its immutable serial number (e.g. `Q2XX-XXXX-XXXX`).
+Meraki is served by Cisco's first-party hosted MCP server (`https://mcp.meraki.com/mcp`). It exposes the read operations of the Meraki Dashboard API v1 as *capabilities* behind two tools, `semantic_search` and `execute_api`. A `capability_id` is the Dashboard API operationId, such as `getOrganizationDevicesAvailabilities`.
 
-## Connection & Authentication
+- **Beta.** Cisco may change tool schemas and the set of supported capabilities.
+- **Read-only.** Only GET capabilities exist. Reboots, configuration changes, deletes and live tools (ping, cable test, throughput test) are not available. When asked for a change, read the current state, then write out the exact change for a human to make in the Meraki Dashboard.
+- **Meraki.com dashboards only.** The China cloud, Federal, GovCloud and other localized dashboards are not supported.
+- **Hierarchy.** Organization, then network, then device. A device is identified by its serial (`Q2XX-XXXX-XXXX`), never by its name.
 
-### Gateway Header Authentication
+## How it is reached through Conduit
 
-The MCP gateway authenticates to Meraki using headers you supply, and translates them to the upstream Meraki API internally:
+- An MSP admin connects Meraki once in Conduit (`https://conduit.wyre.ai`) by pasting a Dashboard API key, created under Organization → API & Webhooks. Conduit sends the key to Cisco as `Authorization: Bearer`. The plugin holds no credentials.
+- There is no organization setting. The org scope is whatever the key's dashboard admin can see, so always start from `getOrganizations`.
+- Through Conduit the tools are namespaced with the vendor slug: `meraki__semantic_search` and `meraki__execute_api`. Your client may add its own prefix, such as `mcp__<connector>__`. This plugin calls them `semantic_search` and `execute_api`.
+- **Access tiers.** `semantic_search` is read tier. Conduit classifies `execute_api` as admin tier, because a single tool name can dispatch to any capability. A member without an admin-tier grant for Meraki sees only `semantic_search`, which searches the capability catalog and returns no customer data. If `execute_api` is missing from your tool list, ask your Conduit org admin for an admin-tier Meraki grant.
 
-| Header | Required | Description |
-|--------|----------|-------------|
-| `X-Meraki-Api-Key` | Yes | Your Dashboard API key |
-| `X-Meraki-Org-Id` | No | Default organization ID -- applied when a tool omits an explicit org |
+## The two tools
 
-The gateway maps `X-Meraki-Api-Key` to the upstream Meraki `Authorization: Bearer <key>` header for you. You never send the `Authorization` header directly -- the MCP server handles that translation.
+### `semantic_search`
 
-Generate credentials at: **Meraki Dashboard > Organization > Settings > Dashboard API access** (then generate the key under **My Profile**).
+| Input | Type | Notes |
+|---|---|---|
+| `query` | string, required | Natural-language description of the data you need |
+| `top_k` | integer, optional | Results to return. Default 5, range 1–20 |
 
-**Environment Variables:**
+It returns ranked `results[]`, each with:
 
-```bash
-export MERAKI_API_KEY="your-api-key"
-export MERAKI_ORG_ID="123456"   # optional default org
+| Field | Meaning |
+|---|---|
+| `capability_id` | The ID to pass to `execute_api` |
+| `intent` | One-line summary of what the capability returns |
+| `product_scope` | `common`, `wireless`, `switch`, `appliance`, `camera`, `sensor`, `cellularGateway`, `sm`, ... |
+| `risk_tier` | `safe`, `elevated`, `destructive` or `unknown` |
+| `tags` | Free-form tags from the API spec |
+| `required_parameters[]` | `{name, location, required, type, description}`. `location` is `path` or `query` |
+
+Each result also carries a resource link, `meraki://capabilities/<capability_id>`. It holds the complete parameter list (optional filters, allowed ranges and defaults) and the API key scopes the capability needs. Read it before using an optional parameter. Through Conduit, resource URIs carry the vendor prefix, so read `meraki+meraki://capabilities/<capability_id>`.
+
+### `execute_api`
+
+| Input | Type | Notes |
+|---|---|---|
+| `capability_id` | string, required | From `semantic_search`, or one of the two direct-call IDs below |
+| `parameters` | object or null, optional | Path and query values together, keyed by parameter name |
+
+The result is an object under `result`:
+
+- Success: `type: "success"`, `capability_id`, `product`, and `data` holding the Dashboard API response.
+- Failure: `type: "error"`, `error` (summary), `recovery_suggestion` (next step), `capability_id`.
+
+A failure comes back as a normal tool result, not a protocol error, so check `result.type` before you use `data`. The API key is never a tool argument.
+
+## The canonical flow
+
+1. **Find the organization.** Call `getOrganizations` directly, no search needed. Use `id` and `name`; confirm the right org with the user when there are several.
+2. **Find networks.** Call `getOrganizationNetworks` directly with the `organizationId`. Use `id`, `name`, `productTypes` and `timeZone`.
+3. **Find the capability.** Call `semantic_search` with a specific query. Prefer a result scoped to the organization (needs `organizationId`) over one you would have to loop per network or per device.
+4. **Execute.** Call `execute_api` with the chosen `capability_id`, every `required_parameters` entry, and any optional filters you confirmed in the resource link.
+
+```text
+execute_api { "capability_id": "getOrganizations" }
+execute_api { "capability_id": "getOrganizationNetworks", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
+semantic_search { "query": "switch ports with errors or CRC drops on a switch", "top_k": 5 }
+execute_api { "capability_id": "getDeviceSwitchPortsStatuses", "parameters": { "serial": "Q2XX-XXXX-XXXX" } }
 ```
 
-> **IMPORTANT:** Never hardcode credentials. Always use environment variables. The key inherits the permissions of the Dashboard account that generated it -- prefer a least-privilege service account.
+When a capability in the table below fits, call it directly and skip step 3.
 
-### Regional Clouds
+## Writing good `semantic_search` queries
 
-Meraki operates isolated regional clouds. Override `MERAKI_BASE_URL` to target a non-global cloud:
+Name the object, the scope and the kind of data: status, history, configuration or rules. Use Meraki vocabulary where you know it.
 
-| Cloud | Base URL |
-|-------|----------|
-| Global (default) | `https://api.meraki.com/api/v1` |
-| China | `https://api.meraki.cn/api/v1` |
+| Good | Too vague |
+|---|---|
+| "devices offline in my org" | "devices" |
+| "switch port status history" | "switches" |
+| "recent config changes" | "changes" |
+| "site-to-site VPN statuses across organization" | "vpn" |
+| "SSID L3 firewall rules for a wireless network" | "meraki stuff" |
 
-Keys are not shared across clouds. Using the wrong base URL returns authentication errors or empty results.
+Never send a single-word query. If the results miss, rephrase with API terms ("availabilities", "uplink loss and latency", "change log", "inbound firewall rules") or raise `top_k` to 10. Check `product_scope` matches the hardware you are asking about.
 
-## Available MCP Tools
+## Parameters
 
-The server exposes exactly 27 tools, grouped by domain.
-
-### Navigation
-
-| Tool | Description |
-|------|-------------|
-| `meraki_navigate` | Discover available tool domains and entry points |
-| `meraki_status` | Check MCP server / API connectivity and credential validity |
-
-### Organizations
-
-| Tool | Description |
-|------|-------------|
-| `meraki_organizations_list` | List organizations the API key can access |
-| `meraki_organizations_get` | Get details for a specific organization |
-| `meraki_organizations_inventory_list` | List device inventory (claimed, unassigned, licensed) for an org |
-
-### Networks
-
-| Tool | Description |
-|------|-------------|
-| `meraki_networks_list` | List networks in an organization |
-| `meraki_networks_get` | Get details for a specific network |
-| `meraki_networks_update` | Update network attributes (name, tags, timezone) |
-| `meraki_networks_delete` | Delete a network (**destructive** -- requires `confirm_destructive_action=true`) |
-
-### Devices
-
-| Tool | Description |
-|------|-------------|
-| `meraki_devices_list` | List devices in a network |
-| `meraki_devices_get` | Get a device by serial number |
-| `meraki_devices_reboot` | Reboot a device by serial |
-| `meraki_devices_remove` | Remove a device from a network (**destructive** -- requires `confirm_destructive_action=true`) |
-
-### Clients
-
-| Tool | Description |
-|------|-------------|
-| `meraki_clients_list` | List clients seen on a network |
-| `meraki_clients_get` | Get a client by ID/MAC |
-| `meraki_clients_get_policy` | Get a client's network access policy |
-| `meraki_clients_update_policy` | Set a client's policy (allowed / blocked / group policy) |
-
-### Wireless (MR)
-
-| Tool | Description |
-|------|-------------|
-| `meraki_wireless_ssids_list` | List SSIDs for a wireless network |
-| `meraki_wireless_ssids_update` | Update an SSID (auth mode, encryption, VLAN) -- high-impact |
-| `meraki_wireless_rf_profiles_list` | List RF profiles for a wireless network |
-
-### Switching (MS)
-
-| Tool | Description |
-|------|-------------|
-| `meraki_switch_ports_list` | List configured switch ports for a switch (by serial) |
-| `meraki_switch_ports_update` | Update a switch port (VLAN, type, PoE, enabled) |
-| `meraki_switch_port_statuses_list` | List live port statuses (link, speed, usage, errors) |
-
-### Security Appliance (MX)
-
-| Tool | Description |
-|------|-------------|
-| `meraki_appliance_firewall_l3_get` | Get L3 outbound firewall rules for a network |
-| `meraki_appliance_firewall_l3_update` | Replace the L3 firewall ruleset -- high-impact |
-| `meraki_appliance_vpn_status_get` | Get site-to-site VPN status for the appliance |
-
-### Long-Tail Passthrough
-
-| Tool | Description |
-|------|-------------|
-| `meraki_raw_request` | Reach **any** Dashboard API v1 endpoint not covered by a curated tool |
-
-`meraki_raw_request` is the escape hatch for the hundreds of Dashboard API v1 endpoints the curated tools do not wrap -- live tools (ping, cable test, throughput), sensor readings (MT), camera endpoints (MV), licensing, alerts/uplink history, traffic analytics, and more. See "The Raw Request Escape Hatch" below.
+- Put every value, path or query, in the one `parameters` object keyed by name: `{ "organizationId": "123", "perPage": 100 }`.
+- Array filters take JSON arrays: `{ "organizationId": "123", "networkIds": ["L_123"], "productTypes": ["switch"] }`.
+- Use the exact names from `required_parameters` or the resource. The server rejects unknown names ("Unsupported parameters") and wrong types ("does not match its documented schema").
+- Some capabilities need more than one identifier. `getDeviceLossAndLatencyHistory` needs `serial` and `ip`, the destination it probes (for example `8.8.8.8`). `getNetworkWirelessSsidFirewallL3FirewallRules` needs `networkId` and `number`, the SSID slot 0–14.
 
 ## Pagination
 
-Meraki uses **Link-header cursor pagination**, not offset/page numbers.
+`execute_api` returns one page per call.
 
-- Pass `perPage` to control page size (endpoint-specific max, commonly 1000)
-- The response `Link` header contains `rel="next"` / `rel="prev"` URLs carrying opaque `startingAfter` and `endingBefore` cursors
-- To page forward, extract the `startingAfter` cursor from the `next` link and pass it on the following call
-- Continue until no `rel="next"` link is present
+- Pass a bounded `perPage` where the capability supports it.
+- Narrow with filters (`networkIds`, `serials`, `productTypes`, `statuses`, `timespan`, `t0`/`t1`) instead of trying to read everything.
+- Do not pass `total_pages`; the server rejects it. Leave the cursor parameters `startingAfter` and `endingBefore` unset; Meraki documents them as not for client use.
+- Never present one page as the complete dataset. When a page comes back full, say the results may be partial and offer to narrow the filter.
 
-**Example workflow:**
+## Rate limit
 
-1. Call a list tool (or `meraki_raw_request`) with `perPage=1000`
-2. Inspect the `Link` header for a `rel="next"` cursor
-3. Re-call with `startingAfter=<cursor>` until the `next` link disappears
-4. Never rely on page numbers -- cursors are opaque and must be passed through verbatim
+Meraki allows 10 requests per second per organization, shared with every other API consumer of that organization. The hosted server retries rate-limited calls with exponential backoff, so do not add your own retry loop. Prefer one org-wide capability over a loop of per-device calls, and make calls one after another rather than in parallel against the same organization.
 
-## Rate Limiting
+## Errors
 
-Meraki enforces a **~10 requests/second per-organization** limit (shared across all callers using that org).
+| What you see | Cause | What to do |
+|---|---|---|
+| "Authentication failed." or HTTP 401 | Key invalid, revoked or expired | The Conduit admin replaces the key in Conduit's Meraki connection |
+| HTTP 403 or a permissions error | The key's dashboard admin cannot see that org or network | Use an org from `getOrganizations`, or ask for a key whose admin has access |
+| `getOrganizations` returns an empty list | The key's admin has no organization on Meraki.com | Check the key belongs to an admin of the customer's org, and that the org is not on an unsupported dashboard |
+| "Capability not found: X" | Misspelled or guessed ID, or a write operation, which does not exist here | Re-run `semantic_search` with a more specific query. Never guess IDs |
+| "Missing required parameters" | A required parameter was left out | Add the names listed in `recovery_suggestion` |
+| "Unsupported parameters" or "does not match its documented schema" | Wrong parameter name or type | Read the capability resource and correct it |
+| Rate-limit error after retries | Organization budget exhausted | Wait, then retry with a narrower or org-wide request |
+| `execute_api` is not in your tool list | No admin-tier Meraki grant in Conduit | Ask the Conduit org admin |
 
-- HTTP 429 responses include a `Retry-After` header (seconds) -- honor it exactly
-- Use exponential backoff on repeated 429s
-- Prefer organization-wide aggregate endpoints (e.g. org device statuses) over looping per-device
-- Increase `perPage` to reduce the number of round-trips
-- Serialize bulk operations; do not fan out concurrent writes against a single org
+A customer on the China cloud, Federal, GovCloud or another localized dashboard cannot be reached through this server. Say so rather than retrying.
 
-## Read-Only Mode & Destructive Actions
+## High-value capabilities
 
-The MCP server defaults to `READ_ONLY_MODE=true`.
+All are read-only and were returned by Cisco's live `semantic_search`. Required parameters are listed; check the resource for optional filters.
 
-- **Read tools** always work.
-- **Write tools** (`meraki_networks_update`, `meraki_wireless_ssids_update`, `meraki_switch_ports_update`, `meraki_clients_update_policy`, `meraki_appliance_firewall_l3_update`) are exposed; whether they execute depends on server configuration.
-- **Destructive tools** (`meraki_networks_delete`, `meraki_devices_remove`) always require an explicit `confirm_destructive_action=true` argument. Without it, the call is rejected.
+| Domain | `capability_id` | Required |
+|---|---|---|
+| Org & inventory | `getOrganizations` | none |
+| | `getOrganizationNetworks` | `organizationId` |
+| | `getOrganizationDevices` | `organizationId` |
+| | `getOrganizationInventoryDevices` | `organizationId` |
+| | `getOrganizationInventoryDevicesEoxOverview` | `organizationId` |
+| Devices | `getOrganizationDevicesAvailabilities` | `organizationId` |
+| | `getOrganizationDevicesStatusesOverview` | `organizationId` |
+| | `getOrganizationDevicesAvailabilitiesChangeHistory` | `organizationId` |
+| | `getDevice` | `serial` |
+| | `getOrganizationDevicesUplinksLossAndLatency` | `organizationId` |
+| | `getDeviceLossAndLatencyHistory` | `serial`, `ip` |
+| Clients | `getOrganizationClientsSearch` | `organizationId`, `mac` |
+| | `getNetworkClients` | `networkId` |
+| | `getNetworkClient` | `networkId`, `clientId` |
+| | `getNetworkClientPolicy` | `networkId`, `clientId` |
+| Wireless | `getNetworkWirelessSsids` | `networkId` |
+| | `getNetworkWirelessSsidFirewallL3FirewallRules` | `networkId`, `number` |
+| | `getNetworkWirelessRfProfiles` | `networkId` |
+| | `getNetworkWirelessFailedConnections` | `networkId` |
+| | `getOrganizationWirelessDevicesPacketLossByNetwork` | `organizationId` |
+| Switch | `getOrganizationSwitchPortsStatusesBySwitch` | `organizationId` |
+| | `getOrganizationSwitchPortsBySwitch` | `organizationId` |
+| | `getDeviceSwitchPortsStatuses` | `serial` |
+| | `getDeviceSwitchPortsStatusesPackets` | `serial` |
+| Appliance | `getOrganizationApplianceUplinkStatuses` | `organizationId` |
+| | `getOrganizationApplianceVpnStatuses` | `organizationId` |
+| | `getNetworkApplianceFirewallL3FirewallRules` | `networkId` |
+| | `getNetworkApplianceFirewallL7FirewallRules` | `networkId` |
+| | `getNetworkApplianceFirewallInboundFirewallRules` | `networkId` |
+| | `getNetworkApplianceFirewallPortForwardingRules` | `networkId` |
+| | `getNetworkApplianceSecurityEvents` | `networkId` |
+| Sensors & cellular | `getOrganizationSensorReadingsLatest` | `organizationId` |
+| | `getOrganizationCellularGatewayUplinkStatuses` | `organizationId` |
+| | `getOrganizationDevicesCellularUplinksBandsByDevice` | `organizationId` |
+| Change log, licensing, firmware | `getOrganizationConfigurationChanges` | `organizationId` |
+| | `getNetworkEvents` | `networkId` |
+| | `getOrganizationLicensesOverview` | `organizationId` |
+| | `getOrganizationFirmwareUpgrades` | `organizationId` |
+| | `getOrganizationFirmwareUpgradesByDevice` | `organizationId` |
 
-**Convention:** Always read and present the current state (e.g. current firewall rules, current SSID config) before proposing a write, and require explicit user confirmation before setting `confirm_destructive_action=true`.
+To list the devices in one network, call `getOrganizationDevices` with a `networkIds` filter.
 
-## The Raw Request Escape Hatch
+## Related skills
 
-`meraki_raw_request` reaches any Dashboard API v1 endpoint the curated tools do not cover. Provide:
-
-- `method` -- `GET`, `POST`, `PUT`, or `DELETE`
-- `path` -- the API path relative to the v1 base (e.g. `/networks/{networkId}/appliance/uplinks/statuses`)
-- `body` -- request payload for POST/PUT (optional)
-
-**Common uses:**
-
-| Goal | Method + path |
-|------|---------------|
-| Trigger a ping live tool | `POST /devices/{serial}/liveTools/ping` |
-| Trigger a cable test | `POST /devices/{serial}/liveTools/cableTest` |
-| Read appliance uplink status | `GET /networks/{networkId}/appliance/uplinks/statuses` |
-| Org-wide device statuses | `GET /organizations/{organizationId}/devices/statuses` |
-| Sensor (MT) readings | `GET /organizations/{organizationId}/sensor/readings/latest` |
-| Camera (MV) snapshot | `POST /devices/{serial}/camera/generateSnapshot` |
-| Licensing overview | `GET /organizations/{organizationId}/licenses/overview` |
-
-Live tools are asynchronous: the initial `POST` returns a job ID and status URL; poll the corresponding `GET .../liveTools/ping/{id}` until `status` is `complete`.
-
-## Error Handling
-
-### Common Error Codes
-
-| Code | Meaning | Resolution |
-|------|---------|------------|
-| 400 | Bad Request | Malformed body or invalid parameter -- check the endpoint schema |
-| 401 | Unauthorized | Invalid/revoked API key; API access not enabled for the org |
-| 403 | Forbidden | Account lacks access to this org/network/resource; needs higher admin role |
-| 404 | Not Found | Wrong serial, network ID, or org ID; resource does not exist |
-| 429 | Rate Limited | Exceeded ~10 req/s per org -- wait `Retry-After` seconds and retry |
-| 5xx | Server Error | Transient Meraki cloud issue -- retry with backoff; check status.meraki.com |
-
-### Error Response Format
-
-```json
-{
-  "errors": [
-    "Invalid API key"
-  ]
-}
-```
-
-Meraki returns errors as an `errors` array of human-readable strings.
-
-## Best Practices
-
-- Resolve the hierarchy top-down: `meraki_organizations_list` -> `meraki_networks_list` -> `meraki_devices_list`
-- Identify devices by **serial**, never by name -- names are mutable and non-unique
-- Set a default `MERAKI_ORG_ID` when you manage a single org to skip the selection step
-- Always page with cursors (`startingAfter`) via the `Link` header; never assume all results fit in one page
-- Honor `Retry-After` on 429 and keep to the ~10 req/s per-org budget
-- Read current state before any write; require explicit confirmation before destructive actions
-- Reach for `meraki_raw_request` for live tools, sensors, cameras, licensing, and uplink history -- these are not curated tools
-- Prefer org-wide aggregate endpoints over per-device loops to conserve the rate budget
-
-## Related Skills
-
-- [devices](../devices/SKILL.md) - Device inventory and lifecycle
-- [troubleshooting](../troubleshooting/SKILL.md) - Live-tools workflows via raw_request
-- [security-appliance](../security-appliance/SKILL.md) - MX firewall and VPN
+- `meraki-devices`: inventory, status and lifecycle by serial
+- `meraki-troubleshooting`: uplink, loss/latency, port and wireless diagnostics
+- `meraki-security-appliance`: MX firewall, port forwarding and VPN review

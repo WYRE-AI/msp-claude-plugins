@@ -2585,7 +2585,7 @@ export const plugins: Plugin[] = [
     id: 'meraki',
     name: 'Meraki',
     vendor: 'Meraki',
-    description: 'Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless',
+    description: 'Meraki - Cisco\'s hosted Meraki MCP: read-only device health, inventory, firewall & VPN review, wireless',
     category: 'network',
     maturity: 'beta',
     features: [
@@ -2594,18 +2594,18 @@ export const plugins: Plugin[] = [
       'Troubleshooting'
     ],
     skills: [
-      { name: 'devices', description: 'Cisco Meraki device inventory and lifecycle: serial-based identity, the MX/MS/MR/MV/MG/MT product lines, org inventory vs network assignment, reboot and removal, and device/uplink status via meraki_raw_request.' },
-      { name: 'security-appliance', description: 'Cisco Meraki MX security appliance: the L3 outbound firewall rule model and the full-ruleset replacement semantics of meraki_appliance_firewall_l3_update, plus Auto VPN site-to-site peer status via meraki_appliance_vpn_status_get.' },
-      { name: 'troubleshooting', description: 'Hands-on Cisco Meraki diagnostics: the async live-tools pattern (ping, cable test, throughput, wake-on-LAN, ARP/MAC tables) that rides the meraki_raw_request passthrough because live tools are not curated tools, plus device reboots and uplink/connectivity checks.' },
-      { name: 'api-patterns', description: 'Cisco Meraki MCP fundamentals: the full tool catalog, gateway header authentication, Dashboard API v1 structure, Link-header cursor pagination, per-org rate limiting, the read-only / confirm_destructive_action safety model, the meraki_raw_request escape hatch, and error handling.' }
+      { name: 'devices', description: 'Cisco Meraki device inventory and status through the hosted Meraki MCP: serial-based identity, the MX/MS/MR/MV/MG/MT product lines, org inventory versus network assignment, availability and its change history, uplink addresses, provisioning, end-of-life (EOX) and firmware status.' },
+      { name: 'security-appliance', description: 'Cisco Meraki MX security appliance review through the hosted Meraki MCP: L3, L7 and inbound firewall rules, port forwarding and 1:1 / 1:many NAT, firewalled services, organization-wide policy rulesets, site-to-site VPN status, VPN firewall rules, third-party peers, threat protection and security events, and SSID L3 firewall rules.' },
+      { name: 'troubleshooting', description: 'Read-only Cisco Meraki diagnostics through the hosted Meraki MCP: site and device outages from availability history and WAN uplink loss/latency, switch port status and error counters, LLDP/CDP topology, wireless connection failures and packet loss, client lookup by MAC, and "what changed?" from the change log and event log.' },
+      { name: 'api-patterns', description: 'How to work with Cisco\'s hosted Meraki MCP server: its two tools (semantic_search and execute_api), the getOrganizations to getOrganizationNetworks to capability flow, passing parameters, single-page results, the per-organization rate limit, Conduit access tiers, error handling, and a table of verified read-only Dashboard API capability IDs.' }
     ],
     agents: [
-      { name: 'meraki-network-auditor', description: 'Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki organization — sweeping networks, devices, and appliances to surface offline or alerting hardware, appliances with site-to-site VPN peers down, overly-permissive firewall rules, and SSIDs configured with weak or open authentication.' }
+      { name: 'meraki-network-auditor', description: 'Use this agent when an MSP needs a read-only health and security audit of a Cisco Meraki organization — sweeping devices, appliance uplinks, site-to-site VPN, MX firewall rules, and wireless SSIDs to surface offline or alerting hardware, failed or failed-over WAN links, unreachable VPN peers, overly permissive firewall rules, and SSIDs with open or weak authentication, each with a severity.' }
     ],
     commands: [
-      { name: '/meraki-find-device', description: 'Locate a Meraki device by serial, name, or MAC across an organization\'s networks' },
-      { name: '/meraki-firewall-review', description: 'Pull and summarize a Meraki network\'s L3 firewall rules and flag overly-permissive (any/any allow) rules' },
-      { name: '/meraki-network-health', description: 'Sweep an organization\'s networks, devices, and appliance VPN status for a site-health overview' }
+      { name: '/meraki-find-device', description: 'Locate a Meraki device by serial, name, or MAC across an organization, or find where a client MAC is connected' },
+      { name: '/meraki-firewall-review', description: 'Review a Meraki MX network\'s L3, L7, inbound, and port-forwarding rules and flag overly permissive ones' },
+      { name: '/meraki-network-health', description: 'Sweep an organization\'s devices, appliance uplinks, and site-to-site VPN for a per-site health overview' }
     ],
     apiInfo: {
       baseUrl: '',

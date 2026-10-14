@@ -903,7 +903,7 @@
     },
     {
       "name": "meraki",
-      "description": "Meraki - Dashboard API network management, device monitoring, firewall & VPN, wireless",
+      "description": "Meraki - Cisco's hosted Meraki MCP: read-only device health, inventory, firewall & VPN review, wireless",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/meraki/meraki"
