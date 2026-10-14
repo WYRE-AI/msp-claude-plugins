@@ -37,6 +37,22 @@ const {
   twitterCard
 } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
+
+// Google Analytics 4 — fires ONLY on production builds for mcp.wyre.ai.
+// Property G-V3W6M1YEHL matches wyre.ai + conduit.wyre.ai + conduit /docs for
+// cross-property aggregation under one WYRE measurement ID.
+//
+// Dual-gate is intentional: the default SITE_URL in astro.config.mjs is
+// 'https://mcp.wyre.ai', so a SITE-only check would also match local dev
+// (no env vars). The PROD check excludes:
+//   - local dev / preview (PROD=false)
+// The SITE check excludes:
+//   - GitHub Pages build (SITE_URL=https://wyre-technology.github.io)
+// Net: GA only loads on the mcp.wyre.ai Docker build that ships to production.
+//
+// If you widen this gate (e.g. add staging), pair the change with a brief
+// audit of where reports get tagged — same property serves multiple sites.
+const enableGA = import.meta.env.PROD && import.meta.env.SITE === 'https://mcp.wyre.ai';
 ---
 
 <!DOCTYPE html>
@@ -60,6 +76,25 @@ const baseUrl = import.meta.env.BASE_URL;
       ogType={ogType}
       twitterCard={twitterCard}
     />
+    {enableGA && (
+      <Fragment>
+        {/*
+          gtag.js is intentionally loaded WITHOUT Subresource Integrity:
+          Google continuously regenerates this script to reflect property
+          configuration changes and never publishes integrity hashes for it,
+          so pinning SRI would break GA on every silent upstream update.
+          Trust model is googletagmanager.com TLS + the published canonical
+          snippet (matches Angela's wyre.ai/conduit installs).
+        */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-V3W6M1YEHL"></script>
+        <script is:inline>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-V3W6M1YEHL');
+        </script>
+      </Fragment>
+    )}
     <script is:inline>
       // Dark mode toggle
       const theme = localStorage.getItem('theme') ||
