@@ -50,20 +50,22 @@ cipp_list_user_groups(tenantFilter=..., userId='upn-or-objectId')
 ### Lifecycle
 
 ```
-cipp_create_user(tenantFilter, displayName, userPrincipalName, mailNickname, password,
-                 firstName?, lastName?, jobTitle?, department?, usageLocation?)
+cipp_create_user(tenantFilter, displayName, userPrincipalName, password,
+                 givenName?, surname?, jobTitle?, department?, country?)
 
 cipp_edit_user(tenantFilter, userId, displayName?, jobTitle?, department?, ...)
 
 cipp_disable_user(tenantFilter, userId)
 ```
 
-`usageLocation` (ISO 2-letter country code) must be set before any license can be assigned — set it at create time even if licensing comes later.
+A license can't be assigned until the user has a usage location (an ISO 2-letter country code). `cipp_create_user` has no usage location param (`country` is the address field, not the usage location), so set `usageLocation` with `cipp_edit_user` before assigning licenses.
+
+`cipp_edit_user` looks up the account's current UPN via CIPP `ListUsers` before it calls `EditUser`. CIPP rebuilds the UPN from username + domain on every edit, so editing without that UPN would rename the account. Right after `cipp_create_user`, Graph can lag and the user may not be visible yet, so the lookup retries up to 4 attempts, waiting 1s/3s/6s (~10s total), when the user isn't found (empty result, HTTP 404, or Graph `Request_ResourceNotFound`). Other errors aren't retried. If the edit still fails with a not-found error, wait a moment and retry it.
 
 ### Security actions
 
 ```
-cipp_reset_password(tenantFilter, userId, password?)        # password optional → CIPP generates one
+cipp_reset_password(tenantFilter, userId)  # CIPP generates the new password (or a PWPush link if PWPush is enabled)
 cipp_reset_mfa(tenantFilter, userId)                        # clears all registered MFA methods
 cipp_revoke_sessions(tenantFilter, userId)                  # invalidates all active tokens
 cipp_bec_check(tenantFilter, userId)                        # BEC investigation report

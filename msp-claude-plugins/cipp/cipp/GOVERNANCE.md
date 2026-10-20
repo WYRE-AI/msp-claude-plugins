@@ -132,8 +132,9 @@ self-approve an identity or configuration change.**
 
 - Responses pass through Conduit into model context for the session and
   are not persisted by this plugin.
-- **`cipp_reset_password` returns a plaintext password** when called
-  without one — CIPP generates it. That credential lands in the model's
+- **`cipp_reset_password` returns a plaintext password** — CIPP always
+  generates it (a supplied password is ignored), or returns a PWPush link
+  instead when PWPush is enabled in CIPP. That credential lands in the model's
   context and in the transcript. Treat any session that calls it as
   containing a live secret, and deliver the password through a secure
   channel rather than the chat surface.

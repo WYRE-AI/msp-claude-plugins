@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **`cipp` 0.1.9 — `cipp-users` documents edit-right-after-create ([WYREAI-530](https://linear.app/wyre-ai/issue/WYREAI-530)).** `cipp_edit_user` resolves the current UPN via `ListUsers` before `EditUser` (CIPP rebuilds the UPN from username + domain, so editing without it renames the account). Right after `cipp_create_user` Graph can lag, so that lookup retries up to 4 attempts (1s/3s/6s, ~10s) on not-found; other errors aren't retried. Also corrected the `cipp_reset_password` line (CIPP always generates the password, or returns a PWPush link when PWPush is enabled; there is no password parameter) and the `cipp_create_user` parameter list to match the MCP.
+
 - Removed the wyre-gateway governance document and redacted private gateway implementation notes from plugin docs, skills, and this changelog. Confirm live grants in the gateway access editor. Affected plugins are patch-bumped.
 
 - **`wyre-gateway` 1.4.5 — QBR prep runs the meeting at MSP Value Pyramid levels 3–5 ([WYREAI-435](https://linear.app/wyre-ai/issue/WYREAI-435/rewrite-qbr-skill-for-msp-value-pyramid-levels-3-5-not-ticket-review)).** `qbr-prep-agent` coaches ease, emotion, and the business move. Ticket volume, SLA %, and device inventory stay in the appendix. Gaps are written before that appendix, and the goal line cites `conduit__memory_search` or notes (or "unknown — asked"). The prompt-library brief and evidence appendix follow the same order.
