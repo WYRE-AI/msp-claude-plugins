@@ -137,7 +137,7 @@ Each type is a row from `GET /company/communicationTypes`. These fields say what
 | `faxFlag` | Type is for fax numbers |
 | `defaultFlag` | Tenant default for its kind |
 
-Call `cw_list_communication_types` (read-only) to see the types and their flags before building communication items or patching them.
+Call `cw_list_communication_types` (read-only) to see the types and their flags before building communication items or patching them. In the examples below, `12345` (email) and `12346` (phone) are placeholders: replace them with ids returned by `cw_list_communication_types`.
 
 `communicationType` on an item is the category (`Email`, `Phone`, `Fax`). It is not the type name. A type named "Direct" still has `communicationType: "Phone"`.
 
@@ -148,7 +148,7 @@ POST /company/contacts/{contactId}/communications
 Content-Type: application/json
 
 {
-  "type": {"id": <emailTypeId>},
+  "type": {"id": 12345},
   "value": "john.smith@acme.com",
   "defaultFlag": true,
   "communicationType": "Email"
@@ -162,7 +162,7 @@ POST /company/contacts/{contactId}/communications
 Content-Type: application/json
 
 {
-  "type": {"id": <phoneTypeId>},
+  "type": {"id": 12346},
   "value": "555-123-4567",
   "extension": "101",
   "defaultFlag": true,
@@ -195,8 +195,8 @@ If no type resolves, it returns an error listing the available types. Override w
 **Example (override params only; add the usual contact fields as normal):**
 ```json
 {
-  "emailTypeId": <emailTypeId>,
-  "phoneTypeName": "<phoneTypeName>"
+  "emailTypeId": 12345,
+  "phoneTypeName": "Mobile"
 }
 ```
 
@@ -272,12 +272,12 @@ Content-Type: application/json
   "type": {"id": 4},
   "communicationItems": [
     {
-      "type": {"id": <emailTypeId>},
+      "type": {"id": 12345},
       "value": "john.smith@acme.com",
       "defaultFlag": true
     },
     {
-      "type": {"id": <phoneTypeId>},
+      "type": {"id": 12346},
       "value": "555-123-4567",
       "extension": "101",
       "defaultFlag": true
