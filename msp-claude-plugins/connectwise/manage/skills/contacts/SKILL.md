@@ -117,22 +117,29 @@ Communication items store contact methods (email, phone, fax, etc.) for a contac
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | int | System | Communication ID |
-| `type` | object | Yes | `{id: typeId}` - Email, Phone, Fax, etc. |
+| `type` | object | Yes | `{id: communicationTypeId}` - a tenant communication type (see below) |
 | `value` | string(250) | Yes | The email/phone/etc. value |
 | `extension` | string(15) | No | Phone extension |
 | `defaultFlag` | boolean | No | Is primary for this type |
-| `communicationType` | string | No | Direct, Fax, Cell, Pager, etc. |
+| `communicationType` | string | No | Category: `Email`, `Phone`, or `Fax`. Not the type name. |
 
 ### Communication Types
 
-| Type ID | Name | Description |
-|---------|------|-------------|
-| 1 | Email | Email address |
-| 2 | Phone | Phone number |
-| 3 | Fax | Fax number |
-| 4 | Cell | Mobile phone |
-| 5 | Pager | Pager (legacy) |
-| 6 | Direct | Direct line |
+Communication type ids and names are **per tenant**. Never assume `{"id": 1}` is Email. Your tenant may have "Email", "Work Email", "Direct", "Mobile", and so on, with different ids.
+
+Each type is a row from `GET /company/communicationTypes`. These fields say what it is for:
+
+| Field | Meaning |
+|-------|---------|
+| `description` | The type name shown in ConnectWise (e.g. "Direct") |
+| `emailFlag` | Type is for email addresses |
+| `phoneFlag` | Type is for phone numbers |
+| `faxFlag` | Type is for fax numbers |
+| `defaultFlag` | Tenant default for its kind |
+
+Call `cw_list_communication_types` (read-only) to see the types and their flags before building communication items or patching them.
+
+`communicationType` on an item is the category (`Email`, `Phone`, `Fax`). It is not the type name. A type named "Direct" still has `communicationType: "Phone"`.
 
 ### Add Communication Item
 
@@ -141,7 +148,7 @@ POST /company/contacts/{contactId}/communications
 Content-Type: application/json
 
 {
-  "type": {"id": 1},
+  "type": {"id": <emailTypeId>},
   "value": "john.smith@acme.com",
   "defaultFlag": true,
   "communicationType": "Email"
@@ -155,13 +162,47 @@ POST /company/contacts/{contactId}/communications
 Content-Type: application/json
 
 {
-  "type": {"id": 2},
+  "type": {"id": <phoneTypeId>},
   "value": "555-123-4567",
   "extension": "101",
   "defaultFlag": true,
-  "communicationType": "Direct"
+  "communicationType": "Phone"
 }
 ```
+
+## MCP Tools
+
+### `cw_list_communication_types`
+
+Read-only. Lists the tenant's communication types with their flags. No required params.
+
+### `cw_create_contact`
+
+Creates a contact, optionally with an email and phone. The MCP resolves the communication types itself from `/company/communicationTypes` and caches them per connection:
+
+- Email: a type with `emailFlag=true`; prefers `defaultFlag`, then the name "Email".
+- Phone: a type with `phoneFlag=true`; prefers the name "Direct", then `defaultFlag`.
+
+If no type resolves, it returns an error listing the available types. Override with optional params (an id wins over a name; an unknown name errors):
+
+| Param | Description |
+|-------|-------------|
+| `emailTypeId` | Communication type id for the email |
+| `emailTypeName` | Communication type name for the email |
+| `phoneTypeId` | Communication type id for the phone |
+| `phoneTypeName` | Communication type name for the phone |
+
+**Example (override params only; add the usual contact fields as normal):**
+```json
+{
+  "emailTypeId": <emailTypeId>,
+  "phoneTypeName": "<phoneTypeName>"
+}
+```
+
+### `cw_update_contact`
+
+When changing communication items, use `type: { "id": <typeId> }` with an id from `cw_list_communication_types`.
 
 ## Portal Access
 
@@ -231,12 +272,12 @@ Content-Type: application/json
   "type": {"id": 4},
   "communicationItems": [
     {
-      "type": {"id": 1},
+      "type": {"id": <emailTypeId>},
       "value": "john.smith@acme.com",
       "defaultFlag": true
     },
     {
-      "type": {"id": 2},
+      "type": {"id": <phoneTypeId>},
       "value": "555-123-4567",
       "extension": "101",
       "defaultFlag": true

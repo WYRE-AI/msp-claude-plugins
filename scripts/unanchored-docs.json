@@ -56,7 +56,6 @@
     "connectwise-psa:commands/search-tickets.md": "names no MCP tool; 2 HTTP endpoint(s), 9 CLI flag(s) — first at commands/search-tickets.md:25 GET /service/tickets",
     "connectwise-psa:commands/update-ticket.md": "names no MCP tool; 8 HTTP endpoint(s), 17 CLI flag(s) — first at commands/update-ticket.md:21 GET /service/tickets/{id}",
     "connectwise-psa:skills/companies": "names no MCP tool; 10 HTTP endpoint(s), 0 CLI flag(s) — first at skills/companies/SKILL.md:164 POST /company/companies/{companyId}/sites",
-    "connectwise-psa:skills/contacts": "names no MCP tool; 11 HTTP endpoint(s), 0 CLI flag(s) — first at skills/contacts/SKILL.md:140 POST /company/contacts/{contactId}/communications",
     "connectwise-psa:skills/projects": "names no MCP tool; 19 HTTP endpoint(s), 0 CLI flag(s) — first at skills/projects/SKILL.md:74 POST /project/projects",
     "datto-bcdr:skills/api-patterns": "names no MCP tool; 12 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:91 GET /bcdr/device",
     "datto-rmm:commands/device-lookup.md": "names no MCP tool; 2 HTTP endpoint(s), 4 CLI flag(s) — first at commands/device-lookup.md:51 GET /api/v2/device/{deviceUid}/alerts/open",
