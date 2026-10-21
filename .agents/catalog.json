@@ -1099,7 +1099,7 @@
     {
       "name": "connectwise-psa",
       "displayName": "Connectwise PSA",
-      "version": "0.3.8",
+      "version": "0.3.9",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
       "category": "psa",
       "tags": [
