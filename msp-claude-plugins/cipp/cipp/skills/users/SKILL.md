@@ -90,7 +90,7 @@ This single call wraps the canonical CIPP offboarding sequence: disable, revoke 
 
 1. `cipp_bec_check` — capture the forensic snapshot before changing anything
 2. `cipp_revoke_sessions` — kick the attacker out of all active sessions
-3. `cipp_reset_password` — generate a strong password, share via secure channel
+3. `cipp_reset_password` — CIPP generates the new password (or a PWPush link); share it via a secure channel
 4. `cipp_reset_mfa` — clear attacker-registered methods; user re-enrolls
 5. Review the BEC report for inbox forwarding rules and remove them
 
