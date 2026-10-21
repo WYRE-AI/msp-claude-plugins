@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **`connectwise-psa` 0.3.9 — contact communication types are per tenant ([WYREAI-529](https://linear.app/wyre-ai/issue/WYREAI-529)).** The contacts skill no longer lists fixed type ids 1-6. It explains `emailFlag`/`phoneFlag`/`faxFlag`/`defaultFlag`, notes that `communicationType` is the category (Email/Phone/Fax) and not the type name, and uses `<emailTypeId>`/`<phoneTypeId>` placeholders. It documents the new `cw_create_contact` params (`emailTypeId`, `emailTypeName`, `phoneTypeId`, `phoneTypeName`) and the read-only `cw_list_communication_types` tool, which is also added to the GOVERNANCE.md read tier.
+
 - Removed the wyre-gateway governance document and redacted private gateway implementation notes from plugin docs, skills, and this changelog. Confirm live grants in the gateway access editor. Affected plugins are patch-bumped.
 
 - **`wyre-gateway` 1.4.5 — QBR prep runs the meeting at MSP Value Pyramid levels 3–5 ([WYREAI-435](https://linear.app/wyre-ai/issue/WYREAI-435/rewrite-qbr-skill-for-msp-value-pyramid-levels-3-5-not-ticket-review)).** `qbr-prep-agent` coaches ease, emotion, and the business move. Ticket volume, SLA %, and device inventory stay in the appendix. Gaps are written before that appendix, and the goal line cites `conduit__memory_search` or notes (or "unknown — asked"). The prompt-library brief and evidence appendix follow the same order.
