@@ -31,10 +31,10 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09  # v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Run OpenCodeReview
-        uses: alibaba/open-code-review@8d023aafcec05f8ba5628fca3eaba88078e5d201  # v1.11.1
+        uses: alibaba/open-code-review@375f64cd6f67a48a135da83cfcf59c52669a09cb  # v1.13.3
         with:
           ocr_version: '1.11.1'
           llm_url: ${{ secrets.OCR_LLM_URL }}
