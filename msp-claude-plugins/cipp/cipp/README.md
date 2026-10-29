@@ -34,7 +34,7 @@ This plugin orients Claude around the [`cipp-mcp`](https://github.com/WYRE-AI/ci
 
 ## Setup
 
-1. Stand up the [cipp-mcp](https://github.com/WYRE-AI/cipp-mcp) server (Docker, npx, or Smithery).
+1. Stand up the [cipp-mcp](https://github.com/WYRE-AI/cipp-mcp) server (Docker or npx), or use the hosted Conduit option at https://conduit.wyre.ai.
 2. Issue API credentials in CIPP at **Settings → API Client Management**.
 3. Copy `.env.example` to `.env` and fill in `CIPP_BASE_URL` plus either a bearer token or OAuth client-credentials.
    `CIPP_BASE_URL` must be the CIPP-API **Azure Function App** URL (`https://<function-app-name>.azurewebsites.net`, named like `cippXXXXX` in your CIPP resource group) — **not** the Static Web App / custom-domain UI URL. The SWA redirects bearer-token requests to its interactive login page, so API calls fail.
