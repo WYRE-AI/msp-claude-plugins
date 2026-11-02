@@ -767,7 +767,7 @@
     {
       "name": "cipp",
       "displayName": "Cipp",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
       "tags": [
