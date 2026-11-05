@@ -69,22 +69,22 @@ The MCP server will maintain an exact allowlist of these five GET paths. It will
 
 Claude Code calls the local stdio MCP server. The server validates tool arguments, builds one allowlisted HTTPS GET request, and sends it directly to the Nizlo API with the bearer token from the local process environment. Nizlo derives the tenant from the authenticated technician and token; the caller never supplies a tenant ID. The server returns bounded JSON to the invoking local session and does not persist API responses. No customer data or credential passes through a WYRE-operated intermediary.
 
-For `nizlo_stale_endpoints`, the server serially retrieves active endpoint pages, deduplicates endpoint IDs, detects total/order changes that would make the result incomplete, applies a UTC cutoff, and groups by immutable customer ID while retaining the display name. It returns endpoint ID, display name or hostname, operating system, and exact `lastSeenAt` value, including an explicit never-seen state.
+For `nizlo_stale_endpoints`, the server serially retrieves active endpoint pages, deduplicates endpoint IDs, applies a UTC cutoff, and groups by immutable customer ID while retaining the display name. It returns endpoint ID, display name or hostname, operating system, and exact `lastSeenAt` value, including an explicit never-seen state. Page totals, ordering, and deduplicated IDs can detect some inventory drift but cannot prove a consistent inventory snapshot. Until the endpoint API supplies a snapshot token or inventory version that spans every page, the report must identify completeness as unverified rather than claiming that every endpoint present during the scan was observed.
 
 ### Rate Limiting and Pagination
 
 - Use serial pagination; do not fan out page requests.
-- Stop when the authoritative page metadata shows the complete result set.
+- Stop when the authoritative page metadata indicates that the final page has been read; do not treat the total, page ordering, or deduplicated IDs as proof of snapshot consistency.
 - Reject page values below 1 and page sizes outside 1-200 before sending a request.
-- On HTTP 429, honor `Retry-After` when present; otherwise use bounded exponential backoff with jitter and a fixed retry ceiling.
-- Surface an incomplete-scan error instead of returning a partial stale-endpoint report after retry exhaustion or inventory drift.
+- On HTTP 429, honor `Retry-After` only when the requested delay is at most 30 seconds and the retry would remain inside a 120-second overall scan deadline. Otherwise return the incomplete-scan error. When `Retry-After` is absent, use bounded exponential backoff with jitter, the same deadline, and a fixed retry ceiling.
+- Surface an incomplete-scan error instead of returning a partial stale-endpoint report after retry exhaustion or detected inventory drift. When no drift is detected but the endpoint API offers no snapshot/version contract, return the report with completeness explicitly marked unverified.
 
 ## Security Considerations
 
 - **Credential handling**: `NIZLO_API_TOKEN` remains in the local MCP process environment. The plugin must redact the token, authorization header, and token prefix from exceptions, traces, and tool output. It introduces no new credential store.
 - **Scope narrowing**: the implementation exposes only five GET paths. Documentation directs operators to grant only `devices.view` and, when alert tools are enabled, `alerts.view`. The server refuses every mutation even when the token holder has broader role authority.
 - **Per-tenant isolation**: Nizlo derives the tenant from the active technician/token relationship and repeats tenant boundaries server-side. Tool schemas contain no tenant selector. Same-named customers remain distinct by immutable customer ID.
-- **Data sensitivity**: responses can contain endpoint names, operating-system details, IP/network context, customer/site names, alert descriptions, and technician-visible activity. Data flows directly from Nizlo to the operator's local process and must not be written to plugin logs or a hosted cache.
+- **Data sensitivity**: responses can contain endpoint names, operating-system details, IP/network context, customer/site names, alert descriptions, and technician-visible activity. Data flows directly from Nizlo to the operator's local process and must not be written to plugin logs or a hosted cache. When Claude Code uses a remotely hosted model, MCP tool results can leave the local process as model context; local stdio transport and disabled plugin logging do not prevent that transfer. Before use, operators must review and approve the configured model provider's customer-data processing, retention, and training policies.
 - **Audit logging**: Nizlo retains coarsened personal-token usage receipts and applies its existing API authorization/audit controls. The plugin adds no remote audit sink. Local Claude Code and shell history policies remain the operator's responsibility.
 - **Transport**: the default and every override must use HTTPS. Redirects that change scheme or origin are rejected before resending the authorization header.
 
@@ -94,8 +94,8 @@ For `nizlo_stale_endpoints`, the server serially retrieves active endpoint pages
 - **Scope/permission enforcement test**: verify a `devices.view`-only token can use device/customer/site/summary tools but receives a controlled permission failure for alerts. Verify the MCP server rejects all non-GET methods and non-allowlisted paths locally. Confirm a direct API mutation attempted with the narrow test token is denied by Nizlo.
 - **Multi-tenant isolation test**: use two sandbox workspaces with distinct tokens and sentinel records. Confirm each token returns only its own workspace and that no tool accepts a tenant selector or foreign identifier to cross the boundary.
 - **Tool-anchoring/drift check**: run `check-doc-references.mjs` and `check-tool-anchoring.mjs` against the plugin and confirm all six documented tool names match the live MCP server.
-- **Pagination consistency test**: seed more than one page of endpoints, include same-named customers with different IDs and null/old/recent timestamps, and verify the stale report groups correctly. Mutate ordering during a test scan and confirm the tool fails closed instead of returning a partial report.
-- **Rate-limit behavior test**: simulate HTTP 429 with and without `Retry-After`, verify bounded retries and jitter, and confirm retry exhaustion returns a controlled incomplete-scan error without exposing the token.
+- **Pagination consistency test**: seed more than one page of endpoints, include same-named customers with different IDs and null/old/recent timestamps, and verify the stale report groups correctly. Mutate ordering during a test scan and confirm the tool fails closed instead of returning a partial report. Without a snapshot token or inventory version, confirm a successful scan labels completeness unverified even when totals and deduplicated IDs appear stable.
+- **Rate-limit behavior test**: simulate HTTP 429 with and without `Retry-After`; verify the 30-second per-delay maximum, 120-second overall deadline, bounded retries, and jitter; and confirm retry exhaustion or either exceeded timing bound returns a controlled incomplete-scan error without exposing the token.
 - **Response-hardening test**: simulate invalid UTF-8, non-JSON success bodies, oversized error bodies, timeouts, redirects, and 4xx/5xx errors. Confirm bounded redacted errors and no traceback containing credentials.
 - **Standard plugin validation**: run `claude plugin validate` plus the repository's formatting, link, structure, and marketplace checks.
 
