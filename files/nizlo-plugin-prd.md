@@ -102,7 +102,7 @@ For `nizlo_stale_endpoints`, the server serially retrieves active endpoint pages
 ## Success Criteria
 
 - [ ] All six documented tools are available from the local stdio MCP server and map only to the five allowlisted GET routes.
-- [ ] A seven-day stale-endpoint scan over multiple pages returns complete customer-ID-grouped results with endpoint name, OS, and exact last-seen time, or fails closed when completeness cannot be proven.
+- [ ] A seven-day stale-endpoint scan over multiple pages returns customer-ID-grouped results with endpoint name, OS, and exact last-seen time; without an API snapshot/version contract it labels completeness unverified, and it fails closed on detected drift or retry exhaustion.
 - [ ] A `devices.view`-only token cannot use alert tools, and no plugin tool can issue a mutation even when broader credentials are supplied.
 - [ ] Two-workspace isolation tests show no cross-tenant data and no caller-controlled tenant selector.
 - [ ] Tokens and authorization headers are absent from stdout, stderr, tool responses, test snapshots, and persisted files.
