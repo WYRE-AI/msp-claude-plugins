@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "zabbix": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/zabbix/mcp",
+      "headers": {
+        "X-Zabbix-Base-Url": "${ZABBIX_BASE_URL}",
+        "X-Zabbix-Api-Token": "${ZABBIX_API_TOKEN}"
+      }
+    }
+  }
+}
