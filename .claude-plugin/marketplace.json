@@ -719,7 +719,7 @@
     {
       "name": "datto-saas-protection",
       "source": "./msp-claude-plugins/kaseya/datto-saas-protection",
-      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
       "category": "bcdr",
       "tags": [
         "kaseya",

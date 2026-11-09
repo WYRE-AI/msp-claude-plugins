@@ -1,35 +1,22 @@
 ---
 name: "Datto SaaS Protection API Patterns"
 description: >
-  Datto SaaS Protection (formerly Backupify) REST API fundamentals: regional
-  base URLs, bearer-token auth, the seat/tenant object model, backup status
-  queries, and restore operations.
+  Datto SaaS Protection (formerly Backupify) through Conduit: the six
+  datto_saas_* tools, the customer/domain/seat object model, Basic-auth key
+  pair, seat types and states, and the confirm-gated bulk seat change.
 when_to_use: >-
-  When working with the Datto SaaS Protection (Backupify) REST API. Use when: datto saas
-  protection, backupify, saas backup, m365 backup, google workspace backup, or saas protection
-  api.
+  When working with the Datto SaaS Protection (Backupify) tools or REST API. Use when: datto saas
+  protection, backupify, saas backup, m365 backup, google workspace backup, saas protection api,
+  datto_saas tools, seat license, or pause seat.
 ---
 
 # Datto SaaS Protection API Patterns
 
-## Status note
-
-The MCP server (`datto-saas-protection-mcp`) and SDK (`@wyre-technology/node-datto-saas-protection`) are in development.
-
 ## Overview
 
-Datto SaaS Protection (rebranded Backupify, now also folded together with Spanning under the same product family) provides cloud-to-cloud backup for Microsoft 365 and Google Workspace tenants.
+Datto SaaS Protection (rebranded Backupify) provides cloud-to-cloud backup for Microsoft 365 and Google Workspace tenants. Conduit brokers it through the `datto-saas-protection-mcp` sidecar (vendor slug `datto-saas-protection`), which wraps the documented Datto REST API at `https://api.datto.com/v1/saas`.
 
 Reference: <https://saasprotection.datto.com/help/M365/Content/Other_Administrative_Tasks/using-rest-api-saas-protection.htm>
-
-Base URLs (per region):
-
-```
-https://api.datto.com/api/v1            (US)
-https://api.eu.datto.com/api/v1         (EU)
-```
-
-The MCP server takes a `region` credential field (`us` or `eu`); never hard-code.
 
 ## Anti-triggers
 
@@ -42,91 +29,69 @@ The MCP server takes a `region` credential field (`us` or `eu`); never hard-code
 
 ## Authentication
 
-API key issued from the SaaS Protection partner portal:
+The Datto REST API uses HTTP Basic auth with the **public/secret API key pair** from the Datto Partner Portal (Admin → Integrations → API Keys). Both are stored on the Datto SaaS Protection connection in Conduit, which injects them on every request; nothing is set on the client.
 
-1. SaaS Protection portal → Settings → API → Create Key
-2. Optional: scope key to specific clients
-3. Send on every request:
+There is a single API host, `api.datto.com`. The connection's Region field is accepted for backward compatibility but has no effect: Datto publishes no EU SaaS Protection API host.
 
-```
-Authorization: Bearer <api_key>
-```
+## Tools
 
-Keys are long-lived; rotate from the same UI.
+| Tool | Tier | What it returns | REST call |
+|------|------|-----------------|-----------|
+| `datto_saas_list_domains` | read | Every customer domain (M365 tenant or Google Workspace domain): `saasCustomerId`, customer name, domain, `productType`, `externalSubscriptionId`, retention, `seatsUsed`, backup stats. Optional `search` filter. **Start here.** | `GET /v1/saas/domains` |
+| `datto_saas_list_seats` | read | Seats for one customer with `seatType`, `seatState`, billable flag and `remoteId`. Optional `seatType` and `seatState` filters. | `GET /v1/saas/{saasCustomerId}/seats` |
+| `datto_saas_get_seat` | read | One seat by `remoteId` or `mainId` (email or site URL), rendered as a seat card. Datto has no single-seat endpoint; this filters the seat list. | `GET /v1/saas/{saasCustomerId}/seats` |
+| `datto_saas_list_applications` | read | Backup history per suite/application (Exchange, OneDrive, SharePoint, Teams, Gmail, Drive) with per-window status. `daysUntil` (up to about 30), `includeRemoteID`. | `GET /v1/saas/{saasCustomerId}/applications` |
+| `datto_saas_get_backup_stats` | read | Detailed per-service backup statistics: last-7-day status, last backups, storage. | `GET /v1/saas/{saasCustomerId}/detailedBackupStats` |
+| `datto_saas_bulk_seat_change` | write | License, Pause or Unlicense up to 100 seats of one type. Confirm-gated (see below). | `PUT /v1/saas/{saasCustomerId}/{externalSubscriptionId}/bulkSeatChange` |
+
+`saasCustomerId` is optional on the read tools: if it is omitted and the client supports prompts, the server asks the user to pick a customer.
+
+There is **no restore tool and no activity-log tool.** Restores are started in the SaaS Protection portal. Do not tell a user that a restore can be queued or polled from here.
 
 ## Object model
 
 ```
-Partner
- └── Client (a customer organization)
-      └── Domain (M365 tenant / Google domain)
-           └── Seat (mailbox / OneDrive / SharePoint site / Google user)
-                └── Backup runs / restore points
+Partner (API key pair)
+ └── Customer domain (saasCustomerId, externalSubscriptionId)
+      └── Seat (remoteId / mainId, seatType, seatState, billable)
+           └── Application backup history (per suite, per window)
 ```
 
-## Common endpoints
+| Seat types (case-sensitive) | `User`, `SharedMailbox`, `SharedDrive`, `Site`, `TeamSite`, `Team` |
+|---|---|
+| Seat states | `Active`, `Paused`, `Archived`, `Unprotected` |
+| Bulk actions (case-sensitive) | `License`, `Pause`, `Unlicense` |
 
-| Domain | Endpoint | Notes |
-|--------|----------|-------|
-| Clients | `GET /clients` | All client orgs |
-| Domains | `GET /clients/{clientId}/domains` | M365/Google tenants |
-| Seats | `GET /clients/{clientId}/domains/{domainId}/seats` | Active + archived |
-| Single seat | `GET /seats/{seatId}` | |
-| Backup status | `GET /seats/{seatId}/backups` | Most recent backup runs |
-| Activity log | `GET /clients/{clientId}/activity` | Org-level events |
-| Restore (request) | `POST /seats/{seatId}/restores` | Queue restore |
-| Restore status | `GET /restores/{restoreId}` | |
-| License usage | `GET /clients/{clientId}/usage` | Seat counts |
+## Bulk seat change
+
+`datto_saas_bulk_seat_change` requires `saasCustomerId`, `externalSubscriptionId` (both from `datto_saas_list_domains`, e.g. `Classic:Office365:123456`), `seatType`, `actionType` and `ids` (1-100 `remoteId` values from `datto_saas_list_seats`).
+
+- **License** starts protection and billing.
+- **Pause** keeps existing backups but stops new ones.
+- **Unlicense** stops protection.
+
+The server asks the user to confirm the exact change. On clients that cannot show a prompt it refuses unless `confirm: true` is passed, and that flag may only be set after the user has explicitly approved this exact change. Seat Management 2.0 tenants only.
 
 ## Pagination
 
-Cursor-based:
-
-```
-GET /clients?limit=100
-→ { items: [...], nextCursor: "abc123" }
-
-GET /clients?limit=100&cursor=abc123
-```
-
-Default `limit` is 50, max is 250. Stop when `nextCursor` is missing or null.
-
-## Restore operations
-
-Restores are async. The flow:
-
-```
-1. POST /seats/{seatId}/restores   → { restoreId, status: "queued" }
-2. Poll GET /restores/{restoreId}  → status transitions queued → running → completed | failed
-3. On completed, fetch the result location (URL or destination metadata)
-```
-
-Typical restore wall-clock: minutes to hours depending on data volume. Poll at 30-second intervals; do not poll faster.
-
-## Rate limits
-
-**60 req/min per API key** under default policy. HTTP 429 includes `Retry-After`. Aggregate operations (list all seats across all clients) should use `Promise.all` with concurrency capped at 4.
+`/domains` and `/seats` return bare arrays. Endpoints that answer with Datto's paged envelope (`{ pagination: { page, perPage, totalPages }, items }`) are followed automatically. Every tool returns a flat array, so there is no cursor to manage.
 
 ## Error handling
 
 | HTTP | Meaning | Action |
 |------|---------|--------|
-| 200 | OK | |
-| 400 | Bad request | Validate inputs |
-| 401 | Bad / expired key | Rotate key |
-| 403 | Key lacks scope on this client | Verify scope |
-| 404 | Unknown seatId / clientId / domainId | |
-| 409 | Restore already queued for this seat | Surface; offer to cancel-and-retry |
+| 401 | Bad or inactive key pair | Re-check the key pair on the Conduit connection |
+| 403 | Key lacks access to this customer | Verify the key's scope in the Partner Portal |
+| 404 | Unknown `saasCustomerId` or `externalSubscriptionId` | Re-run `datto_saas_list_domains` |
 | 429 | Rate limited | Back off per `Retry-After` |
 | 500-503 | Transient | Exponential backoff |
 
 ## Gotchas
 
-- **Region selection is sticky**: A US-region key cannot call EU endpoints. The error is a generic 401, not a 404 — surface a clear message asking the user to check the region credential.
-- **Archived seats**: By default, list endpoints return only active seats. Pass `?includeArchived=true` to see seats whose source mailboxes were deleted but whose backups are retained.
-- **Spanning vs. SaaS Protection**: These are different products that share marketing branding. Spanning has its own API (`spanning-mcp` plugin) — don't conflate keys.
-- **Restore destination quirks**: Restoring an M365 mailbox to an existing user requires Graph API permissions on the target tenant; the SaaS Protection API surfaces the dependency as a 400 once the restore starts running, not at queue time.
+- **Unprotected is not the same as never backed up.** A seat that exists in the tenant but is not licensed shows as `Unprotected`. Coverage gaps are seats in that state, not missing rows.
+- **Archived seats keep their backups.** Seats whose source mailbox or site was deleted stay listed as `Archived`; filter with `seatState` rather than assuming the list is active-only.
+- **Spanning vs. SaaS Protection**: these are different products that share marketing branding. Spanning has its own API and plugin; don't conflate keys or coverage.
 
 ## Related skills
 
-When the build-out lands, expect domain skills for: clients, seats, restores, activity-logs, license-usage.
+- `datto-saas-protection-seat-coverage` — seat-coverage and backup-health sweep across customers.
