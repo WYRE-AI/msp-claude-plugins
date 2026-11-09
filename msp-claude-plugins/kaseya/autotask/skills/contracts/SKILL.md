@@ -96,11 +96,11 @@ Args: {
 }
 ```
 
-All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `pageSize` (default 25, max 500). This is the only read tool for contracts — there is no `contractType` or end-date filter; filter on `contractType`/`endDate` client-side from the returned records.
+All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `pageSize` (default 25, max 500). There is no `contractType` filter; filter on it client-side from the returned records.
 
 ### Fetch a Single Contract or Build a Renewal Pipeline
 
-There is no `autotask_get_contract` tool. There is no `autotask_list_expiring_contracts` tool either — `autotask_search_contracts` is the only read path for contracts. To fetch one contract, call `autotask_search_contracts` (scoped by `companyID` when known) and match the target `id` from the results. To build a 30/60/90-day renewal pipeline or find contracts already past their end date, call `autotask_search_contracts` with `status: 1` (scoped by `companyID` when reviewing one account, otherwise paged across the portfolio) and filter/sort the returned records client-side by `endDate`:
+To fetch one contract by ID, call `autotask_get_contract` (`id`; header fields only). For a renewal pipeline, call `autotask_list_expiring_contracts` with `daysAhead` (default 60), optional `companyID`, and `includeExpired: true` to also catch contracts already past their end date. Sort the result by `endDate`:
 
 - `endDate` on or before today → expired but still Active — the compliance-risk case. Autotask does **not** auto-deactivate expired contracts, so this is how clients still receiving service on expired paper are found.
 - `endDate` within the next 30/60/90 days → the renewal call list, in ascending urgency order.
@@ -149,7 +149,7 @@ Only fields provided change — the typical renewal move is extending `endDate`.
 
 ### Contract Service Lines
 
-`autotask_create_contract_service` (required: `contractID`, `serviceID`, `unitPrice`) and `autotask_update_contract_service` (required: `id`, `contractID`) manage the ContractServices line items on a contract.
+`autotask_create_contract_service` (required: `contractID`, `serviceID`, `unitPrice`) and `autotask_update_contract_service` (required: `id`, `contractID`) manage the ContractServices line items on a contract. Reading those lines, their billed units and the recurring-revenue roll-up is covered in `autotask-contract-services`.
 
 ## API Patterns
 
@@ -291,8 +291,8 @@ Calculate remaining hours:
 ### Contract Renewal
 
 1. **Identify expiring contracts**
-   - `autotask_search_contracts` with `status: 1`, windowed client-side by `endDate` into 30/60/90-day buckets
-   - Filter for `endDate` before today to catch already-lapsed contracts still marked active
+   - `autotask_list_expiring_contracts` with `daysAhead: 90` and `includeExpired: true`, bucketed by `endDate` into 30/60/90 days
+   - Contracts with `endDate` before today are already lapsed but still marked active
 
 2. **Review contract performance**
    - Compare budgeted vs actual hours

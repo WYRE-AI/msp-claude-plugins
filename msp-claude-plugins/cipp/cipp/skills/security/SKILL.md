@@ -44,6 +44,20 @@ cipp_list_named_locations(tenantFilter='contoso.onmicrosoft.com')
 
 Returns named locations: IP ranges (trusted/untrusted) and country-based locations. These are the building blocks CA policies reference for location-based controls.
 
+### `cipp_list_enterprise_apps`
+
+```
+cipp_list_enterprise_apps(tenantFilter='contoso.onmicrosoft.com', includeBuiltIn=False)
+```
+Third-party enterprise applications (service principals) customers have connected through OAuth. Review for unfamiliar apps with broad permissions; consent phishing shows up here. Admin-tier in Conduit.
+
+### `cipp_list_user_signin_logs`
+
+```
+cipp_list_user_signin_logs(tenantFilter, userId='alice@contoso.com', top=100)
+```
+One user's recent interactive sign-ins, newest first: time, app, IP, location, result and failure reason. Use it for "was this account compromised?" alongside `cipp_bec_check`. One tenant per call; admin-tier in Conduit.
+
 ## What to look for in a CA review
 
 | Finding | Why it matters |

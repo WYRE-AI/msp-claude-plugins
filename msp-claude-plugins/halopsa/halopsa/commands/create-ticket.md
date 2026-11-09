@@ -34,13 +34,14 @@ Create a new service ticket in HaloPSA with specified details.
    - Look up contact/user ID if contact provided
    - Look up site ID from name if provided
    - Look up agent ID from name if provided
+   - Resolve categories with `halopsa_categories_list` (`search` by name) and pass the names as `category_1`–`category_4` by level
    - Apply default priority if not specified
 
 5. **Check contract coverage**
    - Query active contracts for client
    - Warn if no active contract (T&M billing)
 
-6. **Create the ticket**
+6. **Create the ticket** with `halopsa_tickets_create` (`summary`, `client_id`, `tickettype_id` required; `details`, `priority_id`, `site_id`, `agent_id`, `category_1`–`category_4` optional). The underlying request:
    ```json
    POST /api/Tickets
    Authorization: Bearer {token}
@@ -55,7 +56,8 @@ Create a new service ticket in HaloPSA with specified details.
        "status_id": 1,
        "user_id": <resolved_contact_id>,
        "site_id": <resolved_site_id>,
-       "agent_id": <resolved_agent_id>
+       "agent_id": <resolved_agent_id>,
+       "category_1": "<level-1 category name>"
      }
    ]
    ```

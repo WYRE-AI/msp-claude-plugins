@@ -134,6 +134,8 @@ curl -s "https://${CW_API_URL}/v4_6_release/apis/3.0/system/info" \
 | `contacts` | Contact management, communication items, portal access |
 | `projects` | Project CRUD, phases, templates, resource allocation |
 | `time-entries` | Time entry CRUD, billable/non-billable, work types |
+| `scheduling` | Schedule entries: booking, moving and reviewing technician time |
+| `procurement` | Purchase and sales orders, procurement products, warehouses, inventory adjustments |
 | `api-patterns` | Authentication, pagination, conditions syntax, rate limiting |
 
 Contact communication type ids and names differ per ConnectWise tenant. Use `cw_list_communication_types` to see them; `cw_create_contact` also accepts `emailTypeId`, `emailTypeName`, `phoneTypeId`, `phoneTypeName`. See the `contacts` skill.

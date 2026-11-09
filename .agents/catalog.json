@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 388,
+    "skills": 392,
     "commands": 313,
     "agents": 154
   },
@@ -374,6 +374,10 @@
         {
           "id": "configuration-items",
           "path": "msp-claude-plugins/kaseya/autotask/skills/configuration-items/SKILL.md"
+        },
+        {
+          "id": "contract-services",
+          "path": "msp-claude-plugins/kaseya/autotask/skills/contract-services/SKILL.md"
         },
         {
           "id": "contracts",
@@ -762,7 +766,7 @@
     {
       "name": "cipp",
       "displayName": "Cipp",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
       "tags": [
@@ -775,7 +779,7 @@
       ],
       "path": "msp-claude-plugins/cipp/cipp",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "alerts",
@@ -796,6 +800,10 @@
         {
           "id": "ops",
           "path": "msp-claude-plugins/cipp/cipp/skills/ops/SKILL.md"
+        },
+        {
+          "id": "secure-score",
+          "path": "msp-claude-plugins/cipp/cipp/skills/secure-score/SKILL.md"
         },
         {
           "id": "security",
@@ -1112,12 +1120,20 @@
           "path": "msp-claude-plugins/connectwise/manage/skills/contacts/SKILL.md"
         },
         {
+          "id": "procurement",
+          "path": "msp-claude-plugins/connectwise/manage/skills/procurement/SKILL.md"
+        },
+        {
           "id": "product-catalog",
           "path": "msp-claude-plugins/connectwise/manage/skills/product-catalog/SKILL.md"
         },
         {
           "id": "projects",
           "path": "msp-claude-plugins/connectwise/manage/skills/projects/SKILL.md"
+        },
+        {
+          "id": "scheduling",
+          "path": "msp-claude-plugins/connectwise/manage/skills/scheduling/SKILL.md"
         },
         {
           "id": "tickets",

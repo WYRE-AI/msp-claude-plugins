@@ -59,6 +59,10 @@ Update fields on an existing HaloPSA ticket including status, priority, category
      -H "Authorization: Bearer $TOKEN"
    ```
 
+   **Agent lookup through Conduit:** `halopsa_agents_list` / `halopsa_agents_get`; teams with `halopsa_teams_list`.
+
+   **Category lookup:** `halopsa_categories_list` with `search`, then pass the category **name** as `category_1`–`category_4` by level (`halopsa_categories_get` reads one by ID).
+
    **Team lookup:**
    ```bash
    curl -s -X GET "{base_url}/api/Team?search={team}" \
@@ -70,7 +74,7 @@ Update fields on an existing HaloPSA ticket including status, priority, category
    - Include only changed fields
    - Merge with existing ticket data
 
-5. **Update the ticket**
+5. **Update the ticket** with `halopsa_tickets_update` (send only the changed fields, including any `category_1`–`category_4`). The underlying request:
    ```bash
    # HaloPSA uses POST for updates with the id field
    curl -s -X POST "{base_url}/api/Tickets" \

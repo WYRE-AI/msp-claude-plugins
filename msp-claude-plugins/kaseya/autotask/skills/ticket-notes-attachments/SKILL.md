@@ -49,6 +49,15 @@ Key parameters:
 - `createdAfter` / `createdBefore` — Date range
 - `page` / `pageSize` — Pagination
 
+### Ticket Note Attachments
+
+Notes often carry their real content as an attachment (a pasted screenshot, a forwarded email) with an empty or unhelpful `description`.
+
+- `autotask_search_ticket_note_attachments` (`ticketNoteId`, optional `pageSize` up to 50) lists the attachments on one note.
+- `autotask_get_ticket_note_attachment` fetches one of them.
+
+Check a note's attachments before concluding it is empty.
+
 ### Ticket Attachments
 
 #### Get a Ticket Attachment
