@@ -60,7 +60,7 @@ export const plugins: Plugin[] = [
       { name: 'calls-queues', description: '3CX\'s live-operations surface: read-only visibility into active calls, recordings, voicemail, department and queue membership, and forwarding/presence profiles, plus the write actions that change live call routing — dropping a call, switching a profile, and logging a queue agent in or out.' },
       { name: 'directory', description: '3CX\'s read-only directory surface: resolving a caller by email or by exact extension, searching the PBX\'s own phonebooks, searching contacts synced from an integrated CRM, and listing PBX users/extensions.' },
       { name: 'pbx-admin', description: '3CX\'s system-and-configuration surface: server time, PBX event log and application log search, service status, database schema and the read-only SELECT-only Query tool, DIDs, IP and phone blocklists, SIP trunks, call flow apps, and the configuration write/delete actions that change what calls the PBX accepts or how they route.' },
-      { name: 'api-patterns', description: '3CX\'s native PBX MCP server: the per-PBX endpoint shape (every PBX is its own FQDN and its own OAuth authorization server — there is no shared mcp.3cx.com), the Admin Console + client setup flow, the permission model (fully inherited from the 3CX account that approved the connection), and how to discover the live tool surface since 3CX has not published exact tool-name strings.' }
+      { name: 'api-patterns', description: '3CX\'s native PBX MCP server: the per-PBX endpoint shape (every PBX is its own FQDN and its own OAuth authorization server — there is no shared mcp.3cx.com), how Conduit\'s catalog connects one anyway, the Admin Console + client setup flow, the permission model (fully inherited from the 3CX account that approved the connection), and how to discover the live tool surface since 3CX has not published exact tool-name strings.' }
     ],
     agents: [],
     commands: [
@@ -273,7 +273,7 @@ export const plugins: Plugin[] = [
     commands: [
       { name: '/add-note', description: 'Add a note or comment to an existing Autotask ticket' },
       { name: '/check-contract', description: 'View contract status, entitlements, and remaining hours for a company or specific contract' },
-      { name: '/check-pricing', description: 'Check pricing details for an Autotask product or service from price lists' },
+      { name: '/check-pricing', description: 'Check pricing details for an Autotask product or service (price-list overrides are UI-only)' },
       { name: '/create-quote', description: 'Create a new Autotask quote with line items for products, services, and service bundles' },
       { name: '/create-ticket', description: 'Create a new service ticket in Autotask PSA' },
       { name: '/expenses', description: 'Use this skill when working with Autotask expense reports - creating reports, adding expense items, searching by status or submitter, and tracking reimbursable and billable expenses' },
@@ -588,7 +588,7 @@ export const plugins: Plugin[] = [
       'Script Execution'
     ],
     skills: [
-      { name: 'alerts', description: 'ConnectWise Automate alert management: alert sources (monitors, scripts, events), severity levels, lifecycle states, acknowledgment, resolution, history tracking, and PSA ticket creation from alerts.' },
+      { name: 'alerts', description: 'ConnectWise Automate alerts through Conduit: the read-only cwautomate_alerts_list and cwautomate_alerts_get tools, filtering by computer, client and severity, alert sources and severity levels, and triage workflows that hand follow-up to the PSA.' },
       { name: 'clients', description: 'ConnectWise Automate client management: client CRUD, client identifiers, locations, client hierarchy, groups, extra data fields (EDFs), and client-level settings.' },
       { name: 'computers', description: 'ConnectWise Automate computer/endpoint management: computer identifiers (ComputerID, Name, ComputerGUID, MAC), status values, OS types, hardware/software inventory, disk, patch, and antivirus status, plus remote management operations.' },
       { name: 'monitors', description: 'ConnectWise Automate monitor management: monitor types (internal, remote, agent, SNMP, script), categories, threshold configuration, templates, assignment methods (computer/group/client), and status evaluation.' },
@@ -1117,12 +1117,14 @@ export const plugins: Plugin[] = [
     maturity: 'production',
     features: [
       'Alert Handling',
+      'Custom Fields',
       'Device Management',
       'Organization Management',
       'Ticket Management'
     ],
     skills: [
       { name: 'alerts', description: 'NinjaOne alerts and the conditions behind them: retrieving device alerts, dismissing individual alerts and bulk resets, alert summaries, severity and priority levels, common hardware/service/security/connectivity alert types and thresholds, alert webhooks, and triage workflows.' },
+      { name: 'custom-fields', description: 'Reading and writing NinjaOne device and organization custom fields through ninjaone_devices_get_custom_fields, ninjaone_devices_update_custom_fields, ninjaone_organizations_get_custom_fields and ninjaone_organizations_update_custom_fields: field-name keys, partial updates, and safe write practice.' },
       { name: 'devices', description: 'NinjaOne device management: device details and updates, Windows service control, inventory, maintenance windows, reboot modes, and health-check workflows for Windows, Mac, and Linux endpoints running the NinjaRMM agent.' },
       { name: 'organizations', description: 'NinjaOne organizations — the top-level container for devices, representing MSP clients: creation and listing, locations, node approval modes, policy mappings and node role IDs, custom fields, tags, cursor pagination, and error codes.' },
       { name: 'tickets', description: 'NinjaOne\'s built-in ticketing system, which integrates with device monitoring: ticket creation and updates, core/status/metadata fields, status and priority values with SLA targets, log entry types, device linkage, tagging patterns, and error codes.' },
@@ -1533,13 +1535,13 @@ export const plugins: Plugin[] = [
       'Workflows'
     ],
     skills: [
-      { name: 'alerts', description: 'Rootly\'s alerting layer between monitoring tools and incident management: alert sources and integrations (Datadog, PagerDuty, New Relic, Grafana), routing rules, escalation policies and their acknowledgement windows, suppression, and the conditions under which an alert auto-creates an incident.' },
+      { name: 'alerts', description: 'Rootly\'s alerting layer between monitoring tools and incident management: alert sources (`alerts_source`) and their webhook/email intake, alert routing rules, alert groups (deduplication/noise reduction), alert urgencies, escalation policies, and the acknowledge/resolve actions on an individual alert.' },
       { name: 'incidents', description: 'Incidents, Rootly\'s primary resource: the incident lifecycle and status transitions, severity levels, the incident field reference, AI-assisted analysis via find_related_incidents and suggest_solutions, action items, alert attachment, and cross-vendor PSA ticket correlation.' },
-      { name: 'oncall', description: 'Rootly on-call visibility built on the get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents, and check_oncall_health_risk tools: schedule and rotation coverage, structured shift handoffs, per-shift incident scoping, shift metric fields, and the burnout risk signals.' },
-      { name: 'postmortems', description: 'Rootly postmortems as structured post-incident retrospectives: the postmortem lifecycle, templates and automatic timeline import, action item creation and tracking through to project-management tools, and the blameless review practices Rootly\'s model assumes.' },
-      { name: 'services', description: 'The Rootly service catalog: tier classification by business criticality, the ownership attributes attached to each service (team, Slack channel, escalation policy, runbooks), upstream/downstream dependency modeling for blast-radius analysis, service CRUD, and how services link back to incidents and alerts.' },
-      { name: 'workflows', description: 'Rootly\'s incident-response automation model: the trigger / condition / action structure, the full catalog of trigger, action, and condition types, workflow CRUD and enable/disable, and the failure modes behind stale, over-firing, or circularly chained workflows.' },
-      { name: 'api-patterns', description: 'The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs.' }
+      { name: 'oncall', description: 'Rootly on-call visibility built on the get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents, get_oncall_schedule_summary and check_responder_availability tools: schedule and rotation coverage, structured shift handoffs, per-shift incident scoping, shift metric fields, and the burnout risk signals.' },
+      { name: 'postmortems', description: 'Rootly postmortems as structured post-incident retrospectives: Rootly\'s retrospective process/step model (there is no standalone "postmortem" object), per-step status tracking through to completion, action item creation and tracking, and the blameless review practices Rootly\'s model assumes.' },
+      { name: 'services', description: 'The Rootly service catalog: the real service record (ownership via owner teams/users, Slack channels, dependency modeling via linked service IDs, and third-party links to PagerDuty/Opsgenie/Cortex/Backstage/GitHub/GitLab), service CRUD, incident/uptime charts per service, and how services link back to incidents and alerts.' },
+      { name: 'workflows', description: 'Rootly\'s incident-response automation model: workflow tasks (each with a concrete `task_type` like `create_slack_channel` or `page_rootly_on_call_responders`), the trigger-type/`triggers`-event structure (incident, post_mortem, action_item, alert, pulse, simple), the ID-list based condition/matching fields, and the `enabled` flag used to turn a workflow on or off (there is no separate enable/disable tool).' },
+      { name: 'api-patterns', description: 'The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs. Team token types and how the gateway injects credentials, the catalog of roughly 253 dynamically generated tools by category, page-number pagination and relationship includes, filter syntax, rate limits, and error handling.' }
     ],
     agents: [
       { name: 'incident-commander', description: 'Use this agent when an MSP engineer, SRE, or incident manager needs to command an active Rootly incident or review open incidents.' },
@@ -1658,6 +1660,7 @@ export const plugins: Plugin[] = [
       'Cloud Security Posture',
       'Purple AI Threat Hunting',
       'PowerQuery Analytics',
+      'Threat Intel',
       'Vulnerability Management'
     ],
     skills: [
@@ -1666,6 +1669,7 @@ export const plugins: Plugin[] = [
       { name: 'misconfigurations', description: 'Cloud security posture findings from SentinelOne\'s XSPM module across AWS, Azure, GCP, Kubernetes, identity providers, and infrastructure-as-code.' },
       { name: 'purple-ai', description: 'The `purple_ai` tool — SentinelOne\'s natural language investigation assistant over the full Singularity telemetry model.' },
       { name: 'threat-hunting', description: 'PowerQuery against the Singularity Data Lake: the Scalyr-based pipeline syntax (distinct from SPL, SQL, KQL, and Elasticsearch DSL), the powerquery, get_timestamp_range, and iso_to_unix_timestamp tools, time-range and row-limit handling, common hunting scenarios, and the Purple AI generation path.' },
+      { name: 'threat-intel', description: 'The SentinelOne sidecar\'s enrichment tools: VirusTotal / Google Threat Intelligence lookups by hash, IP, domain and URL (threat_intel_*), sandbox behaviour and file relationships, advanced VirusTotal search, and the CVE database (cve_search_by_id, cve_search_by_vendor, cve_database_status).' },
       { name: 'vulnerabilities', description: 'CVE tracking through SentinelOne\'s XSPM module: the read-only vulnerability tools, EPSS scores and exploit-maturity values and why they outrank raw CVSS severity for prioritization, status values and their transitions, the vulnerability field reference, and patch-prioritization and reporting workflows.' },
       { name: 'api-patterns', description: 'The SentinelOne Purple MCP server and the APIs behind it: uvx installation and transport modes, Service User token levels, the 23 read-only tools organized by domain, and the dual GraphQL (cursor pagination) / REST (offset pagination) architecture with its differing filter syntaxes, rate limits, and error causes.' }
     ],
@@ -1801,12 +1805,8 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/add-ticket-comment', description: 'Add a comment to an existing Syncro ticket' },
-      { name: '/create-appointment', description: 'Create a calendar appointment in Syncro' },
       { name: '/create-ticket', description: 'Create a new service ticket in Syncro MSP' },
       { name: '/get-customer', description: 'Get detailed customer information from Syncro' },
-      { name: '/list-alerts', description: 'List active RMM alerts from Syncro' },
-      { name: '/log-time', description: 'Log a time entry against a Syncro ticket' },
-      { name: '/resolve-alert', description: 'Resolve an RMM alert in Syncro' },
       { name: '/search-assets', description: 'Search for customer assets in Syncro' },
       { name: '/search-tickets', description: 'Search for tickets in Syncro MSP by various criteria' },
       { name: '/update-ticket', description: 'Update fields on an existing Syncro ticket' }
@@ -2115,12 +2115,15 @@ export const plugins: Plugin[] = [
     id: 'datto-saas-protection',
     name: 'Datto Saas Protection',
     vendor: 'Kaseya',
-    description: 'Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)',
+    description: 'Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing',
     category: 'bcdr',
     maturity: 'alpha',
-    features: [],
+    features: [
+      'Seat Coverage'
+    ],
     skills: [
-      { name: 'api-patterns', description: 'Datto SaaS Protection (formerly Backupify) REST API fundamentals: regional base URLs, bearer-token auth, the seat/tenant object model, backup status queries, and restore operations.' }
+      { name: 'seat-coverage', description: 'Seat-coverage and backup-health sweep for Datto SaaS Protection: finding unprotected and paused seats per customer, reading per-application backup status and detailed stats, and proposing (never silently applying) seat licence changes with datto_saas_bulk_seat_change.' },
+      { name: 'api-patterns', description: 'Datto SaaS Protection (formerly Backupify) through Conduit: the six datto_saas_* tools, the customer/domain/seat object model, Basic-auth key pair, seat types and states, and the confirm-gated bulk seat change.' }
     ],
     agents: [],
     commands: [],
@@ -2195,7 +2198,7 @@ export const plugins: Plugin[] = [
       { name: 'activities', description: 'HubSpot tasks, notes, and associations: task priority and status values, notes-vs-tasks semantics, the association type matrix linking contacts, companies, deals, and tickets, and engagement-history workflows.' },
       { name: 'companies', description: 'HubSpot company records: core fields, industry classification values, lifecycle stages, domain-based deduplication and automatic contact-company matching, and cross-referencing associated contacts, deals, and tickets.' },
       { name: 'contacts', description: 'HubSpot contact records: core and MSP-relevant custom fields, lifecycle stages, lead status values, contact ownership, CRM search filter patterns, and associations to companies and deals.' },
-      { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs.' },
+      { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs. TCV), forecast categories and weighted forecasting, and associating deals with contacts and companies.' },
       { name: 'tickets', description: 'HubSpot support tickets: core fields, default pipeline stages, priority levels, MSP ticket categories, SLA timestamp properties, and associating tickets with contacts, companies, and deals.' },
       { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server and the CRM Search API behind it: the complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP, automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
     ],
@@ -2995,7 +2998,7 @@ export const plugins: Plugin[] = [
       'Retention Rpo Compliance'
     ],
     skills: [
-      { name: 'backup-job-health', description: 'Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: the two structurally different job models (image-based appliance backup vs.' },
+      { name: 'backup-job-health', description: 'Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: the two structurally different job models (image-based appliance backup vs. SaaS-data snapshot backup) and how to normalize them into one health record per protected unit, why a live consecutive-failure streak matters more than a trailing success rate, the missed-versus-failed distinction and its different root causes, and the two storage-trending risk patterns (approaching capacity, anomalous growth).' },
       { name: 'restore-test-verification', description: 'Whether a backup is actually recoverable rather than merely present: the ranked hierarchy of restore evidence (actual restore performed, full boot/virtualization verification, screenshot verification, spot-check restore drill, no evidence at all), adequate test cadence per data-criticality tier, and why a never-tested backup is the highest-priority finding — outranking even an actively failing job.' },
       { name: 'retention-rpo-compliance', description: 'Comparing configured backup retention and cadence against contracted retention windows and RPO (recovery point objective) targets: the two distinct retention gap types (configured-shorter-than-contracted vs. storage-forced truncation), why achievable RPO must be derived from actual job success history rather than the nominal schedule, where the contracted side of the comparison actually lives, and why "no documented requirement" is its own finding rather than an automatic pass.' }
     ],
