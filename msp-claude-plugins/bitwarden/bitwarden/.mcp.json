@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "bitwarden": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/bitwarden/mcp",
+      "headers": {
+        "X-Bitwarden-Client-Id": "${BITWARDEN_CLIENT_ID}",
+        "X-Bitwarden-Client-Secret": "${BITWARDEN_CLIENT_SECRET}",
+        "X-Bitwarden-Region": "${BITWARDEN_REGION}"
+      }
+    }
+  }
+}
