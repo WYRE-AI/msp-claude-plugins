@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "smileback": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/smileback/mcp",
+      "headers": {
+        "X-SmileBack-Client-Id": "${SMILEBACK_CLIENT_ID}",
+        "X-SmileBack-Client-Secret": "${SMILEBACK_CLIENT_SECRET}",
+        "X-SmileBack-Username": "${SMILEBACK_USERNAME}",
+        "X-SmileBack-Password": "${SMILEBACK_PASSWORD}",
+        "X-SmileBack-Region": "${SMILEBACK_REGION}"
+      }
+    }
+  }
+}
