@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 385,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -3715,8 +3715,8 @@
     {
       "name": "datto-saas-protection",
       "displayName": "Datto SAAS Protection",
-      "version": "0.2.3",
-      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "version": "0.2.4",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -3729,11 +3729,15 @@
       ],
       "path": "msp-claude-plugins/kaseya/datto-saas-protection",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
           "path": "msp-claude-plugins/kaseya/datto-saas-protection/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "seat-coverage",
+          "path": "msp-claude-plugins/kaseya/datto-saas-protection/skills/seat-coverage/SKILL.md"
         }
       ],
       "commands": [],

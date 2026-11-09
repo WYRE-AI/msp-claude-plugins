@@ -32,6 +32,20 @@ Computers are the core managed entities in ConnectWise Automate. Each computer r
   of devices and endpoints; use `datto-rmm-devices`,
   `ninjaone-devices` or `atera-devices`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `cwautomate_computers_list` | read | List computers, filtered by client, location or online status |
+| `cwautomate_computers_get` | read | One computer's detail |
+| `cwautomate_computers_search` | read | Find computers by (partial) name |
+| `cwautomate_commands_list` | read | Automate's fixed command catalog; find a `command_id` here |
+| `cwautomate_computers_command_status` | read | Read a queued command by `computer_id` and `execution_id` |
+| `cwautomate_computers_reboot` | write | Queue a reboot (catalog reboot command, or `command_id`) |
+| `cwautomate_computers_run_command` | admin | Queue a catalog command with positional `parameters` |
+
+Commands are queued, not run synchronously. `cwautomate_computers_reboot` and `cwautomate_computers_run_command` return an `execution_id` (by default without waiting). Poll `cwautomate_computers_command_status`; never re-issue on a timeout or a "Duplicate command" result, because the first one is still queued. Free-text commands are not accepted, and the API user's command level silently caps which catalog commands may be issued.
+
 ## Key Concepts
 
 ### Computer Identifiers

@@ -9,7 +9,7 @@ This plugin provides Claude with deep knowledge of ConnectWise Automate, enablin
 - **Computer Management** - Search, view, and manage endpoints across all clients
 - **Script Execution** - Run scripts on computers with parameters and results tracking
 - **Monitor Configuration** - Manage monitoring templates, thresholds, and assignments
-- **Alert Handling** - View, acknowledge, and create tickets from alerts
+- **Alert Handling** - View and triage alerts (read-only; follow-up goes to a PSA ticket)
 - **Client Management** - Manage clients, locations, and group configurations
 
 ## Prerequisites
@@ -98,7 +98,7 @@ ConnectWise Automate enforces rate limits of approximately **60 requests per min
 | `clients` | Client CRUD operations, locations, settings, groups |
 | `scripts` | Script listing, execution, parameters, results |
 | `monitors` | Monitor types, thresholds, templates, assignments |
-| `alerts` | Alert listing, acknowledgment, history, ticket creation |
+| `alerts` | Read-only alert listing and triage by client and severity |
 | `api-patterns` | Authentication, pagination, filtering, error handling |
 
 ## Available Commands

@@ -42,14 +42,16 @@ Conduit's access editor presents four groups — Read, Write, Delete, Admin — 
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change Automate or endpoint state. Safe for autonomous agents. | `read` | `cwautomate_status`, `cwautomate_computers_list`, `cwautomate_computers_get`, `cwautomate_computers_search`, `cwautomate_clients_list`, `cwautomate_clients_get`, `cwautomate_scripts_list`, `cwautomate_scripts_get`, `cwautomate_alerts_list`, `cwautomate_alerts_get`, `cwautomate_navigate` † |
-| **Write** | Changes Automate-side records — and, for one tool, restarts a customer's machine. | `write` | `cwautomate_alerts_acknowledge`, `cwautomate_clients_create`, `cwautomate_clients_update`, `cwautomate_computers_reboot` |
+| **Read** | Cannot change Automate or endpoint state. Safe for autonomous agents. | `read` | `cwautomate_status`, `cwautomate_computers_list`, `cwautomate_computers_get`, `cwautomate_computers_search`, `cwautomate_clients_list`, `cwautomate_clients_get`, `cwautomate_scripts_list`, `cwautomate_scripts_get`, `cwautomate_alerts_list`, `cwautomate_alerts_get`, `cwautomate_commands_list`, `cwautomate_computers_command_status`, `cwautomate_scripts_history`, `cwautomate_scripts_running`, `cwautomate_navigate` † |
+| **Write** | Changes Automate-side records — and, for one tool, restarts a customer's machine. | `write` | `cwautomate_clients_create`, `cwautomate_clients_update`, `cwautomate_computers_reboot` |
 | **Delete** | **Empty.** This plugin exposes no delete tool. | `write` — **not** a tier of its own | *(none)* |
-| **Admin** | Runs operator-chosen code on customer production endpoints. | `admin` | `cwautomate_scripts_execute`, `cwautomate_computers_run_script` |
+| **Admin** | Runs operator-chosen code or catalog commands on customer production endpoints. | `admin` | `cwautomate_scripts_execute`, `cwautomate_computers_run_script`, `cwautomate_computers_run_command` |
+
+Alerts are read-only. `cwautomate_alerts_acknowledge` was removed in connectwise-automate-mcp 2.0.0 because the Automate API has no acknowledge or close route for alerts; any older note that lists it is stale.
 
 It answers with the container's full domain tool list and the sentence "You can call any of these tools directly", which is false behind a gateway that filters by tier. This plugin's own history is the reason the suppression exists: an admin saw six write/admin-tier `cwautomate` tools advertised by `cwautomate_navigate`, called them, and got "not found". Use `conduit__my_access` for the tier-true answer. `cwautomate_status` is deliberately kept — it reports credential health and enumerates nothing.
 
-For this vendor there is no delete tool for that rule to apply to — but the rule that matters here is the same shape: **granting a technician `write` for Automate grants them `cwautomate_computers_reboot` along with the three record-edit tools.** There is no setting that separates them.
+For this vendor there is no delete tool for that rule to apply to — but the rule that matters here is the same shape: **granting a technician `write` for Automate grants them `cwautomate_computers_reboot` along with the two client record-edit tools.** There is no setting that separates them.
 
 Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it. Confirm the live permission grant in the gateway access editor before you treat that workflow as a gateway control.
 
@@ -81,6 +83,14 @@ no operator-supplied code — which is a defensible line for the tier model
 and a poor line for an approval policy. **Anyone you grant `write` on
 Automate can reboot any managed endpoint, and Conduit will not ask.**
 
+**`cwautomate_computers_run_command` is `admin`.** It issues a catalog
+command (the `command_id` comes from `cwautomate_commands_list`) with
+positional `parameters`; what the command does is defined server-side, so
+the call alone does not tell a reviewer its effect. It and the reboot
+queue and return an `execution_id`; poll
+`cwautomate_computers_command_status` (read) and never re-issue on a
+timeout or a "Duplicate command" result.
+
 `cwautomate_clients_create` and `cwautomate_clients_update` sit in the same
 `write` bucket and change nothing outside the RMM console. The tier cannot
 tell them apart from the reboot.
@@ -92,7 +102,7 @@ self-approve an endpoint action.**
 
 - **Read tools: allow.** Fleet health sweeps, offline/patch/disk reporting
   and alert triage across clients are the intended autonomous use.
-- **Write tools: agent drafts the exact call, human approves, then it runs.** Treat `cwautomate_computers_reboot` as the exception inside this group: it belongs to the endpoint-action policy below even though it carries the same tier as an alert acknowledgement.
+- **Write tools: agent drafts the exact call, human approves, then it runs.** Treat `cwautomate_computers_reboot` as the exception inside this group: it belongs to the endpoint-action policy below even though it carries the same tier as a client record edit.
 - **Admin tools: treat the grant as equivalent to full Automate
   administrator**, because for a script-execution tool that is exactly
   what it is. The approver needs the script's actual content and the
