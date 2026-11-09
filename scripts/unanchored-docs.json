@@ -98,7 +98,6 @@
     "ninjaone:commands/search-devices.md": "names no MCP tool; 2 HTTP endpoint(s), 0 CLI flag(s) — first at commands/search-devices.md:27 GET /api/v2/organizations",
     "ninjaone:skills/devices": "names no MCP tool; 26 HTTP endpoint(s), 0 CLI flag(s) — first at skills/devices/REFERENCE.md:28 GET /api/v2/device/{id}/disks",
     "ninjaone:skills/organizations": "names no MCP tool; 4 HTTP endpoint(s), 0 CLI flag(s) — first at skills/organizations/SKILL.md:39 GET /api/v2/organizations",
-    "ninjaone:skills/tickets": "names no MCP tool; 3 HTTP endpoint(s), 0 CLI flag(s) — first at skills/tickets/SKILL.md:41 POST /api/v2/ticketing/ticket",
     "pandadoc:commands/list-templates.md": "names no MCP tool; 0 HTTP endpoint(s), 6 CLI flag(s) — first at commands/list-templates.md:50 --query",
     "pandadoc:commands/proposal-pipeline.md": "names no MCP tool; 0 HTTP endpoint(s), 10 CLI flag(s) — first at commands/proposal-pipeline.md:74 --days",
     "pax8:commands/license-summary.md": "names no MCP tool; 0 HTTP endpoint(s), 6 CLI flag(s) — first at commands/license-summary.md:63 --vendor",

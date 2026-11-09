@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 386,
+    "skills": 387,
     "commands": 317,
     "agents": 154
   },
@@ -1936,6 +1936,10 @@
           "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/api-patterns/SKILL.md"
         },
         {
+          "id": "custom-fields",
+          "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/custom-fields/SKILL.md"
+        },
+        {
           "id": "devices",
           "path": "msp-claude-plugins/ninjaone/ninjaone-rmm/skills/devices/SKILL.md"
         },
@@ -2599,7 +2603,7 @@
     {
       "name": "rootly",
       "displayName": "Rootly",
-      "version": "0.2.13",
+      "version": "0.2.14",
       "description": "Rootly - incident management, postmortems, SRE automation",
       "category": "incident-management",
       "tags": [
@@ -2611,7 +2615,7 @@
       ],
       "path": "msp-claude-plugins/rootly/rootly",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "alerts",

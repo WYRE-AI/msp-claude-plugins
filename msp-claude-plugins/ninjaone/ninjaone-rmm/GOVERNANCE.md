@@ -33,14 +33,16 @@ tier each bucket actually enforces at.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change NinjaOne or endpoint state. Safe for autonomous agents. | `read` | `ninjaone_status`, `ninjaone_devices_list`, `ninjaone_devices_get`, `ninjaone_devices_alerts`, `ninjaone_devices_activities`, `ninjaone_devices_services`, `ninjaone_organizations_list`, `ninjaone_organizations_get`, `ninjaone_organizations_devices`, `ninjaone_organizations_locations`, `ninjaone_alerts_list`, `ninjaone_alerts_summary`, `ninjaone_tickets_list`, `ninjaone_tickets_get`, `ninjaone_tickets_comments`, `ninjaone_tickets_boards_list` |
-| **Write** | Creates or modifies records — **and reboots customer machines.** | `write` | `ninjaone_organizations_create`, `ninjaone_tickets_create`, `ninjaone_tickets_update`, `ninjaone_tickets_add_comment`, `ninjaone_alerts_reset`, `ninjaone_alerts_reset_all`, `ninjaone_devices_reboot` |
+| **Read** | Cannot change NinjaOne or endpoint state. Safe for autonomous agents. | `read` | `ninjaone_status`, `ninjaone_devices_list`, `ninjaone_devices_get`, `ninjaone_devices_alerts`, `ninjaone_devices_activities`, `ninjaone_devices_services`, `ninjaone_organizations_list`, `ninjaone_organizations_get`, `ninjaone_organizations_devices`, `ninjaone_organizations_locations`, `ninjaone_alerts_list`, `ninjaone_alerts_get`, `ninjaone_alerts_summary`, `ninjaone_devices_get_custom_fields`, `ninjaone_organizations_get_custom_fields`, `ninjaone_tickets_list`, `ninjaone_tickets_get`, `ninjaone_tickets_comments`, `ninjaone_tickets_boards_list` |
+| **Write** | Creates or modifies records — **and reboots customer machines.** | `write` | `ninjaone_organizations_create`, `ninjaone_tickets_create`, `ninjaone_tickets_update`, `ninjaone_tickets_add_comment`, `ninjaone_alerts_reset`, `ninjaone_devices_update_custom_fields`, `ninjaone_organizations_update_custom_fields`, `ninjaone_devices_reboot` |
 | **Delete** | — | `write` — **not** a tier of its own | **Empty.** No NinjaOne tool name carries a delete-verb token. |
-| **Admin** | — | `admin` |see below.|
+| **Admin** | Clears a whole client's alert queue. | `admin` | `ninjaone_alerts_reset_all` |
+
+**Not yet classified (enforce at `admin`):** the ticketing lookups `ninjaone_tickets_forms_list`, `ninjaone_tickets_form_get`, `ninjaone_tickets_statuses_list`, `ninjaone_tickets_attributes_list`, `ninjaone_tickets_contacts_list` and `ninjaone_tickets_users_list`. They are reads, but Conduit fails closed on any tool it has no entry for. Creating a ticket needs a `ticket_form_id`, so in practice a ticket-creating agent needs these granted per tool until Conduit classifies them `read`.
 
 ### Read this row twice: `write` includes reboot
 
-The same grant carries `ninjaone_alerts_reset_all`.
+The single-alert `ninjaone_alerts_reset` is in the same grant; the bulk `ninjaone_alerts_reset_all` is not (it is `admin`).
 
 That is the mechanical answer. The risk answer is different, and worth
 keeping in view when you configure the grant:
@@ -60,9 +62,9 @@ keeping in view when you configure the grant:
   alert queue is the monitoring evidence — an agent that clears it to
   "tidy up" has erased the signal that a real outage is in progress, and
   NinjaOne will not regenerate an alert until the underlying condition
-  next re-triggers. It, too, enforces at `write`.
+  next re-triggers. Conduit holds it at `admin` for that reason.
 
-Because the Admin group is empty, there is no tier above `write` that separates ticket comments from machine reboots. That allowlist is the only mechanism Conduit offers here.
+The Admin group holds only `ninjaone_alerts_reset_all`, so there is still no tier above `write` that separates ticket comments from machine reboots. That allowlist is the only mechanism Conduit offers here.
 
 Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
@@ -77,7 +79,7 @@ self-approve deletes.**
   subagents do.
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Ticket writes are visible to the customer if the board emails on update.
-- **Do not grant plain `write` to a scheduled or unattended agent.** For NinjaOne that grant includes `ninjaone_devices_reboot` and `ninjaone_alerts_reset_all`, and no part of Conduit will ask before either runs. Use a service client rather than a human's token — it can never inherit owner bypass.
+- **Do not grant plain `write` to a scheduled or unattended agent.** For NinjaOne that grant includes `ninjaone_devices_reboot`, and no part of Conduit will ask before it runs. Never grant `admin` to one either: that adds `ninjaone_alerts_reset_all`. Use a service client rather than a human's token — it can never inherit owner bypass.
 - For a human-driven reboot: name an approver per invocation and confirm
   `offline: false` first. Conduit will not prompt.
 

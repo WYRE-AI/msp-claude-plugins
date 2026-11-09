@@ -47,7 +47,8 @@ NINJAONE_MCP_URL=https://your-gateway-domain/v1/ninjaone/mcp
 | `ninjaone-rmm:devices` | Device management, services, inventory, maintenance |
 | `ninjaone-rmm:organizations` | Organization and location management |
 | `ninjaone-rmm:alerts` | Alert monitoring and management |
-| `ninjaone-rmm:tickets` | Ticketing operations |
+| `ninjaone-rmm:tickets` | Ticketing: forms, statuses, priority vs severity, create/update |
+| `ninjaone-rmm:custom-fields` | Device and organization custom fields |
 | `ninjaone-rmm:api-patterns` | Authentication and API patterns |
 
 ## Commands
