@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Plugin drift and Conduit consistency (marketplace 1.35.0).** Docs checked against Conduit main (`vendor-config.ts`, `VENDOR_TOOL_CONFIG`) and the live connector tool lists. Every changed plugin is patch-bumped.
+  - **`.mcp.json` headers removed.** Conduit forwards only `mcp-session-id` from the client and injects stored credentials, so the `X-<Vendor>-*` headers in `auvik`, `blackpoint`, `crewhu`, `freshdesk`, `immybot`, `inforcer`, `saas-alerts`, `threatlocker` and `timezest` were never used. Those files are now URL-only, and the READMEs and api-patterns skills describe the Conduit connection fields instead of env vars.
+  - **Retired hosts and slugs.** `*-mcp.wyre.workers.dev` defaults (19 files), `mcp.wyre.ai` documentation links, `mcp.wyretechnology.com` in the gateway guide, and the `connectwise-manage` / `checkpoint-avanan` self-hosted slugs now point at Conduit (`connectwise-psa`, `avanan`). The workflow-pack template uses `https://conduit.wyre.ai/v1/mcp` and the `conduit` server name. READMEs that told users to copy a `.mcp.json` that does not exist describe the Conduit connect flow.
+  - **Docs site.** `mcp.wyre.ai` now 301s to Conduit and 404s every doc path, so the site defaults to the GitHub Pages target (`wyre-ai.github.io/msp-claude-plugins/`) and root-relative links honour `BASE_URL`. The generator no longer truncates descriptions at "vs." / "e.g." / "i.e.", knows every marketplace category (and fails on an unknown one), and the docs pin Node 22.
+  - **Tool names re-anchored to the live connectors:** `hubspot` (first-party HubSpot MCP: `search_crm_objects`, `get_crm_objects`, `manage_crm_objects`, ...), `kpn` (Grexx `kpn_grexx_*` surface and headers), `datto-saas-protection` (six real tools, no restore), `connectwise-automate` (alerts are read-only; v2.0.5 command/script-history tools), `rootly` (no `check_oncall_health_risk` / acknowledge / resolve tools), `ninjaone` (ticket forms required, no CRITICAL priority), `superops` (alerts and scripts only via the admin-tier GraphQL passthrough), `syncro` (removed the alert, appointment and timer commands that `/v1/syncro` cannot run), `m365` (user/licence/MFA work runs on `cipp` and `microsoft-graph`), `autotask` (no price-list or inventory tools).
+  - **GOVERNANCE tiers** corrected for `hudu`, `sentinelone`, `syncro`, `superops`, `pax8`, `ninjaone`, `connectwise-automate`, `datto-saas-protection`, `azure-mcp`, `rootly` and `hubspot`.
+  - **Header names** in docs match Conduit's `headerMapping` (`X-Ironscales-API-Key`, `X-Ironscales-Company-Id`, `X-Mimecast-Client-Id`, `X-Kaseya-Quote-Manager-API-Key`); `meraki` describes Cisco's hosted MCP with a single API key and no org-id field.
+  - **Not brokered by Conduit:** `slack` and `stripe` carry the disclaimer `warmly` already had; `warmly` states that the legacy gateway it relied on has retired.
+  - `CONTRIBUTING.md` documents the URL-only `.mcp.json` convention; `shared-skills` gains a README; `tool-drift-audit.mjs` keys `connectwise/manage` to the `connectwise-psa` Conduit slug and reads negations across the whole paragraph.
+
+### Added
+
+- **Skill coverage for tools the shipped connectors added:** `connectwise-psa-procurement` and `connectwise-psa-scheduling`, `autotask-contract-services`, `cipp-secure-score`, `datto-saas-protection-seat-coverage`, `ninjaone-custom-fields`, `sentinelone-threat-intel`; plus new sections for CIPP standards templates, drift/alignment, mailbox usage, trusted senders, enterprise apps and sign-in logs, Datto RMM job results, HaloPSA ticket categories, IT Glue attachments/user metrics/configuration archiving, and Autotask note attachments, resource roles and opportunity updates.
+
 ### Changed
 
 - **`cipp` 0.1.10 — setup no longer offers Smithery ([WYREAI-599](https://linear.app/wyre-ai/issue/WYREAI-599/smithery-hosted-proxy-shuts-down-oct-31-audit-and-migrate-mcp-repos)).** Smithery's hosted MCP proxy shuts down Oct 31, 2026. The README setup step now points to Docker or npx, or the hosted Conduit option at https://conduit.wyre.ai.

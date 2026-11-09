@@ -237,6 +237,7 @@ export const plugins: Plugin[] = [
     features: [
       'Billing',
       'Configuration Items',
+      'Contract Services',
       'Contract Management',
       'CRM Operations',
       'Expense Management',
@@ -252,6 +253,7 @@ export const plugins: Plugin[] = [
     skills: [
       { name: 'billing', description: 'Autotask billing item retrieval, approval-level workflows, and invoice search — covering billing item types, approval status filtering, and reconciliation of billable work against invoices for MSP finance teams.' },
       { name: 'configuration-items', description: 'Autotask Configuration Item (CI) asset management: CI types and categories, lifecycle status codes, the CI field schema, related-item relationships, DNS records, notes, and contract/billing associations for MSP infrastructure tracking.' },
+      { name: 'contract-services', description: 'The recurring-billing side of Autotask contracts: service and bundle lines (autotask_search_contract_services, autotask_search_contract_service_bundles), the billed unit rows behind them (autotask_search_contract_service_units, autotask_search_contract_service_bundle_units), the per-contract monthly recurring-revenue roll-up (autotask_get_contract_recurring_lines), and writing service lines and onboarding contract shells.' },
       { name: 'contracts', description: 'Autotask contract and service agreement management - contract types (recurring services, block hours, time & materials, fixed price, retainer), service/service bundle associations, SLAs, and how contracts drive billing for MSP account managers.' },
       { name: 'crm', description: 'Autotask CRM entities - companies (accounts), contacts, and sites/locations - including field references, company type classifications, and how these records underpin tickets, contracts, and projects for MSP account management.' },
       { name: 'expenses', description: 'Autotask expense report and expense item structure - the report/item parent-child relationship, approval status workflow, expense categories, payment types, and the billable vs reimbursable distinction for MSP operational expenses.' },
@@ -462,6 +464,7 @@ export const plugins: Plugin[] = [
       'Licenses',
       'Mailbox & Email',
       'Ops',
+      'Secure Score',
       'Security Posture',
       'Standards',
       'Tenants',
@@ -473,6 +476,7 @@ export const plugins: Plugin[] = [
       { name: 'licenses', description: 'Read-only M365 license visibility through CIPP: per-tenant SKU purchase vs. consumption, portfolio-wide CSP license commitments, common SKU part numbers and their friendly names, and the license-mix red flags that drive rightsizing and billing reconciliation.' },
       { name: 'mailboxes', description: 'The four Exchange Online mailbox operations CIPP exposes — mailbox inventory, delegate/full-access permission audit, out-of-office, and email forwarding — plus the BEC-remediation, offboarding, and leave-coverage sequences built from them.' },
       { name: 'ops', description: 'CIPP\'s own operational layer rather than the tenants it manages: GDAP role definitions and pending invites, the CIPP scheduler, and the ping/version/log endpoints used to diagnose why other CIPP tools fail silently.' },
+      { name: 'secure-score', description: 'Microsoft Secure Score through CIPP: the live per-tenant score and its history (cipp_get_secure_score), the recommendation catalog behind it (cipp_list_secure_score_controls), and how to turn the two into a ranked, client-ready improvement plan.' },
       { name: 'security', description: 'Read-only access to a tenant\'s Conditional Access policy graph and named locations through CIPP: policy state semantics, the findings that matter in a CA review, portfolio drift detection, and why CA writes are absent from the MCP surface.' },
       { name: 'standards', description: 'CIPP\'s tenant-baseline enforcement model: the Report/Alert/Remediate standards modes and how to roll them out, on-demand standards evaluation, Best Practice Analyser reports, and SPF/DKIM/DMARC domain health results with their remediation actions.' },
       { name: 'tenants', description: 'The top-level CIPP scope: enumerating managed M365 tenants, retrieving tenant detail, and the accepted `tenantFilter` identifier formats (default domain, custom domain, GUID, `allTenants`).' },
@@ -653,16 +657,20 @@ export const plugins: Plugin[] = [
     features: [
       'Company Management',
       'Contact Management',
+      'Procurement',
       'Product Catalog',
       'Project Management',
+      'Scheduling',
       'Ticket Management',
       'Time Entry Tracking'
     ],
     skills: [
       { name: 'companies', description: 'ConnectWise PSA company/account management: company types, statuses, sites/locations, custom fields, and company relationships.' },
       { name: 'contacts', description: 'ConnectWise PSA contact management: contact records, contact types, communication items (email, phone), portal access, and relationships to companies.' },
+      { name: 'procurement', description: 'ConnectWise PSA procurement and stock through Conduit: purchase orders and their line items, sales orders and their products, procurement product items placed on tickets/projects/opportunities, warehouses and bins, inventory on hand, and the three-step inventory adjustment (cw_create_adjustment, cw_add_adjustment_detail, cw_close_adjustment).' },
       { name: 'product-catalog', description: 'ConnectWise PSA product catalog: catalog items (SKUs), categories, subcategories, manufacturers, and their use on quotes, opportunities, agreements, and tickets.' },
       { name: 'projects', description: 'ConnectWise PSA project management: project lifecycle and status/type values, phases, templates, resource/team allocation, budgeting, billing methods, and project tickets.' },
+      { name: 'scheduling', description: 'ConnectWise PSA schedule entries through Conduit: booking a member\'s time against a service ticket, project ticket or activity (cw_create_schedule_entry), finding and moving bookings (cw_search_schedule_entries, cw_update_schedule_entry), schedule types and statuses, UTC date handling, and the difference between a booking and a time entry.' },
       { name: 'tickets', description: 'ConnectWise PSA ticket management: ticket fields, service boards, statuses, priorities, SLAs, ticket notes, and workflow automation.' },
       { name: 'time-entries', description: 'ConnectWise PSA time entry management: charge-to types (tickets, projects, charge codes), billable vs non-billable time, work types and work roles, time sheets, and the time entry approval workflow.' },
       { name: 'api-patterns', description: 'ConnectWise PSA REST API fundamentals: public/private key + clientId authentication, page/pageSize pagination, the conditions query syntax, rate limiting (60/min), and error-response handling.' }
@@ -2200,7 +2208,7 @@ export const plugins: Plugin[] = [
       { name: 'contacts', description: 'HubSpot contact records: core and MSP-relevant custom fields, lifecycle stages, lead status values, contact ownership, CRM search filter patterns, and associations to companies and deals.' },
       { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs. TCV), forecast categories and weighted forecasting, and associating deals with contacts and companies.' },
       { name: 'tickets', description: 'HubSpot support tickets: core fields, default pipeline stages, priority levels, MSP ticket categories, SLA timestamp properties, and associating tickets with contacts, companies, and deals.' },
-      { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server and the CRM Search API behind it: the complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP, automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
+      { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server (brokered by Conduit) and the CRM Search API behind it: the live tool catalog (search_crm_objects, get_crm_objects, manage_crm_objects, properties and owners), OAuth via the Conduit connect flow, scopes, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
     ],
     agents: [
       { name: 'client-relationship-manager', description: 'Use this agent when an MSP account manager or vCIO needs to review account health across the client portfolio in HubSpot.' },
@@ -3174,7 +3182,7 @@ export const plugins: Plugin[] = [
     id: 'kpn',
     name: 'KPN',
     vendor: 'Kpn',
-    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)',
+    description: 'KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)',
     category: 'network',
     maturity: 'beta',
     features: [
@@ -3182,14 +3190,14 @@ export const plugins: Plugin[] = [
       'Network Checks'
     ],
     skills: [
-      { name: 'mobile-fleet', description: 'KPN business mobile through Mobile Services Management (MSM v11): subscribers, contracts (lines/SIMs), allowed operations per contract, orders and service requests, invoices and invoice PDFs, the customer\'s organisation tree and usage thresholds; plus the confirmed writes (SIM block, unblock, replace; order authorize and cancel) and PIN/PUK handling.' },
-      { name: 'network-checks', description: 'Address- and number-level lookups against KPN: current and planned outages at a Dutch address (Disturbance Check), available access technology and speeds at an address (Speed Check), and the date of the last SIM swap on a KPN mobile number as a fraud signal.' },
-      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the X-KPN-* credential headers and the two OAuth token realms (API Store vs Mobile Services Management), why a valid key can still fail with 401/403 (product entitlement), quota headers and 429 handling, the write-confirmation flow, and why failed MSM writes are never retried automatically.' }
+      { name: 'mobile-fleet', description: 'KPN business mobile through the Grexx (IRMA) interface: finding a customer\'s mobile orders, reading number/SIM/subscription/bundle data (kpn_grexx_mobile_orders), the active SIM or eSIM (kpn_grexx_get_sim), blocks and limits (kpn_grexx_mobile_settings), current usage (kpn_grexx_mobile_usage) and available number portings.' },
+      { name: 'network-checks', description: 'Address- and line-level checks against KPN\'s Grexx interface: technology, speeds and product availability at a Dutch address (kpn_grexx_zipcode_check, kpn_grexx_prequalification), infrastructure and planned work (kpn_grexx_carrier_info), and live line diagnostics on a connectivity order (kpn_grexx_radius_check, kpn_grexx_ras_check, kpn_grexx_start_line_diagnose).' },
+      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the Grexx (IRMA) wholesale interface behind the kpn_grexx_* tools, the client-ID/secret credential pair and the optional Grexx URL fields, the IRMA customer/order model, the one write tool, and common errors.' }
     ],
     agents: [],
     commands: [
-      { name: '/check-outage', description: 'Check a Dutch address for KPN outages and report what connectivity is available there' },
-      { name: '/lost-phone', description: 'Find the KPN business-mobile contract for a lost or stolen phone and block its SIM after confirmation' }
+      { name: '/check-outage', description: 'Check a Dutch KPN site for line problems and planned work, and report what connectivity is available there' },
+      { name: '/lost-phone', description: 'Find the KPN business-mobile line and SIM for a lost or stolen phone so it can be blocked in the Grexx portal' }
     ],
     apiInfo: {
       baseUrl: '',

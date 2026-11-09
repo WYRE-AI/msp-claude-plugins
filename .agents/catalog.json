@@ -2940,7 +2940,7 @@
     {
       "name": "shared-skills",
       "displayName": "Shared Skills",
-      "version": "1.1.7",
+      "version": "1.1.8",
       "description": "Vendor-agnostic MSP skills - terminology and ticket triage",
       "category": "knowledge",
       "tags": [
@@ -2950,7 +2950,7 @@
         "shared"
       ],
       "path": "msp-claude-plugins/shared",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "billing-reconciliation",
