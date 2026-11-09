@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "unitrends-uniview": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/unitrends-uniview/mcp",
+      "headers": {
+        "X-Unitrends-UniView-Client-ID": "${UNITRENDS_UNIVIEW_CLIENT_ID}",
+        "X-Unitrends-UniView-Client-Secret": "${UNITRENDS_UNIVIEW_CLIENT_SECRET}"
+      }
+    }
+  }
+}
