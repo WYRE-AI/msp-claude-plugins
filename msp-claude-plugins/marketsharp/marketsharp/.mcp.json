@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "marketsharp": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/marketsharp/mcp",
+      "headers": {
+        "X-MarketSharp-Company-Id": "${MARKETSHARP_COMPANY_ID}",
+        "X-MarketSharp-Api-Key": "${MARKETSHARP_API_KEY}",
+        "X-MarketSharp-Api-Secret": "${MARKETSHARP_API_SECRET}",
+        "X-MarketSharp-Employee-Id": "${MARKETSHARP_EMPLOYEE_ID:-}"
+      }
+    }
+  }
+}
