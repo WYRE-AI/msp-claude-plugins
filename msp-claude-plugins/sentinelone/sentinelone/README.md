@@ -91,6 +91,7 @@ Add to your Claude Desktop config:
 | `misconfigurations` | Cloud security posture -- misconfigurations across cloud, Kubernetes, identity, and IaC |
 | `inventory` | Unified asset inventory -- endpoints, cloud resources, identities, and network discovery |
 | `threat-hunting` | PowerQuery execution against the Singularity Data Lake for deep forensic analysis |
+| `threat-intel` | VirusTotal indicator enrichment (hash, IP, domain, URL, sandbox behaviour) and CVE lookups |
 
 ## Available Commands
 

@@ -105,7 +105,7 @@ claude --plugin .
 
 | Skill | Description |
 |-------|-------------|
-| `tickets` | Service ticket management, statuses, timers |
+| `tickets` | Service ticket management, statuses, comments |
 | `customers` | Customer and contact management |
 | `assets` | Asset tracking and RMM integration |
 | `invoices` | Invoice generation and payments |

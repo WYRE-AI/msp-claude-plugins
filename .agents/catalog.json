@@ -31,8 +31,8 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 387,
-    "commands": 317,
+    "skills": 388,
+    "commands": 313,
     "agents": 154
   },
   "packs": [
@@ -2159,7 +2159,7 @@
     {
       "name": "pax8",
       "displayName": "Pax8",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
       "category": "marketplace",
       "tags": [
@@ -2171,7 +2171,7 @@
       ],
       "path": "msp-claude-plugins/pax8/pax8",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -2837,7 +2837,7 @@
     {
       "name": "sentinelone",
       "displayName": "Sentinelone",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
       "category": "security",
       "tags": [
@@ -2849,7 +2849,7 @@
       ],
       "path": "msp-claude-plugins/sentinelone/sentinelone",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "alerts",
@@ -2874,6 +2874,10 @@
         {
           "id": "threat-hunting",
           "path": "msp-claude-plugins/sentinelone/sentinelone/skills/threat-hunting/SKILL.md"
+        },
+        {
+          "id": "threat-intel",
+          "path": "msp-claude-plugins/sentinelone/sentinelone/skills/threat-intel/SKILL.md"
         },
         {
           "id": "vulnerabilities",
@@ -3171,28 +3175,12 @@
           "path": "msp-claude-plugins/syncro/syncro-msp/commands/add-ticket-comment.md"
         },
         {
-          "id": "create-appointment",
-          "path": "msp-claude-plugins/syncro/syncro-msp/commands/create-appointment.md"
-        },
-        {
           "id": "create-ticket",
           "path": "msp-claude-plugins/syncro/syncro-msp/commands/create-ticket.md"
         },
         {
           "id": "get-customer",
           "path": "msp-claude-plugins/syncro/syncro-msp/commands/get-customer.md"
-        },
-        {
-          "id": "list-alerts",
-          "path": "msp-claude-plugins/syncro/syncro-msp/commands/list-alerts.md"
-        },
-        {
-          "id": "log-time",
-          "path": "msp-claude-plugins/syncro/syncro-msp/commands/log-time.md"
-        },
-        {
-          "id": "resolve-alert",
-          "path": "msp-claude-plugins/syncro/syncro-msp/commands/resolve-alert.md"
         },
         {
           "id": "search-assets",

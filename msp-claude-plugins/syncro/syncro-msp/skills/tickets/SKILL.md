@@ -28,6 +28,18 @@ Syncro tickets are the core unit of service delivery in the platform. Every clie
   here, invoicing in `syncro-invoices`. Stopping a timer bills nothing.
 - **Fixing the endpoint the ticket is about** — use `syncro-assets`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `syncro_tickets_list` | read | List tickets |
+| `syncro_tickets_get` | read | One ticket with comments |
+| `syncro_tickets_create` | write | Create a ticket |
+| `syncro_tickets_update` | write | Change status, priority, assignee, fields |
+| `syncro_tickets_add_comment` | write | Add a public or hidden comment |
+
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+
 ## Ticket Status Values
 
 Syncro provides configurable ticket statuses. These are the common default values:

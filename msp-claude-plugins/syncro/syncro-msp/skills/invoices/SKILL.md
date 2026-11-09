@@ -29,6 +29,17 @@ Syncro invoices are the core of your billing workflow. Invoices can be created m
 - **The unbilled work behind an invoice** — ticket timers and time
   entries are `syncro-tickets`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `syncro_invoices_list` | read | List invoices |
+| `syncro_invoices_get` | read | One invoice with line items |
+| `syncro_invoices_create` | write | Create an invoice |
+| `syncro_invoices_email` | admin | Email an invoice to the customer (no unsend) |
+
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+
 ## Key Concepts
 
 ### Invoice

@@ -8,6 +8,13 @@ arguments: [alert_id, note]
 
 Acknowledge an RMM alert to indicate a technician is aware and investigating the issue.
 
+## How this runs through Conduit
+
+The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
+`superops_custom_mutation` (admin tier) sends the GraphQL mutation shown in the steps below. It executes an arbitrary mutation against the tenant, so every call needs a named human approver who has seen the exact mutation text and variables. Never run it from a scheduled or unattended agent.
+
+Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the alert step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
+
 ## Prerequisites
 
 - Valid SuperOps.ai API token configured

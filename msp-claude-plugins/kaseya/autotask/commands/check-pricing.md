@@ -1,5 +1,5 @@
 ---
-description: Check pricing details for an Autotask product or service from price lists
+description: Check pricing details for an Autotask product or service (price-list overrides are UI-only)
 argument-hint: "<product> [type]"
 arguments: [product, type]
 ---
@@ -15,8 +15,8 @@ arguments: [product, type]
 
 1. Resolve the product/service (search by name/SKU if not an ID)
 2. Get the item's base pricing (unitCost, unitPrice, MSRP)
-3. Look up price list entries for this item
-4. Display comparison of base vs price list pricing with margins
+3. Note that price-list overrides are not reachable through the connector (Autotask UI only)
+4. Display cost, price, MSRP and margin from the product or service record
 
 ### Step 1: Find the Product/Service
 
@@ -41,23 +41,13 @@ Tool: autotask_get_product
 Args: { productId: <resolved_id> }
 ```
 
-### Step 3: Check Price List
+### Step 3: Price-list overrides
 
-```
-Tool: autotask_search_price_list_products
-Args: { productID: <resolved_id> }
-```
-
-Or for services:
-
-```
-Tool: autotask_search_price_list_services
-Args: { serviceID: <resolved_id> }
-```
+There is no MCP tool for Autotask Price Lists or Inventory Items (both are real Autotask entities, but the connector does not expose them). Check price-list overrides and stock levels directly in the Autotask UI, and say so in the answer rather than guessing.
 
 ### Step 4: Calculate and Display
 
-Show: unit cost, default price, MSRP, price list price, and margin percentage.
+Show: unit cost, default price, MSRP, and margin percentage from the product or service record. Note that any customer price-list override must be checked in the Autotask UI.
 
 ## Parameters
 
@@ -93,12 +83,10 @@ Base Pricing:
   Unit Price: $1,299.00 (default)
   MSRP:       $1,499.00
 
-Price List Pricing:
-  USD: $1,199.00
+Price list overrides: check in the Autotask UI (not available through the connector)
 
 Margins:
   Default margin: 34.6%
-  Price list margin: 29.2%
   vs MSRP discount: 20.0%
 ```
 

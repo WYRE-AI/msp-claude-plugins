@@ -29,11 +29,19 @@ Perform a deep investigation of a specific alert. Retrieves full alert details, 
 
    Call `get_alert_history` with the `alertId` to retrieve the complete timeline of status changes, assignments, and updates.
 
-4. **Investigate with Purple AI** (optional but recommended)
+4. **Read the auto-investigation report**
+
+   Call `get_alert_investigation_report` with the `alert_id`. If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them.
+
+5. **Enrich indicators** (optional)
+
+   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal; skip anything the customer considers confidential.
+
+6. **Investigate with Purple AI** (optional but recommended)
 
    Call `purple_ai` with a natural language query based on the alert details. For example: "Investigate [threat name] on endpoint [endpoint name] -- what is the attack chain and are there related indicators?"
 
-5. **Present investigation summary**
+7. **Present investigation summary**
 
    Combine all data into a structured investigation report with alert context, timeline, MITRE mappings, and recommended next steps.
 
@@ -230,6 +238,8 @@ Alert details shown below...
 | `get_alert` | Retrieve full alert details |
 | `get_alert_notes` | Retrieve analyst comments and investigation notes |
 | `get_alert_history` | Retrieve timeline of status changes |
+| `get_alert_investigation_report` | Purple AI auto-investigation report for the alert |
+| `threat_intel_by_hash` / `threat_intel_by_ip` / `threat_intel_by_domain` / `threat_intel_by_url` | Indicator enrichment |
 | `purple_ai` | Investigate threat context and generate hunting queries |
 
 ## Related Commands

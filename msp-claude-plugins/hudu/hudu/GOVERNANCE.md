@@ -40,8 +40,10 @@ rows twice.
 |---|---|---|---|
 | **Read** | Cannot change Hudu state. Returns documentation — see Data handling. | `read` | `hudu_test_connection`, `hudu_list_companies`, `hudu_get_company`, `hudu_list_assets`, `hudu_get_asset`, `hudu_list_asset_layouts`, `hudu_get_asset_layout`, `hudu_list_articles`, `hudu_get_article`, `hudu_list_websites`, `hudu_get_website`, `hudu_list_folders`, `hudu_list_procedures`, `hudu_list_relations`, `hudu_list_magic_dash`, `hudu_list_activity_logs` |
 | **Write** | Creates or modifies documentation records. Reversible, and visible to everyone who reads the doc next. | `write` | `hudu_create_company`, `hudu_update_company`, `hudu_unarchive_company`, `hudu_create_asset`, `hudu_update_asset`, `hudu_create_article`, `hudu_update_article`, `hudu_create_website`, `hudu_update_website`, `hudu_create_asset_layout`, `hudu_update_asset_layout` |
-| **Delete** | Removes documentation from the active set. | `write` — **not** a tier of its own | `hudu_delete_company`, `hudu_delete_asset`, `hudu_delete_article`, `hudu_delete_website`, `hudu_archive_company`, `hudu_archive_asset`, `hudu_archive_article` |
-| **Admin** | Reads, writes, or destroys stored credentials. | `admin` | `hudu_get_asset_password`, `hudu_list_asset_passwords`, `hudu_create_asset_password`, `hudu_update_asset_password`, `hudu_delete_asset_password` |
+| **Delete** | Removes documentation from the active set. | `write` — **not** a tier of its own | `hudu_delete_asset`, `hudu_delete_article`, `hudu_delete_website`, `hudu_archive_company`, `hudu_archive_asset`, `hudu_archive_article` |
+| **Admin** | Reads, writes, or destroys stored credentials — and deletes a whole company. | `admin` | `hudu_delete_company`, `hudu_get_asset_password`, `hudu_list_asset_passwords`, `hudu_create_asset_password`, `hudu_update_asset_password`, `hudu_delete_asset_password` |
+
+`hudu_delete_company` is the one delete Conduit holds at `admin`: it removes a client's entire documentation set (assets, articles, passwords, websites) in one call, so it sits with the credential tools rather than with the other deletes and archives, which are `write`.
 
 ### The Admin row is the good news on this page
 

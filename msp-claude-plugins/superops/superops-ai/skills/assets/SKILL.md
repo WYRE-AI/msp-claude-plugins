@@ -35,6 +35,17 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
 - **Hardware refresh and warranty programmes** — asset lifecycle
   planning is `scalepad-lifecycle-manager`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_assets_list` | read | List assets |
+| `superops_assets_get` | read | One asset |
+| `superops_assets_software` | read | Installed software on an asset |
+| `superops_assets_patches` | read | Patch status for an asset |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Asset Status Values
 
 | Status | Description | Indicator |

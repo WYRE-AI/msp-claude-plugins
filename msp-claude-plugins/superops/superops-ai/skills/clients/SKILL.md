@@ -27,6 +27,16 @@ Clients (also called Accounts) are the foundation of SuperOps.ai's PSA. Every ti
 - **What a client owns** — endpoints are `superops-assets`, open work is
   `superops-tickets`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_clients_list` | read | List clients |
+| `superops_clients_search` | read | Find a client by name |
+| `superops_clients_get` | read | One client |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Key Concepts
 
 **Stage** tracks the sales lifecycle; **status** tracks the service relationship. They are independent — a `Customer` can be `Inactive`.

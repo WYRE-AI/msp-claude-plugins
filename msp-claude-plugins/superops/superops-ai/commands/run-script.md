@@ -8,6 +8,13 @@ arguments: [asset_id, script_id, parameters, run_as, timeout]
 
 Execute a script on a remote asset via SuperOps.ai RMM for automation and remediation.
 
+## How this runs through Conduit
+
+The Conduit `superops` connector has **no script-execution tool**. The only route is the generic GraphQL passthrough:
+`superops_custom_mutation` (admin tier) sends the GraphQL mutation shown in the steps below. It executes an arbitrary mutation against the tenant, so every call needs a named human approver who has seen the exact mutation text and variables. Never run it from a scheduled or unattended agent.
+
+Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the script-execution step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
+
 ## Prerequisites
 
 - Valid SuperOps.ai API token configured

@@ -28,6 +28,21 @@ SuperOps.ai tickets are the core unit of service delivery in the PSA. Every clie
 - **Running the fix on the endpoint** — remediation is
   `superops-runbooks`; a resolved ticket does not imply a fixed machine.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_tickets_list` | read | List tickets |
+| `superops_tickets_get` | read | One ticket |
+| `superops_tickets_create` | write | Create a ticket |
+| `superops_tickets_update` | write | Change status, priority, assignee |
+| `superops_tickets_add_note` | write | Add a note |
+| `superops_tickets_log_time` | write | Log a worklog entry (`ticketId`, `qty` in the service item's unit, usually hours; optional `serviceItemId`, `billable`, `technicianId`) |
+| `superops_technicians_list` / `superops_technicians_get` / `superops_technicians_groups` | read | Resolve an assignee or group |
+| `superops_technicians_lookups` | read | Roles, teams, designations, business functions and technician groups as `{id, name}` |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Ticket Status Values
 
 | Status | Description | Business Logic |
