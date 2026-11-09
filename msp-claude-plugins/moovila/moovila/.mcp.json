@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "moovila": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/moovila/mcp"
+    }
+  }
+}
