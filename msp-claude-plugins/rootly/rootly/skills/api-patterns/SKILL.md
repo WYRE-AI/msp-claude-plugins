@@ -52,7 +52,7 @@ No additional configuration is needed in the MCP tool calls.
 |------|-------------|----------------|
 | `find_related_incidents` | Finds historically similar incidents using TF-IDF text similarity | `incident_id` or `query` string |
 | `suggest_solutions` | Mines past incident resolutions to recommend actionable fixes | `incident_id` or `description` |
-| `check_oncall_health_risk` | Detects workload health risk in scheduled responders | Schedule or team context |
+| `check_responder_availability` | Checks whether specific users are scheduled on-call in a date range | `user_ids`, `start_date`, `end_date` |
 
 ### On-Call Management
 
@@ -83,7 +83,7 @@ No additional configuration is needed in the MCP tool calls.
 | `list_alerts` | List alerts from integrations | `filter[status]`, `page[number]`, `page[size]` |
 | `get_alert` | Get a single alert | Alert ID |
 | `create_alert` | Create an alert | alert payload |
-| `acknowledge_alert` / `resolve_alert` | Acknowledge or resolve an alert | Alert ID |
+| `update_alert` | Edit an alert: summary, description, urgency, noise flag, labels, services, `ended_at` | `id` (not `alert_id`) |
 
 ### Configuration & Metadata
 
