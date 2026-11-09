@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "alga-psa": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/alga-psa/mcp",
+      "headers": {
+        "X-Alga-Instance-Url": "${ALGA_PSA_INSTANCE_URL}",
+        "X-Alga-Api-Key": "${ALGA_PSA_API_KEY}",
+        "X-Alga-Tenant-Id": "${ALGA_PSA_TENANT_ID}"
+      }
+    }
+  }
+}
