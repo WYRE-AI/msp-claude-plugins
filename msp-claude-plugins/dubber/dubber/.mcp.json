@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "dubber": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/dubber/mcp",
+      "headers": {
+        "X-Dubber-Client-Id": "${DUBBER_CLIENT_ID}",
+        "X-Dubber-Client-Secret": "${DUBBER_CLIENT_SECRET}",
+        "X-Dubber-Auth-Id": "${DUBBER_AUTH_ID}",
+        "X-Dubber-Auth-Token": "${DUBBER_AUTH_TOKEN}",
+        "X-Dubber-Region": "${DUBBER_REGION}"
+      }
+    }
+  }
+}
