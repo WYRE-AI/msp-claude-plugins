@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "myitprocess": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/myitprocess/mcp",
+      "headers": {
+        "X-MyITprocess-Api-Key": "${MYITPROCESS_API_KEY}"
+      }
+    }
+  }
+}
