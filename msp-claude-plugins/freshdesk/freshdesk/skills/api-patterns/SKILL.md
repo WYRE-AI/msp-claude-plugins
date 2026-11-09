@@ -38,14 +38,10 @@ gateway-facing surface uses two `X-` headers, one credential per header:
 | `X-Freshdesk-Domain` | The account subdomain (the `yourcompany` in `yourcompany.freshdesk.com`) |
 | `X-Freshdesk-Api-Key` | The raw Freshdesk API key |
 
-The gateway maps the environment variables `FRESHDESK_DOMAIN` and
-`FRESHDESK_API_KEY` onto those headers automatically. The MCP server then
-translates them into the upstream Freshdesk Basic auth (`apikey:X`).
-
-```bash
-export FRESHDESK_DOMAIN="yourcompany"
-export FRESHDESK_API_KEY="your-freshdesk-api-key"
-```
+Both values are stored on the Freshdesk connection in Conduit, which
+injects them as those headers on every request; nothing is set on the
+client. The MCP server then translates them into the upstream Freshdesk
+Basic auth (`apikey:X`).
 
 ## Base URL
 

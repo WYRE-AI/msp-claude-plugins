@@ -18,18 +18,18 @@ Claude Code plugin for [ImmyBot](https://immy.bot) - desired-state Windows softw
 /plugin install immybot
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/immybot/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/immybot/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-ImmyBot uses Microsoft Entra ID (Azure AD) OAuth 2.0 client credentials. All four fields are required.
+ImmyBot uses Microsoft Entra ID (Azure AD) OAuth 2.0 client credentials. Connect ImmyBot once in the Conduit web UI (**Connections → ImmyBot**); Conduit stores all four fields and injects them on every request.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `IMMYBOT_INSTANCE_SUBDOMAIN` | Yes | Your ImmyBot instance subdomain |
-| `IMMYBOT_TENANT_ID` | Yes | Microsoft Entra tenant UUID |
-| `IMMYBOT_CLIENT_ID` | Yes | Entra app registration client ID |
-| `IMMYBOT_CLIENT_SECRET` | Yes | Entra app registration client secret |
+| Field | Required | Description |
+|-------|----------|-------------|
+| Instance Subdomain | Yes | Your ImmyBot instance subdomain |
+| Tenant ID | Yes | Microsoft Entra tenant UUID |
+| Client ID | Yes | Entra app registration client ID |
+| Client Secret | Yes | Entra app registration client secret |
 
 ## Skills
 

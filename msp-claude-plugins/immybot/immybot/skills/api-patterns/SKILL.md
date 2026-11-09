@@ -37,14 +37,15 @@ inspecting maintenance sessions is another.
 ## Connection & Authentication
 
 ImmyBot uses Microsoft Entra ID (Azure AD) OAuth 2.0 client
-credentials. Four fields are required:
+credentials. Four fields are required, all stored on the ImmyBot
+connection in Conduit (nothing is set on the client):
 
-| Variable | Description |
-|----------|-------------|
-| `IMMYBOT_INSTANCE_SUBDOMAIN` | Your ImmyBot instance subdomain (e.g. `acme` for `acme.immy.bot`) |
-| `IMMYBOT_TENANT_ID` | Microsoft Entra tenant UUID |
-| `IMMYBOT_CLIENT_ID` | App registration client ID |
-| `IMMYBOT_CLIENT_SECRET` | App registration client secret |
+| Conduit field | Description |
+|---------------|-------------|
+| Instance Subdomain | Your ImmyBot instance subdomain (e.g. `acme` for `acme.immy.bot`) |
+| Tenant ID | Microsoft Entra tenant UUID |
+| Client ID | App registration client ID |
+| Client Secret | App registration client secret |
 
 The gateway exchanges these for a token automatically. Token cache is
 managed gateway-side; you should not need to think about token

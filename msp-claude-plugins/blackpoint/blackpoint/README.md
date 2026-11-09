@@ -21,13 +21,16 @@ Claude Code plugin for [Blackpoint Cyber](https://blackpointcyber.com) (the Comp
 /plugin install blackpoint
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/blackpoint/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/blackpoint/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `BLACKPOINT_API_TOKEN` | Yes | CompassOne portal Bearer token |
+Connect Blackpoint once in the Conduit web UI (**Connections → Blackpoint**). Conduit stores these credentials and injects them on every request:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Token | Yes | CompassOne portal Bearer token |
+| Base URL | No | Override the CompassOne API base URL (leave blank for the default) |
 
 ## Skills
 

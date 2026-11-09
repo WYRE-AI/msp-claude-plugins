@@ -21,13 +21,15 @@ Claude Code plugin for [SaaS Alerts](https://saasalerts.com) — SaaS security m
 /plugin install saas-alerts
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/saas-alerts/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/saas-alerts/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SAAS_ALERTS_API_KEY` | Yes | SaaS Alerts partner API key |
+Connect SaaS Alerts once in the Conduit web UI (**Connections → SaaS Alerts**). Conduit stores the key and injects it on every request:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Key | Yes | SaaS Alerts partner API key |
 
 ## Skills
 

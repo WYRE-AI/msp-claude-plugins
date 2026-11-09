@@ -272,7 +272,7 @@
     {
       "name": "auvik",
       "displayName": "Auvik",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "description": "Auvik - network monitoring, device inventory, alerts, configurations, capacity planning across tenants",
       "category": "network",
       "tags": [
@@ -284,16 +284,11 @@
       ],
       "path": "msp-claude-plugins/auvik/auvik",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "auvik": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/auvik/mcp",
-          "headers": {
-            "X-Auvik-Username": "${AUVIK_USERNAME}",
-            "X-Auvik-Api-Key": "${AUVIK_API_KEY}",
-            "X-Auvik-Region": "${AUVIK_REGION}"
-          }
+          "url": "https://conduit.wyre.ai/v1/auvik/mcp"
         }
       },
       "skills": [
@@ -851,7 +846,7 @@
     {
       "name": "freshdesk",
       "displayName": "Freshdesk",
-      "version": "1.0.13",
+      "version": "1.0.14",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
       "category": "psa",
       "tags": [
@@ -863,15 +858,11 @@
       ],
       "path": "msp-claude-plugins/freshdesk/freshdesk",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "freshdesk": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/freshdesk/mcp",
-          "headers": {
-            "X-Freshdesk-Domain": "${FRESHDESK_DOMAIN}",
-            "X-Freshdesk-Api-Key": "${FRESHDESK_API_KEY}"
-          }
+          "url": "https://conduit.wyre.ai/v1/freshdesk/mcp"
         }
       },
       "skills": [
@@ -916,7 +907,7 @@
     {
       "name": "inforcer",
       "displayName": "Inforcer",
-      "version": "1.0.10",
+      "version": "1.0.11",
       "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
       "category": "security",
       "tags": [
@@ -928,15 +919,11 @@
       ],
       "path": "msp-claude-plugins/inforcer/inforcer",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "inforcer": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/inforcer/mcp",
-          "headers": {
-            "X-Inforcer-Region": "${INFORCER_REGION}",
-            "X-Inforcer-Api-Key": "${INFORCER_API_KEY}"
-          }
+          "url": "https://conduit.wyre.ai/v1/inforcer/mcp"
         }
       },
       "skills": [
@@ -3230,7 +3217,7 @@
     {
       "name": "blackpoint",
       "displayName": "Blackpoint",
-      "version": "1.1.9",
+      "version": "1.1.10",
       "description": "Blackpoint Cyber / CompassOne MDR - tenants, assets, detections, vulnerabilities (dark web, external, scans)",
       "category": "security",
       "tags": [
@@ -3242,14 +3229,11 @@
       ],
       "path": "msp-claude-plugins/blackpoint/blackpoint",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "blackpoint": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/blackpoint/mcp",
-          "headers": {
-            "X-Blackpoint-Api-Token": "${BLACKPOINT_API_TOKEN}"
-          }
+          "url": "https://conduit.wyre.ai/v1/blackpoint/mcp"
         }
       },
       "skills": [
@@ -3314,7 +3298,7 @@
     {
       "name": "saas-alerts",
       "displayName": "SAAS Alerts",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "description": "SaaS Alerts - SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection, multi-tenant response",
       "category": "security",
       "tags": [
@@ -3326,14 +3310,11 @@
       ],
       "path": "msp-claude-plugins/saas-alerts/saas-alerts",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "saas-alerts": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/saas-alerts/mcp",
-          "headers": {
-            "X-SaaS-Alerts-API-Key": "${SAAS_ALERTS_API_KEY}"
-          }
+          "url": "https://conduit.wyre.ai/v1/saas-alerts/mcp"
         }
       },
       "skills": [
@@ -3357,7 +3338,7 @@
     {
       "name": "crewhu",
       "displayName": "Crewhu",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "description": "Crewhu - CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs",
       "category": "productivity",
       "tags": [
@@ -3368,14 +3349,11 @@
       ],
       "path": "msp-claude-plugins/crewhu/crewhu",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "crewhu": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/crewhu/mcp",
-          "headers": {
-            "X-Crewhu-Api-Token": "${X_CREWHU_APITOKEN}"
-          }
+          "url": "https://conduit.wyre.ai/v1/crewhu/mcp"
         }
       },
       "skills": [
@@ -3399,7 +3377,7 @@
     {
       "name": "immybot",
       "displayName": "Immybot",
-      "version": "1.1.9",
+      "version": "1.1.10",
       "description": "ImmyBot - desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth)",
       "category": "rmm",
       "tags": [
@@ -3411,17 +3389,11 @@
       ],
       "path": "msp-claude-plugins/immybot/immybot",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "immybot": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/immybot/mcp",
-          "headers": {
-            "X-Immybot-Instance-Subdomain": "${IMMYBOT_INSTANCE_SUBDOMAIN}",
-            "X-Immybot-Tenant-Id": "${IMMYBOT_TENANT_ID}",
-            "X-Immybot-Client-Id": "${IMMYBOT_CLIENT_ID}",
-            "X-Immybot-Client-Secret": "${IMMYBOT_CLIENT_SECRET}"
-          }
+          "url": "https://conduit.wyre.ai/v1/immybot/mcp"
         }
       },
       "skills": [
@@ -3494,7 +3466,7 @@
     {
       "name": "timezest",
       "displayName": "Timezest",
-      "version": "1.1.11",
+      "version": "1.1.12",
       "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
       "category": "productivity",
       "tags": [
@@ -3505,14 +3477,11 @@
       ],
       "path": "msp-claude-plugins/timezest/timezest",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "timezest": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/timezest/mcp",
-          "headers": {
-            "X-Timezest-Api-Token": "${TIMEZEST_API_TOKEN}"
-          }
+          "url": "https://conduit.wyre.ai/v1/timezest/mcp"
         }
       },
       "skills": [
@@ -3581,7 +3550,7 @@
     {
       "name": "threatlocker",
       "displayName": "Threatlocker",
-      "version": "0.1.9",
+      "version": "0.1.10",
       "description": "ThreatLocker - zero-trust application allowlisting, approval triage, audit log investigation, computer inventory",
       "category": "security",
       "tags": [
@@ -3593,15 +3562,11 @@
       ],
       "path": "msp-claude-plugins/threatlocker/threatlocker",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "threatlocker": {
           "type": "http",
-          "url": "https://conduit.wyre.ai/v1/threatlocker/mcp",
-          "headers": {
-            "X-Threatlocker-Api-Key": "${THREATLOCKER_API_KEY}",
-            "X-Threatlocker-Organization-Id": "${THREATLOCKER_ORGANIZATION_ID}"
-          }
+          "url": "https://conduit.wyre.ai/v1/threatlocker/mcp"
         }
       },
       "skills": [
