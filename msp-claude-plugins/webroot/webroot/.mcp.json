@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "webroot": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/webroot/mcp",
+      "headers": {
+        "X-Webroot-Client-Id": "${WEBROOT_CLIENT_ID}",
+        "X-Webroot-Client-Secret": "${WEBROOT_CLIENT_SECRET}",
+        "X-Webroot-Username": "${WEBROOT_USERNAME}",
+        "X-Webroot-Password": "${WEBROOT_PASSWORD}",
+        "X-Webroot-Gsm-Key": "${WEBROOT_GSM_KEY}"
+      }
+    }
+  }
+}
