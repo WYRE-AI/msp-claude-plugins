@@ -41,7 +41,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `ATERA_API_KEY` | Yes | | API key from Admin > API |
-| `ATERA_MCP_URL` | No | `https://atera-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `ATERA_MCP_URL` | No | `https://conduit.wyre.ai/v1/atera/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ### Obtaining API Credentials
 

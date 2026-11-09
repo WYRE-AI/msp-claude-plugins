@@ -34,10 +34,10 @@ Tools here are Azure MCP Server *namespaces*, not single operations — `monitor
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change any Azure resource. Safe for autonomous agents, subject to the data and cost notes below. | `read` for four; `admin` for the other five — see below | `subscription_list`, `group_list`, `group_resource_list`, `advisor`, `monitor`, `resourcehealth`, `applens`, `pricing`, `quota` |
+| **Read** | Cannot change any Azure resource. Safe for autonomous agents, subject to the data and cost notes below. | `read` for four; `admin` for the other seven — see below | `subscription_list`, `group_list`, `group_resource_list`, `advisor`, `monitor`, `resourcehealth`, `applens`, `pricing`, `quota`, `foundry`, `search` |
 | **Write** | *Empty.* No tool in this connector creates or modifies an Azure resource. | — | — |
 | **Delete** | *Empty.* | — | — |
-| **Admin** | *Empty by classification* — but see below: five read tools currently enforce at `admin` because Conduit has no entry for them. | — | — |
+| **Admin** | *Empty by classification* — but see below: seven read tools currently enforce at `admin` because Conduit has no entry for them. `foundry` and `search` joined the live surface after this table was first written. | — | — |
 
 **This plugin is read-only, and that is enforced in two independent
 places.** The gateway runs the Azure MCP Server with the `--read-only`

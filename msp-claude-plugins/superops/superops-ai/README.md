@@ -45,7 +45,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | `SUPEROPS_SUBDOMAIN` | Yes | | Your SuperOps company subdomain |
 | `SUPEROPS_API_TOKEN` | Yes | | Bearer token from Settings > Integrations > API |
 | `SUPEROPS_API_URL` | No | `https://api.superops.ai/graphql` | API URL (US). Use `https://euapi.superops.ai/graphql` for EU |
-| `SUPEROPS_MCP_URL` | No | `https://superops-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `SUPEROPS_MCP_URL` | No | `https://conduit.wyre.ai/v1/superops/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

@@ -8,6 +8,17 @@ arguments: [view, sku]
 
 Show the current Microsoft 365 license inventory for the tenant, including seat utilization and optimization opportunities.
 
+## Conduit tools
+
+The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
+
+| Step | Tool | Tier |
+|------|------|------|
+| Licence assignments and usage | `cipp_list_licenses` (`tenantFilter`) | read |
+| CSP subscriptions | `cipp_list_csp_licenses` | read |
+| Disabled or inactive users still holding seats | `cipp_list_users`, then `cipp_list_user_signin_logs` per candidate | read |
+| Remove a user's licences | `cipp_offboard_user` with `RemoveLicenses: true` only, after confirmation | admin |
+
 ## Arguments
 
 - `view` (optional) — What to show: 'summary' (default), 'users' (per-user breakdown), 'unused' (reclaim candidates)

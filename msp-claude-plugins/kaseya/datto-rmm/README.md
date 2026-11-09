@@ -39,7 +39,7 @@ export DATTO_PLATFORM="merlot"  # Your platform
 | `DATTO_API_KEY` | Yes | | Your Datto RMM API key |
 | `DATTO_API_SECRET` | Yes | | Your Datto RMM API secret |
 | `DATTO_PLATFORM` | Yes | | Your platform (e.g., `merlot`, `pinotage`, `concord`) |
-| `DATTO_RMM_MCP_URL` | No | `https://datto-rmm-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `DATTO_RMM_MCP_URL` | No | `https://conduit.wyre.ai/v1/datto-rmm/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

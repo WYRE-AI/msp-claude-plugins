@@ -32,7 +32,7 @@ export BETTERSTACK_API_TOKEN="your-api-token"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `BETTERSTACK_API_TOKEN` | Yes | | API token from Better Stack > API tokens |
-| `BETTERSTACK_MCP_URL` | No | `https://conduit.wyre.ai/v1/betterstack/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `BETTERSTACK_MCP_URL` | No | `https://conduit.wyre.ai/v1/betterstack/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -59,17 +59,9 @@ BETTERSTACK_MCP_URL=https://your-gateway-domain/v1/betterstack/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
 
-### Self-Hosted (Docker)
-
-Run the Better Stack MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export BETTERSTACK_API_TOKEN="your-api-token"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Better Stack in the Conduit web UI (`/connect/betterstack`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

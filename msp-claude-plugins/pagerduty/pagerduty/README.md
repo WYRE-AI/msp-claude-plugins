@@ -32,7 +32,7 @@ export PAGERDUTY_API_TOKEN="your-api-token"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `PAGERDUTY_API_TOKEN` | Yes | | User API Token from My Profile > User Settings > API Access |
-| `PAGERDUTY_MCP_URL` | No | `https://conduit.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `PAGERDUTY_MCP_URL` | No | `https://conduit.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -59,17 +59,9 @@ PAGERDUTY_MCP_URL=https://your-gateway-domain/v1/pagerduty/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
 
-### Self-Hosted (Docker)
-
-Run the PagerDuty MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export PAGERDUTY_API_TOKEN="your-api-token"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect PagerDuty in the Conduit web UI (`/connect/pagerduty`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

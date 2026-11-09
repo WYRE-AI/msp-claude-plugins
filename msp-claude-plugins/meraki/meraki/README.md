@@ -41,7 +41,7 @@ export MERAKI_ORG_ID="123456"   # optional default org
 | `MERAKI_API_KEY` | Yes | | Dashboard API key from Organization > Settings > Dashboard API access |
 | `MERAKI_ORG_ID` | No | | Default organization ID -- lets tools skip the org-selection step when you manage a single org |
 | `MERAKI_BASE_URL` | No | `https://api.meraki.com/api/v1` | API base URL -- override for regional clouds (China: `https://api.meraki.cn/api/v1`) |
-| `MERAKI_MCP_URL` | No | `https://conduit.wyre.ai/v1/meraki/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `MERAKI_MCP_URL` | No | `https://conduit.wyre.ai/v1/meraki/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 The MCP server defaults to `READ_ONLY_MODE=true`. In read-only mode, curated write tools are still exposed but destructive operations require an explicit `confirm_destructive_action=true` flag. See the `api-patterns` skill for details.
 
@@ -69,10 +69,6 @@ MERAKI_MCP_URL=https://your-gateway-domain/v1/meraki/mcp
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your Dashboard API key (and optional default org ID), and you're done.
-
-### Self-Hosted (Docker)
-
-Run the Meraki MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
 
 ### Claude Code CLI
 

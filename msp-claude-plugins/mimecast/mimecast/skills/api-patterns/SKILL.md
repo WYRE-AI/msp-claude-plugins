@@ -25,7 +25,7 @@ Mimecast uses OAuth 2.0 client credentials flow. The MCP Gateway injects credent
 
 | Header | Description |
 |--------|-------------|
-| `X-Mimecast-Client-ID` | OAuth 2.0 Client ID |
+| `X-Mimecast-Client-Id` | OAuth 2.0 Client ID |
 | `X-Mimecast-Client-Secret` | OAuth 2.0 Client Secret |
 | `X-Mimecast-Region` | Regional API endpoint key (us, eu, de, ca, za, au) |
 

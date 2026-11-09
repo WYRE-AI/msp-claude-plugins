@@ -43,7 +43,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 |----------|----------|---------|-------------|
 | `SYNCRO_SUBDOMAIN` | Yes | | Your Syncro subdomain (from `https://{subdomain}.syncromsp.com`) |
 | `SYNCRO_API_KEY` | Yes | | API key from Admin > API Tokens |
-| `SYNCRO_MCP_URL` | No | `https://syncro-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `SYNCRO_MCP_URL` | No | `https://conduit.wyre.ai/v1/syncro/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

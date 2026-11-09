@@ -30,7 +30,7 @@ You need an IT Glue API key with appropriate permissions:
 |----------|----------|---------|-------------|
 | `ITGLUE_API_KEY` | Yes | — | IT Glue API key |
 | `ITGLUE_REGION` | No | `us` | API region: `us`, `eu`, or `au` |
-| `ITGLUE_MCP_URL` | No | `https://itglue-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `ITGLUE_MCP_URL` | No | `https://conduit.wyre.ai/v1/itglue/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 
 

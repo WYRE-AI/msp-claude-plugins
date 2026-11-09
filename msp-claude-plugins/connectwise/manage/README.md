@@ -53,14 +53,14 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | `CW_PRIVATE_KEY` | Yes | | API member private key |
 | `CW_CLIENT_ID` | Yes | | Registered application client ID |
 | `CW_API_URL` | Yes | | Regional API endpoint (e.g., `api-na.myconnectwise.net`) |
-| `CONNECTWISE_MANAGE_MCP_URL` | No | `https://connectwise-manage-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `CONNECTWISE_MANAGE_MCP_URL` | No | `https://conduit.wyre.ai/v1/connectwise-psa/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
 If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CONNECTWISE_MANAGE_MCP_URL` to your gateway's endpoint:
 
 ```
-CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-manage/mcp
+CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-psa/mcp
 ```
 
 **Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → ConnectWise PSA → Configure and add the variable.
@@ -69,7 +69,7 @@ CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-manage/mcp
 ```json
 {
   "env": {
-    "CONNECTWISE_MANAGE_MCP_URL": "https://your-gateway-domain/v1/connectwise-manage/mcp"
+    "CONNECTWISE_MANAGE_MCP_URL": "https://your-gateway-domain/v1/connectwise-psa/mcp"
   }
 }
 ```

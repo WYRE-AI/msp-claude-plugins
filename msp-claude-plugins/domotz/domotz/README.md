@@ -38,7 +38,7 @@ export DOMOTZ_REGION="us-east-1"
 |----------|----------|---------|-------------|
 | `DOMOTZ_API_KEY` | Yes | | API key from User Menu > API Keys |
 | `DOMOTZ_REGION` | No | `us-east-1` | API region (`us-east-1` or `eu-central-1`) |
-| `DOMOTZ_MCP_URL` | No | `https://conduit.wyre.ai/v1/domotz/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `DOMOTZ_MCP_URL` | No | `https://conduit.wyre.ai/v1/domotz/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -65,18 +65,9 @@ DOMOTZ_MCP_URL=https://your-gateway-domain/v1/domotz/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API key and select your region, and you're done.
 
-### Self-Hosted (Docker)
-
-Run the Domotz MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export DOMOTZ_API_KEY="your-api-key"
-export DOMOTZ_REGION="us-east-1"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Domotz in the Conduit web UI (`/connect/domotz`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

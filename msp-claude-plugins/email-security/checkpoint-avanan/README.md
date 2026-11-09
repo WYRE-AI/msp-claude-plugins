@@ -48,14 +48,14 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 |----------|----------|---------|-------------|
 | `CHECKPOINT_CLIENT_ID` | Yes | | OAuth2 client ID from Infinity Portal |
 | `CHECKPOINT_CLIENT_SECRET` | Yes | | OAuth2 client secret (sent as `accessKey`) |
-| `CHECKPOINT_AVANAN_MCP_URL` | No | `https://checkpoint-avanan-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `CHECKPOINT_AVANAN_MCP_URL` | No | `https://conduit.wyre.ai/v1/avanan/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
 If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CHECKPOINT_AVANAN_MCP_URL` to your gateway's endpoint:
 
 ```
-CHECKPOINT_AVANAN_MCP_URL=https://your-gateway-domain/v1/checkpoint-avanan/mcp
+CHECKPOINT_AVANAN_MCP_URL=https://your-gateway-domain/v1/avanan/mcp
 ```
 
 **Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Checkpoint Avanan > Configure and add the variable.
@@ -64,7 +64,7 @@ CHECKPOINT_AVANAN_MCP_URL=https://your-gateway-domain/v1/checkpoint-avanan/mcp
 ```json
 {
   "env": {
-    "CHECKPOINT_AVANAN_MCP_URL": "https://your-gateway-domain/v1/checkpoint-avanan/mcp"
+    "CHECKPOINT_AVANAN_MCP_URL": "https://your-gateway-domain/v1/avanan/mcp"
   }
 }
 ```

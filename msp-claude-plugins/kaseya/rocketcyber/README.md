@@ -43,7 +43,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 |----------|----------|---------|-------------|
 | `ROCKETCYBER_API_KEY` | Yes | | API key from Provider Settings > API tab |
 | `ROCKETCYBER_REGION` | No | `us` | Region prefix for base URL. Determines base URL: `https://api-{region}.rocketcyber.com/v3` |
-| `ROCKETCYBER_MCP_URL` | No | `https://rocketcyber-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `ROCKETCYBER_MCP_URL` | No | `https://conduit.wyre.ai/v1/rocketcyber/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -121,24 +121,11 @@ claude --plugin .
 
 ## MCP Server
 
-No community MCP server exists yet for RocketCyber. The `.mcp.json` file contains a placeholder configuration pointing to the REST API base URL.
+RocketCyber is brokered by [Conduit](https://conduit.wyre.ai) (vendor slug `rocketcyber`). This plugin does not ship its own `.mcp.json`: install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to `https://conduit.wyre.ai/v1/mcp`, then connect RocketCyber in the Conduit web UI. Conduit stores the API key and injects it on every request.
+
+The connector serves these tools, all read-only: `rocketcyber_get_account`, `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_get_event_summary`, `rocketcyber_list_agents`, `rocketcyber_list_apps`, `rocketcyber_list_firewalls`, `rocketcyber_get_defender`, `rocketcyber_get_office` and `rocketcyber_test_connection`.
 
 Reference implementation: [Celerium PowerShell wrapper](https://github.com/Celerium) provides a community-maintained PowerShell module for the RocketCyber API.
-
-```json
-{
-  "mcpServers": {
-    "rocketcyber": {
-      "type": "http",
-      "url": "https://api-us.rocketcyber.com/v3",
-      "headers": {
-        "Authorization": "Bearer ${ROCKETCYBER_API_KEY}"
-      },
-      "note": "No community MCP server exists yet."
-    }
-  }
-}
-```
 
 ## API Reference
 

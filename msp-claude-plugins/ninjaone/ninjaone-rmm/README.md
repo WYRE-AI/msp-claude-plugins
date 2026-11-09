@@ -17,7 +17,7 @@ Set these environment variables:
 | `NINJAONE_CLIENT_ID` | Yes | | OAuth 2.0 Client ID |
 | `NINJAONE_CLIENT_SECRET` | Yes | | OAuth 2.0 Client Secret |
 | `NINJAONE_REGION` | Yes | | Region: `us`, `eu`, or `oc` |
-| `NINJAONE_MCP_URL` | No | `https://ninjaone-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `NINJAONE_MCP_URL` | No | `https://conduit.wyre.ai/v1/ninjaone/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 Get credentials from **Administration > Apps > API** in NinjaOne.
 

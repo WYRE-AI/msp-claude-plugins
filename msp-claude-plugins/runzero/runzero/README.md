@@ -32,7 +32,7 @@ export RUNZERO_API_TOKEN="your-account-api-token"
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `RUNZERO_API_TOKEN` | Yes | | Account API Token from Account > API Keys |
-| `RUNZERO_MCP_URL` | No | `https://conduit.wyre.ai/v1/runzero/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `RUNZERO_MCP_URL` | No | `https://conduit.wyre.ai/v1/runzero/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
@@ -59,17 +59,9 @@ RUNZERO_MCP_URL=https://your-gateway-domain/v1/runzero/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API token and you're done.
 
-### Self-Hosted (Docker)
-
-Run the RunZero MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export RUNZERO_API_TOKEN="your-account-api-token"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect runZero in the Conduit web UI (`/connect/runzero`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

@@ -53,7 +53,7 @@ export CONNECTWISE_AUTOMATE_2FA="optional-2fa-key"
 | `CONNECTWISE_AUTOMATE_USER` | Yes (option 2) | | User login username |
 | `CONNECTWISE_AUTOMATE_PASS` | Yes (option 2) | | User login password |
 | `CONNECTWISE_AUTOMATE_2FA` | No | | TOTP bypass key for 2FA |
-| `CONNECTWISE_AUTOMATE_MCP_URL` | No | `https://connectwise-automate-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `CONNECTWISE_AUTOMATE_MCP_URL` | No | `https://conduit.wyre.ai/v1/connectwise-automate/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

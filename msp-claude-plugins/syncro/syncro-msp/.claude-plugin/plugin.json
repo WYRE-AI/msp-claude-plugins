@@ -1,11 +1,11 @@
 {
   "name": "syncro",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Claude Code plugin for Syncro MSP - tickets, customers, assets, invoices",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

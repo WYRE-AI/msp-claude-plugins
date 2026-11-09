@@ -8,6 +8,28 @@ arguments: [user, mailbox-action, transfer-to, dry-run]
 
 Execute a structured, safe Microsoft 365 offboarding workflow for a departing employee. Each step is performed in order with confirmation where needed.
 
+## Conduit tools
+
+The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
+
+The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userId`) with the step flags turned on. It is irreversible and queued, so run it once, after the operator confirms the exact flag set.
+
+| Step | `cipp_offboard_user` flag |
+|------|-----------------------------|
+| Revoke sessions | `RevokeSessions` |
+| Reset password | `ResetPass` |
+| Disable sign-in | `DisableSignIn` |
+| Out-of-office | `OOO` (message text) |
+| Convert to shared mailbox | `ConvertToShared` |
+| Forward mail | `forward` (UPN), `KeepCopy` |
+| Mailbox access for the manager | `AccessAutomap` / `AccessNoAutomap` |
+| OneDrive access | `OnedriveAccess` |
+| Remove from groups and Teams | `RemoveGroups` |
+| Free licences | `RemoveLicenses` |
+| Remove MFA methods and mobile devices | `RemoveMFADevices`, `RemoveMobile` |
+
+Use `cipp_list_users` to resolve the user first, and `cipp_list_mailbox_permissions` or `cipp_list_user_groups` to show the dry-run picture before the job is queued.
+
 ## Arguments
 
 - `user` (required) — UPN or display name of the user being offboarded

@@ -8,6 +8,16 @@ arguments: [filter, export]
 
 Audit Microsoft 365 MFA enrollment for all users, producing a prioritized list of accounts that need attention.
 
+## Conduit tools
+
+The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
+
+| Step | Tool | Tier |
+|------|------|------|
+| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`, or `allTenants` for the fleet) | read |
+| Registration-details report (alternative) | `microsoft_graph_get` on `/v1.0/reports/authenticationMethods/userRegistrationDetails` | admin |
+| Conditional Access coverage | `cipp_list_conditional_access_policies` | read |
+
 ## Arguments
 
 - `filter` (optional) — Filter results - "all", "enrolled", "not-enrolled", or "admin-only"

@@ -36,7 +36,7 @@ export HUDU_API_KEY="your-api-key-here"
 |----------|----------|---------|-------------|
 | `HUDU_BASE_URL` | Yes | | Your Hudu instance URL (e.g., `https://your-company.huducloud.com`) |
 | `HUDU_API_KEY` | Yes | | API key from Admin > API Keys |
-| `HUDU_MCP_URL` | No | `https://hudu-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `HUDU_MCP_URL` | No | `https://conduit.wyre.ai/v1/hudu/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

@@ -43,7 +43,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 |----------|----------|---------|-------------|
 | `KNOWBE4_API_KEY` | Yes | | API token from KnowBe4 console |
 | `KNOWBE4_REGION` | Yes | `US` | Account region: `US`, `EU`, `CA`, `UK`, `DE` |
-| `KNOWBE4_MCP_URL` | No | `https://knowbe4-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `KNOWBE4_MCP_URL` | No | `https://conduit.wyre.ai/v1/knowbe4/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

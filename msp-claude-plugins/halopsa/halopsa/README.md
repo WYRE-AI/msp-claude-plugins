@@ -48,7 +48,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | `HALOPSA_CLIENT_ID` | Yes | | OAuth 2.0 Client ID |
 | `HALOPSA_CLIENT_SECRET` | Yes | | OAuth 2.0 Client Secret |
 | `HALOPSA_AUTH_SERVER` | No | `https://{tenant}.halopsa.com/auth` | Auth server URL |
-| `HALOPSA_MCP_URL` | No | `https://halopsa-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `HALOPSA_MCP_URL` | No | `https://conduit.wyre.ai/v1/halopsa/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

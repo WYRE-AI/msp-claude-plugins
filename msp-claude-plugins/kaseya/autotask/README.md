@@ -51,7 +51,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 | `AUTOTASK_SECRET` | Yes | | API secret key |
 | `AUTOTASK_INTEGRATION_CODE` | Yes | | Your integration code |
 | `AUTOTASK_API_ZONE` | Yes | | Data center zone (e.g., `webservices5`) |
-| `AUTOTASK_MCP_URL` | No | `https://autotask-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| `AUTOTASK_MCP_URL` | No | `https://conduit.wyre.ai/v1/autotask/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 

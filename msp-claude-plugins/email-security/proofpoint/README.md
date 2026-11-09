@@ -83,7 +83,7 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 |----------|----------|---------|-------------|
 | `PROOFPOINT_SERVICE_PRINCIPAL` | Yes | | Service principal from Proofpoint TAP dashboard |
 | `PROOFPOINT_SERVICE_SECRET` | Yes | | Service secret associated with the principal |
-| `PROOFPOINT_MCP_URL` | No | `https://proofpoint-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| `PROOFPOINT_MCP_URL` | No | `https://conduit.wyre.ai/v1/proofpoint/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
 
 ## Self-Hosted Gateway
 
