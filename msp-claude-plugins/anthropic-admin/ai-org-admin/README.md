@@ -33,8 +33,10 @@ Org owners see every tool. Members with an ordinary `read` grant will not see th
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install anthropic-admin
+/plugin install ai-org-admin
 ```
+
+The plugin is named `ai-org-admin`, not `anthropic-admin`: Claude Code reserves plugin names that contain "anthropic" or "claude" for Anthropic's own plugins. The Conduit connector slug is still `anthropic-admin`.
 
 **Why a dedicated key.** Anthropic has no read-only Admin key. Admin keys have full admin rights on the Anthropic org: they can invite and remove users, archive API keys, and change workspaces. Conduit only reads, but a dedicated key lets the client rotate or revoke Conduit's access without touching anything else.
 

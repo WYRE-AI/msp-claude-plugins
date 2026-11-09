@@ -1,5 +1,5 @@
 {
-  "name": "anthropic-admin",
+  "name": "ai-org-admin",
   "version": "1.0.0",
   "description": "Claude plugins for the Anthropic Admin API through Conduit - read-only review of a client's Anthropic organization: seat and invite inventory, workspaces, API key inventory, token usage and spend, Claude Code adoption, the compliance activity feed, and rate limits",
   "author": {
