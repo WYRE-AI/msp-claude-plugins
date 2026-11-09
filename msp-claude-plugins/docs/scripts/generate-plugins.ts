@@ -19,7 +19,7 @@ const OUTPUT_PATH_SHARED = path.join(DOCS_DIR, 'src', 'data', 'sharedSkills.ts')
 const VALID_CATEGORIES = new Set([
   'psa', 'rmm', 'documentation', 'security', 'sales', 'accounting',
   'productivity', 'email-security', 'incident-management', 'monitoring',
-  'network', 'crm', 'marketplace', 'marketing', 'infrastructure',
+  'network', 'crm', 'marketplace', 'marketing', 'infrastructure', 'bcdr',
 ]);
 
 function normalizeCategory(raw: string): string {
@@ -74,6 +74,18 @@ function deriveVendor(sourcePath: string): string {
     'email-security': 'Email Security',
     'saas-alerts': 'SaaS Alerts',
     '3cx': '3CX',
+    'anthropic-admin': 'Anthropic',
+    'openai-admin': 'OpenAI',
+    '1password': '1Password',
+    lastpass: 'LastPass',
+    cove: 'N-able',
+    'unitrends-uniview': 'Kaseya',
+    myitprocess: 'Kaseya',
+    gogetssl: 'GoGetSSL',
+    smileback: 'SmileBack',
+    'alga-psa': 'Alga',
+    marketsharp: 'MarketSharp',
+    mspcfo: 'MSPCFO',
   };
 
   return vendorMap[topLevel] ?? capitalize(topLevel);
@@ -136,6 +148,19 @@ function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: 
     'rootly': 'Rootly',
     'cipp': 'CIPP',
     '3cx': '3CX',
+    'ai-org-admin': 'Anthropic Admin',
+    'openai-admin': 'OpenAI Admin',
+    '1password': '1Password',
+    'lastpass': 'LastPass',
+    'jamf': 'Jamf Pro',
+    'cove': 'Cove Data Protection',
+    'unitrends-uniview': 'Unitrends UniView',
+    'myitprocess': 'myITprocess',
+    'gogetssl': 'GoGetSSL',
+    'smileback': 'SmileBack',
+    'alga-psa': 'Alga PSA',
+    'marketsharp': 'MarketSharp',
+    'mspcfo': 'MSPCFO',
   };
 
   return nameMap[marketplaceName] ?? humanize(marketplaceName);

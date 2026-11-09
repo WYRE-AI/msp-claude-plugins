@@ -1121,6 +1121,253 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Network"
+    },
+    {
+      "name": "ai-org-admin",
+      "description": "Anthropic Admin API - read-only review of a client's Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/anthropic-admin/ai-org-admin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "openai-admin",
+      "description": "OpenAI Admin API - read-only review of a client's OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/openai-admin/openai-admin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "jamf",
+      "description": "Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/jamf/jamf"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "RMM"
+    },
+    {
+      "name": "acronis",
+      "description": "Acronis Cyber Protect Cloud - backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/acronis/acronis"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "bitwarden",
+      "description": "Bitwarden - read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and subscription (never vault items)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/bitwarden/bitwarden"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "1password",
+      "description": "1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/1password/1password"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "zabbix",
+      "description": "Zabbix - read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability reporting",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/zabbix/zabbix"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Network"
+    },
+    {
+      "name": "lastpass",
+      "description": "LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/lastpass/lastpass"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "moovila",
+      "description": "Moovila - read-only project, budget, task, time entry and resource reporting for project profitability and billing reconciliation",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/moovila/moovila"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "webroot",
+      "description": "Webroot (OpenText) GSM - read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/webroot/webroot"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Security"
+    },
+    {
+      "name": "cove",
+      "description": "Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/cove/cove"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "unitrends-uniview",
+      "description": "Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/unitrends-uniview/unitrends-uniview"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "BCDR"
+    },
+    {
+      "name": "gogetssl",
+      "description": "GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/gogetssl/gogetssl"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Infrastructure"
+    },
+    {
+      "name": "smileback",
+      "description": "SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/smileback/smileback"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "myitprocess",
+      "description": "Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/myitprocess/myitprocess"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "alga-psa",
+      "description": "Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/alga-psa/alga-psa"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "PSA"
+    },
+    {
+      "name": "dubber",
+      "description": "Dubber call recording - capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and webhook health",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/dubber/dubber"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "marketsharp",
+      "description": "MarketSharp home-improvement CRM - read-only lead pipeline, appointments and close rates, customer history, and sold-job backlog",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/marketsharp/marketsharp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "CRM"
+    },
+    {
+      "name": "mspcfo",
+      "description": "MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/mspcfo/mspcfo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Accounting"
     }
   ]
 }
