@@ -25,6 +25,10 @@ Contacts in ConnectWise PSA represent individuals at your client companies. Cont
   separate entity that contact searches never return; query it through
   `connectwise-psa-api-patterns`.
 
+## Contact Types
+
+Contact types (for example Billing, Primary, Technical) drive who receives invoices and portal notifications. `cw_update_contact_types` (write) sets a contact's types; read the current ones from `cw_get_contact` first and send the full intended set.
+
 ## API Endpoint
 
 ```

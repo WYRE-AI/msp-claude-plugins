@@ -40,10 +40,10 @@ none is coerced to `admin`.
 | **Admin** | — | — | **None.** |
 
 There is **no restore tool and no activity-log tool**. Earlier versions
-of this document described `datto_saas_queue_restore`,
-`datto_saas_get_restore_status`, `datto_saas_list_backups`,
-`datto_saas_list_activity`, `datto_saas_list_clients` and
-`datto_saas_get_license_usage`; none of them is served by the sidecar or
+of this document described datto_saas_queue_restore,
+datto_saas_get_restore_status, datto_saas_list_backups,
+datto_saas_list_activity, datto_saas_list_clients and
+datto_saas_get_license_usage; none of them is served by the sidecar or
 classified in Conduit. Restores are started in the SaaS Protection portal.
 
 Per-call approval for anything below is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.

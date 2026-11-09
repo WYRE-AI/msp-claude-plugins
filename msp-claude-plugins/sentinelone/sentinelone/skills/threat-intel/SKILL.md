@@ -34,7 +34,7 @@ Alongside the Singularity data tools, the SentinelOne connector (Purple MCP side
 | `threat_intel_get_file_behavior` | `hash_value`, optional `sandbox` | Sandbox execution report: processes, file and registry activity, network traffic |
 | `threat_intel_get_file_relationships` | `hash_value`, `relationship_type` | Network IOCs and related files from the file's analysis |
 | `threat_intel_search` | `query` (VirusTotal Intelligence syntax) | Files matching an advanced query |
-| `cve_search_by_id` | `cve_id` | Description, CVSS score, references for one CVE |
+| `cve_search_by_id` | CVE identifier, e.g. CVE-2024-3400 | Description, CVSS score, references for one CVE |
 | `cve_search_by_vendor` | `vendor`, optional `product` | CVEs affecting a vendor/product |
 | `cve_database_status` | — | When the CVE database was last updated and how many CVEs it holds |
 

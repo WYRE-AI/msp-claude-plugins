@@ -47,7 +47,7 @@ Conduit's access editor presents four groups — Read, Write, Delete, Admin — 
 | **Delete** | **Empty.** This plugin exposes no delete tool. | `write` — **not** a tier of its own | *(none)* |
 | **Admin** | Runs operator-chosen code or catalog commands on customer production endpoints. | `admin` | `cwautomate_scripts_execute`, `cwautomate_computers_run_script`, `cwautomate_computers_run_command` |
 
-Alerts are read-only. `cwautomate_alerts_acknowledge` was removed in connectwise-automate-mcp 2.0.0 because the Automate API has no acknowledge or close route for alerts; any older note that lists it is stale.
+Alerts are read-only. There is no `cwautomate_alerts_acknowledge` any more: it was removed in connectwise-automate-mcp 2.0.0 because the Automate API has no acknowledge or close route for alerts; any older note that lists it is stale.
 
 It answers with the container's full domain tool list and the sentence "You can call any of these tools directly", which is false behind a gateway that filters by tier. This plugin's own history is the reason the suppression exists: an admin saw six write/admin-tier `cwautomate` tools advertised by `cwautomate_navigate`, called them, and got "not found". Use `conduit__my_access` for the tier-true answer. `cwautomate_status` is deliberately kept — it reports credential health and enumerates nothing.
 
