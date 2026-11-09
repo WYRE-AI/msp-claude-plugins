@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "1password": {
+      "type": "http",
+      "url": "https://conduit.wyre.ai/v1/1password/mcp",
+      "headers": {
+        "X-OnePassword-Region": "${ONEPASSWORD_REGION}",
+        "X-OnePassword-Events-Token": "${ONEPASSWORD_EVENTS_TOKEN}",
+        "X-OnePassword-Client-Id": "${ONEPASSWORD_CLIENT_ID}",
+        "X-OnePassword-Client-Secret": "${ONEPASSWORD_CLIENT_SECRET}",
+        "X-OnePassword-Account-Id": "${ONEPASSWORD_ACCOUNT_ID}"
+      }
+    }
+  }
+}
