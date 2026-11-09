@@ -28,8 +28,12 @@ LastPass REST API, so this plugin cannot see them.
 /plugin install lastpass
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/lastpass/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or
+any workflow pack), which connects Claude Code to
+[Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`,
+then connect LastPass in the Conduit web UI (`/connect/lastpass`) as
+described below. Conduit stores the key and injects it on every request,
+so there are no environment variables or headers to set on the client.
 
 ## Connecting LastPass in Conduit
 
@@ -49,11 +53,15 @@ account before a key works. A 401 on a new account usually means the
 account is not enrolled yet. If the LastPass connector is not in your
 Conduit catalog yet, it is still rolling out.
 
-## Configuration
+## Conduit connection field
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `LASTPASS_API_KEY` | Yes | LastPass API key, `lpkey_...` (sent as the `X-LastPass-API-Key` header) |
+| Field | Required | Description |
+|-------|----------|-------------|
+| LastPass API key | Yes | LastPass API key, `lpkey_...` |
+
+Conduit passes the key to the MCP server as the `X-LastPass-API-Key`
+header. Nothing is configured on the client: Conduit drops any
+`X-LastPass-API-Key` header a client sends.
 
 ## Business Key vs MSP Key
 

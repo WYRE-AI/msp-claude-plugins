@@ -18,8 +18,8 @@ when_to_use: >-
 ## Overview
 
 MSPCFO runs a first-party hosted MCP server at `https://app.mspcfo.com/mcp`.
-There is no WYRE sidecar. Conduit proxies the server at
-`https://conduit.wyre.ai/v1/mspcfo/mcp` and handles sign-in. This skill
+There is no WYRE sidecar. Conduit proxies the server through its unified
+endpoint, `https://conduit.wyre.ai/v1/mcp`, and handles sign-in. This skill
 covers what is not guessable from the tools themselves: how auth works,
 why tool names must be discovered live, and who can see the tools.
 
@@ -39,8 +39,9 @@ why tool names must be discovered live, and who can see the tools.
   with their MSPCFO account in the browser, and Conduit keeps the access
   and refresh tokens server-side. Conduit sends the access token to MSPCFO
   as a bearer token itself; the client sends no vendor header.
-- `.mcp.json` therefore declares only the Conduit URL. Never add an
-  Authorization header or an API key variable for MSPCFO: there is none.
+- The plugin therefore ships no `.mcp.json`; Claude Code reaches the tools
+  through `wyre-gateway`. Never add an Authorization header or an API key
+  variable for MSPCFO: there is none, and Conduit drops client headers.
 - The token carries the signed-in MSPCFO user's permissions. If a report
   is missing or partial, the MSPCFO account may not have access to it.
 
@@ -66,7 +67,7 @@ MSPCFO does not publish its MCP tool names, and this plugin does not
 invent them.
 
 1. Read the MSPCFO tools from the live tool list in the session (they
-   appear under the mspcfo server).
+   appear on the Conduit server under the `mspcfo` connector).
 2. Match each job to a tool by its description and input schema. MSPCFO's
    public MCP page says the server draws on these reports: Client P&L,
    Client Segments, Market Segments, Member Work Report, Members Billing

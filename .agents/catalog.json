@@ -5599,15 +5599,6 @@
       "path": "msp-claude-plugins/anthropic-admin/ai-org-admin",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "anthropic-admin": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/anthropic-admin/mcp",
-          "headers": {
-            "X-Anthropic-Admin-Key": "${ANTHROPIC_ADMIN_KEY}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5655,15 +5646,6 @@
       "path": "msp-claude-plugins/openai-admin/openai-admin",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "openai-admin": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/openai-admin/mcp",
-          "headers": {
-            "X-OpenAI-Admin-Key": "${OPENAI_ADMIN_KEY}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5708,17 +5690,6 @@
       "path": "msp-claude-plugins/jamf/jamf",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "jamf": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/jamf/mcp",
-          "headers": {
-            "X-Jamf-Base-Url": "${JAMF_BASE_URL}",
-            "X-Jamf-Client-Id": "${JAMF_CLIENT_ID}",
-            "X-Jamf-Client-Secret": "${JAMF_CLIENT_SECRET}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5765,17 +5736,6 @@
       "path": "msp-claude-plugins/acronis/acronis",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "acronis": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/acronis/mcp",
-          "headers": {
-            "X-Acronis-Base-Url": "${ACRONIS_BASE_URL}",
-            "X-Acronis-Client-Id": "${ACRONIS_CLIENT_ID}",
-            "X-Acronis-Client-Secret": "${ACRONIS_CLIENT_SECRET}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5822,17 +5782,6 @@
       "path": "msp-claude-plugins/bitwarden/bitwarden",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "bitwarden": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/bitwarden/mcp",
-          "headers": {
-            "X-Bitwarden-Client-Id": "${BITWARDEN_CLIENT_ID}",
-            "X-Bitwarden-Client-Secret": "${BITWARDEN_CLIENT_SECRET}",
-            "X-Bitwarden-Region": "${BITWARDEN_REGION}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5879,19 +5828,6 @@
       "path": "msp-claude-plugins/1password/1password",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "1password": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/1password/mcp",
-          "headers": {
-            "X-OnePassword-Region": "${ONEPASSWORD_REGION}",
-            "X-OnePassword-Events-Token": "${ONEPASSWORD_EVENTS_TOKEN}",
-            "X-OnePassword-Client-Id": "${ONEPASSWORD_CLIENT_ID}",
-            "X-OnePassword-Client-Secret": "${ONEPASSWORD_CLIENT_SECRET}",
-            "X-OnePassword-Account-Id": "${ONEPASSWORD_ACCOUNT_ID}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "account-hygiene",
@@ -5934,16 +5870,6 @@
       "path": "msp-claude-plugins/zabbix/zabbix",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "zabbix": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/zabbix/mcp",
-          "headers": {
-            "X-Zabbix-Base-Url": "${ZABBIX_BASE_URL}",
-            "X-Zabbix-Api-Token": "${ZABBIX_API_TOKEN}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -5985,15 +5911,6 @@
       "path": "msp-claude-plugins/lastpass/lastpass",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "lastpass": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/lastpass/mcp",
-          "headers": {
-            "X-LastPass-API-Key": "${LASTPASS_API_KEY}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6040,12 +5957,6 @@
       "path": "msp-claude-plugins/moovila/moovila",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "moovila": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/moovila/mcp"
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6097,19 +6008,6 @@
       "path": "msp-claude-plugins/webroot/webroot",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "webroot": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/webroot/mcp",
-          "headers": {
-            "X-Webroot-Client-Id": "${WEBROOT_CLIENT_ID}",
-            "X-Webroot-Client-Secret": "${WEBROOT_CLIENT_SECRET}",
-            "X-Webroot-Username": "${WEBROOT_USERNAME}",
-            "X-Webroot-Password": "${WEBROOT_PASSWORD}",
-            "X-Webroot-Gsm-Key": "${WEBROOT_GSM_KEY}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6156,17 +6054,6 @@
       "path": "msp-claude-plugins/cove/cove",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "cove": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/cove/mcp",
-          "headers": {
-            "X-Cove-Partner": "${COVE_PARTNER}",
-            "X-Cove-Username": "${COVE_USERNAME}",
-            "X-Cove-Api-Token": "${COVE_API_TOKEN}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "access-review",
@@ -6210,16 +6097,6 @@
       "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "unitrends-uniview": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/unitrends-uniview/mcp",
-          "headers": {
-            "X-Unitrends-UniView-Client-ID": "${UNITRENDS_UNIVIEW_CLIENT_ID}",
-            "X-Unitrends-UniView-Client-Secret": "${UNITRENDS_UNIVIEW_CLIENT_SECRET}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6262,16 +6139,6 @@
       "path": "msp-claude-plugins/gogetssl/gogetssl",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "gogetssl": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/gogetssl/mcp",
-          "headers": {
-            "X-GoGetSSL-Username": "${GOGETSSL_USERNAME}",
-            "X-GoGetSSL-Api-Password": "${GOGETSSL_API_PASSWORD}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6315,19 +6182,6 @@
       "path": "msp-claude-plugins/smileback/smileback",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "smileback": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/smileback/mcp",
-          "headers": {
-            "X-SmileBack-Client-Id": "${SMILEBACK_CLIENT_ID}",
-            "X-SmileBack-Client-Secret": "${SMILEBACK_CLIENT_SECRET}",
-            "X-SmileBack-Username": "${SMILEBACK_USERNAME}",
-            "X-SmileBack-Password": "${SMILEBACK_PASSWORD}",
-            "X-SmileBack-Region": "${SMILEBACK_REGION}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6371,15 +6225,6 @@
       "path": "msp-claude-plugins/myitprocess/myitprocess",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "myitprocess": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/myitprocess/mcp",
-          "headers": {
-            "X-MyITprocess-Api-Key": "${MYITPROCESS_API_KEY}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "alignment-reviews",
@@ -6422,17 +6267,6 @@
       "path": "msp-claude-plugins/alga-psa/alga-psa",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "alga-psa": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/alga-psa/mcp",
-          "headers": {
-            "X-Alga-Instance-Url": "${ALGA_PSA_INSTANCE_URL}",
-            "X-Alga-Api-Key": "${ALGA_PSA_API_KEY}",
-            "X-Alga-Tenant-Id": "${ALGA_PSA_TENANT_ID}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6479,19 +6313,6 @@
       "path": "msp-claude-plugins/dubber/dubber",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "dubber": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/dubber/mcp",
-          "headers": {
-            "X-Dubber-Client-Id": "${DUBBER_CLIENT_ID}",
-            "X-Dubber-Client-Secret": "${DUBBER_CLIENT_SECRET}",
-            "X-Dubber-Auth-Id": "${DUBBER_AUTH_ID}",
-            "X-Dubber-Auth-Token": "${DUBBER_AUTH_TOKEN}",
-            "X-Dubber-Region": "${DUBBER_REGION}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6534,18 +6355,6 @@
       "path": "msp-claude-plugins/marketsharp/marketsharp",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "marketsharp": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/marketsharp/mcp",
-          "headers": {
-            "X-MarketSharp-Company-Id": "${MARKETSHARP_COMPANY_ID}",
-            "X-MarketSharp-Api-Key": "${MARKETSHARP_API_KEY}",
-            "X-MarketSharp-Api-Secret": "${MARKETSHARP_API_SECRET}",
-            "X-MarketSharp-Employee-Id": "${MARKETSHARP_EMPLOYEE_ID:-}"
-          }
-        }
-      },
       "skills": [
         {
           "id": "api-patterns",
@@ -6592,12 +6401,6 @@
       "path": "msp-claude-plugins/mspcfo/mspcfo",
       "license": "Apache-2.0",
       "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "mcpServers": {
-        "mspcfo": {
-          "type": "http",
-          "url": "https://conduit.wyre.ai/v1/mspcfo/mcp"
-        }
-      },
       "skills": [
         {
           "id": "agreement-pricing-review",

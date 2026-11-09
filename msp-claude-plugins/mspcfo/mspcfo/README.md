@@ -82,18 +82,10 @@ MSPCFO's MCP only sees what the signed-in MSPCFO user can see in the
 MSPCFO app. Connect with an account whose MSPCFO permissions match what
 you want Claude to read.
 
-`.mcp.json` declares only the gateway URL:
-
-```json
-{
-  "mcpServers": {
-    "mspcfo": {
-      "type": "http",
-      "url": "https://conduit.wyre.ai/v1/mspcfo/mcp"
-    }
-  }
-}
-```
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or
+any workflow pack), which connects Claude Code to Conduit at
+`https://conduit.wyre.ai/v1/mcp`; the MSPCFO tools appear there once the
+connection above is made.
 
 ## Installation
 

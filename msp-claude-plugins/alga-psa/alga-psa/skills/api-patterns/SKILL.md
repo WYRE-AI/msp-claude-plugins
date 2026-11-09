@@ -34,6 +34,10 @@ against `{instance}/api/v1`.
 
 ## Connection and authentication
 
+The fields are entered once in the Conduit web UI (`/connect/alga-psa`). Conduit stores
+them and injects the headers below on every request; nothing is set on the client, and
+Conduit drops any `X-Alga-*` header a client sends.
+
 | Conduit field | Header | Required | Notes |
 |---|---|---|---|
 | Alga Instance URL | `X-Alga-Instance-Url` | Yes | Public `https://` origin, no path (an `/api/v1` suffix is accepted and dropped) |

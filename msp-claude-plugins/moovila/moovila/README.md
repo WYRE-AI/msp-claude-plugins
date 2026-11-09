@@ -35,10 +35,13 @@ projects stay in the Moovila UI.
 /plugin install moovila
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/moovila/mcp`. Your MCP client authenticates to
-Conduit with OAuth (it prompts you to sign in on first use). There are no
-environment variables or headers to configure on the client.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or
+any workflow pack), which connects Claude Code to
+[Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`,
+then connect Moovila in the Conduit web UI (`/connect/moovila`) as
+described below. Your MCP client authenticates to Conduit with OAuth (it
+prompts you to sign in on first use). There are no environment variables
+or headers to configure on the client.
 
 The Moovila connector is in staged rollout in Conduit. If Moovila does not
 appear under **Connections** yet, it has not been enabled for your

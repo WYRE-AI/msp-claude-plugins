@@ -37,27 +37,7 @@ Conduit checks the credentials against SmileBack's token endpoint when you save 
 /plugin install smileback
 ```
 
-The plugin connects to `https://conduit.wyre.ai/v1/smileback/mcp`.
-
-## Configuration
-
-`.mcp.json` sends these headers, which match Conduit's SmileBack connector exactly:
-
-| Variable | Header | Required |
-|---|---|---|
-| `SMILEBACK_CLIENT_ID` | `X-SmileBack-Client-Id` | Yes |
-| `SMILEBACK_CLIENT_SECRET` | `X-SmileBack-Client-Secret` | Yes |
-| `SMILEBACK_USERNAME` | `X-SmileBack-Username` | Yes |
-| `SMILEBACK_PASSWORD` | `X-SmileBack-Password` | Yes |
-| `SMILEBACK_REGION` | `X-SmileBack-Region` | No; set `us` or `eu` |
-
-```bash
-export SMILEBACK_CLIENT_ID="your-client-id"
-export SMILEBACK_CLIENT_SECRET="your-client-secret"
-export SMILEBACK_USERNAME="api-user@yourmsp.com"
-export SMILEBACK_PASSWORD="api-user-password"
-export SMILEBACK_REGION="us"
-```
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect SmileBack in the Conduit web UI (`/connect/smileback`) as above. Conduit stores the five values and injects them as the `X-SmileBack-*` headers on every request, so there are no environment variables or headers to set on the client. Conduit drops any `X-SmileBack-*` header a client sends.
 
 ## Access Tiers and Data
 

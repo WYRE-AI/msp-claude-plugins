@@ -27,7 +27,9 @@ becomes `query.RecordsCount`).
 
 ## Authentication
 
-Conduit sends three headers on every call:
+The three fields are entered once in the Conduit web UI (`/connect/cove`).
+Conduit stores them and sends three headers on every call; nothing is set on
+the client, and Conduit drops any `X-Cove-*` header a client sends:
 
 | Header | Conduit field | What it is |
 |--------|---------------|------------|

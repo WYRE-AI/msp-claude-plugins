@@ -25,12 +25,14 @@ orders, renews, reissues, cancels or pays for anything.
 
 ## Connection & Authentication
 
-Conduit asks for two fields and forwards them as headers:
+Conduit asks for two fields in its web UI (`/connect/gogetssl`), stores them,
+and forwards them to the MCP server as headers. Nothing is set on the client,
+and Conduit drops any `X-GoGetSSL-*` header a client sends:
 
-| Conduit field | Header | Env var (outside the Conduit UI) |
-|---------------|--------|----------------------------------|
-| Client-area username | `X-GoGetSSL-Username` | `GOGETSSL_USERNAME` |
-| API password | `X-GoGetSSL-Api-Password` | `GOGETSSL_API_PASSWORD` |
+| Conduit field | Header |
+|---------------|--------|
+| Client-area username | `X-GoGetSSL-Username` |
+| API password | `X-GoGetSSL-Api-Password` |
 
 There is no `Authorization` header and no Bearer token. GoGetSSL's API uses a
 two-step login: the server posts the username and API password to the

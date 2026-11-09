@@ -25,7 +25,9 @@ commands or change configuration.
 
 ## Authentication through Conduit
 
-Conduit stores the credential once and sends five headers on every call:
+Conduit stores the credential once, entered in the Conduit web UI (`/connect/webroot`),
+and sends five headers on every call. Nothing is set on the client, and Conduit drops any
+`X-Webroot-*` header a client sends:
 
 | Header | Conduit field |
 |---|---|

@@ -35,13 +35,15 @@ Bitwarden Admin Console.
 ## Connection & Authentication
 
 Conduit connects as a Bitwarden **organization API key**. The connect form
-has three fields, each passed to the MCP server as a header:
+in the Conduit web UI (`/connect/bitwarden`) has three fields. Conduit stores
+them and passes each to the MCP server as a header; nothing is set on the
+client, and Conduit drops any `X-Bitwarden-*` header a client sends:
 
-| Conduit field | Header | Env var (.mcp.json) | Notes |
-|---|---|---|---|
-| Organization client_id | `X-Bitwarden-Client-Id` | `BITWARDEN_CLIENT_ID` | Starts with `organization.`. A personal `user.` key is refused. |
-| Organization client_secret | `X-Bitwarden-Client-Secret` | `BITWARDEN_CLIENT_SECRET` | Secret. Redacted from all tool output. |
-| Region | `X-Bitwarden-Region` | `BITWARDEN_REGION` | `us` (bitwarden.com, the default) or `eu` (bitwarden.eu). |
+| Conduit field | Header | Notes |
+|---|---|---|
+| Organization client_id | `X-Bitwarden-Client-Id` | Starts with `organization.`. A personal `user.` key is refused. |
+| Organization client_secret | `X-Bitwarden-Client-Secret` | Secret. Redacted from all tool output. |
+| Region | `X-Bitwarden-Region` | `us` (bitwarden.com, the default) or `eu` (bitwarden.eu). |
 
 Facts that shape every conversation about access:
 

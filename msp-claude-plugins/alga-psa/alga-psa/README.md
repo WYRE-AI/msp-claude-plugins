@@ -38,8 +38,11 @@ admin to enable it.
 /plugin install alga-psa
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/alga-psa/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow
+pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at
+`https://conduit.wyre.ai/v1/mcp`, then connect Alga PSA in the Conduit web UI
+(`/connect/alga-psa`). Conduit stores the credentials and injects them on every request,
+so there are no environment variables or headers to set on the client.
 
 ## Configuration
 
@@ -60,20 +63,17 @@ sidecar's [least-privilege guide](https://github.com/WYRE-AI/alga-psa-mcp#least-
 
 ### 2. Connect in Conduit
 
-Paste the values into Conduit (**Connections → Alga PSA**), or set them as environment
-variables for the plugin's `.mcp.json`:
+Paste the values into Conduit (**Connections → Alga PSA**):
 
-| Conduit field | Variable | Header | Required | Notes |
-|---|---|---|---|---|
-| Alga Instance URL | `ALGA_PSA_INSTANCE_URL` | `X-Alga-Instance-Url` | Yes | The `https://` address you sign in to Alga with, no path. Example: `https://psa.example.com` |
-| API Key | `ALGA_PSA_API_KEY` | `X-Alga-Api-Key` | Yes | From the dedicated user's Profile → API Keys |
-| Tenant ID | `ALGA_PSA_TENANT_ID` | `X-Alga-Tenant-Id` | No | Leave blank unless Alga support asks for it; a wrong value makes every request fail |
+| Conduit field | Required | Notes |
+|---|---|---|
+| Alga Instance URL | Yes | The `https://` address you sign in to Alga with, no path. Example: `https://psa.example.com` |
+| API Key | Yes | From the dedicated user's Profile → API Keys |
+| Tenant ID | No | Leave blank unless Alga support asks for it; a wrong value makes every request fail |
 
-```bash
-export ALGA_PSA_INSTANCE_URL="https://psa.example.com"
-export ALGA_PSA_API_KEY="your-alga-api-key"
-# export ALGA_PSA_TENANT_ID="only-if-alga-support-gave-you-one"
-```
+Conduit passes these to the MCP server as the `X-Alga-Instance-Url`, `X-Alga-Api-Key`
+and `X-Alga-Tenant-Id` headers. Nothing is configured on the client: Conduit drops any
+`X-Alga-*` header a client sends.
 
 Conduit checks the instance URL when you connect: it must be a public `https://`
 address. Private and internal addresses are refused, and the connector never follows
@@ -81,7 +81,7 @@ redirects.
 
 ## Skills
 
-- `api-patterns`: auth headers, the read-only tool surface, pagination styles,
+- `api-patterns`: Conduit connection fields, the read-only tool surface, pagination styles,
   truncation, errors, concurrency and retry limits, untrusted content.
 - `ticket-triage`: queue review, stale and unassigned tickets, single-ticket deep dives.
 - `client-review`: per-client activity summary for QBRs and account reviews.

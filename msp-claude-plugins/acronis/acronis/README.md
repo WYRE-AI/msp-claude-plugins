@@ -13,7 +13,7 @@ Most of the plugin is read-only. Read [Writes are off by default](#writes-are-of
 
 ## Connect Acronis in Conduit
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/acronis/mcp`. If Acronis isn't in your Conduit connector list yet, it hasn't been released to your account.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect Acronis in the Conduit web UI (`/connect/acronis`). Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client. If Acronis isn't in your Conduit connector list yet, it hasn't been released to your account.
 
 1. In the Acronis management portal, go to **Settings → API clients** and create an API client. Create it in your partner tenant if you want Conduit to see all your customers.
 2. Copy its **Client ID** and **Secret**, and the **data center URL** Acronis shows, such as `https://us5-cloud.acronis.com`. Leave off anything after `.com`.
@@ -30,16 +30,6 @@ Don't use your Acronis portal email and password. Everyone in your org shares th
 Conduit checks the connection when you save it: the data center URL must be `https` on `acronis.com`, and Conduit signs in to Acronis with the API client to confirm the Client ID and Secret.
 
 See Acronis's guides to [creating an API client](https://www.acronis.com/en/support/documentation/AcronisCyberCloud/creating-api-client.html) and [managing API clients](https://www.acronis.com/en/support/documentation/AcronisCyberCloud/managing-api-clients.html).
-
-### Plugin configuration
-
-The plugin's `.mcp.json` sends the same three headers from environment variables:
-
-| Variable | Header |
-|----------|--------|
-| `ACRONIS_BASE_URL` | `X-Acronis-Base-Url` |
-| `ACRONIS_CLIENT_ID` | `X-Acronis-Client-Id` |
-| `ACRONIS_CLIENT_SECRET` | `X-Acronis-Client-Secret` |
 
 ## Installation
 
@@ -64,7 +54,7 @@ Not available at all: creating or deleting tenants, users or API clients, any de
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | Conduit headers, tenant hierarchy, tool surface and tiers, argument shape, pagination per API family, filter syntax, errors and response size |
+| `api-patterns` | Conduit connection fields, tenant hierarchy, tool surface and tiers, argument shape, pagination per API family, filter syntax, errors and response size |
 | `backup-health` | Alert-driven daily backup triage across customers, reading alerts, and false positives |
 | `protection-coverage` | Machines with no plan, plan deployment issues, agent hygiene, and the admin-only run-now write |
 | `edr-incidents` | EDR incident review, response action status, and investigation state updates |

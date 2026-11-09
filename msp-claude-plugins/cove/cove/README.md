@@ -12,7 +12,7 @@ Claude Code plugin for [N-able Cove Data Protection](https://developer.n-able.co
 
 ## Connecting through Conduit
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/cove/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect Cove in the Conduit web UI (`/connect/cove`) as described below. Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client.
 
 Cove has no OAuth. You connect it with a Cove **API user**:
 
@@ -33,17 +33,7 @@ Conduit checks the three values with a Cove login before it saves them. A wrong 
 
 The Cove connector is still being rolled out in Conduit. If it is not listed under Connections for your organization yet, it has not been enabled for you.
 
-### Local configuration
-
-`.mcp.json` passes the same three values as headers from environment variables, for clients that do not use a Conduit connection:
-
-| Variable | Header |
-|----------|--------|
-| `COVE_PARTNER` | `X-Cove-Partner` |
-| `COVE_USERNAME` | `X-Cove-Username` |
-| `COVE_API_TOKEN` | `X-Cove-Api-Token` |
-
-Keep the token in a secrets manager. Never commit it.
+Conduit drops any `X-Cove-*` header a client sends, so the token lives only in the Conduit connection. Never commit it or paste it into chat.
 
 ## Installation
 

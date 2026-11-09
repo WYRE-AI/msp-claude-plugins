@@ -28,17 +28,20 @@ delete data in SmileBack. Follow-up actions happen in the PSA.
 
 ## Connection
 
-The plugin connects to `https://conduit.wyre.ai/v1/smileback/mcp` with
-five headers. Conduit stores the same five values when you connect
-SmileBack in the Conduit UI and maps them to these headers:
+Claude Code reaches SmileBack through Conduit's unified endpoint
+(`https://conduit.wyre.ai/v1/mcp`, via `wyre-gateway`). Conduit stores five
+values when you connect SmileBack in the Conduit web UI
+(`/connect/smileback`) and maps them to these headers on every call.
+Nothing is set on the client, and Conduit drops any `X-SmileBack-*` header
+a client sends:
 
-| Conduit field | Header | Env var in `.mcp.json` | Required |
-|---|---|---|---|
-| Client ID | `X-SmileBack-Client-Id` | `SMILEBACK_CLIENT_ID` | Yes |
-| Client Secret | `X-SmileBack-Client-Secret` | `SMILEBACK_CLIENT_SECRET` | Yes |
-| Username (email) | `X-SmileBack-Username` | `SMILEBACK_USERNAME` | Yes |
-| Password | `X-SmileBack-Password` | `SMILEBACK_PASSWORD` | Yes |
-| Region | `X-SmileBack-Region` | `SMILEBACK_REGION` | No (`us` or `eu`, default `us`) |
+| Conduit field | Header | Required |
+|---|---|---|
+| Client ID | `X-SmileBack-Client-Id` | Yes |
+| Client Secret | `X-SmileBack-Client-Secret` | Yes |
+| Username (email) | `X-SmileBack-Username` | Yes |
+| Password | `X-SmileBack-Password` | Yes |
+| Region | `X-SmileBack-Region` | No (`us` or `eu`, default `us`) |
 
 - **Client ID and Client Secret** come from the SmileBack Account menu >
   API Credentials (one pair per account).
@@ -170,7 +173,7 @@ error code from the token endpoint, and SmileBack's message.
 |---|---|---|
 | `invalid_client` | Client ID or Client Secret wrong, or the wrong region | Copy both again from Account > API Credentials; confirm `us` or `eu` |
 | `invalid_grant` | Username or password wrong, or the wrong region | Use the user's email and native SmileBack password; confirm the region |
-| HTTP 401 with no SmileBack status | A required header is missing | Set all four required env vars |
+| HTTP 401 with no SmileBack status | A required field is missing from the Conduit connection | Reconnect SmileBack in Conduit with all four required fields |
 | 404 | Unknown review or response ID | Re-list; IDs are integers |
 | Argument error | Bad date, score outside 0-10, empty campaign name | Fixed client-side; never reached SmileBack |
 

@@ -58,15 +58,15 @@ to). Clients that are projects inside one organization are reviewed
 from that organization's connection; a client with its own organization
 needs its own Admin key.
 
-### Using `.mcp.json` directly
+### How Claude Code reaches it
 
-The plugin's `.mcp.json` points at
-`https://conduit.wyre.ai/v1/openai-admin/mcp` and fills the header from
-an environment variable:
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `OPENAI_ADMIN_KEY` | Yes | OpenAI Admin key, sent as `X-OpenAI-Admin-Key` |
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or
+any workflow pack), which connects Claude Code to Conduit at
+`https://conduit.wyre.ai/v1/mcp`, then connect OpenAI Admin in the
+Conduit web UI (`/connect/openai-admin`) as above. Conduit stores the key
+and injects the `X-OpenAI-Admin-Key` header on every request, so there
+are no environment variables or headers to set on the client. Conduit
+drops any `X-OpenAI-Admin-Key` header a client sends.
 
 ## Installation
 

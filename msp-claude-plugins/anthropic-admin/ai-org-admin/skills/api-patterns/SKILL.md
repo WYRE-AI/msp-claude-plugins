@@ -39,9 +39,9 @@ The sidecar turns this into the upstream `x-api-key` and
 `anthropic-version` headers itself. The upstream host is fixed to
 `https://api.anthropic.com`; there is no base-URL setting.
 
-For a direct (non-catalog) `.mcp.json` connection the plugin maps the
-`ANTHROPIC_ADMIN_KEY` environment variable onto `X-Anthropic-Admin-Key`.
-Never paste the key into chat or a ticket.
+The key is entered only in the Conduit web UI (`/connect/anthropic-admin`).
+Nothing is set on the client, and Conduit drops any `X-Anthropic-Admin-Key`
+header a client sends. Never paste the key into chat or a ticket.
 
 **Credential scope.** Anthropic has no read-only Admin key. The key that
 powers this read-only connector can also invite and remove users, archive

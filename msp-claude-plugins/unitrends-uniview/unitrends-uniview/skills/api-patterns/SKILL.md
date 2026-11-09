@@ -31,12 +31,15 @@ tenant. The MCP server exposes the 12 published operations as 12 tools, all
 
 ## Connection & Authentication
 
-Conduit stores the credential and sends it on every call as two headers:
+Conduit stores the credential, entered in the Conduit web UI
+(`/connect/unitrends-uniview`), and sends it on every call as two headers.
+Nothing is set on the client, and Conduit drops any `X-Unitrends-UniView-*`
+header a client sends:
 
-| Header | Conduit field | Env var in `.mcp.json` |
-|--------|---------------|------------------------|
-| `X-Unitrends-UniView-Client-ID` | Client ID | `UNITRENDS_UNIVIEW_CLIENT_ID` |
-| `X-Unitrends-UniView-Client-Secret` | Client Secret | `UNITRENDS_UNIVIEW_CLIENT_SECRET` |
+| Header | Conduit field |
+|--------|---------------|
+| `X-Unitrends-UniView-Client-ID` | Client ID |
+| `X-Unitrends-UniView-Client-Secret` | Client Secret |
 
 Create the credential in the UniView portal under the settings icon > API
 Access > + New. The secret is shown once; the credential can be revoked on the

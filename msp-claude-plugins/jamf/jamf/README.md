@@ -24,7 +24,7 @@ This plugin manages devices in a client's Jamf Pro tenant. Conduit also has a se
 /plugin install jamf
 ```
 
-The plugin connects through Conduit at `https://conduit.wyre.ai/v1/jamf/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Jamf Pro in the Conduit web UI (`/connect/jamf`) as described below. Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client.
 
 ## Connecting Jamf Pro
 
@@ -38,11 +38,13 @@ Create a dedicated API client for each Jamf Pro tenant in **Settings → System 
 4. Click **Generate client secret** and copy the client ID and secret. Jamf shows the secret only once.
 5. In Conduit, connect **Jamf Pro** with these fields:
 
-| Conduit field | Header | Env var (`.mcp.json`) | Notes |
-|---------------|--------|-----------------------|-------|
-| Jamf Pro URL | `X-Jamf-Base-Url` | `JAMF_BASE_URL` | e.g. `https://org.jamfcloud.com`. Must be a public `https://` URL. |
-| Client ID | `X-Jamf-Client-Id` | `JAMF_CLIENT_ID` | The API client's ID |
-| Client Secret | `X-Jamf-Client-Secret` | `JAMF_CLIENT_SECRET` | The API client's secret |
+| Conduit field | Header Conduit sends | Notes |
+|---------------|----------------------|-------|
+| Jamf Pro URL | `X-Jamf-Base-Url` | e.g. `https://org.jamfcloud.com`. Must be a public `https://` URL. |
+| Client ID | `X-Jamf-Client-Id` | The API client's ID |
+| Client Secret | `X-Jamf-Client-Secret` | The API client's secret |
+
+Conduit drops any `X-Jamf-*` header a client sends, so the secret lives only in the Conduit connection.
 
 Jamf's own guide: [API Roles and Clients](https://learn.jamf.com/bundle/jamf-pro-documentation-current/page/API_Roles_and_Clients.html).
 
@@ -70,7 +72,8 @@ Jamf tools are not yet classified in Conduit's tool table. Until they are, Condu
 | Read | `jamf_search_computers`, `jamf_get_computer`, `jamf_search_mobile_devices`, `jamf_get_mobile_device`, `jamf_search_users`, `jamf_get_user`, `jamf_list_policies`, `jamf_get_policy`, `jamf_list_patch_titles`, `jamf_get_patch_report`, `jamf_list_available_os_updates`, `jamf_list_software_update_plans`, `jamf_list_computer_groups`, `jamf_get_computer_group`, `jamf_list_mobile_device_groups`, `jamf_list_computer_prestages`, `jamf_list_mobile_device_prestages`, `jamf_list_buildings`, `jamf_list_departments`, `jamf_list_sites`, `jamf_backup_check` |
 | Write | `jamf_create_user`, `jamf_update_user`, `jamf_assign_computer`, `jamf_assign_mobile_device`, `jamf_add_computers_to_static_group`, `jamf_create_smart_computer_group`, `jamf_add_serials_to_computer_prestage`, `jamf_redeploy_management_framework`, `jamf_update_mobile_device_inventory`, `jamf_schedule_os_update` |
 | **Admin-gated in Conduit** | `jamf_remove_computers_from_static_group` (sidecar write tier, but annotated destructive, so Conduit requires admin) |
-| **Admin tier (off by default) and admin-gated in Conduit** | `jamf_prepare_computer_lock`, `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role` |
+| **Sidecar admin tier (off by default), but read in Conduit** | `jamf_prepare_computer_lock` (annotated read-only, so Conduit requires only `read`; it is still admin-only in practice because the sidecar lists it only when its admin tier is enabled and Conduit's forwarded tiers include admin. It sends nothing to the device.) |
+| **Admin tier (off by default) and admin-gated in Conduit** | `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role` |
 
 Every admin-tier tool except `jamf_prepare_computer_lock` also requires `"confirm": true`. That argument guards against accidental calls. It does not prove a human approved the action, so confirm the exact target with the user first.
 
@@ -84,11 +87,11 @@ What the sidecar never exposes, at any tier:
 
 | Skill | Covers |
 |-------|--------|
-| `jamf-api-patterns` | Conduit headers, tool tiers, paging and RSQL filters, inventory sections, errors and rate limits |
+| `jamf-api-patterns` | Conduit connection fields, tool tiers, paging and RSQL filters, inventory sections, errors and rate limits |
 | `jamf-device-compliance` | FileVault/escrow, passcode, stale check-in, unmanaged devices; fleet compliance reports |
 | `jamf-patch-management` | OS version spread, available updates, update plans, third-party patch reports, scheduling updates |
 | `jamf-user-onboarding` | New-hire user records, device assignment, PreStage scoping, static groups |
-| `jamf-device-offboarding` | Lost or stolen devices and departing users: lock, wipe, unmanage, delete (all admin-gated) |
+| `jamf-device-offboarding` | Lost or stolen devices and departing users: lock, wipe, unmanage, delete (sidecar admin tier; see the tier table for the one tool Conduit gates at read) |
 
 ## Available Agents
 

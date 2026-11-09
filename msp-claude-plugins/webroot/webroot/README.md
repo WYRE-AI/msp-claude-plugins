@@ -30,8 +30,11 @@ completes a few calls.
 /plugin install webroot
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/webroot/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow
+pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at
+`https://conduit.wyre.ai/v1/mcp`, then connect Webroot in the Conduit web UI
+(`/connect/webroot`) as described below. Conduit stores the credentials and injects them
+on every request, so there are no environment variables or headers to set on the client.
 
 ## Connect Webroot in Conduit
 
@@ -52,16 +55,8 @@ decides what the API can see. Conduit checks the client and login against Webroo
 endpoint and then reads the GSM console with the key, so a wrong value fails at connect
 time, not on the first tool call.
 
-If you run the plugin's `.mcp.json` directly instead of through a Conduit-managed
-connection, set these environment variables:
-
-| Variable | Header |
-|---|---|
-| `WEBROOT_CLIENT_ID` | `X-Webroot-Client-Id` |
-| `WEBROOT_CLIENT_SECRET` | `X-Webroot-Client-Secret` |
-| `WEBROOT_USERNAME` | `X-Webroot-Username` |
-| `WEBROOT_PASSWORD` | `X-Webroot-Password` |
-| `WEBROOT_GSM_KEY` | `X-Webroot-Gsm-Key` |
+The credentials live only in the Conduit connection. Conduit drops any `X-Webroot-*`
+header a client sends, so there is nothing to configure outside the Conduit UI.
 
 Vendor API reference: <https://unityapi.webrootcloudav.com/Docs>
 

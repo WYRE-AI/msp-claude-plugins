@@ -6,7 +6,7 @@ with, endorsed by, or sponsored by the vendor.
 ## What it connects as
 
 This plugin does not hold credentials. It reaches LastPass through the
-WYRE Conduit gateway (`https://conduit.wyre.ai/v1/lastpass/mcp`), which
+WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`), which
 stores the organisation's LastPass API key once and scopes every call to
 the LastPass account the operator is authorised for.
 

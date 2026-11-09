@@ -28,8 +28,11 @@ Those edits are made in myITprocess.
 /plugin install myitprocess
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/myitprocess/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any
+workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai)
+at `https://conduit.wyre.ai/v1/mcp`, then connect myITprocess in the Conduit web
+UI (`/connect/myitprocess`). Conduit stores the key and injects it on every
+request, so there are no environment variables or headers to set on the client.
 
 ## Connecting myITprocess in Conduit
 
@@ -54,15 +57,9 @@ Things to know about the key:
 If myITprocess does not appear in your Conduit catalog yet, the connector is
 still rolling out.
 
-### Claude Code `.mcp.json`
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `MYITPROCESS_API_KEY` | Yes | myITprocess API key (sent as the `X-MyITprocess-Api-Key` header) |
-
-```bash
-export MYITPROCESS_API_KEY="your-myitprocess-api-key"
-```
+The key lives only in the Conduit connection. Conduit drops any
+`X-MyITprocess-Api-Key` header a client sends, so there is nothing to set in
+Claude Code.
 
 ## Tools
 

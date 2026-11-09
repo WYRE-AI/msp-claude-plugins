@@ -6,7 +6,7 @@ with, endorsed by, or sponsored by OpenText or Webroot.
 ## What it connects as
 
 This plugin does not hold credentials. It reaches Webroot through the
-WYRE Conduit gateway (`https://conduit.wyre.ai/v1/webroot/mcp`), which
+WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`), which
 brokers authentication centrally.
 
 - No Webroot client secret or console password is stored on the

@@ -26,17 +26,23 @@ passthrough.
 /plugin install zabbix
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/zabbix/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow
+pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at
+`https://conduit.wyre.ai/v1/mcp`, then connect Zabbix in the Conduit web UI
+(`/connect/zabbix`) as described below. Conduit stores the credentials and injects them
+on every request, so there are no environment variables or headers to set on the client.
 
 ## Connecting Zabbix in Conduit
 
 Conduit asks for two fields:
 
-| Field | Header | Environment variable (`.mcp.json`) |
-|-------|--------|-------------------------------------|
-| Zabbix frontend URL | `X-Zabbix-Base-Url` | `ZABBIX_BASE_URL` |
-| API token | `X-Zabbix-Api-Token` | `ZABBIX_API_TOKEN` |
+| Field | Header Conduit sends |
+|-------|----------------------|
+| Zabbix frontend URL | `X-Zabbix-Base-Url` |
+| API token | `X-Zabbix-Api-Token` |
+
+Conduit drops any `X-Zabbix-*` header a client sends, so the token lives only in the
+Conduit connection.
 
 1. In the Zabbix frontend, create a dedicated user for Conduit. Give it a role that can
    only **read** the host groups you want Conduit to see (a User role, or Admin with

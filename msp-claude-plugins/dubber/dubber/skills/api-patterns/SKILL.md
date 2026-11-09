@@ -28,6 +28,9 @@ by a live customer call. Report unexpected response shapes as findings, not as u
 
 ## Credentials
 
+The fields are entered once in the Conduit web UI (`/connect/dubber`). Nothing is set on
+the client, and Conduit drops any `X-Dubber-*` header a client sends.
+
 | Conduit field | Header | Notes |
 |---|---|---|
 | Client ID | `X-Dubber-Client-Id` | Mashery application key (developer.dubber.net) |

@@ -41,16 +41,12 @@ region. See the [dubber-mcp credentials guide](https://github.com/WYRE-AI/dubber
 
 ### Claude Code
 
-`.mcp.json` points at `https://conduit.wyre.ai/v1/dubber/mcp` and sends the five
-`X-Dubber-*` headers from these environment variables:
-
-| Variable | Header |
-|---|---|
-| `DUBBER_CLIENT_ID` | `X-Dubber-Client-Id` |
-| `DUBBER_CLIENT_SECRET` | `X-Dubber-Client-Secret` |
-| `DUBBER_AUTH_ID` | `X-Dubber-Auth-Id` |
-| `DUBBER_AUTH_TOKEN` | `X-Dubber-Auth-Token` |
-| `DUBBER_REGION` | `X-Dubber-Region` (`sandbox`, `us`, `au`, `eu` or `uk`) |
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow
+pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then
+connect Dubber in the Conduit web UI (`/connect/dubber`) as above. Conduit stores the
+credentials and injects the five `X-Dubber-*` headers on every request, so there are no
+environment variables or headers to set on the client. Conduit drops any `X-Dubber-*`
+header a client sends.
 
 ## Tools and Conduit permission tiers
 

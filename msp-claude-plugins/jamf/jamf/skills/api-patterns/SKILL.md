@@ -22,13 +22,13 @@ WYRE's Jamf Pro sidecar exposes 45 tools over one Jamf Pro tenant per Conduit co
 
 ## Connection and Authentication
 
-Each Conduit connection holds one Jamf Pro **API client** (Settings → System → API Roles and Clients). Conduit passes three headers to the sidecar:
+Each Conduit connection holds one Jamf Pro **API client** (Settings → System → API Roles and Clients), entered once in the Conduit web UI (`/connect/jamf`). Conduit stores the fields and passes three headers to the sidecar. Nothing is set on the client, and Conduit drops any `X-Jamf-*` header a client sends:
 
-| Conduit field | Header | `.mcp.json` env var |
-|---------------|--------|---------------------|
-| Jamf Pro URL | `X-Jamf-Base-Url` | `JAMF_BASE_URL` |
-| Client ID | `X-Jamf-Client-Id` | `JAMF_CLIENT_ID` |
-| Client Secret | `X-Jamf-Client-Secret` | `JAMF_CLIENT_SECRET` |
+| Conduit field | Header |
+|---------------|--------|
+| Jamf Pro URL | `X-Jamf-Base-Url` |
+| Client ID | `X-Jamf-Client-Id` |
+| Client Secret | `X-Jamf-Client-Secret` |
 
 The sidecar exchanges the client ID and secret for a short-lived bearer token, caches it, and retries once with a fresh token on HTTP 401. The base URL must be public `https://`. Private, loopback, and placeholder URLs are refused by both Conduit and the sidecar.
 
@@ -42,7 +42,7 @@ The API client's **API Role** is the real permission boundary. A tool that is li
 |------|-------|-----------------|---------------------|
 | read | 21 | on | read |
 | write | 11 | on | write, except `jamf_remove_computers_from_static_group`, which Conduit treats as admin |
-| admin | 13 | **off** | admin |
+| admin | 13 | **off** | admin, except `jamf_prepare_computer_lock`, which Conduit treats as read |
 
 Two gates apply, and both must pass:
 
@@ -51,7 +51,9 @@ Two gates apply, and both must pass:
 
 Jamf tools are not yet classified in Conduit's tool table, so Conduit derives each tool's required tier from its MCP annotations: read-only tools need read, destructive tools need admin, and the rest need write. That is why `jamf_remove_computers_from_static_group` (annotated destructive) is admin-gated in Conduit even though the sidecar ships it in the write tier.
 
-**Admin-gated in Conduit:** `jamf_prepare_computer_lock`, `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role`, and `jamf_remove_computers_from_static_group`.
+The same rule makes `jamf_prepare_computer_lock` a **read** tool in Conduit: it is annotated read-only and sends nothing to the device. It is still admin-only in practice, because it sits in the sidecar's admin tier, which is listed only when the deployment enables admin and your Conduit grant forwards admin.
+
+**Admin-gated in Conduit:** `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role`, and `jamf_remove_computers_from_static_group`.
 
 Every admin-tier tool except `jamf_prepare_computer_lock` requires `"confirm": true`. Set it only after the user has confirmed the exact action and target in this conversation.
 

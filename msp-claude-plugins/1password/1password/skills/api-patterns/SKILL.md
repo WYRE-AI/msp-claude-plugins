@@ -25,7 +25,9 @@ Neither returns secret values, and vault contents are never reachable.
 
 ## Credentials and headers
 
-Each client account is one Conduit connection. Conduit sends the stored values as headers:
+Each client account is one Conduit connection, set up in the Conduit web UI. Conduit sends
+the stored values to the MCP server as headers (nothing is configured on the client, and
+Conduit drops any `X-OnePassword-*` header a client sends):
 
 | Field | Header | Required |
 |---|---|---|

@@ -7,7 +7,7 @@ affiliated with, endorsed by, or sponsored by MSPCFO.
 
 This plugin holds no credentials. It reaches MSPCFO's hosted MCP
 (`https://app.mspcfo.com/mcp`) through the WYRE Conduit gateway
-(`https://conduit.wyre.ai/v1/mspcfo/mcp`).
+(`https://conduit.wyre.ai/v1/mcp`).
 
 - Auth is OAuth 2.0 with PKCE against MSPCFO's own authorization server.
   An MSP user signs in with their MSPCFO account in the browser. There is

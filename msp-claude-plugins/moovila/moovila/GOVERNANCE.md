@@ -6,7 +6,7 @@ affiliated with, endorsed by, or sponsored by the vendor.
 ## What it connects as
 
 This plugin does not hold credentials. It reaches Moovila through the
-WYRE Conduit gateway (`https://conduit.wyre.ai/v1/moovila/mcp`).
+WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`).
 
 - The MSP registers its own OAuth app in Moovila (App Registration) and
   pastes the Client ID and Client Secret into Conduit once. There is no

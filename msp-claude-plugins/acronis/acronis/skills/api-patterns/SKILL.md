@@ -36,13 +36,9 @@ Conduit sends three headers to the Acronis connector:
 | `X-Acronis-Client-Id` | Client ID | The API client's ID |
 | `X-Acronis-Client-Secret` | Client Secret | The API client's secret |
 
-For the plugin's `.mcp.json`, export them as environment variables:
-
-```bash
-export ACRONIS_BASE_URL="https://us5-cloud.acronis.com"
-export ACRONIS_CLIENT_ID="your-api-client-id"
-export ACRONIS_CLIENT_SECRET="your-api-client-secret"
-```
+You enter these fields once in the Conduit web UI (`/connect/acronis`).
+Conduit stores them and injects the headers on every request; nothing is set
+on the client, and Conduit drops any `X-Acronis-*` header a client sends.
 
 How to get them:
 

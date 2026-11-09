@@ -18,7 +18,7 @@ The plugin is **read-only**. Conduit exposes 20 GoGetSSL tools and none of them 
 /plugin install gogetssl
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/gogetssl/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect GoGetSSL in the Conduit web UI (`/connect/gogetssl`). Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client.
 
 > The GoGetSSL connector is new in Conduit. If it does not appear in your Conduit catalog yet, it is still rolling out.
 
@@ -37,12 +37,7 @@ Things to know before you connect:
 - **The API password can spend money.** It can also place orders and spend your prepaid balance through GoGetSSL's API, even though Conduit only reads. Treat it like a payment credential, and regenerate it in Reseller Modules > API settings if it is ever exposed.
 - **IP restrictions.** If you restrict API access by IP in GoGetSSL, add Conduit's egress IP to the list or every call fails.
 
-If you configure the plugin outside the Conduit UI, set these environment variables, which `.mcp.json` maps onto the headers above:
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GOGETSSL_USERNAME` | Yes | GoGetSSL client-area username |
-| `GOGETSSL_API_PASSWORD` | Yes | API password from Reseller Modules > API settings |
+The credentials live only in the Conduit connection. Conduit drops any `X-GoGetSSL-*` header a client sends, so there is nothing to configure outside the Conduit UI.
 
 API reference: [GoGetSSL API (Postman)](https://documenter.getpostman.com/view/5593375/T1LHFp7m).
 
@@ -50,7 +45,7 @@ API reference: [GoGetSSL API (Postman)](https://documenter.getpostman.com/view/5
 
 | Skill | Covers |
 |-------|--------|
-| `api-patterns` | Auth through Conduit headers, the single-account model, paging, response limits, errors |
+| `api-patterns` | Auth through the Conduit connection, the single-account model, paging, response limits, errors |
 | `certificate-expiry` | Expiry sweeps across every client domain, renewal tiers, batch status checks |
 | `renewal-prep` | Product and price lookup, DCV approver emails, CSR decoding, balance check before renewing |
 | `billing-reconciliation` | Balance, unpaid orders and invoices, invoice line items by period, per-client rebilling |

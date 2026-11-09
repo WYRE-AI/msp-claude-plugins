@@ -34,9 +34,9 @@ change a project or rate limit. If a request needs a change, the answer is
 
 In Conduit the connector has one field, **Admin Key**. Conduit maps it
 onto `X-OpenAI-Admin-Key`; the server then calls OpenAI with
-`Authorization: Bearer <key>`. When you use this plugin's `.mcp.json`
-directly, the header is filled from the `OPENAI_ADMIN_KEY` environment
-variable.
+`Authorization: Bearer <key>`. The key is entered only in the Conduit web
+UI (`/connect/openai-admin`); nothing is set on the client, and Conduit
+drops any `X-OpenAI-Admin-Key` header a client sends.
 
 - An organization owner creates the key at
   platform.openai.com/settings/organization/admin-keys.

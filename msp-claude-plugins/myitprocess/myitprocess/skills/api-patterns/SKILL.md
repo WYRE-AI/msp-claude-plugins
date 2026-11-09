@@ -28,11 +28,13 @@ myITprocess UI.
 
 ## Connection & Authentication
 
-Conduit stores one credential for the connector and sends it on one header:
+Conduit stores one credential for the connector, entered in the Conduit web UI
+(`/connect/myitprocess`), and sends it on one header. Nothing is set on the
+client, and Conduit drops any `X-MyITprocess-Api-Key` header a client sends:
 
-| Conduit field | Gateway header | Env var (Claude Code `.mcp.json`) |
-|---------------|----------------|-----------------------------------|
-| API Key | `X-MyITprocess-Api-Key` | `MYITPROCESS_API_KEY` |
+| Conduit field | Gateway header |
+|---------------|----------------|
+| API Key | `X-MyITprocess-Api-Key` |
 
 The MCP server forwards the key upstream as myITprocess's own `MITP-API-KEY`
 header to the fixed host `https://reporting.live.myitprocess.com`. There is no

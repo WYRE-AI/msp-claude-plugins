@@ -44,19 +44,15 @@ The plugin is named `ai-org-admin`, not `anthropic-admin`: Claude Code reserves 
 
 If Anthropic Admin is not in your Conduit catalog yet, the connector has not been enabled for your org. It is being rolled out in stages.
 
-### Direct connection
+### How Claude Code reaches it
 
-The plugin's `.mcp.json` points at `https://conduit.wyre.ai/v1/anthropic-admin/mcp` and sends the key as the `X-Anthropic-Admin-Key` header:
-
-| Variable | Header | Required |
-|----------|--------|----------|
-| `ANTHROPIC_ADMIN_KEY` | `X-Anthropic-Admin-Key` | Yes |
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Anthropic Admin in the Conduit web UI (`/connect/anthropic-admin`) as above. Conduit stores the key and injects it on every request as the `X-Anthropic-Admin-Key` header, so there are no environment variables or headers to set on the client. Conduit drops any `X-Anthropic-Admin-Key` header a client sends.
 
 ## Skills
 
 | Skill | Covers |
 |-------|--------|
-| `api-patterns` | Auth header, one-key-one-org, tool tiers, pagination, truncation, cents-not-dollars, errors and 429s |
+| `api-patterns` | Conduit connection field, one-key-one-org, tool tiers, pagination, truncation, cents-not-dollars, errors and 429s |
 | `seat-inventory` | Seat counts, admin-role review, pending invites, leaver access checks |
 | `key-and-audit-review` | Key hygiene, leaver key sweeps, leaked-key triage, activity timelines (admin-gated) |
 | `spend-review` | Monthly spend, chargeback by workspace, spike investigation, rate-limit headroom |

@@ -59,8 +59,11 @@ plain reads at the HTTP level.
 /plugin install 1password
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/1password/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow
+pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at
+`https://conduit.wyre.ai/v1/mcp`, then connect 1Password in the Conduit web UI
+(`/connect/1password`). Conduit stores the credentials and injects them on every request,
+so there are no environment variables or headers to set on the client.
 
 ## Connecting a client account
 
@@ -85,18 +88,19 @@ You can add the Events token, the Users API client, or both. Conduit checks each
 you save: the token against the Events API, the client by minting a token and confirming
 its scope is exactly View users.
 
-## Configuration
+## Conduit connection fields
 
-| Env var | Header | Required | Notes |
-|---|---|---|---|
-| `ONEPASSWORD_REGION` | `X-OnePassword-Region` | Yes | `us`, `ent`, `ca` or `eu` |
-| `ONEPASSWORD_EVENTS_TOKEN` | `X-OnePassword-Events-Token` | One half | Events Reporting token |
-| `ONEPASSWORD_CLIENT_ID` | `X-OnePassword-Client-Id` | Other half | Users API client ID |
-| `ONEPASSWORD_CLIENT_SECRET` | `X-OnePassword-Client-Secret` | Other half | Users API client secret |
-| `ONEPASSWORD_ACCOUNT_ID` | `X-OnePassword-Account-Id` | Other half | 26-character account ID |
+| Field | Required | Notes |
+|---|---|---|
+| Region | Yes | `us`, `ent`, `ca` or `eu` |
+| Events Reporting token | One half | For the Events tools |
+| Users API client ID | Other half | For the Users tools |
+| Users API client secret | Other half | For the Users tools |
+| Account ID | Other half | 26-character account ID |
 
-The headers match Conduit's `headerMapping` for the `1password` vendor. The env vars use
-the `ONEPASSWORD_` prefix because a variable name cannot start with a digit.
+Conduit passes these to the 1Password MCP server as the `X-OnePassword-*` headers in its
+`headerMapping`. Nothing is configured on the client: Conduit drops any `X-OnePassword-*`
+header a client sends.
 
 ## Limitations
 

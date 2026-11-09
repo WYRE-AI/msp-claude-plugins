@@ -6,7 +6,7 @@ affiliated with, endorsed by, or sponsored by OpenAI.
 ## What it connects as
 
 This plugin does not hold credentials. It reaches OpenAI through the
-WYRE Conduit gateway (`https://conduit.wyre.ai/v1/openai-admin/mcp`),
+WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`),
 which stores the client's OpenAI Admin key centrally and sends it to the
 openai-admin-mcp server as the `X-OpenAI-Admin-Key` header.
 

@@ -52,8 +52,10 @@ done through this connection and that it has to be done in MarketSharp.
 
 ## Connection and authentication
 
-The connection is configured once in Conduit and shared by everyone in
-the Conduit organization. Conduit sends four headers to the server:
+The connection is configured once in the Conduit web UI
+(`/connect/marketsharp`) and shared by everyone in the Conduit
+organization. Conduit sends four headers to the server; nothing is set on
+the client, and Conduit drops any `X-MarketSharp-*` header a client sends:
 
 | Conduit field | Header | Required |
 |---------------|--------|----------|

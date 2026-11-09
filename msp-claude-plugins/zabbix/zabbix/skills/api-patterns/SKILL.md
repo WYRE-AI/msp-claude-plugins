@@ -32,12 +32,14 @@ Read this skill first; the other Zabbix skills assume these patterns.
 
 ## Connection & Authentication
 
-Conduit stores two fields per connection and forwards them as headers:
+Conduit stores two fields per connection, entered in the Conduit web UI
+(`/connect/zabbix`), and forwards them as headers. Nothing is set on the
+client, and Conduit drops any `X-Zabbix-*` header a client sends:
 
-| Conduit field | Header | `.mcp.json` variable |
-|---------------|--------|----------------------|
-| Zabbix frontend URL | `X-Zabbix-Base-Url` | `ZABBIX_BASE_URL` |
-| API token | `X-Zabbix-Api-Token` | `ZABBIX_API_TOKEN` |
+| Conduit field | Header |
+|---------------|--------|
+| Zabbix frontend URL | `X-Zabbix-Base-Url` |
+| API token | `X-Zabbix-Api-Token` |
 
 - The frontend URL is the address users open Zabbix at (for example
   `https://zabbix.acme.com/zabbix`), https only, no query string. Private,

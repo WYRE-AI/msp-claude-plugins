@@ -58,19 +58,17 @@ them. Use a MarketSharp employee set up for API access rather than a
 person's own login, and give that employee only the permissions the
 connection needs.
 
-### Headers sent by `.mcp.json`
+Conduit passes the four fields to the MCP server as the
+`X-MarketSharp-*` headers in its `headerMapping`. Nothing is configured
+on the client: Conduit drops any `X-MarketSharp-*` header a client sends.
 
-If you point a client at Conduit with this plugin's `.mcp.json`, it sends
-the same four values as headers. Set these environment variables first:
+### How Claude Code reaches it
 
-| Variable | Header | Required |
-|----------|--------|----------|
-| `MARKETSHARP_COMPANY_ID` | `X-MarketSharp-Company-Id` | Yes |
-| `MARKETSHARP_API_KEY` | `X-MarketSharp-Api-Key` | Yes |
-| `MARKETSHARP_API_SECRET` | `X-MarketSharp-Api-Secret` | Yes |
-| `MARKETSHARP_EMPLOYEE_ID` | `X-MarketSharp-Employee-Id` | No (blank is ignored) |
-
-The endpoint is `https://conduit.wyre.ai/v1/marketsharp/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or
+any workflow pack), which connects Claude Code to Conduit at
+`https://conduit.wyre.ai/v1/mcp`, then connect MarketSharp in the Conduit
+web UI (`/connect/marketsharp`) as above. There are no environment
+variables or headers to set on the client.
 
 ## Installation
 
@@ -83,7 +81,7 @@ The endpoint is `https://conduit.wyre.ai/v1/marketsharp/mcp`.
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | Tool surface, Conduit headers, the Employee ID requirement, paging, record caps, errors, rate limits |
+| `api-patterns` | Tool surface, Conduit connection fields, the Employee ID requirement, paging, record caps, errors, rate limits |
 | `lead-pipeline` | Inquiry (lead) volume, statuses, lead sources and product interests over a date range |
 | `sales-appointments` | Appointment schedule, salesperson workload, results and close rate |
 | `customer-history` | Find a customer and assemble their inquiries, appointments, jobs and notes |

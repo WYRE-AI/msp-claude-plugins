@@ -42,8 +42,12 @@ If the MSP manages its Unitrends estate in UniView, use this plugin. Use the
 /plugin install unitrends-uniview
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/unitrends-uniview/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any
+workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai)
+at `https://conduit.wyre.ai/v1/mcp`, then connect Unitrends UniView in the Conduit
+web UI (`/connect/unitrends-uniview`). Conduit stores the credentials and injects
+them on every request, so there are no environment variables or headers to set on
+the client.
 
 ## Connect in Conduit
 
@@ -63,16 +67,20 @@ customer, so treat the secret as a tenant-wide read key.
 The Unitrends UniView connector may still be hidden in the Conduit catalog while it
 completes staging validation. If you cannot find it, ask your Conduit administrator.
 
-## Configuration
+## Conduit connection fields
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `UNITRENDS_UNIVIEW_CLIENT_ID` | Yes | UniView API Client ID (sent as `X-Unitrends-UniView-Client-ID`) |
-| `UNITRENDS_UNIVIEW_CLIENT_SECRET` | Yes | UniView API Client Secret (sent as `X-Unitrends-UniView-Client-Secret`) |
+| Field | Required | Description |
+|-------|----------|-------------|
+| Client ID | Yes | UniView API Client ID |
+| Client Secret | Yes | UniView API Client Secret |
+
+Conduit passes these to the MCP server as the `X-Unitrends-UniView-Client-ID` and
+`X-Unitrends-UniView-Client-Secret` headers. Nothing is configured on the client:
+Conduit drops any `X-Unitrends-UniView-*` header a client sends.
 
 ## Skills
 
-- `api-patterns`: Conduit headers, the OAuth exchange, response shape, pagination,
+- `api-patterns`: Conduit connection fields, the OAuth exchange, response shape, pagination,
   truncation, errors and rate limits.
 - `backup-health-triage`: the daily cross-customer sweep of failed backups, failed
   replication, BackupIQ alerts, offline appliances and low storage.

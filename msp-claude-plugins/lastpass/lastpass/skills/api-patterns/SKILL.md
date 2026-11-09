@@ -43,9 +43,10 @@ when a request needs them; do not infer them from other data.
 |--------|-------|
 | `X-LastPass-API-Key` | The bare LastPass API key (starts with `lpkey_`) |
 
-The plugin's `.mcp.json` maps the `LASTPASS_API_KEY` environment
-variable onto that header. In Conduit, paste the key into the LastPass
-connector's **LastPass API key** field instead. Paste the bare key, not
+Conduit injects that header from the LastPass connection; nothing is set
+on the client, and Conduit drops any `X-LastPass-API-Key` header a client
+sends. In the Conduit web UI (`/connect/lastpass`), paste the key into the
+LastPass connector's **LastPass API key** field. Paste the bare key, not
 `Api-Key lpkey_...`: Conduit rejects anything that does not start with
 `lpkey_`.
 

@@ -29,8 +29,12 @@ person in the Bitwarden Admin Console.
 /plugin install bitwarden
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at
-`https://conduit.wyre.ai/v1/bitwarden/mcp`.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any
+workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai)
+at `https://conduit.wyre.ai/v1/mcp`, then connect Bitwarden in the Conduit web
+UI (`/connect/bitwarden`). Conduit stores the credentials and injects them on
+every request, so there are no environment variables or headers to set on the
+client.
 
 ## Connecting
 
@@ -55,15 +59,10 @@ Self-hosted Bitwarden is not supported yet.
 One key covers one Bitwarden organization. Each client organization needs
 its own key.
 
-## Configuration
-
-`.mcp.json` passes three headers, matching the Conduit connect form:
-
-| Variable | Required | Header |
-|---|---|---|
-| `BITWARDEN_CLIENT_ID` | Yes | `X-Bitwarden-Client-Id` |
-| `BITWARDEN_CLIENT_SECRET` | Yes | `X-Bitwarden-Client-Secret` |
-| `BITWARDEN_REGION` | No (`us` or `eu`; default `us`) | `X-Bitwarden-Region` |
+Conduit passes the three fields to the MCP server as the
+`X-Bitwarden-Client-Id`, `X-Bitwarden-Client-Secret` and `X-Bitwarden-Region`
+headers. Nothing is configured on the client: Conduit drops any
+`X-Bitwarden-*` header a client sends.
 
 ## Tools
 

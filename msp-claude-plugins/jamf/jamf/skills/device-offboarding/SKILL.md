@@ -1,8 +1,8 @@
 ---
 name: "Jamf Pro Device Offboarding"
 description: >
-  Lost, stolen, and leaver device handling in Jamf Pro, all of it behind
-  Conduit's admin gate: operator-only Mac locking through
+  Lost, stolen, and leaver device handling in Jamf Pro, all of it in the
+  sidecar's admin tier (or admin-gated in Conduit): operator-only Mac locking through
   jamf_prepare_computer_lock, mobile device lock, wipe, unmanage, record
   deletion, static group removal, and the read-only evidence to gather
   before any of them.
@@ -18,27 +18,27 @@ when_to_use: >-
 
 ## Overview
 
-Every action in this skill destroys data or removes management. None of it can be undone from Claude. All of it is **admin-gated in Conduit**, and all but one tool sit in the sidecar's admin tier, which is off by default. If the tools are not listed, say so and give the user the Jamf Pro console steps. Do not look for a workaround.
+Every action in this skill destroys data or removes management, except `jamf_prepare_computer_lock`, which only prepares a lock for a human operator. None of it can be undone from Claude. All but one tool sit in the sidecar's admin tier, which is off by default. Conduit gates every tool here at **admin** except `jamf_prepare_computer_lock`, which Conduit treats as read because it is annotated read-only and sends nothing; you still only see it when the sidecar's admin tier is enabled and your grant forwards admin. If the tools are not listed, say so and give the user the Jamf Pro console steps. Do not look for a workaround.
 
 ## Anti-triggers
 
 - **Finding stale or unmanaged devices**: use `jamf-device-compliance` (read only).
 - **Reassigning a device to a new owner without wiping it**: use `jamf-user-onboarding`.
 
-## Admin-Gated Tools
+## Offboarding Tools
 
-| Tool | What it does | Sidecar tier | `confirm` |
-|------|--------------|--------------|-----------|
-| `jamf_prepare_computer_lock` | Checks the Mac and returns a console link and steps for an operator. **Sends nothing.** | admin | no |
-| `jamf_lock_mobile_device` | MDM Device Lock on an iPhone/iPad, with optional `message` and `phoneNumber` | admin | yes |
-| `jamf_wipe_computer` | MDM EraseDevice on a Mac | admin | yes |
-| `jamf_wipe_mobile_device` | EraseDevice on iOS/iPadOS. Optional `preserveDataPlan`, `clearActivationLock` | admin | yes |
-| `jamf_unmanage_computer` | Removes the MDM profile from a Mac | admin | yes |
-| `jamf_unmanage_mobile_device` | Unmanages a mobile device and removes Jamf-managed apps, profiles, and data | admin | yes |
-| `jamf_delete_computer` | Deletes the computer record and its inventory history | admin | yes |
-| `jamf_delete_user` | Deletes a Jamf user record. Devices lose that assignment. | admin | yes |
-| `jamf_delete_computer_group` | Deletes a smart or static computer group | admin | yes |
-| `jamf_remove_computers_from_static_group` | Removes Macs from a static group, so scoped policies stop applying | **write** (Conduit still requires admin) | no |
+| Tool | What it does | Sidecar tier | Conduit tier | `confirm` |
+|------|--------------|--------------|--------------|-----------|
+| `jamf_prepare_computer_lock` | Checks the Mac and returns a console link and steps for an operator. **Sends nothing.** | admin | read | no |
+| `jamf_lock_mobile_device` | MDM Device Lock on an iPhone/iPad, with optional `message` and `phoneNumber` | admin | admin | yes |
+| `jamf_wipe_computer` | MDM EraseDevice on a Mac | admin | admin | yes |
+| `jamf_wipe_mobile_device` | EraseDevice on iOS/iPadOS. Optional `preserveDataPlan`, `clearActivationLock` | admin | admin | yes |
+| `jamf_unmanage_computer` | Removes the MDM profile from a Mac | admin | admin | yes |
+| `jamf_unmanage_mobile_device` | Unmanages a mobile device and removes Jamf-managed apps, profiles, and data | admin | admin | yes |
+| `jamf_delete_computer` | Deletes the computer record and its inventory history | admin | admin | yes |
+| `jamf_delete_user` | Deletes a Jamf user record. Devices lose that assignment. | admin | admin | yes |
+| `jamf_delete_computer_group` | Deletes a smart or static computer group | admin | admin | yes |
+| `jamf_remove_computers_from_static_group` | Removes Macs from a static group, so scoped policies stop applying | **write** | admin | no |
 
 `confirm: true` stops accidental calls. It does not prove anyone approved the action. Set it only after the user has named the device and the action in this conversation.
 

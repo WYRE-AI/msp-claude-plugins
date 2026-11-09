@@ -77,8 +77,9 @@ shared WYRE Moovila app.
 Conduit keeps the client secret and refresh token. On each call it sends
 only the short-lived access token to the sidecar as the
 `X-Moovila-Access-Token` header; the sidecar forwards it upstream as a
-Bearer token. Nothing is configured in `.mcp.json` and no credential lives
-on the technician's machine.
+Bearer token. The plugin ships no `.mcp.json` (Claude Code reaches Conduit
+through `wyre-gateway` at `https://conduit.wyre.ai/v1/mcp`), and no
+credential lives on the technician's machine.
 
 Moovila's help center says scopes are not enforced against the API, so the
 token can read everything the consenting Moovila user can see. Consent
