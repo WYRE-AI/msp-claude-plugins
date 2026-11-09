@@ -30,21 +30,32 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change HubSpot state. Safe for autonomous agents. | `hubspot_retrieve_contact`, `hubspot_list_contacts`, `hubspot_list_contact_properties`, `hubspot_search_contacts`, `hubspot_retrieve_company`, `hubspot_list_company_properties`, `hubspot_search_companies`, `hubspot_retrieve_deal`, `hubspot_list_deal_properties`, `hubspot_search_deals`, `hubspot_retrieve_ticket`, `hubspot_access_associations`, `hubspot_get_user_details`, `hubspot_open_hubspot_ui` |
-| **Write** | Creates or modifies records. Reversible, internally visible. | `hubspot_create_company`, `hubspot_update_company`, `hubspot_create_deal`, `hubspot_update_deal`, `hubspot_create_ticket`, `hubspot_update_ticket`, `hubspot_create_task`, `hubspot_create_note`, `hubspot_create_association` |
-| **Destructive** | Can cause HubSpot to email a real person. | `hubspot_create_contact`, `hubspot_update_contact` |
+| **Read** | Cannot change HubSpot state. Safe for autonomous agents. | `search_crm_objects`, `get_crm_objects`, `query_crm_data`, `discover_hubspot_schema`, `search_properties`, `get_properties`, `search_owners`, `get_user_details`, `tool_guidance`, and the marketing reads (`read_campaign_data`, `read_social_posts`, `query_segments`, `get_*` report and analytics tools) |
+| **Write** | Creates or modifies CRM records and associations. Reversible, internally visible. | `manage_crm_objects` for companies, deals, tickets, notes and tasks |
+| **Destructive** | Can cause HubSpot to email a real person, or publishes content. | `manage_crm_objects` on **contacts**; `manage_social_posts`, `manage_blog_post`, `manage_landing_page`, `manage_website_page`, `manage_campaign_objects`, `manage_segment` |
 
-There is no delete tool in this plugin, so the destructive tier is not defined
-by data loss — it is defined by outbound reach.
+The live connector is HubSpot's own hosted MCP server. Its CRM write tool is
+generic: one `manage_crm_objects` call creates or updates any object type,
+so the tier above depends on the `objectType` in the arguments, not on the
+tool name. **Conduit has no classification for any HubSpot tool today**, so
+every one of them, reads included, fails closed to `admin` in the access
+editor. Granting a read-only agent HubSpot therefore means granting
+individual tools, not a tier.
 
-`hubspot_create_contact` and `hubspot_update_contact` sit in the destructive
-tier deliberately. HubSpot workflows enrol on contact creation and on contact
-property changes. In a portal with any lifecycle-stage, lead-status, or
-list-membership workflow that has an email action, writing a contact property
-hands a real named prospect to a marketing sequence. The plugin sends nothing;
-HubSpot does, on the strength of the write — and a sent email cannot be
-recalled. Company, deal, and ticket objects carry no email address of their
-own, which is why they stay in the write tier.
+There is no delete tool, so the destructive tier is not defined by data loss —
+it is defined by outbound reach.
+
+Contact writes sit in the destructive tier deliberately. HubSpot workflows
+enrol on contact creation and on contact property changes. In a portal with
+any lifecycle-stage, lead-status, or list-membership workflow that has an
+email action, writing a contact property hands a real named prospect to a
+marketing sequence. The plugin sends nothing; HubSpot does, on the strength of
+the write — and a sent email cannot be recalled. Company, deal, and ticket
+objects carry no email address of their own, which is why writes to them stay
+in the write tier.
+
+`manage_crm_objects` takes a `confirmationStatus`. An agent can set
+`CONFIRMED` itself, so treat it as a record of approval, not as a control.
 
 Conduit does not enforce any of that as an approval requirement. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
@@ -63,13 +74,13 @@ destructive calls.**
 ## What it cannot reach
 
 - Only the HubSpot portals mapped to the operator's gateway identity.
-- Only the objects the granted OAuth scopes cover. HubSpot derives scopes from
-  the tools in use; an unscoped object returns a permissions error rather than
+- Only the objects the granted OAuth scopes cover. Scopes are granted at the
+  Conduit connect step; an unscoped object returns a permissions error rather than
   partial data.
 - No filesystem, no shell, no other vendor's data.
-- No marketing email, workflow, sequence, form, or CMS surface. This plugin
-  reads and writes CRM objects only — it cannot author, inspect, or disable the
-  workflows that a contact write may trigger.
+- No workflow, sequence or marketing-email surface. The connector can manage
+  campaigns, social posts, segments and CMS pages, but it cannot author,
+  inspect, or disable the workflows that a contact write may trigger.
 - No sensitive-data (PHI) fields. HubSpot excludes them from the MCP surface
   regardless of portal configuration.
 
@@ -77,15 +88,14 @@ destructive calls.**
 
 - Responses pass through the gateway into model context for the session and are
   not persisted by this plugin.
-- `hubspot_retrieve_contact`, `hubspot_list_contacts`, and
-  `hubspot_search_contacts` return customer and prospect PII — names, email
-  addresses, phone numbers, job titles.
-- `hubspot_retrieve_deal` and `hubspot_search_deals` return commercial data:
-  contract values, MRR, forecast category, and close dates across the whole
-  pipeline. A single unfiltered search can return the company's entire
-  forecast.
-- `hubspot_get_user_details` returns staff identity and the portal ID.
-- `hubspot_search_*` with a permissive `filterGroups` will page through the
+- `search_crm_objects` and `get_crm_objects` on contacts return customer and
+  prospect PII — names, email addresses, phone numbers, job titles.
+- The same tools on deals return commercial data: contract values, MRR,
+  forecast category, and close dates across the whole pipeline. A single
+  unfiltered search can return the company's entire forecast, and
+  `query_crm_data` can aggregate across every object in one SQL call.
+- `get_user_details` returns staff identity and the portal ID.
+- `search_crm_objects` with a permissive `filterGroups` will page through the
   entire object set. Restrict these if your agents run unattended.
 
 ## Known sharp edges
@@ -93,7 +103,7 @@ destructive calls.**
 - **Writes fan out to workflows.** Covered above, and it is the single most
   important thing to understand before granting write access. Audit the portal's
   active workflows before letting an agent touch contact properties.
-- **`hubspot_update_*` is a partial update, but stage changes are not.** Moving
+- **`manage_crm_objects` updates are partial, but stage changes are not.** Moving
   a deal to a closed stage can trigger internal notifications, revenue
   recognition, and renewal automation that no longer key off the original
   close date.
@@ -102,9 +112,6 @@ destructive calls.**
   separate association call — and to the wrong company if two clients share a
   parent domain.
 - **Search is eventually consistent.** A record created through this plugin may
-  not appear in `hubspot_search_*` results for several seconds. An agent that
+  not appear in `search_crm_objects` results for several seconds. An agent that
   creates then immediately searches will conclude the write failed and retry,
   producing duplicates.
-- **`hubspot_open_hubspot_ui` is read-tier but leaves the model's world.** It
-  hands a URL to the technician; it does not verify that the technician is
-  authorised to view what is behind it.

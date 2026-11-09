@@ -17,6 +17,20 @@ when_to_use: >-
 
 Contacts in HubSpot represent individual people -- clients, prospects, vendors, or any person your MSP interacts with. Contacts are the foundational entity in HubSpot CRM. They can be associated with companies, deals, tickets, and activities to build a complete picture of every relationship. For MSPs, contacts typically represent client employees, decision-makers, technical contacts, and billing contacts at managed companies.
 
+## Conduit connector
+
+Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`, OAuth). Its CRM tools are generic over object type, so every call names the `objectType`:
+
+| Tool | Call shape |
+|------|-----------|
+| `search_crm_objects` | `objectType`, optional `query` (free text), `filterGroups` (property `filters` and `associatedWith` association filters), `properties`, `sorts`, `limit` (max 200), `offset` |
+| `get_crm_objects` | `objectType`, `objectIds` (1-100), `properties` |
+| `manage_crm_objects` | `createRequest.objects[]` or `updateRequest.objects[]` (each with `objectType`, `properties`, optional `associations`, and `objectId` for updates), plus `confirmationStatus` (`CONFIRMED` only after the user approved the exact change) |
+| `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
+| `search_owners` | Resolve `hubspot_owner_id` values to people |
+
+Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+
 ## Anti-triggers
 
 - **The organization rather than the person** — "look up Acme Corp" wants a
@@ -36,16 +50,16 @@ Contacts in HubSpot represent individual people -- clients, prospects, vendors, 
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `hubspot_retrieve_contact` | Get a single contact by ID | `contactId` (required) |
-| `hubspot_create_contact` | Create a new contact | `email` (required), `firstname`, `lastname`, `phone`, `company` |
-| `hubspot_update_contact` | Update an existing contact | `contactId` (required), property fields to update |
-| `hubspot_list_contacts` | List contacts with pagination | `limit`, `after` (cursor) |
-| `hubspot_list_contact_properties` | List all available contact properties | None |
-| `hubspot_search_contacts` | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `get_crm_objects` (`objectType: "contacts"`) | Get a single contact by ID | `contactId` (required) |
+| `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) | Create a new contact | `email` (required), `firstname`, `lastname`, `phone`, `company` |
+| `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) | Update an existing contact | `contactId` (required), property fields to update |
+| `search_crm_objects` (`objectType: "contacts"`, no filters) | List contacts with pagination | `limit`, `after` (cursor) |
+| `search_properties` (`objectType: "contacts"`) | List all available contact properties | None |
+| `search_crm_objects` (`objectType: "contacts"`) | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `after` |
 
 ### Search Contacts
 
-Call `hubspot_search_contacts` with filter groups to find contacts:
+Call `search_crm_objects` (`objectType: "contacts"`) with filter groups to find contacts:
 
 **Search by email domain (find all contacts at a company):**
 
@@ -116,7 +130,7 @@ Call `hubspot_search_contacts` with filter groups to find contacts:
 
 ### Create a Contact
 
-Call `hubspot_create_contact` with the contact's properties:
+Call `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) with the contact's properties:
 
 **Example: Create a new client contact:**
 - `email`: `jane.doe@acmecorp.com`
@@ -129,7 +143,7 @@ Call `hubspot_create_contact` with the contact's properties:
 
 ### Update a Contact
 
-Call `hubspot_update_contact` with the `contactId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with the `contactId` and the properties to change:
 
 **Example: Update lifecycle stage and lead status:**
 - `contactId`: `12345`
@@ -138,10 +152,10 @@ Call `hubspot_update_contact` with the `contactId` and the properties to change:
 
 ### Retrieve a Contact
 
-Call `hubspot_retrieve_contact` with the `contactId`:
+Call `get_crm_objects` (`objectType: "contacts"`) with the `contactId`:
 
 **Example:**
-- `hubspot_retrieve_contact` with `contactId=12345`
+- `get_crm_objects` (`objectType: "contacts"`) with `contactId=12345`
 
 ## Key Concepts
 
@@ -223,36 +237,36 @@ Many MSPs add custom properties for contacts. Common examples:
 
 ### Find a Contact by Email
 
-1. Call `hubspot_search_contacts` with a filter on `email` using `EQ` operator
+1. Call `search_crm_objects` (`objectType: "contacts"`) with a filter on `email` using `EQ` operator
 2. If not found, try `CONTAINS_TOKEN` for partial domain matching
 3. Review the results and note the `id` for further operations
 
 ### Find All Contacts at a Company
 
-1. Call `hubspot_search_contacts` with a filter on `email` using `CONTAINS_TOKEN` with the company's email domain
-2. Alternatively, use `hubspot_access_associations` on the company object to get associated contacts
+1. Call `search_crm_objects` (`objectType: "contacts"`) with a filter on `email` using `CONTAINS_TOKEN` with the company's email domain
+2. Alternatively, use `search_crm_objects` (`associatedWith` filter) on the company object to get associated contacts
 3. For each contact, review role and lifecycle stage
 
 ### Create a New Client Contact
 
-1. **Check for duplicates** - Search by email first using `hubspot_search_contacts`
-2. **Create the contact** - Call `hubspot_create_contact` with email, name, phone, company, job title, and `lifecyclestage=customer`
-3. **Associate with company** - Call `hubspot_create_association` to link the contact to the company record
-4. **Log onboarding note** - Call `hubspot_create_note` to document the new contact setup
+1. **Check for duplicates** - Search by email first using `search_crm_objects` (`objectType: "contacts"`)
+2. **Create the contact** - Call `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) with email, name, phone, company, job title, and `lifecyclestage=customer`
+3. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) to link the contact to the company record
+4. **Log onboarding note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the new contact setup
 
 ### Update Contact After Sales Conversion
 
-1. Call `hubspot_update_contact` with:
+1. Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with:
    - `lifecyclestage`: `customer`
    - `hs_lead_status`: `CONNECTED`
-2. Call `hubspot_create_note` to log the conversion details
-3. Call `hubspot_create_task` to create onboarding follow-up tasks
+2. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to log the conversion details
+3. Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) to create onboarding follow-up tasks
 
 ### Contact Audit for a Client Company
 
-1. Find the company with `hubspot_search_companies`
-2. Call `hubspot_access_associations` to get all contacts associated with the company
-3. Retrieve each contact with `hubspot_retrieve_contact`
+1. Find the company with `search_crm_objects` (`objectType: "companies"`)
+2. Call `search_crm_objects` (`associatedWith` filter) to get all contacts associated with the company
+3. Retrieve each contact with `get_crm_objects` (`objectType: "contacts"`)
 4. Build a report with name, email, job title, lifecycle stage, and last activity date
 5. Flag contacts without email addresses or with stale last activity dates
 
@@ -315,9 +329,9 @@ Many MSPs add custom properties for contacts. Common examples:
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| Contact not found | Invalid contact ID | Verify the ID with `hubspot_search_contacts` |
+| Contact not found | Invalid contact ID | Verify the ID with `search_crm_objects` (`objectType: "contacts"`) |
 | Duplicate email | Contact with this email already exists | Search for existing contact first |
-| Invalid property | Property name not recognized | Use `hubspot_list_contact_properties` to check available properties |
+| Invalid property | Property name not recognized | Use `search_properties` (`objectType: "contacts"`) to check available properties |
 | Invalid lifecycle stage | Stage value not valid | Use one of: subscriber, lead, marketingqualifiedlead, salesqualifiedlead, opportunity, customer, evangelist, other |
 | Rate limited | Too many requests | Wait 10 seconds and retry |
 

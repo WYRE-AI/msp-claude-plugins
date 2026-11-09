@@ -13,60 +13,20 @@ This plugin provides Claude with deep knowledge of HubSpot CRM, enabling:
 - **Activities & Tasks** - Log notes, create follow-up tasks, and track engagement history
 - **Associations** - Link contacts, companies, deals, and tickets together for full relationship context
 
-## Prerequisites
-
-### OAuth 2.0 Setup
-
-HubSpot uses OAuth 2.0 with PKCE for MCP authentication. You need a client ID and client secret:
-
-1. Go to [developers.hubspot.com](https://developers.hubspot.com)
-2. Navigate to **Development > MCP Auth Apps**
-3. Create a new MCP Auth App
-4. Copy the **Client ID** and **Client Secret**
-5. Set the credentials as environment variables
-
-### Environment Variables
-
-```bash
-export HUBSPOT_CLIENT_ID="your-client-id"
-export HUBSPOT_CLIENT_SECRET="your-client-secret"
-```
-
 ## Installation
 
-### Via MCP Gateway (Recommended)
+The plugin uses Conduit's `hubspot` connector, which is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`). This plugin does not ship a `.mcp.json`:
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- just paste your OAuth credentials and you're done.
+1. Install the `wyre-gateway` plugin (or any workflow pack) to connect Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`.
+2. Connect **HubSpot** in the Conduit web UI and complete HubSpot's OAuth consent. Conduit stores and refreshes the token; there are no client IDs, secrets or environment variables on your machine.
 
-### Self-Hosted (Claude Desktop)
-
-Add to your Claude Desktop config:
-
-```json
-{
-  "mcpServers": {
-    "hubspot": {
-      "command": "npx",
-      "args": [
-        "-y", "mcp-remote",
-        "https://mcp.hubspot.com/"
-      ],
-      "env": {
-        "HUBSPOT_CLIENT_ID": "YOUR_CLIENT_ID",
-        "HUBSPOT_CLIENT_SECRET": "YOUR_CLIENT_SECRET"
-      }
-    }
-  }
-}
-```
-
-> **Note:** HubSpot hosts their own MCP server at `https://mcp.hubspot.com/`. The `mcp-remote` bridge handles OAuth 2.0 + PKCE automatically. This plugin adds MSP-specific skills, commands, and workflow knowledge on top of HubSpot's official server.
+The live tools are generic over object type: `search_crm_objects`, `get_crm_objects`, `manage_crm_objects` (create/update and associations), `search_properties`, `get_properties`, `search_owners`, `get_user_details` and `query_crm_data`, plus marketing and CMS tools. See `skills/api-patterns/SKILL.md` for the full list and call shapes, and `GOVERNANCE.md` for permission tiers.
 
 ## Available Skills
 
 | Skill | Description |
 |-------|-------------|
-| `api-patterns` | HubSpot MCP connection, OAuth 2.0 + PKCE, scopes, transport, and rate limits |
+| `api-patterns` | The live HubSpot connector tools, call shapes, Conduit OAuth connection, scopes, and rate limits |
 | `contacts` | Contact management -- search, create, update, and associate contacts |
 | `companies` | Company management -- search, create, update, and audit company records |
 | `deals` | Deal and pipeline management -- track deals, update stages, forecast revenue |
@@ -127,22 +87,20 @@ HubSpot enforces rate limits:
 - 100 requests per 10 seconds per OAuth app
 - 500,000 requests per day (varies by HubSpot plan tier)
 
-The plugin automatically handles rate limiting with exponential backoff.
+On a 429, wait for the window to reset rather than retrying immediately.
 
 ## Troubleshooting
 
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `HUBSPOT_CLIENT_ID` and `HUBSPOT_CLIENT_SECRET` are set correctly
-2. Check that the MCP Auth App has not been revoked in the Developer Portal
-3. Re-authenticate by restarting the MCP connection (OAuth tokens may have expired)
-4. Create a new MCP Auth App at [developers.hubspot.com](https://developers.hubspot.com)
+1. Reconnect HubSpot in the Conduit web UI (the HubSpot user may have revoked the app or lost access)
+2. Call `get_user_details` to confirm which HubSpot user the connection acts as
 
 ### Scope Errors
 
 If you see "403 Forbidden" or scope-related errors:
-1. HubSpot MCP automatically derives scopes from the tools you use
+1. `discover_hubspot_schema` shows which object types the connected user can read and write
 2. Ensure your HubSpot account plan supports the required API features
 3. Check that the MCP Auth App has the necessary permissions
 4. Some features (e.g., custom objects) require higher-tier HubSpot plans

@@ -11,7 +11,7 @@ Search for deals in HubSpot CRM by name, pipeline stage, company, or amount. Ret
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `hubspot_search_deals`, `hubspot_retrieve_deal`, and `hubspot_search_companies` available
+- MCP tools `search_crm_objects` (`objectType: "deals"`), `get_crm_objects` (`objectType: "deals"`), and `search_crm_objects` (`objectType: "companies"`) available
 
 ## Steps
 
@@ -19,16 +19,16 @@ Search for deals in HubSpot CRM by name, pipeline stage, company, or amount. Ret
 
    - If a query is provided, search `dealname` using `CONTAINS_TOKEN`
    - If a stage is provided, filter by `dealstage` using `EQ`
-   - If a company is provided, first find the company ID with `hubspot_search_companies`, then use `hubspot_access_associations` to find deals, or filter by associated company
+   - If a company is provided, first find the company ID with `search_crm_objects` (`objectType: "companies"`), then use `search_crm_objects` (`associatedWith` filter) to find deals, or filter by associated company
    - If amount filters are provided, add `GT`/`LT` filters on `amount`
 
-2. **Execute the search** using `hubspot_search_deals`
+2. **Execute the search** using `search_crm_objects` (`objectType: "deals"`)
 
-   Call `hubspot_search_deals` with the constructed `filterGroups`, `limit=100`, sorted by `amount` descending.
+   Call `search_crm_objects` (`objectType: "deals"`) with the constructed `filterGroups`, `limit=100`, sorted by `amount` descending.
 
 3. **Enrich results** with company names if not already included
 
-   For each deal, optionally call `hubspot_access_associations` to get the associated company name.
+   For each deal, optionally call `search_crm_objects` (`associatedWith` filter) to get the associated company name.
 
 4. **Format and return results** with deal details
 
@@ -168,7 +168,7 @@ Valid stages (default pipeline):
   - closedlost
 
 Note: Your HubSpot account may have custom stages.
-Use hubspot_list_deal_properties to check available values.
+Use search_properties to check available values.
 ```
 
 ### Rate Limit
@@ -184,10 +184,10 @@ Please wait a moment and try again.
 
 | Tool | Purpose |
 |------|---------|
-| `hubspot_search_deals` | Search deals by name, stage, and amount |
-| `hubspot_retrieve_deal` | Get full deal details for single results |
-| `hubspot_search_companies` | Resolve company name to ID for filtering |
-| `hubspot_access_associations` | Get associated contacts and companies |
+| `search_crm_objects` (`objectType: "deals"`) | Search deals by name, stage, and amount |
+| `get_crm_objects` (`objectType: "deals"`) | Get full deal details for single results |
+| `search_crm_objects` (`objectType: "companies"`) | Resolve company name to ID for filtering |
+| `search_crm_objects` (`associatedWith` filter) | Get associated contacts and companies |
 
 ## Related Commands
 

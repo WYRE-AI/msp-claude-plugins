@@ -17,6 +17,20 @@ when_to_use: >-
 
 Companies in HubSpot represent organizations -- MSP clients, prospects, vendors, or partners. Companies are a central entity in the CRM that ties together contacts (the people who work there), deals (sales opportunities), and tickets (support requests). For MSPs, companies typically represent managed clients, each with associated contacts, service agreements, and support history. HubSpot can automatically associate contacts with companies based on email domain matching.
 
+## Conduit connector
+
+Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`, OAuth). Its CRM tools are generic over object type, so every call names the `objectType`:
+
+| Tool | Call shape |
+|------|-----------|
+| `search_crm_objects` | `objectType`, optional `query` (free text), `filterGroups` (property `filters` and `associatedWith` association filters), `properties`, `sorts`, `limit` (max 200), `offset` |
+| `get_crm_objects` | `objectType`, `objectIds` (1-100), `properties` |
+| `manage_crm_objects` | `createRequest.objects[]` or `updateRequest.objects[]` (each with `objectType`, `properties`, optional `associations`, and `objectId` for updates), plus `confirmationStatus` (`CONFIRMED` only after the user approved the exact change) |
+| `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
+| `search_owners` | Resolve `hubspot_owner_id` values to people |
+
+Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+
 ## Anti-triggers
 
 - **A named person at the organization** — use `hubspot-contacts`.
@@ -33,15 +47,15 @@ Companies in HubSpot represent organizations -- MSP clients, prospects, vendors,
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `hubspot_retrieve_company` | Get a single company by ID | `companyId` (required) |
-| `hubspot_create_company` | Create a new company | `name` (required), `domain`, `industry`, `phone` |
-| `hubspot_update_company` | Update an existing company | `companyId` (required), property fields to update |
-| `hubspot_list_company_properties` | List all available company properties | None |
-| `hubspot_search_companies` | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `get_crm_objects` (`objectType: "companies"`) | Get a single company by ID | `companyId` (required) |
+| `manage_crm_objects` (`createRequest`, `objectType: "companies"`) | Create a new company | `name` (required), `domain`, `industry`, `phone` |
+| `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) | Update an existing company | `companyId` (required), property fields to update |
+| `search_properties` (`objectType: "companies"`) | List all available company properties | None |
+| `search_crm_objects` (`objectType: "companies"`) | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `after` |
 
 ### Search Companies
 
-Call `hubspot_search_companies` with filter groups to find companies:
+Call `search_crm_objects` (`objectType: "companies"`) with filter groups to find companies:
 
 **Search by name:**
 
@@ -126,7 +140,7 @@ Call `hubspot_search_companies` with filter groups to find companies:
 
 ### Create a Company
 
-Call `hubspot_create_company` with the company's properties:
+Call `manage_crm_objects` (`createRequest`, `objectType: "companies"`) with the company's properties:
 
 **Example: Create a new managed client:**
 - `name`: `Acme Corporation`
@@ -142,7 +156,7 @@ Call `hubspot_create_company` with the company's properties:
 
 ### Update a Company
 
-Call `hubspot_update_company` with the `companyId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) with the `companyId` and the properties to change:
 
 **Example: Update lifecycle stage and employee count:**
 - `companyId`: `98765`
@@ -151,10 +165,10 @@ Call `hubspot_update_company` with the `companyId` and the properties to change:
 
 ### Retrieve a Company
 
-Call `hubspot_retrieve_company` with the `companyId`:
+Call `get_crm_objects` (`objectType: "companies"`) with the `companyId`:
 
 **Example:**
-- `hubspot_retrieve_company` with `companyId=98765`
+- `get_crm_objects` (`objectType: "companies"`) with `companyId=98765`
 
 ## Key Concepts
 
@@ -242,37 +256,37 @@ Common industry values for MSP clients:
 
 ### Find a Company by Name or Domain
 
-1. Call `hubspot_search_companies` with a filter on `name` using `CONTAINS_TOKEN` or on `domain` using `EQ`
+1. Call `search_crm_objects` (`objectType: "companies"`) with a filter on `name` using `CONTAINS_TOKEN` or on `domain` using `EQ`
 2. Review the results and note the `id` for further operations
 3. If not found by name, try searching by domain
 
 ### Create a New Managed Client
 
-1. **Check for duplicates** - Search by domain first using `hubspot_search_companies`
-2. **Create the company** - Call `hubspot_create_company` with name, domain, industry, address, employee count, and `lifecyclestage=customer`
-3. **Create contacts** - Add the primary contact using `hubspot_create_contact`
-4. **Associate contacts** - Call `hubspot_create_association` to link contacts to the company
-5. **Log setup note** - Call `hubspot_create_note` to document the onboarding
+1. **Check for duplicates** - Search by domain first using `search_crm_objects` (`objectType: "companies"`)
+2. **Create the company** - Call `manage_crm_objects` (`createRequest`, `objectType: "companies"`) with name, domain, industry, address, employee count, and `lifecyclestage=customer`
+3. **Create contacts** - Add the primary contact using `manage_crm_objects` (`createRequest`, `objectType: "contacts"`)
+4. **Associate contacts** - Call `manage_crm_objects` (`updateRequest` with `associations`) to link contacts to the company
+5. **Log setup note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the onboarding
 
 ### Company Audit Report
 
-1. Call `hubspot_search_companies` with `lifecyclestage=customer` and `limit=100`
+1. Call `search_crm_objects` (`objectType: "companies"`) with `lifecyclestage=customer` and `limit=100`
 2. Paginate through all results using the `after` cursor
-3. For each company, call `hubspot_access_associations` to get associated contacts and deals
+3. For each company, call `search_crm_objects` (`associatedWith` filter) to get associated contacts and deals
 4. Build a report with company name, domain, industry, employee count, contact count, open deal count, and last activity date
 5. Flag companies with no contacts, no recent activity, or missing domain
 
 ### Look Up Company with Associated Records
 
 1. Search for the company by name or domain
-2. Call `hubspot_access_associations` with `objectType=company`, `objectId=<companyId>`, `toObjectType=contact` to get contacts
-3. Call `hubspot_access_associations` with `toObjectType=deal` to get deals
-4. Call `hubspot_access_associations` with `toObjectType=ticket` to get tickets
+2. Call `search_crm_objects` with `objectType: "contacts"` and an `associatedWith` filter `{ objectType: "companies", operator: "EQUAL", objectIdValues: [<companyId>] }` to get contacts
+3. Call `search_crm_objects` with `objectType: "deals"` and an `associatedWith` filter on the same record to get deals
+4. Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the same record to get tickets
 5. Present a complete company profile with all associated records
 
 ### Client Portfolio Review
 
-1. Call `hubspot_search_companies` with `lifecyclestage=customer`, sorted by `annualrevenue` descending
+1. Call `search_crm_objects` (`objectType: "companies"`) with `lifecyclestage=customer`, sorted by `annualrevenue` descending
 2. For each company, note revenue, industry, and employee count
 3. Calculate total portfolio revenue and average company size
 4. Identify growth opportunities (companies with no open deals)
@@ -312,10 +326,10 @@ Common industry values for MSP clients:
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| Company not found | Invalid company ID | Verify the ID with `hubspot_search_companies` |
+| Company not found | Invalid company ID | Verify the ID with `search_crm_objects` (`objectType: "companies"`) |
 | Duplicate domain | Company with this domain already exists | Search by domain first to find the existing record |
-| Invalid property | Property name not recognized | Use `hubspot_list_company_properties` to check available properties |
-| Invalid industry | Industry value not valid | Use `hubspot_list_company_properties` to see allowed industry values |
+| Invalid property | Property name not recognized | Use `search_properties` (`objectType: "companies"`) to check available properties |
+| Invalid industry | Industry value not valid | Use `search_properties` (`objectType: "companies"`) to see allowed industry values |
 | Rate limited | Too many requests | Wait 10 seconds and retry |
 
 ## Best Practices

@@ -17,6 +17,20 @@ when_to_use: >-
 
 Deals in HubSpot represent sales opportunities -- potential or active revenue from clients. For MSPs, deals track managed services agreements, project engagements, hardware sales, or any revenue opportunity moving through the sales process. Each deal belongs to a pipeline (e.g., "Sales Pipeline" or "Renewals") and progresses through stages (e.g., "Discovery", "Proposal", "Closed Won"). Deals are associated with contacts and companies to provide full context on who is involved and which client the revenue belongs to.
 
+## Conduit connector
+
+Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`, OAuth). Its CRM tools are generic over object type, so every call names the `objectType`:
+
+| Tool | Call shape |
+|------|-----------|
+| `search_crm_objects` | `objectType`, optional `query` (free text), `filterGroups` (property `filters` and `associatedWith` association filters), `properties`, `sorts`, `limit` (max 200), `offset` |
+| `get_crm_objects` | `objectType`, `objectIds` (1-100), `properties` |
+| `manage_crm_objects` | `createRequest.objects[]` or `updateRequest.objects[]` (each with `objectType`, `properties`, optional `associations`, and `objectId` for updates), plus `confirmationStatus` (`CONFIRMED` only after the user approved the exact change) |
+| `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
+| `search_owners` | Resolve `hubspot_owner_id` values to people |
+
+Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+
 ## Anti-triggers
 
 - **Building or pricing the quote behind the deal** — a deal records *that* an
@@ -34,15 +48,15 @@ Deals in HubSpot represent sales opportunities -- potential or active revenue fr
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `hubspot_retrieve_deal` | Get a single deal by ID | `dealId` (required) |
-| `hubspot_create_deal` | Create a new deal | `dealname` (required), `amount`, `dealstage`, `pipeline` |
-| `hubspot_update_deal` | Update an existing deal | `dealId` (required), property fields to update |
-| `hubspot_list_deal_properties` | List all available deal properties | None |
-| `hubspot_search_deals` | Search deals by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `get_crm_objects` (`objectType: "deals"`) | Get a single deal by ID | `dealId` (required) |
+| `manage_crm_objects` (`createRequest`, `objectType: "deals"`) | Create a new deal | `dealname` (required), `amount`, `dealstage`, `pipeline` |
+| `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) | Update an existing deal | `dealId` (required), property fields to update |
+| `search_properties` (`objectType: "deals"`) | List all available deal properties | None |
+| `search_crm_objects` (`objectType: "deals"`) | Search deals by criteria | `filterGroups`, `sorts`, `limit`, `after` |
 
 ### Search Deals
 
-Call `hubspot_search_deals` with filter groups to find deals:
+Call `search_crm_objects` (`objectType: "deals"`) with filter groups to find deals:
 
 **Search by deal name:**
 
@@ -144,7 +158,7 @@ Call `hubspot_search_deals` with filter groups to find deals:
 
 ### Create a Deal
 
-Call `hubspot_create_deal` with the deal's properties:
+Call `manage_crm_objects` (`createRequest`, `objectType: "deals"`) with the deal's properties:
 
 **Example: Create a managed services deal:**
 - `dealname`: `Acme Corp - Managed IT Services`
@@ -156,7 +170,7 @@ Call `hubspot_create_deal` with the deal's properties:
 
 ### Update a Deal
 
-Call `hubspot_update_deal` with the `dealId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) with the `dealId` and the properties to change:
 
 **Example: Move deal to next stage:**
 - `dealId`: `54321`
@@ -165,10 +179,10 @@ Call `hubspot_update_deal` with the `dealId` and the properties to change:
 
 ### Retrieve a Deal
 
-Call `hubspot_retrieve_deal` with the `dealId`:
+Call `get_crm_objects` (`objectType: "deals"`) with the `dealId`:
 
 **Example:**
-- `hubspot_retrieve_deal` with `dealId=54321`
+- `get_crm_objects` (`objectType: "deals"`) with `dealId=54321`
 
 ## Key Concepts
 
@@ -248,20 +262,20 @@ Deals can be categorized for forecasting:
 
 ### Search Deals by Stage
 
-1. Call `hubspot_search_deals` with a filter on `dealstage`
+1. Call `search_crm_objects` (`objectType: "deals"`) with a filter on `dealstage`
 2. Sort by `amount` descending to see highest-value deals first
 3. Review associated companies and contacts for context
 
 ### Update Deal Stage
 
-1. Call `hubspot_retrieve_deal` to confirm current stage and details
-2. Call `hubspot_update_deal` with the new `dealstage` value
+1. Call `get_crm_objects` (`objectType: "deals"`) to confirm current stage and details
+2. Call `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) with the new `dealstage` value
 3. Optionally update `amount` if the deal value has changed
-4. Call `hubspot_create_note` to document why the stage changed
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document why the stage changed
 
 ### Pipeline Overview
 
-1. Call `hubspot_search_deals` with a filter excluding `closedwon` and `closedlost` stages
+1. Call `search_crm_objects` (`objectType: "deals"`) with a filter excluding `closedwon` and `closedlost` stages
 2. Group results by `dealstage`
 3. For each stage, calculate:
    - Number of deals
@@ -272,7 +286,7 @@ Deals can be categorized for forecasting:
 
 ### Revenue Forecast
 
-1. Call `hubspot_search_deals` with filters:
+1. Call `search_crm_objects` (`objectType: "deals"`) with filters:
    - `dealstage` NOT IN `closedlost`
    - `closedate` within the forecast period
 2. For closed-won deals, use actual `amount`
@@ -281,16 +295,16 @@ Deals can be categorized for forecasting:
 
 ### Create a Deal with Company Association
 
-1. **Find the company** - Call `hubspot_search_companies` with the company name
-2. **Find the contact** - Call `hubspot_search_contacts` for the decision-maker
-3. **Create the deal** - Call `hubspot_create_deal` with deal name, amount, stage, and close date
-4. **Associate with company** - Call `hubspot_create_association` from deal to company
-5. **Associate with contact** - Call `hubspot_create_association` from deal to contact
-6. **Log creation note** - Call `hubspot_create_note` to document the deal context
+1. **Find the company** - Call `search_crm_objects` (`objectType: "companies"`) with the company name
+2. **Find the contact** - Call `search_crm_objects` (`objectType: "contacts"`) for the decision-maker
+3. **Create the deal** - Call `manage_crm_objects` (`createRequest`, `objectType: "deals"`) with deal name, amount, stage, and close date
+4. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) from deal to company
+5. **Associate with contact** - Call `manage_crm_objects` (`updateRequest` with `associations`) from deal to contact
+6. **Log creation note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the deal context
 
 ### Stale Deal Review
 
-1. Call `hubspot_search_deals` with filters:
+1. Call `search_crm_objects` (`objectType: "deals"`) with filters:
    - `dealstage` NOT IN `closedwon`, `closedlost`
    - `lastmodifieddate` less than 30 days ago
 2. For each stale deal, note the owner, company, and amount
@@ -359,8 +373,8 @@ Deals can be categorized for forecasting:
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| Deal not found | Invalid deal ID | Verify the ID with `hubspot_search_deals` |
-| Invalid deal stage | Stage ID not valid for the pipeline | Use `hubspot_list_deal_properties` to check valid stages |
+| Deal not found | Invalid deal ID | Verify the ID with `search_crm_objects` (`objectType: "deals"`) |
+| Invalid deal stage | Stage ID not valid for the pipeline | Use `search_properties` (`objectType: "deals"`) to check valid stages |
 | Invalid pipeline | Pipeline ID not recognized | Check your HubSpot account for available pipelines |
 | Invalid close date | Date format incorrect | Use ISO 8601 format (YYYY-MM-DD) |
 | Rate limited | Too many requests | Wait 10 seconds and retry |
