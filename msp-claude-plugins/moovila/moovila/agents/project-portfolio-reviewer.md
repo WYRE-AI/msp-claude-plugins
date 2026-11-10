@@ -39,9 +39,9 @@ carry the nested `{ id, name }` references you need.
    `projectID`. Drop `isDeleted` tasks.
 3. **Budgets.** Page `moovila_project_budgets_list` once and group by
    `projectID`.
-4. **Time.** Page `moovila_time_entries_list` with `lastChangedDate` at
-   the start of the review window, keeping entries whose `startTime` is
-   in the window.
+4. **Time.** Page `moovila_time_entries_list` without `lastChangedDate`
+   (or with a bound the tenant confirms is safe; see the api-patterns
+   skill), keeping entries whose `startTime` is in the window.
 5. **Lookups.** `moovila_users_list` and `moovila_labor_types_list` once
    each, only if the report needs emails, supervisors or cost rates.
 

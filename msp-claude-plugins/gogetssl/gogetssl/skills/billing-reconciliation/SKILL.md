@@ -65,7 +65,9 @@ spreading their cost.
 
 1. `gogetssl_orders_list_unpaid` and `gogetssl_invoices_list_unpaid`, plus
    `gogetssl_orders_list` with `status: "active"` to see which domains are
-   already covered.
+   already covered. If the active list is truncated or too large, use the
+   paged fallback in [certificate-expiry](../certificate-expiry/SKILL.md);
+   if you cannot complete it, report the coverage check as incomplete.
 2. For each unpaid order, check `gogetssl_orders_get_status` and compare its
    domain and order date with the active orders. An unpaid order
    for a domain that already has a newer active order is usually an

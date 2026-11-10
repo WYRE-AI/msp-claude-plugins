@@ -88,7 +88,9 @@ Call `smileback_nps_campaigns_list` to see which campaigns ran, then
 `smileback_nps_responses_list` with `created_since` at the start of the
 comparison quarter (add `campaign_name` if the MSP runs more than one),
 paging until `next` is null and handling truncated pages as for reviews.
-Keep responses whose `contact.company` matches the client name.
+Keep responses whose `contact.company` matches the client name, and place
+each in a quarter by `created_at`. `created_since` has no upper bound, so
+drop responses created after the requested quarter.
 
 NPS = % promoters (9-10) minus % detractors (0-6), from -100 to +100.
 Report the response count next to the score. List any responses whose
@@ -98,7 +100,8 @@ company you could not match to a CSAT company instead of dropping them.
 
 If the client had a project this quarter, call
 `smileback_project_surveys_list` and `smileback_project_responses_list`
-with `created_since` at the quarter start. Filter to the client using
+with `created_since` at the quarter start, and drop responses created
+after the quarter if it is a past one. Filter to the client using
 the contact or company on each response if present; if the responses do
 not identify the client, say so instead of guessing.
 

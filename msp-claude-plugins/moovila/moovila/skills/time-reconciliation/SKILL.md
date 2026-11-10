@@ -2,7 +2,7 @@
 name: "Moovila Time Reconciliation"
 description: >
   Reviewing Moovila time entries for billing: pulling a billing period's
-  entries with lastChangedDate plus a startTime filter, separating
+  entries completely and filtering them on startTime, separating
   billable from non-billable and time adjustments, catching entries with
   missing billing codes, zero bill rates, billable flags that disagree
   with billable hours, or no task, and reconciling Moovila hours against
@@ -37,19 +37,19 @@ made in Moovila or the PSA by a person.
 
 ## Pulling a billing period
 
-`moovila_time_entries_list` has no date-range filter. `lastChangedDate`
-is a change time, so:
+`moovila_time_entries_list` has no date-range filter, and
+`lastChangedDate` is a change time, so:
 
-1. Call `moovila_time_entries_list` with `lastChangedDate` set to the
-   period start (for example `2026-10-01T00:00:00Z`) and `limit` 100.
+1. Call `moovila_time_entries_list` without `lastChangedDate` and with
+   `limit` 100.
 2. Page to the end, following any truncation note's resume offset.
 3. Keep entries whose `startTime` falls inside the period.
 
-This catches entries created when or after the work starts. It misses an
-entry entered ahead of time with a future `startTime` and never edited
-since. If the tenant pre-books time, or you cannot confirm it does not,
-omit `lastChangedDate` for a complete pull, or use a bound the tenant
-confirms, and state in the report which you used (see
+A `lastChangedDate` at the period start (for example
+`2026-10-01T00:00:00Z`) is much smaller, but it misses an entry entered
+ahead of time with a `startTime` in the period and never edited since.
+Use it only when the tenant confirms it does not pre-book time, and state
+in the report which pull you used (see
 [api-patterns](../api-patterns/SKILL.md)).
 
 ## Checks

@@ -51,6 +51,9 @@ not the accounting system's.
    it returns exactly `numberOfRecords` rows, raise the number. If it is
    already 1000, a later `fromDate` only returns a subset of the same
    records, not a separate slice, so say plainly that the result may be
+   incomplete. Also check for a `[truncated: ...]` note: the response cap
+   can drop records before the count reaches `numberOfRecords`, and this
+   tool cannot page past them, so a note also means the result is
    incomplete.
 4. Keep only jobs (entries with a job number or sale date); leads in the
    result have no contract figures.

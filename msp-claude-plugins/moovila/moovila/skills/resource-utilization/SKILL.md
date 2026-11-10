@@ -48,10 +48,10 @@ favor of the labor type tools.
 
 ## Logged utilization for a period
 
-1. `moovila_time_entries_list` with `lastChangedDate` at the period start;
-   page to the end and keep entries whose `startTime` is in the period.
-   If the tenant pre-books time, use the complete pull described in
-   [api-patterns](../api-patterns/SKILL.md) instead.
+1. `moovila_time_entries_list` without `lastChangedDate` (or with the
+   period start only if the tenant confirms it does not pre-book time; see
+   [api-patterns](../api-patterns/SKILL.md)); page to the end and keep
+   entries whose `startTime` is in the period.
 2. Group by `user.id`. Sum `totalHours` and `billableHours`.
 3. Billable utilization = `billableHours` / available hours. Ask the user
    for available hours per week (commonly 40); Moovila's API does not

@@ -45,9 +45,9 @@ in Sydney daylight time. Ask for a narrower window if the user only says "last m
 - By person: `dubber_users_list` to find the user ID, then `dubber_dub_points_list` and
   keep the Dub.Points whose `user` URL ends in `/users/<that ID>`. A person can have more
   than one Dub.Point (desk phone and softphone). Both lists return one Dubber page, so if
-  either may be truncated (the Dub.Point list came back at exactly 20), an empty search is
-  not conclusive: say the search is incomplete and have the user confirm the person's
-  lines in the Dubber portal.
+  either may be truncated (the Dub.Point list came back at exactly 20), one of the
+  person's lines may be missing. Mark the search incomplete, whether or not it found
+  calls, and have the user confirm the person's lines in the Dubber portal.
 - By phone-system identifier: `dubber_dub_points_find` with the external-system
   identifiers, then `dubber_dub_points_get` for detail.
 - By team: use `teamId` on the recordings call instead.

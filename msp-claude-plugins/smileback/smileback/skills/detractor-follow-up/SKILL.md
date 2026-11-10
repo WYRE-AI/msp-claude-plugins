@@ -57,7 +57,9 @@ encoded.
 `smileback_nps_responses_list` with `score_lt: 7` and `created_since`
 at the window start, paging until `next` is null and handling truncated
 pages as `smileback-api-patterns` describes, so no detractor is left on a
-later page. A detractor with a comment goes in the main list;
+later page. `created_since` has no upper bound, so for a past window keep
+only responses whose `created_at` is inside it. A detractor with a comment
+goes in the main list;
 a bare 5 or 6 with no comment goes in the second tier.
 
 ### 3. Enrich each case

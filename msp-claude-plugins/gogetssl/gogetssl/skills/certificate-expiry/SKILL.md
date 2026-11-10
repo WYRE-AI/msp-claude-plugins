@@ -58,10 +58,8 @@ paid subscription needs a reissue, not a new purchase. Check
 
 1. Call `gogetssl_orders_list` with `status: "active"`. The vendor does not
    page this list, so the status filter is what keeps it inside the response
-   limit. If the response comes back `truncated`, do not report from it: page
-   through `gogetssl_orders_list_ssl` (`limit` and `offset`) to get every
-   order ID, keep the active ones, and read their `expires` dates with
-   `gogetssl_orders_get_statuses` in batches of 100.
+   limit. If the response comes back `truncated`, or fails with the
+   response-size error, do not report from it; use the paged fallback below.
 2. Drop rows whose `valid_till` is `null` or `0000-00-00`. Those were never
    issued; handle them in the stuck-order check below.
 3. Compute days to expiry from today and sort ascending.
@@ -80,12 +78,27 @@ paid subscription needs a reissue, not a new purchase. Check
    `end_date`, the reissue and renew flags, and the domains and SANs covered.
    That separates "reissue inside the subscription" from "buy a renewal".
 
+### Paged fallback for a large account
+
+When `gogetssl_orders_list` for a status is truncated or too large:
+
+1. Page through `gogetssl_orders_list_ssl` (`limit` and `offset`) to get
+   every order ID, and keep the ones with the status you were listing.
+2. Call `gogetssl_orders_get_statuses` with those IDs in batches of 100.
+   For active orders, use `expires` as the expiry date (`valid_till`).
+3. These results carry no domain. Call `gogetssl_orders_get_status` for
+   each order you will report (for the expiry sweep, the ones inside the
+   planning window) to get `common_name` and the SANs before grouping.
+
 ### Recently expired certificates
 
-Call `gogetssl_orders_list` with `status: "expired"` and keep rows whose
-`valid_till` is within the last 30-60 days. These are either sites that went
-dark or certificates that were replaced by a new order. Check whether an
-active order now covers the same `common_name` before raising an alarm.
+Call `gogetssl_orders_list` with `status: "expired"` (or the paged fallback)
+and keep rows whose `valid_till` is within the last 30-60 days. These are
+either sites that went dark or certificates that were replaced by a new
+order. Before treating one as replaced, read both orders with
+`gogetssl_orders_get_status` and check that the active order covers every
+name the expired one did, `common_name` and SANs. Report any name it does
+not cover.
 
 ### Stuck orders
 

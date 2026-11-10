@@ -30,7 +30,9 @@ fixing before invoicing.
    projects, and completed ones (`isComplete`) unless the user asked for
    completed projects. Match `target` against `organization.name` first
    (or `customer.name` when the tenant leaves `organization` empty), then
-   project `name`. If several match, list them and ask which one.
+   project `name`. When the target names one customer, review every active
+   project for that customer. Ask only when the target matches more than
+   one customer, or more than one project name for a project-level target.
 
 2. **Tasks**
 
@@ -45,10 +47,11 @@ fixing before invoicing.
 
 4. **Time**
 
-   Page `moovila_time_entries_list` with `lastChangedDate` set to the
-   start of the current month, keep entries for these projects whose
-   `startTime` is in the current month (the filter is a change time, not
-   a work date), and flag
+   Page `moovila_time_entries_list` without `lastChangedDate` (it is a
+   change time, so it can drop an entry created before the month with a
+   `startTime` inside it; use a bound only if the tenant confirms one is
+   safe), keep entries for these projects whose `startTime` is in the
+   current month, and flag
    billable entries with no rate or billing code and entries with no
    task.
 
