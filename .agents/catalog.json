@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 385,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -4956,7 +4956,7 @@
     {
       "name": "sales-pack",
       "displayName": "Sales & Deal Desk",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -4981,6 +4981,10 @@
         {
           "id": "pipeline-health",
           "path": "msp-claude-plugins/sales-pack/skills/pipeline-health/SKILL.md"
+        },
+        {
+          "id": "prospect-security-snapshot",
+          "path": "msp-claude-plugins/sales-pack/skills/prospect-security-snapshot/SKILL.md"
         },
         {
           "id": "quote-to-close-tracking",

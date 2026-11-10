@@ -2847,13 +2847,15 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Pipeline Health',
+      'Prospect Security Snapshot',
       'Quote To Close Tracking',
       'Warm Lead Routing'
     ],
     skills: [
       { name: 'pipeline-health', description: 'CRM pipeline health assessment against whatever CRM is discovered through the gateway: stage-velocity norms derived from closed-won deals, activity-based stalled-deal detection, raw and quality-adjusted pipeline coverage against a revenue target, and the CRM-less degradation rule (report nothing rather than fabricate figures).' },
       { name: 'quote-to-close-tracking', description: 'The quote-to-close handoff chain — a Pax8/Sherweb/Kaseya Quote Manager quote or SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won CRM deal — and the four distinct stall points along it (quote built with no proposal document, proposal sent but not opened, viewed but not signed, signed but the CRM deal never marked closed-won), including cross-system record matching and what to report when only part of the chain is connected.' },
-      { name: 'warm-lead-routing', description: 'Lead-warmth scoring from intent and engagement signals — Warmly website-visitor identification, CRM form fills and email engagement, and Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool tiering, plus routing recommendations based on owner continuity, CRM routing rules, or rep capacity, and the degradation path to CRM-only signals when intent tools aren\'t connected.' }
+      { name: 'warm-lead-routing', description: 'Lead-warmth scoring from intent and engagement signals — Warmly website-visitor identification, CRM form fills and email engagement, and Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool tiering, plus routing recommendations based on owner continuity, CRM routing rules, or rep capacity, and the degradation path to CRM-only signals when intent tools aren\'t connected.' },
+      { name: 'prospect-security-snapshot', description: 'A one-page, plain-language public-domain risk report for a first sales conversation: SPF, DKIM, DMARC, and MX from CIPP when the domain is already in a connected tenant, or from the agent\'s own DNS lookups when no MCP tool covers the check; certificates and exposed services only when a read-only tool or an in-session lookup already has that data; breach mentions only when a tool or a cited public search exists. Labels any check the session cannot perform as unavailable rather than guessing.' }
     ],
     agents: [
       { name: 'pipeline-auditor', description: 'Use this agent when a sales manager, deal desk owner, or MSP leadership needs a full cross-vendor sweep of the open sales pipeline — stalled and at-risk deals ranked by value and staleness, with each stall diagnosed against the full quote-to-close chain rather than CRM activity alone.' },

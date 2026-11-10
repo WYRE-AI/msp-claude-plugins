@@ -43,6 +43,11 @@ narrowing its output or guessing.
 - `warm-lead-routing` — scores lead warmth from Warmly/Calendly/CRM intent
   and engagement signals, falling back to CRM-only signals when intent tools
   aren't connected
+- `prospect-security-snapshot` — one-page, plain-language public-domain
+  risk report for a first sales conversation (SPF, DKIM, DMARC, and MX,
+  plus certificates, exposed services, and breach mentions only when a
+  real source covers them), labeling any check the session cannot perform
+  as unavailable
 
 **Agents**
 - `pipeline-auditor` — full cross-vendor pipeline sweep, stalled/at-risk
