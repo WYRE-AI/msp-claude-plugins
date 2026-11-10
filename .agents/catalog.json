@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 385,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -5288,7 +5288,7 @@
     {
       "name": "assets-pack",
       "displayName": "IT Asset Lifecycle",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5316,6 +5316,10 @@
         {
           "id": "refresh-cycle-planning",
           "path": "msp-claude-plugins/assets-pack/skills/refresh-cycle-planning/SKILL.md"
+        },
+        {
+          "id": "refresh-quote-list",
+          "path": "msp-claude-plugins/assets-pack/skills/refresh-quote-list/SKILL.md"
         },
         {
           "id": "warranty-tracking",
