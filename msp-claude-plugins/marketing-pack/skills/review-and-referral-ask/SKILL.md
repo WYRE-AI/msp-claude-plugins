@@ -106,11 +106,13 @@ detractor survey. If you cannot verify these exclusions, tell the
 operator and ask them to verify before drafting.
 
 For example, with CrewHu, pull the last 90 days of both lists (both
-tools accept only `limit` and `since`):
+tools accept only `limit` and `since`). Compute `<since>` at run time as
+today's date minus 90 days, in ISO 8601 (`YYYY-MM-DDT00:00:00Z`), and
+use the same value in both calls:
 
 ```json
-{ "tool": "crewhu_surveys_promoters", "arguments": { "limit": 100, "since": "2026-08-01T00:00:00Z" } }
-{ "tool": "crewhu_surveys_detractors", "arguments": { "limit": 100, "since": "2026-08-01T00:00:00Z" } }
+{ "tool": "crewhu_surveys_promoters", "arguments": { "limit": 100, "since": "<since>" } }
+{ "tool": "crewhu_surveys_detractors", "arguments": { "limit": 100, "since": "<since>" } }
 ```
 
 Each survey returned carries the customer name (the customer_data.name
