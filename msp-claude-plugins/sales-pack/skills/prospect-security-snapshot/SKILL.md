@@ -2,12 +2,13 @@
 name: "Prospect Security Snapshot"
 description: >
   A one-page, plain-language public-domain risk report for a first sales
-  conversation: SPF, DKIM, DMARC, and MX from CIPP when the domain is
-  already in a connected tenant, or from the agent's own DNS lookups when
-  no MCP tool covers the check; certificates and exposed services only
-  when a read-only tool or an in-session lookup already has that data;
-  breach mentions only when a tool or a cited public search exists. Labels
-  any check the session cannot perform as unavailable rather than guessing.
+  conversation: SPF, DKIM, and DMARC from CIPP only after the operator
+  confirms any CIPP use and the domain is already in a connected tenant
+  (MX from the agent's own DNS lookups, or unavailable); certificates and
+  exposed services only when a read-only tool or an in-session lookup
+  already has that data; breach mentions only when a tool or a cited
+  public search exists. Labels any check the session cannot perform as
+  unavailable rather than guessing.
 when_to_use: >-
   When preparing a first sales conversation from a prospect's public
   domain, and you need a plain-language mail-auth, certificate, exposure,
@@ -49,8 +50,8 @@ would be needed. Do not fill the gap with a guess.
 | System | Role | Required? |
 |--------|------|-----------|
 | Public domain supplied by the operator | The only required input | Yes |
-| CIPP | SPF, DKIM, DMARC, MX, and DNSSEC via `cipp_list_domain_health`, only when the domain already belongs to a listed CIPP tenant and the operator confirms that use is appropriate | Optional |
-| runZero | Existing asset and service inventory via `runzero_assets_search`, `runzero_assets_list`, `runzero_assets_get`, `runzero_services_list`, and `runzero_services_get`, only when the hostname is already in inventory | Optional |
+| CIPP | SPF, DKIM, and DMARC via `cipp_list_domain_health`, only after the operator confirms any CIPP use, and only when the domain already belongs to a listed CIPP tenant. That tool does not return MX or DNSSEC | Optional |
+| runZero | Existing asset and service inventory via scoped `runzero_assets_search` and `runzero_assets_get` (and a scoped service get for that asset), only after the operator confirms any runZero use, and only when the hostname is already in inventory. Do not call unscoped `runzero_assets_list` or `runzero_services_list` | Optional |
 | Agent DNS or web lookups | Fallback for mail records, public certificate data, and cited breach reporting when no MCP tool covers the check | Optional, used only when available in this session |
 
 A public DNS, certificate-transparency, or Have I Been Pwned MCP tool is
@@ -73,16 +74,37 @@ tool.
 If a vendor is connected but the needed tool is not in this list, treat
 that check as unavailable and name the gap in prose.
 
+`conduit__search_tools` is not a CIPP or runZero call and does not need
+the confirmation below.
+
+**Confirm before any CIPP or runZero call.** Before calling any CIPP or
+runZero tool, including `cipp_list_tenants`, `cipp_get_tenant_details`,
+`cipp_list_domain_health`, `runzero_assets_search`, `runzero_assets_list`,
+`runzero_assets_get`, `runzero_services_list`, and `runzero_services_get`,
+tell the operator that the call would use the MSP's existing connector
+credentials, and ask for confirmation. If they decline, do not call those
+tools; stay on public lookups and note the skipped source.
+
+Before asking about CIPP, also say that `cipp_list_domain_health` returns
+SPF, DMARC, and DKIM for every non-`.onmicrosoft.com` domain on the
+tenant, not only the prospect domain. If they confirm, use only the row
+for the operator-supplied domain, and drop sibling-domain rows from the
+brief.
+
 ### Step 2: Mail authentication (SPF, DKIM, DMARC, and MX)
 
-**Preferred MCP path, only when appropriate.** If `cipp_list_tenants` (and
-`cipp_get_tenant_details` when you need to confirm domains on a tenant)
-shows that this exact domain already belongs to a connected CIPP tenant,
-tell the operator that CIPP would be queried with the org's CIPP
-credentials and ask for confirmation before continuing. After confirmation,
-call `cipp_list_domain_health` with that tenant's `tenantFilter`. Use the
-SPF, DKIM, DMARC, MX, and DNSSEC fields as returned. Do not call CIPP
-against a domain that is not on a listed tenant.
+**Preferred MCP path, only after confirmation.** After the operator
+confirms CIPP use, call `cipp_list_tenants` (and `cipp_get_tenant_details`
+only for a single tenant you already have reason to check, never with
+`allTenants`) to see whether this exact domain already belongs to a
+connected CIPP tenant. If it does, call `cipp_list_domain_health` with
+that tenant's `tenantFilter`. Use only the `domain`, `spf`, `dmarc`, and
+`dkim` fields for the operator-supplied domain. That tool does not return
+MX or DNSSEC; get MX from the agent's own DNS lookups, or label MX
+unavailable, and do not invent DNSSEC. Do not put other tenants' names,
+domains, license details, or GDAP details in the report or the sales
+conversation. Do not leave sibling-domain rows in the brief. Do not call
+CIPP against a domain that is not on a listed tenant.
 
 **Fallback, when CIPP does not cover the domain or is not connected.** If
 this session can do DNS lookups (for example a TXT and MX query for the
@@ -117,12 +139,15 @@ or issuer.
 
 Do not port-scan the prospect, and do not start a new discovery task.
 
-If runZero tools are connected, search existing inventory only
-(`runzero_assets_search`, `runzero_assets_list`, `runzero_assets_get`,
-`runzero_services_list`, `runzero_services_get`). Use findings only when
-the hostname or domain is already present and the operator confirms this
-is existing inventory, not a new scan. Never call `runzero_tasks_create`
-or `runzero_sites_create`.
+If runZero tools are connected, ask for confirmation before any runZero
+call, as in the confirmation rule above. After confirmation, search
+existing inventory only, scoped to the operator-supplied domain or
+hostname (`runzero_assets_search`, then `runzero_assets_get` or a scoped
+service get for that asset). Do not call unscoped `runzero_assets_list` or
+`runzero_services_list`. Use findings only when the hostname or domain is
+already present. Do not put other runZero assets or services in the report
+or the sales conversation. Never call `runzero_tasks_create` or
+`runzero_sites_create`.
 
 If no existing inventory record is found, label exposed services
 **unavailable**. You may mention that a future, authorized assessment
@@ -176,12 +201,19 @@ CRM or PSA record.
 
 ### CIPP is connected but the domain is not on a listed tenant
 
-Do not call `cipp_list_domain_health`. Fall back to agent DNS lookups, or
-label mail authentication unavailable if those lookups are not possible.
+This check itself requires a prior confirmed CIPP call (`cipp_list_tenants`
+or a single-tenant `cipp_get_tenant_details`). If the operator has not
+confirmed CIPP use, do not list tenants to find out. If they have
+confirmed and the domain is not on a listed tenant, do not call
+`cipp_list_domain_health`, and do not include other tenants in the brief.
+Fall back to agent DNS lookups, or label mail authentication unavailable
+if those lookups are not possible.
 
 ### Operator declines CIPP or runZero use
 
-Respect that, fall back to public lookups, and note the skipped source.
+Respect that. Do not call any CIPP or runZero tool, including tenant
+listing and inventory search. Fall back to public lookups, and note the
+skipped source.
 
 ### A lookup errors or returns nothing
 
