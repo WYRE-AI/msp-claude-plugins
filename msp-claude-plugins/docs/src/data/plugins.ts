@@ -2741,7 +2741,7 @@ export const plugins: Plugin[] = [
       'Alert Severity Normalization',
       'Bec Response',
       'Containment Playbooks',
-      'Shadow AI'
+      'Shadow Ai'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },

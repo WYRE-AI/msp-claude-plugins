@@ -79,13 +79,14 @@ app-inventory connection means Entra inventory is unavailable for that client.
 |------------------|--------------------------------------|
 | SuperOps | `superops_assets_list` / `superops_assets_get` for scope, then `superops_assets_software` for installed software. |
 | N-central | `ncentral_list_devices`, `ncentral_list_devices_by_org_unit`, or `ncentral_get_device` for scope; `ncentral_get_device_assets` includes installed software. |
-| ImmyBot | `immybot_computers_list` / `immybot_computers_get` and `immybot_computers_inventory` for observed inventory. `immybot_software_list`, `immybot_software_search`, and `immybot_software_get` describe the catalog; `immybot_deployments_for_computer` / `immybot_deployments_for_software` describe intended/deployed software. Label these separately; catalog or deployment records alone do not prove observed installs. |
-| Datto RMM | `datto_list_devices`, `datto_get_device`, and `datto_find_device` scope devices only. `datto_get_device_audit` is admin-tier (forensics-class inventory). Use it only when discovery shows it is actually callable for this org, and set `auditType` to `software`. Do not use the default `full` audit. A read-only Datto grant cannot call it; otherwise report software inventory unavailable because an admin grant is required. The same admin grant also admits `datto_run_quickjob`; never call that tool. |
+| ImmyBot | Intended/deployed software only, not observed installs. `immybot_computers_list` / `immybot_computers_get` scope devices. `immybot_computers_inventory` returns only inventory categories and collection timestamps, not software names; use it for snapshot freshness only. `immybot_software_list`, `immybot_software_search`, and `immybot_software_get` describe the catalog; `immybot_deployments_for_computer` / `immybot_deployments_for_software` describe intended/deployed software. Report these as intended/deployed, and report observed endpoint software unavailable from ImmyBot. |
+| Datto RMM | `datto_list_devices`, `datto_get_device`, and `datto_find_device` scope devices only. `datto_get_device_audit` is admin-tier (forensics-class inventory). Use it only when discovery shows it is actually callable for this org, and always pass `auditType` = `software`; never request a full or other audit type. A read-only Datto grant cannot call it; otherwise report software inventory unavailable because an admin grant is required. The same admin grant also admits `datto_run_quickjob`; never call that tool. |
 
-NinjaOne, Atera, ConnectWise Automate, and Syncro have no dedicated installed-
-software MCP tool for this workflow. Their device/asset lists do not establish
-software coverage. If these are the only connected RMM sources, report endpoint
-software inventory unavailable through the connected MCP tools.
+NinjaOne, Atera, ConnectWise Automate, Syncro, and ImmyBot have no MCP tool
+that returns observed installed software for this workflow. Their device/asset
+lists do not establish software coverage. If these are the only connected RMM
+sources, report endpoint software inventory unavailable through the connected
+MCP tools.
 
 Follow discovered pagination for the authorized client/device scope. Preserve
 source, device identifier, software name, publisher, version, and inventory
