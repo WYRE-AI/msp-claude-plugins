@@ -354,7 +354,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.5",
+      "version": "0.6.6",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
