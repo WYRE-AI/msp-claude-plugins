@@ -11,9 +11,21 @@ This plugin provides Claude with deep knowledge of Sherweb, enabling:
 - **Distributor Billing** - Analyze payable charges, pricing breakdowns, deductions, fees, and taxes. Charges are fetched by explicit date range; there is no billing-period list and no invoice retrieval — see [GOVERNANCE.md](GOVERNANCE.md)
 - **API Patterns** - OAuth 2.0 client credentials flow, subscription key authentication, rate limiting, and error handling
 
-## Prerequisites
+## Configuration
 
-### API Credentials
+### Connect through Conduit
+
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Sherweb once in Conduit at `https://conduit.wyre.ai/connect/sherweb` (**Connections → Sherweb**, slug `sherweb`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
+
+| Conduit connection field |
+|---|
+| Client ID |
+| Client Secret |
+| Subscription Key |
+
+Conduit requests an OAuth token from Sherweb with these credentials when you save the connection, so bad credentials are rejected there.
+
+### Obtaining API Credentials
 
 Sherweb uses OAuth 2.0 client credentials for API authentication, plus an API management subscription key:
 
@@ -22,40 +34,19 @@ Sherweb uses OAuth 2.0 client credentials for API authentication, plus an API ma
 3. Create a new API application or manage existing credentials
 4. Note your Client ID, Client Secret, and Subscription Key
 
-### Environment Variables
+## Self-Hosted Gateway
 
-```bash
-export SHERWEB_CLIENT_ID="your-client-id"
-export SHERWEB_CLIENT_SECRET="your-client-secret"
-export SHERWEB_SUBSCRIPTION_KEY="your-subscription-key"
-export SHERWEB_MCP_URL="https://your-sherweb-mcp-url"
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http sherweb https://your-gateway-domain/v1/sherweb/mcp`. The gateway then holds the Sherweb credentials, not the client.
 
 ## Installation
 
-### Via MCP Gateway (Recommended)
-
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- configure your Sherweb credentials and you're done.
-
-### Self-Hosted
-
-Add to your Claude Desktop or Claude Code MCP config:
-
-```json
-{
-  "mcpServers": {
-    "sherweb": {
-      "type": "http",
-      "url": "${SHERWEB_MCP_URL}",
-      "headers": {
-        "X-Sherweb-Client-Id": "${SHERWEB_CLIENT_ID}",
-        "X-Sherweb-Client-Secret": "${SHERWEB_CLIENT_SECRET}",
-        "X-Sherweb-Subscription-Key": "${SHERWEB_SUBSCRIPTION_KEY}"
-      }
-    }
-  }
-}
 ```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install sherweb@msp-claude-plugins
+```
+
+Then connect Sherweb in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 > **Note:** This plugin adds MSP-specific skills, commands, and workflow knowledge on top of the Sherweb Partner API.
 
@@ -108,7 +99,7 @@ Add to your Claude Desktop or Claude Code MCP config:
 ### Credentials
 
 - Never commit Client ID, Client Secret, or Subscription Key to version control
-- Use environment variables for all credentials
+- Keep the credentials in the Conduit connection, not in local files or environment variables
 - The Client Secret is shown only once when generated -- store it securely
 - Rotate credentials periodically via the Sherweb Partner Portal
 - Monitor for unexpected API activity
@@ -132,10 +123,10 @@ Sherweb enforces rate limits per subscription tier. When rate limited:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `SHERWEB_CLIENT_ID` and `SHERWEB_CLIENT_SECRET` are correct
-2. Check that the Subscription Key (`SHERWEB_SUBSCRIPTION_KEY`) is included
+1. Open the Sherweb connection in Conduit (`https://conduit.wyre.ai/connect/sherweb`) and check the Client ID and Client Secret
+2. Check that the Subscription Key on the same connection is filled in and current
 3. Verify credentials have not been revoked in the Partner Portal
-4. Regenerate credentials at [cumulus.sherweb.com](https://cumulus.sherweb.com) > Security > APIs
+4. Regenerate credentials at [cumulus.sherweb.com](https://cumulus.sherweb.com) > Security > APIs, then update the Conduit connection
 
 ### Forbidden (403)
 

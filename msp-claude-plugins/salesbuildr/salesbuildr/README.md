@@ -5,34 +5,35 @@ CRM plugin for Salesbuildr - manage companies, contacts, products, opportunities
 ## Installation
 
 ```
-/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin salesbuildr
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install salesbuildr@msp-claude-plugins
 ```
+
+Then connect Salesbuildr in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Configuration
 
-Add to your `~/.claude/settings.json`:
+### Connect through Conduit
 
-```json
-{
-  "env": {
-    "SALESBUILDR_API_KEY": "your-api-key-here"
-  }
-}
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Salesbuildr once in Conduit at `https://conduit.wyre.ai/connect/salesbuildr` (**Connections → SalesBuildr**, slug `salesbuildr`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
 
-### Environment Variables
+| Conduit connection field |
+|---|
+| API Key |
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `SALESBUILDR_API_KEY` | Yes | API key from Salesbuildr portal (Settings > API Keys) |
-| `SALESBUILDR_API_URL` | No | API base URL (default: `https://portal.salesbuildr.com/public-api`) |
+Conduit checks the key against the Salesbuildr public API (`https://portal.salesbuildr.com/public-api`) when you save the connection.
 
 ### Obtaining Credentials
 
 1. Log in to your Salesbuildr portal
 2. Navigate to **Settings > API Keys**
 3. Generate a new API key
-4. Copy the key to your settings
+4. Paste the key into the Conduit connection
+
+## Self-Hosted Gateway
+
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http salesbuildr https://your-gateway-domain/v1/salesbuildr/mcp`. The gateway then holds the Salesbuildr credentials, not the client.
 
 ## Available Skills
 
@@ -67,3 +68,12 @@ Add to your `~/.claude/settings.json`:
 
 - 500 requests per 10 minutes
 - Plugin implements conservative request patterns
+
+## Troubleshooting
+
+### Authentication Errors
+
+If a tool call returns "401 Unauthorized":
+1. Open the Salesbuildr connection in Conduit (`https://conduit.wyre.ai/connect/salesbuildr`) and check the API Key
+2. Check that the key has not been revoked in Salesbuildr under **Settings > API Keys**
+3. Generate a new key if needed, then update the Conduit connection

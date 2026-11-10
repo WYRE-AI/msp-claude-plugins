@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.12",
+      "version": "0.2.13",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -624,7 +624,7 @@
     {
       "name": "blumira",
       "displayName": "Blumira",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
       "category": "security",
       "tags": [
@@ -1791,7 +1791,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -2384,7 +2384,7 @@
     {
       "name": "proofpoint-essentials",
       "displayName": "Proofpoint Essentials",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
       "category": "email-security",
       "tags": [
@@ -2764,7 +2764,7 @@
     {
       "name": "salesbuildr",
       "displayName": "Salesbuildr",
-      "version": "1.1.10",
+      "version": "1.1.11",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
       "category": "crm",
       "tags": [
@@ -2988,7 +2988,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.10",
+      "version": "0.3.11",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
