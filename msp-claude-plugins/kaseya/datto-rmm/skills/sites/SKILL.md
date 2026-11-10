@@ -23,6 +23,15 @@ Sites in Datto RMM represent client organizations or locations. Each site contai
 - **The endpoints themselves rather than the grouping** — use
   `datto-rmm-devices`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `datto_list_sites` / `datto_get_site` | read | Sites (customers) and one site's detail |
+| `datto_get_site_patches` | admin (unclassified) | Patch status rolled up across a site's devices |
+
+Tiers are Conduit's classification. REST examples later in this skill show what the tools call underneath.
+
 ## Key Concepts
 
 ### Site Hierarchy

@@ -1,11 +1,11 @@
 {
   "name": "itglue",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Claude plugins for IT Glue documentation platform - organizations, assets, passwords, documents",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

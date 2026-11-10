@@ -10,7 +10,7 @@ Produce a clean device inventory for a single Auvik tenant, broken down by devic
 
 ## Prerequisites
 
-- Auvik MCP server connected with a valid `AUVIK_USERNAME` and `AUVIK_API_KEY`
+- Auvik connected in Conduit with a valid username and API key
 - Tools: `auvik_tenants_list`, `auvik_devices_list`, `auvik_devices_get_details`, `auvik_devices_get_lifecycle`, `auvik_devices_get_warranty`
 
 ## Steps

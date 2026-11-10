@@ -1,11 +1,11 @@
 {
   "name": "superops",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Claude Code plugin for SuperOps.ai PSA/RMM - tickets, assets, clients, alerts",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

@@ -72,7 +72,7 @@ done.
 
 Run the official [ntnx-api-mcp-server](https://github.com/nutanix/ntnx-api-mcp-server)
 behind the self-hosted [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway).
-See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup.
+See the [MCP Gateway documentation](https://conduit.wyre.ai) for setup.
 
 ## Available Skills
 

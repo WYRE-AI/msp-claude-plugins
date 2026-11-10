@@ -1,11 +1,11 @@
 {
   "name": "datto-saas-protection",
-  "version": "0.2.3",
-  "description": "Claude plugins for Datto SaaS Protection (Backupify) - M365 / Google Workspace backup status, restore, seat management",
+  "version": "0.2.4",
+  "description": "Claude plugins for Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

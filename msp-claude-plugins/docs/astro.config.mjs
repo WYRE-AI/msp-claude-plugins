@@ -5,11 +5,11 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 
 // Build target: set SITE_URL and BASE_PATH env vars to override.
-// Primary (mcp.wyre.ai): defaults below
-// GitHub Pages: SITE_URL=https://wyre-technology.github.io BASE_PATH=/msp-claude-plugins/
-// Gateway (Docker): SITE_URL=https://mcp.wyre.ai BASE_PATH=/docs/
-const site = process.env.SITE_URL || 'https://mcp.wyre.ai';
-const base = process.env.BASE_PATH || '/';
+// Primary (GitHub Pages, see .github/workflows/deploy-docs.yml): defaults below.
+// mcp.wyre.ai was retired on 2026-09-30 and now 301s to conduit.wyre.ai,
+// which does not serve these pages, so it is no longer a build target.
+const site = process.env.SITE_URL || 'https://wyre-ai.github.io';
+const base = process.env.BASE_PATH || '/msp-claude-plugins/';
 
 // https://astro.build/config
 export default defineConfig({

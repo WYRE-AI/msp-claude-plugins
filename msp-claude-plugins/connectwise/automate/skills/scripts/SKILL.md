@@ -31,6 +31,19 @@ Scripts in ConnectWise Automate are automation routines that run on managed endp
 - **Another RMM's job runner** — Datto RMM quickjobs and NinjaOne script
   runs share this vocabulary; use `datto-rmm-jobs`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `cwautomate_scripts_list` | read | Script catalog |
+| `cwautomate_scripts_get` | read | One script's metadata and parameters |
+| `cwautomate_scripts_running` | read | Scripts currently running on a computer (`computer_id`) |
+| `cwautomate_scripts_history` | read | Completed runs on a computer with pass/fail state and Automate's diagnostic message (`computer_id`) |
+| `cwautomate_computers_run_script` | admin | Run one script on one computer; waits up to 20 seconds |
+| `cwautomate_scripts_execute` | admin | Run one script on several computers and poll its history for each outcome |
+
+Automate has no synchronous script run. A run that outlasts the wait returns `completed: false` and **keeps running**: read `cwautomate_scripts_history` (and `cwautomate_scripts_running`) for the result instead of launching it again. Check `cwautomate_scripts_running` before a launch so a script already in progress is not queued twice.
+
 ## Key Concepts
 
 ### Script Types

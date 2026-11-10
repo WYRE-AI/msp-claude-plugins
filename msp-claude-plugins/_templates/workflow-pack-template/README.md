@@ -101,9 +101,9 @@ individual vendor MCP servers:
 ```json
 {
   "mcpServers": {
-    "msp-mcp-gateway": {
+    "conduit": {
       "type": "http",
-      "url": "https://mcp.wyre.ai/v1/mcp"
+      "url": "https://conduit.wyre.ai/v1/mcp"
     }
   }
 }
@@ -177,7 +177,7 @@ arguments: [queue]
 
 ## Prerequisites
 
-- WYRE MCP Gateway connected (`msp-mcp-gateway`) with at least a PSA connector
+- WYRE Conduit connected (`conduit`) with at least a PSA connector
 - Optional: RMM, security connectors (sections are skipped with a note if absent)
 
 ## Steps

@@ -28,6 +28,21 @@ SuperOps.ai tickets are the core unit of service delivery in the PSA. Every clie
 - **Running the fix on the endpoint** — remediation is
   `superops-runbooks`; a resolved ticket does not imply a fixed machine.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_tickets_list` | read | List tickets |
+| `superops_tickets_get` | read | One ticket |
+| `superops_tickets_create` | write | Create a ticket |
+| `superops_tickets_update` | write | Change status, priority, assignee |
+| `superops_tickets_add_note` | write | Add a note |
+| `superops_tickets_log_time` | write | Log a worklog entry (`ticketId`, `qty` in the service item's unit, usually hours; optional `serviceItemId`, `billable`, `technicianId`) |
+| `superops_technicians_list` / `superops_technicians_get` / `superops_technicians_groups` | read | Resolve an assignee or group |
+| `superops_technicians_lookups` | read | Roles, teams, designations, business functions and technician groups as `{id, name}` |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Ticket Status Values
 
 | Status | Description | Business Logic |
@@ -70,14 +85,17 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 | Operation | Type | Purpose |
 |-----------|------|---------|
 | `createTicket` | mutation | Create a ticket |
-| `getTicketList` | query | List/search tickets with filter, orderBy, cursor paging |
+| `getTicketList` | query | List/search tickets (`input: ListInfoInput!`: `page`, `pageSize`, `condition`, `sort`; keep paging only while `listInfo.hasMore` is `true`) |
 | `getTicket` | query | Full detail for one ticket |
 | `updateTicket` | mutation | Change status, priority, assignee, resolution |
-| `addTicketNote` | mutation | Internal (`isPublic: false`) or client-visible note |
-| `addTicketTimeEntry` | mutation | Log time (`duration` in minutes, `billable` flag) |
 
-`getTicketList` returns a `listInfo` block (`totalCount`, `hasNextPage`, `endCursor`)
-for cursor pagination; `first` controls page size.
+The published schema has no `addTicketNote` or `addTicketTimeEntry` mutation. Add
+notes with the typed `superops_tickets_add_note` tool and log time with
+`superops_tickets_log_time` (both write tier); the raw equivalent for time is
+`createWorklogEntries(input: [CreateWorklogEntryInput!]!)`, which needs the
+admin-tier passthrough and human approval. `getTicketList` takes
+`input: ListInfoInput!` and returns `listInfo` (`page`, `pageSize`, `hasMore`,
+`totalCount`). Note-and-time examples in `references/api.md` predate the schema.
 
 See [references/api.md](references/api.md) for the full operation catalog with
 request shapes and variable examples.

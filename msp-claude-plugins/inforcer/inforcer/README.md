@@ -56,19 +56,14 @@ https://conduit.wyre.ai/v1/inforcer/mcp
 
 ## Configuration
 
-The gateway authenticates to Inforcer using two credentials, each mapped to its own `X-` header. Set the environment variables; the `.mcp.json` substitutes them into the request headers.
+Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client. Connect Inforcer once in the Conduit web UI (**Connections → Inforcer**). Conduit stores both credentials and injects them on every request:
 
-| Env var | Header | Required | Notes |
-|---------|--------|----------|-------|
-| `INFORCER_REGION` | `X-Inforcer-Region` | Yes | One of `us`, `uk`, `eu`, `anz`. Selects the regional API host. |
-| `INFORCER_API_KEY` | `X-Inforcer-Api-Key` | Yes | Your Inforcer API key. The MCP server forwards it upstream as the `Inf-Api-Key` header. |
+| Field | Required | Notes |
+|-------|----------|-------|
+| Region | Yes | One of `us`, `uk`, `eu`, `anz`. Selects the regional API host. |
+| API Key | Yes | Your Inforcer API key. The MCP server forwards it upstream as the `Inf-Api-Key` header. |
 
-```bash
-export INFORCER_REGION="us"        # or uk / eu / anz
-export INFORCER_API_KEY="your-inforcer-api-key"
-```
-
-Region is **required** — the upstream base URL is region-specific (`https://api-{region}.inforcer.com/api`), and the MCP server uses `X-Inforcer-Region` to choose the host.
+Region is **required**: the upstream base URL is region-specific (`https://api-{region}.inforcer.com/api`), and the MCP server uses it to choose the host.
 
 ## The Client Tenant ID gotcha
 
@@ -78,7 +73,7 @@ The MCP server resolves friendly names, DNS domains, and Azure AD GUIDs to the i
 
 ## Conduit
 
-If you connect through [Conduit](https://conduit.wyre.ai), Inforcer tools are routed and authenticated via your gateway session using the `X-Inforcer-Region` and `X-Inforcer-Api-Key` headers configured above. See the `wyre-gateway` plugin for setup.
+Inforcer tools are routed through [Conduit](https://conduit.wyre.ai) and authenticated with the credentials stored on your Inforcer connection. To reach every connected vendor from one endpoint instead, install the `wyre-gateway` plugin.
 
 ## Resources
 
