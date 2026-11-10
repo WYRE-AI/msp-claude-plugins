@@ -37,8 +37,7 @@ Create a new service ticket in HaloPSA with specified details.
    - Apply default priority if not specified
 
 5. **Check contract coverage**
-   - Query active contracts for client
-   - Warn if no active contract (T&M billing)
+   - The HaloPSA connector has no contract tool, so ask the operator to confirm coverage in HaloPSA, or report it as unknown. Do not assume T&M billing
 
 6. **Create the ticket** with `halopsa_tickets_create` (`summary`, `client_id`, `tickettype_id` required; `details`, `priority_id`, `site_id`, `agent_id`, `category_1`–`category_4` optional). The underlying request:
    ```json

@@ -140,7 +140,7 @@ dropped agent. Also check `lastCommunicatedTime` freshness before dispatching a 
 ```javascript
 // Check if asset is available for remote actions
 function canRunRemoteAction(asset) {
-  if (asset.status !== 'Online') {
+  if (typeof asset.status !== 'string' || asset.status.toLowerCase() !== 'online') {
     return {
       canRun: false,
       reason: `Asset is ${asset.status}. Last communicated: ${asset.lastCommunicatedTime}`

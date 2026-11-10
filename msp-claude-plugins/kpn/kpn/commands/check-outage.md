@@ -17,7 +17,7 @@ Answer "is KPN down at this site?" for one Dutch address, using the line's own s
 
 1. **Find the line (if possible)**
 
-   If `order_id` was not given, look it up: `kpn_grexx_customer_data` (by `zipCode` or customer name), then `kpn_grexx_order_summary` with the `customerId` and `productGroup: "Connectivity"`, and again with `productGroup: "Internet"`. Pick the order whose installation address matches the requested address, including the house number and extension. If you cannot establish that match, ask the user to confirm the order ID instead of checking a line at another site. Only if neither product group returns an order, skip to step 3. A failed lookup or check is not evidence of an outage: say which call failed (see the api-patterns skill for connection and order errors).
+   If `order_id` was not given, look it up: `kpn_grexx_customer_data` (by `zipCode` or customer name; it returns 20 cards by default, so page with `skip`/`take` up to 100 until `TotalNumberOfRecords` is covered and check every matching card), then `kpn_grexx_order_summary` with the `customerId` and `productGroup: "Connectivity"`, and again with `productGroup: "Internet"`. Pick the order whose installation address matches the requested address, including the house number and extension. If you cannot establish that match, ask the user to confirm the order ID instead of checking a line at another site. Only if neither product group returns an order, skip to step 3. A failed lookup or check is not evidence of an outage: say which call failed (see the api-patterns skill for connection and order errors).
 
 2. **Check the line**
 

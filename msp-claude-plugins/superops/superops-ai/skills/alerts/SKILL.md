@@ -92,8 +92,8 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 The published schema has **no** acknowledge mutation, no single-alert query and no
 alert-to-ticket mutation: acknowledge in the SuperOps console, and create a ticket
 with `superops_tickets_create`. `getAlertList` returns `listInfo` (`page`,
-`pageSize`, `hasMore`, `totalCount`): page with `page`/`pageSize` until `hasMore`
-is false.
+`pageSize`, `hasMore`, `totalCount`): page with `page`/`pageSize` only while `hasMore`
+is `true`.
 
 The longer examples in `references/` and in the alert commands predate the published
 schema (`schema/superops.graphql` in superops-mcp) and use fields and operations it

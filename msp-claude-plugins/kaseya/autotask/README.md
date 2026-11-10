@@ -55,8 +55,8 @@ There is no per-plugin URL setting, and setting an environment variable does not
 To check the credentials directly against Autotask before you save them in Conduit, export them in your shell and run:
 
 ```bash
-# Through Conduit, call autotask_test_connection instead.
-# Direct check with curl (export AUTOTASK_USERNAME first):
+# Authenticated check: through Conduit, call autotask_test_connection.
+# Zone lookup only (no secret needed; export AUTOTASK_USERNAME first):
 curl "https://webservices5.autotask.net/atservicesrest/v1.0/zoneInformation?user=${AUTOTASK_USERNAME}"
 ```
 

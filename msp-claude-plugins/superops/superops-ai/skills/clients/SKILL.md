@@ -92,20 +92,24 @@ Variables for fuzzy search:
 ```json
 {
   "input": {
-    "filter": {
-      "or": [
-        { "name": { "contains": "acme" } },
-        { "emailDomains": { "contains": "acme.com" } }
+    "page": 1,
+    "pageSize": 10,
+    "condition": {
+      "joinOperator": "OR",
+      "operands": [
+        { "attribute": "name", "operator": "contains", "value": "acme" },
+        { "attribute": "emailDomains", "operator": "contains", "value": "acme.com" }
       ]
-    },
-    "first": 10
+    }
   }
 }
 ```
 
+`joinOperator` must be uppercase: SuperOps silently treats anything else as `OR`. Valid string operators are `is`, `isNot`, `contains`, `notContains`, `startsWith` and `endsWith`; `includes` / `notIncludes` take an array.
+
 ### Client Health Dashboard
 
-Batch related counts into a single GraphQL request with aliases:
+Batch related counts into a single GraphQL request with aliases. The `filter` objects below predate the published schema: `ListInfoInput` takes a `condition` (as in the search example above), not `filter`, so rewrite them before sending (tracked in #270):
 
 ```graphql
 query getClientHealth($clientId: ID!) {
