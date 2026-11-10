@@ -24,7 +24,8 @@ activities, book appointments, or change any record. Searches and
 filtered lists use POST because that is how MarketSharp exposes them;
 they do not change data.
 
-In Conduit every MarketSharp tool is classified at the read tier.
+Every tool the MarketSharp server serves is classified at the read tier
+in Conduit.
 **No MarketSharp tool is admin-gated.**
 
 Conduit's connect form mentions that adding notes, activities and

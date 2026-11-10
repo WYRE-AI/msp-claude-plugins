@@ -47,19 +47,21 @@ merge them silently.
 
 ### 2. Pull two quarters of reviews in one pass
 
-Call `smileback_reviews_list` with `modified_since` set to the start of
-the previous quarter and `include_unrated: true`, paging until `next`
-is null (see `smileback-api-patterns` for truncated pages). One pull
-covers this quarter and the comparison quarter for every client, so
-reuse it if you are preparing several QBRs.
+Take the quarter from the request (default: the last full quarter); the
+comparison quarter is the one before it. Call `smileback_reviews_list`
+with `modified_since` set to the start of the comparison quarter and
+`include_unrated: true`, paging until `next` is null (see
+`smileback-api-patterns` for truncated pages). One pull covers both
+quarters for every client, so reuse it if you are preparing several QBRs.
 
-Keep rows where `company.id` is the client. Assign each to a quarter:
-
-- Rated reviews by `rated_on`.
-- Unrated reviews (no `rated_on`) by `ticket.closed_on`.
+Keep rows where `company.id` is the client. Assign every review, rated or
+not, to a quarter by `ticket.closed_on` (when the survey went out), and
+use `rated_on` only when `closed_on` is missing. Using the same date for
+rated and unrated reviews keeps the response rate on one cohort.
 
 `modified_since` returns anything edited since that date, so drop rows
-rated or closed before the previous quarter.
+whose cohort date is before the comparison quarter or after the
+requested quarter.
 
 ### 3. Compute CSAT
 
@@ -84,7 +86,8 @@ client has tickets on more than one board; a dip is often one board.
 
 Call `smileback_nps_campaigns_list` to see which campaigns ran, then
 `smileback_nps_responses_list` with `created_since` at the start of the
-previous quarter (add `campaign_name` if the MSP runs more than one).
+comparison quarter (add `campaign_name` if the MSP runs more than one),
+paging until `next` is null and handling truncated pages as for reviews.
 Keep responses whose `contact.company` matches the client name.
 
 NPS = % promoters (9-10) minus % detractors (0-6), from -100 to +100.

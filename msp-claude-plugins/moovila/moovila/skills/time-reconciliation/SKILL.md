@@ -45,10 +45,12 @@ is a change time, so:
 2. Page to the end, following any truncation note's resume offset.
 3. Keep entries whose `startTime` falls inside the period.
 
-This catches every entry worked in the period, because an entry is
-created when or after the work starts. The only miss is an entry entered
-ahead of time with a future `startTime` and never edited since; if the
-tenant pre-books time, start `lastChangedDate` a week earlier.
+This catches entries created when or after the work starts. It misses an
+entry entered ahead of time with a future `startTime` and never edited
+since. If the tenant pre-books time, or you cannot confirm it does not,
+omit `lastChangedDate` for a complete pull, or use a bound the tenant
+confirms, and state in the report which you used (see
+[api-patterns](../api-patterns/SKILL.md)).
 
 ## Checks
 
@@ -82,7 +84,9 @@ filtering.
    after the sync.
 
 Match on customer name and project name, not on IDs; Moovila GUIDs do not
-appear in the PSA.
+appear in the PSA. When a name matches more than one customer or project
+on either side, or only loosely, list the candidates and ask the user to
+confirm the mapping before reconciling them.
 
 ## Report shape
 

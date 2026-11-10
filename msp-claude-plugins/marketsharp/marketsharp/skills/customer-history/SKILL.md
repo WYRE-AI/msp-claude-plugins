@@ -49,7 +49,11 @@ in MarketSharp.
 5. **Jobs.** Job IDs come back from step 1 when the search matched a job;
    otherwise use `marketsharp_jobs_search` (needs an Employee ID) on the
    customer's name or address. Read each with `marketsharp_jobs_get` for
-   status, sale and completion dates and contract total.
+   status, sale and completion dates and contract total. A name or address
+   search can match other customers' jobs: keep a job only when its
+   contact ID (where the record carries one) or site address matches the
+   selected contact, and if you cannot tell, list the candidates and ask
+   before adding them to the history.
 6. **Notes.** `marketsharp_notes_list` for the contact (needs an Employee
    ID); filter with `noteType` (`ContactNote`, `Appointment`, `Job`,
    `ServiceOrder`, `WorkOrder` and others) when only one kind matters.

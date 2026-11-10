@@ -46,9 +46,11 @@ Call `gogetssl_orders_get_status` on the expiring order. Note:
 - the product, so the renewal can match it
 - the domains and SANs covered, so nothing is dropped
 - the validation method used last time
-- `end_date` versus `valid_till`: if the subscription runs past the
-  certificate's expiry, this is a **reissue** inside the paid period, and no
-  purchase is needed
+- `end_date` versus `valid_till`: if the order is still active, its reissue
+  flag allows a reissue, and the subscription runs past the certificate's
+  expiry, this is a **reissue** inside the paid period, and no purchase is
+  needed. Say when the subscription ends, because a renewal purchase is
+  still due at `end_date`
 
 ### 2. Pick and price the product
 

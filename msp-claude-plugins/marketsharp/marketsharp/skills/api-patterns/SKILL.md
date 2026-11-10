@@ -28,7 +28,7 @@ read-only.
 ## Tool surface and tiers
 
 All 25 tools are listed flat in `tools/list`. The server has one tier,
-`read`, and Conduit classifies every MarketSharp tool as a read, so **no
+`read`, and Conduit classifies every tool the server serves as a read, so **no
 MarketSharp tool is admin-gated** and a technician-level grant reaches
 all of them.
 
@@ -117,8 +117,11 @@ lowered, and the server fetches one page per call.
 | | `marketsharp_opportunities_list` | `numberOfRecords` | 100 / 1000 |
 
 - On the filter lists and employees, **fewer rows than the page size means
-  the last page**. Keep reading until that happens before you total
-  anything.
+  the last page**, unless the response ends with a `[truncated: ...]` note.
+  A truncated page is short because of the response cap, not the end of
+  the data: call again with the page arguments the note gives and keep
+  them for the pages after. Keep reading until a short page has no note
+  before you total anything.
 - The count-only tools cannot page. If a call returns exactly
   `numberOfRecords` rows, the list may be cut short: raise the number,
   narrow the search, or, at the maximum, say the result may be incomplete.

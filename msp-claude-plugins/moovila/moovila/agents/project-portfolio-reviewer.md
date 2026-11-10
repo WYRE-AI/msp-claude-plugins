@@ -33,7 +33,8 @@ carry the nested `{ id, name }` references you need.
 1. **Projects.** Page `moovila_projects_list` (limit 20) to the end.
    Drop `isTemplate`, `isDeleted` and `isInactive` records. Keep
    incomplete projects plus any completed within the review window.
-   If the user named a customer, filter on `organization.name` now.
+   If the user named a customer, filter on `organization.name` now (or
+   `customer.name` when the tenant leaves `organization` empty).
 2. **Tasks.** Page `moovila_tasks_list` to the end once and group by
    `projectID`. Drop `isDeleted` tasks.
 3. **Budgets.** Page `moovila_project_budgets_list` once and group by
@@ -56,7 +57,9 @@ Then score each active project:
   entries with no `taskID`, and open entries with no `endTime`. Follow
   the time-reconciliation skill.
 - **Activity:** no task change and no time entry in 14 days means
-  stalled.
+  stalled. Run the project-health skill's stalled-project check with its
+  own 14-day pulls, so a review window shorter than 14 days does not
+  hide older activity.
 
 Rank projects by the number of dimensions flagged, then by overrun
 amount, then by days late. A project that is late and over budget comes

@@ -40,12 +40,15 @@ what happens to their recorded lines and existing recordings before anything is 
    (portal-only logins) and Dub.Points whose user is not in the user list.
 4. Compare against the client's staff list or PSA contacts if the user provides one.
 
-`dubber_users_list` returns one Dubber page and has no paging argument. On a large account
-state that the list may be incomplete.
+`dubber_users_list` and `dubber_dub_points_list` each return one Dubber page and have no
+paging argument (the Dub.Point page is 20 items). On a large account state that the lists
+may be incomplete.
 
 ## Onboarding
 
-1. Check the person does not already exist: `dubber_users_list`, match on email.
+1. Check the person does not already exist: `dubber_users_list`, match on email. That
+   list is one page, so on a large account absence from it is not proof; confirm in the
+   Dubber portal before creating.
 2. `dubber_users_create` with `accountId`, `email` and `name`.
 3. Report the new user ID. Connecting their phone line is a Dub.Point and phone-system
    task; `dubber_dub_points_create` takes a raw Dubber object, so only use it when the user
@@ -54,7 +57,9 @@ state that the list may be incomplete.
 ## Offboarding
 
 1. Find the user: `dubber_users_list`, match on email, then `dubber_users_get`.
-2. Find their Dub.Points with `dubber_dub_points_list`.
+2. Find their Dub.Points with `dubber_dub_points_list`. If it returns exactly 20 items it
+   may be truncated: check the leaver's lines in the Dubber portal before deciding what
+   happens to them or deleting anything.
 3. Ask the user what should happen to those lines and the recordings already made.
    Recordings are compliance records; removing a login is not a reason to remove calls.
 4. Prefer a reversible change first. If the client only needs the user's details changed

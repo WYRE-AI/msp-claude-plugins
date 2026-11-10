@@ -50,19 +50,25 @@ favor of the labor type tools.
 
 1. `moovila_time_entries_list` with `lastChangedDate` at the period start;
    page to the end and keep entries whose `startTime` is in the period.
+   If the tenant pre-books time, use the complete pull described in
+   [api-patterns](../api-patterns/SKILL.md) instead.
 2. Group by `user.id`. Sum `totalHours` and `billableHours`.
 3. Billable utilization = `billableHours` / available hours. Ask the user
    for available hours per week (commonly 40); Moovila's API does not
    expose working calendars.
-4. Compare with `workTargetBillable`. Check the scale on the first labor
-   type: if targets are 0-1 treat them as fractions, if 0-100 as
-   percentages.
+4. Compare with `workTargetBillable`. Check the scale across the whole
+   labor type table, not one row: if every target is between 0 and 1
+   treat them as fractions, and if any is above 1 treat them as
+   percentages. If the table only holds 0 and 1, ask the user which
+   scale the tenant uses before comparing.
 
 ## Forward load
 
 1. `moovila_tasks_list`, paging to the end. Keep tasks with `isDeleted`
-   false, `percentageComplete` under 100, and a `dueDate` in the next
-   2-4 weeks.
+   false, `percentageComplete` under 100, and a `dueDate` that is either
+   already past (overdue work still needs doing) or in the next 2-4 weeks.
+   Count open tasks with no `dueDate` separately and say their timing is
+   unknown.
 2. Group by `ownerUser.id`. Remaining effort per task is
    `workEstimate` x (1 - `percentageComplete` / 100).
 3. Compare remaining effort with each owner's available project hours in

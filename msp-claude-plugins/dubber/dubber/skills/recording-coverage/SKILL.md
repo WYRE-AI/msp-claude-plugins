@@ -51,11 +51,14 @@ but could not place. Every tool used here is read tier in Conduit.
 4. **Check each line for recent calls.** For each Dub.Point call
    `dubber_recordings_list` with `dubPointId`, `startTimeFrom` set to the start of the
    window, and `limit: 1`. One returned recording is enough to prove capture. Then note
-   its `start_time` as "last seen".
+   its `start_time` as "last seen". An empty result means "silent" only when the scan
+   finished: if `scanCapReached` or `hasMore` is true, call again with
+   `cursor=<nextCursor>` and `offset=<remainingOffset>`. If `excludedUnparseableStartTime`
+   is above 0, mark the line "unknown" rather than silent.
 5. **Date the silent lines.** For a Dub.Point with no recording in the window, call
-   `dubber_recordings_list` with only `dubPointId` and `limit: 1` (no time filter) to find
-   the most recent call it ever recorded. No result at all means the line has never
-   recorded.
+   `dubber_recordings_list` with `accountId`, `dubPointId` and `limit: 1` and no time
+   filter to find the most recent call it ever recorded. No result at all means the line
+   has never recorded.
 6. **Look for unmatched calls.** If you have the group ID, call
    `dubber_groups_list_unidentified_recordings`. A growing pile here usually means a line
    is recording but is not mapped to a Dub.Point, which is the other half of a "missing

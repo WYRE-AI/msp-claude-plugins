@@ -44,6 +44,9 @@ invoice or top up the balance; that happens in the GoGetSSL client area.
 
 1. Call `gogetssl_invoices_list_by_period` with `date_from` and `date_till`
    set to the month (`YYYY-MM-DD`). The window may span at most 365 days.
+   If the response comes back `truncated`, split the window into shorter
+   ranges and repeat until each response is complete. If a single day is
+   still truncated, report the reconciliation as incomplete.
 2. For each line, take `order_id` and look up its domain.
    `gogetssl_orders_list` maps `order_id` to `common_name` for many orders
    at once; call it once per relevant `status` (usually `active` and
@@ -60,8 +63,11 @@ spreading their cost.
 
 ### Unpaid items sweep
 
-1. `gogetssl_orders_list_unpaid` and `gogetssl_invoices_list_unpaid`.
-2. For each unpaid order, check `gogetssl_orders_get_status`. An unpaid order
+1. `gogetssl_orders_list_unpaid` and `gogetssl_invoices_list_unpaid`, plus
+   `gogetssl_orders_list` with `status: "active"` to see which domains are
+   already covered.
+2. For each unpaid order, check `gogetssl_orders_get_status` and compare its
+   domain and order date with the active orders. An unpaid order
    for a domain that already has a newer active order is usually an
    abandoned attempt and can be cancelled in the client area. An unpaid
    order for a domain with nothing active is a renewal that has not

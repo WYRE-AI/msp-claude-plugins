@@ -40,8 +40,9 @@ status or reassigning happens in Alga.
 
 1. Find it: `alga_projects_list` with `client_id` or `search`, then `alga_projects_get`.
 2. `alga_projects_phases_list` with the `project_id`.
-3. `alga_projects_task_status_mappings_list` with the `project_id` to get the column
-   order and names.
+3. `alga_projects_task_status_mappings_list` with the `project_id` and each phase's
+   `phase_id` to get that phase's column order and names (a phase without its own
+   columns returns the project's).
 4. `alga_projects_tasks_list` with the `project_id` (add `phase_id` for one phase).
    Bucket tasks by status column.
 5. Per phase: tasks done vs total, tasks in progress, and tasks past their due date that

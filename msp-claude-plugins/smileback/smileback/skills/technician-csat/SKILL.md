@@ -47,9 +47,10 @@ Report them under "former staff" rather than dropping their reviews.
 ### 2. Pull the period
 
 `smileback_reviews_list` with `modified_since` at the period start and
-`include_unrated: true`, paged to the end. Keep rated reviews whose
-`rated_on` is in the period and unrated ones whose `ticket.closed_on`
-is in the period. A month is the shortest useful period for one tech;
+`include_unrated: true`, paged to the end. Keep reviews, rated or not,
+whose `ticket.closed_on` is in the period (fall back to `rated_on` when
+`closed_on` is missing), so rated and unrated reviews come from the same
+cohort and the response rate is not skewed. A month is the shortest useful period for one tech;
 a quarter is better.
 
 ### 3. Attribute

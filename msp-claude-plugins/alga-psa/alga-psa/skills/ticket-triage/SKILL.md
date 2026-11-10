@@ -43,7 +43,9 @@ the ticket so a person can make it in Alga.
 2. Pull the queue with `alga_tickets_list`: `is_open` true, the `board_id`, sorted by
    `latest_activity_at` or `entered_at`. Pass `fields` (for example
    `ticket_number,title,status_name,priority_name,assigned_to_name,client_name,entered_at,latest_activity_at`)
-   so a full page fits under the response cap. Page until `hasNext` is false.
+   so a full page fits under the response cap. Page until `hasNext` is false. If any
+   page comes back `truncated`, restart from page 1 with the smaller `limit` its
+   `truncation_hint` names, so the page boundaries stay consistent, before you count.
 3. Group by priority and assignee. Flag:
    - **Unassigned**: no `assigned_to_name`.
    - **Stale**: `latest_activity_at` older than your threshold (for example 3 business days).

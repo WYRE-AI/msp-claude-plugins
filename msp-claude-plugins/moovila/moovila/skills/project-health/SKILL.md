@@ -83,8 +83,12 @@ stalled. Find it with `lastChangedDate`:
 
 1. `moovila_tasks_list` with `lastChangedDate` set 14 days back.
 2. `moovila_time_entries_list` with the same `lastChangedDate`.
-3. Any active project whose ID appears in neither result has had no task
-   edits and no time logged for two weeks.
+3. Page both to the end, following any truncation note's resume offset
+   (see [api-patterns](../api-patterns/SKILL.md)); activity on a later
+   page counts.
+4. Any active project that has at least one open task and whose ID
+   appears in neither result has had no task edits and no time logged
+   for two weeks. A project with no open tasks is not stalled.
 
 ## Report shape
 

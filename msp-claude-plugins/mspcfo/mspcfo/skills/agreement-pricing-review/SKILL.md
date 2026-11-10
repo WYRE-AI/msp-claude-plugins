@@ -45,7 +45,7 @@ made there, by a person.
 
 | Term | Meaning |
 |---|---|
-| Efficiency | MSPCFO's measure of how well revenue covers delivery cost. MSPCFO frames 1 as the target for rate increases; below 1 under-recovers. |
+| Efficiency | MSPCFO's ratio of invoiced labor to the billable value of the labor delivered under the agreement. MSPCFO frames 1 as the target for rate increases; below 1 means more labor value is delivered than billed. It is not a cost measure: check cost recovery (margin) separately before calling an agreement unprofitable or proposing an increase. |
 | Overutilized | The agreement consumes more hours than its price supports. |
 | Underpriced | The fee is low for the work, even at normal consumption. |
 | Declining | Margin is trending down across periods. |
@@ -64,10 +64,14 @@ made there, by a person.
 
 ### Annual rate-increase recommendation
 
-1. Take the client's current efficiency from Client P&L over trailing
-   twelve months.
-2. Work out the revenue needed to reach an efficiency of 1 at current
-   consumption. Label this as a derived figure, with the inputs shown.
+1. Take this agreement's own invoiced labor and efficiency over trailing
+   twelve months from the agreement-level report. Client-level efficiency
+   from Client P&L mixes every agreement the client has, so do not use it
+   here; if agreement-level figures are not available, say the target
+   cannot be determined for this agreement.
+2. Work out the invoiced labor needed to reach an efficiency of 1 at
+   current consumption. Label this as a derived figure, with the inputs
+   shown.
 3. Compare it with a normal annual increase. If the gap is large, propose
    a staged path (this year's increase plus a scope or consumption
    change) instead of one shock increase.

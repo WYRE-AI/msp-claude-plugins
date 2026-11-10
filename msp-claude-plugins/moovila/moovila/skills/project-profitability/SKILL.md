@@ -71,6 +71,10 @@ entries when you need labor cost and revenue the rollups do not carry.
    `moovila_labor_types_list` and use `fullyBurdenedCost`.
 6. Revenue: for fixed-fee projects use `projectValue`; for time and
    materials, sum `billableHours` x `billRate`.
+7. Margin = revenue minus costs. Time entries carry labor only, so add
+   hardware and subcontract actuals when you can identify them without
+   counting labor twice. If you cannot, call the result labor-only
+   margin, not total profit.
 
 ## Cross-customer roll-up
 
@@ -82,11 +86,16 @@ per project:
 2. Page `moovila_tasks_list` once and group by `projectID`.
 3. Page `moovila_project_budgets_list` once and group by `projectID`.
 4. Compute burn and completion per project, then group by
-   `organization.name`.
+   `organization.name` (fall back to `customer.name` when the tenant
+   leaves `organization` empty).
 
-Rank by overrun amount (sum `totalActual` minus sum `totalBudget`), not by
-percentage, so a large overrun on a big project outranks a small one on a
-tiny project.
+Over budget is not the same as losing money: a fixed-fee project can
+overrun its budget and still make a margin. For "which projects are
+losing money", rank by margin (revenue minus actual cost, as in steps 5-7
+above), lowest first, and say whether it is labor-only. For "which
+projects are over budget", rank by overrun amount (sum `totalActual` minus
+sum `totalBudget`), not by percentage, so a large overrun on a big project
+outranks a small one on a tiny project.
 
 ## Report shape
 

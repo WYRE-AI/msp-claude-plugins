@@ -43,10 +43,12 @@ none can change a lead.
    `marketsharp_inquiry_statuses_list`, `marketsharp_lead_sources_list`
    (primary sources; pass `primaryLeadSourceId` for the secondary ones
    under a source), and `marketsharp_employees_list` for salespeople.
-3. Page through `marketsharp_inquiries_list` with
-   `modifiedFrom`/`modifiedTo` set to the period and
+3. Page through `marketsharp_inquiries_list` with `modifiedFrom` set to
+   the period start, no `modifiedTo` (a lead created in the period and
+   edited since would otherwise drop out), and
    **`appointmentRequired: false`**. Keep raising `pageNumber` until a
-   page returns fewer rows than `rowsPerPage`.
+   page returns fewer rows than `rowsPerPage` with no truncation note
+   (see [api-patterns](../api-patterns/SKILL.md)).
 4. Filter to leads actually created in the period by their inquiry date.
    The list filters on *changed* date, so an old lead edited this week is
    included and has to be dropped from a "new leads" count.
@@ -64,7 +66,9 @@ overstates the appointment rate and hides every unworked lead.
    last 7-14 days).
 2. For each lead, check whether it has an appointment: either compare
    against `marketsharp_appointments_list` with `inquiryIds` (up to 100
-   IDs per call), or read the lead with `marketsharp_inquiries_get`.
+   IDs per call), reading every page and following any truncation note
+   before you mark a lead as having none, or read the lead with
+   `marketsharp_inquiries_get` and `appointmentRequired: false`.
 3. Report leads with no appointment, oldest first, with source, status
    and age in days. Speed-to-appointment is the number contractors
    watch most.

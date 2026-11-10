@@ -46,8 +46,10 @@ people on the account.
 
 Time entries are filtered by user and work item, not by client. Two practical routes:
 
-- For a small ticket set, call `alga_tickets_time_entries_list` per ticket and sum.
-  Respect the 4-calls-at-once limit per connection.
+- For a small ticket set, call `alga_tickets_time_entries_list` for every ticket that
+  was open at any point in the period (the union of the opened, closed and still-open
+  pulls above), keep only the entries dated inside the period, and sum. Respect the
+  4-calls-at-once limit per connection.
 - For a broad view, `alga_time_entries_list` with `date_from` / `date_to` and
   `work_item_type` ticket, then keep only entries whose work item is one of this
   client's tickets.

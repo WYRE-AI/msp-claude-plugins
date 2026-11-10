@@ -110,8 +110,10 @@ clearly works; date filter formats are not documented in the spec.
 1. `myitprocess_clients_list` filtered `isActive` `equal` `true`, sorted by
    `lastReviewDate` ascending.
 2. `myitprocess_reviews_overdue_categories_list` (no filter, paged) and count
-   overdue categories per `client.id`.
-3. Rank clients by number of overdue categories, then by age of
+   categories per `client.id`. The response does not say which categories
+   are merely due and which are overdue, so report the count as "categories
+   due or overdue".
+3. Rank clients by number of categories due or overdue, then by age of
    `lastReviewDate`; show `alignmentScore` alongside. A client with no open
    review in `myitprocess_reviews_list` and many overdue categories is the one
    to schedule first.

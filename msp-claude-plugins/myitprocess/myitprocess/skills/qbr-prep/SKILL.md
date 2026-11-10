@@ -60,7 +60,9 @@ See [api-patterns](../api-patterns/SKILL.md) for filters and the rate limit,
    time". If there is no upcoming meeting, say so and prepare against today.
 3. **Recommendations.** `myitprocess_recommendations_list` filtered by
    `client.id` and `isArchived` `equal` `false`; page to `totalCount`. Mark the
-   ones whose `id` is in the upcoming meeting's agenda.
+   ones whose `id` is in the upcoming meeting's agenda. If an item on the last
+   past meeting's agenda is not in that list, repeat the call with `isArchived`
+   `equal` `true` and report it as archived in "Since last meeting".
 4. **Initiatives.** `myitprocess_initiatives_list` filtered by `client.id` and
    `isArchived` `equal` `false`, to group recommendations under their initiative
    titles.

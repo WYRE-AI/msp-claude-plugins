@@ -58,7 +58,10 @@ paid subscription needs a reissue, not a new purchase. Check
 
 1. Call `gogetssl_orders_list` with `status: "active"`. The vendor does not
    page this list, so the status filter is what keeps it inside the response
-   limit.
+   limit. If the response comes back `truncated`, do not report from it: page
+   through `gogetssl_orders_list_ssl` (`limit` and `offset`) to get every
+   order ID, keep the active ones, and read their `expires` dates with
+   `gogetssl_orders_get_statuses` in batches of 100.
 2. Drop rows whose `valid_till` is `null` or `0000-00-00`. Those were never
    issued; handle them in the stuck-order check below.
 3. Compute days to expiry from today and sort ascending.

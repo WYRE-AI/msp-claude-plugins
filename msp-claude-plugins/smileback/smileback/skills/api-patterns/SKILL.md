@@ -126,7 +126,10 @@ upper bound. To get a client's CSAT for a quarter:
 `modified_since` filters on `last_modified`, not `rated_on`. A review
 rated last year but edited this week comes back, so the `rated_on` filter
 in step 2 is required. Every review rated inside the window has
-`last_modified` at or after `rated_on`, so nothing is missed.
+`last_modified` at or after `rated_on`, so nothing is missed. When you
+also need a response rate (`include_unrated: true`), place rated and
+unrated reviews by `ticket.closed_on` instead, as `smileback-csat-qbr-summary`
+does, so both come from the same cohort.
 
 NPS responses are grouped by `contact.company`, which is a name, not the
 CSAT company ID. Match names carefully and report any responses whose

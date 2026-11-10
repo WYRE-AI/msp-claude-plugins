@@ -38,15 +38,20 @@ not the accounting system's.
 ## Workflow
 
 1. `marketsharp_companies_get` for the time zone.
-2. `marketsharp_opportunities_list` with `fromDate` at the start of the
-   period and `numberOfRecords` sized to the expected volume (default
-   100, maximum 1000). It returns jobs **and** leads changed since that
-   date, with job numbers, sale and contract dates, contract totals,
-   contract status and balance due.
-3. **Check for truncation.** The tool cannot page. If it returns exactly
-   `numberOfRecords` rows, raise the number. If it is already 1000, move
-   `fromDate` later and run the earlier slice separately, or say plainly
-   that the result may be incomplete.
+2. `marketsharp_opportunities_list` with `fromDate` and `numberOfRecords`
+   sized to the expected volume (default 100, maximum 1000). It returns
+   jobs **and** leads changed since that date, with job numbers, sale and
+   contract dates, contract totals, contract status and balance due. For
+   new sales, `fromDate` at the period start is enough. A job sold long
+   ago and not edited since is not returned, so for the backlog and
+   balances set `fromDate` far enough back to cover every open job (for
+   example two years); if you keep a recent `fromDate`, call the result
+   "jobs changed since `fromDate`", not the full backlog.
+3. **Check for truncation.** The tool cannot page and has no end date. If
+   it returns exactly `numberOfRecords` rows, raise the number. If it is
+   already 1000, a later `fromDate` only returns a subset of the same
+   records, not a separate slice, so say plainly that the result may be
+   incomplete.
 4. Keep only jobs (entries with a job number or sale date); leads in the
    result have no contract figures.
 5. Slice the job set:

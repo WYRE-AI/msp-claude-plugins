@@ -55,7 +55,9 @@ encoded.
 ### 2. Collect NPS detractors
 
 `smileback_nps_responses_list` with `score_lt: 7` and `created_since`
-at the window start. A detractor with a comment goes in the main list;
+at the window start, paging until `next` is null and handling truncated
+pages as `smileback-api-patterns` describes, so no detractor is left on a
+later page. A detractor with a comment goes in the main list;
 a bare 5 or 6 with no comment goes in the second tier.
 
 ### 3. Enrich each case

@@ -58,14 +58,15 @@ tenant (bring your own client). Connect it once in Conduit:
 2. Register an app for Conduit. Use Conduit's callback URL as the redirect
    URL and tick the project, task, user, time entry and lookup table read
    permissions.
-3. In Conduit, open **Connections → Moovila** and paste the **Client ID**
-   and **Client Secret** Moovila shows.
+3. In Conduit, open **Connections → Moovila** and paste the Client ID and
+   Client Secret Moovila shows into **OAuth Client ID** and **OAuth Client
+   Secret**.
 4. Sign in to Moovila to approve.
 
 | Field | Required | Description |
 |-------|----------|-------------|
-| Client ID | Yes | From your Moovila App Registration |
-| Client Secret | Yes | From your Moovila App Registration |
+| OAuth Client ID | Yes | From your Moovila App Registration |
+| OAuth Client Secret | Yes | From your Moovila App Registration |
 
 Conduit keeps the client secret and refresh token and sends only a
 short-lived access token to the Moovila MCP server on each call.

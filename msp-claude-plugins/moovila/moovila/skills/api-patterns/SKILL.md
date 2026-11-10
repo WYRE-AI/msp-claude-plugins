@@ -117,9 +117,13 @@ is inclusive has not been verified against a live tenant, so when exact
 edges matter, step back a minute and de-duplicate on `id`.
 
 It filters on change time, not on business date. A time entry worked in
-September but edited in October appears in an October pull. To report on
-a period, pull with a `lastChangedDate` at or before the period start and
-filter on `startTime` (time entries) or `dueDate` (tasks) yourself.
+September but edited in October appears in an October pull. The period
+start is not a completeness bound: a task due in the period may not have
+changed for months, and a pre-booked time entry may predate its
+`startTime`. When you need every record, pull without `lastChangedDate`
+and filter on `startTime` (time entries) or `dueDate` (tasks) yourself.
+Use an earlier `lastChangedDate` only when the tenant confirms nothing
+older can fall in the period, and say which bound you used.
 
 ## IDs and lookups
 

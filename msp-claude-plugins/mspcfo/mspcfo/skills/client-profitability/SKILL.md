@@ -45,7 +45,7 @@ segment reports from the live tool list.
 | Margin | What is left after cost. Compare percentages across clients, absolute values for impact. |
 | Flagged client | A client earning well below the portfolio average. MSPCFO's monthly summary ranks these by financial impact; rank the same way. |
 | Client / Market Segments | Groupings of clients (by size, vertical or MSPCFO's segmentation). Use them to tell a client problem from a segment problem. |
-| Efficiency | MSPCFO's efficiency measure on Client P&L. Its MCP page frames a target efficiency of 1 for rate-increase work; treat values below that as under-recovering. |
+| Efficiency | MSPCFO's ratio of invoiced labor to the billable value of the labor delivered. Its MCP page frames a target efficiency of 1 for rate-increase work; below 1 means more labor value is delivered than billed. It is not a cost measure, so read it alongside margin. |
 
 ## Common workflows
 

@@ -40,7 +40,9 @@ MarketSharp.
    the company's zone.
 2. `marketsharp_appointments_list` with `appointmentFrom` and
    `appointmentTo` spanning the day or week. Add `salespersonId` for one
-   rep. Page with `pageNumber` until a page is short.
+   rep. Page with `pageNumber` until a page is short and carries no
+   `[truncated: ...]` note; if it carries one, call again with the exact
+   page arguments the note gives.
 3. `marketsharp_employees_list` to turn salesperson IDs into names.
 4. For the customer and address behind an appointment,
    `marketsharp_appointments_get`, then `marketsharp_contacts_get` if the
@@ -55,7 +57,10 @@ person asked for them.
 1. Load the result names: `marketsharp_appointment_results_list`, and the
    same tool with `reasons: true` for result reasons.
 2. Page through `marketsharp_appointments_list` for the period (by
-   appointment date, not changed date).
+   appointment date, not changed date), for example
+   `{"appointmentFrom": "2026-10-01", "appointmentTo": "2026-10-31T23:59:59", "pageNumber": 1, "rowsPerPage": 500}`.
+   Follow any truncation note as above. If a page call fails, retry it
+   once; if it still fails, report the counts as incomplete.
 3. Count per salesperson: appointments scheduled, appointments with a
    result (run), and appointments whose result is a sold result.
    **Close rate = sold / run.** Appointments still without a result are

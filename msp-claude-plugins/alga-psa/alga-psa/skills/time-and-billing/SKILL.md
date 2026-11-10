@@ -38,6 +38,7 @@ connector. List what needs doing and who should do it.
 
 1. `alga_time_sheets_list` with `approval_status` SUBMITTED, sorted by `submitted_at`
    ascending: these wait on a manager.
+   `{"approval_status": "SUBMITTED", "sort": "submitted_at", "order": "asc", "limit": 100, "page": 1}`
 2. Repeat with DRAFT for sheets not yet submitted and CHANGES_REQUESTED for sheets sent
    back. Narrow to one period with `period_id`.
 3. Map `user_id` to names with `alga_users_list`, and to managers with `alga_teams_list`
@@ -48,7 +49,8 @@ connector. List what needs doing and who should do it.
 ### Hours by technician
 
 1. `alga_time_entries_list` with `user_id`, `date_from` and `date_to` (`YYYY-MM-DD`).
-   Page to the end.
+   Page to the end. If a page request fails, report the hours as incomplete rather than
+   presenting the technician totals as complete.
 2. Split by `is_billable` and by `work_item_type`. A high share of `ad_hoc` or
    `non_billable_category` time is worth a conversation.
 3. For a whole team, loop over its members from `alga_teams_list`, at most 4 calls at a

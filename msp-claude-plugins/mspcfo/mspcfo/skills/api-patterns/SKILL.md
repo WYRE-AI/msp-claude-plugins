@@ -53,9 +53,14 @@ yet, so Conduit fails closed.
 - Admin-tier callers see every tool MSPCFO lists.
 - Every other caller sees **no** MSPCFO tools.
 
-So "connected, but no MSPCFO tools" almost always means the caller's
-Conduit tier is below admin, not that sign-in failed. Say that plainly
-and point the user to a Conduit admin. Do not retry the sign-in.
+When no MSPCFO tools appear, check the connection first: in Conduit,
+**Connections → MSPCFO** should show the connection as connected and
+signed in. An expired or revoked sign-in, or an MSPCFO outage, also
+leaves the session with no MSPCFO tools, even for an admin; signing in
+again fixes the first. Only when the connection is connected and signed
+in and the tools are still missing is the cause the caller's Conduit
+tier being below admin. Then say so plainly and point the user to a
+Conduit admin.
 
 Every MSPCFO tool is admin-gated in Conduit, whatever it does. That will
 change only after WYRE classifies the tools from a verified live

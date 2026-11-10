@@ -27,7 +27,9 @@ fixing before invoicing.
 1. **Find the projects**
 
    Page `moovila_projects_list` and drop templates, deleted and inactive
-   projects. Match `target` against `organization.name` first, then
+   projects, and completed ones (`isComplete`) unless the user asked for
+   completed projects. Match `target` against `organization.name` first
+   (or `customer.name` when the tenant leaves `organization` empty), then
    project `name`. If several match, list them and ask which one.
 
 2. **Tasks**
@@ -44,7 +46,9 @@ fixing before invoicing.
 4. **Time**
 
    Page `moovila_time_entries_list` with `lastChangedDate` set to the
-   start of the current month, keep entries for these projects, and flag
+   start of the current month, keep entries for these projects whose
+   `startTime` is in the current month (the filter is a change time, not
+   a work date), and flag
    billable entries with no rate or billing code and entries with no
    task.
 
