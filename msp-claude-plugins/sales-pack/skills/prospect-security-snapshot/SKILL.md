@@ -51,7 +51,7 @@ would be needed. Do not fill the gap with a guess.
 |--------|------|-----------|
 | Public domain supplied by the operator | The only required input | Yes |
 | CIPP | SPF, DKIM, and DMARC via `cipp_list_domain_health`, only after the operator confirms any CIPP use, and only when the domain already belongs to a listed CIPP tenant. That tool does not return MX or DNSSEC | Optional |
-| runZero | Existing asset and service inventory via scoped `runzero_assets_search` and `runzero_assets_get` (and a scoped service get for that asset), only after the operator confirms any runZero use, and only when the hostname is already in inventory. Do not call unscoped `runzero_assets_list` or `runzero_services_list` | Optional |
+| runZero | Existing asset and service inventory via scoped `runzero_assets_search` and `runzero_assets_get`, or `runzero_services_list` with a hostname `search` filter and `runzero_services_get`, reported as inventory observations with external exposure unverified, only after the operator confirms any runZero use, and only when the hostname is already in inventory. Do not call unscoped `runzero_assets_list` or `runzero_services_list` | Optional |
 | Agent DNS or web lookups | Fallback for mail records, public certificate data, and cited breach reporting when no MCP tool covers the check | Optional, used only when available in this session |
 
 A public DNS, certificate-transparency, or Have I Been Pwned MCP tool is
@@ -82,8 +82,9 @@ runZero tool, including `cipp_list_tenants`, `cipp_get_tenant_details`,
 `cipp_list_domain_health`, `runzero_assets_search`, `runzero_assets_list`,
 `runzero_assets_get`, `runzero_services_list`, and `runzero_services_get`,
 tell the operator that the call would use the MSP's existing connector
-credentials, and ask for confirmation. If they decline, do not call those
-tools; stay on public lookups and note the skipped source.
+credentials, and ask for confirmation for each connector. If they decline
+a connector, do not call that connector's tools; stay on public lookups
+for those checks and note the skipped source.
 
 Before asking about CIPP, also say that `cipp_list_domain_health` returns
 SPF, DMARC, and DKIM for every non-`.onmicrosoft.com` domain on the
@@ -164,12 +165,21 @@ Do not port-scan the prospect, and do not start a new discovery task.
 If runZero tools are connected, ask for confirmation before any runZero
 call, as in the confirmation rule above. After confirmation, search
 existing inventory only, scoped to the operator-supplied domain or
-hostname (`runzero_assets_search`, then `runzero_assets_get` or a scoped
-service get for that asset). Do not call unscoped `runzero_assets_list` or
-`runzero_services_list`. Use findings only when the hostname or domain is
-already present. Do not put other runZero assets or services in the report
-or the sales conversation. Never call `runzero_tasks_create` or
-`runzero_sites_create`.
+hostname (`runzero_assets_search`, then `runzero_assets_get`, or
+`runzero_services_list` with a `search` filter for that hostname and
+`runzero_services_get` for a matching service). Do not call unscoped
+`runzero_assets_list` or `runzero_services_list`. Use findings only when
+the hostname or domain is already present. Do not put other runZero
+assets or services in the report or the sales conversation. Never call
+`runzero_tasks_create` or `runzero_sites_create`.
+
+An inventory record shows what a runZero explorer saw from its own
+vantage point, not that the service is reachable from the internet.
+Report each match as an inventory observation, with the last-seen time
+the record returns, and say external exposure is unverified unless the
+record itself shows the service was seen from an external vantage point.
+If the record has no last-seen time, say so, and do not present it as
+current.
 
 If no existing inventory record is found, label exposed services
 **unavailable**. You may mention that a future, authorized assessment
@@ -201,7 +211,9 @@ without a one-line explanation. Structure:
    explanation of the gap (for example, missing DMARC, or DKIM selector
    unknown).
 3. **Certificates.** Findings or unavailable.
-4. **Exposed services.** Existing-inventory findings or unavailable.
+4. **Exposed services.** Existing-inventory observations, each with its
+   last-seen time and whether external exposure is verified, or
+   unavailable.
 5. **Breach mentions.** Cited public mentions or unavailable.
 6. **Auth and credentials note.** If CIPP or runZero was used, say so,
    because those calls use the MSP's existing connector credentials. If
@@ -233,9 +245,11 @@ if those lookups are not possible.
 
 ### Operator declines CIPP or runZero use
 
-Respect that. Do not call any CIPP or runZero tool, including tenant
-listing and inventory search. Fall back to public lookups, and note the
-skipped source.
+Respect that for the declined connector only. If CIPP is declined, call no
+CIPP tool, including tenant listing; if runZero is declined, call no
+runZero tool, including inventory search. The other connector may still
+be used after its own confirmation. Fall back to public lookups for the
+skipped checks, and note the skipped source.
 
 ### A lookup errors or returns nothing
 
