@@ -1,7 +1,7 @@
 # Plugin PRD: Zendesk
 
 > Version: 1.2.0
-> Created: 2026-08-30 (revised 2026-10-13: added Security Considerations + Testing Plan sections per CONTRIBUTING.md Tier-3 checklist; corrected Zendesk hosted-MCP-server availability claim after re-verification — see note below. Revised 2026-11-10: dropped "apply tags" from the read-only scope, made the read-only test call a write tool directly, replaced the data-residency claim with explicit processing controls, reframed rate limits as an MCP-layer contract to measure, and removed private gateway source paths.)
+> Created: 2026-08-30 (revised 2026-10-13: added Security Considerations + Testing Plan sections per CONTRIBUTING.md Tier-3 checklist; corrected Zendesk hosted-MCP-server availability claim after re-verification — see note below. Revised 2026-11-10: dropped "apply tags" from the read-only scope, made the read-only test call a write tool directly, replaced the data-residency claim with explicit processing controls, reframed rate limits as an MCP-layer contract to measure, marked the endpoint and OAuth details as unverified, made the release gates apply to the fallback server too, added a live tool-name comparison, and removed private gateway source paths.)
 > Status: Draft - Awaiting Review
 > Requested in: #10
 
@@ -30,7 +30,7 @@ MSPs and their clients running Zendesk today have no way to triage tickets, chec
 - **Organizations & users**: look up organizations, organization memberships, end-users, agents, groups.
 - **Knowledge Base (Guide)**: search help-center articles, sections, categories.
 - **Reference data**: macros, triggers, views, SLA policies — read/lookup only, so an agent can explain "why did this ticket route here" without needing to safely reproduce write-side automation logic.
-- Connecting through **Zendesk's own hosted MCP server** (`https://<subdomain>.zendesk.com/api/mcp`, OAuth-gated) rather than building and operating a new WYRE-run `zendesk-mcp` server — mirrors how this repo already handles Stripe, Slack, HubSpot, and PandaDoc.
+- Connecting through **Zendesk's own hosted MCP server** (endpoint and OAuth details unverified; see Connection model) rather than building and operating a new WYRE-run `zendesk-mcp` server — mirrors how this repo already handles Stripe, Slack, HubSpot, and PandaDoc.
 
 ### Out of Scope
 
@@ -43,7 +43,7 @@ MSPs and their clients running Zendesk today have no way to triage tickets, chec
 
 ### Connection model
 
-Zendesk's MCP server is hosted per-tenant at `https://<subdomain>.zendesk.com/api/mcp`, OAuth-gated, advertising read and write scopes (per Zendesk's public MCP announcement, [TechRadar coverage](https://www.techradar.com/pro/zendesk-becomes-the-latest-to-adopt-mcp-to-futureproof-customers-in-the-ai-first-era) and Zendesk's own [MCP action-flow docs](https://support.zendesk.com/hc/en-us/articles/10497779528730)) — **but see the architecture-blocking update at the top of this document: whether this specific server is reachable today is unconfirmed, not merely "early access."** If it remains unreachable at implementation time, this connection model does not work and the plugin needs a WYRE-run proxy instead (the exact pattern this PRD currently avoids). This is the same shape as this repo's existing hosted-OAuth plugins (Stripe, Slack, HubSpot, PandaDoc): the plugin is connector-only and ships no `.mcp.json`. The connection, including the per-tenant subdomain and the OAuth grant, is set up in the Conduit connection UI, and Conduit would need a Zendesk vendor entry the same way it has one for those, assuming the server exists to route to.
+Zendesk announced a hosted MCP server ([TechRadar coverage](https://www.techradar.com/pro/zendesk-becomes-the-latest-to-adopt-mcp-to-futureproof-customers-in-the-ai-first-era)). Zendesk's [MCP action-flow docs](https://support.zendesk.com/hc/en-us/articles/10497779528730) cover Zendesk calling *out* to external MCP servers, not this server. Neither source gives the endpoint or the auth model, so this PRD's working assumptions are unverified: a per-tenant endpoint (assumed `https://<subdomain>.zendesk.com/api/mcp`), OAuth 2.1 with PKCE, and separate read and write scopes. All three are confirmed from Zendesk's own documentation or from the server's discovery metadata (the `WWW-Authenticate` challenge and RFC 9728 / RFC 8414 well-known documents) before any design work depends on them. A failed request to the assumed URL does not show the server is unavailable; it may live at another URL. **See also the architecture-blocking update at the top of this document: whether this specific server is reachable today is unconfirmed, not merely "early access."** If it remains unreachable at implementation time, this connection model does not work and the plugin needs a WYRE-run proxy instead (the exact pattern this PRD currently avoids). This is the same shape as this repo's existing hosted-OAuth plugins (Stripe, Slack, HubSpot, PandaDoc): the plugin is connector-only and ships no `.mcp.json`. The connection, including the per-tenant subdomain and the OAuth grant, is set up in the Conduit connection UI, and Conduit would need a Zendesk vendor entry the same way it has one for those, assuming the server exists to route to.
 
 ### API surface (read/triage scope only)
 
@@ -57,7 +57,7 @@ Zendesk's MCP server is hosted per-tenant at `https://<subdomain>.zendesk.com/ap
 
 ### Authentication requirements
 
-OAuth 2.1 (PKCE), per-tenant subdomain, read + write scopes advertised by Zendesk's server. The connection requests the narrowest (read-only) scope Zendesk allows, and write tools must be blocked as described under Security Considerations, not just left out of the skills.
+Assumed, pending the discovery check above: OAuth 2.1 (PKCE), per-tenant subdomain, separate read and write scopes. The connection requests the narrowest (read-only) scope Zendesk allows, and write tools must be blocked as described under Security Considerations, not just left out of the skills.
 
 ### Data flow
 
@@ -80,18 +80,19 @@ Zendesk's REST API enforces per-plan rate limits (typically 200–700 req/min de
 
 ## Testing Plan
 
-- **Live connection smoke test (blocking on the architecture question above)**: before any skill ships, connect to a real Zendesk sandbox/trial tenant and run a live `tools/list` against Zendesk's hosted MCP server to confirm it (a) is reachable at all, and (b) get the actual registered tool names — this is also what Success Criteria below already requires, and it is the same step that resolves the architecture-blocking update.
+- **Live connection smoke test (blocking)**: before any skill ships, connect the selected MCP server to a real Zendesk sandbox/trial tenant through Conduit and run a live `tools/list` to get the actual registered tool names. The selected server is Zendesk's hosted one if the architecture-blocking update resolves in its favor, or the WYRE-run fallback if it does not; the same test applies to whichever ships. Attempting the hosted server first is also what resolves the architecture-blocking update.
 - **Read-only enforcement test**: from the live `tools/list`, pick each write-capable tool (ticket update, close, tag) and call it directly through Conduit with the grant this plugin's connection issued, outside any shipped skill. Each call must be rejected, either by Zendesk because the grant is read-only or by Conduit's allowlist, and the sandbox ticket must be unchanged afterwards. A skill that simply never calls a write tool does not pass this test.
 - **Multi-tenant isolation test**: connect two separate sandbox Zendesk subdomains under the same gateway instance and confirm a session authenticated against tenant A cannot retrieve tenant B's tickets/organizations.
-- **Tool-anchoring / drift check**: run this repo's `check-doc-references.mjs` and `check-tool-anchoring.mjs` (the #178-audit tooling) against the shipped skill docs to confirm every documented tool name matches a real, live-verified tool — not a name inferred from REST endpoints.
+- **Live tool-name comparison**: compare every tool name the shipped skills, commands, and agents document against the smoke test's live `tools/list` result, using `scripts/tool-drift-audit.mjs --live <json>` with the observed names. Any documented name missing from the live list fails the release, so an invented or stale name (including one inferred from REST endpoints) cannot ship.
+- **Repo checks**: `check-doc-references.mjs` and `check-tool-anchoring.mjs` also pass. These catch broken skill references and docs that name no tool at all; they do not validate tool names against the server, which is why the live comparison above is a separate gate.
 - **Rate-limit behavior test**: exercise a paginated bulk lookup (e.g. listing all tickets for a busy sandbox org) until the sandbox throttles. Record what the MCP layer returns (error shape, any rate-limit headers or `Retry-After` value that reach the client, timeout behavior), then confirm the skill paginates and backs off on that signal rather than retrying immediately.
 - **Standard plugin validation**: `claude plugin validate` passes clean, matching the Success Criteria item below.
 
 ## Success Criteria
 
 - [ ] A maintainer confirms Zendesk should be added as a gateway vendor (i.e. this PRD is approved) before any skill/agent implementation begins.
-- [ ] The plugin's `api-patterns` skill documents the **actual** registered tool names from a live `tools/list` against a connected Zendesk tenant — not names inferred from REST endpoints or from third-party community Zendesk MCP servers (several exist on GitHub with different tool surfaces than Zendesk's own official server).
-- [ ] `claude plugin validate` and this repo's `check-doc-references.mjs` / `check-tool-anchoring.mjs` pass with zero un-anchored tool references.
+- [ ] The plugin's `api-patterns` skill documents the **actual** registered tool names from a live `tools/list` against the selected MCP server (Zendesk's hosted one or the WYRE-run fallback) connected to a Zendesk tenant — not names inferred from REST endpoints or from third-party community Zendesk MCP servers (several exist on GitHub with different tool surfaces than Zendesk's own official server).
+- [ ] The live tool-name comparison finds zero documented names missing from the live `tools/list`, and `claude plugin validate`, `check-doc-references.mjs`, and `check-tool-anchoring.mjs` pass with zero un-anchored tool references.
 - [ ] A technician can search open tickets by organization and read comments/tags, and the read-only enforcement test shows every write-capable Zendesk tool is rejected for this connection.
 
 ## Open Questions
