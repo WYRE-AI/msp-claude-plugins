@@ -20,34 +20,13 @@ operator is authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers
   "who opened this ticket" — BMS's own log records only the API user.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal BMS connection made
-  with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires
-> tier `admin` today.** Conduit derives each tool's tier from
-> `VENDOR_TOOL_CONFIG` (`src/proxy/result-cache.ts`) and fails closed for
-> anything absent from it:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `kaseya-bms` has no entry, so
-> the grouping below carries no enforcement weight right now — read tools
-> require `admin` exactly as the rest do, and there is no narrower grant
-> that admits them. The grouping is still the right *risk* reading, and it
-> becomes the enforcement reading on the day this vendor is classified.
-> The list of unclassified vendors moves whenever one of them is
-> classified, so it is stated in one place only:
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified*.
->
-> *This blockquote is the whole of the not-classified caveat. When
-> `kaseya-bms` appears in `VENDOR_TOOL_CONFIG`, delete this blockquote and
-> change nothing else.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|

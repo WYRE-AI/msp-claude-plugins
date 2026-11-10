@@ -31,13 +31,7 @@ tenant the operator is authorised for.
   "who disabled that account" — the Microsoft 365 unified audit log
   records only the app registration, and cannot tell you which
   technician was behind it.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Graph connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 **One exception you must know about.** This plugin's `README.md` and
 `.env.example` still document a direct-to-Microsoft path: an Entra app
@@ -48,6 +42,8 @@ action in the customer's audit log appears as the app. Do not use it
 against production tenants. It is documentation drift, not a supported
 deployment model.
 
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
+
 ## Tool permission groups
 
 ### Two surfaces, and they do not join
@@ -55,13 +51,7 @@ deployment model.
 This plugin and Conduit do not describe the same thing, and the
 mismatch has to be stated before any table can be read honestly.
 
-**Conduit's `m365` slug classifies one specific MCP server** — the
-`@softeria/ms-365-mcp-server` sidecar, pinned at v0.111.0, **172 tools**,
-named in kebab-case: `list-mail-messages`, `send-mail`,
-`delete-onedrive-file`, `graph-batch`. Those names are what a Conduit
-grant admits or denies (`src/proxy/result-cache.ts:1057`), because the
-tier gate matches on tool name and nothing else
-(`src/proxy/tool-call-enforcement.ts:69-79`).
+**Conduit's `m365` slug classifies one specific MCP server** — the `@softeria/ms-365-mcp-server` sidecar, pinned at v0.111.0, **172 tools**, named in kebab-case: `list-mail-messages`, `send-mail`, `delete-onedrive-file`, `graph-batch`.
 
 **This plugin's skills teach raw Graph HTTP operations** —
 `GET /users/{id}/messages`, `POST /users/{id}/assignLicense`. Not one of
@@ -87,17 +77,7 @@ exactly the error this document exists to prevent.
 | **Delete** | Removes mail, files, calendars, rules, and sharing permissions. | `write` — **not** a tier of its own | 21 tools. `delete-mail-message`, `delete-mail-folder`, `delete-mail-attachment`, `delete-mail-rule`, `delete-onedrive-file`, `delete-drive-item-permission`, `delete-calendar`, `delete-calendar-event`, `delete-specific-calendar-event`, `cancel-calendar-event`, `delete-outlook-contact`, `delete-contact-folder`, `delete-onenote-page`, `delete-excel-range`, `delete-excel-table-row`, `delete-focused-inbox-override`, `delete-my-calendar-permission`, `delete-planner-bucket`, `delete-todo-task`, `delete-todo-task-list`, `delete-todo-linked-resource` |
 | **Admin** | Arbitrary-Graph passthrough, and the change-notification webhooks that establish a standing data-egress channel. | `admin` | 8 tools. `graph-batch`, `download-bytes`, `create-subscription`, `update-subscription`, `delete-subscription`, `reauthorize-subscription`, `get-subscription`, `list-subscriptions` |
 
-**The Delete row is the one to read twice.** Conduit's enforcement tiers
-are only `read`, `write`, and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. "Delete" is a presentation group in
-the access editor, and a delete-group tool compiles to and enforces at
-tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`). So **granting a technician `write` on this
-vendor also grants all 21 delete tools above** — including
-`delete-mail-message` and `delete-onedrive-file` against a live
-production mailbox. There is no setting that separates them; the only
-way to admit some write tools but not the delete ones is a granular
-per-tool grant, which compiles to an explicit `customTools` allowlist.
+So **granting a technician `write` on this vendor also grants all 21 delete tools above** — including `delete-mail-message` and `delete-onedrive-file` against a live production mailbox.
 
 **`graph-batch` is the tool that re-opens everything else.** It is an
 arbitrary-Graph-request passthrough: any method, any endpoint, wrapped
@@ -109,14 +89,7 @@ grant should be treated as equivalent to full tenant administrator,
 because for a passthrough tool that is exactly what it is. Never give it
 to a scheduled or unattended agent.
 
-Three of the admin tools are **read-only and still pinned to `admin`**:
-`download-bytes` (arbitrary-Graph-path binary GET), `get-subscription`,
-and `list-subscriptions` are all `isWrite: false, isAdmin: true`, and
-`isAdmin` outranks (`src/access/tool-classification.ts:33-38`). This is
-the same rule that pins the `microsoft-graph` plugin's
-`microsoft_graph_get` to `admin`: when blast radius is chosen by
-arguments rather than by tool name, a name-matching gate has to price
-the worst argument.
+This is the same rule that pins the `microsoft-graph` plugin's `microsoft_graph_get` to `admin`: when blast radius is chosen by arguments rather than by tool name, a name-matching gate has to price the worst argument.
 
 ### Operations these skills teach that have no tool here
 
@@ -172,9 +145,7 @@ though the tier does not exist. The gap is real and worth keeping:
   useful, and equally useful to anyone reconstructing how a mailbox is
   monitored.
 
-Conduit cannot express "read, but not that read". If the distinction
-matters — and in a mailbox it usually does — it has to be a granular
-`customTools` allowlist or a rule in the agent's own configuration.
+Conduit cannot express "read, but not that read".
 
 ### Two write tools worse than their tier suggests
 
@@ -216,10 +187,7 @@ self-approve deletes, and treat admin as tenant administrator.**
 - Write tools: agent drafts the exact call, human approves, then it
   runs. `send-mail` and `update-mailbox-settings` deserve a named
   approver every time.
-- Delete tools: require a named human approver per invocation. Do not
-  grant these to scheduled or unattended agents. Conduit cannot enforce
-  this separation for you — a `write` grant already admits all 21 — so
-  it has to live in the agent's own configuration.
+- Delete tools: require a named human approver per invocation. Do not grant these to scheduled or unattended agents.
 - Admin tools: treat the grant as equivalent to full tenant
   administrator, because `graph-batch` makes it exactly that.
 - Prefer the read-only route for questions. If the task is "how many",
@@ -228,11 +196,7 @@ self-approve deletes, and treat admin as tenant administrator.**
   write path to mis-fire — at the cost of an `admin` grant of its own.
   Use this plugin when you intend to change something.
 
-None of the approval steps above are things Conduit does. Conduit
-compares tiers. It has no approval step, no per-call confirmation, and
-no interactive prompt. Per-call approval is a workflow you impose on
-your agents, and it is only as good as the agent configuration that
-carries it.
+None of the approval steps above are things Conduit does. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## What it cannot reach
 
@@ -272,9 +236,7 @@ carries it.
   "Redundancy plan Q3", "Acquisition — Project Falcon" — which disclose
   sensitive facts even when the content is never opened. Also tier
   `read`.
-- **`download-bytes` returns file *contents*** as raw bytes from an
-  arbitrary Graph path. It is `isWrite: false` and pinned `admin`, which
-  is the right price for it.
+- **`download-bytes` returns file *contents*** as raw bytes from an arbitrary Graph path.
 - **Sign-in telemetry is personal data.** `auditLogs/signIns` returns IP
   addresses and geolocation per named user; in several jurisdictions
   this attracts employee-monitoring obligations independent of the

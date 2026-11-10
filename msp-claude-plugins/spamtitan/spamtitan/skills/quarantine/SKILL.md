@@ -54,12 +54,7 @@ Quarantined messages are retained for a configurable period (typically 30 days).
 
 ### Multi-Domain Management — the queue is not tenant-scoped
 
-In MSP deployments SpamTitan typically filters mail for multiple client
-domains, and the natural instinct is to scope the quarantine listing to one
-customer. **You cannot.** `spamtitan_get_queue` accepts no `domain`
-parameter. Its shipped input schema is exactly `page`, `per_page`, `sender`,
-`recipient`, `subject`, `reason`
-(`spamtitan-mcp/src/domains/quarantine.ts:21-53`).
+In MSP deployments SpamTitan typically filters mail for multiple client domains, and the natural instinct is to scope the quarantine listing to one customer. **You cannot.** `spamtitan_get_queue` accepts no `domain` parameter.
 
 What follows from that:
 

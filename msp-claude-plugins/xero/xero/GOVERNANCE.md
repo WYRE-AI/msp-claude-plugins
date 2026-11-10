@@ -24,31 +24,13 @@ authorised for.
   authorised this invoice". Xero's own history attributes every change to the
   connected app, which is one name for your whole team — and that matters
   more here than in most connectors, because these are accounting records.
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. A user only removed
-  from the org keeps an already-issued access token for up to an hour, but it
-  reaches only a personal Xero connection made with their own key — never the
-  org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request. A user only removed from the organisation keeps an already-issued access token for up to an hour, but it reaches only a personal Xero connection made with their own key, never the organisation's.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-> **Not classified in Conduit — every tool in the table below requires tier
-> `admin` today.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). `xero` has no entry there, so the
-> grouping below carries no enforcement meaning at present — read tools
-> included. A `read` or `write` grant on this vendor admits nothing; an
-> `admin` grant admits everything, including `xero_payments_create`. The
-> grouping becomes what Conduit actually enforces once the vendor is
-> classified, and classifying it is a privilege *reduction*, not an
-> expansion. For the live list of unclassified vendors see
-> `wyre-gateway/GOVERNANCE.md`, *Fail-closed, and the vendors Conduit has
-> not classified* — it is stated once there because it moves.
->
-> *Editor's note: when `xero` gains a `VENDOR_TOOL_CONFIG` entry, delete this
-> blockquote and nothing else. No other part of this document depends on it.*
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of what these tools can do. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table.
 
 | Tier | What it can do | Tools |
 |---|---|---|
@@ -79,12 +61,7 @@ state is safely reversible.
 balance and no obligation. It is the one thing here you can create and then
 change your mind about.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there is
-no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Nothing sits between an agent and
-`xero_payments_create` once its tier is granted. Where this document asks
-for a named human approver, that is a policy you impose on your agents, and
-it is only as good as the agent configuration that carries it.
+Nothing sits between an agent and `xero_payments_create` once its tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## Recommended agent policy
 
@@ -104,14 +81,7 @@ destructive calls.**
 
 ## What it cannot reach
 
-- Only the Xero organization selected by the `xero-tenant-id` the operator's
-  gateway identity maps to. The authorization-code grant Conduit holds can
-  cover every organization the consenting user authorised; the header, set at
-  the gateway, picks exactly one. Note that Conduit chooses it for you — at
-  connect time it calls `https://api.xero.com/connections` and stores the
-  **first** tenant returned (`fetchXeroTenantId`, `src/oauth/vendor-oauth.ts`).
-  If the consenting user can see more than one Xero organization, confirm the
-  stored tenant is the intended one before granting anyone the write tools.
+- Only the Xero organization selected by the `xero-tenant-id` the operator's gateway identity maps to. The authorization-code grant Conduit holds can cover every organization the consenting user authorised; the header, set at the gateway, picks exactly one. If the consenting user can see more than one Xero organization, confirm the stored tenant is the intended one before granting anyone the write tools.
 - Only the scopes granted. Reports are read-only by scope
   (`accounting.reports.read`) and cannot be made writable from this plugin.
 - No filesystem, no shell, no other vendor's data.

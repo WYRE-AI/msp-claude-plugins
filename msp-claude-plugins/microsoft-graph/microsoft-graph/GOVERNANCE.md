@@ -27,18 +27,14 @@ technician. Consequences worth stating plainly:
   signed-in user*, not as a service principal. Operator identity is
   therefore enforced by Entra itself, not merely logged: a technician
   cannot read what their own Entra roles do not permit.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Graph connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 - Separately, a Global Administrator in **each customer tenant** must
   grant admin consent out of band before that tenant returns any data.
   Consent is per tenant and revocable by the customer at any time, from
   their side, without involving you.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -52,24 +48,7 @@ them, and not the two you would guess from "read-only".
 | **Delete** | *Empty.* | — | None. |
 | **Admin** | Issues an arbitrary `GET` against any Microsoft Graph endpoint the caller's roles and the consented scopes allow. | `admin` | `microsoft_graph_get` |
 
-**`microsoft_graph_get` is a read-only tool pinned to `admin`, and that
-is the single most instructive fact in this document.** Conduit
-classifies it `isWrite: false, isAdmin: true`
-(`src/proxy/result-cache.ts:1043`), and `isAdmin` outranks `isWrite`
-(`src/access/tool-classification.ts:33-38`), so it requires the highest
-tier Conduit has despite mutating nothing.
-
-The reason is a property of the enforcement model, not a judgement
-about Graph. Conduit's tier check matches on **tool name only** — the
-gate input carries `identity`, `vendorSlug`, and `toolName` and has no
-`arguments` field at all (`src/proxy/tool-call-enforcement.ts:69-79`).
-For `microsoft_graph_get` the blast radius is chosen entirely by the
-arguments: one call returns the room list, the next returns every
-sign-in record for a named director. A name-matching gate cannot tell
-those apart, so the tool is pinned where the worst argument belongs.
-This is the same rule that pins `autotask_raw_request` and
-`cwautomate_scripts_execute` to `admin`, applied to a tool that only
-reads.
+The reason is a property of the enforcement model, not a judgement about Graph. For `microsoft_graph_get` the blast radius is chosen entirely by the arguments: one call returns the room list, the next returns every sign-in record for a named director. A name-matching gate cannot tell those apart, so the tool is pinned where the worst argument belongs. This is the same rule that pins `autotask_raw_request` and `cwautomate_scripts_execute` to `admin`, applied to a tool that only reads.
 
 The lesson generalises past this plugin: **"read" and "safe" are
 different questions.** Conduit's tiers answer the first one — can this
@@ -78,21 +57,9 @@ A tool that reads a customer's entire directory is tier `read` on most
 vendors; the fact that this one is not is an accident of it being a
 passthrough, not evidence that Conduit is grading disclosure.
 
-**The practical consequence: an agent restricted to tier `read` cannot
-use this plugin for anything.** The two read tools describe the query
-surface; they return no tenant data. Every question this plugin exists
-to answer goes through `microsoft_graph_get`, which needs `admin`.
-Granting `write` changes nothing at all here — there is no write tool
-and no delete tool to admit — so the only meaningful settings are
-`read` (effectively off) and `admin` (everything).
+**The practical consequence: an agent restricted to tier `read` cannot use this plugin for anything.** The two read tools describe the query surface; they return no tenant data. Every question this plugin exists to answer goes through `microsoft_graph_get`, which needs `admin`.
 
-A granular per-tool grant whose `customTools` is exactly
-`["microsoft_graph_get"]` still compiles to stored tier `admin`, because
-the compiled tier is the highest any checked tool requires
-(`src/access/tier-group-mapping.ts`, `selectionToGrant`). On a
-three-tool vendor that narrowing buys nothing; on a vendor where the
-same operator also holds `admin` for other reasons, it is the difference
-between a scoped grant and a blanket one.
+On a three-tool vendor that narrowing buys nothing; on a vendor where the same operator also holds `admin` for other reasons, it is the difference between a scoped grant and a blanket one.
 
 It remains true that **nothing here can write.** The server exposes
 three tools, the only one that reaches a tenant issues HTTP `GET`, and
@@ -117,10 +84,7 @@ decision, not a formality.**
   disclosure decision. Scope it at Entra, where the boundary is real.
 - Write and delete tools: none exist, so there is nothing to withhold.
 
-Conduit will not ask a human before any of this. It compares tiers — it
-has no approval step, no per-call confirmation, and no interactive
-prompt. Any "check with me first" rule lives in your agent
-configuration and is only as good as that configuration.
+Conduit will not ask a human before any of this. Any "check with me first" rule lives in your agent configuration and is only as good as that configuration.
 
 The residual risk here is not damage — it is **disclosure and wrong
 conclusions**. See Data handling and Known sharp edges.

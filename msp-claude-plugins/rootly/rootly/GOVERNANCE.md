@@ -22,13 +22,9 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who declared that incident". Rootly's own log attributes actions to
   the token, so a shared Global token makes every declaration anonymous.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Rootly connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -39,35 +35,40 @@ disagreement is not cosmetic.
 
 ### Three tool-name schemes, none of which line up
 
+**Update, 2026-08-30 (issue #178 corrective pass):** this plugin's skills,
+agents, and commands have been rewritten to use the third scheme below —
+Conduit's real, unprefixed, OpenAPI-generated names (`list_incidents`,
+`create_incident`, `list_alerts`, `list_retrospective_processes`, and so
+on). The table and the "not one tool name" claim that follow describe the
+*prior* state, kept for the historical record and because the sidecar
+scheme (row 1) is still real and still not what Conduit serves. The vendor's
+`hidden: true` / SSE-transport status below this section was **not**
+verified as part of that corrective pass — it was out of scope (a
+gateway-repo question, not a plugin-doc one) and may itself be stale, since
+it is dated over a month before this note. Confirm the vendor's current
+status in the access editor before relying on it.
+
 | Where | Naming scheme | Example |
 |---|---|---|
-| This plugin's `GOVERNANCE.md` (before this revision) | domain-then-verb, `rootly_` prefixed | `rootly_incidents_list` |
-| This plugin's skills, agents, and commands | verb-then-domain, `rootly_` prefixed | `rootly_list_alerts` |
-| Conduit's `VENDOR_TOOL_CONFIG` | unprefixed, generated from Rootly's OpenAPI spec | `list_alerts` |
+| This plugin's skills, agents, and commands (before the 2026-08-30 corrective pass) | mixed: unprefixed domain-then-verb in some files (`incidents_get`), `rootly_`-prefixed verb-then-domain in others (`rootly_list_alerts`) | `rootly_list_alerts`, `incidents_get` |
+| Conduit's classification, and this plugin's skills/agents/commands as of 2026-08-30 | unprefixed, generated from Rootly's own API surface | `list_alerts` |
 
-The first scheme is the WYRE-built `rootly-mcp` sidecar's surface. **Conduit
-does not route to it.** `src/credentials/vendor-config.ts` sets
-`containerUrl: "https://mcp.rootly.com"` with `mcpPath: "/sse"` — Rootly's
-own first-party hosted server — and `VENDOR_TOOL_CONFIG` is keyed to that
-server's 251 generated tool names. The second scheme matches nothing at all;
-it appears only in this plugin's own prose.
-
-The consequence: **not one tool name this plugin documents or references
-appears in `VENDOR_TOOL_CONFIG`.** Conduit is fail-closed per tool, not per
-vendor — the enforcement gate coerces an unclassified tool to the highest
-tier, `const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). So every `rootly_*` name would
-require tier `admin`, read tools included, if it were reachable at all.
+The first scheme is the WYRE-built `rootly-mcp` sidecar's surface — Conduit
+does not route to it. The consequence, as of the prior revision: not one
+tool name this plugin documented or referenced matched what Conduit actually
+classifies for this vendor, so every one of them would have required the
+highest permission tier, read tools included, if the vendor were reachable
+at all. After the 2026-08-30 pass, the plugin's documented names match
+Conduit's scheme directly — but confirm the vendor is actually un-hidden
+before assuming that closes the gap in practice, not just on paper.
 
 ### It is not currently reachable at all
 
-Conduit marks this vendor `hidden: true` as of 2026-07-31
-(`src/credentials/vendor-config.ts`, conduit#1202). Rootly is the only
-vendor in the fleet on the legacy HTTP+SSE transport; Conduit's proxy
-implements only Streamable HTTP, and POSTing to an SSE-only `GET` endpoint
-returns 405 — confirmed live in production, not just staging. The vendor is
-pulled from the catalog until the proxy grows SSE support or Rootly is
-confirmed to also serve Streamable HTTP.
+Rootly is the only vendor in the fleet on the legacy HTTP+SSE transport, and
+Conduit's proxy does not support that transport — confirmed live in
+production, not just staging. The vendor is pulled from the catalog until
+that changes. Confirm availability in the access editor before relying on
+these tools.
 
 **So there is no correct tier table to write for the tool names this plugin
 uses.** What follows is Conduit's classification of the upstream it *does*
@@ -98,27 +99,11 @@ Two things in that table are worth an owner's attention:
 
 ### The Delete row, stated anyway
 
-The Delete group is empty here, but the general rule is the one readers most
-often get wrong, so it belongs on the page. Conduit's enforcement tiers are
-only `read`, `write` and `admin` (plus `none`, meaning deny) —
-`src/access/permission-tier.ts:27`. "Delete" is a presentation group in the
-access editor and compiles to and enforces at tier `write`
-(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`). On any vendor
-that does have delete tools, **granting `write` grants every one of them**,
-and only a granular per-tool `customTools` allowlist separates them.
+The Delete group is empty here, but the general rule is the one readers most often get wrong, so it belongs on the page.
 
-Conduit compares tiers. It has **no approval step, no per-call confirmation,
-and no elicitation.** Nothing at the gateway will pause an agent before it
-declares an incident and pages a human. Per-call approval is a policy you
-impose on your agents, and it is only as good as the agent configuration that
-carries it.
+Per-call approval is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
-`rootly_navigate` and `rootly_back` appeared in the previous revision's Read
-tier and are gone from this one. Conduit refuses every `*_navigate` and
-`*_back` tool before any tier check, for every caller including org owners
-and personal connections (`src/proxy/tool-call-enforcement.ts:123-129`,
-`src/proxy/discovery-tools.ts:41-50`); `conduit__my_access` replaces them.
-`*_status` is deliberately kept.
+`rootly_navigate` and `rootly_back` appeared in the previous revision's Read tier and are gone from this one. `*_status` is deliberately kept.
 
 ### Where the mechanical tier disagrees with the judgement
 
@@ -150,12 +135,7 @@ equivalents (`create_incident`, `create_alert`, `update_incident`,
   surface exposes no team-delete tool, so this is currently unreachable
   rather than merely ungated.
 
-None of these distinctions is expressible as a Conduit grant. Conduit's
-policy matches on tool name only and never inspects arguments —
-`ToolCallGateInput` has no `arguments` field
-(`src/proxy/tool-call-enforcement.ts:69-79`) — so "may update an incident's
-title, may not resolve it" cannot be configured. It has to live in the
-agent's own configuration.
+None of these distinctions is expressible as a Conduit grant. It has to live in the agent's own configuration.
 
 ## Recommended agent policy
 
@@ -167,13 +147,7 @@ configuration.
 - Read tools: allow. Incident triage, shift handoff summaries, and
   reliability reporting are the intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it runs.
-- Incident and alert creation and resolution: require a named human approver
-  per invocation. Do not grant them to scheduled or unattended agents.
-  Because workflows sit downstream of a create, an unattended agent holding
-  it has whatever reach your workflow actions have — including your status
-  page and your customers' inboxes. Conduit cannot separate these from the
-  other 105 write tools, so an unattended agent needs a granular
-  `customTools` allowlist, not a `write` tier.
+- Incident and alert creation and resolution: require a named human approver per invocation. Do not grant them to scheduled or unattended agents. Because workflows sit downstream of a create, an unattended agent holding it has whatever reach your workflow actions have — including your status page and your customers' inboxes.
 - Admin tools: treat the grant as equivalent to full Rootly administrator.
   `create_workflow_run` executes automation whose blast radius is chosen at
   call time, and the `create_user_*` contact tools can redirect paging.
@@ -193,15 +167,20 @@ configuration.
   cannot speak its transport (see *Tool permission groups*), so the
   connector is not currently serving any tool.
 - The two bullets that follow describe the WYRE-built `rootly-mcp`
-  sidecar's surface, which Conduit does not route to. They are retained
-  because this plugin's skills were written against it, and they are
-  **not** a description of the hosted surface Conduit classifies — which
-  does expose postmortem, action-item, workflow, service-catalog, and
-  schedule tools.
+  sidecar's surface, which Conduit does not route to. Before the
+  2026-08-30 corrective pass, this plugin's `postmortems`, `services`,
+  `alerts`, and `workflows` skills were written against an invented
+  tool surface that matched neither the sidecar nor the hosted server —
+  they are retained here as a description of the sidecar's real,
+  narrower capability, not of what this plugin currently documents. The
+  hosted surface Conduit classifies has real write paths for all of
+  these: `create_incident_action_item`, `update_incident_retrospective_step`,
+  `create_workflow`, and `create_service`, among others — see this
+  plugin's `postmortems`, `workflows`, and `services` skills as of
+  2026-08-30 for the corrected tool names.
 - **No postmortem, action-item, workflow, or service-catalog write
-  path** *in the sidecar surface*. This plugin's `postmortems`,
-  `workflows`, and `services` skills describe Rootly REST API endpoints
-  that the sidecar does not expose as tools.
+  path** *in the sidecar surface*. The sidecar does not expose these as
+  tools at all; this is a sidecar limitation, not a hosted-surface one.
 - **No schedule authoring** *in the sidecar surface*. Schedules can be
   listed and read but not created, edited, or overridden.
 - No filesystem, no shell, no other vendor's data.
@@ -212,38 +191,40 @@ configuration.
 
 - Responses pass through the gateway into model context for the session
   and are not persisted by this plugin.
-- `rootly_org_teams_*` and `rootly_org_current_user` return staff
-  identity — names, email addresses, and team membership.
-  `rootly_schedules_*` returns who is on-call and when, which is a
-  roster of your responders' working patterns.
-- `rootly_incidents_get` returns incident titles, summaries, and
-  timelines. In practice these carry infrastructure detail — service
+- `list_teams` and `get_current_user` return staff identity — names,
+  email addresses, and team membership. `list_schedules` and related
+  on-call tools return who is on-call and when, which is a roster of
+  your responders' working patterns.
+- `list_incidents` / `get_incident` return incident titles, summaries,
+  and timelines. In practice these carry infrastructure detail — service
   names, hostnames, error output — and, on customer-impacting incidents,
   a description of which customers were affected.
-- `rootly_alerts_list` returns the raw monitoring payloads behind an
+- `list_alerts` returns the raw monitoring payloads behind an
   incident, with the same disclosure profile.
 - Restrict these if your agents run unattended.
 
 ## Known sharp edges
 
-- **Two upstreams exist, they expose different tools, and Conduit routes
-  to the one this plugin's skills were not written against.** The
-  WYRE-built `rootly-mcp` sidecar serves the `rootly_*` names those skills
-  use. Conduit's `containerUrl` for this vendor is `https://mcp.rootly.com`
+- **Two upstreams exist and they expose different tools.** The
+  WYRE-built `rootly-mcp` sidecar serves `rootly_*`-prefixed names.
+  Conduit's `containerUrl` for this vendor is `https://mcp.rootly.com`
   — Rootly's own hosted server, which generates a different, larger set
   from their OpenAPI spec (`list_incidents`, `find_related_incidents`, and
-  similar). Tool names are not interchangeable; a runbook written against
-  one fails against the other with "unknown tool", not with a permissions
-  error. This plugin ships no `.mcp.json`, so nothing in it pins an
-  endpoint — check the connection before trusting any tool name on this
-  page.
+  similar). As of the 2026-08-30 corrective pass this plugin's skills,
+  agents, and commands are written against the hosted surface Conduit
+  actually routes to, not the sidecar — but tool names across the two
+  upstreams are still not interchangeable, so if you ever point this
+  plugin at the sidecar directly, a runbook written against one fails
+  against the other with "unknown tool", not a permissions error. This
+  plugin ships no `.mcp.json`, so nothing in it pins an endpoint — check
+  the connection before trusting any tool name on this page.
 - **Acknowledging pauses the escalation clock.** An agent that
   acknowledges an alert it cannot resolve has stopped it reaching the
   human who could.
 - **Severity IDs are UUIDs and are per-organisation.** Nothing can be
-  hardcoded; `rootly_org_severities_list` is a required lookup before any
-  create. An agent guessing a severity ID gets a 422 whose message does
-  not explain why.
+  hardcoded; `list_severities` is a required lookup before any create. An
+  agent guessing a severity ID gets a 422 whose message does not explain
+  why.
 - **Rootly's model is internal-first.** It is built for one engineering
   organisation's own infrastructure, not per-client MSP ticketing. If you
   route multiple customers through team-based scoping, be explicit that

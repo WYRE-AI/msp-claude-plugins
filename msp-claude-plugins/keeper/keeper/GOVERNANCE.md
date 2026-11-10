@@ -60,24 +60,14 @@ the advertised schema and the inbound call: `save_to_secret` and
 
 ## Why the blocking is at the bridge and not a prompt
 
-Upstream ksm-mcp asks a human to confirm unmasking and every write, over
-a terminal. There is no terminal in a container. The upstream offers
-only two settings for that situation — refuse the operations outright,
-or auto-approve them all — and under the refusing setting `get_field`
-with `unmask: true` fails, which makes the integration useless for its
-main purpose. The deployment therefore runs in batch mode, where the
-confirmations auto-approve, and the safety is moved to the allowlist
-instead. That is a deliberate trade, and it is why "Keeper asked for
-confirmation" is never an accurate description of what happened here.
+Upstream ksm-mcp asks a human to confirm unmasking and every write, over a terminal. There is no terminal in a container. That is a deliberate trade, and it is why "Keeper asked for confirmation" is never an accurate description of what happened here.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool tiers
 
 Four tools return metadata only and are classified `read`:
 `list_secrets`, `list_folders`, `health_check`, `get_server_version`.
-
-Five are classified `admin`, which outranks write in Conduit's model — a
-Keeper read *is* a credential read: `get_secret`, `get_field`,
-`get_totp_code`, `generate_password`, and `search_secrets`.
 
 `search_secrets` is the one that does not follow from its return value. It
 returns metadata and nothing else, but it matches case-insensitively against
@@ -138,13 +128,7 @@ sharp edges below.
   naming an internal function, which reads like a server fault. Blocked
   for that reason. Nothing is lost: a masked `get_secret` reports the
   fields a record actually has, which is the better answer anyway.
-- **`download_file` cannot return file contents in any configuration.**
-  Upstream's signature is `DownloadFile(uid, fileUID, savePath) error` —
-  it returns an error and writes bytes to a server-side path. Passing
-  `save_path` through would let one tenant write attacker-chosen paths
-  into a container shared with every other tenant's child process;
-  stripping it leaves no destination. Blocked for that reason.
-  **Attachments are not retrievable through this connection.**
+- **`download_file` cannot return file contents in any configuration.** Upstream's signature is `DownloadFile(uid, fileUID, savePath) error` — it returns an error and writes bytes to a server-side path. Blocked for that reason. **Attachments are not retrievable through this connection.**
 - **`get_secret` does not guarantee a complete field list.** With no
   `fields` argument it iterates a hard-coded list per record type, so a
   standard field outside that list is simply absent. "Not in the

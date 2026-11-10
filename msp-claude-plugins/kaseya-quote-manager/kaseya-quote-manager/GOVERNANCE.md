@@ -22,12 +22,9 @@ authorised for.
 
 - Every call carries operator identity, so the gateway audit log answers "who
   pulled this cost data" — Quote Manager sees a single API key and cannot.
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. A user only removed
-  from the org keeps an already-issued access token for up to an hour, but it
-  reaches only a personal Quote Manager connection made with their own key —
-  never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -49,66 +46,21 @@ distributor, or record a payment through this plugin.
 
 ### What Conduit actually classifies
 
-`VENDOR_TOOL_CONFIG` carries **two** entries for `kaseya-quote-manager`:
-`kqm_customer_list` and `kqm_navigate`, both `read`. Every other tool in the
-table above is unclassified.
+**So a read-only connector's read surface currently requires tier `admin`, one tool excepted.** That is the opposite of what the group table above implies an owner is buying, and it is the most likely source of a support ticket about this plugin: an agent granted `read` can list customers and nothing else.
 
-Conduit is fail-closed per tool, not per vendor. The enforcement gate coerces
-an unclassified tool to the highest tier —
-`const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). **So a read-only connector's read
-surface currently requires tier `admin`, one tool excepted.** That is the
-opposite of what the group table above implies an owner is buying, and it is
-the most likely source of a support ticket about this plugin: an agent
-granted `read` can list customers and nothing else.
+`kqm_navigate` is classified `read` and is still unreachable. `kqm_status` is deliberately kept. So of the two classified tools, only one is actually callable.
 
-`kqm_navigate` is classified `read` and is still unreachable. Conduit refuses
-every `*_navigate` and `*_back` tool before any tier check, for every caller
-including org owners and personal connections
-(`src/proxy/tool-call-enforcement.ts:123-129`,
-`src/proxy/discovery-tools.ts:41-50`); `conduit__my_access` replaces them.
-`kqm_status` is deliberately kept. So of the two classified tools, only one
-is actually callable.
-
-Classifying the rest is a privilege *reduction* — it moves them down from
-`admin` to `read`. Until that lands, a granular per-tool `customTools`
-allowlist is the only way to give an analysis agent this surface without also
-granting it `admin` on the vendor, and `admin` is a materially different
-thing to hold: it is the tier that would admit any write or passthrough tool
-this connector ever gains.
+Classifying the rest is a privilege *reduction* — it moves them down from `admin` to `read`.
 
 ### There is no write surface to grant, and no delete row to misread
 
-Nothing here for a `write` grant to admit. State the general rule anyway,
-because this connector is the exception and not the pattern: Conduit's
-enforcement tiers are only `read`, `write` and `admin` (plus `none`, meaning
-deny) — `src/access/permission-tier.ts:27`. The access editor's "Delete"
-group is presentation only and compiles to and enforces at tier `write`
-(`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`), so on any
-vendor that does have delete tools, granting `write` grants every one of
-them. Only a granular per-tool `customTools` allowlist separates them.
-
-Conduit compares tiers. It has **no approval step, no per-call confirmation,
-and no elicitation.** There is nothing to approve here today, but do not
-carry the assumption to a connector where there is.
+Nothing here for a `write` grant to admit.
 
 ## Recommended agent policy
 
-Because there is no write surface, **read tools are safe to grant to
-autonomous and scheduled agents** — margin analysis, procurement reporting,
-and quote pipeline review are the intended unattended uses. Grant them
-through a granular `customTools` allowlist naming the tools the agent
-actually needs; a bare `read` grant reaches one tool, and `admin` reaches
-everything including anything added later.
+Because there is no write surface, **read tools are safe to grant to autonomous and scheduled agents** — margin analysis, procurement reporting, and quote pipeline review are the intended unattended uses.
 
-The remaining control is not about state change, it is about disclosure. The
-data this plugin returns is among the most commercially sensitive an MSP holds
-(see below), so scope agent access by *what an operator may see*, not by what
-it may break. Conduit's tier model is a poor instrument for that: it ranks
-tools by whether they mutate state, and every tool here is a read. **The
-mechanical tier and the real risk are orthogonal on this connector** — which
-is exactly why the `customTools` allowlist, not the tier, is the control to
-reach for.
+The remaining control is not about state change, it is about disclosure. The data this plugin returns is among the most commercially sensitive an MSP holds (see below), so scope agent access by *what an operator may see*, not by what it may break. Conduit's tier model is a poor instrument for that: it ranks tools by whether they mutate state, and every tool here is a read.
 
 ## What it cannot reach
 

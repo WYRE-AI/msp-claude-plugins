@@ -22,13 +22,7 @@ brokers OAuth 2.0 centrally and scopes every call to the QBO company
 - Every call carries operator identity, so the gateway audit log answers
   "who posted that journal entry" — QBO's own audit log records only the
   connected app.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal QuickBooks
-  connection made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 The gateway connection also selects **sandbox vs production**. A sandbox
 connection is the correct default for anyone evaluating agent behaviour
@@ -44,13 +38,7 @@ Tool names follow `qbo_<entity>_<operation>`. Entities include
 `departments`, `employees`, `terms`, `payment_methods`, `tax_codes`,
 `tax_rates`, `company_info`, and `attachables`.
 
-Conduit's access editor presents four groups — Read, Write, Delete, Admin —
-so those are the buckets an owner actually clicks. The **Enforcement tier**
-column is a separate thing: it is what Conduit compares against a
-technician's grant, derived mechanically from `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`) rather than from the risk judgement in the
-second column. Note that Conduit's slug for this vendor is **`qbo`**, not
-`quickbooks-online`.
+Conduit's access editor presents four groups — Read, Write, Delete, Admin — so those are the buckets an owner actually clicks. Note that Conduit's slug for this vendor is **`qbo`**, not `quickbooks-online`.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -59,18 +47,7 @@ second column. Note that Conduit's slug for this vendor is **`qbo`**, not
 | **Delete** | *Empty.* There is no delete tool and no void tool anywhere in this plugin. | — | — |
 | **Admin** | *Empty by design.* This connector exposes no passthrough, dispatcher, or credential-reading tool. | — | — |
 
-The money-moving tools — `qbo_invoices_send`, `qbo_payments_create`,
-`qbo_bill_payments_create`, `qbo_bill_payments_update`,
-`qbo_journal_entries_create`, `qbo_journal_entries_update`,
-`qbo_deposits_create`, `qbo_deposits_update`, `qbo_transfers_create`,
-`qbo_transfers_update`, `qbo_refund_receipts_create`,
-`qbo_refund_receipts_update`, `qbo_credit_memos_create`,
-`qbo_credit_memos_update`, `qbo_sales_receipts_create`,
-`qbo_sales_receipts_update` — sit in the **Write** group, because Conduit has
-no group for them. They are unclassified, so they enforce at `admin` today;
-were they classified they would sit at `write` alongside
-`qbo_customers_create`. That collapse is the single most important thing on
-this page and it is discussed below.
+The money-moving tools — `qbo_invoices_send`, `qbo_payments_create`, `qbo_bill_payments_create`, `qbo_bill_payments_update`, `qbo_journal_entries_create`, `qbo_journal_entries_update`, `qbo_deposits_create`, `qbo_deposits_update`, `qbo_transfers_create`, `qbo_transfers_update`, `qbo_refund_receipts_create`, `qbo_refund_receipts_update`, `qbo_credit_memos_create`, `qbo_credit_memos_update`, `qbo_sales_receipts_create`, `qbo_sales_receipts_update` — sit in the **Write** group, because Conduit has no group for them. That collapse is the single most important thing on this page and it is discussed below.
 
 **There is no delete tool anywhere in this plugin**, and no void tool
 either. That sounds reassuring and mostly is — but it also means every
@@ -80,15 +57,7 @@ unwind. "Not deletable" is not the same as "not harmful".
 
 ### What Conduit actually classifies
 
-`VENDOR_TOOL_CONFIG` carries **four** entries under the slug `qbo`, all of
-them `read`: `qbo_status`, `qbo_customers_list`, `qbo_invoices_list`, and
-`qbo_reports_aged_receivables`.
-
-Every other tool this document names is unclassified, and Conduit is
-fail-closed per tool, not per vendor. The enforcement gate coerces an
-unclassified tool to the highest tier —
-`const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`). So as things stand:
+So as things stand:
 
 - `qbo_journal_entries_create`, `qbo_payments_create`, `qbo_invoices_send`,
   `qbo_transfers_*`, `qbo_deposits_*`, `qbo_refund_receipts_*` and
@@ -97,27 +66,13 @@ unclassified tool to the highest tier —
   `qbo_reports_general_ledger`, and every other report except aged
   receivables.
 
-The second bullet is the operational problem. The bundled
-`billing-reconciler` and `profitability-reporter` subagents are read-only by
-design, and the reports they need require `admin` — a tier that also admits
-posting a journal entry. **There is no safe middle setting until these tools
-are classified**; build one by hand with a granular per-tool `customTools`
-allowlist naming exactly the report and list tools. Classifying them is a
-privilege *reduction*, not a relaxation: it moves the read tools down from
-`admin`.
+The second bullet is the operational problem. The bundled `billing-reconciler` and `profitability-reporter` subagents are read-only by design, and the reports they need require `admin` — a tier that also admits posting a journal entry. Classifying them is a privilege *reduction*, not a relaxation: it moves the read tools down from `admin`.
 
-`qbo_navigate` is not listed above because it is unreachable regardless of
-tier. Conduit refuses every `*_navigate` and `*_back` tool before any tier
-check, for every caller including org owners and personal connections
-(`src/proxy/tool-call-enforcement.ts:123-129`,
-`src/proxy/discovery-tools.ts:41-50`). `conduit__my_access` replaces it.
-`qbo_status` is deliberately kept.
+`qbo_navigate` is not listed above because it is unreachable regardless of tier. `conduit__my_access` replaces it. `qbo_status` is deliberately kept.
 
 ### Where the mechanical tier disagrees with the judgement
 
-Conduit's tiers are a function of `isWrite`/`isAdmin`. "Moves money on the
-books" is not a distinction it can express, so the reasoning has to live
-here as prose. It has not changed:
+"Moves money on the books" is not a distinction it can express, so the reasoning has to live here as prose. It has not changed:
 
 - **`qbo_invoices_send` leaves the building.** It emails the invoice to
   the customer. There is no unsend. A wrong amount, a wrong customer, or a
@@ -143,25 +98,7 @@ here as prose. It has not changed:
   vendor credit shows up as an underpayment to the supplier, not as an
   obvious error in QBO.
 
-### What a `write` grant would mean here
-
-Once these tools are classified, `write` on this vendor admits
-`qbo_customers_create` and `qbo_journal_entries_create` equally. Conduit's
-enforcement tiers are only `read`, `write` and `admin` (plus `none`, meaning
-deny) — `src/access/permission-tier.ts:27` — and the access editor's
-"Delete" group is presentation only, compiling to and enforcing at tier
-`write` (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`). This
-plugin has no delete tools, so that particular trap does not bite here; the
-equivalent trap does. **A single `write` grant covers creating a customer
-record and posting to the general ledger, and no setting separates them.**
-The only way to admit some and not the others is a granular per-tool
-selection, which compiles to an explicit `customTools` allowlist.
-
-Conduit compares tiers. It has **no approval step, no per-call confirmation,
-and no elicitation.** Nothing here can be read as "the gateway will stop an
-agent before it emails a client an invoice." Per-call approval is a policy
-you impose on your agents, and it is only as good as the agent configuration
-that carries it.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Recommended agent policy
 
@@ -169,27 +106,13 @@ The safe default is **read autonomously, propose writes, never self-approve
 deletes** — with the caveat that Conduit cannot currently express the first
 half of that on this connector (see *What Conduit actually classifies*).
 
-- Read tools: allow. Aged-receivables review, per-client profitability,
-  and reconciliation reporting are the intended autonomous use, and are
-  what the bundled `billing-reconciler` and `profitability-reporter`
-  subagents do. Today only `qbo_reports_aged_receivables`,
-  `qbo_customers_list`, `qbo_invoices_list` and `qbo_status` are reachable
-  at tier `read`; grant the rest through a granular `customTools` allowlist
-  rather than by handing the agent `admin`.
+- Read tools: allow. Aged-receivables review, per-client profitability, and reconciliation reporting are the intended autonomous use, and are what the bundled `billing-reconciler` and `profitability-reporter` subagents do.
 - Write tools: agent drafts the exact call, human approves, then it runs.
   Note that creating an invoice is the lower-risk half of a two-step
   sequence — `qbo_invoices_create` followed by `qbo_invoices_send` reaches
   the customer, and Conduit sees two ordinary calls.
-- Money-moving tools: require a named human approver per invocation, and
-  require that approver to be someone who would sign off on the underlying
-  transaction anyway. Do not grant them to scheduled or unattended agents.
-  Conduit cannot enforce this separation for you — once these tools are
-  classified, a `write` grant admits them alongside the harmless creates —
-  so it has to live in the agent's own configuration.
-- Admin tools: none exist here, but the fail-closed coercion means an
-  `admin` grant is currently the only tier that reaches most of this
-  surface, and it admits the general ledger with it. Treat holding it as
-  equivalent to full bookkeeper access.
+- Money-moving tools: require a named human approver per invocation, and require that approver to be someone who would sign off on the underlying transaction anyway. Do not grant them to scheduled or unattended agents.
+- Treat holding it as equivalent to full bookkeeper access.
 - **Never grant any write tool against a production realm during a close
   period** unless the approver is the person doing the close.
 

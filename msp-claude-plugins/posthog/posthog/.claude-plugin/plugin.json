@@ -1,6 +1,6 @@
 {
   "name": "posthog",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Claude plugin for PostHog product analytics — insights, dashboards, feature flags, cohorts, events (read-only)",
   "author": {
     "name": "MSP Claude Plugins Community"

@@ -22,11 +22,7 @@ Consequences worth stating plainly:
   identity, which is shared. The log records *who called what*, never
   with what arguments — so it will name `liongard_agents_delete` but not
   which agent.
-- Removing a technician's Conduit org membership stops their Liongard
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
 
 **If you run without the gateway**, the plugin README documents a direct
 mode where `LIONGARD_INSTANCE` and `LIONGARD_API_KEY` sit in the
@@ -35,11 +31,7 @@ and no tier is enforced at all.
 
 ## Tool permission groups
 
-Liongard is fully classified in Conduit: all 24 tools the server
-registers have an entry in `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`), so nothing here falls through to the
-fail-closed `admin` default. That makes this one of the few plugins in
-the marketplace whose table is enforceable as written.
+That makes this one of the few plugins in the marketplace whose table is enforceable as written.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -48,12 +40,7 @@ the marketplace whose table is enforceable as written.
 | **Delete** | — | `write` — **not** a tier of its own | **Empty.** The one deletion tool this plugin has is classified `admin`, so it is not in this group. See below. |
 | **Admin** | Unbounded filter-DSL query surfaces, and anything that acts on customer infrastructure. | `admin` | `liongard_detections_list`, `liongard_inventory_devices`, `liongard_inventory_identities`, `liongard_inspections_run`, `liongard_agents_delete` |
 
-`liongard_navigate` is classified `read` but is refused for *every*
-caller at *every* tier, org owners included: Conduit suppresses
-`*_navigate` and `*_back` unconditionally before any tier check
-(`src/proxy/tool-call-enforcement.ts:125-130`,
-`src/proxy/discovery-tools.ts:41-50`), because a vendor menu advertises
-tools without knowing the caller's access. Use `conduit__my_access`.
+Use `conduit__my_access`.
 
 **This plugin cannot touch a customer endpoint, and that is the headline
 governance fact about it.** Liongard reads and documents; it does not
@@ -79,26 +66,9 @@ enforced, and the commentary is why an operator should care.
   Recovery needs a physical or remote reinstall at the site, which this
   plugin cannot do.
 
-  Conduit classifies it `isWrite: true, isAdmin: true`, and `isAdmin`
-  outranks (`src/access/tool-classification.ts:33-38`). Because the
-  presentation-layer **Delete** group is a subset of *write*-classified
-  tools, an admin-classified deletion tool lands in the **Admin** group
-  instead. The practical consequence is the one an owner most wants:
-  **granting a technician `write` on Liongard does not admit
-  `liongard_agents_delete`.** That is unusual — for most vendors a
-  `write` grant does admit every delete tool — and it holds only as long
-  as this tool keeps its `isAdmin` flag.
+Because the presentation-layer **Delete** group is a subset of *write*-classified tools, an admin-classified deletion tool lands in the **Admin** group instead.
 
-- **`liongard_detections_list`, `liongard_inventory_devices`, and
-  `liongard_inventory_identities` are `admin`, not `read`.** Each takes
-  an unbounded filter DSL (`filters: array<object>`) rather than fixed
-  parameters, so the caller composes the query at call time and Conduit's
-  policy — which matches on tool name only and never inspects arguments —
-  cannot bound what comes back. Their singular siblings
-  (`liongard_detections_get`, `liongard_inventory_device_get`,
-  `liongard_inventory_identity_get`) take an id and stay `read`. If a
-  reporting agent is denied a "list all devices" call, that asymmetry is
-  the reason, and it is deliberate.
+- Their singular siblings (`liongard_detections_get`, `liongard_inventory_device_get`, `liongard_inventory_identity_get`) take an id and stay `read`. If a reporting agent is denied a "list all devices" call, that asymmetry is the reason, and it is deliberate.
 
 - **`liongard_inspections_run` is `admin`, not `write`.** It triggers a
   data collection using stored credentials. It changes nothing on the
@@ -111,17 +81,7 @@ enforced, and the commentary is why an operator should care.
   `cipp_run_standards_check`. That is a stricter reading than this
   document previously took, and the stricter reading is the one enforced.
 
-- **`liongard_metrics_evaluate` and `liongard_metrics_evaluate_systems`
-  are `write`, not `read`.** They run a JMESPath expression against
-  already-collected inspection data — no remote execution, no change to
-  any customer system — so the earlier "this is a read" argument is
-  defensible on blast radius. Conduit disagrees on the grounds that they
-  execute evaluation rules rather than perform a passive lookup, and
-  `evaluate` is in its write-verb set (`src/access/tool-naming.ts:60-68`).
-  Practical effect: a read-only reporting agent cannot evaluate a
-  compliance metric. Granting it `write` to do so also grants it
-  environment and launchpoint creation, unless you use a granular
-  `customTools` allowlist.
+- **`liongard_metrics_evaluate` and `liongard_metrics_evaluate_systems` are `write`, not `read`.** They run a JMESPath expression against already-collected inspection data — no remote execution, no change to any customer system — so the earlier "this is a read" argument is defensible on blast radius. Practical effect: a read-only reporting agent cannot evaluate a compliance metric.
 
 - **`liongard_inspections_create_launchpoint` is `write` with weight.** A
   launchpoint binds an inspector, an environment, an agent, stored
@@ -130,37 +90,9 @@ enforced, and the commentary is why an operator should care.
   schedule nobody may revisit. It sits in the same grant as
   `liongard_environments_create`, which is far more benign.
 
-The Liongard REST API's two genuinely catastrophic calls — deleting an
-environment and deleting a launchpoint — **are not exposed by this MCP
-surface**. Both cascade: they destroy all associated systems,
-detections, and historical inspection data with no undo. An agent
-cannot reach them here. If either is ever added, classify it
-`isWrite: true, isAdmin: true` on day one, so it joins
-`liongard_agents_delete` in the Admin group rather than riding in on a
-`write` grant. Until then, decommissioning a client is a console
-operation a human does, and `Status = Inactive` is the reversible
-alternative.
+The Liongard REST API's two genuinely catastrophic calls — deleting an environment and deleting a launchpoint — **are not exposed by this MCP surface**. Both cascade: they destroy all associated systems, detections, and historical inspection data with no undo. An agent cannot reach them here. Until then, decommissioning a client is a console operation a human does, and `Status = Inactive` is the reversible alternative.
 
-### What granting `write` means
-
-Conduit's enforcement tiers are only `read`, `write`, and `admin` (plus
-`none`, meaning deny) — `src/access/permission-tier.ts:27`. "Delete" is a
-presentation group in the access editor, and a delete-group tool compiles
-to and enforces at tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`). For most vendors that means **granting `write`
-also grants every delete tool**, with a granular per-tool `customTools`
-allowlist as the only way to separate them.
-
-Liongard is the exception, for one reason only: its sole deletion tool
-carries `isAdmin`. Do not generalise from it. What a `write` grant on
-Liongard *does* admit is environment creation, launchpoint creation, and
-both metric evaluations — as one indivisible bundle, unless you go
-granular.
-
-Conduit has no approval step, no per-call confirmation, and no
-interactive prompt. It compares tiers. The per-call approval discipline
-below is a workflow you impose on your agents, and it is only as good as
-the agent configuration that carries it.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Recommended agent policy
 

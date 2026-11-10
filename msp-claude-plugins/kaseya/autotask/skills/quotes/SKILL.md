@@ -72,7 +72,7 @@ These are **mutually exclusive** - set only one per line item. The `quoteItemTyp
 | `id` | int | System | Auto-generated unique identifier |
 | `name` | string | No | Quote name/title |
 | `description` | string | No | Quote description |
-| `companyId` | int | Yes | Customer company ID |
+| `companyID` | int | Yes | Customer company ID |
 | `contactId` | int | No | Customer contact ID |
 | `opportunityId` | int | No | Linked opportunity ID |
 | `effectiveDate` | date | No | Quote effective date (YYYY-MM-DD) |
@@ -118,7 +118,7 @@ Three discount mechanisms can be applied to quote items:
 ```
 Tool: autotask_create_quote
 Args: {
-  "companyId": 67890,
+  "companyID": 67890,
   "name": "Network Refresh - Contoso Ltd",
   "description": "Hardware and managed services quote for office network upgrade",
   "contactId": 11111,
@@ -128,7 +128,7 @@ Args: {
 }
 ```
 
-**Required:** `companyId` only. All other fields are optional but recommended.
+**Required:** `companyID` only. All other fields are optional but recommended.
 
 ### Add a Product Line Item
 
@@ -222,14 +222,14 @@ Args: { "quoteItemId": 77777 }
 ```
 Tool: autotask_search_quotes
 Args: {
-  "companyId": 67890,
+  "companyID": 67890,
   "searchTerm": "network",
   "pageSize": 25
 }
 ```
 
 **Filters:**
-- `companyId` - Filter by customer
+- `companyID` - Filter by customer
 - `contactId` - Filter by contact
 - `opportunityId` - Filter by linked opportunity
 - `searchTerm` - Search quote name/description
@@ -270,7 +270,7 @@ autotask_search_companies: { "searchTerm": "Contoso" }
 
 2. **Find the contact:**
 ```
-autotask_search_contacts: { "companyId": <company_id>, "searchTerm": "John" }
+autotask_search_contacts: { "companyID": <company_id>, "searchTerm": "John" }
 ```
 
 3. **Look up products/services:**
@@ -282,7 +282,7 @@ autotask_search_services: { "searchTerm": "Managed" }
 4. **Create the quote:**
 ```
 autotask_create_quote: {
-  "companyId": <company_id>,
+  "companyID": <company_id>,
   "contactId": <contact_id>,
   "name": "Network Refresh Proposal",
   "effectiveDate": "2026-03-01",
@@ -305,7 +305,7 @@ autotask_search_quote_items: { "quoteId": <quote_id> }
 
 ```
 autotask_create_quote: {
-  "companyId": 67890,
+  "companyID": 67890,
   "opportunityId": 22222,
   "name": "Q1 Hardware Refresh"
 }
@@ -373,7 +373,7 @@ autotask_create_quote_item: {
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| companyId required | Missing customer | Provide companyId when creating quote |
+| companyID required | Missing customer | Provide companyID when creating quote |
 | quoteId required | Missing parent quote | Create a quote first, then add items |
 | quantity required | Missing quantity | Always provide quantity for line items |
 | Multiple item references | Set more than one of serviceID/productID/serviceBundleID | Set exactly ONE item reference per line item |

@@ -24,20 +24,16 @@ operator is authorised for.
   "who released that message" — Harmony Email's own log records only the
   API application, and the `releasedBy` field on a quarantine entry will
   show the shared integration account for every release.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal Harmony Email
-  connection made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
 > **The tool names this document previously listed do not exist.** Every
 > `avanan_*` name in the earlier revision of this table — 34 of them —
 > is absent from both shipped servers. Conduit routes this vendor to
-> `http://avanan-mcp` (`conduit/src/credentials/vendor-config.ts:3035`),
+> `http://avanan-mcp`,
 > whose tools are named `hec_*`. The separate `avanan-legacy-mcp` uses
 > `avanan_*` names, but for MSP-partner, tenant and licence management —
 > not quarantine, threats, incidents or policies. The table below is the
@@ -51,33 +47,13 @@ Conduit's access editor presents four groups; enforcement uses only
 | **Read** | Cannot change Harmony Email state or mail flow. | `read` | `hec_query_events`, `hec_list_exceptions`, `hec_search_emails` |
 | **Write** | — | `write` | *None classified.* |
 | **Delete** | — | `write` | *None classified.* |
-| **Admin** | Everything else, by fail-closed coercion — see below. | `admin` | `hec_get_email`, `hec_get_event`, `hec_get_task_status`, `hec_add_exception`, `hec_update_exception`, `hec_delete_exception`, `hec_quarantine_emails`, `hec_quarantine_events`, `hec_restore_emails`, `hec_restore_events` |
+| **Admin** |see below.| `admin` | `hec_get_email`, `hec_get_event`, `hec_get_task_status`, `hec_add_exception`, `hec_update_exception`, `hec_delete_exception`, `hec_quarantine_emails`, `hec_quarantine_events`, `hec_restore_emails`, `hec_restore_events` |
 
-**Conduit classifies 3 of the server's 13 tools.** The other ten have no
-`VENDOR_TOOL_CONFIG` entry, and Conduit fails closed per *tool*, not per
-vendor: `const requiredTier: PermissionTier = classified ?? 'admin';`
-(`conduit/src/access/access-enforcement.ts:63`). So the ten sit at
-`admin` today by coercion rather than by judgement — including
-`hec_get_email`, an ordinary read, which a `read` grant cannot reach.
+`hec_restore_emails` delivers quarantined mail to a user's inbox and `hec_delete_exception` removes a standing detection bypass; both would land in **Write** the moment someone classifies this vendor by verb alone, and the first `write` grant would pick them up silently. Whoever classifies Avanan should pin the quarantine/restore family and the exception writes deliberately rather than letting name inference decide.
 
-The coercion is currently protective by accident. `hec_restore_emails`
-delivers quarantined mail to a user's inbox and `hec_delete_exception`
-removes a standing detection bypass; both would land in **Write** the
-moment someone classifies this vendor by verb alone, and the first
-`write` grant would pick them up silently. Whoever classifies Avanan
-should pin the quarantine/restore family and the exception writes
-deliberately rather than letting name inference decide.
+Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
-**Conduit does not enforce per-call approval.** It compares tiers — there
-is no approval step, no per-call confirmation, and no interactive prompt
-anywhere in its enforcement path. Where this document asks for a named
-human approver, that is a policy you impose on your agents, and it is
-only as good as the agent configuration that carries it.
-
-Two of the coerced-`admin` tools deserve the tier on their merits, not
-just by fail-closed accident. The reasoning below was written against the
-previous revision's invented tool names; it is retained because the
-hazards are real, remapped onto the tools that actually exist.
+The reasoning below was written against the previous revision's invented tool names; it is retained because the hazards are real, remapped onto the tools that actually exist.
 
 **`hec_restore_emails` / `hec_restore_events` are the sharp ones.**
 Restoring is not un-quarantining a record — it delivers a message the
@@ -143,10 +119,7 @@ self-approve destructive calls.**
   nothing in this plugin can reach into Microsoft 365 or Google
   Workspace to retrieve a message that was already delivered.
 - No live event stream. Every tool is point-in-time.
-- Regional scope. A tenant provisioned in the EU or AP region is served
-  by a different API gateway; credentials for one region return
-  authentication errors against another, so a misconfigured connection
-  fails closed rather than reading the wrong tenant.
+- Regional scope.
 
 ## Data handling
 
@@ -158,10 +131,6 @@ self-approve destructive calls.**
   `hec_get_event` carry sender IP addresses, recipient lists, and
   attachment hashes. For a DLP-quarantined outbound message, that content
   is by definition what the DLP rule matched.
-- Note the tier split here works against you: `hec_search_emails` is one
-  of the three tools classified `read`, so it is reachable by the lowest
-  grant, while `hec_get_email` — arguably less sensitive, since it needs
-  an id you already hold — sits at `admin` by coercion.
 
 Restrict the search and event reads if your agents run unattended, or
 scope them to the tenants that specific operator supports.

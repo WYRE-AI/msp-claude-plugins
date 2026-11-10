@@ -25,12 +25,7 @@ operator is authorised for.
   the personal API key's owner, which is fine for a single technician's key
   but says nothing about which agent or session made the call once a key is
   shared.
-- Removing someone from the organisation clears their per-vendor grants and
-  revokes their gateway refresh tokens at once; a user deactivated in your
-  identity provider is refused on their very next request. A user only
-  removed from the org keeps an already-issued access token for up to an
-  hour, but it reaches only a personal PostHog connection made with their own
-  key — never the org's. See `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 ### The scope decision happens outside Conduit, at key creation
 
@@ -58,31 +53,7 @@ own settings UI.
 
 ## Tool permission tiers
 
-> **`posthog` has no entry in `VENDOR_TOOL_CONFIG` — this is a new vendor
-> connector.** Conduit derives a tool's tier from `VENDOR_TOOL_CONFIG`
-> (`src/proxy/result-cache.ts`) and fails closed:
-> `const requiredTier: PermissionTier = classified ?? 'admin';`
-> (`src/access/access-enforcement.ts:63`). Until `posthog` is classified
-> there, the grouping below carries no tier-enforcement meaning at all — a
-> `read` or `write` grant on this vendor admits nothing, and an `admin`
-> grant admits every tool the upstream MCP server exposes, including the
-> write tools this plugin deliberately does not document or recommend. For
-> the live list of unclassified vendors see `wyre-gateway/GOVERNANCE.md`,
-> *Fail-closed, and the vendors Conduit has not classified*. Classifying a
-> vendor is always a privilege *reduction*, never an expansion.
->
-> Because tiering does nothing for this vendor yet, and because PostHog's
-> MCP server exposes exactly **one** tool (`exec`, taking a free-text
-> `command` string — confirmed live via `tools/list`, not inferred), a
-> gateway-side `customTools` allowlist CANNOT express the read-tool-family
-> split below. There is no per-family tool name to allow or deny: `exec`
-> either reaches the connection (the entire upstream command surface,
-> reads and writes alike) or it doesn't. Naming `exec` in the allowlist is
-> operationally identical to granting `admin` with no allowlist at all —
-> both admit every command PostHog's `exec` accepts, including every
-> write tool this document excludes. The family table below documents
-> PostHog's own command vocabulary for this plugin's skills to use
-> responsibly; it is not a Conduit-enforceable boundary.
+> **Confirm the live grant in the access editor.** The grouping below is a risk reading of PostHog's own command vocabulary. It is not a description of gateway enforcement. Confirm the live permission grant before you rely on a tier in this table, and confirm the personal API key was scoped to read-only resources. See *The scope decision happens outside Conduit*.
 
 PostHog's own MCP server exposes a very large tool surface — north of 200
 tools spanning nearly every product area, with substantial create/update/
@@ -138,17 +109,7 @@ are built against.
 | Alerts | get, list (**not** `alert-simulate`) |
 | Business Knowledge | search, retrieve |
 
-**Conduit does not enforce per-call approval.** It compares tiers and,
-where configured, checks the tool allowlist against the MCP tool NAME —
-there is no approval step, no per-call confirmation, no command-content
-inspection, and no interactive prompt anywhere in its enforcement path.
-For this vendor the allowlist has exactly one name to check against
-(`exec`), so it collapses to a binary reachable/not-reachable decision.
-**The read-only posture above rests entirely on (1) the key's own
-`resource:action` scopes.** There is no (2) — the gateway allowlist adds
-no granularity beyond "can this grantee reach PostHog through Conduit at
-all," and nothing in Conduit stops a full-scope key from reaching every
-write tool once that coarse gate is open.
+For this vendor the allowlist has exactly one name to check against (`exec`), so it collapses to a binary reachable/not-reachable decision. **The read-only posture above rests entirely on (1) the key's own `resource:action` scopes.** There is no (2) — the gateway allowlist adds no granularity beyond "can this grantee reach PostHog through Conduit at all," and nothing in Conduit stops a full-scope key from reaching every write tool once that coarse gate is open.
 
 ## Recommended agent policy
 
@@ -226,42 +187,7 @@ rendering surface outside the client's own team, don't grant this vendor to
 that agent at all — the only enforcement point available today is whether
 the grant exists, not which of PostHog's commands it can reach.
 
-## Open enforcement gap (tracked, not resolved by this plugin)
-
-**"Read-only" for this vendor rests on exactly ONE real control, and
-Conduit does not enforce it:**
-
-1. The PostHog personal API key must be scoped to read-only
-   `resource:action` pairs at creation (see *The scope decision happens
-   outside Conduit* above) — Conduit does not inspect or verify this.
-   PostHog's own API rejects a write call against a properly-scoped key
-   before it reaches Conduit or this plugin, so a correctly-scoped key IS
-   a hard boundary — but nothing checks that the connecting operator
-   actually scoped it that way.
-
-**There is no second, gateway-side layer for this vendor — not
-"unenforced if misconfigured," but structurally absent.** PostHog's MCP
-server exposes a single tool, `exec` (confirmed live via `tools/list`:
-one entry, schema `{command, context}`), that dispatches every operation
-— read and write alike — through a free-text `command` string. Conduit's
-`customTools` allowlist gates on the MCP tool NAME; with only one name to
-gate on, it can only ever choose between "this grantee can reach PostHog
-through Conduit" (the full upstream command surface) or "cannot" (nothing,
-not even reads). No allowlist configuration, correct or otherwise, can
-admit `dashboard-get` while excluding `conversations-tickets-reply-create`
-— Conduit cannot see inside the `command` string to tell them apart. An
-operator who pastes in a full-access key gets the complete, unrestricted
-upstream PostHog tool surface the moment ANY grant reaches `exec` at all —
-`admin` and a "read-family" allowlist are operationally identical for this
-vendor today. This is a real gap between what this document calls
-"read-only" and what Conduit actually enforces for a first adopt-vendor
-plugin of this shape — flagged to Aaron (2026-08-12), who has since
-directed Conduit-side engineering (command-argument sub-tool inspection
-for exec-dispatch vendors as a class; warden security review pending) to
-close it. Not resolved by this PR; tracking here so it isn't lost. Until
-that ships, treat PostHog as key-scope-only enforcement: if you cannot
-verify the connecting operator scoped the key read-only, assume this
-connection can write.
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Known sharp edges
 
@@ -273,8 +199,7 @@ connection can write.
 - **A key minted without explicit read-only scopes is read-write by
   default.** PostHog does not force an operator to narrow scopes at key
   creation; the read-only posture this document describes depends on the
-  connecting operator having done that deliberately. See *Open enforcement
-  gap* above — this is not a hypothetical, it's the actual current state.
+  connecting operator having done that deliberately. See *The scope decision happens outside Conduit* — this is not a hypothetical, it's the actual current state.
 - **Feature-flag and early-access-feature reads are two different families
   with overlapping vocabulary.** `early-access-feature-list` /
   `early-access-feature-retrieve` is the confirmed read surface for
@@ -282,12 +207,4 @@ connection can write.
   has its own read and write tools documented at the link above. Don't
   assume every "feature flag" question routes through the early-access
   tools — check `skills/feature-flags-and-experiments/SKILL.md`.
-- **Not yet classified means not yet safely grantable at any coarse tier
-  OR allowlist.** Until `posthog` gets sub-tool-aware enforcement (a plain
-  `VENDOR_TOOL_CONFIG` entry alone can't express a mid-command split for a
-  single-tool vendor — see *Open enforcement gap*), there is no `read`
-  grant, and no `customTools` allowlist, that admits only the families
-  above. `exec` either reaches the connection or it doesn't — that is the
-  entire granularity Conduit has today. Classifying the vendor with real
-  command-level sub-tool inspection, when it ships, is what turns the
-  family table above into an actual enforced `read` tier.
+- `exec` either reaches the connection or it doesn't — that is the entire granularity Conduit has today.

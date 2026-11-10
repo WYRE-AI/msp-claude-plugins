@@ -40,9 +40,6 @@ Billing in Sherweb represents the financial data flowing from the distributor to
 
 ### Available Tools
 
-The server registers exactly two billing tools
-(`sherweb-mcp/src/domains/billing.ts:17-69`).
-
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
 | `sherweb_billing_payable_charges` | Get payable charges for a date range | `billingCycleType` (`OneTime`\|`Monthly`\|`Yearly`), `periodFrom`, `periodTo`, `page`, `pageSize` |

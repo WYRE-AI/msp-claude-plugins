@@ -13,13 +13,7 @@ Review the SpamTitan quarantine queue for held messages. Starts with an email fl
 - SpamTitan MCP server connected with valid API credentials
 - MCP tools `spamtitan_get_stats`, `spamtitan_get_queue`, `spamtitan_get_message`, `spamtitan_release_message`, and `spamtitan_delete_message` available
 
-> **⚠ `domain` scopes the statistics, not the queue.** `spamtitan_get_stats`
-> accepts a `domain` argument; `spamtitan_get_queue` does not — its complete
-> input schema is `page`, `per_page`, `sender`, `recipient`, `subject`,
-> `reason` (`spamtitan-mcp/src/domains/quarantine.ts:21-53`). On a
-> multi-tenant appliance the queue listing therefore covers **every tenant**,
-> and this command has to narrow it client-side on the recipient address.
-> Never present an unnarrowed listing as one customer's quarantine.
+On a multi-tenant appliance the queue listing therefore covers **every tenant**, and this command has to narrow it client-side on the recipient address. Never present an unnarrowed listing as one customer's quarantine.
 
 ## Steps
 

@@ -30,6 +30,6 @@ The hosted Stripe MCP server serves its own tools through the connection; this p
 
 ## See also
 
-- WYRE MCP Gateway vendor config: `src/credentials/vendor-config.ts` (`stripe:` entry)
+- WYRE MCP Gateway vendor config: the gateway vendor registry (`stripe:` entry)
 - Stripe MCP docs: https://docs.stripe.com/mcp
 - Hosted endpoint: https://mcp.stripe.com

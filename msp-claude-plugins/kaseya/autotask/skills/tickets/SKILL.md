@@ -187,18 +187,24 @@ Args: {
   "companyID": 12345,
   "status": 1,
   "assignedResourceID": 29744150,
-  "searchTerm": "T20260917",
   "pageSize": 25
 }
 ```
 
-**Filters:** `companyID`, `status`, `priority`, `queueID`, `assignedResourceID`, `searchTerm` (ticket-number prefix only — not title or description text), `pageSize`
+**Filters:** `companyID`, `status` (omit to get all non-Complete tickets), `priority`, `queueID`, `assignedResourceID`, `contactID`, `unassigned`, `createdAfter`, `createdBefore`, `lastActivityAfter`, `searchTerm` (ticket-number prefix only — not title or description text), `page`, `pageSize`
+
+To look up tickets by number, pass the prefix alone:
+
+```
+Tool: autotask_search_tickets
+Args: { "searchTerm": "T20260917" }
+```
 
 ### Get Ticket Details
 
 ```
 Tool: autotask_get_ticket_details
-Args: { "ticketId": 54321 }
+Args: { "ticketID": 54321 }
 ```
 
 ### Get Ticket History (Audit Trail)
@@ -296,7 +302,7 @@ See [references/api.md](references/api.md) for additional query patterns (SLA-br
 ### Ticket Creation Flow
 
 1. **Validate company exists** and has active contract
-2. **Check for duplicates** - list the company's open tickets with `companyID`/`status`. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
+2. **Check for duplicates** - list the company's open tickets (`companyID`, `status` omitted) and compare titles client-side. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
 3. **Auto-set defaults:**
    - Status → NEW (1)
    - Priority → MEDIUM (2) if not specified

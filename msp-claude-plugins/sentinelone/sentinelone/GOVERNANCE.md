@@ -19,19 +19,11 @@ operator is authorised for.
   "who ran that Data Lake query" — SentinelOne's own log records only the
   Service User. It records *who called what*, never with what arguments,
   so it will not show you the query text.
-- Removing a technician's Conduit org membership stops their SentinelOne
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
-
-Conduit derives every tool's tier from `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`, the `sentinelone` block), which
-`src/access/tool-classification.ts:4` declares the single source of
-truth. The convention is `isAdmin → admin` (outranks), `isWrite → write`,
-neither → `read` (`tool-classification.ts:33-38`).
 
 **Six of this plugin's twenty-two tools are classified.** The other
 sixteen have no entry in that table, so no tier is invented for them
@@ -41,9 +33,9 @@ below.
 |---|---|---|---|
 | **Read** | Cannot change SentinelOne or endpoint state. Safe for autonomous agents. | `read` | `list_alerts`, `get_alert`, `search_inventory_items`, `get_timestamp_range` |
 | **Write** | *Empty for this vendor.* | `write` | *None.* |
-| **Delete** | *Empty for this vendor.* | `write` — **not a tier of its own** | *None.* |
+| **Delete** | *Empty for this vendor.* |`write`| *None.* |
 | **Admin** | Unbounded query surfaces. They change nothing, but Conduit tiers them by what they can pull back, not by whether they mutate. | `admin` | `powerquery`, `purple_ai` |
-| **Not classified** | Documented and server-registered, but absent from `VENDOR_TOOL_CONFIG`. **Requires `admin` today.** | `admin` (coerced) | `search_alerts`, `get_alert_notes`, `get_alert_history`, `list_vulnerabilities`, `search_vulnerabilities`, `get_vulnerability`, `get_vulnerability_notes`, `get_vulnerability_history`, `list_misconfigurations`, `search_misconfigurations`, `get_misconfiguration`, `get_misconfiguration_notes`, `get_misconfiguration_history`, `list_inventory_items`, `get_inventory_item`, `iso_to_unix_timestamp` |
+| **Not classified** |**Requires `admin` today.**| `admin` (coerced) | `search_alerts`, `get_alert_notes`, `get_alert_history`, `list_vulnerabilities`, `search_vulnerabilities`, `get_vulnerability`, `get_vulnerability_notes`, `get_vulnerability_history`, `list_misconfigurations`, `search_misconfigurations`, `get_misconfiguration`, `get_misconfiguration_notes`, `get_misconfiguration_history`, `list_inventory_items`, `get_inventory_item`, `iso_to_unix_timestamp` |
 
 ### This plugin is read-only — but "read-only" is not the same as tier `read`
 
@@ -56,56 +48,17 @@ is nothing waiting to fill them.
 That is a statement about the tool surface. It is **not** a statement
 about which grant an operator needs, and the two come apart badly here:
 
-- `powerquery` and `purple_ai` are deliberately `admin`
-  (`result-cache.ts:845`, `:848`). They mutate nothing; they are
-  unbounded query surfaces over the Data Lake, and Conduit's convention
-  sends "unbounded passthrough/query surfaces" to `admin`
-  (`tool-classification.ts:13-16`). `wyre-gateway/GOVERNANCE.md` lists
-  both in the no-fixed-blast-radius class alongside
-  `autotask_raw_request`.
-- The sixteen unclassified tools reach `admin` a different way. Conduit
-  fails closed:
+Gateway configuration source is omitted from this repository.
 
-  ```ts
-  const requiredTier: PermissionTier = classified ?? 'admin'; // UNCLASSIFIED -> ADMIN
-  ```
-  — `src/access/access-enforcement.ts:63`. The `tools/list` filter
-  mirrors the same decision (`src/proxy/list-visibility.ts:44`), so
-  those sixteen are invisible below `admin`, not merely un-callable.
+So a `read` grant on SentinelOne reaches four tools. Everything a vulnerability report or a misconfiguration sweep needs — every `*_vulnerabilities` and `*_misconfigurations` tool, `list_inventory_items`, and every `_notes` / `_history` detail call — requires `admin` today, which on any vendor grants the whole surface.
 
-So a `read` grant on SentinelOne reaches four tools. Everything a
-vulnerability report or a misconfiguration sweep needs — every
-`*_vulnerabilities` and `*_misconfigurations` tool, `list_inventory_items`,
-and every `_notes` / `_history` detail call — requires `admin` today,
-which on any vendor grants the whole surface. **There is no safe middle
-setting for this plugin right now.** Classifying the sixteen would be a
-privilege reduction, not an addition.
-
-One more qualification, unchanged by any of this: **the read-only
-property belongs to the tool surface, not to the credential.** The
-Service User token behind Conduit may well carry response permissions in
-SentinelOne. Nothing in this plugin exercises them, but if SentinelOne
-ships response tools in a future Purple MCP release they would appear
-through the same connection — unclassified, and therefore reachable by
-anyone already holding `admin`. Re-read this table after a vendor
-upgrade rather than assuming it still holds.
+One more qualification, unchanged by any of this: **the read-only property belongs to the tool surface, not to the credential.** The Service User token behind Conduit may well carry response permissions in SentinelOne. Re-read this table after a vendor upgrade rather than assuming it still holds.
 
 ### There is no per-call approval step
 
-Conduit compares tiers. It has no approval mechanism, no per-call
-confirmation, and no elicitation anywhere in the request path — see
-`wyre-gateway/GOVERNANCE.md`, *The tier model*. Nothing you write into an
-agent's prompt is enforced by the gateway; per-call approval is a policy
-you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Nothing you write into an agent's prompt is enforced by the gateway; per-call approval is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
-Conduit's enforcement tiers are only `read`, `write` and `admin`, plus
-`none` meaning deny (`src/access/permission-tier.ts:27`). "Delete" is a
-presentation group in the access editor, and a delete-group tool compiles
-to and enforces at tier `write` (`src/access/tier-group-mapping.ts`,
-`GROUP_ENFORCEMENT_TIER`) — so granting `write` on a vendor also grants
-every delete tool on it. For SentinelOne both groups are empty, so a
-`write` grant buys nothing over `read` today.
+For SentinelOne both groups are empty, so a `write` grant buys nothing over `read` today.
 
 ## Recommended agent policy
 
@@ -114,17 +67,8 @@ has nothing to apply to. The policy that matters here is about data
 volume, cost, and the size of the grant:
 
 - Allow the four `read`-tier tools to scheduled and unattended agents.
-- Everything else needs `admin`. Do not hand a broad `admin` grant to an
-  unattended agent just to unlock vulnerability reporting — use a
-  granular per-tool grant whose `customTools` list names the specific
-  tools that agent needs, which is the only mechanism that separates
-  them.
-- Bound `powerquery` and `purple_ai` in that allowlist deliberately.
-  Require an explicit time range on every Data Lake query and cap how
-  many an unattended agent may issue per run. Conduit's gates match on
-  tool name only — arguments are never inspected
-  (`src/proxy/tool-call-enforcement.ts:69-79`) — so nothing upstream
-  will notice an unbounded query.
+- Everything else needs `admin`.
+- Bound `powerquery` and `purple_ai` in that allowlist deliberately. Require an explicit time range on every Data Lake query and cap how many an unattended agent may issue per run.
 - Keep `list_inventory_items` / `search_inventory_items` out of an
   unattended agent's allowlist if the `IDENTITY` surface is in scope;
   see *Data handling*.
@@ -174,11 +118,7 @@ volume, cost, and the size of the grant:
 - **Alert IDs are not stable.** They change after merge operations, so a
   `get_alert` that 404s does not mean the alert was resolved. Re-query
   rather than reporting it closed.
-- **An unclassified tool fails silently, not loudly.** Because
-  `tools/list` filters the same way the call gate denies, a technician
-  on tier `read` does not see `list_vulnerabilities` refuse — they see a
-  connector that appears to have four tools. Rule out the classification
-  gap before concluding the vendor is misbehaving.
+- Rule out the classification gap before concluding the vendor is misbehaving.
 - **Read-only invites over-trust.** Because nothing can be broken, it is
   tempting to let an agent report findings straight to a customer. The
   data is point-in-time and scoped to whatever the connected credential

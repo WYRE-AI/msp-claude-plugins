@@ -118,8 +118,7 @@ client** — `.mcp.json` declares only the gateway URL:
   gateway-side second layer for this vendor — PostHog's MCP server exposes
   a single `exec` tool, so Conduit's tool allowlist can only admit or deny
   it wholesale, not exclude write tool names from within it. See
-  [GOVERNANCE.md](GOVERNANCE.md), *Tool permission tiers* and *Open
-  enforcement gap*, for the full detail. If you cannot verify the connecting
+  [GOVERNANCE.md](GOVERNANCE.md), *Tool permission tiers* and *The scope decision happens outside Conduit*, for the full detail. If you cannot verify the connecting
   operator scoped the key read-only, assume this connection can write.
 - Never paste a PostHog personal API key into a technician's local
   environment, a `.env` file, or this repo. It is entered once, in Conduit's
