@@ -5,7 +5,7 @@
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | int | System | Auto-generated unique identifier |
-| `ticketNumber` | string | System | Human-readable (e.g., T20240215.0001) |
+| `ticketNumber` | string | System | Human-readable (e.g., T20240215.0001). MCP `searchTerm` is a prefix on this field, not a title search. |
 | `title` | string(255) | Yes | Brief issue summary |
 | `description` | text | No | Detailed description |
 | `companyID` | int | Yes | Company/account reference |
