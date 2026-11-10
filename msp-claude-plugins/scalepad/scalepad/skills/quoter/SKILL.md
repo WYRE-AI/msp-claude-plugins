@@ -27,7 +27,7 @@ the same product:
   `X-Quoter-Client-Secret` are configured; the MCP server exchanges
   and refreshes the Bearer token for you.
 
-Discover this domain's tools with `scalepad_navigate` (domain `quoter`).
+This domain's tools are named `scalepad_quoter_*`.
 
 ## Anti-triggers
 

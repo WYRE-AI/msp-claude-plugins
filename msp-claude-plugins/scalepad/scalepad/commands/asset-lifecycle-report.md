@@ -11,7 +11,6 @@ Build a hardware aging report for a client: dashboard summary, assets past repla
 ## Prerequisites
 
 - ScalePad MCP server connected with a valid `X_SCALEPAD_API_KEY`
-- Optional discovery: `scalepad_navigate` with `domain: "lifecycle-manager"` lists the relevant tools
 - Tools used: `scalepad_lm_clients_lookup`, `scalepad_lm_hardware_dashboard_get`, `scalepad_lm_hardware_list`, `scalepad_lm_hardware_attached_initiatives_lookup`, `scalepad_lm_initiatives_list`, `scalepad_lm_budget_summary_get`
 
 ## Steps

@@ -46,12 +46,12 @@ export X_SCALEPAD_REGION="us"   # optional
 ## Discovery
 
 All **381** tools are exposed upfront — nothing is gated behind
-navigation. Two helper tools aid discovery:
+navigation. `scalepad_status` reports credential status and the
+available domains.
 
-- `scalepad_navigate` — list a product domain's tools with
-  descriptions (`core`, `lifecycle-manager`, `controlmap`,
-  `backup-radar`, `quoter`); a help aid, not a prerequisite
-- `scalepad_status` — credential status and available domains
+The server also registers `scalepad_navigate`, a menu of a domain's
+tools. Conduit refuses it for every caller and leaves it out of the tool
+list, so use `conduit__my_access` to see which tools you can call.
 
 Tool names follow `scalepad_<domain-prefix>_<resource>_<action>`
 with prefixes `core`, `lm`, `cm`, `br`, and `quoter`. The counts are

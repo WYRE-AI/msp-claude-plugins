@@ -11,7 +11,6 @@ Summarize a client's compliance posture from ControlMap: health score, open risk
 ## Prerequisites
 
 - ScalePad MCP server connected with a valid `X_SCALEPAD_API_KEY` and the correct `X_SCALEPAD_REGION` (us/eu/ca/au) for the tenant
-- Optional discovery: `scalepad_navigate` with `domain: "controlmap"` lists the relevant tools
 - Tools used: `scalepad_cm_health_list`, `scalepad_cm_risks_list_summaries`, `scalepad_cm_controls_list_summaries`, `scalepad_cm_evidence_list_summaries`, `scalepad_cm_action_items_search`
 
 ## Steps
