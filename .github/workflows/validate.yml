@@ -36,6 +36,15 @@ jobs:
             node scripts/check-marketplace-drift.mjs
           fi
 
+      # .agents/ manifests (Codex/ChatGPT marketplace + catalog) are
+      # generated from .claude-plugin/marketplace.json and each plugin's own
+      # files — this is exactly the drift the generator (#236) was written
+      # to fix in the first place (the Codex file sat stale at 1/83 plugins
+      # for a month with nothing to catch it). Fail CI if a PR changes an
+      # input without regenerating the output.
+      - name: Codex/ChatGPT manifest drift check
+        run: node scripts/generate-agents-manifest.mjs --check
+
       # Documentation integrity. Both are pure filesystem reads — no network,
       # no sibling *-mcp checkouts — so they run on every PR in well under a
       # second. scripts/tool-drift-audit.mjs is deliberately NOT wired in here;

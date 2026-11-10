@@ -192,9 +192,7 @@ Domotz enforces API rate limits per API key.
 The server surfaces failures as `Domotz API error <status>: <body>`; the
 upstream body is passed through unmodified.
 
-A denial through Conduit looks different from a Domotz error — most Domotz
-tools are unclassified and therefore require `admin`. Check
-`conduit__my_access` before treating a refusal as a credential problem.
+Check `conduit__my_access` before treating a refusal as a credential problem.
 
 ## Best Practices
 

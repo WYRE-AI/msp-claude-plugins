@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'infrastructure' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
+  category: 'accounting' | 'automation' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'infrastructure' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -111,6 +111,34 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'abnormal/abnormal-security',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'advanced-workflows',
+    name: 'Advanced Workflows',
+    vendor: 'Advanced-workflows',
+    description: 'Vendor-generic MSP automation workflows that adapt to the customer\'s connected stack.',
+    category: 'automation',
+    maturity: 'alpha',
+    features: [
+      'Chat Delivery Adapters',
+      'Psa Tool Map',
+      'Ticket Triage Agent'
+    ],
+    skills: [
+      { name: 'chat-delivery-adapters', description: 'The delivery-adapter contract every advanced-workflow skill uses to post its finished report somewhere a human will see it — Slack, an IT Glue document, or (blocked) Microsoft Teams.' },
+      { name: 'psa-tool-map', description: 'Maps abstract PSA/ticketing operations (list new tickets, get ticket detail, update priority + status, list statuses, list priorities) to concrete Conduit tool names for Autotask, HaloPSA, and ConnectWise PSA.' },
+      { name: 'ticket-triage-agent', description: 'Build (or run once) a ticket-triage agent that classifies new PSA tickets by priority, advances them to In Progress, and posts a summary to the connected chat tool.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'advanced-workflows/advanced-workflows',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
@@ -922,6 +950,40 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'kaseya/it-glue',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'keeper',
+    name: 'Keeper Secrets Manager',
+    vendor: 'Keeper',
+    description: 'Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Application Setup',
+      'Finding Secrets',
+      'Notation Queries',
+      'Retrieving Credentials'
+    ],
+    skills: [
+      { name: 'application-setup', description: 'Building the Keeper Secrets Manager application that a Conduit connection authenticates as: what an application, a share and a client device are, how folder and record grants bound everything the connection can ever see, read-only vs editable shares, generating the base64 device configuration in the Vault UI or Keeper Commander, verifying the realised scope from the client side, and rotating or revoking a device.' },
+      { name: 'finding-secrets', description: 'Locating the right Keeper record without reading any of them: the metadata returned by `list_secrets`, `search_secrets` and `list_folders`, how record UIDs, titles and folders relate, what `search_secrets` actually matches on (and what it silently does not), the query strings its validator rejects, and why an empty result set usually means scope rather than absence.' },
+      { name: 'notation-queries', description: 'The KSM notation string grammar accepted by `get_field`: the three-part `<record>/<type>/<field-path>` shape, the four field-path forms (plain, indexed, property, indexed-property), `field` vs `custom_field` vs `file` selectors, how the record segment is classified as a UID or a title, which characters the validator rejects outright, and how the returned value is masked.' },
+      { name: 'retrieving-credentials', description: 'Reading credential material out of Keeper safely: what `get_secret` returns and exactly which parts of it masking covers, the `fields` parameter, `unmask` semantics under a container deployment with no confirmation prompt, why a record\'s field list is not guaranteed complete, `get_totp_code` versus unmasking a TOTP seed, and the handling rules for secret material once it is in an agent transcript.' },
+      { name: 'api-patterns', description: 'The Keeper Secrets Manager tool surface as exposed through Conduit: the nine read-only tools and their access tiers, the ten blocked tools and whether each is withheld by policy or broken upstream, the arguments stripped from `generate_password`, how the KSM application bounds everything the connection can see, the `configBase64` credential, and the error vocabulary.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/find-secret', description: 'Locate a Keeper record by description and return its UID and metadata without revealing any credential' },
+      { name: '/scope-audit', description: 'Report exactly what the connected Keeper KSM application can reach - folders, record counts, and record types - reading no credential values' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'keeper/keeper',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
@@ -2396,7 +2458,7 @@ export const plugins: Plugin[] = [
       { name: 'offboarding-orchestrator', description: 'Use this agent when an MSP is ending a client relationship — whether through churn, client acquisition, mutual termination, or non-renewal — and needs to orchestrate a complete, auditable teardown across every connected tool, reclaim all licensed spend, and fulfill contractual data-handover obligations.' },
       { name: 'onboarding-completeness-checker', description: 'Use this agent when an MSP needs to validate that a newly onboarded client has been fully set up across all MSP tools and systems before transitioning to steady-state support.' },
       { name: 'portfolio-threat-sweep', description: 'Use this agent when an indicator set — file hashes, domains, IPs, sender addresses, URLs, a CVE, or a MITRE ATT&CK technique — needs to be hunted across every client tenant simultaneously to map blast radius and identify exposure before a campaign spreads.' },
-      { name: 'qbr-prep-agent', description: 'Use this agent when an MSP account manager or vCIO needs to prepare a complete Quarterly Business Review data package for a client.' },
+      { name: 'qbr-prep-agent', description: 'Use this agent when an MSP account manager or vCIO needs to prepare and run a quarterly business review as a value conversation with a business owner at levels 3–5 of the MSP Value Pyramid — not a ticket review.' },
       { name: 'renewal-risk-analyzer', description: 'Use this agent when an MSP account manager, sales leader, or operations manager wants to identify clients at risk of not renewing before the renewal conversation happens.' },
       { name: 'security-posture-scorer', description: 'Use this agent when an MSP needs a comprehensive, scored security health assessment for a specific client — acting as a vCISO-style health check by aggregating data across all connected security tools.' },
       { name: 'service-profitability-auditor', description: 'Use this agent when an MSP owner, operations leader, or finance lead needs to identify which clients and contracts are losing money or eroding margin across the portfolio.' },
@@ -3103,6 +3165,36 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'axcient/axcient',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'kpn',
+    name: 'KPN',
+    vendor: 'Kpn',
+    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)',
+    category: 'network',
+    maturity: 'beta',
+    features: [
+      'Mobile Fleet',
+      'Network Checks'
+    ],
+    skills: [
+      { name: 'mobile-fleet', description: 'KPN business mobile through Mobile Services Management (MSM v11): subscribers, contracts (lines/SIMs), allowed operations per contract, orders and service requests, invoices and invoice PDFs, the customer\'s organisation tree and usage thresholds; plus the confirmed writes (SIM block, unblock, replace; order authorize and cancel) and PIN/PUK handling.' },
+      { name: 'network-checks', description: 'Address- and number-level lookups against KPN: current and planned outages at a Dutch address (Disturbance Check), available access technology and speeds at an address (Speed Check), and the date of the last SIM swap on a KPN mobile number as a fraud signal.' },
+      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the X-KPN-* credential headers and the two OAuth token realms (API Store vs Mobile Services Management), why a valid key can still fail with 401/403 (product entitlement), quota headers and 429 handling, the write-confirmation flow, and why failed MSM writes are never retried automatically.' }
+    ],
+    agents: [],
+    commands: [
+      { name: '/check-outage', description: 'Check a Dutch address for KPN outages and report what connectivity is available there' },
+      { name: '/lost-phone', description: 'Find the KPN business-mobile contract for a lost or stolen phone and block its SIM after confirmation' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'kpn/kpn',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];

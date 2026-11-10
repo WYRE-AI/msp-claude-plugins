@@ -1,0 +1,53 @@
+{
+  "name": "@wyre-ai/mcp-jev-guardrails",
+  "version": "0.1.0",
+  "description": "Fleet-wide TypeSafe/Jev question map and decide() composition for MCP tool-call guardrails.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WYRE-AI/msp-claude-plugins.git",
+    "directory": "packages/mcp-jev-guardrails"
+  },
+  "keywords": [
+    "mcp",
+    "typesafe",
+    "jev",
+    "guardrails",
+    "conduit"
+  ],
+  "author": "WYRE.AI",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/WYRE-AI/msp-claude-plugins/issues"
+  },
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins/tree/main/packages/mcp-jev-guardrails",
+  "dependencies": {
+    "@typesafe-ai/sdk": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

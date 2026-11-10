@@ -23,9 +23,7 @@ gate.
   that make an HTTP call: **no mutating tool uses GET** (reads = 156 GET +
   21 POST, where POST is a search or a render; mutations = 94 POST, 51 DELETE,
   36 PUT, 21 PATCH).
-- **Tier** — the permission tier Conduit enforces
-  (`VENDOR_TOOL_CONFIG`, `src/proxy/result-cache.ts`). It tracks Access
-  except for three tools pinned `admin` by hand; see `GOVERNANCE.md`.
+- It tracks Access except for three tools pinned `admin` by hand; see `GOVERNANCE.md`.
 - **Endpoint** — verb and path template. `{…}` segments are filled from tool
   arguments; the base URL comes from configuration, never from arguments.
 

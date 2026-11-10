@@ -21,13 +21,7 @@ the operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who published that quote" — ScalePad's own log records only the API
   account.
-- Removing someone from the organisation clears their per-vendor grants
-  and revokes their gateway refresh tokens at once; a user deactivated
-  in your identity provider is refused on their very next request. A
-  user only removed from the org keeps an already-issued access token
-  for up to an hour, but it reaches only a personal ScalePad connection
-  made with their own key — never the org's. See
-  `wyre-gateway/GOVERNANCE.md`.
+- Removing someone from the organisation clears their per-vendor grants and revokes their gateway refresh tokens at once; a user deactivated in your identity provider is refused on their very next request.
 
 One credential, five products. A single ScalePad API key covers Core,
 Lifecycle Manager, ControlMap, Backup Radar, and the hosted Quoter path.
@@ -35,6 +29,8 @@ There is no per-product key, so **you cannot grant an agent Core without
 also granting it Quoter** at the credential layer. Separation has to come
 from the tool tiers below, which is why they matter more here than for a
 single-product vendor.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
 
@@ -44,17 +40,7 @@ ControlMap, 3 Backup Radar, 61 Quoter, plus `scalepad_navigate` and
 with domain prefixes `core`, `lm`, `cm`, `br`, and `quoter`. Every one
 is listed in [references/tool-inventory.md](references/tool-inventory.md).
 
-Conduit classifies **all 381** in `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`): **177 read, 201 write, 3 admin**. That
-matters because an unclassified tool fails closed to the top tier —
-`const requiredTier: PermissionTier = classified ?? 'admin';`
-(`src/access/access-enforcement.ts:63`) — so a partial block does not
-degrade gracefully, it inverts. This one was partial until 2026-08-04:
-it held 41 entries and every one was a delete, a revoke or a publish,
-which meant `write` bought only the ability to destroy and `read` bought
-nothing at all. **If a ScalePad grant on your org predates 2026-08-04,
-re-check it** — an owner who needed asset reporting had no choice but
-`admin` then, and that grant still says `admin` now.
+This one was partial until 2026-08-04: it held 41 entries and every one was a delete, a revoke or a publish, which meant `write` bought only the ability to destroy and `read` bought nothing at all. **If a ScalePad grant on your org predates 2026-08-04, re-check it** — an owner who needed asset reporting had no choice but `admin` then, and that grant still says `admin` now.
 
 The read/write split is derived from the container, not guessed from
 names: scalepad-mcp attaches `{readOnlyHint: false, destructiveHint:
@@ -77,16 +63,6 @@ tool — no mutating tool uses `GET`.
   `read` but refused for every caller at stage 0 of both gates, as with
   every vendor's discovery tool — a container-side menu cannot know the
   caller's tier. Do not plan around it.)
-- **Tier `write` subsumes `read` and adds all 201 mutators — including
-  every delete.** Conduit's tiers are `read`, `write`, and `admin`
-  (plus `none`, meaning deny) — `src/access/permission-tier.ts:27`.
-  "Delete" is a presentation group in the access editor; a delete-group
-  tool compiles to and enforces at tier `write`
-  (`src/access/tier-group-mapping.ts`, `GROUP_ENFORCEMENT_TIER`).
-  **There is no tier that admits creates and updates but withholds
-  deletes.** If that separation matters, it has to be a granular
-  per-tool grant, which compiles to an explicit `customTools`
-  allowlist.
 - **Tier `admin` is only three tools wider than `write`** — and all
   three mint credentials. Nothing routine needs it.
 - **Do not use the HTTP verb as a proxy for "destroys a record."** 51
@@ -98,10 +74,7 @@ tool — no mutating tool uses `GET`.
 
 ### Where the mechanical tier and the author's judgement disagree
 
-Conduit's model grades exactly one thing — can this call change vendor
-state — and grades it by tool name, never by arguments
-(`src/proxy/tool-call-enforcement.ts:69-79`). Three places where that
-diverges from how these tools actually behave:
+Three places where that diverges from how these tools actually behave:
 
 - **`scalepad_quoter_quotes_publish`** makes a quote customer-visible.
   Publishing is not a status flag — it puts your pricing, margin
@@ -153,13 +126,7 @@ understanding rather than trusting:
   enrollment token for a client, which grants device enrollment until
   it expires. Access-granting, so `admin` for the same reason.
 
-**scalepad-mcp attaches no annotations to the first two** — the
-container itself reports them read-only, because from its point of view
-they read a token rather than writing a record. Deriving tiers from
-annotations alone would have put credential minting behind a `read`
-grant, so both are pinned `admin` by hand in `VENDOR_TOOL_CONFIG`, and
-the tier model is now more conservative than the container's own
-metadata. Two consequences worth carrying:
+**scalepad-mcp attaches no annotations to the first two** — the container itself reports them read-only, because from its point of view they read a token rather than writing a record. Two consequences worth carrying:
 
 1. **Do not infer "safe" from an absent `destructiveHint`** on this
    vendor, or from `read` in the inventory, without checking these
@@ -230,20 +197,12 @@ the first two thirds of that directly.
   runs. Pay particular attention to `_create` calls in ControlMap; a
   fabricated control or risk pollutes a compliance record other people
   will later rely on.
-- Delete tools: require a named human approver per invocation. Do not
-  grant these to scheduled or unattended agents. Conduit cannot enforce
-  this separation for you — `write` already admits them, and so does
-  `admin`. A granular `customTools` allowlist is the only mechanism
-  that admits creates and updates while withholding deletes.
+- Delete tools: require a named human approver per invocation. Do not grant these to scheduled or unattended agents.
 - Admin: three tools, all credential minting, none of them needed for
   ordinary work. Grant `write` rather than `admin` unless the tenant
   genuinely runs standalone Quoter or issues SaaS enrollment tokens.
 
-Do not read the approval steps above as something Conduit performs.
-Conduit compares tiers. It has no approval step, no per-call
-confirmation, and no interactive prompt. Per-call approval is a workflow
-you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Do not read the approval steps above as something Conduit performs. Per-call approval is a workflow you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ## What it cannot reach
 

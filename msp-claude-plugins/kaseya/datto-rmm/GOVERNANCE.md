@@ -21,18 +21,11 @@ operator is authorised for.
 - Every call carries operator identity, so the gateway audit log answers
   "who ran this script on the customer's server" — Datto RMM's job
   history records only the API account.
-- Removing a technician's Conduit org membership stops their Datto RMM
-  access on their next call, because membership is re-read per request.
-  It does **not** revoke an already-issued token, and it does not touch
-  credentials they connected personally. Full offboarding is more than
-  one step — see `wyre-gateway/GOVERNANCE.md`, *Revocation*.
+- Complete offboarding in the gateway console, and confirm the person no longer has access before you treat it as done.
+
+Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission groups
-
-Datto RMM is classified in Conduit's `VENDOR_TOOL_CONFIG`
-(`src/proxy/result-cache.ts`) under the slug `datto-rmm`. All ten tools
-are classified; none fall through to the unclassified-means-`admin`
-rule.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
@@ -41,11 +34,7 @@ rule.
 | **Delete** | — | — | **None.** This plugin exposes no delete-group tool, so the usual "a `write` grant also admits the deletes" trap does not apply here. |
 | **Admin** | Executes code on a customer endpoint, or reads forensics-class inventory. | `admin` | `datto_run_quickjob`, `datto_get_device_audit` |
 
-Conduit compares tiers. It has no approval step, no per-call
-confirmation, and no interactive prompt — its source contains no
-elicitation handling at all. Per-call approval for anything below is a
-policy you impose on your agents, and it is only as good as the agent
-configuration that carries it.
+Per-call approval for anything below is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
 ### `datto_run_quickjob` enforces at `admin`, and should
 
@@ -67,22 +56,11 @@ claim.
 
 ### `datto_get_device_audit` enforces at `admin`, which may surprise you
 
-It reads like a `get_*` tool and it changes nothing, but Conduit
-classifies it `isAdmin` because a device audit is forensics-class
-sensitive data: full hardware and software inventory for a customer
-endpoint. **A read-only agent cannot call it.** If your fleet-audit or
-patch-coverage workflow depends on this tool, it needs an `admin` grant
-on Datto RMM — which also admits `datto_run_quickjob`. There is no tier
-between them; separating the two requires a per-tool `customTools`
-allowlist.
+**A read-only agent cannot call it.** If your fleet-audit or patch-coverage workflow depends on this tool, it needs an `admin` grant on Datto RMM — which also admits `datto_run_quickjob`.
 
 ### `datto_resolve_alert` is the whole Write group
 
-It is a write rather than a read because closing an alert removes it
-from the queue the on-call technician is watching. It does not fix the
-underlying condition — the monitor will re-fire — but an agent that
-resolves alerts in bulk can hide a live outage. Granting `write` on
-Datto RMM grants exactly this one tool plus the reads.
+It is a write rather than a read because closing an alert removes it from the queue the on-call technician is watching. It does not fix the underlying condition — the monitor will re-fire — but an agent that resolves alerts in bulk can hide a live outage.
 
 ## Recommended agent policy
 
