@@ -144,7 +144,7 @@ The hosted server cannot reboot or remove a device. Prepare the change for a hum
 
 > Reboot HQ-MS-CORE (MS250-48, serial Q2XX-XXXX-XXXX, network "HQ") from the Dashboard: Switching > Monitor > Switches > HQ-MS-CORE > Tools > Reboot. All wired clients at HQ lose connectivity until it is back online.
 
-For removal, the human uses Organization > Inventory, selects the serial and chooses Remove from network (or Unclaim to take it out of the org). Afterwards, confirm with `getOrganizationInventoryDevice` that `networkId` is null.
+For removal, the human uses Organization > Inventory, selects the serial and chooses Remove from network (or Unclaim to take it out of the org). Afterwards, confirm the result. After a removal from a network, `getOrganizationInventoryDevice` shows `networkId` as null. After an unclaim, the serial is no longer in the organization's inventory, so that lookup returns not found.
 
 ## Error Handling
 

@@ -31,7 +31,13 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
    Keep each network's `id`, `name`, and `productTypes`.
 
-   **Site scope.** If `network_id` is given, keep only that network and add `"networkIds": ["<networkId>"]` to the `parameters` of every call in steps 3–6, as the examples show. Every total and finding in the report is then for that site alone. Without `network_id`, leave `networkIds` out and the sweep covers the whole organization.
+   **Site scope.** If `network_id` is given, skip the list above, which may not include the site on its first page, and read the network directly:
+
+   ```
+   execute_api { "capability_id": "getNetwork", "parameters": { "networkId": "<networkId>" } }
+   ```
+
+   Check that its `organizationId` matches the organization from step 1. If it does not, stop and say which organization the network belongs to. Then add `"networkIds": ["<networkId>"]` to the `parameters` of every call in steps 3–6, as the examples show. Every total and finding in the report is then for that site alone. Without `network_id`, leave `networkIds` out and the sweep covers the whole organization.
 
 3. **Get device totals**
 

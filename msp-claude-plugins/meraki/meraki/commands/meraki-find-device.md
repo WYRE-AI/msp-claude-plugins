@@ -27,13 +27,13 @@ Locate a Cisco Meraki device by serial number, name, or MAC address across an or
    execute_api { "capability_id": "getDevice", "parameters": { "serial": "Q2XX-XXXX-XXXX" } }
    ```
 
-   This needs no organization ID. A hit gives `name`, `model`, `mac`, `networkId`, `lanIp`, and firmware, but not the organization, which step 6 needs. If `org_id` is given, use it. Otherwise read the device's network; its `organizationId` is the device's org, and its `name` is the network name for the results:
+   This needs no organization ID. A hit gives `name`, `model`, `mac`, `networkId`, `lanIp`, and firmware, but not the organization, which step 6 needs. Read the device's network; its `organizationId` is the device's org, and its `name` is the network name for the results:
 
    ```
    execute_api { "capability_id": "getNetwork", "parameters": { "networkId": "<networkId>" } }
    ```
 
-   Then skip to step 6. A 404 means the device is not in any network the key can see: it may be claimed but unassigned, in another org, or mistyped. Resolve the org (step 3) and check inventory:
+   Use that `organizationId` in step 6, even when `org_id` was given. If it differs from `org_id`, say the device belongs to that other organization. Then skip to step 6. A 404 means the device is not in any network the key can see: it may be claimed but unassigned, in another org, or mistyped. Resolve the org (step 3) and check inventory:
 
    ```
    execute_api { "capability_id": "getOrganizationInventoryDevice", "parameters": { "organizationId": "<orgId>", "serial": "Q2XX-XXXX-XXXX" } }
