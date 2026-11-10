@@ -29,28 +29,30 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
    execute_api { "capability_id": "getOrganizationNetworks", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
    ```
 
-   Keep each network's `id`, `name`, and `productTypes`. If `network_id` is given, keep only that network and pass `"networkIds": ["<networkId>"]` to every org-wide call below.
+   Keep each network's `id`, `name`, and `productTypes`.
 
-3. **Get org-wide device totals**
+   **Site scope.** If `network_id` is given, keep only that network and add `"networkIds": ["<networkId>"]` to the `parameters` of every call in steps 3–6, as the examples show. Every total and finding in the report is then for that site alone. Without `network_id`, leave `networkIds` out and the sweep covers the whole organization.
+
+3. **Get device totals**
 
    ```
-   execute_api { "capability_id": "getOrganizationDevicesStatusesOverview", "parameters": { "organizationId": "<orgId>" } }
+   execute_api { "capability_id": "getOrganizationDevicesStatusesOverview", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"] } }
    ```
 
-   Returns counts by status (online, alerting, offline, dormant). This is a single summary, not a paged list, so use it for the headline numbers.
+   Returns counts by status (online, alerting, offline, dormant) for the networks requested, or for the whole organization when `networkIds` is left out. This is a single summary, not a paged list, so use it for the headline numbers.
 
 4. **List the devices that need attention**
 
    ```
-   execute_api { "capability_id": "getOrganizationDevicesAvailabilities", "parameters": { "organizationId": "<orgId>", "statuses": ["offline", "alerting"], "perPage": 100 } }
+   execute_api { "capability_id": "getOrganizationDevicesAvailabilities", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "statuses": ["offline", "alerting", "dormant"], "perPage": 100 } }
    ```
 
-   Each entry carries `serial`, `name`, `productType`, `status`, and the device's network. Group them by network.
+   Each entry carries `serial`, `name`, `productType`, `status`, and the device's network. Group them by network and keep each device's `status`: a `dormant` device has been offline for an extended period and is labeled dormant, not offline, in the problem list and report.
 
 5. **Check appliance uplinks**
 
    ```
-   execute_api { "capability_id": "getOrganizationApplianceUplinkStatuses", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
+   execute_api { "capability_id": "getOrganizationApplianceUplinkStatuses", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "perPage": 100 } }
    ```
 
    Flag any uplink with status `failed`, and any appliance whose primary uplink is not `active` while another one is (the site has failed over). An uplink that is `not connected` is normal on a single-circuit site.
@@ -58,7 +60,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 6. **Check site-to-site VPN**
 
    ```
-   execute_api { "capability_id": "getOrganizationApplianceVpnStatuses", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
+   execute_api { "capability_id": "getOrganizationApplianceVpnStatuses", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "perPage": 100 } }
    ```
 
    For each appliance network, read `deviceStatus` first. If the local MX is offline, every peer will read unreachable and the real finding is the appliance outage. Otherwise flag peers in `merakiVpnPeers` or `thirdPartyVpnPeers` whose `reachability` is `unreachable`.
@@ -69,7 +71,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
    execute_api { "capability_id": "getOrganizationAssuranceAlertsOverviewByNetwork", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
    ```
 
-   Adds active alert counts by severity per network. If the org returns an error or nothing for this capability, drop the column.
+   Adds active alert counts by severity per network. For a single-site sweep, keep only the row for `network_id`. If the org returns an error or nothing for this capability, drop the column.
 
 8. **Assemble the report**
 
@@ -88,15 +90,15 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 ## Output
 
-- **Org summary** — networks swept, device totals by status, appliances with a failed uplink or failover, appliances with a VPN peer down
+- **Summary** — networks swept, device totals by status, appliances with a failed uplink or failover, appliances with a VPN peer down (organization-wide, or for the one site when `network_id` is given)
 - **Per-site table:**
 
-  | Site | Offline / alerting devices | Uplinks | VPN | Alerts | Flag |
-  |------|----------------------------|---------|-----|--------|------|
-  | Main Office | 0 / 1 (MR "Lobby AP" alerting) | wan1 active | 3/3 peers reachable | 2 warning | Watch |
+  | Site | Offline / alerting / dormant devices | Uplinks | VPN | Alerts | Flag |
+  |------|--------------------------------------|---------|-----|--------|------|
+  | Main Office | 0 / 1 / 0 (MR "Lobby AP" alerting) | wan1 active | 3/3 peers reachable | 2 warning | Watch |
   | Branch 2 | MX offline | — | appliance offline | 5 critical | Site down |
 
-- **Problem devices** — name, serial, product type, status, network
+- **Problem devices** — name, serial, product type, status (`offline`, `alerting`, or `dormant`), network
 - **Coverage note** — any check that hit a full page and may be incomplete
 
 ## Examples

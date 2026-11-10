@@ -79,7 +79,7 @@ Each call returns one page. Use the filters to narrow the result rather than rea
 ## Examples
 
 ```
-execute_api { "capability_id": "getOrganizationDevicesAvailabilities", "parameters": { "organizationId": "<orgId>", "statuses": ["offline", "alerting"], "perPage": 500 } }
+execute_api { "capability_id": "getOrganizationDevicesAvailabilities", "parameters": { "organizationId": "<orgId>", "statuses": ["offline", "alerting", "dormant"], "perPage": 500 } }
 ```
 
 ```
