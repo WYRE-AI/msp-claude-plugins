@@ -36,26 +36,33 @@ A client roster is required; every signal family is optional.
    guaranteed gateway spellings. Never assume a vendor is connected or invent
    a tool. A connected vendor without an allowed tool for the needed data is
    an unavailable signal, with the missing capability described in prose.
-2. **Establish the roster.** Use a discovered roster tool from the table. If
-   none is available, stop: "No client roster tool is available through Conduit,
-   so a client churn ranking cannot be produced." Do not substitute ticket or
-   invoice customers for a complete roster. Page through the roster, retaining
-   stable client IDs and active/inactive status. If access fails, report the
-   error and stop unless another allowed roster source succeeds.
+2. **Establish the roster.** Use every discovered roster tool from the table,
+   one per connected PSA (Autotask, HaloPSA, ConnectWise PSA, Syncro, or
+   SuperOps). If none is available, stop: "No client roster tool is available
+   through Conduit, so a client churn ranking cannot be produced." Do not
+   substitute ticket or invoice customers for a complete roster. Page through
+   each roster fully, retaining source, stable client IDs, and active/inactive
+   status. Then reconcile them into one roster: merge a client that appears in
+   more than one PSA only after confirming identity, and keep unconfirmed
+   duplicates separate and listed as coverage gaps. If one roster read fails,
+   continue with the others and report that PSA's clients as out of scope; if
+   all fail, report the errors and stop. If the operator limits the scan to one
+   PSA, state that scope in the summary.
 3. **Set scope and join identities.** Default to active clients, the most recent
    complete 30 days versus the preceding 30 days, and renewals within 90 days.
    State dates, timezone, as-of time, and operator overrides. Match sources by
    explicit cross-system IDs first, then verified unique company identities.
    Ask about ambiguous matches; exclude unresolved joins from scoring, and
-   list them as coverage gaps. Merge duplicate clients across PSAs only after
-   confirming identity. Deduplicate invoices and tickets across sources.
+   list them as coverage gaps. Deduplicate invoices and tickets across sources.
 4. **Read available evidence.** Use only the discovery result matching an
    allowed table entry. Paginate and apply the same client, date, and status
    scope across both comparison windows. Retain source, record identifiers,
    timestamps, counts, and denominators. Use detail tools only where needed.
    On permission errors or missing fields, mark the affected signal unavailable;
    on rate limits, follow the returned retry guidance with bounded retries.
-   Unfinished pagination is incomplete coverage, never a zero result.
+   Unfinished pagination is incomplete coverage, never a zero result: if any
+   required page for a family cannot be read, that family is unassessable for
+   every client the missing pages could cover. Do not score partial counts.
 5. **Score and report.** Apply the rules below per client. Preserve every roster
    client, including those with no usable signals. Recommend human review only;
    this scan does not contact clients or change operational records.
@@ -105,8 +112,10 @@ Label generic due-date comparisons as proxies rather than contractual SLA facts.
 
 Rank by descending adverse-family count first, then summed intensity of fired
 families, then client identifier for stable ties. Show the count as [N] adverse
-of [N] assessable families, plus the intensity sum. Missing families contribute
-neither evidence of health nor an adverse flag. Do not normalize sparse clients
+of [N] assessable families, plus the intensity sum. A family is assessable for a
+client only when all of its required reads for both windows completed. Missing
+or incomplete families contribute neither evidence of health nor an adverse
+flag, and are excluded from the assessable count. Do not normalize sparse clients
 into apparently healthy accounts. Mark single-family rankings as partial;
 mark zero-family clients unranked (insufficient evidence), after ranked clients.
 Flag unequal coverage so the operator can compare like-for-like cohorts.
@@ -145,4 +154,4 @@ convert missing data to zero, or describe a lack of observations as low risk.
 
 - [Agreement Reconciliation](../agreement-reconciliation/SKILL.md): `finance-pack-agreement-reconciliation`, entitlement and invoice matching.
 - [Margin Analysis](../margin-analysis/SKILL.md): `finance-pack-margin-analysis`, client profitability.
-- [SLA Escalation Playbooks](../../../ops-pack/skills/sla-escalation-playbooks/SKILL.md): `ops-pack-sla-escalation-playbooks`, operational escalation.
+- `ops-pack-sla-escalation-playbooks` (SLA Escalation Playbooks, in the separately installed `ops-pack` plugin): operational escalation.

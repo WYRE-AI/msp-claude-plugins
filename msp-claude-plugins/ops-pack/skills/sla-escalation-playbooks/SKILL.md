@@ -132,7 +132,7 @@ figures or invent a ticket's breach state.
 
 ## Related Skills
 
-- [Churn Scanner](../../../finance-pack/skills/churn-scanner/SKILL.md): portfolio client retention risk ranking.
+- `finance-pack-churn-scanner` (Churn Scanner, in the separately installed `finance-pack` plugin): portfolio client retention risk ranking.
 
 - [Dispatch Prioritization](../dispatch-prioritization/SKILL.md) — scoring and
   assigning the unassigned queue, of which SLA proximity is one factor
