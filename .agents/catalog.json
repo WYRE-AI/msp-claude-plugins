@@ -30,8 +30,8 @@
     }
   },
   "totals": {
-    "packs": 85,
-    "skills": 382,
+    "packs": 86,
+    "skills": 385,
     "commands": 317,
     "agents": 154
   },
@@ -39,7 +39,7 @@
     {
       "name": "3cx",
       "displayName": "3CX",
-      "version": "0.1.1",
+      "version": "0.2.0",
       "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
       "category": "productivity",
       "tags": [
@@ -144,6 +144,35 @@
           "path": "msp-claude-plugins/abnormal/abnormal-security/agents/threat-report-generator.md"
         }
       ]
+    },
+    {
+      "name": "advanced-workflows",
+      "displayName": "Advanced Workflows",
+      "version": "1.0.0",
+      "description": "Vendor-generic MSP automation workflows that adapt to the customer's connected stack.",
+      "category": "automation",
+      "tags": [
+        "workflows",
+        "automation",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/advanced-workflows/advanced-workflows",
+      "skills": [
+        {
+          "id": "chat-delivery-adapters",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/chat-delivery-adapters/SKILL.md"
+        },
+        {
+          "id": "psa-tool-map",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/psa-tool-map/SKILL.md"
+        },
+        {
+          "id": "ticket-triage-agent",
+          "path": "msp-claude-plugins/advanced-workflows/advanced-workflows/skills/ticket-triage-agent/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
     },
     {
       "name": "atera",
@@ -325,7 +354,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.4",
+      "version": "0.6.5",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -738,7 +767,7 @@
     {
       "name": "cipp",
       "displayName": "Cipp",
-      "version": "0.1.8",
+      "version": "0.1.10",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
       "tags": [
@@ -822,7 +851,7 @@
     {
       "name": "freshdesk",
       "displayName": "Freshdesk",
-      "version": "1.0.12",
+      "version": "1.0.13",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
       "category": "psa",
       "tags": [
@@ -1070,7 +1099,7 @@
     {
       "name": "connectwise-psa",
       "displayName": "Connectwise PSA",
-      "version": "0.3.7",
+      "version": "0.3.9",
       "description": "ConnectWise PSA - tickets, companies, contacts, projects, time",
       "category": "psa",
       "tags": [
@@ -1558,7 +1587,7 @@
     {
       "name": "itglue",
       "displayName": "IT Glue",
-      "version": "1.2.5",
+      "version": "1.2.6",
       "description": "IT Glue - organizations, assets, passwords, flexible assets",
       "category": "documentation",
       "tags": [
@@ -2583,7 +2612,7 @@
     {
       "name": "rootly",
       "displayName": "Rootly",
-      "version": "0.2.12",
+      "version": "0.2.13",
       "description": "Rootly - incident management, postmortems, SRE automation",
       "category": "incident-management",
       "tags": [
@@ -3465,7 +3494,7 @@
     {
       "name": "timezest",
       "displayName": "Timezest",
-      "version": "1.1.10",
+      "version": "1.1.11",
       "description": "TimeZest - tech scheduling against ConnectWise / Autotask / Halo PSA tickets",
       "category": "productivity",
       "tags": [
@@ -4157,7 +4186,7 @@
     {
       "name": "mailprotector",
       "displayName": "Mailprotector",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "description": "Claude plugins for Mailprotector email security - CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and mail-flow auditing for MSPs",
       "category": "email-security",
       "tags": [

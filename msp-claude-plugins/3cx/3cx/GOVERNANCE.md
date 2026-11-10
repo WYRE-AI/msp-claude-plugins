@@ -5,49 +5,131 @@ affiliated with, endorsed by, or sponsored by 3CX.
 
 ## What it connects as
 
-3CX is not a catalog vendor on the gateway, so there is no fixed proxy URL for it.
+**3CX is a catalog vendor in WYRE's Conduit gateway** — slug `3cx`,
+category `communications`, shown as *Communications & Telephony*.
 
-Two real connection paths exist instead, and this plugin's `api-patterns`
-skill documents both:
+It does not fit the catalog's *commonest* shape, and the difference is
+worth understanding. Most catalog vendors point at one fixed endpoint
+shared by every customer. 3CX can't: every PBX is its own origin
+(`https://yourpbx.3cx.eu/mcp`, or whatever FQDN that customer's PBX
+actually uses) with its own OAuth authorization server. Conduit's catalog
+handles that case directly, treating each PBX as its own authorization
+server and proxying to the tenant's own MCP URL. `hudu-official` is the
+only other vendor with that same combination.
 
-1. **Direct, standalone** (no gateway) — `claude mcp add --transport http`
+Two connection paths exist, and this plugin's `api-patterns` skill
+documents both:
+
+1. **Through Conduit's vendor catalog** (recommended) — `/connect/3cx`, or
+   **3CX** under *Communications & Telephony* in the org catalog at
+   `/org/catalog`. There is one field, **MCP Server URL**: the URL exactly
+   as the PBX console shows it (Admin → Integrations → MCP Clients).
+   Conduit discovers that PBX's OAuth endpoints from the PBX's own
+   metadata at connect time — RFC 9728 protected-resource metadata, then
+   RFC 8414 authorization-server metadata — registers a client dynamically
+   (RFC 7591 DCR) as a public client using PKCE, and persists what it
+   discovered so later refreshes resolve the same endpoints. The operator
+   signs in **as a 3CX user**, and the connection can do only what that
+   user's 3CX role allows. Requires 3CX V20 Update 10 or later with the
+   MCP Server enabled, and the PBX reachable from the internet on port 443.
+2. **Direct, standalone** (no gateway) — `claude mcp add --transport http`
    pointed straight at that PBX's own MCP URL, with the technician
    completing 3CX's own OAuth flow in the browser. Nothing brokers this:
    the technician's Claude session holds a token scoped to that one PBX by
    that PBX's own authorization server, and 3CX's own Admin Console
    (**Admin → Integrations → MCP Clients**) is the audit and revocation
    surface for it — not Conduit.
-2. **Through Conduit's BYO MCP feature** (`/connect/byo`), for an MSP who wants this PBX's tools alongside their other Conduit-brokered vendors.
+
+Conduit's **BYO MCP** feature (`/connect/byo`) is a third, generic path,
+but it exists for MCP servers with *no* catalog entry. 3CX has one, so BYO
+is no longer the right route for a PBX — and specifically should not be
+used to sidestep the classification gap described in the next section.
 
 Consequences worth stating plainly, for whichever path is used:
 
+- **Catalog connection:** the PBX's OAuth tokens are stored at Conduit like
+  any other credential, so an org gets the usual centrally-brokered story
+  — no per-technician secret, one place to see who's connected, Conduit's
+  access grants and per-tool allowlists, `conduit__my_access`, the org
+  audit views, and Conduit's usual revocation-on-org-removal behavior.
 - **Direct connection:** no credential is brokered anywhere. The OAuth
   token lives only in that technician's local Claude Code state, scoped to
   that one PBX, revocable from that PBX's own Admin Console. There is no
-  org-wide audit log across technicians for this path — each connection is
-  its own island.
+  org-wide audit log across technicians for this path, and none of
+  Conduit's grants, allowlists, or `conduit__my_access` apply — each
+  connection is its own island.
+
 Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ## Tool permission tiers
 
-**Direct connection:** no gateway tier gate sits in this path. What Claude
-can call is bounded only by the 3CX account's own role inside that PBX
-(see *Permission Model* in the `api-patterns` skill).
+**3CX has no tool classification yet, so every one of its tools is
+currently unclassified.** This is a tracked backlog item, not a structural
+limit: 3CX documents roughly 42 tools by display name only and has not
+published the wire names, so there is nothing to key a classification table
+on until a real connection confirms them.
+
+Conduit is fail-closed on classification — an unclassified tool falls
+back to requiring `admin`. On a catalog connection, the concrete effect
+today is:
+
+| Caller | What they see and can call today |
+|---|---|
+| Org **owner** | Every 3CX tool. Owner access bypasses the grant and tier gates, so classification does not affect owners at all. |
+| Any **non-owner** member | **Nothing.** A `read` or even `write` grant does not reach an unclassified tool, because the tool requires `admin`. |
+
+Two things follow, and both are easy to get backwards:
+
+1. **This is temporary and tracked.** When 3CX is classified, its read
+   tools move *down* from `admin` to `read`. Classifying a vendor is a
+   privilege reduction, not an addition — if it feels like a
+   security-relaxing change, you have it backwards.
+2. **Do not route around it via BYO.** Connecting the PBX at
+   `/connect/byo` would swap a hand-curated classification (pending) for a
+   name-guessing heuristic (immediate), and would give up the catalog's
+   grants, allowlists, `conduit__my_access`, and audit views in the
+   process. That is a worse posture, not a better one. If a non-owner
+   genuinely needs access before classification lands, grant it
+   deliberately — `admin` on this vendor, or an explicit per-tool
+   `customTools` allowlist.
+
+This is the general pattern for any vendor Conduit has not yet classified
+— the list of affected vendors moves whenever one is classified, so it
+isn't restated here.
 
 Treat the lists below as descriptions of capability, not as verified tool
 names. Confirm the live grant after connecting.
 
-- Read-only lookups: contacts, calls, recordings, voicemail, queues,
-  departments, profiles, server time, event log, services, app logs, DIDs,
-  blocklists, peers, tables, SIP trunks, call flow apps.
-- Write actions: drop a call, select or activate a profile, set or clear a
-  profile message, apply a temporary override, log an agent or the current
-  user in or out of queues, add or remove a blocklist entry, assign a DID.
-- **`Query` is SELECT-only on the PBX** (see the `pbx-admin` skill). Do not
-  describe a workaround that reaches past that restriction.
+### What classification should produce
 
-Per-call approval is a workflow you impose on your agents, and it is only
-as good as the agent configuration that carries it.
+For reference, the capability groups this plugin's skills document sort
+into Conduit's four presentation buckets as below. **None of this is
+enforced today** — every row collapses to `admin` for non-owners until 3CX
+is classified — but it is the shape to expect, and to configure against the
+moment classification lands.
+
+| Group | Capabilities | Enforcement tier |
+|---|---|---|
+| **Read** | contacts, calls, recordings, voicemail, queues, departments, profiles, server time, event log, services, app logs, DIDs, blocklists, peers, tables, SIP trunks, call flow apps, and the `Query` tool | `read` |
+| **Write** | drop a call, select/activate a profile, set/clear a profile message, apply a temporary profile override, log an agent or the current user in/out of queues, assign a DID, add an IP blocklist entry, add a phone blacklist entry | `write` |
+| **Delete** | remove an IP blocklist entry, remove a phone blacklist entry | `write` — **not** a tier of its own |
+| **Admin** | none — 3CX exposes no credential-read or raw-passthrough tool. The `Query` tool is the only query surface, and the PBX caps it at `SELECT` | `admin` |
+
+The Delete row is the one to read twice: Conduit's enforcement tiers are
+only `read`, `write`, and `admin` (plus `none`), so a delete-group tool
+enforces at `write`. Granting a technician `write` on this vendor will also
+grant the blocklist/blacklist removals. The only way to admit some write
+tools but not those is a granular per-tool grant, which compiles to an
+explicit `customTools` allowlist.
+
+The `Query` tool belongs in the read group on its merits: 3CX enforces
+`SELECT`-only server-side regardless of the connecting account's role (see
+the `pbx-admin` skill), so it cannot write anything no matter how it is
+eventually tiered.
+
+Conduit compares tiers; it has no approval step, no per-call confirmation,
+and no interactive prompt on any path. Per-call approval is a workflow
+imposed on agent configuration, not something Conduit enforces.
 
 ## Recommended agent policy
 
@@ -65,17 +147,24 @@ self-approve a call-affecting action.**
   assignment): the same discipline as any production network-ACL or
   call-routing change — a named human approver, the exact value confirmed,
   never unattended.
-- If connected via Conduit BYO, remember the `Query`-tool tiering gap above: a `read`-tier grant may not reach it even though it can never write anything.
+- **On a catalog connection today, none of these tier distinctions are
+  live for non-owners** — every 3CX tool requires `admin` until the vendor
+  is classified (see *Tool permission tiers*). Treat the policy above as
+  what to configure the moment classification lands. In the meantime, keep
+  3CX work under an owner account or an explicit `customTools` allowlist
+  rather than widening grants to `admin` across the board, and don't move
+  the PBX to BYO to get finer tiers sooner.
 
 ## What it cannot reach
 
-- Only the one PBX the connection (direct or BYO) was set up against.
+- Only the one PBX the connection (catalog or direct) was set up against.
   There is no cross-PBX aggregation anywhere in this plugin — an MSP
   managing multiple customers' 3CX systems needs a separate connection per
   PBX.
 - Only what the connecting 3CX account's own role permits inside 3CX.
   Neither this plugin nor Conduit narrows that further — a broad 3CX role
-  is a broad grant here too.
+  is a broad grant here too. Conduit's tier gate can only ever subtract
+  from what that 3CX role already permits, never add to it.
 - No filesystem, no shell, no other vendor's data.
 - Nothing beyond what 3CX shipped in the V20 Update 10 Alpha tool set — no
   extension provisioning, no license/billing surface, and no write access
@@ -84,9 +173,9 @@ self-approve a call-affecting action.**
 
 ## Data handling
 
-- Responses pass into the model's context for the session; the BYO path
-  additionally passes through Conduit but is not persisted there beyond
-  the credential itself.
+- Responses pass into the model's context for the session; a catalog
+  connection additionally passes through Conduit, but nothing is persisted
+  there beyond the credential itself.
 - Directory and contact lookups return PII — names, emails, and (via
   CRM-integrated search) whatever the connected CRM syncs to that PBX.
 - Recordings and voicemail lists are scoped to "available to the
@@ -109,11 +198,16 @@ self-approve a call-affecting action.**
   plugin describes tools by capability rather than an invented snake_case
   identifier, and the tier table above is conditioned on that rather than
   asserted as verified fact.
+- **Every 3CX tool requires `admin` for non-owners right now.** The vendor
+  is not yet classified, and Conduit fails closed to `admin` for
+  unclassified tools, so a non-owner with a `read` grant sees nothing.
+  Owners are unaffected. This is tracked and temporary — and BYO is not
+  the workaround. See *Tool permission tiers*.
 - **The direct-connection path has no cross-technician audit trail.**
   Unlike a Conduit-brokered vendor, a directly-connected PBX only shows
   that one technician's connection in 3CX's own Admin Console — there is
   no org-wide "who connected which PBX" view unless every connection goes
-  through Conduit's BYO path instead.
+  through Conduit's catalog instead.
 - **Don't conflate this with the community *3cx-mcp-server* project.**
   Different codebase, different auth model, different tool surface —
   including a licensing claim ("Enterprise/Enterprise Plus required") that

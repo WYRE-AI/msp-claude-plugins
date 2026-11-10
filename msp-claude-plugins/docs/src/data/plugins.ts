@@ -5,7 +5,7 @@ export interface Plugin {
   name: string;
   vendor: string;
   description: string;
-  category: 'accounting' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'infrastructure' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
+  category: 'accounting' | 'automation' | 'bcdr' | 'crm' | 'documentation' | 'email-security' | 'incident-management' | 'infrastructure' | 'legal' | 'marketplace' | 'monitoring' | 'network' | 'productivity' | 'psa' | 'rmm' | 'sales' | 'security' | 'workflow-pack';
   maturity: 'production' | 'beta' | 'alpha';
   features: string[];
   skills: Skill[];
@@ -111,6 +111,34 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'abnormal/abnormal-security',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'advanced-workflows',
+    name: 'Advanced Workflows',
+    vendor: 'Advanced-workflows',
+    description: 'Vendor-generic MSP automation workflows that adapt to the customer\'s connected stack.',
+    category: 'automation',
+    maturity: 'alpha',
+    features: [
+      'Chat Delivery Adapters',
+      'Psa Tool Map',
+      'Ticket Triage Agent'
+    ],
+    skills: [
+      { name: 'chat-delivery-adapters', description: 'The delivery-adapter contract every advanced-workflow skill uses to post its finished report somewhere a human will see it — Slack, an IT Glue document, or (blocked) Microsoft Teams.' },
+      { name: 'psa-tool-map', description: 'Maps abstract PSA/ticketing operations (list new tickets, get ticket detail, update priority + status, list statuses, list priorities) to concrete Conduit tool names for Autotask, HaloPSA, and ConnectWise PSA.' },
+      { name: 'ticket-triage-agent', description: 'Build (or run once) a ticket-triage agent that classifies new PSA tickets by priority, advances them to In Progress, and posts a summary to the connected chat tool.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'advanced-workflows/advanced-workflows',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {

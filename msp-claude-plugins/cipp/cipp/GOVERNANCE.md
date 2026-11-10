@@ -80,10 +80,14 @@ The other four are the ones a reviewer is most likely to challenge:
   this API.
 - **`cipp_delete_standard_template`** — deletes a baseline definition the MSP's tenants are measured against.
 
-`cipp_create_user` is `admin` too. It is additive and reversible — but
-note that it consumes a licence, so it has a billing consequence, and
-`usageLocation` must be set at create time or no licence can be assigned
-later.
+`cipp_create_user` is `admin` too. It is additive and reversible. It
+takes no `usageLocation` parameter (`country` is the address field, not the
+usage location) and assigns no licence, so a new account has no usage
+location. A licence can't be assigned until one is set, so follow the create
+with `cipp_edit_user` to set `usageLocation` (and `licenses`, if needed).
+That edit can run right after the create: its user lookup retries for about
+10 seconds while Microsoft Graph catches up. Assigning a licence has a
+billing consequence, and the edit is where it happens.
 
 `cipp_bec_check` changes nothing in the tenant; Conduit still requires
 `admin` for it, because the risk is what it returns rather than what it
@@ -132,11 +136,24 @@ self-approve an identity or configuration change.**
 
 - Responses pass through Conduit into model context for the session and
   are not persisted by this plugin.
-- **`cipp_reset_password` returns a plaintext password** when called
-  without one — CIPP generates it. That credential lands in the model's
-  context and in the transcript. Treat any session that calls it as
-  containing a live secret, and deliver the password through a secure
-  channel rather than the chat surface.
+- **`cipp_reset_password` returns the new credential in its response.**
+  The tool takes no password input: CIPP always generates the password. It
+  is never emailed. It comes back in the result's `resultText` and
+  `copyField` in one of two forms:
+  - **The plaintext password**, when PWPush is not enabled in CIPP or
+    creating the PWPush link fails (CIPP falls back to the plain password).
+    The password itself is now in the model's context and in the transcript.
+  - **A PWPush link**, when PWPush is enabled in CIPP. The response carries
+    the link, not the password. Anyone holding the link can retrieve the
+    password until the push expires, so the link is the secret.
+
+  Either way, treat any session that calls it as containing a live secret,
+  and deliver it through a secure channel rather than the chat surface. For
+  a cloud-only user the reset applies immediately, and the user must change
+  the password at next sign-in. For a directory-synced user CIPP submits it
+  through password writeback: it applies asynchronously, is not confirmed
+  when the call returns, and fails if writeback is off or the on-premises
+  password policy rejects it.
 - **`cipp_bec_check` is the heaviest PII read here.** It returns a
   user's recent sign-in locations and IPs, mailbox forwarding and inbox
   rules, MFA changes, and app-consent grants — a complete behavioural
