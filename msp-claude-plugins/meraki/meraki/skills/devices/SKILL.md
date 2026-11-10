@@ -109,16 +109,16 @@ execute_api { "capability_id": "getOrganizationInventoryDevices", "parameters": 
 
 ### Find a device from whatever the user gave you
 
-1. **Serial** -- `getDevice`. If it is not found, try `getOrganizationInventoryDevice`; the device may be claimed but unassigned.
-2. **Name, MAC or model fragment** -- `getOrganizationDevices` with `name`, `mac` or `model` (each matches on contains or exact), or `getOrganizationInventoryDevices` with `search` to include unassigned hardware.
+1. **Serial** -- `getDevice`. It is not scoped to an organization, so read the device's network with `getNetwork` and check its `organizationId` is the org you meant. If it is not found, try `getOrganizationInventoryDevice`; the device may be claimed but unassigned.
+2. **Name, MAC or model fragment** -- `getOrganizationDevices` with `name`, `mac` or `model` (each matches on contains or exact), or `getOrganizationInventoryDevices` with `search` to include unassigned hardware. Inventory `search` matches serial, MAC and model, not name, so an unassigned device cannot be found by name; list `usedState: "unused"` inventory and read the names instead.
 3. Translate `networkId` to a network name with `getOrganizationNetworks`.
 
 ### Offline and alerting sweep
 
 1. `getOrganizationDevicesStatusesOverview` for the headline counts.
-2. `getOrganizationDevicesAvailabilities` with `statuses: ["offline", "alerting"]`.
+2. `getOrganizationDevicesAvailabilities` with `statuses: ["offline", "alerting", "dormant"]`.
 3. `getOrganizationDevicesAvailabilitiesChangeHistory` with those `serials` and a `timespan` such as 604800 (7 days) to show when each dropped and whether it is flapping.
-4. Report by network, appliances first. When an MX is offline, the switches and APs behind it usually show offline too because they reach the cloud through it -- treat that as one site outage, not many device faults.
+4. Report by network, appliances first. When an MX is offline, the switches and APs behind it usually show offline too because they reach the cloud through it. Report that as a likely shared cause at the site rather than many separate device faults, and confirm with someone on site before calling it an outage: cloud status alone does not prove traffic has stopped.
 
 For the cause, hand off to `meraki-troubleshooting`.
 
@@ -131,20 +131,21 @@ For the cause, hand off to `meraki-troubleshooting`.
 1. `getOrganizationInventoryDevicesEoxOverview` for counts of end-of-sale, end-of-support and nearing end-of-support.
 2. `getOrganizationInventoryDevices` with `eoxStatuses: ["endOfSupport", "nearEndOfSupport"]` to name the affected serials and models.
 3. `getOrganizationFirmwareUpgradesByDevice` with `currentUpgradesOnly: true` for upgrades that are scheduled or in progress.
-4. Group by model and `firmware`. Flag end-of-support hardware first, then devices running a firmware train that differs from the rest of their network.
+4. `getOrganizationDevices` (narrowed with `networkIds`) for every assigned device's current `firmware`; the calls above only cover filtered or pending devices.
+5. Group by model and `firmware`. Flag end-of-support hardware first, then devices running a firmware train that differs from the rest of their network.
 
 ### Reboot or removal request
 
 The hosted server cannot reboot or remove a device. Prepare the change for a human:
 
-1. Confirm identity with `getDevice`: name, model, network, `productType`.
+1. Confirm identity with `getDevice`: name, model, network, `productType`. Read its network with `getNetwork` and check the `organizationId` is the org the request is about.
 2. Check availability. An `offline` device cannot receive a reboot from the Dashboard; it needs a local power cycle.
-3. Assess impact. Rebooting an MX or a core switch drops the whole site; rebooting an AP drops only its clients.
+3. Assess impact. Rebooting an MX or a core switch drops the whole site; rebooting an AP drops its clients, and if it is a mesh gateway, every repeater that reaches the network through it and their clients too. Check for mesh repeaters (find the capability with `semantic_search`) before stating the impact.
 4. Hand over a precise instruction, for example:
 
 > Reboot HQ-MS-CORE (MS250-48, serial Q2XX-XXXX-XXXX, network "HQ") from the Dashboard: Switching > Monitor > Switches > HQ-MS-CORE > Tools > Reboot. All wired clients at HQ lose connectivity until it is back online.
 
-For removal, the human uses Organization > Inventory, selects the serial and chooses Remove from network (or Unclaim to take it out of the org). Afterwards, confirm the result. After a removal from a network, `getOrganizationInventoryDevice` shows `networkId` as null. After an unclaim, the serial is no longer in the organization's inventory, so that lookup returns not found.
+For removal, the human uses Organization > Inventory, selects the serial and chooses Remove from network (or Unclaim to take it out of the org). Removing an MV camera from its network deletes its stored video, so warn the requester and get that confirmed before handing over the steps. Afterward, confirm the result. After a removal from a network, `getOrganizationInventoryDevice` shows `networkId` as null. After an unclaim, the serial is no longer in the organization's inventory, so that lookup returns not found.
 
 ## Error Handling
 

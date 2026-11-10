@@ -61,7 +61,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
    execute_api { "capability_id": "getOrganizationApplianceUplinkStatuses", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "perPage": 100 } }
    ```
 
-   Flag any uplink with status `failed`, and any appliance whose primary uplink is not `active` while another one is (the site has failed over). An uplink that is `not connected` is normal on a single-circuit site.
+   Flag any uplink with status `failed`. The status list does not say which uplink is configured as primary; `wan1` is the default. If `wan1` is down while another uplink is `active`, report a likely failover and note that the configured primary was not checked. An uplink that is `not connected` is normal on a single-circuit site.
 
 6. **Check site-to-site VPN**
 
@@ -77,7 +77,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
    execute_api { "capability_id": "getOrganizationAssuranceAlertsOverviewByNetwork", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
    ```
 
-   Adds active alert counts by severity per network. For a single-site sweep, keep only the row for `network_id`. If the org returns an error or nothing for this capability, drop the column.
+   Adds active alert counts by severity per network. For a single-site sweep, add `"networkId": "<networkId>"` (this capability takes a single network) so the site's row is not lost past the first page. If the org returns an error or nothing for this capability, drop the column.
 
 8. **Assemble the report**
 

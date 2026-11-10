@@ -57,13 +57,13 @@ Locate a Cisco Meraki device by serial number, name, or MAC address across an or
    execute_api { "capability_id": "getOrganizationInventoryDevices", "parameters": { "organizationId": "<orgId>", "macs": ["aa:bb:cc:dd:ee:ff"], "perPage": 100 } }
    ```
 
-   No match means the MAC is not a Meraki device. Treat it as a client and search for it:
+   A match whose `networkId` is set is an assigned device; inventory does not carry its LAN IP, so read it with `getDevice` and the match's `serial`. No match means the MAC is not a Meraki device. Treat it as a client and search for it:
 
    ```
-   execute_api { "capability_id": "getOrganizationClientsSearch", "parameters": { "organizationId": "<orgId>", "mac": "aa:bb:cc:dd:ee:ff" } }
+   execute_api { "capability_id": "getOrganizationClientsSearch", "parameters": { "organizationId": "<orgId>", "mac": "aa:bb:cc:dd:ee:ff", "perPage": 5 } }
    ```
 
-   Each record names the network the client was seen on, with its IP, VLAN, SSID or switch port, last-seen time, and `recentDeviceMac` (the AP or switch it last connected through). To name that AP or switch, look it up with `getOrganizationDevices` and `"mac": "<recentDeviceMac>"`.
+   The search returns at most five records, one per network the client was seen on. If `records` holds five, say the client may also appear on other networks and its latest location may be missing. Each record names the network the client was seen on, with its IP, VLAN, SSID or switch port, last-seen time, and `recentDeviceMac` (the AP or switch it last connected through). To name that AP or switch, look it up with `getOrganizationDevices` and `"mac": "<recentDeviceMac>"`.
 
 5. **Name — search assigned devices**
 
