@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **`autotask` 0.6.6 — tickets skill documents `searchTerm` as a ticket-number prefix ([WYREAI-369](https://linear.app/wyre-ai/issue/WYREAI-369/autotask-searchterm-is-a-ticket-prefix-skills-say-title-search)).** `autotask_search_tickets` matches `searchTerm` with `beginsWith` on `ticketNumber`, so title words return nothing. The skill now says so, shows a `"T20260917"` lookup, lists every filter the live tool accepts, and the duplicate check lists the company's open tickets and compares titles client-side instead of searching by title.
+- **`autotask` 0.6.6 — tickets skill documents `searchTerm` as a ticket-number prefix ([WYREAI-369](https://linear.app/wyre-ai/issue/WYREAI-369/autotask-searchterm-is-a-ticket-prefix-skills-say-title-search)).** `autotask_search_tickets` matches `searchTerm` with `beginsWith` on `ticketNumber`, so title words return nothing. The skill now says so, shows a `"T20260917"` lookup, and lists every filter the live tool accepts. It also notes that a number lookup skips Complete tickets unless `status: 5` is passed, and that `page` is ignored by the server, so only the first `pageSize` (max 500) results come back. The duplicate check lists the company's open tickets and compares titles client-side instead of searching by title, and treats a full 500-row result as inconclusive.
 
 - **Docs site footer now reads "Built by WYRE AI™."** The bottom bar drops the `© <year> WYRE Technology. Built with Astro.` line and links "WYRE AI™" to https://wyre.ai. The footer columns and the Terms/Privacy links are unchanged.
 
