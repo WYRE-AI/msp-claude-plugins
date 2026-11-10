@@ -23,7 +23,7 @@ have connected, but none of them are individually required:
 - **MDR / SOC-managed** — Blackpoint Cyber, RocketCyber
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
-- **Shadow AI comparison**: Microsoft Graph app inventory and a supported RMM
+- **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
   installed-software source, both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
 - **Email security** — Mimecast, Proofpoint, Abnormal, Ironscales, Avanan, SpamTitan
