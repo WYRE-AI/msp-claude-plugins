@@ -51,7 +51,7 @@ would be needed. Do not fill the gap with a guess.
 |--------|------|-----------|
 | Public domain supplied by the operator | The only required input | Yes |
 | CIPP | SPF, DKIM, and DMARC via `cipp_list_domain_health`, only after the operator confirms any CIPP use, and only when the domain already belongs to a listed CIPP tenant. That tool does not return MX or DNSSEC | Optional |
-| runZero | Existing asset and service inventory via scoped `runzero_assets_search` and `runzero_assets_get`, or `runzero_services_list` with a hostname `search` filter and `runzero_services_get`, reported as inventory observations with external exposure unverified, only after the operator confirms any runZero use, and only when the hostname is already in inventory. Do not call unscoped `runzero_assets_list` or `runzero_services_list` | Optional |
+| runZero | Existing asset and service inventory via scoped `runzero_assets_search` and `runzero_assets_get`, or `runzero_services_list` with a hostname `search` filter and `runzero_services_get`, reported as inventory observations with external exposure unverified unless the record shows an external vantage point (see Step 4), only after the operator confirms any runZero use, and only when the hostname is already in inventory. Do not call unscoped `runzero_assets_list` or `runzero_services_list` | Optional |
 | Agent DNS or web lookups | Fallback for mail records, public certificate data, and cited breach reporting when no MCP tool covers the check | Optional, used only when available in this session |
 
 A public DNS, certificate-transparency, or Have I Been Pwned MCP tool is
