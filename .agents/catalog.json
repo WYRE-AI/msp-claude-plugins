@@ -5024,12 +5024,11 @@
       "name": "marketing-pack",
       "displayName": "MSP Marketing",
       "version": "0.1.0",
-      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
+      "description": "MSP Marketing: review or referral request drafts from survey and ticket data, across whatever survey and PSA tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
         "marketing",
-        "case-studies",
         "reviews",
         "referrals",
         "msp"
