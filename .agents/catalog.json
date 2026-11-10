@@ -3150,7 +3150,7 @@
     {
       "name": "syncro",
       "displayName": "Syncro",
-      "version": "0.2.10",
+      "version": "0.3.0",
       "description": "Syncro MSP - tickets, customers, assets, invoicing",
       "category": "psa-rmm",
       "tags": [
@@ -3807,7 +3807,7 @@
     {
       "name": "hubspot",
       "displayName": "Hubspot",
-      "version": "0.2.10",
+      "version": "0.3.0",
       "description": "HubSpot CRM - contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP server)",
       "category": "crm",
       "tags": [
@@ -5519,7 +5519,7 @@
     {
       "name": "kpn",
       "displayName": "KPN",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "description": "KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)",
       "category": "network",
       "tags": [

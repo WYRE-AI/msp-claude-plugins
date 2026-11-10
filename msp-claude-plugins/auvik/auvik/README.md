@@ -37,7 +37,7 @@ Connect Auvik once in the Conduit web UI (**Connections → Auvik**). Conduit st
 |-------|----------|-------------|
 | Username | Yes | Email address of the Auvik user the API key belongs to |
 | API Key | Yes | API key issued from the Auvik portal under My Profile / API Keys |
-| Region | No | Region cluster the tenant lives in: `us1`, `us2`, `us3`, `us4`, `eu1`, `eu2`, `au1`, `ca1`. Omit to auto-detect. |
+| Region | No | Region cluster the tenant lives in: `us1`, `us2`, `us3`, `us4`, `us5`, `us6`, `eu1`, `eu2`, `au1`, `ca1`, `lnx`. Omit to auto-detect. |
 
 See the [Auvik API documentation](https://support.auvik.com/hc/en-us/sections/360002960071-Auvik-APIs) for instructions on issuing an API key and identifying your region.
 
@@ -136,7 +136,7 @@ Pulls interface statistics over the window, flags any link with sustained utiliz
 
 ## Troubleshooting
 
-- **Region detection** - If calls return 404 or redirect loops, your tenant is in a different region cluster. Set the Region field on the Auvik connection in Conduit explicitly. The current clusters are `us1`, `us2`, `us3`, `us4`, `eu1`, `eu2`, `au1`, `ca1`.
+- **Region detection** - If calls return 404 or redirect loops, your tenant is in a different region cluster. Set the Region field on the Auvik connection in Conduit explicitly. The current clusters are `us1`, `us2`, `us3`, `us4`, `us5`, `us6`, `eu1`, `eu2`, `au1`, `ca1`, `lnx`.
 - **Rate limits** - Auvik enforces per-key rate limits. If listings start returning 429, slow the pagination loop or narrow the query by tenant. The MCP server surfaces rate-limit errors as tool errors with a retryable status.
 - **Dismiss vs resolve** - `auvik_alerts_dismiss` acknowledges and hides the alert in the UI. It does not fix the underlying condition. If the condition still holds when the alert next evaluates, a new alert will appear. Use dismissals only for confirmed noise.
 - **v1 vs v2 device endpoints** - `auvik_devices_list` returns the lighter v1 device record. For lifecycle, warranty, and extended attributes use `auvik_devices_get_details`, `auvik_devices_get_lifecycle`, and `auvik_devices_get_warranty`.

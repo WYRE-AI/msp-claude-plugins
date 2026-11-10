@@ -38,10 +38,13 @@ Auvik tenants live in one of several regional clusters:
 | `us2` | `auvikapi.us2.my.auvik.com` |
 | `us3` | `auvikapi.us3.my.auvik.com` |
 | `us4` | `auvikapi.us4.my.auvik.com` |
+| `us5` | `auvikapi.us5.my.auvik.com` |
+| `us6` | `auvikapi.us6.my.auvik.com` |
 | `eu1` | `auvikapi.eu1.my.auvik.com` |
 | `eu2` | `auvikapi.eu2.my.auvik.com` |
 | `au1` | `auvikapi.au1.my.auvik.com` |
 | `ca1` | `auvikapi.ca1.my.auvik.com` |
+| `lnx` | `auvikapi.lnx.my.auvik.com` |
 
 Set the Region field on the Auvik connection in Conduit to pin the region. If omitted, the server attempts to detect the region from the credentials. Misroutes typically surface as 404 or redirect loops on calls that should obviously succeed.
 

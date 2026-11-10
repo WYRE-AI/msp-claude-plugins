@@ -21,7 +21,7 @@ The Conduit `m365` connector (hidden, personal-only) has no tools for this area.
 
 - MFA registration: `cipp_list_mfa_users`; Conditional Access: `cipp_list_conditional_access_policies`, `cipp_list_named_locations`
 - Sign-ins and audit: `cipp_list_user_signin_logs`, `cipp_list_audit_logs`
-- Compromise check: `cipp_bec_check`; response: `cipp_revoke_sessions`, `cipp_reset_password`, `cipp_reset_mfa`, `cipp_disable_user`
+- Compromise check: `cipp_bec_check` (admin tier, read-only); response: `cipp_revoke_sessions`, `cipp_reset_password`, `cipp_reset_mfa`, `cipp_disable_user` (all admin-tier writes in Conduit, so the caller needs admin access to the `cipp` connector)
 - Secure Score: `cipp_get_secure_score`, `cipp_list_secure_score_controls`
 
 ## Overview

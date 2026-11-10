@@ -1,6 +1,6 @@
 {
   "name": "kpn",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Claude plugins for KPN (Dutch telco) through Conduit - Grexx/IRMA address checks, line diagnostics, and read-only business-mobile lookups",
   "author": {
     "name": "WYRE Technology"

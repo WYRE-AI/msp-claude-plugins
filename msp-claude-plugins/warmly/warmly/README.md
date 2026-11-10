@@ -2,7 +2,7 @@
 
 Claude Code plugin for [Warmly](https://www.warmly.ai) — visitor intelligence and account-level engagement for B2B sales teams.
 
-> **Not currently brokered by Conduit.** Every other connector in this marketplace reaches its vendor through the WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`). Warmly does not: Conduit has no `warmly` entry, so there is no slug to connect and a connect attempt 404s. The connector was wired only in the older `WYRE-AI/mcp-gateway`, which retired on 30 September 2026; `mcp.wyre.ai` now redirects to Conduit. **There is currently no WYRE connection path for Warmly.**
+> **Not currently brokered by Conduit.** Most connectors in this marketplace reach their vendor through the WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`). Warmly does not (nor do `slack` and `stripe`): Conduit has no `warmly` entry, so there is no slug to connect and a connect attempt 404s. The connector was wired only in the older `WYRE-AI/mcp-gateway`, which retired on 30 September 2026; `mcp.wyre.ai` now redirects to Conduit. **There is currently no WYRE connection path for Warmly.**
 >
 > This plugin ships no `.mcp.json`, so it wires no client anywhere and nothing is silently misrouted. Its skills and tool reference are accurate about Warmly's API and are why it remains listed — but treat the connection instructions below as describing the legacy system, not the one the rest of this marketplace targets. See `GOVERNANCE.md` for what that means for identity, audit, and revocation.
 

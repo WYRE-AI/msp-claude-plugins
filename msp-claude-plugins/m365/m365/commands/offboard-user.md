@@ -12,7 +12,7 @@ Execute a structured, safe Microsoft 365 offboarding workflow for a departing em
 
 The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
 
-The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userId`) with the step flags turned on. It is irreversible and queued, so run it once, after the operator confirms the exact flag set.
+The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userId`) with the step flags turned on. Conduit classifies `cipp_offboard_user` as an admin-tier write, so the caller needs admin access to the `cipp` connector. It is irreversible and queued, so run it once, after the operator confirms the exact flag set.
 
 | Step | `cipp_offboard_user` flag |
 |------|-----------------------------|

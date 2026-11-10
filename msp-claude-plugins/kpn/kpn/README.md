@@ -4,6 +4,9 @@ Claude plugin for **KPN**, the Dutch incumbent telco, through the Conduit gatewa
 Backed by [`WYRE-AI/kpn-mcp`](https://github.com/WYRE-AI/kpn-mcp), which talks to KPN's
 **Grexx** (IRMA) wholesale interface. Every tool is named `kpn_grexx_*`.
 
+> **Preview in Conduit.** The `kpn` connector carries Conduit's early-access "Preview"
+> badge, so its tool surface can still change.
+
 | Area | What an MSP uses it for | Tools |
 |---|---|---|
 | Connection test | Verify the Grexx credentials mint a token | `kpn_grexx_test_connection` |
