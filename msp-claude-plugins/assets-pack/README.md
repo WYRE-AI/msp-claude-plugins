@@ -60,9 +60,10 @@ for "what devices exist."
   bucketing devices into replace-now / plan-this-year / monitor tiers so
   refresh conversations happen proactively, not after a failure
 - `refresh-quote-list` : turns that calendar into a per-client list of
-  devices to quote, matched against a connected ScalePad Quoter,
-  ConnectWise CPQ, or Kaseya Quote Manager catalog when one exists.
-  Drafts the list only; it does not create quotes
+  devices to quote, matched against a connected ScalePad Quoter, Kaseya
+  Quote Manager, or ConnectWise PSA product catalog when one exists
+  (ConnectWise CPQ has no searchable catalog). Drafts the list only; it
+  does not create quotes
 
 **Agents**
 - `warranty-status-auditor` — portfolio-wide (or single-client) warranty

@@ -2,10 +2,10 @@
 name: "Refresh Quote List"
 description: >
   Turns a Refresh Cycle Planning calendar into a per-client list of
-  devices to quote, then hands off to the existing ScalePad Quoter,
-  ConnectWise CPQ, or Kaseya Quote Manager quotes skills. Drafts the
-  list only, using read-only catalog and quote tools, and never creates,
-  updates, or publishes a quote.
+  devices to quote, matched against a connected ScalePad Quoter, Kaseya
+  Quote Manager, or ConnectWise PSA product catalog, then hands off to a
+  quoting skill. Drafts the list only, using read-only catalog and quote
+  tools, and never creates, updates, or publishes a quote.
 when_to_use: >-
   When a hardware refresh calendar is ready and the MSP needs a
   per-client list of devices to quote, ready to hand to a quoting skill,
@@ -21,12 +21,11 @@ when_to_use: >-
 Refresh Cycle Planning already produces a tiered calendar. This companion
 skill takes that calendar (or the same warranty, EOL/EOS, and age inputs
 when a calendar was just built) and drafts a per-client list of devices
-to quote, matched against a connected quoting catalog when one exists.
+to quote, matched against a connected product catalog when one exists.
 
 This skill does not replace Refresh Cycle Planning, and it does not
-create quotes. The operator hands the list to `scalepad-quoter`,
-`connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes` if they want a
-quote built.
+create quotes. The operator hands the list to `scalepad-quoter` or
+`connectwise-cpq-quotes` if they want a quote built.
 
 Do not invent catalog items or prices. If a catalog tool returns an
 amount, you may carry that amount through as returned and label the
@@ -38,9 +37,10 @@ SKU) without an amount.
 - **Building the refresh calendar itself** (tiers, dates, and
   insufficient-data bucketing): use
   [Refresh Cycle Planning](../refresh-cycle-planning/SKILL.md).
-- **Creating, updating, or publishing a quote:** use `scalepad-quoter`,
-  `connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes`. This skill
-  stops at the list.
+- **Creating, updating, or publishing a quote:** use `scalepad-quoter`
+  or `connectwise-cpq-quotes`. Kaseya Quote Manager's tools are
+  read-only, so a Kaseya quote is built in the Quote Manager web app.
+  This skill stops at the list.
 - **ScalePad Lifecycle Manager roadmaps:** use
   `scalepad-lifecycle-manager`.
 
@@ -49,11 +49,16 @@ SKU) without an amount.
 | System | Role | Required? |
 |--------|------|-----------|
 | Refresh Cycle Planning output, or the RMM inventory that skill uses | The devices, tiers, and timing to quote | Yes |
-| ScalePad Quoter, ConnectWise CPQ, or Kaseya Quote Manager | Read-only catalog and existing-quote context for matching items | Optional |
+| ScalePad Quoter, Kaseya Quote Manager, or ConnectWise PSA | Read-only product catalog for matching items | Optional |
+| ScalePad Quoter, Kaseya Quote Manager, or ConnectWise CPQ | Read-only existing-quote context | Optional |
 
-If no quoting connector is connected, still produce the per-client device
-list from the calendar, and say a catalog-backed quote list could not be
-drafted.
+ConnectWise CPQ has no searchable product catalog. Its quote items are
+lines on existing quotes, not catalog products, so ConnectWise catalog
+matching comes from ConnectWise PSA when it is connected.
+
+If no catalog connector is connected, still produce the per-client
+device list from the calendar, and say a catalog-backed quote list could
+not be drafted.
 
 ## Workflow
 
@@ -64,33 +69,39 @@ Gateway names often look like `<vendor-slug>__<tool_name>`.
 
 If a refresh calendar is not already in hand, follow
 [Refresh Cycle Planning](../refresh-cycle-planning/SKILL.md) to build
-one, then continue here. Do not restate that skill's RMM tool list.
+one, then continue here. That skill's read-only RMM and documentation
+inventory reads are in scope for building the calendar. Do not restate
+its tool list here.
 
-Only call read-only list, get, or search tools from the allow-list
-below. Never create, update, publish, delete, or authenticate-for-write.
+For quoting and catalog systems, only call the read-only tools in the
+allow-list below. Never create, update, publish, delete, or
+authenticate-for-write in any connected system.
 
 **ScalePad Quoter (read-only):** `scalepad_quoter_items_list`,
-`scalepad_quoter_items_get`, `scalepad_quoter_quotes_get`. There is no
-`scalepad_quoter_quotes_list` tool in the current GOVERNANCE surface;
-use `scalepad_quoter_quotes_get` only when an existing quote id is
-already known. Never call `scalepad_quoter_items_update`,
-`scalepad_quoter_quotes_publish`, `scalepad_quoter_auth_authorize`, or
-`scalepad_quoter_auth_refresh`.
-
-**ConnectWise CPQ (read-only):** `cpq_search_quotes`, `cpq_get_quote`,
-`cpq_get_quote_versions`, `cpq_search_quote_items`, `cpq_get_quote_item`,
-`cpq_search_quote_tabs`, `cpq_list_quote_customers`,
-`cpq_list_quote_terms`, `cpq_list_templates`, `cpq_list_tax_codes`,
-`cpq_list_users`, `cpq_list_recurring_revenues`, `cpq_test_connection`.
-Never call `cpq_create_quote_from_template`, `cpq_create_quote_item`,
-`cpq_create_quote_term`, or any update or delete CPQ tool.
+`scalepad_quoter_items_get`, `scalepad_quoter_quotes_list`,
+`scalepad_quoter_quotes_get`. Never call `scalepad_quoter_items_update`,
+`scalepad_quoter_quotes_create`, `scalepad_quoter_quotes_publish`,
+`scalepad_quoter_auth_authorize`, or `scalepad_quoter_auth_refresh`.
 
 **Kaseya Quote Manager (read-only):** `kqm_product_list`,
 `kqm_product_get`, `kqm_category_list`, `kqm_category_get`,
 `kqm_quote_list`, `kqm_quote_get`, `kqm_quote_line_list`,
 `kqm_quote_line_get`, `kqm_quote_section_list`, `kqm_quote_section_get`,
-`kqm_customer_list`, `kqm_customer_get`. Never create or update quotes,
-products, or orders.
+`kqm_customer_list`, `kqm_customer_get`.
+
+**ConnectWise PSA catalog (read-only):** `cw_search_catalog_items`,
+`cw_get_catalog_item`, `cw_list_catalog_categories`,
+`cw_list_catalog_subcategories`. Never call `cw_create_catalog_item` or
+`cw_update_catalog_item`.
+
+**ConnectWise CPQ (read-only, existing quotes only):**
+`cpq_search_quotes`, `cpq_get_quote`, `cpq_get_quote_versions`,
+`cpq_search_quote_items`, `cpq_get_quote_item`, `cpq_search_quote_tabs`,
+`cpq_list_quote_customers`, `cpq_list_templates`, `cpq_test_connection`.
+`cpq_search_quote_items` searches lines on existing quotes; never treat
+its results as catalog matches. Never call
+`cpq_create_quote_from_template`, `cpq_create_quote_item`,
+`cpq_create_quote_term`, or any update or delete CPQ tool.
 
 If a vendor is connected but the needed tool is not in this list, skip
 that catalog and say so.
@@ -98,10 +109,14 @@ that catalog and say so.
 ### Step 2: Build the per-client device list
 
 From the refresh calendar, group devices by client. Stay with
-replace-now and plan-this-year tiers unless the operator asks to include
-monitor-tier items. Keep the insufficient-data bucket as a separate
-list: those devices are not quote-ready until the calendar gaps are
-filled.
+replace-now and plan-this-year tiers by default. Keep the
+insufficient-data bucket as a separate list: those devices are not
+quote-ready until the calendar gaps are filled.
+
+If the operator explicitly asks to include monitor-tier devices, include
+them. Refresh Cycle Planning may report monitor as a count only, so pull
+the device details from the same RMM inventory (or ask for a detailed
+calendar) rather than quoting a bare count.
 
 For each device, carry forward make, model, quantity, tier, and target
 window as the calendar provided them. Do not invent a replacement model
@@ -109,8 +124,9 @@ if the calendar did not specify one.
 
 ### Step 3: Match a catalog when one is connected
 
-If a quoting connector is connected, search its catalog (items,
-products, or templates) for a reasonable match to each replacement.
+If a catalog connector is connected, search its catalog
+(`scalepad_quoter_items_list`, `kqm_product_list`, or
+`cw_search_catalog_items`) for a reasonable match to each replacement.
 Record:
 
 - The catalog name or SKU as returned
@@ -119,10 +135,9 @@ Record:
   no currency conversion and no "typical street price" fill-in
 - "No catalog match" when nothing suitable was returned
 
-Existing quotes (`cpq_search_quotes`, `kqm_quote_list`, or
-`scalepad_quoter_quotes_get` for a known id) may be cited as prior
-context ("an earlier quote already includes this SKU") but must not be
-modified.
+Existing quotes (`scalepad_quoter_quotes_list`, `kqm_quote_list`, or
+`cpq_search_quotes`) may be cited as prior context ("an earlier quote
+already includes this SKU") but must not be modified.
 
 ### Step 4: Draft the list and hand off
 
@@ -134,13 +149,27 @@ Produce a per-client list:
 4. Catalog match or "no catalog match"
 5. Amounts only when returned by a catalog tool, otherwise omitted
 6. A handoff line naming the quoting skill to use next
-   (`scalepad-quoter`, `connectwise-cpq-quotes`, or
-   `kaseya-quote-manager-quotes`), and stating that this skill did not
-   create a quote
+   (`scalepad-quoter` or `connectwise-cpq-quotes`, or the Kaseya Quote
+   Manager web app), and stating that this skill did not create a quote
 
-If no quoting connector was connected, omit catalog columns and say the
-operator will need one of those skills, plus a connected quoter, to
-build a quote.
+Example (fictional data):
+
+```text
+Client: Example Dental Group
+Catalog: ScalePad Quoter (scalepad_quoter_items_list)
+
+| Tier            | Window  | Device (calendar)    | Qty | Catalog match          | Amount (as returned) |
+|-----------------|---------|----------------------|-----|------------------------|----------------------|
+| Replace now     | Now     | Dell OptiPlex 7060   | 6   | Dell OptiPlex 7020 SFF | 899.00               |
+| Plan this year  | 2027 Q2 | HP ProBook 450 G7    | 3   | No catalog match       |                      |
+
+Insufficient data (not quote-ready): 2 devices with no warranty, EOL/EOS, or age data.
+Handoff: use scalepad-quoter to build the quote. This skill did not create a quote.
+```
+
+If no catalog connector was connected, omit the catalog columns and say
+the operator will need a connected quoter, and `scalepad-quoter` or
+`connectwise-cpq-quotes`, to build a quote.
 
 ## Error Handling
 
@@ -155,7 +184,7 @@ You may include a returned amount as data, labeled with its source. Do
 not format a quote, do not total a made-up margin, and do not invent
 list prices for unmatched rows.
 
-### Several quoting tools are connected
+### Several catalogs are connected
 
 Ask which catalog to match against, or run each separately and label the
 source, rather than silently merging them.
@@ -163,8 +192,9 @@ source, rather than silently merging them.
 ## Best Practices
 
 - One client section at a time if the calendar is large.
-- Keep monitor-tier and insufficient-data devices visible, but out of
-  the quote-ready list.
+- Keep insufficient-data devices visible, but out of the quote-ready
+  list. Keep monitor-tier devices out too, unless the operator asked to
+  include them.
 - Oxford commas, and no em dashes.
 
 ## Related Skills
@@ -173,6 +203,7 @@ source, rather than silently merging them.
   the calendar this skill consumes.
 - [Warranty Tracking](../warranty-tracking/SKILL.md) and
   [EOL/EOS Flagging](../eol-eos-flagging/SKILL.md) feed that calendar.
-- `scalepad-quoter`, `connectwise-cpq-quotes`, and
-  `kaseya-quote-manager-quotes` are the handoff targets for actually
-  building a quote.
+- `scalepad-quoter` and `connectwise-cpq-quotes` are the handoff targets
+  for actually building a quote. `connectwise-psa-product-catalog` and
+  `kaseya-quote-manager-quotes` cover the catalog and quote data this
+  skill reads.

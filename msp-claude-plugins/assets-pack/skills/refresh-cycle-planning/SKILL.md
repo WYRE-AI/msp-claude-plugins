@@ -58,8 +58,9 @@ automatically.
 - **Drafting a per-client refresh quote list:** use
   [Refresh Quote List](../refresh-quote-list/SKILL.md). This skill stops
   at the calendar.
-- **Creating or publishing a quote:** use `scalepad-quoter`,
-  `connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes`. This skill
+- **Creating or publishing a quote:** use `scalepad-quoter` or
+  `connectwise-cpq-quotes`. Kaseya Quote Manager's tools are read-only,
+  so a Kaseya quote is built in the Quote Manager web app. This skill
   produces a tiered calendar and device counts, never a dollar figure.
 
 ## Discovering available tools first
