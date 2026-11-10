@@ -67,14 +67,22 @@ below. Never create, update, send, void, or raw/execute.
 `xero_contacts_list`, `xero_contacts_get`, `xero_contacts_search`,
 `pax8-list-companies`.
 
-**Agreements and contracts:** `autotask_search_contracts`,
+**Agreements and contracts:** `autotask_list_expiring_contracts`,
+`autotask_search_contracts`, `autotask_get_contract`,
 `cw_search_agreements`, `cw_get_agreement`, `cw_get_agreement_additions`.
-There is no `autotask_get_contract` and no
-`autotask_list_expiring_contracts` tool; use `autotask_search_contracts`
-and filter returned `endDate` values client-side, as the Autotask
-contracts skill describes. HaloPSA MCP has no contract or agreement list
-tool, and Syncro MCP has no contract list tool: when those are the only
-PSA, say the contract side is unavailable.
+For a renewal window in Autotask, `autotask_list_expiring_contracts`
+returns contracts whose end date falls within `daysAhead` days, optionally
+scoped to one `companyID`:
+
+```json
+{ "tool": "autotask_list_expiring_contracts", "arguments": { "companyID": 12345, "daysAhead": 90 } }
+```
+
+`autotask_search_contracts` also accepts `endDateFrom` and `endDateTo`
+(ISO dates). `autotask_get_contract` returns header fields only, with no
+service lines. HaloPSA MCP has no contract or agreement list tool, and
+Syncro MCP has no contract list tool: when those are the only PSA, say
+the contract side is unavailable.
 
 **Invoices and billing:** `autotask_search_invoices`,
 `autotask_get_invoice_details`, `autotask_search_billing_items`,
@@ -99,6 +107,11 @@ the hosted Pax8 path anyway).
 `cw_search_time_entries`, `cw_get_time_entry`. If the operator does not
 supply a loaded labor rate, say labor cost could not be estimated. Do
 not invent a rate.
+
+**Delivered work (optional):** `autotask_search_tickets`,
+`cw_search_tickets`, `halopsa_tickets_list`, `syncro_tickets_list`.
+Use these only to summarize the client's closed work for the value
+section. Never create, update, or comment on tickets.
 
 If a vendor is connected but the needed tool is not in this list, treat
 that input as unavailable.
@@ -130,7 +143,7 @@ price-increase conversation:
    before any commercial conversation. Do not surprise a client with an
    increase while an over-billing finding is still open.
 3. **Value and delivery evidence.** Hours and closed work only as
-   returned by time or ticket tools already gathered. If those were not
+   returned by the labor and delivered-work tools above. If those were not
    connected, omit this section and say why.
 4. **Margin picture.** Directional only, and only from Margin Analysis
    output (for example, "margin on this agreement is thin because
