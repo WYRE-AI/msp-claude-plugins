@@ -1006,6 +1006,19 @@
       "category": "Workflow Pack"
     },
     {
+      "name": "marketing-pack",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/marketing-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
       "name": "devops-pack",
       "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
       "source": {

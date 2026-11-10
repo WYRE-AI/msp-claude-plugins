@@ -2875,6 +2875,30 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'marketing-pack',
+    name: 'Marketing Pack',
+    vendor: 'Marketing-pack',
+    description: 'MSP Marketing: anonymized case-study drafting from closed PSA work, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'beta',
+    features: [
+      'Review And Referral Ask'
+    ],
+    skills: [
+      { name: 'review-and-referral-ask', description: 'Picks clients who appear happy from CrewHu survey results (or another discovered survey tool) together with ticket SLA and resolution data, then drafts a review or referral request for the MSP to send. Drafts only; never sends email, never creates outreach tickets, and never posts a review.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'marketing-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'devops-pack',
     name: 'Devops Pack',
     vendor: 'Devops-pack',
