@@ -27,37 +27,18 @@ Domotz authenticates via an API key:
 2. Navigate to **User Menu > API Keys**
 3. Generate a new API key
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export DOMOTZ_API_KEY="your-api-key"
-export DOMOTZ_REGION="us-east-1"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Domotz once in Conduit (**Connections → Domotz**, slug `domotz`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DOMOTZ_API_KEY` | Yes | | API key from User Menu > API Keys |
-| `DOMOTZ_REGION` | No | `us-east-1` | API region (`us-east-1` or `eu-central-1`) |
-| `DOMOTZ_MCP_URL` | No | `https://conduit.wyre.ai/v1/domotz/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `DOMOTZ_MCP_URL` to your gateway's endpoint:
-
-```
-DOMOTZ_MCP_URL=https://your-gateway-domain/v1/domotz/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org -> Settings -> Integrations -> Domotz -> Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "DOMOTZ_MCP_URL": "https://your-gateway-domain/v1/domotz/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http domotz https://your-gateway-domain/v1/domotz/mcp`. The gateway then holds the Domotz credentials, not the client.
 
 ## Installation
 

@@ -40,6 +40,8 @@ Find a company in HubSpot CRM by name or domain and display a complete profile i
    - Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the same record
    - For each ticket ID, call `get_crm_objects` (`objectType: "tickets"`) to get subject, status, and priority
 
+   Each association search returns one page. Pass the returned `offset` and repeat until there are no more results, so the profile and deal total cover every record.
+
 6. **Format and present the complete company profile**
 
 ## Parameters

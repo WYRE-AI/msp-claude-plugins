@@ -15,7 +15,7 @@ The plugin reaches Datto SaaS Protection through [Conduit](https://conduit.wyre.
 | `datto_saas_get_seat` | read | One seat by email, site URL or remote ID |
 | `datto_saas_list_applications` | read | Backup history per application (Exchange, OneDrive, SharePoint, Teams, Gmail, Drive) |
 | `datto_saas_get_backup_stats` | read | Detailed per-service backup statistics |
-| `datto_saas_bulk_seat_change` | write | License, Pause or Unlicense up to 100 seats (confirm-gated) |
+| `datto_saas_bulk_seat_change` | write | License, Pause or Unlicense up to 100 seats. Confirm-gated, but on a client that cannot show the prompt an agent can pass `confirm: true` itself, so the gate is not a guarantee of human approval |
 
 There is no restore or activity-log tool; restores are started in the SaaS Protection portal.
 

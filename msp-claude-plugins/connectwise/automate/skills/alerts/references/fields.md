@@ -16,8 +16,7 @@ interface Alert {
   // Target
   ComputerID: number;           // Affected computer
   ComputerName: string;         // Computer hostname
-  ClientID: number;             // Parent client
-  ClientName: string;           // Client name
+  Client?: { Id: number; Name: string }; // Parent client; may be absent. `client_id` filters on Client.Id
   LocationID: number;           // Location ID
 
   // Alert Details

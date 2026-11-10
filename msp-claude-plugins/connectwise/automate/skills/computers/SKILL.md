@@ -44,7 +44,7 @@ Computers are the core managed entities in ConnectWise Automate. Each computer r
 | `cwautomate_computers_reboot` | write | Queue a reboot (catalog reboot command, or `command_id`) |
 | `cwautomate_computers_run_command` | admin | Queue a catalog command with positional `parameters` |
 
-Commands are queued, not run synchronously. `cwautomate_computers_reboot` and `cwautomate_computers_run_command` return an `execution_id` (by default without waiting). Poll `cwautomate_computers_command_status`; never re-issue on a timeout or a "Duplicate command" result, because the first one is still queued. Free-text commands are not accepted, and the API user's command level silently caps which catalog commands may be issued.
+Commands are queued, not run synchronously. `cwautomate_computers_reboot` and `cwautomate_computers_run_command` return an `execution_id` (by default without waiting). Poll `cwautomate_computers_command_status`; never re-issue on a timeout or a "Duplicate command" result, because the first one is still queued. If a timeout leaves no `execution_id` to poll, check the computer's command queue in the Automate console (or escalate for a manual check) before retrying. Free-text commands are not accepted, and the API user's command level silently caps which catalog commands may be issued.
 
 ## Key Concepts
 

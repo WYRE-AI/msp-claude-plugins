@@ -20,6 +20,7 @@ The Conduit `m365` connector (hidden, personal-only) has no tools for this area.
 - Look up and list users: `cipp_list_users`; groups: `cipp_list_user_groups`; devices: `cipp_list_user_devices`
 - Create, edit or disable: `cipp_create_user`, `cipp_edit_user`, `cipp_disable_user`
 - Reset password or MFA: `cipp_reset_password`, `cipp_reset_mfa`; end sessions: `cipp_revoke_sessions`
+- Every create, edit, disable, reset and revoke tool above is an admin-tier write in Conduit, so it needs admin access to the `cipp` connector. `cipp_list_users` and `cipp_list_user_groups` are read; `cipp_list_user_devices` is admin
 - Offboard: `cipp_offboard_user` (irreversible, admin)
 
 ## Overview

@@ -27,7 +27,7 @@ Contacts in ConnectWise PSA represent individuals at your client companies. Cont
 
 ## Contact Types
 
-Contact types (for example Billing, Primary, Technical) drive who receives invoices and portal notifications. `cw_update_contact_types` (write) sets a contact's types; read the current ones from `cw_get_contact` first and send the full intended set.
+Contact types (for example Billing, Primary, Technical) drive who receives invoices and portal notifications. `cw_update_contact_types` (write) adds or removes **one** type per call: `id` (contact), `action` (`add` or `remove`), and `typeName` or `typeId`; a removal can pass the `associationId` instead. Read the current types from `cw_get_contact` first, then make one call per type to add or remove. Adding a type the contact already has is a no-op.
 
 ## API Endpoint
 

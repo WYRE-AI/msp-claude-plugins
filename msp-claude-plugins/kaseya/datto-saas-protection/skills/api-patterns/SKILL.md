@@ -72,9 +72,21 @@ Partner (API key pair)
 
 The server asks the user to confirm the exact change. On clients that cannot show a prompt it refuses unless `confirm: true` is passed, and that flag may only be set after the user has explicitly approved this exact change. Seat Management 2.0 tenants only.
 
+```json
+{
+  "saasCustomerId": 123456,
+  "externalSubscriptionId": "Classic:Office365:123456",
+  "seatType": "User",
+  "actionType": "License",
+  "ids": ["00000000-0000-0000-0000-000000000001", "00000000-0000-0000-0000-000000000002"]
+}
+```
+
+Add `"confirm": true` only after the user has approved this exact list.
+
 ## Pagination
 
-`/domains` and `/seats` return bare arrays. Endpoints that answer with Datto's paged envelope (`{ pagination: { page, perPage, totalPages }, items }`) are followed automatically. Every tool returns a flat array, so there is no cursor to manage.
+`/domains` and `/seats` return bare arrays. Endpoints that answer with Datto's paged envelope (`{ pagination: { page, perPage, totalPages }, items }`) are followed automatically. List tools return a flat array, so there is no cursor to manage; `datto_saas_get_seat` returns a single seat object.
 
 ## Error handling
 

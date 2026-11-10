@@ -32,9 +32,9 @@ The address tools take a Dutch postcode (`1012JS`), a house number and an option
 
 1. Resolve the line: `kpn_grexx_customer_data` for the customer card, then `kpn_grexx_order_summary` with `productGroup: "Connectivity"` (or `"Internet"`) for the order ID.
 2. `kpn_grexx_ras_check` on the order — is a PPP session up, and with which IP?
-3. `kpn_grexx_radius_check` — logins over the last 7 days. Many logins mean a flapping line; an empty result means the line has been up the whole time.
+3. `kpn_grexx_radius_check` — logins over the last 7 days. Many logins mean a flapping line. An empty result is inconclusive: the line has been up for over 7 days, or it has not been up at all. Use the RAS check from step 2 to tell them apart, and never report continuous uptime from an empty history alone.
 4. `kpn_grexx_carrier_info` for the site address — look for planned work.
-5. If the line is down and there is no planned work, and it is an xDSL order that is out of sync, propose `kpn_grexx_start_line_diagnose` with the matching `symptomCode`. It is the one write tool: confirm with the user first, and do not start a second one while one is running.
+5. If the line is down and there is no planned work, and it is an xDSL order that is out of sync, propose `kpn_grexx_start_line_diagnose` with the matching `symptomCode`. It is the one write tool: confirm with the user first, and do not start a second one while one is running. It only starts the test and returns an `AnalysisId`; the connector cannot fetch the result, so follow it up in the Grexx portal (or with KPN) and say so.
 6. If the line is up, continue with the customer's own network (router/firewall in the RMM).
 
 There is no dedicated "disturbance" (storing) lookup through Conduit. Planned work comes from `kpn_grexx_carrier_info`; unplanned outages show up as a line that is down or flapping.

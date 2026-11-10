@@ -96,7 +96,7 @@ In the gateway connection UI, choose the **`azure-mcp`** vendor and supply:
 2. **Service Principal Client ID** — the app registration's `appId`
 3. **Service Principal Client Secret** — the secret from Step 1
 
-The gateway authenticates the Azure MCP sidecar with these credentials and routes the eight enabled namespaces' tools into your session. No Azure credentials are stored client-side.
+The gateway authenticates the Azure MCP sidecar with these credentials and routes the enabled namespaces' 11 tools into your session. No Azure credentials are stored client-side.
 
 ## Verifying the connection
 

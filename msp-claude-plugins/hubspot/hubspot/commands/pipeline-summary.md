@@ -26,7 +26,7 @@ Generate a summary of the HubSpot deal pipeline showing deals per stage, total a
 
 2. **Fetch closed-won deals** for the period (if period filter is set)
 
-   Call `search_crm_objects` (`objectType: "deals"`) with `dealstage=closedwon` and the period filter to get won deals.
+   Call `search_crm_objects` (`objectType: "deals"`) with `dealstage=closedwon` and the period filter to get won deals. Set `limit=100` and paginate with `offset` through all results, as for open deals, so the revenue totals include every won deal.
 
 3. **Group deals by stage** and calculate metrics
 
@@ -208,7 +208,8 @@ Please wait a moment and try again.
 | `search_crm_objects` (`objectType: "deals"`) | Fetch deals by stage, owner, and close date |
 | `get_crm_objects` (`objectType: "deals"`) | Get full deal details |
 | `search_crm_objects` (`associatedWith` filter) | Get associated companies for deal names |
-| `get_user_details` | Resolve owner names |
+| `search_owners` | Resolve owner names and HubSpot owner IDs |
+| `get_user_details` | Identify the connected user (for "my deals") |
 
 ## Related Commands
 

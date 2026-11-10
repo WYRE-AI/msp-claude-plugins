@@ -100,7 +100,7 @@ All filters optional: `searchTerm` (contains-match on contract name), `companyID
 
 ### Fetch a Single Contract or Build a Renewal Pipeline
 
-To fetch one contract by ID, call `autotask_get_contract` (`id`; header fields only). For a renewal pipeline, call `autotask_list_expiring_contracts` with `daysAhead` (default 60), optional `companyID`, and `includeExpired: true` to also catch contracts already past their end date. Sort the result by `endDate`:
+To fetch one contract by ID, call `autotask_get_contract` (`id`; header fields only). For a renewal pipeline, call `autotask_list_expiring_contracts` with `daysAhead` (default 60), `status: 1` (In Effect), `pageSize: 500` (default 100), optional `companyID`, and `includeExpired: true` to also catch contracts already past their end date. If 500 rows come back the list may be incomplete: split the request by `companyID` and warn about any company that still reaches the cap. Sort the result by `endDate`:
 
 - `endDate` on or before today → expired but still Active — the compliance-risk case. Autotask does **not** auto-deactivate expired contracts, so this is how clients still receiving service on expired paper are found.
 - `endDate` within the next 30/60/90 days → the renewal call list, in ascending urgency order.
@@ -291,7 +291,7 @@ Calculate remaining hours:
 ### Contract Renewal
 
 1. **Identify expiring contracts**
-   - `autotask_list_expiring_contracts` with `daysAhead: 90` and `includeExpired: true`, bucketed by `endDate` into 30/60/90 days
+   - `autotask_list_expiring_contracts` with `daysAhead: 90`, `status: 1`, `pageSize: 500` and `includeExpired: true`, bucketed by `endDate` into 30/60/90 days (a full page of 500 means the list may be incomplete)
    - Contracts with `endDate` before today are already lapsed but still marked active
 
 2. **Review contract performance**

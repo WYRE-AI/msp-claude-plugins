@@ -230,7 +230,7 @@ Content-Type: application/json
 
 ### Update an Opportunity
 
-`autotask_update_opportunity` (`opportunityId` plus only the fields to change) moves stage, status, probability, owner and close date, and records win/loss reasons.
+`autotask_update_opportunity` (write tier; `opportunityId` plus only the fields to change) moves stage, status, probability, owner and close date, and records win/loss reasons.
 
 - Revenue: set the per-period fields (`monthlyRevenue`, `yearlyRevenue`, `onetimeRevenue`, ...). Setting `amount` **replaces** the breakdown with a one-time value and clears recurring revenue; `cost` behaves the same way.
 - `useQuoteTotals: true` overwrites every revenue and cost field from the primary quote, and zeroes them if no quote is attached.

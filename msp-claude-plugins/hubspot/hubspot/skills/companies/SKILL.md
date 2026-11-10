@@ -47,9 +47,9 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `get_crm_objects` (`objectType: "companies"`) | Get a single company by ID | `companyId` (required) |
+| `get_crm_objects` (`objectType: "companies"`) | Get companies by ID | `objectIds` (required, 1-100) |
 | `manage_crm_objects` (`createRequest`, `objectType: "companies"`) | Create a new company | `name` (required), `domain`, `industry`, `phone` |
-| `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) | Update an existing company | `companyId` (required), property fields to update |
+| `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) | Update an existing company | `objectId` (required), property fields to update |
 | `search_properties` (`objectType: "companies"`) | List all available company properties | None |
 | `search_crm_objects` (`objectType: "companies"`) | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `after` |
 
@@ -156,19 +156,19 @@ Call `manage_crm_objects` (`createRequest`, `objectType: "companies"`) with the 
 
 ### Update a Company
 
-Call `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) with the `companyId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) with the company's `objectId` and the properties to change:
 
 **Example: Update lifecycle stage and employee count:**
-- `companyId`: `98765`
+- `objectId`: `98765`
 - `lifecyclestage`: `customer`
 - `numberofemployees`: `175`
 
 ### Retrieve a Company
 
-Call `get_crm_objects` (`objectType: "companies"`) with the `companyId`:
+Call `get_crm_objects` (`objectType: "companies"`) with the company ID in `objectIds`:
 
 **Example:**
-- `get_crm_objects` (`objectType: "companies"`) with `companyId=98765`
+- `get_crm_objects` (`objectType: "companies"`) with `objectIds: [98765]`
 
 ## Key Concepts
 
@@ -266,7 +266,7 @@ Common industry values for MSP clients:
 2. **Create the company** - Call `manage_crm_objects` (`createRequest`, `objectType: "companies"`) with name, domain, industry, address, employee count, and `lifecyclestage=customer`
 3. **Create contacts** - Add the primary contact using `manage_crm_objects` (`createRequest`, `objectType: "contacts"`)
 4. **Associate contacts** - Call `manage_crm_objects` (`updateRequest` with `associations`) to link contacts to the company
-5. **Log setup note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the onboarding
+5. **Log setup note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the company, so the note shows on its timeline
 
 ### Company Audit Report
 
@@ -329,7 +329,7 @@ Common industry values for MSP clients:
 | Company not found | Invalid company ID | Verify the ID with `search_crm_objects` (`objectType: "companies"`) |
 | Duplicate domain | Company with this domain already exists | Search by domain first to find the existing record |
 | Invalid property | Property name not recognized | Use `search_properties` (`objectType: "companies"`) to check available properties |
-| Invalid industry | Industry value not valid | Use `search_properties` (`objectType: "companies"`) to see allowed industry values |
+| Invalid industry | Industry value not valid | Use `get_properties` (`objectType: "companies"`, property `industry`) to see allowed industry values |
 | Rate limited | Too many requests | Wait 10 seconds and retry |
 
 ## Best Practices

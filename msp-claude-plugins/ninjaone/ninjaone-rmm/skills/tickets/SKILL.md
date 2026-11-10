@@ -51,7 +51,7 @@ NinjaOne includes a built-in ticketing system that integrates with device monito
 | `ninjaone_tickets_update` | write | Update a ticket (`ticket_id`; pass `version` from `ninjaone_tickets_get`) |
 | `ninjaone_tickets_add_comment` | write | Add a public or internal comment |
 
-The six lookup tools were added in ninjaone-mcp's ticketing release and have no Conduit classification yet, so they enforce at `admin` until Conduit classifies them. A `write` grant alone can create a ticket only if the form, status and assignee IDs are already known.
+The six lookup tools were added in ninjaone-mcp's ticketing release and have no Conduit classification yet, so they enforce at `admin` until Conduit classifies them. A `write` grant alone can create a ticket only if the form ID is already known; status and assignee are optional (the status defaults to New), so leave them out when their IDs are unknown.
 
 ### Creating a ticket
 

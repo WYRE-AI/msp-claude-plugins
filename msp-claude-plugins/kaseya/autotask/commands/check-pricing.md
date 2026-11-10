@@ -36,10 +36,21 @@ Args: { searchTerm: "$product" }
 
 ### Step 2: Get Full Details
 
+For a product:
+
 ```
 Tool: autotask_get_product
 Args: { productId: <resolved_id> }
 ```
+
+For a service (`type="service"`, or an ID resolved from `autotask_search_services`):
+
+```
+Tool: autotask_get_service
+Args: { serviceId: <resolved_id> }
+```
+
+Product and service IDs are separate sequences, so never look a service ID up as a product.
 
 ### Step 3: Price-list overrides
 

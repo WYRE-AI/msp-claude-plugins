@@ -202,7 +202,7 @@ channels; 1-3 are the most common in MSP workflows.)
 | Status | Meaning | Action |
 |--------|---------|--------|
 | 400 | Validation failed | Check required fields and encodings |
-| 401 | Missing or invalid credentials | Re-check `FRESHDESK_DOMAIN` / `FRESHDESK_API_KEY` |
+| 401 | Missing or invalid credentials | Re-check the Domain and API Key fields on the Freshdesk connection in Conduit |
 | 403 | Authenticated but not permitted | Check the API key's agent scope |
 | 404 | Unknown ticket / contact / company / article ID | Re-list or re-search to confirm |
 | 429 | Rate limit exceeded | Read `Retry-After` and back off |

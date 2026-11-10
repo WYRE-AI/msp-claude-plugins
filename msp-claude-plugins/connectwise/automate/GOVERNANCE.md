@@ -89,7 +89,9 @@ positional `parameters`; what the command does is defined server-side, so
 the call alone does not tell a reviewer its effect. It and the reboot
 queue and return an `execution_id`; poll
 `cwautomate_computers_command_status` (read) and never re-issue on a
-timeout or a "Duplicate command" result.
+timeout or a "Duplicate command" result. If the call times out before it
+returns an `execution_id`, there is nothing to poll: check the computer's
+command queue in the Automate console before deciding whether to retry.
 
 `cwautomate_clients_create` and `cwautomate_clients_update` sit in the same
 `write` bucket and change nothing outside the RMM console. The tier cannot

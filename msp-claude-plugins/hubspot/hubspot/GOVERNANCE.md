@@ -37,10 +37,10 @@ Confirm the live permission grant in the gateway access editor before you rely o
 The live connector is HubSpot's own hosted MCP server. Its CRM write tool is
 generic: one `manage_crm_objects` call creates or updates any object type,
 so the tier above depends on the `objectType` in the arguments, not on the
-tool name. **Conduit has no classification for any HubSpot tool today**, so
-every one of them, reads included, fails closed to `admin` in the access
-editor. Granting a read-only agent HubSpot therefore means granting
-individual tools, not a tier.
+tool name. **Conduit classifies the 22 read tools above as `read`** (conduit#2480).
+`manage_crm_objects` and the other `manage_*` tools are not classified, so they
+fail closed to `admin` in the access editor: an agent that writes to HubSpot
+needs the `admin` grant, and a `read` grant gives no HubSpot write access.
 
 There is no delete tool, so the destructive tier is not defined by data loss —
 it is defined by outbound reach.
@@ -52,7 +52,10 @@ email action, writing a contact property hands a real named prospect to a
 marketing sequence. The plugin sends nothing; HubSpot does, on the strength of
 the write — and a sent email cannot be recalled. Company, deal, and ticket
 objects carry no email address of their own, which is why writes to them stay
-in the write tier.
+in the write tier by default. A company-, deal- or ticket-based workflow can
+still email the contacts associated with the record, so check the portal's
+workflows: if any of them sends email on these objects, treat those writes as
+destructive too.
 
 `manage_crm_objects` takes a `confirmationStatus`. An agent can set
 `CONFIRMED` itself, so treat it as a record of approval, not as a control.

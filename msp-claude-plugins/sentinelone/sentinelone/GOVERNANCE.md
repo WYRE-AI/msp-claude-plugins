@@ -65,7 +65,7 @@ With no write or delete tier, the usual "propose and approve" ceremony
 has nothing to apply to. The policy that matters here is about data
 volume, cost, and the size of the grant:
 
-- Allow the four `read`-tier tools to scheduled and unattended agents.
+- Allow the six `read`-tier tools (`list_alerts`, `get_alert`, `search_alerts`, `search_vulnerabilities`, `search_inventory_items`, `get_timestamp_range`) to scheduled and unattended agents, subject to the `IDENTITY` exception below.
 - Everything else needs `admin`.
 - Bound `powerquery` and `purple_ai` in that allowlist deliberately. Require an explicit time range on every Data Lake query and cap how many an unattended agent may issue per run.
 - Keep `list_inventory_items` / `search_inventory_items` out of an

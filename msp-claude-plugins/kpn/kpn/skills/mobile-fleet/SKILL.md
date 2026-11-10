@@ -41,11 +41,11 @@ Every mobile tool is keyed on an IRMA **order ID** (one per mobile subscription)
 
 ### Fleet overview for a customer
 
-`kpn_grexx_order_summary` (`productGroup: "Mobile"`, `orderState: "Active"`), then `kpn_grexx_mobile_orders` in batches of 50. Report number, user label, subscription and bundles.
+`kpn_grexx_order_summary` (`productGroup: "Mobile"`, `orderState: "Active"`), paging with `skip` and `take` (up to 2500 per page) until every order is collected. Then `kpn_grexx_mobile_orders` with those order IDs in batches of 50. Report number, user label, subscription and bundles.
 
 ### Usage review
 
-`kpn_grexx_mobile_usage` per order. Flag lines near their bundle limits and lines with no usage at all (candidates for cancellation, which the customer then requests through the portal).
+`kpn_grexx_mobile_usage` per order. It returns current usage only. Flag lines near their bundle limits. Treat a line with no usage as something to investigate, not as proof it is unused: check its history in the Grexx portal and ask the customer before suggesting a cancellation (which the customer requests through the portal).
 
 ### Lost or stolen phone
 

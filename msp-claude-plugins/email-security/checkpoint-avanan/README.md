@@ -18,56 +18,18 @@ full tool inventory and permission model.
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Check Point Avanan once in Conduit (**Connections → Checkpoint Avanan**, slug `avanan`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "CHECKPOINT_CLIENT_ID": "your-client-id",
-    "CHECKPOINT_CLIENT_SECRET": "your-client-secret"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "CHECKPOINT_CLIENT_ID": "your-client-id",
-    "CHECKPOINT_CLIENT_SECRET": "your-client-secret"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `CHECKPOINT_CLIENT_ID` | Yes | | OAuth2 client ID from Infinity Portal |
-| `CHECKPOINT_CLIENT_SECRET` | Yes | | OAuth2 client secret (sent as `accessKey`) |
-| `CHECKPOINT_AVANAN_MCP_URL` | No | `https://conduit.wyre.ai/v1/avanan/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Client ID |
+| API Secret Key |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CHECKPOINT_AVANAN_MCP_URL` to your gateway's endpoint:
-
-```
-CHECKPOINT_AVANAN_MCP_URL=https://your-gateway-domain/v1/avanan/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Checkpoint Avanan > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "CHECKPOINT_AVANAN_MCP_URL": "https://your-gateway-domain/v1/avanan/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http avanan https://your-gateway-domain/v1/avanan/mcp`. The gateway then holds the Check Point Avanan credentials, not the client.
 
 ### Obtaining API Credentials
 

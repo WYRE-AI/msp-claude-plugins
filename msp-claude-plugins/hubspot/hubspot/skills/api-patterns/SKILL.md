@@ -52,7 +52,7 @@ HubSpot's hosted server excludes properties marked as sensitive (for example PHI
 |------|---------|---------------|
 | `search_crm_objects` | Search and list records of one object type | `objectType` (`contacts`, `companies`, `deals`, `tickets`, `notes`, `tasks`, ... or a custom `p<portalId>_<name>`), `query`, `filterGroups` (property `filters` + `associatedWith`), `properties`, `sorts`, `limit` (max 200), `offset` |
 | `get_crm_objects` | Fetch up to 100 records of one type by ID | `objectType`, `objectIds`, `properties` |
-| `manage_crm_objects` | Create or update records, and create associations | `createRequest` / `updateRequest` with `objects[]` (`objectType`, `properties`, `associations`, `objectId` on update); `confirmationStatus` |
+| `manage_crm_objects` | Create or update records, and create associations. Not classified in Conduit, so it needs the `admin` grant. | `createRequest` / `updateRequest` with `objects[]` (`objectType`, `properties`, `associations`, `objectId` on update); `confirmationStatus` |
 | `query_crm_data` | Read-only SQL over CRM data, for counts and aggregates | `sql`; call `tool_guidance` first |
 | `discover_hubspot_schema` | Object types (including custom objects) and access | — |
 
@@ -228,12 +228,12 @@ When rate limited, the MCP tool will return a 429 error. Wait before retrying. T
 | 404 Not Found | Invalid object ID | Verify the record ID exists |
 | 409 Conflict | Duplicate record | Check for existing records before creating |
 | 429 Too Many Requests | Rate limit exceeded | Wait 10 seconds and retry |
-| Invalid property | Property name not valid | Use `list_*_properties` tools to check available properties |
+| Invalid property | Property name not valid | Use `search_properties` to find the property, then `get_properties` for its definition and allowed values |
 
 ### Troubleshooting MCP Connection
 
 1. **Check the Conduit connection** - Reconnect HubSpot in the Conduit web UI if the token was revoked or the user lost access
-2. **Test with a simple call** - `get_user_details` confirms the connection and returns the user's owner ID
+2. **Test with a simple call** - `get_user_details` confirms the connection and returns the user's owner ID. If it also returns 401, fix the HubSpot connection in Conduit rather than retrying
 3. **Check object access** - `discover_hubspot_schema` shows which object types the connected user can read and write
 5. **Check plan** - Ensure your HubSpot plan supports the API features you need
 
@@ -243,7 +243,7 @@ When rate limited, the MCP tool will return a 429 error. Wait before retrying. T
 2. **Use maximum page size** - Set `limit=100` to minimize total tool calls
 3. **Monitor rate limits** - Stay well under 100 requests per 10 seconds
 4. **Use associations** - Link related objects (contacts to companies, deals to contacts) for full context
-5. **Check properties first** - Use `list_*_properties` tools to discover available fields before searching
+5. **Check properties first** - Use `search_properties` / `get_properties` to discover available fields before searching
 6. **Validate before creating** - Search for existing records before creating duplicates
 7. **Use lifecycle stages** - Track contacts and companies through their lifecycle for accurate reporting
 8. **Cache property lists** - Property definitions change infrequently; reference them across multiple operations

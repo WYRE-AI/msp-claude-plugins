@@ -38,7 +38,7 @@ Syncro invoices are the core of your billing workflow. Invoices can be created m
 | `syncro_invoices_create` | write | Create an invoice |
 | `syncro_invoices_email` | admin | Email an invoice to the customer (no unsend) |
 
-The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it. In particular, adding line items to an existing invoice, recording a payment, updating an invoice and voiding one are **manual** steps in Syncro: describe them to the user, and never report them as done.
 
 ## Key Concepts
 

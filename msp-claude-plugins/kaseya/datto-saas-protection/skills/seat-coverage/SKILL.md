@@ -29,13 +29,20 @@ The two questions an MSP asks of SaaS Protection every week are "is everyone who
 3. Group the results by `seatType` (`User`, `SharedMailbox`, `SharedDrive`, `Site`, `TeamSite`, `Team`). Unprotected `User` seats are usually the finding that matters; unprotected `Site` or `Team` seats are often deliberate.
 4. Report per customer: protected count, unprotected count by type, paused count. Flag paused seats separately: they keep old backups but take no new ones.
 
-To inspect one person, `datto_saas_get_seat` with their email (`mainId`) or `remoteId` returns the seat card.
+If a seat read fails, retry it once. If it still fails, mark that customer's result as incomplete and say which read failed; never present a partial sweep as complete.
+
+To inspect one person, call `datto_saas_get_seat` with `seatId` set to their email (the `mainId`) or `remoteId`, plus `saasCustomerId` (pick the customer if prompted). It returns the seat card:
+
+```json
+{ "saasCustomerId": 123456, "seatId": "jane.doe@contoso.example" }
+```
 
 ## Workflow: backup health
 
 1. `datto_saas_list_applications` for the customer (`daysUntil: 7` for a weekly review) — backup status per suite (Exchange, OneDrive, SharePoint, Teams, Gmail, Drive) per window.
 2. `datto_saas_get_backup_stats` for the same customer — per-service last-7-day status, last backup times and storage.
 3. A suite whose recent windows are failing, or whose last backup is older than a day, is the finding. Name the suite and the last good backup time.
+4. If `datto_saas_list_applications` or `datto_saas_get_backup_stats` fails for a customer, retry once, then mark that customer's backup health as unknown in the report rather than leaving it out.
 
 ## Remediation: licensing seats
 

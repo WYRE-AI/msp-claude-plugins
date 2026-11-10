@@ -22,7 +22,7 @@ Answer "is KPN down at this site?" for one Dutch address, using the line's own s
 2. **Check the line**
 
    - `kpn_grexx_ras_check` — is a PPP session up, and which IP does it have?
-   - `kpn_grexx_radius_check` — logins in the last 7 days. Many logins mean a flapping line; an empty result means it has been up throughout.
+   - `kpn_grexx_radius_check` — logins in the last 7 days. Many logins mean a flapping line. An empty result means the line has been up for over 7 days **or not at all**, so read it together with the RAS check before concluding anything.
 
 3. **Check for planned work**
 

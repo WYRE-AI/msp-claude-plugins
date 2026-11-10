@@ -11,7 +11,7 @@ Create a new deal in HubSpot CRM and associate it with a company and optionally 
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `search_crm_objects` (`objectType: "companies"`), `search_crm_objects` (`objectType: "contacts"`), `manage_crm_objects` (`createRequest`, `objectType: "deals"`), and `manage_crm_objects` (`updateRequest` with `associations`) available
+- MCP tools `search_crm_objects` (`objectType: "companies"`), `search_crm_objects` (`objectType: "contacts"`), `manage_crm_objects` (`createRequest`, `objectType: "deals"`), and `manage_crm_objects` (`updateRequest` with `associations`) available. `manage_crm_objects` is not classified in Conduit, so it needs the `admin` grant
 - Company must exist in HubSpot
 - Contact (if specified) must exist in HubSpot
 
@@ -28,7 +28,9 @@ Create a new deal in HubSpot CRM and associate it with a company and optionally 
    - If a name was provided, call `search_crm_objects` (`objectType: "contacts"`) with `firstname` and `lastname` filters
    - If an ID was provided, call `get_crm_objects` (`objectType: "contacts"`) with `objectIds: [<contactId>]`
 
-3. **Create the deal** with the provided properties
+3. **Get approval** - Show the resolved company (and contact), the deal properties and the associations you will create, and wait for the user to approve. Do not call `manage_crm_objects` before approval, and ask again before any later change.
+
+4. **Create the deal** with the approved properties
 
    Call `manage_crm_objects` (`createRequest`, `objectType: "deals"`) with:
    - `dealname`: The deal name
@@ -38,19 +40,19 @@ Create a new deal in HubSpot CRM and associate it with a company and optionally 
    - `closedate`: The expected close date
    - `dealtype`: `newbusiness` (default)
 
-4. **Associate with company** - Link the deal to the company
+5. **Associate with company** - Link the deal to the company
 
    Call `manage_crm_objects` with an `updateRequest` on the deal (`objectType: "deals"`, its `objectId`) and `associations: [{ targetObjectType: "COMPANY", targetObjectId: <id> }]`
 
-5. **Associate with contact** (if specified) - Link the deal to the contact
+6. **Associate with contact** (if specified) - Link the deal to the contact
 
    Call `manage_crm_objects` with an `updateRequest` on the deal (`objectType: "deals"`, its `objectId`) and `associations: [{ targetObjectType: "CONTACT", targetObjectId: <id> }]`
 
-6. **Log creation note** - Document the deal creation
+7. **Log creation note** - Document the deal creation
 
    Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with a summary of the deal and associate it with the deal
 
-7. **Present deal summary** for confirmation
+8. **Present deal summary**
 
 ## Parameters
 

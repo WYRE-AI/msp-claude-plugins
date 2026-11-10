@@ -41,8 +41,9 @@ Tools here are Azure MCP Server *namespaces*, not single operations — `monitor
 
 **This plugin is read-only, and that is enforced in two independent
 places.** The gateway runs the Azure MCP Server with the `--read-only`
-flag, and it applies a namespace allowlist that admits only the eight
-observability, cost, and inventory namespaces. Write- and
+flag, and it applies a namespace allowlist that admits only the
+observability, cost, and inventory namespaces behind the 11 tools above
+(including `foundry` and `search`). Write- and
 delete-capable namespaces (`storage`, `keyvault`, `compute`, `role`,
 `aks`, and others) are not enabled, so even an over-privileged service
 principal has no mutating call to route.
@@ -78,7 +79,7 @@ They cannot express "Priya may query Log Analytics, the overnight agent may not.
 The safe default for most plugins is "read autonomously, propose
 writes". Here there are no writes to propose, so:
 
-- Read tools: allow, including for scheduled and unattended agents. Health triage, Advisor review, quota headroom checks, and inventory reporting are all safe to automate — but note that a bare `read` grant reaches only four of the nine tools today.
+- Read tools: allow, including for scheduled and unattended agents. Health triage, Advisor review, quota headroom checks, and inventory reporting are all safe to automate — but note that a bare `read` grant reaches only four of the eleven tools today.
 - **Withhold `monitor` from unattended agents specifically**, whatever tier it settles at.
 - The two controls worth applying anyway are on **data** and **cost**,
   not on state changes — see below.

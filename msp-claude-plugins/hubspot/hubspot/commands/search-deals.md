@@ -168,7 +168,7 @@ Valid stages (default pipeline):
   - closedlost
 
 Note: Your HubSpot account may have custom stages.
-Use search_properties to check available values.
+Use get_properties (objectType deals, property dealstage) to list the valid stages.
 ```
 
 ### Rate Limit

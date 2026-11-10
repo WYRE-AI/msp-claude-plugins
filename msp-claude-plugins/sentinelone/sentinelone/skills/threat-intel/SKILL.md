@@ -29,16 +29,24 @@ Alongside the Singularity data tools, the SentinelOne connector (Purple MCP side
 |------|-----------|---------|
 | `threat_intel_by_hash` | `hash_value` (MD5, SHA-1 or SHA-256) | Detection ratio, names, first/last seen, classification |
 | `threat_intel_by_ip` | `ip_address` | Reputation, ASN/owner, related detections |
-| `threat_intel_by_domain` | domain | Reputation, registration, related detections |
-| `threat_intel_by_url` | URL | Reputation and scan verdicts |
+| `threat_intel_by_domain` | `domain` | Reputation, registration, related detections |
+| `threat_intel_by_url` | `url` | Reputation and scan verdicts |
 | `threat_intel_get_file_behavior` | `hash_value`, optional `sandbox` | Sandbox execution report: processes, file and registry activity, network traffic |
 | `threat_intel_get_file_relationships` | `hash_value`, `relationship_type` | Network IOCs and related files from the file's analysis |
 | `threat_intel_search` | `query` (VirusTotal Intelligence syntax) | Files matching an advanced query |
-| `cve_search_by_id` | CVE identifier, e.g. CVE-2024-3400 | Description, CVSS score, references for one CVE |
+| `cve_search_by_id` | `cve_id`, e.g. CVE-2024-3400 | Description, CVSS score, references for one CVE |
 | `cve_search_by_vendor` | `vendor`, optional `product` | CVEs affecting a vendor/product |
 | `cve_database_status` | — | When the CVE database was last updated and how many CVEs it holds |
 
 **Tier:** none of these tools is classified in Conduit yet, so all of them enforce at `admin`. See `GOVERNANCE.md`.
+
+```json
+{ "tool": "threat_intel_by_hash", "arguments": { "hash_value": "44d88612fea8a8f36de82e1278abb02f" } }
+{ "tool": "threat_intel_by_domain", "arguments": { "domain": "login-contoso-support.example" } }
+{ "tool": "threat_intel_by_url", "arguments": { "url": "https://login-contoso-support.example/reset" } }
+```
+
+The VirusTotal tools need a VirusTotal API key on the server (`PURPLEMCP_VT_API_KEY` in Purple MCP). If they fail with an authentication error, the key is missing; the CVE tools do not need it.
 
 ## Workflows
 
@@ -60,7 +68,7 @@ Alongside the Singularity data tools, the SentinelOne connector (Purple MCP side
 
 - **Third-party lookups leave the tenant.** Hashes, IPs, domains and URLs are sent to VirusTotal / Google Threat Intelligence. Do not submit indicators the customer considers confidential (internal hostnames, URLs with tokens).
 - **A clean result is not proof of safety.** A hash VirusTotal has never seen returns little or nothing; treat that as "unknown", not "benign".
-- **Rate limits.** Threat-intel lookups are quota-bound upstream. Enrich the indicators that matter rather than every row of a hunt result.
+- **Rate limits.** Threat-intel lookups are quota-bound upstream. Enrich the indicators that matter rather than every row of a hunt result. On a quota or rate-limit error, do not retry in a loop: wait a minute and retry once, then defer the rest and report those indicators as unverified.
 
 ## Related Skills
 

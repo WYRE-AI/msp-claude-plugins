@@ -4,12 +4,14 @@
 
 ```text
 1. cwautomate_clients_list                       -> find ClientID 42 ("Contoso")
-2. cwautomate_alerts_list { client_id: 42, severity: 4, limit: 50 }
+2. cwautomate_alerts_list { client_id: 42, severity: 4, limit: 50, skip: 0 }
+   -> repeat with skip: 50, 100, ... until a page returns fewer than 50 rows
 3. cwautomate_alerts_get  { alert_id: 98123 }     -> full detail for the oldest one
-4. cwautomate_computers_get { computer_id: 1234 } -> online state, last contact
+4. cwautomate_computers_get { computer_id: <each distinct affected computer> }
+   -> online state, last contact
 ```
 
-Report: number of critical alerts, affected computers, oldest first-seen time, and whether the computers are online.
+Report: number of critical alerts, affected computers, oldest first-seen time, and whether the computers are online. Count and age only after every page is read; otherwise label the figures as a sample.
 
 ## Alert raised by a script
 

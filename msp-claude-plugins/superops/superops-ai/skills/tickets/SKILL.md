@@ -88,11 +88,14 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 | `getTicketList` | query | List/search tickets with filter, orderBy, cursor paging |
 | `getTicket` | query | Full detail for one ticket |
 | `updateTicket` | mutation | Change status, priority, assignee, resolution |
-| `addTicketNote` | mutation | Internal (`isPublic: false`) or client-visible note |
-| `addTicketTimeEntry` | mutation | Log time (`duration` in minutes, `billable` flag) |
 
-`getTicketList` returns a `listInfo` block (`totalCount`, `hasNextPage`, `endCursor`)
-for cursor pagination; `first` controls page size.
+The published schema has no `addTicketNote` or `addTicketTimeEntry` mutation. Add
+notes with the typed `superops_tickets_add_note` tool and log time with
+`superops_tickets_log_time` (both write tier); the raw equivalent for time is
+`createWorklogEntries(input: [CreateWorklogEntryInput!]!)`, which needs the
+admin-tier passthrough and human approval. `getTicketList` takes
+`input: ListInfoInput!` and returns `listInfo` (`page`, `pageSize`, `hasMore`,
+`totalCount`). Note-and-time examples in `references/api.md` predate the schema.
 
 See [references/api.md](references/api.md) for the full operation catalog with
 request shapes and variable examples.

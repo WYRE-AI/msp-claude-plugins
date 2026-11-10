@@ -14,9 +14,9 @@ The Conduit `m365` connector has no user, licence or MFA tools, so this command 
 
 | Step | Tool | Tier |
 |------|------|------|
-| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`, or `allTenants` for the fleet) | read |
+| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`, or `allTenants` for the fleet) | admin |
 | Registration-details report (alternative) | `microsoft_graph_get` on `/v1.0/reports/authenticationMethods/userRegistrationDetails` | admin |
-| Conditional Access coverage | `cipp_list_conditional_access_policies` | read |
+| Conditional Access coverage | `cipp_list_conditional_access_policies` | admin |
 
 ## Arguments
 
@@ -30,7 +30,9 @@ The Conduit `m365` connector has no user, licence or MFA tools, so this command 
 
 ## Steps
 
-1. **Pull registration details report** (most efficient — single call)
+1. **Pull MFA registration** (one call per tenant)
+   - Through Conduit, call `cipp_list_mfa_users` (`tenantFilter`). Each row reports whether the user is MFA-registered and which methods are registered; map those fields to the categories in step 2.
+   - Alternative: the Graph registration-details report, sent as `microsoft_graph_get` with this path. Use it when you need `isMfaCapable` or `isAdmin`, which the CIPP rows may not carry:
    ```http
    GET /v1.0/reports/authenticationMethods/userRegistrationDetails?$select=userPrincipalName,isMfaRegistered,isMfaCapable,methodsRegistered,isAdmin
    ```

@@ -61,7 +61,7 @@ Update fields on an existing HaloPSA ticket including status, priority, category
 
    **Agent lookup through Conduit:** `halopsa_agents_list` / `halopsa_agents_get`; teams with `halopsa_teams_list`.
 
-   **Category lookup:** `halopsa_categories_list` with `search`, then pass the category **name** as `category_1`–`category_4` by level (`halopsa_categories_get` reads one by ID).
+   **Category lookup:** `halopsa_categories_list` with `search` (both category tools are unclassified on the `halopsa` connector in Conduit, so they need the `admin` grant), then pass the category **name** as `category_1`–`category_4` by level (`halopsa_categories_get` reads one by ID).
 
    **Team lookup:**
    ```bash

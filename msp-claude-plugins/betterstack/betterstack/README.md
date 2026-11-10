@@ -23,35 +23,15 @@ Better Stack authenticates via a Bearer token:
 2. Navigate to **API tokens** in your account settings
 3. Generate a new API token
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export BETTERSTACK_API_TOKEN="your-api-token"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Better Stack once in Conduit (**Connections → BetterStack**, slug `betterstack`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `BETTERSTACK_API_TOKEN` | Yes | | API token from Better Stack > API tokens |
-| `BETTERSTACK_MCP_URL` | No | `https://conduit.wyre.ai/v1/betterstack/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
+There are no fields to paste: Conduit signs in to Better Stack with OAuth.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `BETTERSTACK_MCP_URL` to your gateway's endpoint:
-
-```
-BETTERSTACK_MCP_URL=https://your-gateway-domain/v1/betterstack/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Better Stack > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "BETTERSTACK_MCP_URL": "https://your-gateway-domain/v1/betterstack/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http betterstack https://your-gateway-domain/v1/betterstack/mcp`. The gateway then holds the Better Stack credentials, not the client.
 
 ## Installation
 

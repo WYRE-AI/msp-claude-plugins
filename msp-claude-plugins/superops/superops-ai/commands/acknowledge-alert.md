@@ -10,6 +10,8 @@ Acknowledge an RMM alert to indicate a technician is aware and investigating the
 
 ## How this runs through Conduit
 
+> **This cannot be done through Conduit today.** The published SuperOps GraphQL schema (`schema/superops.graphql` in superops-mcp) defines no acknowledge mutation, so the `acknowledgeAlerts` mutation shown below is rejected. Acknowledge the alert in the SuperOps console. The steps are kept for reference only.
+
 The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
 `superops_custom_mutation` (admin tier) sends the GraphQL mutation shown in the steps below. It executes an arbitrary mutation against the tenant, so every call needs a named human approver who has seen the exact mutation text and variables. Never run it from a scheduled or unattended agent.
 

@@ -15,11 +15,13 @@ The Conduit `m365` connector has no user, licence or MFA tools, so this command 
 | Step | Tool | Tier |
 |------|------|------|
 | Find the user | `cipp_list_users` (`tenantFilter`), or `microsoft_graph_get` on `/v1.0/users?$filter=...` | read / admin |
+
+CIPP reads the customer tenant named in `tenantFilter`. A `microsoft_graph_get` read goes to whichever tenant the `microsoft-graph` connection is signed into. Before combining the two, check that they are the same tenant: compare the tenant ID from `microsoft_graph_get` on `/v1.0/organization` with the CIPP tenant. If you cannot confirm a match, report the Graph data separately or leave it out.
 | Groups | `cipp_list_user_groups` | read |
-| Devices | `cipp_list_user_devices` | read |
-| MFA state | `cipp_list_mfa_users` | read |
+| Devices | `cipp_list_user_devices` | admin |
+| MFA state | `cipp_list_mfa_users` | admin |
 | Licences | `cipp_list_licenses` | read |
-| Recent sign-ins | `cipp_list_user_signin_logs` | read |
+| Recent sign-ins | `cipp_list_user_signin_logs` | admin |
 
 ## Arguments
 

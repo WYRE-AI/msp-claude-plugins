@@ -271,7 +271,7 @@ Deals can be categorized for forecasting:
 1. Call `get_crm_objects` (`objectType: "deals"`) to confirm current stage and details
 2. Call `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) with the new `dealstage` value
 3. Optionally update `amount` if the deal value has changed
-4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document why the stage changed
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the deal to document why the stage changed
 
 ### Pipeline Overview
 
@@ -300,7 +300,7 @@ Deals can be categorized for forecasting:
 3. **Create the deal** - Call `manage_crm_objects` (`createRequest`, `objectType: "deals"`) with deal name, amount, stage, and close date
 4. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) from deal to company
 5. **Associate with contact** - Call `manage_crm_objects` (`updateRequest` with `associations`) from deal to contact
-6. **Log creation note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the deal context
+6. **Log creation note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the new deal to document the deal context
 
 ### Stale Deal Review
 

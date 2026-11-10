@@ -14,65 +14,21 @@ This plugin provides Claude with deep knowledge of ConnectWise PSA, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect ConnectWise PSA once in Conduit (**Connections → ConnectWise PSA**, slug `connectwise-psa`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "CW_COMPANY_ID": "acmemsp",
-    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "CW_API_URL": "api-na.myconnectwise.net"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "CW_COMPANY_ID": "acmemsp",
-    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "CW_API_URL": "api-na.myconnectwise.net"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `CW_COMPANY_ID` | Yes | | Your ConnectWise company identifier (codebase) |
-| `CW_PUBLIC_KEY` | Yes | | API member public key |
-| `CW_PRIVATE_KEY` | Yes | | API member private key |
-| `CW_CLIENT_ID` | Yes | | Registered application client ID |
-| `CW_API_URL` | Yes | | Regional API endpoint (e.g., `api-na.myconnectwise.net`) |
-| `CONNECTWISE_MANAGE_MCP_URL` | No | `https://conduit.wyre.ai/v1/connectwise-psa/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Company ID |
+| Public Key |
+| Private Key |
+| Client ID |
+| Server URL (self-hosted / regional) |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CONNECTWISE_MANAGE_MCP_URL` to your gateway's endpoint:
-
-```
-CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-psa/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → ConnectWise PSA → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "CONNECTWISE_MANAGE_MCP_URL": "https://your-gateway-domain/v1/connectwise-psa/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http connectwise-psa https://your-gateway-domain/v1/connectwise-psa/mcp`. The gateway then holds the ConnectWise PSA credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -106,7 +62,7 @@ CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-psa/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+To check the credentials directly against ConnectWise PSA before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Build authorization header (Base64 of company+publicKey:privateKey)

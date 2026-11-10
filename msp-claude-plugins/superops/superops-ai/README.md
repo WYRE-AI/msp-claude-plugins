@@ -14,57 +14,18 @@ This plugin provides Claude with deep knowledge of SuperOps.ai, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect SuperOps once in Conduit (**Connections → SuperOps**, slug `superops`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "SUPEROPS_SUBDOMAIN": "acmemsp",
-    "SUPEROPS_API_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "SUPEROPS_SUBDOMAIN": "acmemsp",
-    "SUPEROPS_API_TOKEN": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `SUPEROPS_SUBDOMAIN` | Yes | | Your SuperOps company subdomain |
-| `SUPEROPS_API_TOKEN` | Yes | | Bearer token from Settings > Integrations > API |
-| `SUPEROPS_API_URL` | No | `https://api.superops.ai/graphql` | API URL (US). Use `https://euapi.superops.ai/graphql` for EU |
-| `SUPEROPS_MCP_URL` | No | `https://conduit.wyre.ai/v1/superops/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Token |
+| Subdomain |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `SUPEROPS_MCP_URL` to your gateway's endpoint:
-
-```
-SUPEROPS_MCP_URL=https://your-gateway-domain/v1/superops/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → SuperOps → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "SUPEROPS_MCP_URL": "https://your-gateway-domain/v1/superops/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http superops https://your-gateway-domain/v1/superops/mcp`. The gateway then holds the SuperOps credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -87,7 +48,7 @@ SUPEROPS_MCP_URL=https://your-gateway-domain/v1/superops/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+To check the credentials directly against SuperOps before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test connection (GraphQL query)

@@ -61,7 +61,7 @@ All search tools take ConnectWise `conditions` syntax, `orderBy`, `page` and `pa
 1. `cw_list_warehouses`, then `cw_get_inventory_on_hand` with `warehouseId` (and `catalogItemId` to narrow).
 2. Compare with the physical count the user supplies. Negative balances are the usual sign of a missed receipt.
 3. Draft the adjustment and show it: header (`identifier`, `typeId` from `cw_list_adjustment_types`, `reason`) and every line (item, warehouse, bin, signed quantity).
-4. After approval: `cw_create_adjustment`, then `cw_add_adjustment_detail` per line. Leave `unitCost` unset for a write-off so ConnectWise applies average cost.
+4. After approval: `cw_create_adjustment`, then `cw_add_adjustment_detail` per line. Leave `unitCost` unset for a write-off so ConnectWise applies average cost. If any detail call fails or times out, stop: read the draft back with `cw_get_adjustment`, reconcile its lines against the approved list (missing or duplicated lines), and fix them before going on. Never ask to close a draft that is partial or has duplicate lines.
 5. `cw_close_adjustment` only after a second, explicit approval. It is the step that moves stock, and it is `admin` tier.
 
 ## Gotchas

@@ -151,7 +151,7 @@ update_alert
 
 ### Acknowledge / Resolve an Alert
 
-The hosted Rootly MCP has **no acknowledge or resolve tool**. Acknowledge and resolve alerts from Rootly's paging surfaces (web, mobile app or Slack). Through the MCP you can annotate an alert with `update_alert` (pass `id`): mark it `noise`, change `alert_urgency_id`, edit the summary or description, or attach services and environments.
+The hosted Rootly MCP has **no acknowledge or resolve tool**. Acknowledge and resolve alerts from Rootly's paging surfaces (web, mobile app or Slack). Through the MCP you can annotate an alert with `update_alert` (write tier; pass `id`): mark it `noise`, change `alert_urgency_id`, edit the summary or description, or attach services and environments.
 
 ### List Alert Sources
 

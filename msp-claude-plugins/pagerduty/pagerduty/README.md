@@ -23,35 +23,15 @@ PagerDuty authenticates via a User API Token:
 3. Click **Create New API Key**
 4. Copy the generated token
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export PAGERDUTY_API_TOKEN="your-api-token"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect PagerDuty once in Conduit (**Connections → PagerDuty**, slug `pagerduty`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PAGERDUTY_API_TOKEN` | Yes | | User API Token from My Profile > User Settings > API Access |
-| `PAGERDUTY_MCP_URL` | No | `https://conduit.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- Conduit endpoint; override only for a self-hosted gateway |
+There are no fields to paste: Conduit signs in to PagerDuty with OAuth.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `PAGERDUTY_MCP_URL` to your gateway's endpoint:
-
-```
-PAGERDUTY_MCP_URL=https://your-gateway-domain/v1/pagerduty/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > PagerDuty > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "PAGERDUTY_MCP_URL": "https://your-gateway-domain/v1/pagerduty/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http pagerduty https://your-gateway-domain/v1/pagerduty/mcp`. The gateway then holds the PagerDuty credentials, not the client.
 
 ## Installation
 

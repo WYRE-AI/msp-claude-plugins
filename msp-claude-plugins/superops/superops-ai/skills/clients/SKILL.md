@@ -145,19 +145,19 @@ query getClientHealth($clientId: ID!) {
 | List clients | `getClientList(input: ListInfoInput!)` |
 | Get client | `getClient(input: ClientIdentifierInput!)` |
 | Update client | `updateClient(input: UpdateClientInput!)` |
-| Soft delete | `softDeleteClients(input: DeleteClientsInput!)` |
-| Hard delete | `hardDeleteClients(input: DeleteClientsInput!)` |
-| Restore | `restoreClients(input: RestoreClientsInput!)` |
-| Create site | `createSite(input: CreateSiteInput!)` |
-| List sites | `getClientSites(input: ClientSitesInput!)` |
-| Update site | `updateSite(input: UpdateSiteInput!)` |
-| Create contact | `createRequester(input: CreateRequesterInput!)` |
-| List contacts | `getClientRequesters(input: ClientRequestersInput!)` |
-| Update contact | `updateRequester(input: UpdateRequesterInput!)` |
+| Soft delete | `softDeleteClients(input: [ClientIdentifierInput!]!)` |
+| Hard delete | `hardDeleteClients(input: [ClientIdentifierInput!]!)` |
+| Restore | `restoreClients(input: [ClientIdentifierInput!]!)` |
 
 Note the `V2` suffix on client creation — `createClientV2` is the current mutation, while
-update/delete have no version suffix. Deletes take an array (`accountIds`), even for one
-client. Soft-deleted clients can be recovered with `restoreClients`; hard deletes cannot.
+update/delete have no version suffix. Delete and restore take an array of
+`{ accountId }` objects, even for one client: `input: [{ accountId: "<id>" }]`.
+Soft-deleted clients can be recovered with `restoreClients`; hard deletes cannot.
+
+The site and requester operations in `references/api.md` (`createSite`,
+`getClientSites`, `updateSite`, `createRequester`, `getClientRequesters`,
+`updateRequester`) are not in the published schema (`schema/superops.graphql` in
+superops-mcp); do not send them.
 
 See [references/api.md](references/api.md) for the complete operation catalog with
 request/response examples.

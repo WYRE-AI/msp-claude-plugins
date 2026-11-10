@@ -83,7 +83,7 @@ No additional configuration is needed in the MCP tool calls.
 | `list_alerts` | List alerts from integrations | `filter[status]`, `page[number]`, `page[size]` |
 | `get_alert` | Get a single alert | Alert ID |
 | `create_alert` | Create an alert | alert payload |
-| `update_alert` | Edit an alert: summary, description, urgency, noise flag, labels, services, `ended_at` | `id` (not `alert_id`) |
+| `update_alert` | Edit an alert (write tier): summary, description, urgency, noise flag, labels, services, `ended_at` | `id` (not `alert_id`) |
 
 ### Configuration & Metadata
 

@@ -95,7 +95,7 @@ On a 429, wait for the window to reset rather than retrying immediately.
 
 If you see "401 Unauthorized":
 1. Reconnect HubSpot in the Conduit web UI (the HubSpot user may have revoked the app or lost access)
-2. Call `get_user_details` to confirm which HubSpot user the connection acts as
+2. Call `get_user_details` to confirm which HubSpot user the connection acts as. If it still returns 401, the connection is not fixed: resolve it in Conduit instead of retrying
 
 ### Scope Errors
 

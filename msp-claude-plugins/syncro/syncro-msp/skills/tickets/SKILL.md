@@ -38,7 +38,7 @@ Syncro tickets are the core unit of service delivery in the platform. Every clie
 | `syncro_tickets_update` | write | Change status, priority, assignee, fields |
 | `syncro_tickets_add_comment` | write | Add a public or hidden comment |
 
-The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it. The timer and time-tracking procedures below are therefore **manual** in Syncro (or need the `syncro-official` connector); never report a timer as started, stopped or billed through this connector.
 
 ## Ticket Status Values
 

@@ -22,35 +22,17 @@ Rootly authenticates via Bearer token using an API key:
 2. Navigate to **Account > Manage API Keys**
 3. Generate an API token
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export ROOTLY_API_TOKEN="your-api-token"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Rootly once in Conduit (**Connections → Rootly**, slug `rootly`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ROOTLY_API_TOKEN` | Yes | | API token from Account > Manage API Keys |
-| `ROOTLY_MCP_URL` | No | `https://conduit.wyre.ai/v1/rootly/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Token |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ROOTLY_MCP_URL` to your gateway's endpoint:
-
-```
-ROOTLY_MCP_URL=https://your-gateway-domain/v1/rootly/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Rootly > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ROOTLY_MCP_URL": "https://your-gateway-domain/v1/rootly/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http rootly https://your-gateway-domain/v1/rootly/mcp`. The gateway then holds the Rootly credentials, not the client.
 
 ## Installation
 
@@ -64,11 +46,7 @@ Rootly hosts their own MCP server at `https://mcp.rootly.com`. See [Rootly MCP d
 
 ### Claude Code CLI
 
-Rootly is a hosted vendor with no bundled `.mcp.json` in this plugin -- it is routed entirely through the MCP Gateway. Connect via the [MCP Gateway](https://conduit.wyre.ai) as described above, or point `ROOTLY_MCP_URL` at your own gateway deployment and set the environment variable:
-
-```bash
-export ROOTLY_API_TOKEN="your-api-token"
-```
+Rootly is a hosted vendor with no bundled `.mcp.json` in this plugin -- it is routed entirely through the MCP Gateway. Connect it in Conduit as described above.
 
 ## Available Skills
 

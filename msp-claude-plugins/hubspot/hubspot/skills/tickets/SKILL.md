@@ -155,7 +155,7 @@ MSPs commonly categorize tickets by type:
 3. **Create the ticket** - Call `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) with subject, content, pipeline, stage, priority, and owner
 4. **Associate with contact** - Call `manage_crm_objects` (`updateRequest` with `associations`) from ticket to contact
 5. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) from ticket to company
-6. **Log initial note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document initial triage findings
+6. **Log initial note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the new ticket to document initial triage findings
 
 ### Search Tickets for a Client
 
@@ -169,7 +169,7 @@ MSPs commonly categorize tickets by type:
 1. Call `get_crm_objects` (`objectType: "tickets"`) to confirm current state
 2. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) with the new `hs_pipeline_stage`
 3. If closing, include `hs_resolution` describing the fix
-4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to log the status change details
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the ticket to log the status change details
 
 ### Ticket Volume Report for a Client
 
@@ -187,7 +187,7 @@ MSPs commonly categorize tickets by type:
 1. Call `get_crm_objects` (`objectType: "tickets"`) to review the current ticket
 2. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) to set `hs_ticket_priority` to `HIGH`
 3. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) to reassign `hubspot_owner_id` to the escalation engineer
-4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the escalation reason
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the ticket to document the escalation reason
 5. Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) to create a follow-up task for the assigned engineer
 
 ## Response Examples

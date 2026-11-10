@@ -10,35 +10,21 @@ Claude Code plugin for NinjaOne Remote Monitoring and Management.
 
 ## Configuration
 
-Set these environment variables:
+### Connect through Conduit
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `NINJAONE_CLIENT_ID` | Yes | | OAuth 2.0 Client ID |
-| `NINJAONE_CLIENT_SECRET` | Yes | | OAuth 2.0 Client Secret |
-| `NINJAONE_REGION` | Yes | | Region: `us`, `eu`, or `oc` |
-| `NINJAONE_MCP_URL` | No | `https://conduit.wyre.ai/v1/ninjaone/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
+This plugin ships no `.mcp.json` and reads no environment variables. Connect NinjaOne once in Conduit (**Connections → NinjaOne**, slug `ninjaone`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-Get credentials from **Administration > Apps > API** in NinjaOne.
+| Conduit connection field |
+|---|
+| Client ID |
+| Client Secret |
+| Region |
+
+Get the credentials from **Administration > Apps > API** in NinjaOne.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `NINJAONE_MCP_URL` to your gateway's endpoint:
-
-```
-NINJAONE_MCP_URL=https://your-gateway-domain/v1/ninjaone/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → NinjaOne → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "NINJAONE_MCP_URL": "https://your-gateway-domain/v1/ninjaone/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http ninjaone https://your-gateway-domain/v1/ninjaone/mcp`. The gateway then holds the NinjaOne credentials, not the client.
 
 ## Skills
 

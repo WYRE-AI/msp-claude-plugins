@@ -6,7 +6,7 @@ arguments: [mobile_number, customer, reference]
 
 # Lost Phone
 
-Identify exactly which KPN line and SIM belong to a lost or stolen company phone, so the block is placed on the right line. Through Conduit the KPN tools are read-only: the block itself is done in the Grexx portal.
+Identify exactly which KPN line and SIM belong to a lost or stolen company phone, so the block is placed on the right line. The KPN tools this command uses are read-only; Conduit has no tool that blocks a SIM, so the block itself is done in the Grexx portal.
 
 ## Prerequisites
 

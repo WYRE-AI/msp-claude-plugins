@@ -54,7 +54,7 @@ Third-party enterprise applications (service principals) customers have connecte
 ### `cipp_list_user_signin_logs`
 
 ```
-cipp_list_user_signin_logs(tenantFilter, userId='alice@contoso.com', top=100)
+cipp_list_user_signin_logs(tenantFilter, userId='alice@contoso.com', top=100)   # top defaults to 50, max 1000
 ```
 One user's recent interactive sign-ins, newest first: time, app, IP, location, result and failure reason. Use it for "was this account compromised?" alongside `cipp_bec_check`. One tenant per call; admin-tier in Conduit.
 

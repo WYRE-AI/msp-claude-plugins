@@ -31,11 +31,11 @@ Perform a deep investigation of a specific alert. Retrieves full alert details, 
 
 4. **Read the auto-investigation report**
 
-   Call `get_alert_investigation_report` with the `alert_id`. If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them.
+   Call `get_alert_investigation_report` with the `alert_id` (not classified in Conduit, so it needs the `admin` grant). If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them.
 
 5. **Enrich indicators** (optional)
 
-   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal; skip anything the customer considers confidential.
+   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal; skip anything the customer considers confidential. Like the report above, the threat-intel tools are unclassified in Conduit and need the `admin` grant.
 
 6. **Investigate with Purple AI** (optional but recommended)
 

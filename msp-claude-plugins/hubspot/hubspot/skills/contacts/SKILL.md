@@ -50,9 +50,9 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `get_crm_objects` (`objectType: "contacts"`) | Get a single contact by ID | `contactId` (required) |
+| `get_crm_objects` (`objectType: "contacts"`) | Get contacts by ID | `objectIds` (required, 1-100) |
 | `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) | Create a new contact | `email` (required), `firstname`, `lastname`, `phone`, `company` |
-| `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) | Update an existing contact | `contactId` (required), property fields to update |
+| `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) | Update an existing contact | `objectId` (required), property fields to update |
 | `search_crm_objects` (`objectType: "contacts"`, no filters) | List contacts with pagination | `limit`, `after` (cursor) |
 | `search_properties` (`objectType: "contacts"`) | List all available contact properties | None |
 | `search_crm_objects` (`objectType: "contacts"`) | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `after` |
@@ -143,10 +143,10 @@ Call `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) with the c
 
 ### Update a Contact
 
-Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with the `contactId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with the contact's `objectId` and the properties to change:
 
 **Example: Update lifecycle stage and lead status:**
-- `contactId`: `12345`
+- `objectId`: `12345`
 - `lifecyclestage`: `customer`
 - `hs_lead_status`: `CONNECTED`
 
@@ -243,8 +243,8 @@ Many MSPs add custom properties for contacts. Common examples:
 
 ### Find All Contacts at a Company
 
-1. Call `search_crm_objects` (`objectType: "contacts"`) with a filter on `email` using `CONTAINS_TOKEN` with the company's email domain
-2. Alternatively, use `search_crm_objects` (`associatedWith` filter) on the company object to get associated contacts
+1. Find the company ID with `search_crm_objects` (`objectType: "companies"`)
+2. Call `search_crm_objects` with `objectType: "contacts"` and an `associatedWith` filter `{ objectType: "companies", operator: "EQUAL", objectIdValues: [<companyId>] }`, paginating with `offset`. This also finds contacts with no email address. Use an email-domain `CONTAINS_TOKEN` search only to find contacts that are not yet associated
 3. For each contact, review role and lifecycle stage
 
 ### Create a New Client Contact
@@ -252,20 +252,20 @@ Many MSPs add custom properties for contacts. Common examples:
 1. **Check for duplicates** - Search by email first using `search_crm_objects` (`objectType: "contacts"`)
 2. **Create the contact** - Call `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) with email, name, phone, company, job title, and `lifecyclestage=customer`
 3. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) to link the contact to the company record
-4. **Log onboarding note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to document the new contact setup
+4. **Log onboarding note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the new contact, so the note shows on its timeline
 
 ### Update Contact After Sales Conversion
 
 1. Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with:
    - `lifecyclestage`: `customer`
    - `hs_lead_status`: `CONNECTED`
-2. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) to log the conversion details
-3. Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) to create onboarding follow-up tasks
+2. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the contact to log the conversion details
+3. Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) with `associations` to the contact to create onboarding follow-up tasks
 
 ### Contact Audit for a Client Company
 
 1. Find the company with `search_crm_objects` (`objectType: "companies"`)
-2. Call `search_crm_objects` (`associatedWith` filter) to get all contacts associated with the company
+2. Call `search_crm_objects` with `objectType: "contacts"` and an `associatedWith` filter on the company ID to get all contacts associated with it
 3. Retrieve each contact with `get_crm_objects` (`objectType: "contacts"`)
 4. Build a report with name, email, job title, lifecycle stage, and last activity date
 5. Flag contacts without email addresses or with stale last activity dates

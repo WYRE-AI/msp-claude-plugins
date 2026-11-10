@@ -68,7 +68,7 @@ See [references/fields.md](references/fields.md) for the alert fields and [refer
 ### Critical alerts dashboard
 
 1. `cwautomate_alerts_list` with `severity: 4`, then `severity: 3`, paging with `limit`/`skip` until a page returns fewer than `limit` rows.
-2. Group by client (`client_id` on each alert) and by computer.
+2. Group by client (the nested `Client.Id` on each alert; keep alerts without a client in their own group) and by computer.
 3. For the top computers, `cwautomate_computers_get` to show online state and last contact.
 
 ### Triage one client

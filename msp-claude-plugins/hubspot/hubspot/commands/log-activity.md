@@ -11,6 +11,7 @@ Log a note or create a follow-up task on a HubSpot contact, company, or deal. En
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
+- `manage_crm_objects` is not classified in Conduit, so logging an activity needs the `admin` grant
 - MCP tools `manage_crm_objects` (`createRequest`, `objectType: "notes"`), `manage_crm_objects` (`createRequest`, `objectType: "tasks"`), `manage_crm_objects` (`updateRequest` with `associations`), and search tools available
 - At least one object (contact, company, or deal) must be specified for association
 

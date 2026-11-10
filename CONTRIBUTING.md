@@ -429,7 +429,7 @@ Choose one of two shapes. Both are URL-only: **no `headers` block and no environ
 
    `<conduit-slug>` must be the vendor's key in Conduit's `VENDORS` (for example `connectwise-psa`, not `connectwise-manage`; `avanan`, not `checkpoint-avanan`).
 
-Workflow packs and `wyre-gateway` use the unified endpoint, `https://conduit.wyre.ai/v1/mcp`, with the server name `conduit`.
+Workflow packs and `wyre-gateway` use the unified endpoint, `https://conduit.wyre.ai/v1/mcp`. The packs name the server `conduit`; `wyre-gateway` keeps its existing name, `msp-mcp-gateway`, because renaming it would change the tool IDs in users' permission allowlists.
 
 ### Why there are no headers
 
@@ -437,7 +437,7 @@ Conduit forwards only `mcp-session-id` from the client (`buildUpstreamHeaders` i
 
 ### Tool names
 
-Every tool a skill, agent or command names must exist on the live Conduit connector for that vendor (check Conduit's `VENDOR_TOOL_CONFIG` in `src/proxy/result-cache.ts` and the connector's `tools/list`). `scripts/check-tool-anchoring.mjs` and `scripts/tool-drift-audit.mjs` enforce this. State each write or admin tool's Conduit tier where you describe it.
+Every tool a skill, agent or command names must exist on the live Conduit connector for that vendor (check Conduit's `VENDOR_TOOL_CONFIG` in `src/proxy/result-cache.ts` and the connector's `tools/list`). `scripts/check-tool-anchoring.mjs` only finds documents that name no tool at all; it does not prove a named tool exists. `scripts/tool-drift-audit.mjs` checks names against a live tool list, and only when you pass one (`--live`), so run it with a live list when you add or rename tool references. State each write or admin tool's Conduit tier where you describe it.
 
 ### Testing MCP Integration
 

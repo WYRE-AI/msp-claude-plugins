@@ -24,15 +24,15 @@ You need an IT Glue API key with appropriate permissions:
 3. Create a new API key with required permissions
 4. Note your region (US, EU, or AU)
 
-### Environment Variables
+### Connect through Conduit
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ITGLUE_API_KEY` | Yes | — | IT Glue API key |
-| `ITGLUE_REGION` | No | `us` | API region: `us`, `eu`, or `au` |
-| `ITGLUE_MCP_URL` | No | `https://conduit.wyre.ai/v1/itglue/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
+This plugin ships no `.mcp.json` and reads no environment variables. Connect IT Glue once in Conduit (**Connections → IT Glue**, slug `itglue`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
+| API host |
 
 ## Installation
 
@@ -122,11 +122,7 @@ IT Glue operates in multiple regions:
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ITGLUE_MCP_URL` to your gateway's IT Glue endpoint:
-
-
-
-The gateway handles authentication via OAuth — remove the `ITGLUE_API_KEY` header from your setup when using gateway mode.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http itglue https://your-gateway-domain/v1/itglue/mcp`. The gateway then holds the IT Glue credentials, not the client.
 
 ## API Rate Limits
 

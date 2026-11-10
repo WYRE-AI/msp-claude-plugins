@@ -24,8 +24,9 @@ Create a schedule entry/appointment in ConnectWise, optionally linked to a ticke
    - `cw_search_members` with `conditions: "identifier = '<member>'"` (or by name)
    - The member is required and never defaulted: if none was given, ask
 
-3. **Validate the ticket** (if `ticket_id` was provided)
-   - `cw_get_ticket` to confirm it exists; its ID becomes `objectId`
+3. **Resolve what the time is booked against** (`objectId` is required)
+   - With `ticket_id`: `cw_get_ticket` to confirm it exists; its ID becomes `objectId`
+   - Without one: ask for the service ticket, project ticket or activity to book against. `cw_create_schedule_entry` cannot create a booking that is not linked to one, so stop rather than book without it
 
 4. **Resolve the schedule type and status**
    - `cw_list_schedule_types` (use the `S`/Service type for a service ticket)
@@ -37,7 +38,8 @@ Create a schedule entry/appointment in ConnectWise, optionally linked to a ticke
 
 6. **Create the entry**
    - `cw_create_schedule_entry` with `objectId`, `typeId`, `memberId`, `dateStart`, `dateEnd`, and optional `name`, `statusId`, `whereId`, `reminderId`
-   - `reminderId` values have no list endpoint; copy one from an existing entry returned by `cw_search_schedule_entries`
+   - `location`: `whereId` is a service location (On-Site, In-house, Remote), not an address. Map the request to one of those if it names one. The entry has no free-text address field, so tell the user an address cannot be saved on it (put it in the ticket notes instead)
+   - `reminder_minutes`: `reminderId` values have no list endpoint. Use the `reminderId` from an existing entry (`cw_search_schedule_entries`) whose reminder matches the requested interval. If no entry shows that interval, tell the user it cannot be set rather than using some other entry's ID
 
 7. **Report** the entry ID and the booked time in the user's local timezone
 
@@ -52,9 +54,9 @@ To move or re-assign an existing booking, use `cw_update_schedule_entry` instead
 | start_date | datetime | Yes | - | Start date and time |
 | end_date | datetime | Yes | - | End date and time |
 | member | string | No | Current user | Member identifier |
-| ticket_id | integer | No | - | Associated ticket ID |
+| ticket_id | integer | Yes* | - | Ticket to book against. *Required unless the user names another project ticket or activity |
 | type | string | No | - | Schedule type |
-| location | string | No | - | Location/address |
+| location | string | No | - | Service location (On-Site, In-house, Remote); not a street address |
 | reminder_minutes | integer | No | - | Minutes before reminder |
 | status | string | No | - | Schedule status |
 

@@ -37,7 +37,7 @@ You are alert to the common pitfalls: an `Agreement` class item without an `ianC
 - **Lifecycle management**: Retire EOL SKUs via `inactiveFlag`, bulk-replace references, and surface items that haven't been sold in N months as retirement candidates
 - **Client onboarding prep**: Given a client seat count and service tier, produce the list of agreement additions (managed workstation × N, managed server × M, M365 licenses × K). Read current additions with `cw_get_agreement_additions` and billing history with `cw_search_agreement_recaps` / `cw_get_agreement_recap`; after approval write them with `cw_create_agreement_addition` / `cw_update_agreement_addition`
 - **Purchasing and receiving**: Open purchase orders and unreceived lines (`cw_search_purchase_orders`, `cw_get_purchase_order_items`), sales orders (`cw_search_sales_orders`, `cw_get_sales_order_products`), and items placed on tickets or projects but not yet purchased (`cw_search_procurement_products`)
-- **Inventory**: Stock by bin (`cw_list_warehouses`, `cw_get_inventory_on_hand`) and reconciliation through a drafted adjustment (`cw_create_adjustment`, `cw_add_adjustment_detail`); posting it with `cw_close_adjustment` is admin-tier and always needs explicit approval
+- **Inventory**: Stock by bin (`cw_list_warehouses`, `cw_get_inventory_on_hand`) and reconciliation through a drafted adjustment (`cw_create_adjustment`, `cw_add_adjustment_detail`, both write tier); posting it with `cw_close_adjustment` is admin-tier and always needs explicit approval
 
 ## Approach
 

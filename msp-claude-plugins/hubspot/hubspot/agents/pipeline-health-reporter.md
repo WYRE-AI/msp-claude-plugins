@@ -32,7 +32,7 @@ You are careful about the difference between pipeline coverage (total pipeline v
 
 ## Approach
 
-Begin by pulling all open deals from HubSpot using `search_crm_objects` (`objectType: "deals"`) with a filter for open status. For each deal, retrieve the deal name, amount, stage, pipeline, close date, creation date, and associated company. Then retrieve the last activity date by checking the most recent note, call, or meeting logged against each deal.
+Begin by pulling all open deals from HubSpot using `search_crm_objects` (`objectType: "deals"`) with a filter for open status, paginating with `offset`. Use `get_crm_objects` to fetch full deal records and `search_owners` to turn `hubspot_owner_id` into a name. For each deal, retrieve the deal name, amount, stage, pipeline, close date, creation date, and associated company. Then retrieve the last activity date by checking the most recent note, call, or meeting logged against each deal.
 
 Calculate deal age in the current stage: the number of days since the deal moved into its current stage. This requires the `hs_date_entered_[stage]` property or equivalent stage transition data. For each deal, flag the combination of stage and days-in-stage against expected benchmarks — a managed services opportunity should advance from "Discovery" to "Proposal" within 14 days; one sitting in "Discovery" for 45 days is stalled at that stage.
 

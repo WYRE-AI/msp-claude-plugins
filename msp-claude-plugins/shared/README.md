@@ -24,7 +24,7 @@ Vendor-agnostic MSP knowledge that other plugins in this marketplace build on. I
 | Command | Purpose |
 |---------|---------|
 | `/correlate-incident` | Build a cross-tool incident summary |
-| `/reconcile-billing` | Reconcile marketplace subscriptions against invoices |
+| `/reconcile-billing` | Reconcile marketplace subscriptions against invoices. It calls the Pax8 and Xero (or QuickBooks) APIs directly, so it needs local `PAX8_TOKEN` / `XERO_TOKEN` (or `QBO_TOKEN`) values and does not work through Conduit connections alone |
 
 Vendor-specific plugins point here (for example `shared-skills-ticket-triage`) instead of repeating the practice in every PSA plugin.
 

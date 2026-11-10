@@ -44,10 +44,11 @@ A schedule entry is a **forward booking** of a member's time against a service t
 3. `cw_list_schedule_types` (Service type for a service ticket) and, if the user named one, `cw_list_schedule_statuses`.
 4. Check the member's existing bookings for the window with `cw_search_schedule_entries`.
 5. Convert the requested local time to UTC, then `cw_create_schedule_entry` with `objectId` (the ticket ID), `typeId`, `memberId`, `dateStart`, `dateEnd`, and optional `statusId`, `whereId` (On-Site, Remote, ...), `name`.
+6. If the booking is refused as a conflict, show the overlapping entry and let the user pick another time, or explicitly approve a double booking; only then retry with `allowScheduleConflictsFlag: true`.
 
 ### Who is booked tomorrow
 
-`cw_search_schedule_entries` with a `dateStart` range for tomorrow in UTC, ordered by `dateStart asc`, then group by member.
+Work out tomorrow's start and end in the user's time zone and convert both to UTC. Then `cw_search_schedule_entries` with `conditions: "dateStart < [<end UTC>] and dateEnd > [<start UTC>]"`, so bookings that start today and run into tomorrow are included, ordered by `dateStart asc`, then group by member.
 
 ### Reschedule
 

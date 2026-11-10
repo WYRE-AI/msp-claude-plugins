@@ -23,37 +23,18 @@ Huntress authenticates via HTTP Basic Auth using an API key and secret:
 2. Navigate to **Settings > API Credentials**
 3. Generate an API key and secret pair
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export HUNTRESS_API_KEY="your-api-key"
-export HUNTRESS_API_SECRET="your-api-secret"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Huntress once in Conduit (**Connections → Huntress**, slug `huntress`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `HUNTRESS_API_KEY` | Yes | | API key from Settings > API Credentials |
-| `HUNTRESS_API_SECRET` | Yes | | API secret from Settings > API Credentials |
-| `HUNTRESS_MCP_URL` | No | `https://conduit.wyre.ai/v1/huntress/mcp` | MCP server URL — Conduit endpoint; override only for a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| API Secret |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `HUNTRESS_MCP_URL` to your gateway's endpoint:
-
-```
-HUNTRESS_MCP_URL=https://your-gateway-domain/v1/huntress/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Huntress → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "HUNTRESS_MCP_URL": "https://your-gateway-domain/v1/huntress/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http huntress https://your-gateway-domain/v1/huntress/mcp`. The gateway then holds the Huntress credentials, not the client.
 
 ## Installation
 

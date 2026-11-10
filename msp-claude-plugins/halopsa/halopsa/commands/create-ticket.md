@@ -1,7 +1,7 @@
 ---
 description: Create a new service ticket in HaloPSA
-argument-hint: "<client> <summary> [details] [priority] [tickettype] [contact] [site] [agent]"
-arguments: [client, summary, details, priority, tickettype, contact, site, agent]
+argument-hint: "<client> <summary> [details] [priority] [tickettype] [contact] [site] [agent] [category]"
+arguments: [client, summary, details, priority, tickettype, contact, site, agent, category]
 ---
 
 # Create HaloPSA Ticket
@@ -34,7 +34,7 @@ Create a new service ticket in HaloPSA with specified details.
    - Look up contact/user ID if contact provided
    - Look up site ID from name if provided
    - Look up agent ID from name if provided
-   - Resolve categories with `halopsa_categories_list` (`search` by name) and pass the names as `category_1`–`category_4` by level
+   - If `category` was given, resolve it with `halopsa_categories_list` (`search` by name; admin grant on the `halopsa` connector) and pass the name as `category_1`–`category_4` by its level. Skip the lookup when no category was given
    - Apply default priority if not specified
 
 5. **Check contract coverage**
@@ -78,6 +78,7 @@ Create a new service ticket in HaloPSA with specified details.
 | contact | string | No | - | Contact name or email |
 | site | string | No | - | Site name or ID |
 | agent | string | No | - | Assigned agent name or ID |
+| category | string | No | - | Ticket category name; resolved with `halopsa_categories_list` |
 
 ## Examples
 

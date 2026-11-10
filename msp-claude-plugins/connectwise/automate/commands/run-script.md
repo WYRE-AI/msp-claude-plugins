@@ -32,11 +32,13 @@ Execute a script on an endpoint in ConnectWise Automate with optional parameters
 
 5. **Execute (after approval)**
    - One computer: `cwautomate_computers_run_script` with `computer_id`, `script_id` and `parameters` (key-value pairs). It waits up to 20 seconds.
-   - Several computers: `cwautomate_scripts_execute` with `script_id` and the list of computer IDs; it schedules the script and polls its history for the per-computer outcome.
+   - Several computers: `cwautomate_scripts_execute` with `script_id`, `computer_ids` and the same approved `parameters`, which apply to every target; it schedules the script and polls its history for the per-computer outcome.
 
 6. **Collect the result**
    - If the run finished inside the wait, report its pass/fail state and Automate's diagnostic message.
-   - If the result has `completed: false`, the script is **still running**. Do not launch it again. Read `cwautomate_scripts_history` for that computer (and `cwautomate_scripts_running` to see it is still in progress) until the run appears in history.
+   - If the result has `completed: false`, the script is **still running**. Do not launch it again.
+     - Without `--wait`: report it as queued or running and stop.
+     - With `--wait`: read `cwautomate_scripts_history` for that computer (and `cwautomate_scripts_running` to see it is still in progress) until the run appears in history.
 
 Under the hood step 5 issues `POST /cwa/api/v1/Computers/{computerID}/Scripts/{scriptID}/Execute`; Automate has no synchronous run, which is why history is the source of truth for the outcome.
 

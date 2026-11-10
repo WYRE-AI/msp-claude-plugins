@@ -43,7 +43,7 @@ An Autotask recurring-service contract bills through **service lines** (a catalo
 
 ### MRR for a client
 
-1. `autotask_search_contracts` with `companyID` and `status: 1`.
+1. `autotask_search_contracts` with `companyID`, `status: 1` and `pageSize: 500` (the default is 25). If 500 contracts come back, say the list may be incomplete.
 2. For each recurring-service contract, `autotask_get_contract_recurring_lines` (`activeOn` today).
 3. Sum the monthly figures; report per service and per contract.
 
@@ -60,8 +60,8 @@ Run `autotask_get_contract_recurring_lines` with `activeOn` set to a day in each
 ### Onboard a multi-site customer
 
 1. Draft one contract shell per site and show it.
-2. After approval, `autotask_create_contracts_bulk`. Shells are created one at a time, so read the per-item result: a failure part-way does not roll back the earlier ones.
-3. Add the service lines to each shell with `autotask_create_contract_service`.
+2. After approval, `autotask_create_contracts_bulk`. Shells are created one at a time, so read the per-item result: a failure part-way does not roll back the earlier ones. Retry only the failed items, never the whole batch, or the shells that succeeded are duplicated.
+3. Add the service lines with `autotask_create_contract_service`, only to shells that were created successfully.
 
 ## Gotchas
 
