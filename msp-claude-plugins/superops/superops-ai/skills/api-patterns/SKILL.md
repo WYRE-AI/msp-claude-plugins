@@ -2,7 +2,7 @@
 name: "SuperOps API Patterns"
 description: >
   SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth,
-  region-specific endpoints, request/variable structure, cursor pagination, the 800 req/min
+  region-specific endpoints, request/variable structure, offset (page/pageSize) pagination, the 800 req/min
   rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.
 when_to_use: >-
   When working with authentication, query building, mutations, pagination, rate limiting, and
@@ -81,6 +81,12 @@ Endpoints are region-specific; using the wrong region fails auth rather than red
 Nearly every list query takes a single `input` argument of type `ListInfoInput!`, and
 mutations take a single `input` of a per-entity input type.
 
+Through Conduit, the typed `superops_*` tools build these requests for you. The
+GraphQL below is what `superops_custom_query` and `superops_custom_mutation`
+(admin tier) send for anything without a typed tool. Every document validates
+against `schema/superops.graphql` in
+[superops-mcp](https://github.com/WYRE-AI/superops-mcp).
+
 ### Query Example
 
 ```graphql
@@ -89,12 +95,14 @@ query getClientList($input: ListInfoInput!) {
     clients {
       accountId
       name
+      stage
       status
     }
     listInfo {
+      page
+      pageSize
       totalCount
-      hasNextPage
-      endCursor
+      hasMore
     }
   }
 }
@@ -104,10 +112,10 @@ Variables:
 ```json
 {
   "input": {
-    "first": 50,
-    "filter": {
-      "status": "Active"
-    }
+    "page": 1,
+    "pageSize": 50,
+    "condition": { "attribute": "stage", "operator": "includes", "value": ["Active"] },
+    "sort": [{ "attribute": "name", "order": "ASC" }]
   }
 }
 ```
@@ -118,64 +126,43 @@ Variables:
 mutation createTicket($input: CreateTicketInput!) {
   createTicket(input: $input) {
     ticketId
-    ticketNumber
+    displayId
     subject
     status
   }
 }
 ```
 
-Variables:
+Variables (`source` is required):
 ```json
 {
   "input": {
     "subject": "Issue with email",
-    "client": {
-      "accountId": "client-uuid"
-    },
-    "priority": "HIGH"
+    "client": { "accountId": "<account id>" },
+    "source": "INTEGRATION",
+    "priority": "High"
   }
 }
 ```
 
-## Cursor-Based Pagination
+The typed tool `superops_tickets_create` sends exactly this request.
 
-### Pagination Parameters
+## Offset Pagination
 
-| Parameter | Type | Description |
-|-----------|------|-------------|
-| `first` | Int | Number of items to return (max 500) |
-| `after` | String | Cursor for next page |
-| `before` | String | Cursor for previous page |
-| `last` | Int | Number of items from end |
+`ListInfoInput` pages by offset. It has no cursors, and no `first`, `after`,
+`hasNextPage` or `endCursor`.
 
-### Pagination Pattern
+| Input field | Type | Description |
+|-------------|------|-------------|
+| `page` | Int | 1-based page number |
+| `pageSize` | Int | Rows per page. The Conduit tools cap it at 100 |
+| `condition` | RuleConditionInput | Filter. See below |
+| `sort` | [SortInput] | `{ attribute, order: ASC \| DESC }` |
 
-Every list result carries a `listInfo` object with `totalCount`, `hasNextPage`,
-`hasPreviousPage`, `startCursor`, and `endCursor` (see
-[references/examples.md](references/examples.md) for a full response body).
-
-Request `listInfo { hasNextPage endCursor }`, then pass `endCursor` as `after` on the next
-call. Loop while `hasNextPage` is true.
-
-First page:
-```json
-{
-  "input": {
-    "first": 100
-  }
-}
-```
-
-Next page:
-```json
-{
-  "input": {
-    "first": 100,
-    "after": "YXJyYXljb25uZWN0aW9uOjk5"
-  }
-}
-```
+Every list result carries `listInfo { page pageSize totalCount hasMore }`.
+Increment `page` while `hasMore` is `true`. SuperOps returns `null`, never
+`false`, on the last page, so treat any falsy value as the end, or page against
+`totalCount`.
 
 See [references/examples.md](references/examples.md) for a complete fetch-all-pages
 implementation.
@@ -215,77 +202,71 @@ Honor `extensions.retryAfter` and add jitter. See
 
 ## Query Filtering
 
-### Filter Operators
+`ListInfoInput` has no `filter` or `orderBy`. A filter is a `condition`
+(`RuleConditionInput`), which is either a leaf or a branch:
 
-| Operator | Description | Example |
-|----------|-------------|---------|
-| `eq` | Equals | `{ "status": "Active" }` |
-| `ne` | Not equals | `{ "status": { "ne": "Closed" } }` |
-| `in` | In array | `{ "status": ["Open", "In Progress"] }` |
-| `contains` | Contains substring | `{ "name": { "contains": "Acme" } }` |
-| `startsWith` | Starts with | `{ "name": { "startsWith": "A" } }` |
-| `gt` | Greater than | `{ "createdTime": { "gt": "2024-01-01" } }` |
-| `gte` | Greater than or equal | `{ "priority": { "gte": "HIGH" } }` |
-| `lt` | Less than | `{ "createdTime": { "lt": "2024-02-01" } }` |
-| `lte` | Less than or equal | `{ "count": { "lte": 10 } }` |
+- leaf: `{ "attribute": "...", "operator": "...", "value": ... }`
+- branch: `{ "joinOperator": "AND" | "OR", "operands": [ ...conditions ] }`
 
-Equality is implicit — `{ "status": "Active" }` is the `eq` form; a bare array is the
-`in` form.
+### Operators
+
+These are verified live in superops-mcp (`src/utils/conditions.ts`):
+
+| Operator | Value | Notes |
+|----------|-------|-------|
+| `is`, `isNot` | string | Whole-value match, case-insensitive |
+| `contains`, `notContains` | string | Substring match |
+| `startsWith`, `endsWith` | string | |
+| `includes`, `notIncludes` | array | Matches any or none of the listed values |
+
+`equals` and `in` are rejected with a 500. No range operator (`gt`, `gte`, `lt`,
+`lte`) is documented.
 
 ### Complex Filter Example
 
 ```json
 {
   "input": {
-    "filter": {
-      "and": [
-        { "status": ["Open", "In Progress"] },
-        { "priority": { "in": ["Critical", "High"] } },
-        {
-          "or": [
-            { "client": { "accountId": "client-1" } },
-            { "client": { "accountId": "client-2" } }
-          ]
-        }
+    "condition": {
+      "joinOperator": "AND",
+      "operands": [
+        { "attribute": "status", "operator": "includes", "value": ["Open", "On Hold"] },
+        { "attribute": "priority", "operator": "includes", "value": ["Critical", "High"] },
+        { "attribute": "client", "operator": "includes", "value": ["<account id 1>", "<account id 2>"] }
       ]
     }
   }
 }
 ```
 
+**`joinOperator` must be uppercase.** SuperOps treats `"and"`, or any other
+unrecognised value, as `OR` and reports no error, so the filter returns a
+superset.
+
+Three mistakes make a filter return zero rows without an error:
+
+- a value outside the field's real set
+- a JSON column filtered by its bare name instead of a path into it (`software`
+  matches nothing, `software.name` works)
+- `includes` on a fragment, because `includes` matches a whole value. Use
+  `contains` for substrings
+
 ### Ordering Results
 
 ```json
 {
   "input": {
-    "orderBy": {
-      "field": "createdTime",
-      "direction": "DESC"
-    }
+    "sort": [{ "attribute": "createdTime", "order": "DESC" }]
   }
 }
 ```
 
 ## Date/Time Handling
 
-All dates and times must be in **UTC** with **ISO 8601** format:
-
-```
-2024-02-15T10:30:00Z
-```
-
-### Date Range Queries
-
-```json
-{
-  "filter": {
-    "createdTime": {
-      "gte": "2024-02-01T00:00:00Z",
-      "lte": "2024-02-29T23:59:59Z"
-    }
-  }
-}
-```
+Timestamps are `String` fields in UTC ISO 8601, such as
+`2024-02-15T10:30:00Z`. No date-range operator is documented. For a time window,
+sort on `createdTime` `DESC`, page until rows fall before the window starts, and
+filter the rows yourself.
 
 ## Error Handling
 
@@ -329,11 +310,11 @@ See [references/examples.md](references/examples.md) for an error-dispatch wrapp
 - Use `undefined` (don't include field) to leave unchanged
 
 ```javascript
-// This will CLEAR the assignee
-{ "assignee": null }
+// This will CLEAR the assigned technician
+{ "technician": null }
 
-// This will leave assignee unchanged
-{ /* assignee field omitted */ }
+// This will leave the technician unchanged
+{ /* technician field omitted */ }
 ```
 
 ## Request Best Practices

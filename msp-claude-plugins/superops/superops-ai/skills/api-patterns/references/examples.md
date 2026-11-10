@@ -1,5 +1,11 @@
 # SuperOps.ai GraphQL Client Implementation Examples
 
+These examples are for code that calls the SuperOps API directly. Through
+Conduit, use the typed `superops_*` tools, or `superops_custom_query` /
+`superops_custom_mutation` for anything else. Every GraphQL document here
+validates against `schema/superops.graphql` in
+[superops-mcp](https://github.com/WYRE-AI/superops-mcp).
+
 ## Pagination Response Body
 
 ```json
@@ -8,40 +14,42 @@
     "getAssetList": {
       "assets": [...],
       "listInfo": {
+        "page": 1,
+        "pageSize": 100,
         "totalCount": 1250,
-        "hasNextPage": true,
-        "hasPreviousPage": false,
-        "startCursor": "YXJyYXljb25uZWN0aW9uOjA=",
-        "endCursor": "YXJyYXljb25uZWN0aW9uOjQ5"
+        "hasMore": true
       }
     }
   }
 }
 ```
 
+On the last page `hasMore` is `null`, not `false`.
+
 ## Complete Pagination Implementation
 
 ```javascript
-async function fetchAllAssets(filter = {}) {
+const GET_ASSETS_QUERY = `
+  query getAssetList($input: ListInfoInput!) {
+    getAssetList(input: $input) {
+      assets { assetId name status platform client }
+      listInfo { page pageSize totalCount hasMore }
+    }
+  }
+`;
+
+async function fetchAllAssets(condition) {
   const allAssets = [];
-  let hasNextPage = true;
-  let cursor = null;
+  const pageSize = 100;
 
-  while (hasNextPage) {
-    const variables = {
-      input: {
-        first: 100,
-        filter,
-        ...(cursor && { after: cursor })
-      }
-    };
-
-    const response = await graphqlRequest(GET_ASSETS_QUERY, variables);
+  for (let page = 1; ; page++) {
+    const input = { page, pageSize, ...(condition && { condition }) };
+    const response = await graphqlRequest(GET_ASSETS_QUERY, { input });
     const { assets, listInfo } = response.data.getAssetList;
 
     allAssets.push(...assets);
-    hasNextPage = listInfo.hasNextPage;
-    cursor = listInfo.endCursor;
+    // hasMore is true or null — never false.
+    if (!listInfo.hasMore || allAssets.length >= listInfo.totalCount) break;
   }
 
   return allAssets;
@@ -110,50 +118,39 @@ async function safeGraphQLRequest(query, variables) {
 }
 ```
 
-## Relative Date Calculation
+## Relative Date Windows
+
+No date-range operator is documented. To get the tickets from the last seven
+days, sort newest first, stop paging once rows fall before the window starts,
+and filter the rows yourself:
 
 ```javascript
-// Get tickets from last 7 days
-const sevenDaysAgo = new Date();
-sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+const since = Date.now() - 7 * 24 * 60 * 60 * 1000;
+const recent = [];
 
-const variables = {
-  input: {
-    filter: {
-      createdTime: {
-        gte: sevenDaysAgo.toISOString()
-      }
-    }
-  }
-};
+for (let page = 1; ; page++) {
+  const { data } = await graphqlRequest(GET_TICKETS, {
+    input: { page, pageSize: 100, sort: [{ attribute: 'createdTime', order: 'DESC' }] }
+  });
+  const { tickets, listInfo } = data.getTicketList;
+  const inWindow = tickets.filter(t => Date.parse(t.createdTime) >= since);
+  recent.push(...inWindow);
+  if (inWindow.length < tickets.length || !listInfo.hasMore) break;
+}
 ```
 
 ## Field Selection: Request Only Needed Fields
 
-```graphql
-# Good - specific fields
-query {
-  getClientList(input: { first: 50 }) {
-    clients {
-      accountId
-      name
-      status
-    }
-  }
-}
+Select only the fields you use. Select `JSON` fields such as `accountManager` and
+`hqSite` by name only.
 
-# Avoid - requesting everything
-query {
-  getClientList(input: { first: 50 }) {
+```graphql
+query clientNames {
+  getClientList(input: { page: 1, pageSize: 50 }) {
     clients {
       accountId
       name
       status
-      emailDomains
-      website
-      phone
-      industry
-      # ... many more fields
     }
   }
 }
@@ -161,43 +158,60 @@ query {
 
 ## Use Variables
 
-```graphql
-# Good - reusable with variables
-query getClient($id: ID!) {
-  getClient(input: { accountId: $id }) {
-    name
-    status
-  }
-}
+Pass values as variables, not as literals spliced into the query string:
 
-# Avoid - hardcoded values
-query {
-  getClient(input: { accountId: "abc123" }) {
+```graphql
+query getClient($input: ClientIdentifierInput!) {
+  getClient(input: $input) {
     name
     status
   }
 }
 ```
 
+```json
+{ "input": { "accountId": "<account id>" } }
+```
+
 ## Batch Related Queries
 
+One request with aliases beats several round-trips against the rate limit.
+`client` is a flat filter attribute holding the account ID.
+
 ```graphql
-# Good - single request for related data
-query getDashboard($clientId: ID!) {
+query dashboard($clientId: ID!, $clientFilter: JSON) {
   client: getClient(input: { accountId: $clientId }) {
     name
   }
-  tickets: getTicketList(input: {
-    filter: { client: { accountId: $clientId }, status: "Open" }
+  openTickets: getTicketList(input: {
+    pageSize: 1
+    condition: {
+      joinOperator: "AND"
+      operands: [
+        { attribute: "client", operator: "includes", value: $clientFilter }
+        { attribute: "status", operator: "includes", value: ["Open"] }
+      ]
+    }
   }) {
     listInfo { totalCount }
   }
-  assets: getAssetList(input: {
-    filter: { client: { accountId: $clientId }, status: "Online" }
+  onlineAssets: getAssetList(input: {
+    pageSize: 1
+    condition: {
+      joinOperator: "AND"
+      operands: [
+        { attribute: "client", operator: "includes", value: $clientFilter }
+        { attribute: "status", operator: "includes", value: ["ONLINE"] }
+      ]
+    }
   }) {
     listInfo { totalCount }
   }
 }
+```
+
+```json
+{ "clientId": "<account id>", "clientFilter": ["<account id>"] }
 ```
 
 ## Cache Reference Data
@@ -248,20 +262,24 @@ async function graphqlRequest(query, variables = {}) {
   return response.json();
 }
 
-// Usage
+// Usage. ticketId must be selected: without it getTicketList returns an
+// empty tickets array alongside a correct totalCount.
 const GET_TICKETS = `
   query getTicketList($input: ListInfoInput!) {
     getTicketList(input: $input) {
       tickets {
         ticketId
-        ticketNumber
+        displayId
         subject
         status
         priority
+        createdTime
       }
       listInfo {
+        page
+        pageSize
         totalCount
-        hasNextPage
+        hasMore
       }
     }
   }
@@ -269,8 +287,9 @@ const GET_TICKETS = `
 
 const result = await graphqlRequest(GET_TICKETS, {
   input: {
-    first: 50,
-    filter: { status: ["Open", "In Progress"] }
+    page: 1,
+    pageSize: 50,
+    condition: { attribute: 'status', operator: 'includes', value: ['Open', 'On Hold'] }
   }
 });
 ```

@@ -39,25 +39,24 @@ Anything without a typed tool goes through `superops_custom_query` (read-only Gr
 
 ## Key Concepts
 
-**Stage** tracks the sales lifecycle; **status** tracks the service relationship. They are independent — a `Customer` can be `Inactive`.
+**Stage** tracks the lifecycle, and **status** is a sub-state of stage. Each status
+belongs to one stage, and pairing a status with the wrong stage matches nothing.
+Both are tenant-configured strings. A stock tenant has these values:
 
-| Stage | Description |
-|-------|-------------|
-| **Lead** | Prospective client |
-| **Prospect** | Qualified lead |
-| **Customer** | Active paying client |
-| **Churned** | Former client |
+| Stage | Statuses |
+|-------|----------|
+| **Active** | Paid, Unpaid |
+| **Prospect** | New, Negotiation, Won, Lost |
+| **Inactive** | (none) |
 
-| Status | Description |
-|--------|-------------|
-| **Active** | Current client |
-| **Inactive** | Temporarily suspended |
-| **Archived** | No longer serviced |
+To read the tenant's own lists, query `getAllFields(input: "CLIENT")` through
+`superops_custom_query`.
 
-Most-used fields: `accountId` (system-generated), `name` (required), `stage`, `status`,
-`emailDomains`, `accountManager`, `primaryContact`, `customFields`. A client owns
-**sites** (physical locations) and **requesters** (contacts); requesters can be assigned
-to a site.
+Most-used fields: `accountId` (system-generated), `name` (required), `stage`,
+`status`, `emailDomains`, `accountManager`, `primaryContact`, `hqSite` and
+`customFields`. The last four are `JSON`, so select them by name only. A client
+owns **sites** (physical locations) and **client users** (contacts). Ticket
+inputs refer to a client user as the `requester`.
 
 See [references/fields.md](references/fields.md) for the complete field reference.
 
@@ -65,30 +64,30 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 
 ### Client Onboarding
 
-1. **Create client** with `createClientV2` — name, stage, status, email domains
-2. **Set up default site** with address
-3. **Create primary contact** (`createRequester` with `isPrimaryContact: true`)
-4. **Configure custom fields** for billing, contracts
-5. **Assign account manager**
+1. **Create the client and its HQ site** with `createClientV2`. Its `hqSite`
+   input is required.
+2. **Add other locations** with `createClientSite`.
+3. **Create contacts** with `createClientUser`. Each contact needs a requester
+   `role` and an association with the client and a site.
+4. **Set the primary contact and account manager** with `updateClient`.
 
-Ordering matters: the site must exist before a requester can be assigned to it via `siteId`.
+Ordering matters: a site must exist before a contact can be associated with it.
+Every step is a `superops_custom_mutation` call (admin tier, human approval).
 
 ### Client Search
 
-```graphql
-query searchClients($input: ListInfoInput!) {
-  getClientList(input: $input) {
-    clients {
-      accountId
-      name
-      emailDomains
-      status
-    }
-  }
-}
+Use `superops_clients_search`. It matches the term against the client name or any
+of its email domains:
+
+```json
+{ "tool": "superops_clients_search", "arguments": { "query": "acme" } }
 ```
 
-Variables for fuzzy search:
+The GraphQL it sends is a `condition` branch. `joinOperator` must be uppercase,
+because SuperOps treats any other spelling as `OR` without reporting an error.
+The valid string operators are `is`, `isNot`, `contains`, `notContains`,
+`startsWith` and `endsWith`. `includes` and `notIncludes` take an array.
+
 ```json
 {
   "input": {
@@ -98,48 +97,53 @@ Variables for fuzzy search:
       "joinOperator": "OR",
       "operands": [
         { "attribute": "name", "operator": "contains", "value": "acme" },
-        { "attribute": "emailDomains", "operator": "contains", "value": "acme.com" }
+        { "attribute": "emailDomains", "operator": "contains", "value": "acme" }
       ]
     }
   }
 }
 ```
 
-`joinOperator` must be uppercase: SuperOps silently treats anything else as `OR`. Valid string operators are `is`, `isNot`, `contains`, `notContains`, `startsWith` and `endsWith`; `includes` / `notIncludes` take an array.
-
 ### Client Health Dashboard
 
-Batch related counts into a single GraphQL request with aliases. The `filter` objects below predate the published schema: `ListInfoInput` takes a `condition` (as in the search example above), not `filter`, so rewrite them before sending (tracked in #270):
+Aliases batch the client record and its asset and ticket counts into one
+`superops_custom_query` call. `client` is a flat attribute holding the account ID
+on both lists. It is not a nested `client.accountId` path.
 
 ```graphql
-query getClientHealth($clientId: ID!) {
-  getClient(input: { accountId: $clientId }) {
+query clientHealth($clientId: ID!, $clientFilter: JSON, $openStatuses: JSON) {
+  client: getClient(input: { accountId: $clientId }) {
     name
+    stage
     status
   }
-  getClientAssets: getAssetList(input: {
-    filter: { client: { accountId: $clientId } }
+  assets: getAssetList(input: {
+    pageSize: 1
+    condition: { attribute: "client", operator: "includes", value: $clientFilter }
   }) {
     listInfo { totalCount }
   }
-  getClientTickets: getTicketList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      status: ["Open", "In Progress"]
-    }
-  }) {
-    listInfo { totalCount }
-  }
-  getClientAlerts: getAlertList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      status: "Active"
+  openTickets: getTicketList(input: {
+    pageSize: 1
+    condition: {
+      joinOperator: "AND"
+      operands: [
+        { attribute: "client", operator: "includes", value: $clientFilter }
+        { attribute: "status", operator: "includes", value: $openStatuses }
+      ]
     }
   }) {
     listInfo { totalCount }
   }
 }
 ```
+
+```json
+{ "clientId": "<account id>", "clientFilter": ["<account id>"], "openStatuses": ["Open", "On Hold"] }
+```
+
+An `Alert` has no client field, so alert counts come from `getAlertsForAsset`
+on each of the client's assets. See the alerts skill.
 
 ## API Patterns
 
@@ -158,13 +162,18 @@ update/delete have no version suffix. Delete and restore take an array of
 `{ accountId }` objects, even for one client: `input: [{ accountId: "<id>" }]`.
 Soft-deleted clients can be recovered with `restoreClients`; hard deletes cannot.
 
-The site and requester operations in `references/api.md` (`createSite`,
-`getClientSites`, `updateSite`, `createRequester`, `getClientRequesters`,
-`updateRequester`) are not in the published schema (`schema/superops.graphql` in
-superops-mcp); do not send them.
+| List sites | `getClientSiteList(input: GetClientSiteListInput!)` (`clientId`, `listInfo`) |
+| Create / update site | `createClientSite(input: CreateClientSiteInput!)` / `updateClientSite(input: UpdateClientSiteInput!)` |
+| Delete sites | `deleteClientSites(input: [ClientSiteIdentifierInput!]!)` |
+| List contacts | `getClientUserList(input: GetClientUserListInput!)` (`clientId`, `listInfo`) |
+| Create / update contact | `createClientUser(input: CreateClientUserInput!)` / `updateClientUser(input: UpdateClientUserInput!)` |
 
-See [references/api.md](references/api.md) for the complete operation catalog with
-request/response examples.
+The schema has no `createSite`, `getClientSites`, `updateSite`, `createRequester`,
+`getClientRequesters` or `updateRequester`. The site and client-user operations
+above replace them.
+
+See [references/api.md](references/api.md) for the documents and variables.
+Every example there validates against the schema.
 
 ## Error Handling
 
@@ -194,10 +203,6 @@ function validateClientInput(input) {
         errors.push(`Invalid email domain: ${domain}`);
       }
     });
-  }
-
-  if (input.website && !input.website.startsWith('http')) {
-    errors.push('Website must be a valid URL');
   }
 
   return errors;

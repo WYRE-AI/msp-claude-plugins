@@ -2,9 +2,10 @@
 name: "SuperOps Alerts"
 description: >
   SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle
-  and valid transitions, asset/client/monitor associations, and the GraphQL
-  operations for listing, acknowledging, resolving, and converting alerts
-  into tickets. Includes triage, dashboard, and client-reporting workflows.
+  and valid transitions, asset/client/monitor associations, the GraphQL
+  operations for listing and resolving alerts, and the hand-offs for
+  acknowledging them (console) and ticketing them (superops_tickets_create).
+  Includes triage, dashboard, and client-reporting workflows.
 when_to_use: >-
   When listing, filtering, acknowledging, or resolving alerts from SuperOps.ai monitored assets.
   Use when: superops alert, alert management, list alerts superops, acknowledge alert, resolve alert
@@ -89,45 +90,47 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 | `getAlertsForAsset` | query | Alerts scoped to one asset (`input: AssetDetailsListInput!`) |
 | `resolveAlerts` | mutation | `input: [ResolveAlertInput]`, each `{ id }`; returns `Boolean` |
 
-The published schema has **no** acknowledge mutation, no single-alert query and no
-alert-to-ticket mutation: acknowledge in the SuperOps console, and create a ticket
-with `superops_tickets_create`. `getAlertList` returns `listInfo` (`page`,
-`pageSize`, `hasMore`, `totalCount`): page with `page`/`pageSize` only while `hasMore`
-is `true`.
+The schema has no acknowledge mutation, no single-alert query and no
+alert-to-ticket mutation. Acknowledge alerts in the SuperOps console, and create
+tickets with `superops_tickets_create`. `getAlertList` takes
+`ListInfoInput` (`page`, `pageSize`, `condition`, `sort`) and returns `listInfo`
+(`page`, `pageSize`, `hasMore`, `totalCount`). Keep paging while `hasMore` is
+`true`.
 
-The longer examples in `references/` and in the alert commands predate the published
-schema (`schema/superops.graphql` in superops-mcp) and use fields and operations it
-does not define. Check an operation against the schema before sending it.
+A filter is a `condition`. It is either a `{ attribute, operator, value }` leaf or
+a `{ joinOperator: "AND" | "OR", operands: [...] }` branch. `joinOperator` must be
+uppercase, because SuperOps treats any other spelling as `OR` without reporting
+an error. The supported operators are `is`, `isNot`, `contains`, `notContains`,
+`startsWith`, `endsWith`, `includes` and `notIncludes`. `includes` and
+`notIncludes` take an array. No date-range operator is documented.
 
-Filters accept either a scalar or an array for `status` and `severity`
-(`"status": "Active"` and `"status": ["Active", "Acknowledged"]` are both valid),
-and `createdTime` supports `gte`/`lte` range operators.
-
-See [references/api.md](references/api.md) for the full operation catalog with
-request shapes and variable examples.
+See [references/api.md](references/api.md) for the documents and variables.
+Every example there validates against the schema.
 
 ## Common Workflows
 
 ### Alert Triage Workflow
 
-1. Query `getAlertList` filtered to `status: "Active"`, `severity: "Critical"`,
-   ordered by `createdTime` ascending (oldest first).
-2. Acknowledge the alert being worked in the SuperOps console (there is no API mutation for it).
-3. `superops_tickets_create` if the issue needs tracked service delivery.
-4. Once fixed, `resolveAlerts` with `input: [{ id: "<alert id>" }]`, sent through `superops_custom_mutation` (admin tier). Never send it without a human approver who has seen the exact mutation.
+1. List alerts newest first with `getAlertList` through `superops_custom_query`.
+2. Acknowledge the alert being worked in the SuperOps console. The API has no
+   mutation for it.
+3. Call `superops_tickets_create` if the issue needs tracked service delivery.
+4. Once the issue is fixed, send `resolveAlerts` with `input: [{ id: "<alert id>" }]`
+   through `superops_custom_mutation` (admin tier). Never send it without a human
+   approver who has seen the exact mutation.
 
 ### Alert Summary Dashboard
 
-Use GraphQL query aliases to fetch several counts in a single request — active
-Critical, active High, Acknowledged, and recently Resolved — each reading only
-`listInfo { totalCount }`.
+Use GraphQL aliases to fetch several `getAlertList` counts in one request. Each
+count reads only `listInfo { totalCount }`.
 
 ### Client Alert Report
 
-Filter `getAlertList` by `client.accountId` plus a `createdTime` `gte`/`lte`
-range to produce a period report of alerts raised and resolved.
+An `Alert` has no client field. List the client's assets with
+`superops_assets_list` (`clientId`), page through `getAlertsForAsset` for each
+asset, and keep the alerts whose `createdTime` falls inside the reporting window.
 
-See [references/api.md](references/api.md) for all three workflow queries.
+See [references/api.md](references/api.md) for all three workflows.
 
 ## Error Handling
 
@@ -162,7 +165,7 @@ function canTransition(currentStatus, newStatus) {
 1. **Acknowledge promptly** - Show clients issues are being tracked
 2. **Create tickets for complex issues** - Link alert to ticket for tracking
 3. **Document resolutions** - Helps with recurring issues
-4. **Use bulk operations** - One `alertIds` array beats N calls
+4. **Use bulk operations** - One `resolveAlerts` call with a list of `{ id }` beats N calls
 5. **Set up auto-resolution** - Let transient issues clear themselves
 6. **Monitor acknowledgment time** - Track response SLAs
 7. **Review alert patterns** - Identify recurring problems
