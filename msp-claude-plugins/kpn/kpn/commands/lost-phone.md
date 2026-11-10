@@ -29,6 +29,7 @@ Identify exactly which KPN line and SIM belong to a lost or stolen company phone
 
    - `kpn_grexx_get_sim` — ICCID and SIM type (PUK is masked)
    - `kpn_grexx_mobile_settings` — blocks already in place
+   - If either read fails or comes back empty (settings stay empty for about 5 minutes after activation), still hand off: give the user the confirmed number and order, and say which details are missing so they can find them in the portal.
 
 5. **Hand off**
 

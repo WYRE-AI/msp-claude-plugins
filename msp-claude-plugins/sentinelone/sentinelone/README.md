@@ -80,6 +80,8 @@ Add to your Claude Desktop config:
 
 `PURPLEMCP_VT_API_KEY` is optional, but the `threat_intel_*` VirusTotal tools fail without it. Get a key from https://www.virustotal.com/gui/my-apikey.
 
+Through Conduit there is no connection field for a VirusTotal key: it must be set on the SentinelOne sidecar by whoever runs the gateway. If the `threat_intel_*` tools return an authentication error, VirusTotal lookups are not available on that deployment; the CVE tools still work.
+
 ## Available Skills
 
 | Skill | Description |

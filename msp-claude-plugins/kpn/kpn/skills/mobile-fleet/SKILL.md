@@ -54,5 +54,5 @@ Find the order for the number (`attribute` on `kpn_grexx_order_summary`), confir
 ## Gotchas
 
 - **Order IDs, not phone numbers.** Search by number through `attribute` on the order summary, then work with the order ID.
-- **Freshly activated lines** return nothing from settings and usage for the first few minutes.
+- **Freshly activated lines** return nothing from settings and usage for the first few minutes. Retry after the 5-minute window; an empty result after that is a real failure to report, not a new line.
 - **Masked codes are masked on purpose.** Do not try to recover a PUK through another route; the user gets it from the portal.

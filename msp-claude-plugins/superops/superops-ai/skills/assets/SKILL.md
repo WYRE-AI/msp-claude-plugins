@@ -135,7 +135,7 @@ See [references/api.md](references/api.md) for all three workflow queries.
 ### Asset Status Checks
 
 A `status` of `Online` alone is not sufficient — the status field can lag a
-dropped agent. Also check `lastSeen` freshness before dispatching a remote action:
+dropped agent. Also check `lastCommunicatedTime` freshness before dispatching a remote action, and refuse when it is missing or unparseable:
 
 ```javascript
 // Check if asset is available for remote actions
@@ -143,11 +143,15 @@ function canRunRemoteAction(asset) {
   if (asset.status !== 'Online') {
     return {
       canRun: false,
-      reason: `Asset is ${asset.status}. Last seen: ${asset.lastSeen}`
+      reason: `Asset is ${asset.status}. Last communicated: ${asset.lastCommunicatedTime}`
     };
   }
 
-  const lastSeenMinutes = (Date.now() - new Date(asset.lastSeen)) / 60000;
+  const last = Date.parse(asset.lastCommunicatedTime ?? '');
+  if (Number.isNaN(last)) {
+    return { canRun: false, reason: 'No valid lastCommunicatedTime on the asset' };
+  }
+  const lastSeenMinutes = (Date.now() - last) / 60000;
   if (lastSeenMinutes > 5) {
     return {
       canRun: false,
@@ -163,7 +167,7 @@ function canRunRemoteAction(asset) {
 
 1. **Filter queries** - Always use filters to limit result sets
 2. **Check status first** - Verify asset is online before running scripts
-3. **Use pagination** - Handle large asset lists with cursor pagination
+3. **Use pagination** - Page large asset lists with `page` and `pageSize` in `ListInfoInput`, and keep going while `listInfo.hasMore` is true
 4. **Cache static data** - Cache client/site associations locally
 5. **Monitor execution** - Track script execution results
 6. **Set appropriate timeouts** - Long-running scripts need adequate timeouts

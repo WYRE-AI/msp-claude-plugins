@@ -82,7 +82,7 @@ Underlying REST: `POST /api/v2/ticketing/ticket`, `PUT /api/v2/ticketing/ticket/
 
 ## Status Values
 
-Statuses are **per tenant** and addressed by ID. Read them with `ninjaone_tickets_statuses_list`; do not assume names such as `OPEN` or `IN_PROGRESS`. A new ticket defaults to status 1000 (New).
+Statuses are **per tenant**. Read them with `ninjaone_tickets_statuses_list`; do not assume names such as `OPEN` or `IN_PROGRESS`. Create and update take the status **ID** (a new ticket defaults to 1000, New). The `status` filter on `ninjaone_tickets_list` takes the status **display name**, matched client-side.
 
 ## Priority and Severity
 
@@ -103,7 +103,7 @@ NinjaOne separates urgency (priority) from impact (severity). **There is no `CRI
 | `MINOR` | Minor issue |
 | `NONE` | No impact recorded |
 
-For a "critical" ticket, set `severity: "CRITICAL"` and `priority: "HIGH"`.
+For a "critical" ticket, set `severity: "CRITICAL"`, and set `priority: "HIGH"` only if the user did not ask for a priority (keep an explicit one, even `LOW`).
 
 
 ## Log Entries
@@ -112,12 +112,7 @@ Log entries track all ticket activity:
 
 ### Entry Types
 
-| Type | Description |
-|------|-------------|
-| `COMMENT` | Public or private comment |
-| `STATUS_CHANGE` | Status transition |
-| `ASSIGNMENT` | Technician assignment change |
-| `TIME_ENTRY` | Logged work time |
+The `type` filter accepts `DESCRIPTION`, `COMMENT`, `CONDITION`, `SAVE`, `DELETE`, `PRODUCT` and `INFO`. Use `COMMENT` for just the conversation.
 
 ### Log Entry Structure
 

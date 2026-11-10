@@ -58,7 +58,7 @@ There is no MCP tool for Autotask Price Lists or Inventory Items (both are real 
 
 ### Step 4: Calculate and Display
 
-Show: unit cost, default price, MSRP, and margin percentage from the product or service record. Note that any customer price-list override must be checked in the Autotask UI.
+Show: unit cost, default price, MSRP, and margin percentage from the product or service record. Note that any customer price-list override must be checked in the Autotask UI. A service sold on a recurring contract can carry its own unit price on the contract service line; for what a specific customer pays, read it with the `autotask-contract-services` skill rather than quoting the catalog price.
 
 ## Parameters
 

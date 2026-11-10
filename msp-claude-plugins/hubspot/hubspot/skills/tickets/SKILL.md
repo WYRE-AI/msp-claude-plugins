@@ -29,7 +29,7 @@ Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.h
 | `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
 | `search_owners` | Resolve `hubspot_owner_id` values to people |
 
-Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
 
 ## Anti-triggers
 
@@ -46,9 +46,9 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `get_crm_objects` (`objectType: "tickets"`) | Get a single ticket by ID | `ticketId` (required) |
+| `get_crm_objects` (`objectType: "tickets"`) | Get tickets by ID | `objectIds` (required, 1-100) |
 | `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) | Create a new ticket | `subject` (required), `content`, `hs_pipeline`, `hs_pipeline_stage` |
-| `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) | Update an existing ticket | `ticketId` (required), property fields to update |
+| `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) | Update an existing ticket | `objectId` (required), property fields to update |
 
 ### Create a Ticket
 
@@ -64,23 +64,23 @@ Call `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) with the ti
 
 ### Update a Ticket
 
-Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) with the `ticketId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) with the ticket's `objectId` and the properties to change:
 
 **Example: Move ticket to In Progress:**
-- `ticketId`: `77777`
+- `objectId`: `77777`
 - `hs_pipeline_stage`: `2`
 
 **Example: Resolve a ticket:**
-- `ticketId`: `77777`
+- `objectId`: `77777`
 - `hs_pipeline_stage`: `4`
 - `hs_resolution`: `Reconfigured mail relay settings. Confirmed delivery restored for all 5 users.`
 
 ### Retrieve a Ticket
 
-Call `get_crm_objects` (`objectType: "tickets"`) with the `ticketId`:
+Call `get_crm_objects` (`objectType: "tickets"`) with the ticket ID in `objectIds`:
 
 **Example:**
-- `get_crm_objects` (`objectType: "tickets"`) with `ticketId=77777`
+- `get_crm_objects` (`objectType: "tickets"`) with `objectIds: [77777]`
 
 ### Search Tickets
 

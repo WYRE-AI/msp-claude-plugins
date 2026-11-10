@@ -72,7 +72,7 @@ Set `disable=true` to remove existing forwarding — this is the **first action*
 cipp_list_mailbox_usage(tenantFilter, sortBy='percentOfQuota', limit=25)   # explicit; defaults are mailboxSize and 50
 cipp_get_mailbox_usage(tenantFilter, upn='user@contoso.com')
 ```
-The list reports mailbox and archive sizes across a tenant, largest first, with tenant-wide totals including `nearQuotaCount` (mailboxes about to stop receiving mail). `sortBy` takes `mailboxSize`, `archiveSize`, `totalSize` or `percentOfQuota`; `minSizeGB` filters. The single-mailbox form reads live from Exchange, including the archive.
+The list reports mailbox and archive sizes across a tenant, ordered by the chosen `sortBy` field (largest first), with tenant-wide totals including `nearQuotaCount` (mailboxes about to stop receiving mail). `sortBy` takes `mailboxSize`, `archiveSize`, `totalSize` or `percentOfQuota`; `minSizeGB` filters. The single-mailbox form reads live from Exchange, including the archive.
 
 ### `cipp_list_trusted_blocked_senders`
 

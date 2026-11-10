@@ -53,9 +53,12 @@ Datto RMM operates across 6 regional platforms:
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install datto-rmm@msp-claude-plugins
+```
+
+Then connect Datto RMM in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 

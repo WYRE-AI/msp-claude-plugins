@@ -17,7 +17,7 @@ This plugin provides Claude with deep knowledge of Better Stack, enabling:
 
 ### API Credentials
 
-Better Stack authenticates via a Bearer token:
+Through Conduit there is no token to create: Conduit connects Better Stack with OAuth. A **self-hosted** gateway authenticates with a Bearer token:
 
 1. Log into [Better Stack](https://betterstack.com)
 2. Navigate to **API tokens** in your account settings
@@ -37,11 +37,11 @@ There is no per-plugin URL setting, and setting an environment variable does not
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
+Connect Better Stack in [Conduit](https://conduit.wyre.ai) and sign in to Better Stack with OAuth; there is no token to paste.
 
 ### Claude Code CLI
 
-This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Better Stack in the Conduit web UI (`/connect/betterstack`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install betterstack@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Better Stack in the Conduit web UI (`/connect/betterstack`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -101,7 +101,7 @@ This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API tokens periodically via Better Stack settings
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Better Stack audit log
@@ -118,9 +118,8 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `BETTERSTACK_API_TOKEN` is set correctly
-2. Check that the API token has not been revoked
-3. Regenerate the token at Better Stack > API tokens
+1. Reconnect Better Stack in Conduit (**Connections → BetterStack**); Conduit signs in with OAuth, so there is no token to paste
+2. On a self-hosted gateway, check that its API token has not been revoked, and regenerate it at Better Stack > API tokens if needed
 
 ### Rate Limits
 

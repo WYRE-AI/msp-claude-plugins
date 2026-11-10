@@ -53,7 +53,7 @@ To move or re-assign an existing booking, use `cw_update_schedule_entry` instead
 | name | string | Yes | - | Entry name/subject |
 | start_date | datetime | Yes | - | Start date and time |
 | end_date | datetime | Yes | - | End date and time |
-| member | string | No | Current user | Member identifier |
+| member | string | Yes | - | Member identifier; never defaulted, asked for if missing |
 | ticket_id | integer | Yes* | - | Ticket to book against. *Required unless the user names another project ticket or activity |
 | type | string | No | - | Schedule type |
 | location | string | No | - | Service location (On-Site, In-house, Remote); not a street address |

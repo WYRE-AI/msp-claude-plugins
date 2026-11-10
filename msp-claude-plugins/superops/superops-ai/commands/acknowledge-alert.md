@@ -10,12 +10,9 @@ Acknowledge an RMM alert to indicate a technician is aware and investigating the
 
 ## How this runs through Conduit
 
-> **This cannot be done through Conduit today.** The published SuperOps GraphQL schema (`schema/superops.graphql` in superops-mcp) defines no acknowledge mutation, so the `acknowledgeAlerts` mutation shown below is rejected. Acknowledge the alert in the SuperOps console. The steps are kept for reference only.
+> **This cannot be done through Conduit today.** The published SuperOps GraphQL schema (`schema/superops.graphql` in superops-mcp) defines no acknowledge mutation, so there is nothing to send through `superops_custom_mutation`. Acknowledge the alert in the SuperOps console.
 
-The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
-`superops_custom_mutation` (admin tier) sends the GraphQL mutation shown in the steps below. It executes an arbitrary mutation against the tenant, so every call needs a named human approver who has seen the exact mutation text and variables. Never run it from a scheduled or unattended agent.
-
-Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the alert step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
+The Conduit `superops` connector has **no alert tool**. Reading the alert goes through `superops_custom_query` (admin tier, read-only), which needs a human approver who has seen the query. Use the typed tools for asset and client context (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`). If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
 
 ## Prerequisites
 
@@ -26,49 +23,9 @@ Use the typed tools for context first (`superops_assets_list`, `superops_assets_
 
 ## Steps
 
-1. **Validate alert exists**
-   - Query alert by ID
-   - Return error if alert not found
-   - Show current alert details for confirmation
-
-2. **Check alert status**
-   - Verify alert is in Active status
-   - Warn if already acknowledged
-   - Error if already resolved
-
-3. **Acknowledge the alert**
-   ```graphql
-   mutation acknowledgeAlerts($input: AcknowledgeAlertsInput!) {
-     acknowledgeAlerts(input: $input) {
-       success
-       acknowledgedCount
-       alerts {
-         alertId
-         status
-         acknowledgedTime
-         acknowledgedBy {
-           id
-           name
-         }
-       }
-     }
-   }
-   ```
-
-   Variables:
-   ```json
-   {
-     "input": {
-       "alertIds": ["<alert_id>"],
-       "notes": "<note>"
-     }
-   }
-   ```
-
-4. **Confirm acknowledgment**
-   - Display updated alert status
-   - Show acknowledgment timestamp
-   - Suggest next steps
+1. **Find the alert** - `getAlertList` through `superops_custom_query` (admin tier, read-only, human approval) to show the alert's `id`, `message`, `severity`, `status` and `asset` for confirmation. Use the typed asset tools for context.
+2. **Hand off** - Tell the operator to acknowledge it in the SuperOps console, with the alert ID and any note they want to add. Do not send an `acknowledgeAlerts` mutation; the schema has none.
+3. **Confirm** - Once the operator says it is done, re-read the alert and report its status.
 
 ## Parameters
 
@@ -140,36 +97,6 @@ Current Acknowledgment:
 
 To add another note, use /add-alert-note alert_9876 "Your note"
 To resolve the alert, use /resolve-alert alert_9876
-```
-
-## curl Example
-
-```bash
-curl -X POST 'https://yourcompany.superops.ai/graphql' \
-  -H 'Authorization: Bearer YOUR_API_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "query": "mutation acknowledgeAlerts($input: AcknowledgeAlertsInput!) { acknowledgeAlerts(input: $input) { success acknowledgedCount alerts { alertId status acknowledgedTime acknowledgedBy { id name } } } }",
-    "variables": {
-      "input": {
-        "alertIds": ["alert-uuid-here"],
-        "notes": "Investigating disk space issue"
-      }
-    }
-  }'
-```
-
-## Bulk Acknowledgment
-
-To acknowledge multiple alerts at once, you can use the API directly with multiple alert IDs:
-
-```json
-{
-  "input": {
-    "alertIds": ["alert-1", "alert-2", "alert-3"],
-    "notes": "Bulk acknowledgment - scheduled maintenance window"
-  }
-}
 ```
 
 ## Error Handling

@@ -16,8 +16,9 @@ The Conduit `m365` connector has no user, licence or MFA tools, so this command 
 |------|------|------|
 | Licence assignments and usage | `cipp_list_licenses` (`tenantFilter`) | read |
 | CSP subscriptions | `cipp_list_csp_licenses` | read |
-| Disabled or inactive users still holding seats | `cipp_list_users`, then `signInActivity` from the Graph users query in step 2 (`microsoft_graph_get`) for the 90-day check. Sign-in logs keep only about 30 days, so they cannot show 90 days of inactivity; treat a user with no `signInActivity` as unknown, not inactive | read / admin |
-| Remove all of a user's licences | `cipp_offboard_user` with `RemoveLicenses: true` only. This removes **every** assigned licence, so confirm that scope explicitly. Removing one SKU has no Conduit tool; do it in the Microsoft 365 admin center | admin |
+| Disabled or inactive users still holding seats | `cipp_list_users`, then `signInActivity` from the Graph users query in step 2 (`microsoft_graph_get`) for the 90-day check. Sign-in logs keep only about 30 days, so they cannot show 90 days of inactivity; treat a user with no `signInActivity` as unknown, not inactive. Combine the Graph data with CIPP's only after the tenant ID from `microsoft_graph_get` on `/v1.0/organization` matches the CIPP tenant; otherwise report it separately or leave it out | read / admin |
+| Remove all of a user's licences | `cipp_offboard_user` with `RemoveLicenses: true` only. This removes **every** assigned licence and also takes the user out of any group that assigns a licence, even with `RemoveGroups` off, which can remove access those groups grant. List those groups and confirm the scope before queuing it | admin |
+| Change one SKU | `cipp_edit_user` with `licenses` set to the **complete** list of SKUs the user should keep (CIPP adds missing SKUs and removes the rest) | admin |
 
 ## Arguments
 

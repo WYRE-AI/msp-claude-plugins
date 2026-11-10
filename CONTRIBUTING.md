@@ -131,24 +131,9 @@ msp-claude-plugins/
 | REST Client | API testing | Thunder Client extension |
 | Claude Code | Testing plugins locally | https://claude.ai/code |
 
-### Environment Variables
+### Vendor Credentials
 
-When testing MCP integrations, configure these environment variables:
-
-```bash
-# Autotask
-export AUTOTASK_USERNAME="your-api-user@domain.com"
-export AUTOTASK_INTEGRATION_CODE="YOUR_INTEGRATION_CODE"
-export AUTOTASK_SECRET="YOUR_SECRET"
-
-# ConnectWise
-export CW_COMPANY_ID="your-company"
-export CW_PUBLIC_KEY="your-public-key"
-export CW_PRIVATE_KEY="your-private-key"
-export CW_CLIENT_ID="your-client-id"
-
-# Never commit these values!
-```
+Plugins read no environment variables. To test a plugin against a vendor, connect the vendor in Conduit (its connection fields come from Conduit's `vendor-config.ts`) and use the unified connector, as described under the `.mcp.json` convention below. Conduit stores the credentials and injects them on each request. Never commit vendor credentials.
 
 ---
 

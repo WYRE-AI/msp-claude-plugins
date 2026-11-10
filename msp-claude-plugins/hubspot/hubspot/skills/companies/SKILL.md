@@ -29,7 +29,7 @@ Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.h
 | `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
 | `search_owners` | Resolve `hubspot_owner_id` values to people |
 
-Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
 
 ## Anti-triggers
 
@@ -51,7 +51,7 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 | `manage_crm_objects` (`createRequest`, `objectType: "companies"`) | Create a new company | `name` (required), `domain`, `industry`, `phone` |
 | `manage_crm_objects` (`updateRequest`, `objectType: "companies"`) | Update an existing company | `objectId` (required), property fields to update |
 | `search_properties` (`objectType: "companies"`) | List all available company properties | None |
-| `search_crm_objects` (`objectType: "companies"`) | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `search_crm_objects` (`objectType: "companies"`) | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `offset` |
 
 ### Search Companies
 
@@ -271,7 +271,7 @@ Common industry values for MSP clients:
 ### Company Audit Report
 
 1. Call `search_crm_objects` (`objectType: "companies"`) with `lifecyclestage=customer` and `limit=100`
-2. Paginate through all results using the `after` cursor
+2. Paginate through all results using `offset`
 3. For each company, call `search_crm_objects` (`associatedWith` filter) to get associated contacts and deals
 4. Build a report with company name, domain, industry, employee count, contact count, open deal count, and last activity date
 5. Flag companies with no contacts, no recent activity, or missing domain

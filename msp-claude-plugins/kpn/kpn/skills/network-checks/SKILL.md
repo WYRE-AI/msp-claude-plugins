@@ -30,10 +30,10 @@ The address tools take a Dutch postcode (`1012JS`), a house number and an option
 
 ## Outage triage for a KPN site
 
-1. Resolve the line: `kpn_grexx_customer_data` for the customer card, then `kpn_grexx_order_summary` with `productGroup: "Connectivity"` (or `"Internet"`) for the order ID.
+1. Resolve the line: `kpn_grexx_customer_data` for the customer card, then `kpn_grexx_order_summary` with `productGroup: "Connectivity"` and `"Internet"` for the order ID, matched to the site's full address. If a lookup or check fails, say which one; a failed call is not evidence of an outage (see the api-patterns skill for connection and order errors).
 2. `kpn_grexx_ras_check` on the order — is a PPP session up, and with which IP?
 3. `kpn_grexx_radius_check` — logins over the last 7 days. Many logins mean a flapping line. An empty result is inconclusive: the line has been up for over 7 days, or it has not been up at all. Use the RAS check from step 2 to tell them apart, and never report continuous uptime from an empty history alone.
-4. `kpn_grexx_carrier_info` for the site address — look for planned work.
+4. `kpn_grexx_carrier_info` for the site address — look for planned work. Only work that is in progress now on this line's connection point explains the outage; future or unrelated work must not delay troubleshooting.
 5. If the line is down and there is no planned work, and it is an xDSL order that is out of sync, propose `kpn_grexx_start_line_diagnose` with the matching `symptomCode`. It is the one write tool: confirm with the user first, and do not start a second one while one is running. It only starts the test and returns an `AnalysisId`; the connector cannot fetch the result, so follow it up in the Grexx portal (or with KPN) and say so.
 6. If the line is up, continue with the customer's own network (router/firewall in the RMM).
 

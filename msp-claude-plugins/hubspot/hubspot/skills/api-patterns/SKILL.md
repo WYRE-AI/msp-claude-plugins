@@ -136,19 +136,20 @@ HubSpot MCP tools that search records use the CRM Search API under the hood. Sea
 
 ### Pagination
 
-Search results use cursor-based pagination:
+`search_crm_objects` pages with an integer `offset` token:
 
 | Parameter | Description | Default | Max |
 |-----------|-------------|---------|-----|
-| `limit` | Results per page | 10 | 100 |
-| `after` | Cursor for next page | None | - |
+| `limit` | Results per page | 100 | 200 |
+| `offset` | Paging token from the previous page | None | - |
 
 **Iterating through all results:**
 
-1. Call the search tool with `limit=100`
-2. Check the response for a `paging.next.after` value
-3. If present, call again with `after` set to that value
-4. Repeat until no `paging.next.after` is returned
+1. Call `search_crm_objects` with `limit` (up to 200) and no `offset`
+2. If the response carries a next-page offset, call again with `offset` set to it
+3. Repeat until no next offset is returned
+
+The raw HubSpot REST `after` / `paging.next.after` cursor below is what the server translates; do not pass `after` to the MCP tool.
 
 ## Response Format
 

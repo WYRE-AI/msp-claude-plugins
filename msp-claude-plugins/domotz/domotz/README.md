@@ -48,7 +48,7 @@ Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API key 
 
 ### Claude Code CLI
 
-This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Domotz in the Conduit web UI (`/connect/domotz`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install domotz@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Domotz in the Conduit web UI (`/connect/domotz`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -94,7 +94,7 @@ This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via the Domotz Portal
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Domotz audit log
@@ -111,9 +111,9 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `DOMOTZ_API_KEY` is set correctly
+1. Check the Domotz connection in Conduit (**Connections → Domotz**): reconnect it, or re-enter the credentials
 2. Check that the API key has not been revoked
-3. Verify `DOMOTZ_REGION` matches your account's region
+3. Verify the Region on the Domotz connection in Conduit matches your account's region
 4. Regenerate credentials at Domotz Portal > User Menu > API Keys
 
 ### Region Mismatch

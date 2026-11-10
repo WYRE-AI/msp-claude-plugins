@@ -36,9 +36,12 @@ This plugin ships no `.mcp.json` and reads no environment variables. Connect IT 
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables above
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install itglue@msp-claude-plugins
+```
+
+Then connect IT Glue in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -106,7 +109,7 @@ If `search_documents` returns 404, use `list_flexible_asset_types` + `search_fle
 ### API Key Security
 
 - Never commit API keys to version control
-- Use environment variables for credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically
 - Use minimum required permissions
 
@@ -114,7 +117,7 @@ If `search_documents` returns 404, use `list_flexible_asset_types` + `search_fle
 
 IT Glue operates in multiple regions:
 
-| Region | Base URL | `ITGLUE_REGION` value |
+| Region | Base URL | Conduit Region value |
 |--------|----------|------------------------|
 | US | `https://api.itglue.com` | `us` (default) |
 | EU | `https://api.eu.itglue.com` | `eu` |
@@ -135,13 +138,13 @@ IT Glue enforces rate limits:
 
 ### Authentication Errors (401)
 
-1. Verify `ITGLUE_API_KEY` is set correctly
+1. Check the IT Glue connection in Conduit (**Connections → IT Glue**): reconnect it, or re-enter the credentials
 2. Check the API key hasn't expired
 3. Confirm the key has required permissions
 
 ### Wrong Region (404 on valid resources)
 
-1. Verify `ITGLUE_REGION` matches your IT Glue account
+1. Verify the Region on the IT Glue connection in Conduit matches your IT Glue account
 2. Try `us`, `eu`, or `au` if unsure
 
 ### Documents return 404

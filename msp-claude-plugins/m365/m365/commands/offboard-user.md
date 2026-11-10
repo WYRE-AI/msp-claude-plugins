@@ -12,7 +12,7 @@ Execute a structured, safe Microsoft 365 offboarding workflow for a departing em
 
 The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
 
-The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userId`) with the step flags turned on. Conduit classifies `cipp_offboard_user` as an admin-tier write, so the caller needs admin access to the `cipp` connector. It is irreversible and queued, so run it once, after the operator confirms the exact flag set. Queuing is not completion: check the job's outcome in CIPP (`cipp_list_logs`, admin tier) and report the offboarding as done only once the job has succeeded. Report a pending or failed job as not complete.
+The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userId`) with the step flags turned on. Conduit classifies `cipp_offboard_user` as an admin-tier write, so the caller needs admin access to the `cipp` connector. It is irreversible and queued, so run it once, after the operator confirms the exact flag set. Queuing is not completion: check the job's outcome in CIPP (`cipp_list_logs`, admin tier) and report the offboarding as done only once the job has succeeded. Report a pending or failed job as not complete. With `RemoveLicenses`, CIPP may schedule the licence removal as a separate task a few minutes later, so check the user's licences again (`cipp_list_licenses` or `cipp_list_users`) and do not report licence removal, or the offboarding, as complete until they are gone.
 
 | Step | `cipp_offboard_user` flag |
 |------|-----------------------------|
@@ -25,7 +25,7 @@ The whole workflow is one CIPP job: `cipp_offboard_user` (`tenantFilter`, `userI
 | Mailbox access for the manager | `AccessAutomap` / `AccessNoAutomap` |
 | OneDrive access | `OnedriveAccess` |
 | Remove from **all** groups and Teams | `RemoveGroups` (all memberships, including Teams the user solely owns; leave it off and remove memberships by hand if an ownership transfer is pending) |
-| Free licences | `RemoveLicenses` |
+| Free licences | `RemoveLicenses` (also removes the user from licence-assigning groups, even with `RemoveGroups` off; list those groups and confirm before queuing) |
 | Remove MFA methods and mobile devices | `RemoveMFADevices`, `RemoveMobile` |
 
 Use `cipp_list_users` to resolve the user first, and `cipp_list_mailbox_permissions` or `cipp_list_user_groups` to show the dry-run picture before the job is queued.

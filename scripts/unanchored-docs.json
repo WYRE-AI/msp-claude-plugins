@@ -34,7 +34,6 @@
     "autotask:commands/time-entry.md": "names no MCP tool; 1 HTTP endpoint(s), 6 CLI flag(s) — first at commands/time-entry.md:50 POST /v1.0/TimeEntries",
     "autotask:skills/api-patterns": "names no MCP tool; 12 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:39 GET /v1.0/Tickets",
     "autotask:skills/configuration-items": "names no MCP tool; 6 HTTP endpoint(s), 0 CLI flag(s) — first at skills/configuration-items/SKILL.md:84 POST /v1.0/ConfigurationItemTypes/query",
-    "azure-mcp:agents/azure-ops-analyst.md": "names no MCP tool; 0 HTTP endpoint(s), 1 CLI flag(s) — first at agents/azure-ops-analyst.md:12 --read-only",
     "connectwise-automate:commands/list-computers.md": "names no MCP tool; 1 HTTP endpoint(s), 7 CLI flag(s) — first at commands/list-computers.md:28 GET /cwa/api/v1/Computers",
     "connectwise-automate:skills/api-patterns": "names no MCP tool; 13 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:54 POST /APICredentials",
     "connectwise-automate:skills/clients": "names no MCP tool; 11 HTTP endpoint(s), 0 CLI flag(s) — first at skills/clients/references/api.md:6 GET /cwa/api/v1/Clients",

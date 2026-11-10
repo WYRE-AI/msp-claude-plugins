@@ -29,7 +29,7 @@ Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.h
 | `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
 | `search_owners` | Resolve `hubspot_owner_id` values to people |
 
-Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
 
 ## Anti-triggers
 
@@ -48,11 +48,11 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `get_crm_objects` (`objectType: "deals"`) | Get a single deal by ID | `dealId` (required) |
+| `get_crm_objects` (`objectType: "deals"`) | Get deals by ID | `objectIds` (required, 1-100) |
 | `manage_crm_objects` (`createRequest`, `objectType: "deals"`) | Create a new deal | `dealname` (required), `amount`, `dealstage`, `pipeline` |
-| `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) | Update an existing deal | `dealId` (required), property fields to update |
+| `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) | Update an existing deal | `objectId` (required), property fields to update |
 | `search_properties` (`objectType: "deals"`) | List all available deal properties | None |
-| `search_crm_objects` (`objectType: "deals"`) | Search deals by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `search_crm_objects` (`objectType: "deals"`) | Search deals by criteria | `filterGroups`, `sorts`, `limit`, `offset` |
 
 ### Search Deals
 
@@ -170,19 +170,19 @@ Call `manage_crm_objects` (`createRequest`, `objectType: "deals"`) with the deal
 
 ### Update a Deal
 
-Call `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) with the `dealId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "deals"`) with the deal's `objectId` and the properties to change:
 
 **Example: Move deal to next stage:**
-- `dealId`: `54321`
+- `objectId`: `54321`
 - `dealstage`: `proposalpending`
 - `amount`: `6000`
 
 ### Retrieve a Deal
 
-Call `get_crm_objects` (`objectType: "deals"`) with the `dealId`:
+Call `get_crm_objects` (`objectType: "deals"`) with the deal ID in `objectIds`:
 
 **Example:**
-- `get_crm_objects` (`objectType: "deals"`) with `dealId=54321`
+- `get_crm_objects` (`objectType: "deals"`) with `objectIds: [54321]`
 
 ## Key Concepts
 

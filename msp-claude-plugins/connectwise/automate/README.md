@@ -55,9 +55,12 @@ ConnectWise Automate enforces rate limits of approximately **60 requests per min
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. Skills and commands will be available automatically
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install connectwise-automate@msp-claude-plugins
+```
+
+Then connect ConnectWise Automate in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 

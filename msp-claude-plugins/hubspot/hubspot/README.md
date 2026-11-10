@@ -75,7 +75,7 @@ The live tools are generic over object type: `search_crm_objects`, `get_crm_obje
 ### OAuth Tokens
 
 - Never commit client IDs or client secrets to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate client secrets periodically via the HubSpot Developer Portal
 - Monitor for unexpected API activity in HubSpot account settings
 - OAuth tokens are scoped -- the MCP server automatically derives required scopes from the tools used
@@ -102,7 +102,7 @@ If you see "401 Unauthorized":
 If you see "403 Forbidden" or scope-related errors:
 1. `discover_hubspot_schema` shows which object types the connected user can read and write
 2. Ensure your HubSpot account plan supports the required API features
-3. Check that the MCP Auth App has the necessary permissions
+3. Reconnect HubSpot in Conduit and approve the requested scopes; the HubSpot user must also have access to the object in HubSpot
 4. Some features (e.g., custom objects) require higher-tier HubSpot plans
 
 ### Rate Limiting

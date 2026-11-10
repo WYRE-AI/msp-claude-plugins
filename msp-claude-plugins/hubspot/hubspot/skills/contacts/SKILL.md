@@ -29,7 +29,7 @@ Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.h
 | `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
 | `search_owners` | Resolve `hubspot_owner_id` values to people |
 
-Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
 
 ## Anti-triggers
 
@@ -53,9 +53,9 @@ Parameter names in the tables below (such as `contactId` or `after`) describe th
 | `get_crm_objects` (`objectType: "contacts"`) | Get contacts by ID | `objectIds` (required, 1-100) |
 | `manage_crm_objects` (`createRequest`, `objectType: "contacts"`) | Create a new contact | `email` (required), `firstname`, `lastname`, `phone`, `company` |
 | `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) | Update an existing contact | `objectId` (required), property fields to update |
-| `search_crm_objects` (`objectType: "contacts"`, no filters) | List contacts with pagination | `limit`, `after` (cursor) |
+| `search_crm_objects` (`objectType: "contacts"`, no filters) | List contacts with pagination | `limit`, `offset` |
 | `search_properties` (`objectType: "contacts"`) | List all available contact properties | None |
-| `search_crm_objects` (`objectType: "contacts"`) | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| `search_crm_objects` (`objectType: "contacts"`) | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `offset` |
 
 ### Search Contacts
 
@@ -152,10 +152,10 @@ Call `manage_crm_objects` (`updateRequest`, `objectType: "contacts"`) with the c
 
 ### Retrieve a Contact
 
-Call `get_crm_objects` (`objectType: "contacts"`) with the `contactId`:
+Call `get_crm_objects` (`objectType: "contacts"`) with the contact ID in `objectIds`:
 
 **Example:**
-- `get_crm_objects` (`objectType: "contacts"`) with `contactId=12345`
+- `get_crm_objects` (`objectType: "contacts"`) with `objectIds: [12345]`
 
 ## Key Concepts
 

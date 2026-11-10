@@ -38,7 +38,7 @@ Execute a script on an endpoint in ConnectWise Automate with optional parameters
    - If the run finished inside the wait, report its pass/fail state and Automate's diagnostic message.
    - If the result has `completed: false`, the script is **still running**. Do not launch it again.
      - Without `--wait`: report it as queued or running and stop.
-     - With `--wait`: read `cwautomate_scripts_history` for that computer (and `cwautomate_scripts_running` to see it is still in progress) until the run appears in history.
+     - With `--wait`: read `cwautomate_scripts_history` for that computer (and `cwautomate_scripts_running` to see it is still in progress) every 30 seconds until the run appears in history, for at most 10 minutes. At the deadline, report the run as still running or unknown, and never relaunch it.
 
 Under the hood step 5 issues `POST /cwa/api/v1/Computers/{computerID}/Scripts/{scriptID}/Execute`; Automate has no synchronous run, which is why history is the source of truth for the outcome.
 

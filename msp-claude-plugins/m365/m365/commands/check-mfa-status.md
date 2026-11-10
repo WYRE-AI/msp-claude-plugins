@@ -14,7 +14,7 @@ The Conduit `m365` connector has no user, licence or MFA tools, so this command 
 
 | Step | Tool | Tier |
 |------|------|------|
-| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`, or `allTenants` for the fleet) | admin |
+| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`; pass `"allTenants"` as its value for the fleet) | admin |
 | Registration-details report (alternative) | `microsoft_graph_get` on `/v1.0/reports/authenticationMethods/userRegistrationDetails` | admin |
 | Conditional Access coverage | `cipp_list_conditional_access_policies` | admin |
 

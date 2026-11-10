@@ -20,8 +20,9 @@ The Conduit `m365` connector (hidden, personal-only) has no tools for this area.
 
 - Assignments and usage: `cipp_list_licenses`; CSP subscriptions: `cipp_list_csp_licenses`
 - SKU detail not in CIPP: `microsoft_graph_get` on `/v1.0/subscribedSkus`
-- Removing all of a leaver's licences: `cipp_offboard_user` with `RemoveLicenses: true` (admin tier; removes every licence the user holds)
-- Assigning a licence, removing one SKU, or changing service plans: no Conduit tool does this (`microsoft_graph_get` is read-only). Do it by hand in the Microsoft 365 admin center or CIPP
+- Removing all of a leaver's licences: `cipp_offboard_user` with `RemoveLicenses: true` (admin tier). It removes every licence and the user's licence-assigning group memberships, and it only queues a job: check the user's licences afterwards before reporting success
+- Assigning or removing a SKU: `cipp_edit_user` (admin tier) with `licenses` set to the **complete** list of SKU IDs the user should hold; CIPP adds missing SKUs and removes any others, so include every SKU the user keeps
+- Changing service plans inside a SKU: no Conduit tool does this (`microsoft_graph_get` is read-only); do it in the Microsoft 365 admin center
 
 ## Overview
 

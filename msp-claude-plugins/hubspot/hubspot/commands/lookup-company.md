@@ -28,17 +28,17 @@ Find a company in HubSpot CRM by name or domain and display a complete profile i
 3. **Fetch associated contacts** (if show_contacts is true)
 
    - Call `search_crm_objects` with `objectType: "contacts"` and an `associatedWith` filter `{ objectType: "companies", operator: "EQUAL", objectIdValues: [<companyId>] }`
-   - For each contact ID, call `get_crm_objects` (`objectType: "contacts"`) to get name, email, job title, and phone
+   - Fetch the contacts with `get_crm_objects` (`objectType: "contacts"`, up to 100 `objectIds` per call) to get name, email, job title, and phone
 
 4. **Fetch associated deals** (if show_deals is true)
 
    - Call `search_crm_objects` with `objectType: "deals"` and an `associatedWith` filter on the same record
-   - For each deal ID, call `get_crm_objects` (`objectType: "deals"`) to get deal name, amount, stage, and close date
+   - Fetch the deals with `get_crm_objects` (`objectType: "deals"`, up to 100 `objectIds` per call) to get deal name, amount, stage, and close date
 
 5. **Fetch associated tickets** (if show_tickets is true)
 
    - Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the same record
-   - For each ticket ID, call `get_crm_objects` (`objectType: "tickets"`) to get subject, status, and priority
+   - Fetch the tickets with `get_crm_objects` (`objectType: "tickets"`, up to 100 `objectIds` per call) to get subject, status, and priority
 
    Each association search returns one page. Pass the returned `offset` and repeat until there are no more results, so the profile and deal total cover every record.
 

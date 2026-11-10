@@ -48,7 +48,7 @@ Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API key,
 
 ### Claude Code CLI
 
-This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Axcient in the Conduit web UI (`/connect/axcient`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install axcient@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Axcient in the Conduit web UI (`/connect/axcient`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -87,7 +87,7 @@ This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via partner.axcient.com
 - Use the minimum scope necessary for your use case
 
@@ -103,7 +103,7 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `AXCIENT_API_KEY` is set correctly
+1. Check the Axcient connection in Conduit (**Connections → Axcient x360Recover**): reconnect it, or re-enter the credentials
 2. Check that the API key has not been revoked in partner.axcient.com
 3. Note that a malformed path parameter (e.g. a non-numeric ID) also
    surfaces as 401 in this API — see the `api-patterns` skill before

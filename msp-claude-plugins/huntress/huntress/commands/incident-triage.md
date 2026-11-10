@@ -65,7 +65,7 @@ Triage open incidents across all managed client organizations. Lists incidents f
 
 ## Error Handling
 
-- **Authentication Error:** Verify `HUNTRESS_API_KEY` and `HUNTRESS_API_SECRET` are set correctly
+- **Authentication Error:** Check the Huntress connection in Conduit (API Key and API Secret); reconnect it if the credentials were rotated or revoked
 - **Rate Limit:** Wait and retry; use severity or organization filters to reduce result set
 - **No Results:** Confirm filters are correct; no open incidents is a good sign
 

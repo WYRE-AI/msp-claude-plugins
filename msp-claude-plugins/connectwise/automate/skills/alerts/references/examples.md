@@ -11,7 +11,7 @@
    -> online state, last contact
 ```
 
-Report: number of critical alerts, affected computers, oldest first-seen time, and whether the computers are online. Count and age only after every page is read; otherwise label the figures as a sample.
+Report: number of critical alerts, affected computers, oldest first-seen time, and whether the computers are online. Count and age only after every page is read; otherwise label the figures as a sample. Alerts can change between pages, so present the totals as observed during the scan, not as an exact snapshot.
 
 ## Alert raised by a script
 

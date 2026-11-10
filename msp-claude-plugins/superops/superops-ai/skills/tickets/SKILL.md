@@ -85,7 +85,7 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 | Operation | Type | Purpose |
 |-----------|------|---------|
 | `createTicket` | mutation | Create a ticket |
-| `getTicketList` | query | List/search tickets with filter, orderBy, cursor paging |
+| `getTicketList` | query | List/search tickets (`input: ListInfoInput!`: `page`, `pageSize`, `condition`, `sort`; page until `listInfo.hasMore` is false) |
 | `getTicket` | query | Full detail for one ticket |
 | `updateTicket` | mutation | Change status, priority, assignee, resolution |
 

@@ -45,16 +45,11 @@ There is no per-plugin URL setting, and setting an environment variable does not
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your Dashboard API key (and optional default org ID), and you're done.
+Connect Meraki in [Conduit](https://conduit.wyre.ai) and paste your Dashboard API key. There is no organization field.
 
 ### Claude Code CLI
 
-Set the environment variables and connect through the gateway:
-
-```bash
-export MERAKI_API_KEY="your-api-key"
-export MERAKI_ORG_ID="123456"
-```
+Install this plugin (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install meraki@msp-claude-plugins`), connect Meraki in Conduit as above, and add the unified connector `https://conduit.wyre.ai/v1/mcp` to Claude Code (or install the `wyre-gateway` plugin). There are no environment variables to set.
 
 ## Available Skills
 
@@ -123,7 +118,7 @@ Product lines you will encounter:
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via the Meraki Dashboard (My Profile)
 - Use a least-privilege service account rather than a full-org admin key
 - Review Dashboard API access and change logs regularly
@@ -139,7 +134,7 @@ Product lines you will encounter:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `MERAKI_API_KEY` is set correctly and API access is enabled at Organization > Settings > Dashboard API access
+1. Check the Meraki connection in Conduit (**Connections → Meraki**): reconnect it, or re-enter the credentials and API access is enabled at Organization > Settings > Dashboard API access
 2. Check that the API key has not been revoked or regenerated
 3. Confirm the account has admin access to the target organization
 

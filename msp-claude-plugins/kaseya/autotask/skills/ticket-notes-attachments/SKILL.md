@@ -53,7 +53,7 @@ Key parameters:
 
 Notes often carry their real content as an attachment (a pasted screenshot, a forwarded email) with an empty or unhelpful `description`.
 
-- `autotask_search_ticket_note_attachments` (`ticketNoteId`, optional `pageSize` up to 50) lists the attachments on one note.
+- `autotask_search_ticket_note_attachments` (`ticketNoteId`, optional `pageSize`) lists the attachments on one note. It returns 10 by default and at most 50; if a result reaches the limit, there may be more, so check the note in Autotask.
 - `autotask_get_ticket_note_attachment` (`ticketNoteId`, `attachmentId`) fetches one of them. It returns metadata only unless you pass `includeData: true`, which adds the base64 file bytes. Large files are stripped from the result: check `dataOmittedReason` before treating the content as missing.
 
 Check a note's attachments before concluding it is empty.

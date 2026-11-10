@@ -29,13 +29,13 @@ Perform a deep investigation of a specific alert. Retrieves full alert details, 
 
    Call `get_alert_history` with the `alertId` to retrieve the complete timeline of status changes, assignments, and updates.
 
-4. **Read the auto-investigation report**
+4. **Read the auto-investigation report** (optional)
 
-   Call `get_alert_investigation_report` with the `alert_id` (not classified in Conduit, so it needs the `admin` grant). If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them.
+   Call `get_alert_investigation_report` with the `alert_id` (not classified in Conduit, so it needs the `admin` grant). If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them. If the grant is missing or no report exists, say so and continue with the evidence you have.
 
 5. **Enrich indicators** (optional)
 
-   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal; skip anything the customer considers confidential. Like the report above, the threat-intel tools are unclassified in Conduit and need the `admin` grant.
+   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal. Skip anything the customer considers confidential, and ask the user before sending any indicator whose confidentiality you do not know (internal hostnames, URLs with tokens); skip it if they do not approve. Like the report above, the threat-intel tools are unclassified in Conduit and need the `admin` grant.
 
 6. **Investigate with Purple AI** (optional but recommended)
 

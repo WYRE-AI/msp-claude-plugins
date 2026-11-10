@@ -29,7 +29,7 @@ Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.h
 | `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
 | `search_owners` | Resolve `hubspot_owner_id` values to people |
 
-Parameter names in the tables below (such as `contactId` or `after`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
 
 ## Anti-triggers
 

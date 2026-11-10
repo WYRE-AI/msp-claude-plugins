@@ -10,15 +10,14 @@ Create a new service ticket in HaloPSA with specified details.
 
 ## Prerequisites
 
-- Valid HaloPSA OAuth credentials configured
+- HaloPSA connected in Conduit (Client ID, Client Secret, Tenant); Conduit handles the OAuth token
 - Client must exist in HaloPSA
 - User must have ticket creation permissions
 
 ## Steps
 
-1. **Authenticate with OAuth 2.0**
-   - Obtain access token using client credentials flow
-   - Token endpoint: `{base_url}/auth/token?tenant={tenant}`
+1. **Check the connection**
+   - Call `halopsa_status`; if it fails, ask the user to fix the HaloPSA connection in Conduit. Do not ask for credentials or request a token yourself
 
 2. **Validate client exists**
    - If numeric, use as client ID directly

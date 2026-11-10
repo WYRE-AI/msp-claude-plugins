@@ -55,11 +55,8 @@ There is no per-plugin URL setting, and setting an environment variable does not
 To check the credentials directly against Autotask before you save them in Conduit, export them in your shell and run:
 
 ```bash
-# Test connection (using the Autotask MCP tool)
-# Claude Code will inject the environment variables automatically
-mcp-cli call autotask-mcp/autotask_test_connection '{}'
-
-# Or test manually with curl (env vars must be set)
+# Through Conduit, call autotask_test_connection instead.
+# Direct check with curl (export AUTOTASK_USERNAME first):
 curl "https://webservices5.autotask.net/atservicesrest/v1.0/zoneInformation?user=${AUTOTASK_USERNAME}"
 ```
 
@@ -70,9 +67,12 @@ curl "https://webservices5.autotask.net/atservicesrest/v1.0/zoneInformation?user
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install autotask@msp-claude-plugins
+```
+
+Then connect Autotask in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 

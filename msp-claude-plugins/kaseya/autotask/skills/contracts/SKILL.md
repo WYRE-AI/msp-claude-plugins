@@ -96,7 +96,7 @@ Args: {
 }
 ```
 
-All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `pageSize` (default 25, max 500). There is no `contractType` filter; filter on it client-side from the returned records.
+All filters optional: `searchTerm` (contains-match on contract name), `companyID`, `status`, `contractType` (picklist ID), `endDateFrom` / `endDateTo` (ISO `YYYY-MM-DD`), `pageSize` (default 25, max 500). Filter on `contractType` and end date server-side, so the page-size limit applies to the filtered set.
 
 ### Fetch a Single Contract or Build a Renewal Pipeline
 

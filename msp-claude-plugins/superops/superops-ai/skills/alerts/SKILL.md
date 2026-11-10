@@ -114,7 +114,7 @@ request shapes and variable examples.
    ordered by `createdTime` ascending (oldest first).
 2. Acknowledge the alert being worked in the SuperOps console (there is no API mutation for it).
 3. `superops_tickets_create` if the issue needs tracked service delivery.
-4. `resolveAlerts` with `input: [{ id: "<alert id>" }]` once fixed.
+4. Once fixed, `resolveAlerts` with `input: [{ id: "<alert id>" }]`, sent through `superops_custom_mutation` (admin tier). Never send it without a human approver who has seen the exact mutation.
 
 ### Alert Summary Dashboard
 

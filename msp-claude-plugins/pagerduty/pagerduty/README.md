@@ -16,7 +16,7 @@ This plugin provides Claude with deep knowledge of PagerDuty, enabling:
 
 ### API Credentials
 
-PagerDuty authenticates via a User API Token:
+Through Conduit there is no token to create: Conduit connects PagerDuty with OAuth. A **self-hosted** gateway authenticates with a User API Token:
 
 1. Log into [PagerDuty](https://app.pagerduty.com)
 2. Navigate to **My Profile > User Settings > API Access**
@@ -37,11 +37,11 @@ There is no per-plugin URL setting, and setting an environment variable does not
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
+Connect PagerDuty in [Conduit](https://conduit.wyre.ai) and sign in to PagerDuty with OAuth; there is no token to paste.
 
 ### Claude Code CLI
 
-This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect PagerDuty in the Conduit web UI (`/connect/pagerduty`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install pagerduty@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect PagerDuty in the Conduit web UI (`/connect/pagerduty`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -101,7 +101,7 @@ This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API tokens periodically via the PagerDuty dashboard
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the PagerDuty audit log
@@ -118,10 +118,8 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `PAGERDUTY_API_TOKEN` is set correctly
-2. Check that the API token has not been revoked
-3. Regenerate the token at My Profile > User Settings > API Access
-4. Ensure the token type is correct (User Token vs. Account-level API Key)
+1. Reconnect PagerDuty in Conduit (**Connections → PagerDuty**); Conduit signs in with OAuth, so there is no token to paste
+2. On a self-hosted gateway, check that its API token has not been revoked, regenerate it at My Profile > User Settings > API Access if needed, and make sure the token type is right (User Token vs. Account-level API Key)
 
 ### Rate Limits
 

@@ -38,9 +38,12 @@ There is no per-plugin URL setting, and setting an environment variable does not
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install hudu@msp-claude-plugins
+```
+
+Then connect Hudu in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -101,7 +104,7 @@ There is no per-plugin URL setting, and setting an environment variable does not
 ### API Key Security
 
 - Never commit API keys to version control
-- Use environment variables for credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically
 - Use minimum required permissions
 - Restrict API keys by IP whitelist when possible
@@ -130,7 +133,7 @@ Hudu's UI names differ from API endpoint names in some cases:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `HUDU_API_KEY` is set correctly
+1. Check the Hudu connection in Conduit (**Connections → Hudu (API Key)**): reconnect it, or re-enter the credentials
 2. Check the API key hasn't been revoked
 3. Confirm the key has required permissions
 4. Verify your IP is on the API key's whitelist (if configured)
@@ -138,7 +141,7 @@ If you see "401 Unauthorized":
 ### Wrong Base URL
 
 If you see "404 Not Found" or connection errors:
-1. Verify `HUDU_BASE_URL` matches your Hudu instance URL
+1. Verify the Base URL on the Hudu connection in Conduit matches your Hudu instance URL
 2. Ensure the URL does not have a trailing slash
 3. For self-hosted instances, confirm the instance is reachable
 

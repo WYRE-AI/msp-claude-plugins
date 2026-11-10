@@ -46,7 +46,7 @@ Rootly hosts their own MCP server at `https://mcp.rootly.com`. See [Rootly MCP d
 
 ### Claude Code CLI
 
-Rootly is a hosted vendor with no bundled `.mcp.json` in this plugin -- it is routed entirely through the MCP Gateway. Connect it in Conduit as described above.
+Rootly is a hosted vendor with no bundled `.mcp.json` in this plugin -- it is routed entirely through Conduit. Install the plugin for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install rootly@msp-claude-plugins`), connect Rootly in Conduit as described above, and add the unified connector `https://conduit.wyre.ai/v1/mcp` (or install the `wyre-gateway` plugin).
 
 ## Available Skills
 
@@ -107,7 +107,7 @@ Rootly is a hosted vendor with no bundled `.mcp.json` in this plugin -- it is ro
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API tokens periodically via Rootly Account settings
 - Use the minimum scope necessary for your use case
 - Monitor API usage in Rootly audit logs
@@ -124,7 +124,7 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `ROOTLY_API_TOKEN` is set correctly
+1. Check the Rootly connection in Conduit (**Connections → Rootly**): reconnect it, or re-enter the credentials
 2. Check that the API token has not been revoked
 3. Regenerate the token at Account > Manage API Keys
 

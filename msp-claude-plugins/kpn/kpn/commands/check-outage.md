@@ -17,7 +17,7 @@ Answer "is KPN down at this site?" for one Dutch address, using the line's own s
 
 1. **Find the line (if possible)**
 
-   If `order_id` was not given, look it up: `kpn_grexx_customer_data` (by `zipCode` or customer name), then `kpn_grexx_order_summary` with the `customerId` and `productGroup: "Connectivity"`. If no KPN connectivity order is found, skip to step 3.
+   If `order_id` was not given, look it up: `kpn_grexx_customer_data` (by `zipCode` or customer name), then `kpn_grexx_order_summary` with the `customerId` and `productGroup: "Connectivity"`, and again with `productGroup: "Internet"`. Pick the order whose installation address matches the requested address, including the house number and extension. If you cannot establish that match, ask the user to confirm the order ID instead of checking a line at another site. Only if neither product group returns an order, skip to step 3. A failed lookup or check is not evidence of an outage: say which call failed (see the api-patterns skill for connection and order errors).
 
 2. **Check the line**
 
@@ -34,7 +34,7 @@ Answer "is KPN down at this site?" for one Dutch address, using the line's own s
 
 5. **Report**
 
-   - Line down or flapping with planned work: report the work window; on-site troubleshooting can wait.
+   - Line down or flapping with planned work that is **in progress now** and covers this line: report the work window; on-site troubleshooting can wait. Planned work that is in the future, already over, or on another connection point does not explain a current outage: report it, and keep investigating.
    - Line down, no planned work, xDSL out of sync: suggest `kpn_grexx_start_line_diagnose` (write; confirm the order and symptom code first).
    - Line up: point to the customer's own equipment (router, firewall, cabling) next.
 
