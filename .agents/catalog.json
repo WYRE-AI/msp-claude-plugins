@@ -30,8 +30,8 @@
     }
   },
   "totals": {
-    "packs": 86,
-    "skills": 385,
+    "packs": 87,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -5019,6 +5019,38 @@
           "path": "msp-claude-plugins/sales-pack/agents/warm-lead-router.md"
         }
       ]
+    },
+    {
+      "name": "marketing-pack",
+      "displayName": "MSP Marketing",
+      "version": "0.1.0",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "marketing",
+        "case-studies",
+        "reviews",
+        "referrals",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/marketing-pack",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "mcpServers": {
+        "conduit": {
+          "type": "http",
+          "url": "https://conduit.wyre.ai/v1/mcp"
+        }
+      },
+      "skills": [
+        {
+          "id": "case-study-drafter",
+          "path": "msp-claude-plugins/marketing-pack/skills/case-study-drafter/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": []
     },
     {
       "name": "devops-pack",

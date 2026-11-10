@@ -1,0 +1,12 @@
+{
+  "name": "marketing-pack",
+  "displayName": "MSP Marketing",
+  "description": "Cross-vendor marketing workflows for MSPs: anonymized case-study drafting from closed PSA work, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
+  "version": "0.1.0",
+  "author": {
+    "name": "MSP Claude Plugins Community"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
