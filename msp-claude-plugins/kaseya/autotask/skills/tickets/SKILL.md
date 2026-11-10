@@ -304,7 +304,7 @@ See [references/api.md](references/api.md) for additional query patterns (SLA-br
 ### Ticket Creation Flow
 
 1. **Validate company exists** and has active contract
-2. **Check for duplicates** - list the company's open tickets (`companyID`, `status` omitted, `pageSize: 500`) and compare titles client-side. If 500 come back the list may be incomplete: narrow it (for example `createdAfter` for recent tickets) or tell the user the check was inconclusive before creating. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
+2. **Check for duplicates** - list the company's open tickets (`companyID`, `status` omitted, `pageSize: 500`) and compare titles client-side. If 500 come back the list may be incomplete, so tell the user the duplicate check was inconclusive before creating. Narrowing (for example with `createdAfter`) only rules out duplicates inside that window, so say which window you checked. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
 3. **Auto-set defaults:**
    - Status → NEW (1)
    - Priority → MEDIUM (2) if not specified
