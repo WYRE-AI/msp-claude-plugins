@@ -37,10 +37,11 @@ SKU) without an amount.
 - **Building the refresh calendar itself** (tiers, dates, and
   insufficient-data bucketing): use
   [Refresh Cycle Planning](../refresh-cycle-planning/SKILL.md).
-- **Creating, updating, or publishing a quote:** use `scalepad-quoter`
-  or `connectwise-cpq-quotes`. Kaseya Quote Manager's tools are
-  read-only, so a Kaseya quote is built in the Quote Manager web app.
-  This skill stops at the list.
+- **Building or publishing a quote:** build it with `scalepad-quoter`
+  (which can also publish) or `connectwise-cpq-quotes`. CPQ's API has no
+  publish verb, so a CPQ quote is published from the CPQ web app. Kaseya
+  Quote Manager's tools are read-only, so a Kaseya quote is built in the
+  Quote Manager web app. This skill stops at the list.
 - **ScalePad Lifecycle Manager roadmaps:** use
   `scalepad-lifecycle-manager`.
 
@@ -103,8 +104,9 @@ its results as catalog matches. Never call
 `cpq_create_quote_from_template`, `cpq_create_quote_item`,
 `cpq_create_quote_term`, or any update or delete CPQ tool.
 
-If a vendor is connected but the needed tool is not in this list, skip
-that catalog and say so.
+If a vendor is connected but the needed tool is not in this list, was
+not returned by discovery, or fails with an access error, skip that
+catalog and say why.
 
 ### Step 2: Build the per-client device list
 
@@ -124,15 +126,19 @@ if the calendar did not specify one.
 
 ### Step 3: Match a catalog when one is connected
 
-If a catalog connector is connected, search its catalog
-(`scalepad_quoter_items_list`, `kqm_product_list`, or
-`cw_search_catalog_items`) for a reasonable match to each replacement.
+If a catalog search tool (`scalepad_quoter_items_list`,
+`kqm_product_list`, or `cw_search_catalog_items`) was discovered and is
+accessible, search it for a reasonable match to each replacement. If
+none is accessible, produce the device list without catalog matches.
 Record:
 
 - The catalog name or SKU as returned
 - The tool that returned it
-- An amount only if the tool actually returned one, copied as-is, with
-  no currency conversion and no "typical street price" fill-in
+- An amount only if the tool actually returned one, copied as-is and
+  labeled with the field it came from (for example `cost` or `price`),
+  with no currency conversion and no "typical street price" fill-in.
+  Never present a cost as a sell price. Cost is internal: keep it out of
+  anything client-facing.
 - "No catalog match" when nothing suitable was returned
 
 Existing quotes (`scalepad_quoter_quotes_list`, `kqm_quote_list`, or
@@ -147,7 +153,8 @@ Produce a per-client list:
 2. Tier and target window
 3. Devices and quantities
 4. Catalog match or "no catalog match"
-5. Amounts only when returned by a catalog tool, otherwise omitted
+5. Amounts only when returned by a catalog tool, labeled with their
+   field, otherwise omitted
 6. A handoff line naming the quoting skill to use next
    (`scalepad-quoter` or `connectwise-cpq-quotes`, or the Kaseya Quote
    Manager web app), and stating that this skill did not create a quote
@@ -158,9 +165,9 @@ Example (fictional data):
 Client: Example Dental Group
 Catalog: ScalePad Quoter (scalepad_quoter_items_list)
 
-| Tier            | Window  | Device (calendar)    | Qty | Catalog match          | Amount (as returned) |
+| Tier            | Window  | Device (calendar)    | Qty | Catalog match          | Amount (field)       |
 |-----------------|---------|----------------------|-----|------------------------|----------------------|
-| Replace now     | Now     | Dell OptiPlex 7060   | 6   | Dell OptiPlex 7020 SFF | 899.00               |
+| Replace now     | Now     | Dell OptiPlex 7060   | 6   | Dell OptiPlex 7020 SFF | cost: 899.00         |
 | Plan this year  | 2027 Q2 | HP ProBook 450 G7    | 3   | No catalog match       |                      |
 
 Insufficient data (not quote-ready): 2 devices with no warranty, EOL/EOS, or age data.
@@ -169,7 +176,8 @@ Handoff: use scalepad-quoter to build the quote. This skill did not create a quo
 
 If no catalog connector was connected, omit the catalog columns and say
 the operator will need a connected quoter, and `scalepad-quoter` or
-`connectwise-cpq-quotes`, to build a quote.
+`connectwise-cpq-quotes`, to build a quote, or can build it in the Kaseya
+Quote Manager web app.
 
 ## Error Handling
 

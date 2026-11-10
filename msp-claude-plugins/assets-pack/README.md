@@ -114,8 +114,9 @@ neither pack duplicates the other's judgment.
 **vs. `ops-pack` (MSP Operations)** — `ops-pack` is service-desk/ticket
 focused: board health, dispatch prioritization, SLA monitoring, and shift
 handoffs against whatever PSA you have connected. It answers "is the queue
-under control." `assets-pack` doesn't touch tickets or PSAs at all — it
-answers "what does the hardware itself need," independent of whether
+under control." `assets-pack` doesn't touch tickets at all (its only PSA
+use is `refresh-quote-list` reading a ConnectWise PSA product catalog) —
+it answers "what does the hardware itself need," independent of whether
 anyone has filed a ticket about it. A laptop three weeks from warranty
 expiration that nobody has reported a problem with yet is exactly the kind
 of finding `assets-pack` surfaces that `ops-pack` has no visibility into.
