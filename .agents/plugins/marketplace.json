@@ -1007,7 +1007,7 @@
     },
     {
       "name": "marketing-pack",
-      "description": "MSP Marketing: review or referral request drafts from survey and ticket data, across whatever survey and PSA tools you have connected.",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/marketing-pack"

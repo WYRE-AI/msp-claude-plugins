@@ -207,5 +207,7 @@ signals.
 
 ## Related Skills
 
-This pack may later include a case-study drafter. Until that skill is on
-the same branch, do not assume it is installed.
+- [Case Study Drafter](../case-study-drafter/SKILL.md): turns a closed
+  project or resolved incident into an anonymized case study. A client
+  happy enough for a review ask may also be a case-study candidate, but
+  naming them there needs that skill's separate approval step.

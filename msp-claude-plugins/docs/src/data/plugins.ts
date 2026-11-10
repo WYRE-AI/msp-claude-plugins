@@ -2878,13 +2878,15 @@ export const plugins: Plugin[] = [
     id: 'marketing-pack',
     name: 'Marketing Pack',
     vendor: 'Marketing-pack',
-    description: 'MSP Marketing: review or referral request drafts from survey and ticket data, across whatever survey and PSA tools you have connected.',
+    description: 'MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.',
     category: 'workflow-pack',
     maturity: 'alpha',
     features: [
+      'Case Study Drafter',
       'Review And Referral Ask'
     ],
     skills: [
+      { name: 'case-study-drafter', description: 'Turns a closed PSA project or a resolved incident, plus optional documentation records, into an anonymized case study with a challenge, approach, and result.' },
       { name: 'review-and-referral-ask', description: 'Picks clients who appear happy from CrewHu survey results (or another discovered survey tool) together with ticket SLA and resolution data, then drafts a review or referral request for the MSP to send.' }
     ],
     agents: [],
