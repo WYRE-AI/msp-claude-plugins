@@ -1,7 +1,7 @@
 # Plugin PRD: Zendesk
 
-> Version: 1.1.0
-> Created: 2026-08-30 (revised 2026-10-13: added Security Considerations + Testing Plan sections per CONTRIBUTING.md Tier-3 checklist; corrected Zendesk hosted-MCP-server availability claim after re-verification — see note below)
+> Version: 1.2.0
+> Created: 2026-08-30 (revised 2026-10-13: added Security Considerations + Testing Plan sections per CONTRIBUTING.md Tier-3 checklist; corrected Zendesk hosted-MCP-server availability claim after re-verification — see note below. Revised 2026-11-10: dropped "apply tags" from the read-only scope, made the read-only test call a write tool directly, replaced the data-residency claim with explicit processing controls, reframed rate limits as an MCP-layer contract to measure, and removed private gateway source paths.)
 > Status: Draft - Awaiting Review
 > Requested in: #10
 
@@ -26,7 +26,7 @@ MSPs and their clients running Zendesk today have no way to triage tickets, chec
 
 ### In Scope
 
-- **Ticketing**: search/list/get tickets, read comments, apply tags, check SLA/priority status (read-heavy; the issue's suggested skill).
+- **Ticketing**: search/list/get tickets, read comments and existing tags, check SLA/priority status (read-only; the issue's suggested skill). Applying tags changes ticket state, so it is a write and sits under Out of Scope.
 - **Organizations & users**: look up organizations, organization memberships, end-users, agents, groups.
 - **Knowledge Base (Guide)**: search help-center articles, sections, categories.
 - **Reference data**: macros, triggers, views, SLA policies — read/lookup only, so an agent can explain "why did this ticket route here" without needing to safely reproduce write-side automation logic.
@@ -34,7 +34,7 @@ MSPs and their clients running Zendesk today have no way to triage tickets, chec
 
 ### Out of Scope
 
-- **Writing/updating tickets, closing tickets, or bulk actions** — the issue's suggested "Automations" skill (business rules, SLAs, schedules as *editable* config) is deferred; this PRD scopes to read/triage/lookup, matching the "confirm-before-write" pattern used elsewhere in this repo's support-desk plugins.
+- **Writing/updating tickets (including adding or removing tags), closing tickets, or bulk actions** — the issue's suggested "Automations" skill (business rules, SLAs, schedules as *editable* config) is deferred; this PRD scopes to read/triage/lookup, matching the "confirm-before-write" pattern used elsewhere in this repo's support-desk plugins.
 - **Building a WYRE-operated `zendesk-mcp` server** — *conditional on the architecture-blocking update above.* The original premise was that Zendesk ships its own official hosted MCP server (early access since summer 2026), making a WYRE-run duplicate server pointless. As of 2026-10-13 that server's availability is unconfirmed and may not exist in reachable form yet (see top of document); if it remains unavailable, this item should be promoted back **into** scope rather than left out.
 - **Explore/Reporting API** (analytics, dashboards) — a possible future skill, not needed for the ticketing/KB workflows this PRD targets.
 - **Side Conversations, Apps Framework, or Sunshine/CRM objects** — out of scope until there's a concrete MSP workflow that needs them.
@@ -43,7 +43,7 @@ MSPs and their clients running Zendesk today have no way to triage tickets, chec
 
 ### Connection model
 
-Zendesk's MCP server is hosted per-tenant at `https://<subdomain>.zendesk.com/api/mcp`, OAuth-gated, advertising read and write scopes (per Zendesk's public MCP announcement, [TechRadar coverage](https://www.techradar.com/pro/zendesk-becomes-the-latest-to-adopt-mcp-to-futureproof-customers-in-the-ai-first-era) and Zendesk's own [MCP action-flow docs](https://support.zendesk.com/hc/en-us/articles/10497779528730)) — **but see the architecture-blocking update at the top of this document: whether this specific server is reachable today is unconfirmed, not merely "early access."** If it remains unreachable at implementation time, this connection model does not work and the plugin needs a WYRE-run proxy instead (the exact pattern this PRD currently avoids). This is the same shape as this repo's existing hosted-OAuth plugins (Stripe, Slack, HubSpot, PandaDoc) — no bundled `.mcp.json` pointing at a fixed URL, since the subdomain is per-tenant; the gateway would need a Zendesk vendor entry the same way it has one for those, assuming the server exists to route to.
+Zendesk's MCP server is hosted per-tenant at `https://<subdomain>.zendesk.com/api/mcp`, OAuth-gated, advertising read and write scopes (per Zendesk's public MCP announcement, [TechRadar coverage](https://www.techradar.com/pro/zendesk-becomes-the-latest-to-adopt-mcp-to-futureproof-customers-in-the-ai-first-era) and Zendesk's own [MCP action-flow docs](https://support.zendesk.com/hc/en-us/articles/10497779528730)) — **but see the architecture-blocking update at the top of this document: whether this specific server is reachable today is unconfirmed, not merely "early access."** If it remains unreachable at implementation time, this connection model does not work and the plugin needs a WYRE-run proxy instead (the exact pattern this PRD currently avoids). This is the same shape as this repo's existing hosted-OAuth plugins (Stripe, Slack, HubSpot, PandaDoc): the plugin is connector-only and ships no `.mcp.json`. The connection, including the per-tenant subdomain and the OAuth grant, is set up in the Conduit connection UI, and Conduit would need a Zendesk vendor entry the same way it has one for those, assuming the server exists to route to.
 
 ### API surface (read/triage scope only)
 
@@ -57,31 +57,34 @@ Zendesk's MCP server is hosted per-tenant at `https://<subdomain>.zendesk.com/ap
 
 ### Authentication requirements
 
-OAuth 2.1 (PKCE), per-tenant subdomain, read + write scopes advertised by Zendesk's server — this plugin only requests read-scoped operations for the in-scope skills above.
+OAuth 2.1 (PKCE), per-tenant subdomain, read + write scopes advertised by Zendesk's server. The connection requests the narrowest (read-only) scope Zendesk allows, and write tools must be blocked as described under Security Considerations, not just left out of the skills.
 
 ### Data flow
 
-Claude → gateway's Zendesk vendor route → Zendesk's own hosted MCP server (per-tenant subdomain) → Zendesk REST API. No WYRE-operated proxy/server sits in this path, unlike the PSA/RMM plugins that front a WYRE-built `*-mcp` container.
+Claude → Conduit's Zendesk vendor route → Zendesk's own hosted MCP server (per-tenant subdomain) → Zendesk REST API. No WYRE-operated Zendesk server sits in this path, unlike the PSA/RMM plugins that front a WYRE-built `*-mcp` container. Ticket data still passes through Conduit and Claude on the way back; see Data sensitivity below.
 
 ### Rate limiting
 
-Zendesk's REST API enforces per-plan rate limits (typically 200–700 req/min depending on Zendesk plan tier); since the hosted MCP server sits in front of the same API, the same limits apply. Skills should batch/paginate rather than loop per-ticket calls.
+Zendesk's REST API enforces per-plan rate limits (typically 200–700 req/min depending on plan tier). Zendesk has not published whether its hosted MCP server inherits those limits, adds its own, or shares a budget with the tenant's other API clients, so this PRD does not assume the REST numbers apply. The MCP-layer contract is measured during the live smoke test instead: what a throttled tool call returns (an MCP error, a tool result carrying the REST 429, or a timeout), whether rate-limit headers or a `Retry-After` value reach the client through Conduit, and how long a slow call can run before the MCP call times out. The `api-patterns` skill documents what was observed. Either way, skills batch and paginate rather than loop per-ticket calls.
 
 ## Security Considerations
 
-- **Credential handling**: this plugin holds no Zendesk credentials of its own. OAuth tokens live in the gateway's existing per-tenant credential store (`mcp-gateway/src/credentials/`), the same store already used for Stripe/Slack/HubSpot/PandaDoc — no new credential-storage surface is introduced. See the Open Questions item below on requesting read-only scopes explicitly.
-- **Scope narrowing**: Zendesk's server advertises combined read+write scopes. This plugin's shipped skills only call read/lookup endpoints, but unless the OAuth flow itself is asked for a narrower scope at connect time, write-capable tools remain technically reachable (just undocumented) through the same token. Request the narrowest scope Zendesk's OAuth flow allows; if Zendesk does not support scope narrowing below its default grant, document that write tools are reachable-but-unused rather than implying they are blocked.
+- **Credential handling**: this plugin holds no Zendesk credentials of its own and ships no `.mcp.json`. OAuth tokens are held by Conduit's existing per-tenant credential storage, the same storage already used for Stripe/Slack/HubSpot/PandaDoc, so no new credential-storage surface is introduced. See the Open Questions item below on requesting read-only scopes explicitly.
+- **Scope narrowing and write blocking**: Zendesk's server advertises combined read+write scopes. Leaving write tools out of the shipped skills does not stop a model from calling them, so read-only has to be enforced below the skills. Request the narrowest scope Zendesk's OAuth flow allows. If Zendesk cannot issue a read-only grant, Conduit must block every write-capable Zendesk tool by allowlist (the approach the `keeper` plugin uses) before launch. Shipping with write tools reachable through the token is not an acceptable v1 state.
 - **Per-tenant isolation**: each MSP client's Zendesk subdomain requires its own OAuth grant (see Multi-tenant Open Question below). A credential or token mix-up across client tenants would expose one client's ticket/customer data through another client's session — this needs the same per-tenant isolation guarantee the gateway already provides for its other hosted vendors, explicitly verified for Zendesk's per-subdomain routing shape before launch, not assumed from the existing vendors' single-fixed-URL shape.
-- **Data sensitivity**: ticket content, organization/user records, and macros/triggers can contain customer PII and internal support-process details. No new data leaves Zendesk's own infrastructure under this design (data flows through Zendesk's hosted server, not a WYRE-operated intermediary) — but this guarantee is contingent on the architecture-blocking update above: if a WYRE-run proxy becomes necessary instead, this data-residency property no longer holds by default and needs its own review.
+- **Data sensitivity**: ticket content, organization/user records, and macros/triggers can contain customer PII and internal support-process details. Every tool result leaves Zendesk: it passes through Conduit and is processed by Claude, even with no WYRE-run Zendesk server in the path. Before launch, confirm and document:
+  - **Conduit**: tool results are relayed, not stored. Request/response logging records the tool name, tenant, and outcome, and leaves out ticket bodies, comments, and user PII. The hosting region is stated so an MSP can compare it with its clients' residency requirements.
+  - **Claude**: ticket content is processed under the MSP's own Anthropic account and that account's data-retention terms; the plugin adds no separate retention. The plugin README says so, so an MSP with residency-restricted clients can decide before connecting their Zendesk.
+  - **Fallback proxy**: if the architecture-blocking update forces a WYRE-run Zendesk server, it becomes a third processor and needs its own review of hosting region, retention (none beyond the request), and logging (same rules as Conduit) before it ships.
 - **Audit logging**: no Zendesk-specific audit requirement beyond what the gateway already logs for credential access across other hosted vendors (per this repo's existing credential-access audit logging). No new gap identified, but not independently re-verified for this vendor.
 
 ## Testing Plan
 
 - **Live connection smoke test (blocking on the architecture question above)**: before any skill ships, connect to a real Zendesk sandbox/trial tenant and run a live `tools/list` against Zendesk's hosted MCP server to confirm it (a) is reachable at all, and (b) get the actual registered tool names — this is also what Success Criteria below already requires, and it is the same step that resolves the architecture-blocking update.
-- **Read-only enforcement test**: verify that the OAuth grant obtained by this plugin cannot successfully invoke a write-scoped tool (ticket update/close) from within a shipped skill — confirms the read-only intent in Scope is actually enforced, not just documented.
+- **Read-only enforcement test**: from the live `tools/list`, pick each write-capable tool (ticket update, close, tag) and call it directly through Conduit with the grant this plugin's connection issued, outside any shipped skill. Each call must be rejected, either by Zendesk because the grant is read-only or by Conduit's allowlist, and the sandbox ticket must be unchanged afterwards. A skill that simply never calls a write tool does not pass this test.
 - **Multi-tenant isolation test**: connect two separate sandbox Zendesk subdomains under the same gateway instance and confirm a session authenticated against tenant A cannot retrieve tenant B's tickets/organizations.
 - **Tool-anchoring / drift check**: run this repo's `check-doc-references.mjs` and `check-tool-anchoring.mjs` (the #178-audit tooling) against the shipped skill docs to confirm every documented tool name matches a real, live-verified tool — not a name inferred from REST endpoints.
-- **Rate-limit behavior test**: exercise a paginated bulk lookup (e.g. listing all tickets for a busy sandbox org) and confirm the skill backs off/paginates correctly rather than hammering the endpoint, given the rate limits noted above.
+- **Rate-limit behavior test**: exercise a paginated bulk lookup (e.g. listing all tickets for a busy sandbox org) until the sandbox throttles. Record what the MCP layer returns (error shape, any rate-limit headers or `Retry-After` value that reach the client, timeout behavior), then confirm the skill paginates and backs off on that signal rather than retrying immediately.
 - **Standard plugin validation**: `claude plugin validate` passes clean, matching the Success Criteria item below.
 
 ## Success Criteria
@@ -89,12 +92,12 @@ Zendesk's REST API enforces per-plan rate limits (typically 200–700 req/min de
 - [ ] A maintainer confirms Zendesk should be added as a gateway vendor (i.e. this PRD is approved) before any skill/agent implementation begins.
 - [ ] The plugin's `api-patterns` skill documents the **actual** registered tool names from a live `tools/list` against a connected Zendesk tenant — not names inferred from REST endpoints or from third-party community Zendesk MCP servers (several exist on GitHub with different tool surfaces than Zendesk's own official server).
 - [ ] `claude plugin validate` and this repo's `check-doc-references.mjs` / `check-tool-anchoring.mjs` pass with zero un-anchored tool references.
-- [ ] A technician can search open tickets by organization and read comments/tags without any write-scoped tool being reachable from the shipped skills.
+- [ ] A technician can search open tickets by organization and read comments/tags, and the read-only enforcement test shows every write-capable Zendesk tool is rejected for this connection.
 
 ## Open Questions
 
 - **🔴 Does Zendesk's general-purpose hosted MCP server exist in reachable form yet?** This is now the PRD's lead open question, not a side detail — see the architecture-blocking update at the top of this document. Must be re-confirmed directly against Zendesk's early-access programs page immediately before any go decision, independent of this PRD's own (now corrected) claims.
-- **Gateway registration**: does `mcp-gateway/src/credentials/vendor-config.ts` need a new Zendesk entry (per-tenant subdomain routing is a different shape than this repo's other hosted vendors, which route to a single fixed hosted URL)? This needs gateway-side design, not just a plugin-side `.mcp.json` — and is moot if the answer to the question above is "not yet."
+- **Conduit registration**: Zendesk needs a new Conduit vendor entry, and per-tenant subdomain routing is a different shape from this repo's other hosted vendors, which route to a single fixed hosted URL. This needs Conduit-side design (the plugin itself ships no `.mcp.json`), and is moot if the answer to the question above is "not yet."
 - **Tool names are unverified.** This PRD deliberately does not name specific MCP tools (e.g. `zendesk_tickets_search`) because Zendesk's official server was in early access as of this PRD's writing and no live `tools/list` was available to confirm real names — the exact drift risk this repo's issue #178 audit just spent a full corrective pass fixing across 18 other plugins. Implementation must start from a live connection, not from guessed names. (See the Testing Plan's live-connection smoke test, which resolves both this item and the architecture question above in one step.)
 - **Multi-tenant MSPs**: an MSP supporting several clients' Zendesk instances would need to connect multiple subdomains — does the gateway's OAuth flow support per-tenant re-auth, or does this need a "which client" disambiguation step in the skill itself?
-- **Write scope**: Zendesk's server advertises write scopes even though this PRD scopes to read-only skills — should the plugin's `.mcp.json`/GOVERNANCE.md explicitly request read-only OAuth scopes if Zendesk's OAuth flow supports scope narrowing, to keep write tools unreachable by default rather than just undocumented? (Expanded in Security Considerations above.)
+- **Write scope**: does Zendesk's OAuth flow support a read-only grant? If yes, the Conduit connection requests it; if no, Conduit's allowlist blocks the write tools. Either way GOVERNANCE.md records which mechanism applies. (See Scope narrowing and write blocking under Security Considerations.)
