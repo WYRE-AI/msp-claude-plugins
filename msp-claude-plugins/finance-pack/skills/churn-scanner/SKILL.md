@@ -113,10 +113,15 @@ Label generic due-date comparisons as proxies rather than contractual SLA facts.
 Rank by descending adverse-family count first, then summed intensity of fired
 families, then client identifier for stable ties. Show the count as [N] adverse
 of [N] assessable families, plus the intensity sum. A family is assessable for a
-client only when all of its required reads for both windows completed. Missing
-or incomplete families contribute neither evidence of health nor an adverse
-flag, and are excluded from the assessable count. Do not normalize sparse clients
-into apparently healthy accounts. Mark single-family rankings as partial;
+client only when every read its rule needs completed and its prerequisites are
+met. Ticket volume and SLA misses need both windows and their minimum samples.
+Sentiment needs the recent window; earlier surveys are context only. Overdue
+invoices and renewal proximity need current data as of the scan. The usage
+proxy needs comparable historical snapshots. An unassessable family contributes
+neither evidence of health nor an adverse flag, is excluded from the assessable
+count, and its observed counts are shown as context only. Do not normalize
+sparse clients into apparently healthy accounts. Mark single-family rankings
+as partial;
 mark zero-family clients unranked (insufficient evidence), after ranked clients.
 Flag unequal coverage so the operator can compare like-for-like cohorts.
 
