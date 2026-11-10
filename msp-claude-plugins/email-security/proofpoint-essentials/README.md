@@ -31,16 +31,15 @@ API, enabling:
 
 ## Tool Surface
 
-This plugin documents the tool surface of the companion
+This plugin documents the 20 tools of the companion
 [`proofpoint-essentials-mcp`](https://github.com/WYRE-AI/proofpoint-essentials-mcp)
-server, which is under active development and not yet published. Tool names
-below follow the `proofpoint_essentials_{resource}_{operation}` convention
-the server is being built to.
+server, which Conduit brokers as the `proofpoint-essentials` vendor. Every
+org-scoped tool takes the org's primary domain (`domain` or `orgDomain`).
 
 | Group | Tools |
 |---|---|
-| Discovery | `proofpoint_essentials_endpoint_resolve` |
-| Organizations | `proofpoint_essentials_org_get`, `proofpoint_essentials_org_activate`, `proofpoint_essentials_org_deactivate`, `proofpoint_essentials_org_delete` |
+| Discovery | `proofpoint_essentials_endpoint_discover` |
+| Organizations | `proofpoint_essentials_org_get`, `proofpoint_essentials_org_set_active`, `proofpoint_essentials_org_delete` |
 | Domains | `proofpoint_essentials_domains_list`, `proofpoint_essentials_domains_create`, `proofpoint_essentials_domains_update`, `proofpoint_essentials_domains_delete` |
 | Users | `proofpoint_essentials_users_list`, `proofpoint_essentials_users_get`, `proofpoint_essentials_users_create`, `proofpoint_essentials_users_update`, `proofpoint_essentials_users_delete` |
 | Features | `proofpoint_essentials_features_get`, `proofpoint_essentials_features_update` |
@@ -49,43 +48,26 @@ the server is being built to.
 | Reporting | `proofpoint_essentials_reporting_get` |
 | SSO | `proofpoint_essentials_token_create` |
 
-Until the MCP server ships, this plugin's skills and commands are still
-useful on their own: they document the Proofpoint Essentials REST API
-directly (auth model, base URL/region resolution, resource shapes, batch
-semantics, error handling) for anyone calling the API by hand or building
-against it.
-
 ## Configuration
 
 Proofpoint Essentials authenticates with **org-admin credentials** — the
-same email/password used to sign into the Essentials console — sent as
-request headers, not an API key:
+same email/password used to sign into the Essentials console — not an API
+key. A reseller-level admin can act on any customer org the reseller
+manages; a customer-org admin is scoped to that one org only. There is no
+separate key to generate or rotate — see the `api-patterns` skill for the
+full authentication and regional-routing model.
 
-```http
-X-User: admin@msp-reseller.com
-X-Password: ***
-```
+Connect Proofpoint Essentials in [Conduit](https://conduit.wyre.ai) and
+enter the connection fields there:
 
-A reseller-level admin can act on any customer org the reseller manages; a
-customer-org admin is scoped to that one org only. There is no separate key
-to generate or rotate — see the `api-patterns` skill for the full
-authentication and regional-routing model.
+| Field | Required | Notes |
+|---|---|---|
+| Username | Yes | The admin login email |
+| Password | Yes | The admin login password |
+| Region | No | Regional pod, e.g. `us1` or `eu1`. Defaults to `us1` |
 
-### Claude Code Settings (Recommended, once the MCP server is available)
-
-```json
-{
-  "env": {
-    "PROOFPOINT_ESSENTIALS_USER": "admin@msp-reseller.com",
-    "PROOFPOINT_ESSENTIALS_PASSWORD": "your-password",
-    "PROOFPOINT_ESSENTIALS_REGION": "us1"
-  }
-}
-```
-
-`PROOFPOINT_ESSENTIALS_REGION` defaults to `us1`, which also serves as the
-endpoint-discovery anchor for orgs hosted on other regional pods — see the
-`api-patterns` skill.
+Every tool call goes to the connection's region. Use
+`proofpoint_essentials_endpoint_discover` to find which pod hosts an org.
 
 ## Available Skills
 
@@ -100,7 +82,7 @@ endpoint-discovery anchor for orgs hosted on other regional pods — see the
 
 | Command | Description |
 |---------|-------------|
-| `/search-org` | Resolve a customer org by name or domain and show its details |
+| `/search-org` | Resolve a customer org by its primary domain and show its details |
 | `/org-health-check` | Full read-only health sweep: lifecycle, domains, users, features/licensing, recent mail flow |
 
 ## API Documentation
