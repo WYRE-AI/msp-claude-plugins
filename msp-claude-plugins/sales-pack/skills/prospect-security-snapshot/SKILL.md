@@ -106,6 +106,28 @@ domains, license details, or GDAP details in the report or the sales
 conversation. Do not leave sibling-domain rows in the brief. Do not call
 CIPP against a domain that is not on a listed tenant.
 
+The call takes the tenant's filter, and the result has one row per domain.
+A check that failed comes back as an `error` object instead of a record:
+
+```json
+{ "tenantFilter": "contoso.onmicrosoft.com" }
+```
+
+```json
+[
+  {
+    "domain": "contoso.com",
+    "spf": { "...": "record data as CIPP returns it" },
+    "dmarc": { "...": "record data as CIPP returns it" },
+    "dkim": { "error": "Request timed out" }
+  }
+]
+```
+
+Report a check with an `error` field as **not verified** (the CIPP check
+failed), never as missing. You may retry that one record with an agent DNS
+lookup below.
+
 **Fallback, when CIPP does not cover the domain or is not connected.** If
 this session can do DNS lookups (for example a TXT and MX query for the
 domain, or a public DNS looking-glass the agent already has), look up:
