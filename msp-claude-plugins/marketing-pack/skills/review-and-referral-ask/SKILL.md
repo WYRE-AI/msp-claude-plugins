@@ -119,6 +119,15 @@ Each survey returned carries the customer name (the customer_data.name
 field) and the PSA ticket number (the ticket_num field). Use those to
 look up the client and that ticket with the PSA tools in Step 3.
 
+These two tools only filter the most recent page of up to 100 surveys,
+so their results can be incomplete, and they never see responses older
+than `<since>`. Before drafting for a candidate, page through
+`crewhu_surveys_list` with `sentiment: "negative"` and an increasing
+`step` (omit `since`), until it reports no more results, to check that
+customer's older negative responses. If you cannot page to the end, say
+so and ask the operator to confirm that the client has no unresolved
+detractor survey of any age before you draft.
+
 Keep only clients with a clearly positive signal from the survey tool
 (for example, a promoter record or a high score as returned). If the
 tool does not explain its threshold, report the score as returned and
@@ -175,8 +184,12 @@ connector, and retry." Do not build the list from tickets alone.
 
 ### Promoters list is empty
 
-Say so. Do not widen the net to detractors or to unsurveyed clients in
-order to produce drafts.
+An empty promoter result covers only the page that was checked. If more
+survey pages exist (`crewhu_surveys_list` reports more results), page
+through them with `sentiment: "positive"`, the same `<since>`, and an
+increasing `step` before reporting none. If you cannot, say the list
+may be incomplete and ask the operator whether recent promoters exist. Do not widen the net to detractors or to
+unsurveyed clients in order to produce drafts.
 
 ### Survey and tickets disagree
 
