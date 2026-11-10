@@ -2875,6 +2875,30 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'marketing-pack',
+    name: 'Marketing Pack',
+    vendor: 'Marketing-pack',
+    description: 'MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'alpha',
+    features: [
+      'Case Study Drafter'
+    ],
+    skills: [
+      { name: 'case-study-drafter', description: 'Turns a closed PSA project or a resolved incident, plus optional documentation records, into an anonymized case study with a challenge, approach, and result.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'marketing-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'devops-pack',
     name: 'Devops Pack',
     vendor: 'Devops-pack',
