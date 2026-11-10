@@ -6,334 +6,143 @@ arguments: [client_id, severity, status, asset_id, limit]
 
 # List SuperOps.ai RMM Alerts
 
-List active RMM alerts across all clients or filtered by specific criteria.
+List RMM alerts across all clients, or for one client or one asset.
 
 ## How this runs through Conduit
 
-The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
-`superops_custom_query` (admin tier) sends the GraphQL query shown in the steps below. It cannot change state, but it can read anything the token can see.
+The Conduit `superops` connector has **no alert tool**. The only route is the
+generic GraphQL passthrough `superops_custom_query`, which is admin tier. It
+cannot change state, but it can read anything the token can see, so it needs a
+human approver.
 
-Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the alert step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
-
-## Prerequisites
-
-- Valid SuperOps.ai API token configured
-- User must have alert viewing permissions
-- RMM module enabled in SuperOps.ai
+Use the typed tools for context: `superops_clients_search` resolves a client
+name, `superops_assets_list` lists a client's assets, and `superops_assets_get`
+reads one asset. Fall back to the passthrough only for the alert step itself. If
+the operator has no `admin` grant on SuperOps, stop and say so rather than
+looking for another route.
 
 ## Steps
 
-1. **Build filter criteria**
-   - Resolve client ID if client name provided
-   - Map severity string to API enum
-   - Map status string to API enum (default: active)
-   - Validate asset exists if asset_id provided
+1. **Choose the query.**
+   - No `asset_id` or `client_id`: use `getAlertList`.
+   - `asset_id`: use `getAlertsForAsset` for that asset.
+   - `client_id`: an `Alert` has no client field. Resolve the client with
+     `superops_clients_search`, list its assets with `superops_assets_list`
+     (`clientId`), and run `getAlertsForAsset` for each asset.
 
-2. **Query alerts**
+2. **Query alerts** with `superops_custom_query`:
+
    ```graphql
    query getAlertList($input: ListInfoInput!) {
      getAlertList(input: $input) {
        alerts {
-         alertId
+         id
          message
          severity
          status
-         type
          createdTime
-         acknowledgedTime
-         asset {
-           assetId
-           name
-           status
-         }
-         client {
-           accountId
-           name
-         }
-         site {
-           id
-           name
-         }
-         acknowledgedBy {
-           id
-           name
-         }
-         ticket {
-           ticketId
-           ticketNumber
-         }
+         resolvedTime
+         asset
        }
        listInfo {
+         page
+         pageSize
          totalCount
-         hasNextPage
-         endCursor
+         hasMore
        }
      }
    }
    ```
 
-   Variables:
    ```json
    {
      "input": {
-       "first": 25,
-       "filter": {
-         "status": "Active",
-         "severity": ["Critical", "High"],
-         "client": { "accountId": "client-uuid" }
+       "page": 1,
+       "pageSize": 25,
+       "condition": {
+         "joinOperator": "AND",
+         "operands": [
+           { "attribute": "status", "operator": "includes", "value": ["<status>"] },
+           { "attribute": "severity", "operator": "includes", "value": ["<severity>"] }
+         ]
        },
-       "orderBy": {
-         "field": "createdTime",
-         "direction": "DESC"
-       }
+       "sort": [{ "attribute": "createdTime", "order": "DESC" }]
      }
    }
    ```
 
-3. **Apply pagination**
-   - Default limit: 25
-   - Maximum limit: 100
-   - Show pagination info for additional results
+   For one asset:
 
-4. **Format and display results**
-   - Group by severity
-   - Show alert age
-   - Include linked ticket info
+   ```graphql
+   query getAlertsForAsset($input: AssetDetailsListInput!) {
+     getAlertsForAsset(input: $input) {
+       alerts { id message severity status createdTime resolvedTime }
+       listInfo { page pageSize totalCount hasMore }
+     }
+   }
+   ```
+
+   ```json
+   { "input": { "assetId": "<asset_id>", "listInfo": { "page": 1, "pageSize": 25 } } }
+   ```
+
+3. **Mind the filters.** `status` and `severity` are plain strings, and the
+   schema lists no values for them. A value the tenant doesn't use returns zero
+   rows without an error, so the first time, list without a condition and filter
+   on the values you see. Include only the operands the user asked for.
+   `joinOperator` must be uppercase.
+
+4. **Page and format.** `limit` maps to `pageSize`, which has a maximum of 100.
+   Keep paging while `listInfo.hasMore` is `true`. Group the rows by severity, show
+   each alert's age from `createdTime`, and name the asset from the `asset` JSON.
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| client_id | string | No | - | Filter by client ID or name |
-| severity | string | No | - | Low, Medium, High, Critical |
-| status | string | No | active | active, acknowledged, resolved |
-| asset_id | string | No | - | Filter by specific asset |
-| limit | integer | No | 25 | Max results (1-100) |
-
-## Alert Severity Levels
-
-| Severity | Description | Typical Response |
-|----------|-------------|------------------|
-| **Critical** | Immediate attention required | Respond within 15 minutes |
-| **High** | Significant issue | Respond within 1 hour |
-| **Medium** | Moderate concern | Respond within 4 hours |
-| **Low** | Informational | Review during business hours |
-
-## Alert Status Values
-
-| Status | Description |
-|--------|-------------|
-| **Active** | Alert triggered and unaddressed |
-| **Acknowledged** | Alert seen, being worked |
-| **Resolved** | Issue fixed, alert closed |
+| client_id | string | No | - | Client account ID or name |
+| severity | string | No | - | The tenant's severity value |
+| status | string | No | - | The tenant's status value |
+| asset_id | string | No | - | One asset |
+| limit | integer | No | 25 | Page size (1-100) |
 
 ## Examples
 
-### List All Active Alerts
-
 ```
 /list-alerts
-```
-
-### List Critical and High Severity
-
-```
 /list-alerts --severity Critical
-/list-alerts --severity High
-```
-
-### Filter by Client
-
-```
-/list-alerts --client_id client_123
 /list-alerts --client_id "Acme Corporation"
-```
-
-### Filter by Status
-
-```
-/list-alerts --status active
-/list-alerts --status acknowledged
-```
-
-### Combined Filters
-
-```
-/list-alerts --client_id client_123 --severity Critical --status active
-```
-
-### Increase Result Limit
-
-```
-/list-alerts --limit 50
-```
-
-### Filter by Asset
-
-```
-/list-alerts --asset_id asset_456
+/list-alerts --asset_id 1182
 ```
 
 ## Output
 
-### Default Output (Active Alerts)
-
 ```
-Active Alerts (showing 12 of 47)
+Alerts (showing 12 of 47)
 
-CRITICAL (3)
-------------
-  [2m ago]  ACME-DC01         Disk Space Critical: C: drive at 5% free
-            Acme Corporation  Type: Disk Space | Asset: Online
+Critical (3)
+  [2m ago]  ACME-DC01   Disk Space Critical: C: drive at 5% free      id 4417
+  [15m ago] TECH-SQL01  Service Stopped: MSSQLSERVER                  id 4415
+  [1h ago]  ABC-FILE01  CPU Usage: 98% for 30 minutes                 id 4409
 
-  [15m ago] TECH-SQL01        Service Stopped: MSSQLSERVER
-            Tech Solutions    Type: Service | Asset: Online
+High (5)
+  ...
 
-  [1h ago]  ABC-FILE01        CPU Usage: 98% for 30 minutes
-            ABC Industries    Type: Performance | Asset: Online
-
-HIGH (5)
---------
-  [30m ago] ACME-WS001        Security: Failed login attempts (15)
-            Acme Corporation  Type: Security | Asset: Online
-
-  [45m ago] ACME-WS002        Antivirus: Definitions outdated (7 days)
-            Acme Corporation  Type: Security | Asset: Online
-
-  [2h ago]  TECH-WS005        Patch Status: 3 critical updates pending
-            Tech Solutions    Type: Patch | Asset: Online
-
-  ... 2 more
-
-MEDIUM (4)
-----------
-  [3h ago]  ABC-LAPTOP01      Battery Health: Degraded (65%)
-            ABC Industries    Type: Hardware | Asset: Offline
-
-  ... 3 more
-
-Summary:
-  Total Active: 47 | Critical: 8 | High: 15 | Medium: 18 | Low: 6
-
-Use --limit 100 to see more results
-```
-
-### Client-Filtered Output
-
-```
-Active Alerts for Acme Corporation (showing 8 of 8)
-
-CRITICAL (1)
-------------
-  [2m ago]  ACME-DC01         Disk Space Critical: C: drive at 5% free
-            Type: Disk Space  Asset: Online
-            Linked Ticket: TICK-12345
-
-HIGH (3)
---------
-  [30m ago] ACME-WS001        Security: Failed login attempts (15)
-  [45m ago] ACME-WS002        Antivirus: Definitions outdated (7 days)
-  [2h ago]  ACME-DC02         Memory Usage: 95% sustained
-
-MEDIUM (2)
-----------
-  [4h ago]  ACME-LAPTOP03     Disk Health: SMART warning
-  [6h ago]  ACME-WS003        Pending Reboot: 14 days
-
-LOW (2)
--------
-  [1d ago]  ACME-WS004        Windows Update: Optional updates available
-  [2d ago]  ACME-WS005        Uptime: 45 days since last reboot
-
-Summary:
-  Total Active: 8 | Acknowledged: 3 | Last 24h: 4 new alerts
-```
-
-## curl Example
-
-```bash
-curl -X POST 'https://yourcompany.superops.ai/graphql' \
-  -H 'Authorization: Bearer YOUR_API_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "query": "query getAlertList($input: ListInfoInput!) { getAlertList(input: $input) { alerts { alertId message severity status type createdTime asset { assetId name status } client { accountId name } } listInfo { totalCount hasNextPage } } }",
-    "variables": {
-      "input": {
-        "first": 25,
-        "filter": {
-          "status": "Active",
-          "severity": ["Critical", "High"]
-        },
-        "orderBy": {
-          "field": "createdTime",
-          "direction": "DESC"
-        }
-      }
-    }
-  }'
+Next page: --page 2
 ```
 
 ## Error Handling
 
-### Client Not Found
-
-```
-Client not found: "Acme"
-
-Did you mean one of these?
-- Acme Corporation (ID: client_123)
-- Acme Industries (ID: client_456)
-```
-
-### Invalid Severity
-
-```
-Invalid severity: "Urgent"
-
-Valid severity values:
-- Critical
-- High
-- Medium
-- Low
-```
-
-### No Alerts Match
-
-```
-No alerts found matching criteria:
-- Status: active
-- Severity: Critical
-- Client: Acme Corporation
-
-This is good news! No critical active alerts for this client.
-
-Try broadening your search:
-/list-alerts --client_id client_123 --severity High
-/list-alerts --client_id client_123 --status acknowledged
-```
-
-### API Errors
-
-| Error | Resolution |
-|-------|------------|
-| Invalid client ID | Verify client exists |
-| Invalid severity | Use: Critical, High, Medium, Low |
-| Invalid status | Use: active, acknowledged, resolved |
-| Permission denied | Check user permissions |
-| Rate limited | Wait and retry (800 req/min limit) |
-
-## Best Practices
-
-1. **Check critical alerts first** - Use `--severity Critical` for urgent triage
-2. **Acknowledge promptly** - Use `/acknowledge-alert` to show you're working on it
-3. **Filter by client** - Focus on specific client issues
-4. **Review acknowledged alerts** - Don't let them sit indefinitely
-5. **Create tickets for tracking** - Use `/create-ticket` for complex issues
+| Situation | Response |
+|-----------|----------|
+| Client not found | Offer the closest matches from `superops_clients_search` |
+| Zero rows with a filter | Re-run unfiltered and check the tenant's status and severity spellings |
+| No `admin` grant | Stop and say so |
 
 ## Related Commands
 
 - `/acknowledge-alert` - Acknowledge an alert
 - `/resolve-alert` - Resolve an alert
-- `/create-ticket` - Create ticket from alert
+- `/create-ticket` - Create a ticket for an alert
 - `/get-asset` - View asset details
-- `/run-script` - Run remediation script
+- `/run-script` - Run a remediation script

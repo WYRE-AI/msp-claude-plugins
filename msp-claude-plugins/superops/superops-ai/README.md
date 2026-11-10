@@ -9,7 +9,7 @@ This plugin provides Claude with deep knowledge of SuperOps.ai, enabling:
 - **Ticket Management** - Create, search, update, and manage service tickets
 - **Asset Management** - Query assets, run scripts, monitor patches
 - **Client Operations** - Client and site management
-- **Alert Handling** - Monitor, acknowledge, and resolve alerts
+- **Alert Handling** - Monitor and resolve alerts (acknowledgement is console-only)
 - **Runbook Execution** - Execute automation scripts on assets
 
 ## Configuration
@@ -43,8 +43,8 @@ There is no per-plugin URL setting, and setting an environment variable does not
    - This is typically your company name or a custom identifier
 
 4. **Determine Your API Region**
-   - **US Region**: `https://api.superops.ai/graphql`
-   - **EU Region**: `https://euapi.superops.ai/graphql`
+   - **US Region**: `https://api.superops.ai/msp`
+   - **EU Region**: `https://euapi.superops.ai/msp`
 
 ### Testing Your Connection
 
@@ -52,11 +52,11 @@ To check the credentials directly against SuperOps before you save them in Condu
 
 ```bash
 # Test connection (GraphQL query)
-curl -X POST "https://api.superops.ai/graphql" \
+curl -X POST "https://api.superops.ai/msp" \
   -H "Authorization: Bearer ${SUPEROPS_API_TOKEN}" \
   -H "CustomerSubDomain: ${SUPEROPS_SUBDOMAIN}" \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ clients { edges { node { id name } } } }"}' | jq
+  -d '{"query": "{ getClientList(input: { page: 1, pageSize: 1 }) { listInfo { totalCount } } }"}' | jq
 ```
 
 ## Installation
@@ -92,10 +92,10 @@ claude --plugin .
 
 ## API Reference
 
-- **Base URL**: `https://api.superops.ai/graphql` (US) or `https://euapi.superops.ai/graphql` (EU)
+- **Base URL**: `https://api.superops.ai/msp` (US) or `https://euapi.superops.ai/msp` (EU)
 - **Auth**: Bearer token + `CustomerSubDomain` header
 - **Rate Limit**: 800 requests per minute
-- **Docs**: [SuperOps.ai API Documentation](https://developer.superops.ai/)
+- **Docs**: [SuperOps.ai API Documentation](https://developer.superops.com/msp)
 
 ## Contributing
 
