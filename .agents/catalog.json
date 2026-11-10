@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 385,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -4824,7 +4824,7 @@
     {
       "name": "finance-pack",
       "displayName": "Finance & Billing",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
       "category": "workflow-pack",
       "tags": [
@@ -4856,6 +4856,10 @@
         {
           "id": "margin-analysis",
           "path": "msp-claude-plugins/finance-pack/skills/margin-analysis/SKILL.md"
+        },
+        {
+          "id": "renewal-and-price-increase-prep",
+          "path": "msp-claude-plugins/finance-pack/skills/renewal-and-price-increase-prep/SKILL.md"
         }
       ],
       "commands": [

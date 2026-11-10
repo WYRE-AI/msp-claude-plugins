@@ -2776,12 +2776,14 @@ export const plugins: Plugin[] = [
     features: [
       'Agreement Reconciliation',
       'License True Up',
-      'Margin Analysis'
+      'Margin Analysis',
+      'Renewal And Price Increase Prep'
     ],
     skills: [
       { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
       { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
-      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' }
+      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' },
+      { name: 'renewal-and-price-increase-prep', description: 'Composes Agreement Reconciliation and Margin Analysis into per-client talking points for an upcoming renewal or a price-increase conversation. Grounds every point in returned contracts, invoices, hours, and marketplace data, and produces a partial brief when a source is missing rather than inventing rates or amounts.' }
     ],
     agents: [
       { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },
