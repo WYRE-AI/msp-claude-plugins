@@ -69,7 +69,8 @@ below. Never create, update, send, void, or raw/execute.
 
 **Agreements and contracts:** `autotask_list_expiring_contracts`,
 `autotask_search_contracts`, `autotask_get_contract`,
-`cw_search_agreements`, `cw_get_agreement`, `cw_get_agreement_additions`.
+`autotask_search_contract_services`,
+`autotask_search_contract_service_units`, `cw_search_agreements`, `cw_get_agreement`, `cw_get_agreement_additions`.
 For a renewal window in Autotask, `autotask_list_expiring_contracts`
 returns contracts whose end date falls within `daysAhead` days, optionally
 scoped to one `companyID`:
@@ -80,7 +81,8 @@ scoped to one `companyID`:
 
 `autotask_search_contracts` also accepts `endDateFrom` and `endDateTo`
 (ISO dates). `autotask_get_contract` returns header fields only, with no
-service lines. HaloPSA MCP has no contract or agreement list tool, and
+service lines; read billed units with the two contract-service tools.
+HaloPSA MCP has no contract or agreement list tool, and
 Syncro MCP has no contract list tool: when those are the only PSA, say
 the contract side is unavailable.
 
@@ -106,7 +108,12 @@ the hosted Pax8 path anyway).
 **Labor (optional):** `autotask_search_time_entries`,
 `cw_search_time_entries`, `cw_get_time_entry`. If the operator does not
 supply a loaded labor rate, say labor cost could not be estimated. Do
-not invent a rate.
+not invent a rate. This is stricter than Margin Analysis: do not use a
+PSA billing rate or resource cost rate as a proxy here, because a brief
+for a pricing conversation must not rest on an estimated labor cost.
+Without an operator-supplied rate, report hours as a fact and show
+margin as gross margin excluding labor (labeled that way), or as
+unavailable when marketplace cost is also missing.
 
 **Delivered work (optional):** `autotask_search_tickets`,
 `cw_search_tickets`, `halopsa_tickets_list`, `syncro_tickets_list`.
@@ -126,7 +133,8 @@ For the chosen client (or each client in an upcoming renewal window):
    match.
 2. Follow [Margin Analysis](../margin-analysis/SKILL.md) for revenue,
    marketplace cost, and labor, with the same missing-input labels that
-   skill already requires.
+   skill already requires, but apply the stricter labor-rate rule in
+   Step 1 (operator-supplied rate only).
 
 Do not redo those skills' report formats. Extract the findings you need
 for the conversation.
