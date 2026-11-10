@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Marketplace 1.37.0, `secops-pack` 0.1.6: MSP Tool Compromise Response ([WYREAI-735](https://linear.app/wyre-ai/issue/WYREAI-735/conduit-skill-msp-tool-compromise-response)).** Adds a read-only, discovery-first workflow pack skill for investigating a suspected or vendor-disclosed compromise of an MSP management-plane tool (RMM, remote access, or similar automation). It correlates independent EDR, identity, network, cloud, and documentation evidence with scoped platform reads, reports what was checked and what could not be verified, and recommends an operator-approved rotation and containment plan. The first worked example is N-able N-central 2026.4 HF2 (build 2026.4.1.26). After open PR https://github.com/WYRE-AI/msp-claude-plugins/pull/262 (WYREAI-723, Shadow AI, also `secops-pack` 0.1.6) merges, re-sequence this pack version to 0.1.7.
+
 - **Skill coverage for tools the shipped connectors added:** `connectwise-psa-procurement` and `connectwise-psa-scheduling`, `autotask-contract-services`, `cipp-secure-score`, `datto-saas-protection-seat-coverage`, `ninjaone-custom-fields`, `sentinelone-threat-intel`; plus new sections for CIPP standards templates, drift/alignment, mailbox usage, trusted senders, enterprise apps and sign-in logs, Datto RMM job results, HaloPSA ticket categories, IT Glue attachments/user metrics/configuration archiving, and Autotask note attachments, resource roles and opportunity updates.
 
 ### Removed
