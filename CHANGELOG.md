@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **`proofpoint-essentials` 0.1.1 — tool names and arguments match the server ([#178](https://github.com/WYRE-AI/msp-claude-plugins/issues/178)).** `proofpoint_essentials_endpoint_resolve`, `_org_activate` and `_org_deactivate` never existed. The skills and commands now use `proofpoint_essentials_endpoint_discover` and `proofpoint_essentials_org_set_active` (`isActive`). The tool tables use the real arguments (`domain` / `orgDomain`, and `start`/`end`/`params` on reporting, which has no `direction` argument). The region is described as a Conduit connection field. `/search-org` and `/org-health-check` now take the org's primary domain.
+
+- **Discovery tools Conduit refuses are no longer documented as callable ([#178](https://github.com/WYRE-AI/msp-claude-plugins/issues/178)).** Conduit refuses every vendor's `*_navigate` and `*_back` tool and leaves them out of the tool list; `conduit__my_access` replaces them. Patch-bumped: `ncentral` 1.0.9 (it also documented an `ncentral_back` the server does not register), `scalepad` 1.1.5, `sherweb` 0.3.11 (its progressive-disclosure meta-tools exist only under `LAZY_LOADING=true`, which Conduit does not use; `sherweb_subscriptions_amendment_status` added to the Read tier), `liongard` 0.2.9, `abnormal-security` 0.2.13, `salesbuildr` 1.1.11 and `xero` 0.2.11.
+
 ### Changed
 
 - **Docs site footer now reads "Built by WYRE AI™."** The bottom bar drops the `© <year> WYRE Technology. Built with Astro.` line and links "WYRE AI™" to https://wyre.ai. The footer columns and the Terms/Privacy links are unchanged.
