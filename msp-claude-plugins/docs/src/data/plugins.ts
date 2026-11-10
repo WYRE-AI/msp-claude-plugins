@@ -2775,11 +2775,13 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Agreement Reconciliation',
+      'Churn Scanner',
       'License True Up',
       'Margin Analysis'
     ],
     skills: [
       { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
+      { name: 'churn-scanner', description: 'Cross-vendor client retention risk ranking from ticket volume, customer sentiment, SLA misses, overdue invoices, upcoming agreement renewals, and RMM availability proxies.' },
       { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
       { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' }
     ],

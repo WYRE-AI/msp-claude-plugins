@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 86,
-    "skills": 385,
+    "skills": 386,
     "commands": 317,
     "agents": 154
   },
@@ -4691,7 +4691,7 @@
     {
       "name": "ops-pack",
       "displayName": "MSP Operations",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -4824,7 +4824,7 @@
     {
       "name": "finance-pack",
       "displayName": "Finance & Billing",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
       "category": "workflow-pack",
       "tags": [
@@ -4848,6 +4848,10 @@
         {
           "id": "agreement-reconciliation",
           "path": "msp-claude-plugins/finance-pack/skills/agreement-reconciliation/SKILL.md"
+        },
+        {
+          "id": "churn-scanner",
+          "path": "msp-claude-plugins/finance-pack/skills/churn-scanner/SKILL.md"
         },
         {
           "id": "license-true-up",

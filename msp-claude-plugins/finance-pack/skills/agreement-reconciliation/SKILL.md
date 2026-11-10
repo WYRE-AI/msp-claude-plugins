@@ -61,6 +61,8 @@ invoice line."
 
 ## Anti-triggers
 
+- **Portfolio client churn risk ranking:** use `finance-pack-churn-scanner`.
+
 - **Working a contract record itself** — contract types, service and service-
   bundle associations, block hours, and renewals are the PSA's surface; use
   `autotask-contracts` or `halopsa-contracts`.
@@ -249,6 +251,8 @@ MATCHED — No Issues
 | PSA contract data incomplete (e.g. missing term end date) | Note as a data-hygiene flag alongside billing findings — don't silently skip the line. |
 
 ## Related Skills
+
+- [Churn Scanner](../churn-scanner/SKILL.md): portfolio client retention risk ranking.
 
 - [`shared/skills/billing-reconciliation`](../../../shared/skills/billing-reconciliation/SKILL.md) — Pax8 subscription vs. accounting invoice reconciliation (distribution layer, not PSA)
 - [`license-true-up`](../license-true-up/SKILL.md) — Pax8/Sherweb subscription seats vs. billed vs. actually deployed seats

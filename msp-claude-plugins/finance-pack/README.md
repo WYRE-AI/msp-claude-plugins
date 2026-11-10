@@ -20,6 +20,10 @@ hardcoded to one PSA or one accounting platform.
 | Microsoft 365 / CIPP | Optional — improves license true-up accuracy with actual deployed-seat data | microsoft-graph or CIPP |
 | PSA time entries | Optional — improves margin analysis with labor cost estimates | Same PSA as above, if time tracking is used |
 
+Churn Scanner requires only a client roster, with all signal sources optional,
+including CrewHu surveys and RMM last-seen/online data. The table above describes
+the other finance workflows' connection needs.
+
 Every skill, agent, and command in this pack discovers what's actually
 connected via `conduit__search_tools` before running — it never assumes a
 fixed vendor stack, and it reports "unable to verify" rather than silently
@@ -28,6 +32,7 @@ skipping or guessing when a connector is missing.
 ## What's included
 
 **Skills**
+- `churn-scanner`: client retention risk ranking from available service, sentiment, billing, renewal, and RMM signals
 - `agreement-reconciliation` — PSA contract/agreement vs. accounting invoice reconciliation
 - `license-true-up` — marketplace-provisioned vs. billed vs. deployed seat reconciliation
 - `margin-analysis` — per-client/service-line margin, with explicit handling of missing cost data

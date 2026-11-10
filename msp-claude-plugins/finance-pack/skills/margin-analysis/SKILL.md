@@ -43,6 +43,8 @@ Cost    = marketplace wholesale cost (Pax8/Sherweb) + estimated labor cost
 
 ## Anti-triggers
 
+- **Portfolio client churn risk ranking:** use `finance-pack-churn-scanner`.
+
 - **Accounting-platform financial reports** — Profit and Loss, Balance
   Sheet, and Aged Receivables are prebuilt reports with their own parameters
   and response shape; use `xero-reports` or `qbo-reports`.
@@ -176,6 +178,8 @@ SUMMARY
 | Client has revenue but zero rows in every cost source | Report revenue and mark "cost data unavailable" — do not drop the client from the report. |
 
 ## Related Skills
+
+- [Churn Scanner](../churn-scanner/SKILL.md): portfolio client retention risk ranking.
 
 - [`agreement-reconciliation`](../agreement-reconciliation/SKILL.md) — confirm billed revenue is accurate before trusting it as a margin input
 - [`license-true-up`](../license-true-up/SKILL.md) — confirm marketplace cost inputs reflect actual provisioned/deployed seats, not stale subscription data
