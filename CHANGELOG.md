@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Docs site footer now reads "Built by WYRE AI™."** The bottom bar drops the `© <year> WYRE Technology. Built with Astro.` line and links "WYRE AI™" to https://wyre.ai. The footer columns and the Terms/Privacy links are unchanged.
+
 - **`cipp` 0.1.10 — setup no longer offers Smithery ([WYREAI-599](https://linear.app/wyre-ai/issue/WYREAI-599/smithery-hosted-proxy-shuts-down-oct-31-audit-and-migrate-mcp-repos)).** Smithery's hosted MCP proxy shuts down Oct 31, 2026. The README setup step now points to Docker or npx, or the hosted Conduit option at https://conduit.wyre.ai.
 
 - **`cipp` 0.1.9 — `cipp-users` documents edit-right-after-create ([WYREAI-530](https://linear.app/wyre-ai/issue/WYREAI-530)).** `cipp_edit_user` resolves the current UPN via `ListUsers` before `EditUser` (CIPP rebuilds the UPN from username + domain, so editing without it renames the account). Right after `cipp_create_user` Graph can lag, so that lookup retries up to 4 attempts (1s/3s/6s, ~10s) on not-found; other errors aren't retried. Also corrected the `cipp_reset_password` line (CIPP always generates the password, or returns a PWPush link when PWPush is enabled; there is no password parameter) and the `cipp_create_user` parameter list to match the MCP. GOVERNANCE.md now says `cipp_create_user` takes no `usageLocation` (set it with `cipp_edit_user` before assigning a licence), and describes both `cipp_reset_password` results: the plaintext generated password, or a PWPush link when PWPush is enabled.
