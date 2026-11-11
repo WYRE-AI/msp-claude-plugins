@@ -51,7 +51,7 @@ authentication failure even with a valid token.
 Inside Conduit the SuperOps connection holds the token and subdomain, and nothing reads environment variables. These exports are only for calling SuperOps directly, as in `references/examples.md`.
 
 ```bash
-export SUPEROPS_API_KEY="your-api-token"
+export SUPEROPS_API_TOKEN="your-api-token"
 export SUPEROPS_SUBDOMAIN="yourcompany"
 export SUPEROPS_REGION="us"  # or "eu"
 ```

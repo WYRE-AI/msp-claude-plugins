@@ -35,7 +35,7 @@ Clients (also called Accounts) are the foundation of SuperOps.ai's PSA. Every ti
 | `superops_clients_search` | read | Find a client by name |
 | `superops_clients_get` | read | One client |
 
-Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+Anything without a typed tool goes through `superops_custom_query` (admin tier; send query documents only, since the tool does not stop a mutation) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
 
 ## Key Concepts
 

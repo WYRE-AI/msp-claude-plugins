@@ -27,7 +27,7 @@ This plugin ships no `.mcp.json` and reads no environment variables. Connect Sup
 
 There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http superops https://your-gateway-domain/v1/superops/mcp`. The gateway then holds the SuperOps credentials, not the client.
 
-### Obtaining API Credentials
+## Obtaining API Credentials
 
 1. **Log into SuperOps.ai**
    - Navigate to your SuperOps instance
@@ -42,11 +42,11 @@ There is no per-plugin URL setting, and setting an environment variable does not
    - Your subdomain is your company identifier in SuperOps
    - This is typically your company name or a custom identifier
 
-4. **Determine Your API Region**
+4. **Determine Your API Region** (Conduit connects to the US region only; the EU endpoint matters only if you call SuperOps directly)
    - **US Region**: `https://api.superops.ai/msp`
    - **EU Region**: `https://euapi.superops.ai/msp`
 
-### Testing Your Connection
+## Testing Your Connection
 
 To check the credentials directly against SuperOps before you save them in Conduit, export them in your shell and run:
 

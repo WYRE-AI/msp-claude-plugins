@@ -17,8 +17,9 @@ Mark an RMM alert as being worked so other technicians don't pick it up.
 > console. This command finds the alert, shows it to the operator, and hands off.
 
 The Conduit `superops` connector has **no alert tool**. Reading the alert goes
-through `superops_custom_query`. That tool is admin tier and read-only, and it
-needs a human approver who has seen the query. Use the typed tools for asset and
+through `superops_custom_query`. That tool is admin tier and is meant for query
+documents only, but it would run a mutation if sent one, so it needs a human
+approver who has seen the query. Use the typed tools for asset and
 client context: `superops_assets_get` and `superops_clients_get`. If the operator
 has no `admin` grant on SuperOps, stop and say so rather than looking for another
 route.

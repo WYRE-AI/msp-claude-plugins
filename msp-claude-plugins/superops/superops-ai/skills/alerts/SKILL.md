@@ -41,7 +41,7 @@ SuperOps.ai RMM generates alerts when monitored conditions are triggered on mana
 | `superops_custom_query` | admin | List or read alerts (no typed alert tool exists) |
 | `superops_custom_mutation` | admin | Acknowledge or resolve alerts (no typed alert tool exists) |
 
-Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+Anything without a typed tool goes through `superops_custom_query` (admin tier; send query documents only, since the tool does not stop a mutation) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
 
 ## Alert Severity Levels
 

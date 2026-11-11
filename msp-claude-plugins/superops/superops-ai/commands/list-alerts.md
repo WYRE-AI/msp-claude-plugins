@@ -12,8 +12,9 @@ List RMM alerts across all clients, or for one client or one asset.
 
 The Conduit `superops` connector has **no alert tool**. The only route is the
 generic GraphQL passthrough `superops_custom_query`, which is admin tier. It
-cannot change state, but it can read anything the token can see, so it needs a
-human approver.
+is meant for query documents only, but it does not stop a mutation and it can
+read anything the token can see, so it needs a human approver. Send it a query
+document and nothing else.
 
 Use the typed tools for context: `superops_clients_search` resolves a client
 name, `superops_assets_list` lists a client's assets, and `superops_assets_get`

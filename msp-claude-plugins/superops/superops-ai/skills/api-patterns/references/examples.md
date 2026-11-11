@@ -249,7 +249,7 @@ async function graphqlRequest(query, variables = {}) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.SUPEROPS_API_KEY}`,
+      'Authorization': `Bearer ${process.env.SUPEROPS_API_TOKEN}`,
       'CustomerSubDomain': process.env.SUPEROPS_SUBDOMAIN
     },
     body: JSON.stringify({ query, variables })
