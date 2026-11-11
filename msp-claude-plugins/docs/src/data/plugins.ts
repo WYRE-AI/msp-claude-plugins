@@ -1755,12 +1755,12 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'alerts', description: 'SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle and valid transitions, asset/client/monitor associations, and the GraphQL operations for listing, acknowledging, resolving, and converting alerts into tickets.' },
+      { name: 'alerts', description: 'SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle and valid transitions, asset/client/monitor associations, the GraphQL operations for listing and resolving alerts, and the hand-offs for acknowledging them (console) and ticketing them (superops_tickets_create).' },
       { name: 'assets', description: 'SuperOps.ai RMM asset inventory: asset status and platform enums, hardware, network, OS and association fields, software inventory, disk usage, patch status, activity history, and the GraphQL queries and script-execution mutations behind them.' },
       { name: 'clients', description: 'SuperOps.ai client (account) management: stage and status enums, core/business/ address fields, client CRUD mutations, site and contact (requester) management, custom fields, soft vs. hard delete, and onboarding workflows.' },
-      { name: 'runbooks', description: 'SuperOps.ai RMM script automation: script types and OS targeting, run-as contexts, execution priority, parameterized arguments, single-asset and batch execution, recurring schedules, execution status polling, and exit-code interpretation.' },
+      { name: 'runbooks', description: 'SuperOps.ai RMM script automation: finding scripts in the library (all, or by OS), their run-time variables, running one script on one asset with runScriptOnAsset through the admin-tier GraphQL passthrough, and what the API cannot do (batch runs, schedules, reading execution results back).' },
       { name: 'tickets', description: 'SuperOps.ai service desk ticketing: ticket fields, status and priority enums, client/site/requester/assignee associations, notes, time entries, and the GraphQL mutations and queries behind them.' },
-      { name: 'api-patterns', description: 'SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth, region-specific endpoints, request/variable structure, cursor pagination, the 800 req/min rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.' }
+      { name: 'api-patterns', description: 'SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth, region-specific endpoints, request/variable structure, offset (page/pageSize) pagination, the 800 req/min rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.' }
     ],
     agents: [
       { name: 'automation-opportunity-finder', description: 'Use this agent when an MSP operations lead, service manager, or technician wants to identify repetitive ticket patterns in SuperOps.ai that should be automated — not live operations management, but a retrospective analysis of ticket history to find recurring issues with the same client, same category, and same resolution, calculate the manual time cost, and recommend runbooks or automation scripts to eliminate the pattern.' },
@@ -1773,7 +1773,7 @@ export const plugins: Plugin[] = [
       { name: '/get-asset', description: 'Get detailed asset information including hardware, software, and alerts' },
       { name: '/list-alerts', description: 'List active RMM alerts across all clients or filtered by criteria' },
       { name: '/list-assets', description: 'List and filter assets in SuperOps.ai' },
-      { name: '/log-time', description: 'Log a time entry against a SuperOps.ai ticket' },
+      { name: '/log-time', description: 'Log a worklog (time) entry against a SuperOps.ai ticket' },
       { name: '/resolve-alert', description: 'Resolve an RMM alert and optionally create a ticket' },
       { name: '/run-script', description: 'Execute a script on a remote asset via SuperOps RMM' },
       { name: '/update-ticket', description: 'Update fields on an existing SuperOps.ai ticket' }

@@ -4,6 +4,12 @@
 > Created: 2026-02-04
 > Status: Draft
 
+> **Historical.** This draft was written before the plugin was anchored on the
+> SuperOps schema. Its GraphQL uses operations and fields that do not exist,
+> such as `addTicketNote`, cursor paging and `alertId`. Do not copy it. The
+> commands under `commands/` and the `references/api.md` files under `skills/`
+> are the current, schema-validated versions (#270).
+
 ## Overview
 
 This PRD defines 8 additional slash commands for the SuperOps AI Claude Code plugin. These commands extend the existing `/create-ticket` and `/search-tickets` functionality to provide comprehensive ticket lifecycle management, RMM alert handling, script execution, and asset management.
