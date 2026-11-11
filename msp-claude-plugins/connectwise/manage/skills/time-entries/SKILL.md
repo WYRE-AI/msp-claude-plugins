@@ -24,6 +24,18 @@ Time entries in ConnectWise PSA track time spent on tickets, projects, and other
 - **Project time** — project hours charge to a `ProjectTicket`, so the
   ticket has to be located first; use `connectwise-psa-projects`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `cw_search_time_entries` / `cw_get_time_entry` | read | Find and read time entries |
+| `cw_create_time_entry` | write | Log time against a ticket, project ticket or activity |
+| `cw_update_time_entry` | write | Correct hours, notes, work type or billable option on an existing entry |
+| `cw_delete_time_entry` | write | Remove a mistaken entry. Check it has not been invoiced first: deleting billed time leaves the invoice and the ticket disagreeing |
+| `cw_update_invoice` | write | Edit an invoice record (for example after time corrections), when the operator asks for it |
+
+Prefer `cw_update_time_entry` over delete-and-recreate, so the entry keeps its ID and audit history.
+
 ## API Endpoint
 
 ```

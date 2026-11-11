@@ -38,14 +38,10 @@ in the SaaS Alerts partner portal.
 |--------|-------|
 | `X-SaaS-Alerts-API-Key` | The raw partner API key |
 
-The gateway maps the environment variable `SAAS_ALERTS_API_KEY` onto the
-`X-SaaS-Alerts-API-Key` header automatically. Internally the MCP server
-forwards this to the SaaS Alerts API as the `api_key` header — you do not
-need to construct that header yourself.
-
-```bash
-export SAAS_ALERTS_API_KEY="your-partner-api-key"
-```
+The key is stored on the SaaS Alerts connection in Conduit, which
+injects it as `X-SaaS-Alerts-API-Key` on every request; nothing is set on
+the client. The MCP server forwards it to the SaaS Alerts API as the
+`api_key` header, so you do not construct that header yourself.
 
 ## Hierarchy
 

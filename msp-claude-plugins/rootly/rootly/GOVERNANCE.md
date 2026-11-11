@@ -85,14 +85,14 @@ revision.
 | **Read** | Cannot change Rootly state or notify anyone. | `read` | 136 tools — every `list_*` and `get_*`, plus `search_incidents`, `find_related_incidents`, `collect_incidents`, `check_responder_availability`, `suggest_solutions`, `get_oncall_handoff_summary` |
 | **Write** | Creates or modifies records — including declaring an incident. | `write` | 110 tools — every `create_*` and `update_*`, plus `attach_alert` and `patch_alert_route` |
 | **Delete** | *Empty.* Rootly's hosted surface exposes no delete tool at all. | — | 0 |
-| **Admin** | Org-level state and personal-contact writes. | `admin` | 5 tools — `check_oncall_health_risk`, `create_user_email_address`, `create_user_phone_number`, `create_user_notification_rule`, `create_workflow_run` |
+| **Admin** | Org-level state and personal-contact writes. | `admin` | 5 live tools — `create_user_email_address`, `create_user_phone_number`, `create_user_notification_rule`, `create_workflow_run`, `run_ai_automation`. (Conduit also classifies `check_oncall_health_risk` admin, but the hosted server no longer serves it.) |
 
 Two things in that table are worth an owner's attention:
 
 - **`create_incident` enforces at `write`, the same as `update_cause`.** The
   Write group holds 110 tools and no mechanism distinguishes them.
 - **The Admin group is small but well chosen.** `create_workflow_run`
-  executes a workflow, `check_oncall_health_risk` is a sensitive read, and
+  executes a workflow, and
   the three `create_user_*_address`/`_phone_number`/`_notification_rule`
   tools rewrite *where a responder gets paged* — a paging-diversion surface,
   correctly held above `write`.

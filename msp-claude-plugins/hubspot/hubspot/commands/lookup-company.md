@@ -11,7 +11,7 @@ Find a company in HubSpot CRM by name or domain and display a complete profile i
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `hubspot_search_companies`, `hubspot_retrieve_company`, `hubspot_access_associations`, `hubspot_retrieve_contact`, and `hubspot_retrieve_deal` available
+- MCP tools `search_crm_objects` (`objectType: "companies"`), `get_crm_objects` (`objectType: "companies"`), `search_crm_objects` (`associatedWith` filter), `get_crm_objects` (`objectType: "contacts"`), and `get_crm_objects` (`objectType: "deals"`) available
 
 ## Steps
 
@@ -19,26 +19,28 @@ Find a company in HubSpot CRM by name or domain and display a complete profile i
 
    - If the query contains a dot (e.g., `acmecorp.com`), search by `domain` using `EQ`
    - Otherwise, search by `name` using `CONTAINS_TOKEN`
-   - Call `hubspot_search_companies` with the constructed filter
+   - Call `search_crm_objects` (`objectType: "companies"`) with the constructed filter
 
 2. **Retrieve full company details**
 
-   Call `hubspot_retrieve_company` with the matched `companyId` to get all properties.
+   Call `get_crm_objects` (`objectType: "companies"`) with the matched `companyId` to get all properties.
 
 3. **Fetch associated contacts** (if show_contacts is true)
 
-   - Call `hubspot_access_associations` with `objectType=company`, `objectId=<companyId>`, `toObjectType=contact`
-   - For each contact ID, call `hubspot_retrieve_contact` to get name, email, job title, and phone
+   - Call `search_crm_objects` with `objectType: "contacts"` and an `associatedWith` filter `{ objectType: "companies", operator: "EQUAL", objectIdValues: [<companyId>] }`
+   - Fetch the contacts with `get_crm_objects` (`objectType: "contacts"`, up to 100 `objectIds` per call) to get name, email, job title, and phone
 
 4. **Fetch associated deals** (if show_deals is true)
 
-   - Call `hubspot_access_associations` with `toObjectType=deal`
-   - For each deal ID, call `hubspot_retrieve_deal` to get deal name, amount, stage, and close date
+   - Call `search_crm_objects` with `objectType: "deals"` and an `associatedWith` filter on the same record
+   - Fetch the deals with `get_crm_objects` (`objectType: "deals"`, up to 100 `objectIds` per call) to get deal name, amount, stage, and close date
 
 5. **Fetch associated tickets** (if show_tickets is true)
 
-   - Call `hubspot_access_associations` with `toObjectType=ticket`
-   - For each ticket ID, call `hubspot_retrieve_ticket` to get subject, status, and priority
+   - Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the same record
+   - Fetch the tickets with `get_crm_objects` (`objectType: "tickets"`, up to 100 `objectIds` per call) to get subject, status, and priority
+
+   Each association search returns one page. Pass the returned `offset` and repeat until there are no more results, so the profile and deal total cover every record.
 
 6. **Format and present the complete company profile**
 
@@ -209,12 +211,12 @@ Showing the first 20. Use /search-contacts "@acmecorp.com" for the full list.
 
 | Tool | Purpose |
 |------|---------|
-| `hubspot_search_companies` | Find company by name or domain |
-| `hubspot_retrieve_company` | Get full company details |
-| `hubspot_access_associations` | Get associated contacts, deals, and tickets |
-| `hubspot_retrieve_contact` | Get contact details for each association |
-| `hubspot_retrieve_deal` | Get deal details for each association |
-| `hubspot_retrieve_ticket` | Get ticket details (if show_tickets is true) |
+| `search_crm_objects` (`objectType: "companies"`) | Find company by name or domain |
+| `get_crm_objects` (`objectType: "companies"`) | Get full company details |
+| `search_crm_objects` (`associatedWith` filter) | Get associated contacts, deals, and tickets |
+| `get_crm_objects` (`objectType: "contacts"`) | Get contact details for each association |
+| `get_crm_objects` (`objectType: "deals"`) | Get deal details for each association |
+| `get_crm_objects` (`objectType: "tickets"`) | Get ticket details (if show_tickets is true) |
 
 ## Related Commands
 

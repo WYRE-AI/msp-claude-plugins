@@ -145,6 +145,10 @@ calculation.
 See [references/api.md](references/api.md) for the full create/query request
 bodies and the submit, approve, and reject patterns.
 
+## Resource Roles
+
+Every ticket or task time entry needs a billing **role** the resource actually holds, and so does a ticket assigned to a resource. Look the valid role IDs up with `autotask_search_resource_roles` (`resourceId`, or `resourceName` such as "Jane Tech"; `includeInactive` to see retired assignments) instead of guessing; a role the resource does not hold is the usual cause of a rejected `autotask_create_time_entry` (a write-tier tool).
+
 ## Business Rules
 
 ### Quarter-Hour Rounding

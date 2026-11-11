@@ -1,11 +1,11 @@
 {
   "name": "timezest",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "TimeZest - tech scheduling and appointment booking against ConnectWise / Autotask / Halo PSA tickets for MSPs",
   "author": {
-    "name": "WYRE AI"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

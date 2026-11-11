@@ -213,4 +213,3 @@ Public comments automatically email the customer (unless --do_not_email):
 - `/create-ticket` - Create a new ticket
 - `/search-tickets` - Search for tickets
 - `/update-ticket` - Update ticket fields
-- `/log-time` - Log time against a ticket

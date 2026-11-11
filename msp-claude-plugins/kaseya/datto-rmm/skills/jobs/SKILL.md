@@ -25,6 +25,18 @@ Jobs in Datto RMM execute component scripts on devices. Quick jobs run immediate
   per run; account and site variables are a separate persistent store
   in `datto-rmm-variables`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `datto_run_quickjob` | admin | Run a component on one device (`deviceUid`, `componentUid`, `jobName`, `variables`); returns a job UID |
+| `datto_get_job` | read | Job status: queued, running, completed |
+| `datto_get_job_components` | read | The components and variables the job ran |
+| `datto_get_job_results` | admin | Per-device result: status, exit code, error message |
+| `datto_get_job_stdout` / `datto_get_job_stderr` | admin | What the script printed on that device |
+
+Tiers are Conduit's classification. REST examples later in this skill show what the tools call underneath.
+
 ## Key Concepts
 
 ### Job Types

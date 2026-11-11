@@ -1,11 +1,11 @@
 {
   "name": "pagerduty",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Claude plugins for PagerDuty - incident management, on-call scheduling, service health monitoring, alert management, and analytics for MSPs",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

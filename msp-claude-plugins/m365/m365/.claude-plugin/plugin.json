@@ -1,11 +1,11 @@
 {
   "name": "m365",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Claude plugins for Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

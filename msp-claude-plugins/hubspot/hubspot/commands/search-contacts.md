@@ -11,7 +11,7 @@ Search for contacts in HubSpot CRM by name, email address, or company name. Retu
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `hubspot_search_contacts`, `hubspot_retrieve_contact`, and `hubspot_list_contact_properties` available
+- MCP tools `search_crm_objects` (`objectType: "contacts"`), `get_crm_objects` (`objectType: "contacts"`), and `search_properties` (`objectType: "contacts"`) available
 
 ## Steps
 
@@ -22,9 +22,9 @@ Search for contacts in HubSpot CRM by name, email address, or company name. Retu
    - If a specific field is requested, search that field
    - Otherwise, search by `firstname`, `lastname`, and `email` across multiple filter groups
 
-2. **Execute the search** using `hubspot_search_contacts`
+2. **Execute the search** using `search_crm_objects` (`objectType: "contacts"`)
 
-   Call `hubspot_search_contacts` with the constructed `filterGroups`, `limit=100`, and sort by `lastname` ascending.
+   Call `search_crm_objects` (`objectType: "contacts"`) with the constructed `filterGroups`, `limit=100`, and sort by `lastname` ascending.
 
 3. **Optionally filter by lifecycle stage**
 
@@ -167,9 +167,9 @@ Please wait a moment and try again.
 
 | Tool | Purpose |
 |------|---------|
-| `hubspot_search_contacts` | Search contacts by name, email, or company |
-| `hubspot_retrieve_contact` | Get full contact details for single results |
-| `hubspot_access_associations` | Get associated companies, deals, and tickets |
+| `search_crm_objects` (`objectType: "contacts"`) | Search contacts by name, email, or company |
+| `get_crm_objects` (`objectType: "contacts"`) | Get full contact details for single results |
+| `search_crm_objects` (`associatedWith` filter) | Get associated companies, deals, and tickets |
 
 ## Related Commands
 

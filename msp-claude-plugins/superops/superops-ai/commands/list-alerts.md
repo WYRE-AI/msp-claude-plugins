@@ -8,6 +8,13 @@ arguments: [client_id, severity, status, asset_id, limit]
 
 List active RMM alerts across all clients or filtered by specific criteria.
 
+## How this runs through Conduit
+
+The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
+`superops_custom_query` (admin tier) sends the GraphQL query shown in the steps below. It cannot change state, but it can read anything the token can see.
+
+Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the alert step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
+
 ## Prerequisites
 
 - Valid SuperOps.ai API token configured
