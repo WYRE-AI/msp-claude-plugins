@@ -67,6 +67,9 @@ invoice line."
 - **Working an invoice itself** — creating, sending, or querying invoices is
   the accounting connector's surface; use `xero-invoices` or
   `qbo-invoices`.
+- **Renewal or price-increase talking points** for a client conversation:
+  use [Renewal and Price-Increase Prep](../renewal-and-price-increase-prep/SKILL.md),
+  which composes this skill with Margin Analysis.
 
 ## Connected Systems
 
@@ -253,3 +256,4 @@ MATCHED — No Issues
 - [`shared/skills/billing-reconciliation`](../../../shared/skills/billing-reconciliation/SKILL.md) — Pax8 subscription vs. accounting invoice reconciliation (distribution layer, not PSA)
 - [`license-true-up`](../license-true-up/SKILL.md) — Pax8/Sherweb subscription seats vs. billed vs. actually deployed seats
 - [`margin-analysis`](../margin-analysis/SKILL.md) — turns reconciled revenue into per-client margin once billing is confirmed accurate
+- [`renewal-and-price-increase-prep`](../renewal-and-price-increase-prep/SKILL.md): composes this skill and Margin Analysis into renewal or price-increase talking points
