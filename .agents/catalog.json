@@ -30,10 +30,10 @@
     }
   },
   "totals": {
-    "packs": 87,
-    "skills": 394,
-    "commands": 313,
-    "agents": 154
+    "packs": 105,
+    "skills": 474,
+    "commands": 314,
+    "agents": 172
   },
   "packs": [
     {
@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.12",
+      "version": "0.2.13",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -624,7 +624,7 @@
     {
       "name": "blumira",
       "displayName": "Blumira",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
       "category": "security",
       "tags": [
@@ -1791,7 +1791,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -2384,7 +2384,7 @@
     {
       "name": "proofpoint-essentials",
       "displayName": "Proofpoint Essentials",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
       "category": "email-security",
       "tags": [
@@ -2764,7 +2764,7 @@
     {
       "name": "salesbuildr",
       "displayName": "Salesbuildr",
-      "version": "1.1.10",
+      "version": "1.1.11",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
       "category": "crm",
       "tags": [
@@ -2988,7 +2988,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.10",
+      "version": "0.3.11",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
@@ -5592,6 +5592,805 @@
         }
       ],
       "agents": []
+    },
+    {
+      "name": "ai-org-admin",
+      "displayName": "Ai Org Admin",
+      "version": "1.0.0",
+      "description": "Anthropic Admin API - read-only review of a client's Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed",
+      "category": "productivity",
+      "tags": [
+        "anthropic",
+        "claude",
+        "ai-governance",
+        "spend",
+        "seats",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/anthropic-admin/ai-org-admin",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "claude-code-adoption",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/skills/claude-code-adoption/SKILL.md"
+        },
+        {
+          "id": "key-and-audit-review",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/skills/key-and-audit-review/SKILL.md"
+        },
+        {
+          "id": "seat-inventory",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/skills/seat-inventory/SKILL.md"
+        },
+        {
+          "id": "spend-review",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/skills/spend-review/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "anthropic-org-reviewer",
+          "path": "msp-claude-plugins/anthropic-admin/ai-org-admin/agents/anthropic-org-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "openai-admin",
+      "displayName": "Openai Admin",
+      "version": "1.0.0",
+      "description": "OpenAI Admin API - read-only review of a client's OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log",
+      "category": "productivity",
+      "tags": [
+        "openai",
+        "chatgpt",
+        "ai-governance",
+        "spend",
+        "seats",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/openai-admin/openai-admin",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/openai-admin/openai-admin/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "seat-key-inventory",
+          "path": "msp-claude-plugins/openai-admin/openai-admin/skills/seat-key-inventory/SKILL.md"
+        },
+        {
+          "id": "security-review",
+          "path": "msp-claude-plugins/openai-admin/openai-admin/skills/security-review/SKILL.md"
+        },
+        {
+          "id": "spend-review",
+          "path": "msp-claude-plugins/openai-admin/openai-admin/skills/spend-review/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "openai-org-reviewer",
+          "path": "msp-claude-plugins/openai-admin/openai-admin/agents/openai-org-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "jamf",
+      "displayName": "Jamf",
+      "version": "1.0.0",
+      "description": "Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage",
+      "category": "rmm",
+      "tags": [
+        "jamf",
+        "jamf-pro",
+        "apple",
+        "macos",
+        "ios",
+        "mdm",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/jamf/jamf",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/jamf/jamf/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "device-compliance",
+          "path": "msp-claude-plugins/jamf/jamf/skills/device-compliance/SKILL.md"
+        },
+        {
+          "id": "device-offboarding",
+          "path": "msp-claude-plugins/jamf/jamf/skills/device-offboarding/SKILL.md"
+        },
+        {
+          "id": "patch-management",
+          "path": "msp-claude-plugins/jamf/jamf/skills/patch-management/SKILL.md"
+        },
+        {
+          "id": "user-onboarding",
+          "path": "msp-claude-plugins/jamf/jamf/skills/user-onboarding/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "jamf-posture-auditor",
+          "path": "msp-claude-plugins/jamf/jamf/agents/jamf-posture-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "acronis",
+      "displayName": "Acronis",
+      "version": "1.0.0",
+      "description": "Acronis Cyber Protect Cloud - backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting",
+      "category": "bcdr",
+      "tags": [
+        "acronis",
+        "backup",
+        "bcdr",
+        "edr",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/acronis/acronis",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/acronis/acronis/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "backup-health",
+          "path": "msp-claude-plugins/acronis/acronis/skills/backup-health/SKILL.md"
+        },
+        {
+          "id": "edr-incidents",
+          "path": "msp-claude-plugins/acronis/acronis/skills/edr-incidents/SKILL.md"
+        },
+        {
+          "id": "protection-coverage",
+          "path": "msp-claude-plugins/acronis/acronis/skills/protection-coverage/SKILL.md"
+        },
+        {
+          "id": "tenants-and-usage",
+          "path": "msp-claude-plugins/acronis/acronis/skills/tenants-and-usage/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "acronis-backup-health-reviewer",
+          "path": "msp-claude-plugins/acronis/acronis/agents/acronis-backup-health-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "bitwarden",
+      "displayName": "Bitwarden",
+      "version": "1.0.0",
+      "description": "Bitwarden - read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and subscription (never vault items)",
+      "category": "security",
+      "tags": [
+        "bitwarden",
+        "password-manager",
+        "access-review",
+        "audit",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/bitwarden/bitwarden",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "event-log-review",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/skills/event-log-review/SKILL.md"
+        },
+        {
+          "id": "license-reconciliation",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/skills/license-reconciliation/SKILL.md"
+        },
+        {
+          "id": "offboarding-access-review",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/skills/offboarding-access-review/SKILL.md"
+        },
+        {
+          "id": "security-posture",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/skills/security-posture/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "bitwarden-org-auditor",
+          "path": "msp-claude-plugins/bitwarden/bitwarden/agents/bitwarden-org-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "1password",
+      "displayName": "1password",
+      "version": "1.0.0",
+      "description": "1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)",
+      "category": "security",
+      "tags": [
+        "1password",
+        "password-manager",
+        "access-review",
+        "audit",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/1password/1password",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "account-hygiene",
+          "path": "msp-claude-plugins/1password/1password/skills/account-hygiene/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/1password/1password/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "offboarding-review",
+          "path": "msp-claude-plugins/1password/1password/skills/offboarding-review/SKILL.md"
+        },
+        {
+          "id": "signin-triage",
+          "path": "msp-claude-plugins/1password/1password/skills/signin-triage/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "access-reviewer",
+          "path": "msp-claude-plugins/1password/1password/agents/access-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "zabbix",
+      "displayName": "Zabbix",
+      "version": "1.0.0",
+      "description": "Zabbix - read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability reporting",
+      "category": "network",
+      "tags": [
+        "zabbix",
+        "monitoring",
+        "noc",
+        "sla",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/zabbix/zabbix",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/zabbix/zabbix/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "monitoring-coverage",
+          "path": "msp-claude-plugins/zabbix/zabbix/skills/monitoring-coverage/SKILL.md"
+        },
+        {
+          "id": "problem-triage",
+          "path": "msp-claude-plugins/zabbix/zabbix/skills/problem-triage/SKILL.md"
+        },
+        {
+          "id": "sla-reporting",
+          "path": "msp-claude-plugins/zabbix/zabbix/skills/sla-reporting/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "noc-triage-analyst",
+          "path": "msp-claude-plugins/zabbix/zabbix/agents/noc-triage-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "lastpass",
+      "displayName": "Lastpass",
+      "version": "1.0.0",
+      "description": "LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)",
+      "category": "security",
+      "tags": [
+        "lastpass",
+        "password-manager",
+        "access-review",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/lastpass/lastpass",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/lastpass/lastpass/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "msp-billing",
+          "path": "msp-claude-plugins/lastpass/lastpass/skills/msp-billing/SKILL.md"
+        },
+        {
+          "id": "offboarding-review",
+          "path": "msp-claude-plugins/lastpass/lastpass/skills/offboarding-review/SKILL.md"
+        },
+        {
+          "id": "privileged-access",
+          "path": "msp-claude-plugins/lastpass/lastpass/skills/privileged-access/SKILL.md"
+        },
+        {
+          "id": "security-posture",
+          "path": "msp-claude-plugins/lastpass/lastpass/skills/security-posture/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "posture-sweep",
+          "path": "msp-claude-plugins/lastpass/lastpass/agents/posture-sweep.md"
+        }
+      ]
+    },
+    {
+      "name": "moovila",
+      "displayName": "Moovila",
+      "version": "1.0.0",
+      "description": "Moovila - read-only project, budget, task, time entry and resource reporting for project profitability and billing reconciliation",
+      "category": "psa",
+      "tags": [
+        "moovila",
+        "project-management",
+        "profitability",
+        "time-tracking",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/moovila/moovila",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/moovila/moovila/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "project-health",
+          "path": "msp-claude-plugins/moovila/moovila/skills/project-health/SKILL.md"
+        },
+        {
+          "id": "project-profitability",
+          "path": "msp-claude-plugins/moovila/moovila/skills/project-profitability/SKILL.md"
+        },
+        {
+          "id": "resource-utilization",
+          "path": "msp-claude-plugins/moovila/moovila/skills/resource-utilization/SKILL.md"
+        },
+        {
+          "id": "time-reconciliation",
+          "path": "msp-claude-plugins/moovila/moovila/skills/time-reconciliation/SKILL.md"
+        }
+      ],
+      "commands": [
+        {
+          "id": "project-review",
+          "path": "msp-claude-plugins/moovila/moovila/commands/project-review.md"
+        }
+      ],
+      "agents": [
+        {
+          "id": "project-portfolio-reviewer",
+          "path": "msp-claude-plugins/moovila/moovila/agents/project-portfolio-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "webroot",
+      "displayName": "Webroot",
+      "version": "1.0.0",
+      "description": "Webroot (OpenText) GSM - read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits",
+      "category": "security",
+      "tags": [
+        "webroot",
+        "opentext",
+        "endpoint-protection",
+        "antivirus",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/webroot/webroot",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/webroot/webroot/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "console-audit",
+          "path": "msp-claude-plugins/webroot/webroot/skills/console-audit/SKILL.md"
+        },
+        {
+          "id": "endpoint-health",
+          "path": "msp-claude-plugins/webroot/webroot/skills/endpoint-health/SKILL.md"
+        },
+        {
+          "id": "threat-review",
+          "path": "msp-claude-plugins/webroot/webroot/skills/threat-review/SKILL.md"
+        },
+        {
+          "id": "usage-reconciliation",
+          "path": "msp-claude-plugins/webroot/webroot/skills/usage-reconciliation/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "site-security-reviewer",
+          "path": "msp-claude-plugins/webroot/webroot/agents/site-security-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "cove",
+      "displayName": "Cove",
+      "version": "1.0.0",
+      "description": "Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review",
+      "category": "bcdr",
+      "tags": [
+        "cove",
+        "n-able",
+        "backup",
+        "bcdr",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/cove/cove",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "access-review",
+          "path": "msp-claude-plugins/cove/cove/skills/access-review/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/cove/cove/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "backup-health",
+          "path": "msp-claude-plugins/cove/cove/skills/backup-health/SKILL.md"
+        },
+        {
+          "id": "customer-inventory",
+          "path": "msp-claude-plugins/cove/cove/skills/customer-inventory/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "backup-health-triager",
+          "path": "msp-claude-plugins/cove/cove/agents/backup-health-triager.md"
+        }
+      ]
+    },
+    {
+      "name": "unitrends-uniview",
+      "displayName": "Unitrends Uniview",
+      "version": "1.0.0",
+      "description": "Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup",
+      "category": "bcdr",
+      "tags": [
+        "unitrends",
+        "uniview",
+        "kaseya",
+        "backup",
+        "bcdr",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "backup-health-triage",
+          "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview/skills/backup-health-triage/SKILL.md"
+        },
+        {
+          "id": "protection-coverage",
+          "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview/skills/protection-coverage/SKILL.md"
+        },
+        {
+          "id": "spanning-saas-backup",
+          "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview/skills/spanning-saas-backup/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "backup-health-reviewer",
+          "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview/agents/backup-health-reviewer.md"
+        }
+      ]
+    },
+    {
+      "name": "gogetssl",
+      "displayName": "Gogetssl",
+      "version": "1.0.0",
+      "description": "GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation",
+      "category": "infrastructure",
+      "tags": [
+        "gogetssl",
+        "ssl",
+        "certificates",
+        "renewals",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/gogetssl/gogetssl",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/gogetssl/gogetssl/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "billing-reconciliation",
+          "path": "msp-claude-plugins/gogetssl/gogetssl/skills/billing-reconciliation/SKILL.md"
+        },
+        {
+          "id": "certificate-expiry",
+          "path": "msp-claude-plugins/gogetssl/gogetssl/skills/certificate-expiry/SKILL.md"
+        },
+        {
+          "id": "renewal-prep",
+          "path": "msp-claude-plugins/gogetssl/gogetssl/skills/renewal-prep/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "ssl-renewal-planner",
+          "path": "msp-claude-plugins/gogetssl/gogetssl/agents/ssl-renewal-planner.md"
+        }
+      ]
+    },
+    {
+      "name": "smileback",
+      "displayName": "Smileback",
+      "version": "1.0.0",
+      "description": "SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching",
+      "category": "productivity",
+      "tags": [
+        "smileback",
+        "csat",
+        "nps",
+        "customer-feedback",
+        "qbr",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/smileback/smileback",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/smileback/smileback/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "csat-qbr-summary",
+          "path": "msp-claude-plugins/smileback/smileback/skills/csat-qbr-summary/SKILL.md"
+        },
+        {
+          "id": "detractor-follow-up",
+          "path": "msp-claude-plugins/smileback/smileback/skills/detractor-follow-up/SKILL.md"
+        },
+        {
+          "id": "technician-csat",
+          "path": "msp-claude-plugins/smileback/smileback/skills/technician-csat/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "smileback-qbr-analyst",
+          "path": "msp-claude-plugins/smileback/smileback/agents/smileback-qbr-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "myitprocess",
+      "displayName": "Myitprocess",
+      "version": "1.0.0",
+      "description": "Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings",
+      "category": "productivity",
+      "tags": [
+        "myitprocess",
+        "kaseya",
+        "vcio",
+        "qbr",
+        "roadmap",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/myitprocess/myitprocess",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "alignment-reviews",
+          "path": "msp-claude-plugins/myitprocess/myitprocess/skills/alignment-reviews/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/myitprocess/myitprocess/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "qbr-prep",
+          "path": "msp-claude-plugins/myitprocess/myitprocess/skills/qbr-prep/SKILL.md"
+        },
+        {
+          "id": "roadmap",
+          "path": "msp-claude-plugins/myitprocess/myitprocess/skills/roadmap/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "vcio-review-prep",
+          "path": "msp-claude-plugins/myitprocess/myitprocess/agents/vcio-review-prep.md"
+        }
+      ]
+    },
+    {
+      "name": "alga-psa",
+      "displayName": "Alga PSA",
+      "version": "1.0.0",
+      "description": "Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance",
+      "category": "psa",
+      "tags": [
+        "alga",
+        "alga-psa",
+        "psa",
+        "ticketing",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/alga-psa/alga-psa",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "client-review",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/skills/client-review/SKILL.md"
+        },
+        {
+          "id": "project-status",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/skills/project-status/SKILL.md"
+        },
+        {
+          "id": "ticket-triage",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/skills/ticket-triage/SKILL.md"
+        },
+        {
+          "id": "time-and-billing",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/skills/time-and-billing/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "alga-client-review-analyst",
+          "path": "msp-claude-plugins/alga-psa/alga-psa/agents/alga-client-review-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "dubber",
+      "displayName": "Dubber",
+      "version": "1.0.0",
+      "description": "Dubber call recording - capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and webhook health",
+      "category": "productivity",
+      "tags": [
+        "dubber",
+        "call-recording",
+        "compliance",
+        "voip",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/dubber/dubber",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/dubber/dubber/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "call-retrieval",
+          "path": "msp-claude-plugins/dubber/dubber/skills/call-retrieval/SKILL.md"
+        },
+        {
+          "id": "recording-coverage",
+          "path": "msp-claude-plugins/dubber/dubber/skills/recording-coverage/SKILL.md"
+        },
+        {
+          "id": "user-lifecycle",
+          "path": "msp-claude-plugins/dubber/dubber/skills/user-lifecycle/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "recording-compliance-auditor",
+          "path": "msp-claude-plugins/dubber/dubber/agents/recording-compliance-auditor.md"
+        }
+      ]
+    },
+    {
+      "name": "mspcfo",
+      "displayName": "Mspcfo",
+      "version": "1.0.0",
+      "description": "MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)",
+      "category": "accounting",
+      "tags": [
+        "mspcfo",
+        "profitability",
+        "finance",
+        "agreements",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/mspcfo/mspcfo",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "agreement-pricing-review",
+          "path": "msp-claude-plugins/mspcfo/mspcfo/skills/agreement-pricing-review/SKILL.md"
+        },
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/mspcfo/mspcfo/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "client-profitability",
+          "path": "msp-claude-plugins/mspcfo/mspcfo/skills/client-profitability/SKILL.md"
+        },
+        {
+          "id": "technician-utilization",
+          "path": "msp-claude-plugins/mspcfo/mspcfo/skills/technician-utilization/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "profitability-review-analyst",
+          "path": "msp-claude-plugins/mspcfo/mspcfo/agents/profitability-review-analyst.md"
+        }
+      ]
     }
   ]
 }

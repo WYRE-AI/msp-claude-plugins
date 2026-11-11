@@ -1,0 +1,11 @@
+{
+  "name": "mspcfo",
+  "version": "1.0.0",
+  "description": "MSPCFO — MSP profitability from PSA data: client P&L, agreement health and pricing, technician utilization. Connects to MSPCFO's hosted MCP through Conduit with MSPCFO sign-in (OAuth), no API key",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

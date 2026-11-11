@@ -11,7 +11,7 @@ already cited from `SKILL.md`.
 
 Allowed: `ncentral_server_info`, `ncentral_validate_token`,
 `ncentral_health`, `ncentral_status`, `ncentral_navigate`,
-`ncentral_back`, `ncentral_list_service_orgs`, `ncentral_list_customers`,
+`ncentral_list_service_orgs`, `ncentral_list_customers`,
 `ncentral_get_customer`, `ncentral_list_sites`, `ncentral_get_site`,
 `ncentral_list_org_units`, `ncentral_get_org_unit`,
 `ncentral_list_org_unit_children`, `ncentral_list_devices`,
@@ -105,8 +105,9 @@ still do not invent names.
   reports Defender status through RocketCyber, not MDE itself.
 - No Datto EDR plugin. Datto RMM audit is inventory, not EDR telemetry.
 - No ScreenConnect / ConnectWise Control plugin.
-- `WYRE-AI/bitdefender-mcp` and `WYRE-AI/eset-protect-mcp` exist as
-  sidecar repos, but neither has a marketplace pack on `origin/main`.
+- Bitdefender GravityZone and ESET PROTECT are live Conduit connectors
+  but have no marketplace pack on `origin/main`. If
+  `conduit__search_tools` finds them, use only their list/get read tools.
 - No Fortinet, Palo Alto, or SonicWall firewall plugin. Meraki MX L3
   get is the curated firewall read; Auvik and Domotz can identify
   devices, not manage those vendors' rulesets.
