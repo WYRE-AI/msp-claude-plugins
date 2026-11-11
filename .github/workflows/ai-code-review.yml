@@ -36,7 +36,7 @@ jobs:
       - name: Run OpenCodeReview
         uses: alibaba/open-code-review@375f64cd6f67a48a135da83cfcf59c52669a09cb  # v1.13.3
         with:
-          ocr_version: '1.11.1'
+          ocr_version: '1.13.3'
           llm_url: ${{ secrets.OCR_LLM_URL }}
           llm_auth_token: ${{ secrets.OCR_LLM_AUTH_TOKEN }}
           llm_model: ${{ secrets.OCR_LLM_MODEL }}
