@@ -35,6 +35,8 @@ it.
 
 ## Anti-triggers
 
+- **Portfolio client churn risk ranking:** use `finance-pack-churn-scanner`.
+
 - **A platform's SLA policy configuration** — policy fields, business-hours
   calendars, and how a vendor computes its own due dates are that
   connector's surface; use `freshdesk-sla-business-hours`, `autotask-tickets`,
@@ -129,6 +131,8 @@ figures or invent a ticket's breach state.
   audit trail lives with the ticket, not just in chat.
 
 ## Related Skills
+
+- `finance-pack-churn-scanner` (Churn Scanner, in the separately installed `finance-pack` plugin): portfolio client retention risk ranking.
 
 - [Dispatch Prioritization](../dispatch-prioritization/SKILL.md) — scoring and
   assigning the unassigned queue, of which SLA proximity is one factor

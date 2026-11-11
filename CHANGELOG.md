@@ -71,6 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`finance-pack` 0.1.6: Churn Scanner ([WYREAI-722](https://linear.app/wyre-ai/issue/WYREAI-722)).** Adds read-only, discovery-first client retention risk ranking with explicit thresholds, source coverage, and optional sentiment (CrewHu or SmileBack) and RMM proxies.
+- **`ops-pack` 0.1.4:** Adds reciprocal routing from SLA Escalation Playbooks to Churn Scanner for portfolio churn risk reviews.
 - **`finance-pack` 0.1.5: Renewal and Price-Increase Prep ([WYREAI-734](https://linear.app/wyre-ai/issue/WYREAI-734/conduit-skill-renewal-and-price-increase-prep)).** Adds a companion skill that composes Agreement Reconciliation and Margin Analysis into per-client talking points for a renewal or price-increase conversation. It does not invent rates or amounts, and it produces a partial brief when a source is missing.
 
 - **`assets-pack` 0.1.5: Refresh Quote List ([WYREAI-733](https://linear.app/wyre-ai/issue/WYREAI-733/conduit-skill-hardware-refresh-quote-list)).** Adds a companion skill that turns a Refresh Cycle Planning calendar into a per-client list of devices to quote, matched against a ScalePad Quoter, Kaseya Quote Manager, or ConnectWise PSA product catalog, and handing off to `scalepad-quoter` or `connectwise-cpq-quotes`. Read-only: it drafts the list and does not create quotes. Amounts appear only when a catalog tool returns them.
