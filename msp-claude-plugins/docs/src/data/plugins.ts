@@ -1404,7 +1404,7 @@ export const plugins: Plugin[] = [
     agents: [],
     commands: [
       { name: '/org-health-check', description: 'Full health check for one Proofpoint Essentials customer org' },
-      { name: '/search-org', description: 'Resolve a Proofpoint Essentials customer org by name or domain and show its details' }
+      { name: '/search-org', description: 'Resolve a Proofpoint Essentials customer org by its primary domain and show its details' }
     ],
     apiInfo: {
       baseUrl: '',

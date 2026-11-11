@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.13",
+      "version": "0.2.14",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -1791,7 +1791,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -2384,7 +2384,7 @@
     {
       "name": "proofpoint-essentials",
       "displayName": "Proofpoint Essentials",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
       "category": "email-security",
       "tags": [
@@ -2764,7 +2764,7 @@
     {
       "name": "salesbuildr",
       "displayName": "Salesbuildr",
-      "version": "1.1.11",
+      "version": "1.1.12",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
       "category": "crm",
       "tags": [
@@ -2988,7 +2988,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.11",
+      "version": "0.3.12",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
@@ -3936,7 +3936,7 @@
     {
       "name": "xero",
       "displayName": "Xero",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
       "category": "accounting",
       "tags": [
@@ -4529,7 +4529,7 @@
     {
       "name": "ncentral",
       "displayName": "Ncentral",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
       "category": "rmm",
       "tags": [
@@ -5414,7 +5414,7 @@
     {
       "name": "scalepad",
       "displayName": "Scalepad",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
       "category": "productivity",
       "tags": [

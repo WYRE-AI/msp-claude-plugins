@@ -78,28 +78,33 @@ subsequent call for that org to the resolved pod.
 
 ### Endpoint discovery — resolve the pod before doing anything else
 
-Before calling any org-scoped resource for an organization you have not
-already resolved, call `proofpoint_essentials_endpoint_resolve` (backed by
-the discovery endpoint under `us1`) with the org's primary domain or org
-name. The response identifies the regional pod that hosts the org. Cache
-that mapping for the session — do not re-resolve on every call, but do not
-assume yesterday's mapping still holds after a reseller migrates a customer
-between pods.
+Before calling any org-scoped tool for an organization you have not
+already resolved, call `proofpoint_essentials_endpoint_discover` with the
+org's primary `domain`. The response identifies the regional pod that hosts
+the org. Cache that mapping for the session — do not re-resolve on every
+call, but do not assume yesterday's mapping still holds after a reseller
+migrates a customer between pods.
+
+Through MCP, the region is not a per-call argument. Every tool is sent to
+the region set on the Conduit connection (`us1` when left blank). If
+discovery returns a different pod, the connection's region has to change
+before that org's tools will work.
 
 **Every workflow in this plugin starts here.** `org-management`,
-`user-management`, and `reporting` all assume the caller already knows which
-region an org lives on. If you skip discovery and guess `us1`, an org on
-`eu1` fails outright rather than silently returning empty data.
+`user-management`, and `reporting` all assume the connection points at the
+region the org lives on. If it points at `us1` and the org is on `eu1`,
+calls fail outright rather than silently returning empty data.
 
 ## Common Workflows
 
 ### First contact with an unfamiliar org
 
-1. Call `proofpoint_essentials_endpoint_resolve` with the org's primary
-   domain to get its regional pod.
-2. Build every subsequent request's base URL from that region.
-3. Call `proofpoint_essentials_org_get` to confirm the org resolves and pull
-   its domain list before doing anything else.
+1. Call `proofpoint_essentials_endpoint_discover` with the org's primary
+   `domain` to get its regional pod.
+2. Confirm the Conduit connection's region matches that pod. (When calling
+   the REST API by hand, build every request's base URL from it.)
+3. Call `proofpoint_essentials_org_get` with the same `domain` to confirm
+   the org resolves and pull its domain list before doing anything else.
 
 ### Batch operations and 207 Multi-Status
 

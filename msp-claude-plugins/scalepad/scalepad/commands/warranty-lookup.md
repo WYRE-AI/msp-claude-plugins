@@ -11,7 +11,6 @@ Look up warranty coverage and lifecycle status for a client's hardware, flagging
 ## Prerequisites
 
 - ScalePad MCP server connected with a valid `X_SCALEPAD_API_KEY`
-- Optional discovery: `scalepad_navigate` with `domain: "lifecycle-manager"` lists the relevant tools
 - Tools used: `scalepad_lm_clients_lookup`, `scalepad_lm_hardware_list`, `scalepad_lm_hardware_lifecycles_list`, `scalepad_lm_hardware_overview_get`, `scalepad_lm_warranty_pricing_list`
 
 ## Steps
