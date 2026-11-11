@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 105,
-    "skills": 474,
+    "skills": 476,
     "commands": 314,
     "agents": 172
   },
@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.13",
+      "version": "0.2.14",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -1791,7 +1791,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.9",
+      "version": "0.2.10",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -2384,7 +2384,7 @@
     {
       "name": "proofpoint-essentials",
       "displayName": "Proofpoint Essentials",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "description": "Proofpoint Essentials - MSP org, domain, user, licensing, and reporting management",
       "category": "email-security",
       "tags": [
@@ -2764,7 +2764,7 @@
     {
       "name": "salesbuildr",
       "displayName": "Salesbuildr",
-      "version": "1.1.11",
+      "version": "1.1.12",
       "description": "SalesBuildr CRM - contacts, companies, opportunities, quotes",
       "category": "crm",
       "tags": [
@@ -2988,7 +2988,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.11",
+      "version": "0.3.12",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
@@ -3936,7 +3936,7 @@
     {
       "name": "xero",
       "displayName": "Xero",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
       "category": "accounting",
       "tags": [
@@ -4529,7 +4529,7 @@
     {
       "name": "ncentral",
       "displayName": "Ncentral",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
       "category": "rmm",
       "tags": [
@@ -4735,7 +4735,7 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "description": "Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
       "category": "workflow-pack",
       "tags": [
@@ -4767,6 +4767,10 @@
         {
           "id": "containment-playbooks",
           "path": "msp-claude-plugins/secops-pack/skills/containment-playbooks/SKILL.md"
+        },
+        {
+          "id": "shadow-ai",
+          "path": "msp-claude-plugins/secops-pack/skills/shadow-ai/SKILL.md"
         }
       ],
       "commands": [
@@ -5301,7 +5305,7 @@
     {
       "name": "assets-pack",
       "displayName": "IT Asset Lifecycle",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5329,6 +5333,10 @@
         {
           "id": "refresh-cycle-planning",
           "path": "msp-claude-plugins/assets-pack/skills/refresh-cycle-planning/SKILL.md"
+        },
+        {
+          "id": "refresh-quote-list",
+          "path": "msp-claude-plugins/assets-pack/skills/refresh-quote-list/SKILL.md"
         },
         {
           "id": "warranty-tracking",
@@ -5420,7 +5428,7 @@
     {
       "name": "scalepad",
       "displayName": "Scalepad",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
       "category": "productivity",
       "tags": [

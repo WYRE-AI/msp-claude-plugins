@@ -16,8 +16,7 @@ when_to_use: >-
 Backup Radar aggregates backup job results across vendors and scores
 their health. The API surface is read-only (v3): backup health and
 backup device inventory per client. Regional: `us` (default) or `eu`
-via `X-ScalePad-Region`. Discover this domain's tools with
-`scalepad_navigate` (domain `backup-radar`). Requires an active
+via `X-ScalePad-Region`. Its tools are named `scalepad_br_*`. Requires an active
 Backup Radar subscription
 (402 otherwise).
 

@@ -39,15 +39,15 @@ first (see `api-patterns`) before requesting a report.
 
 ### Inbound vs. outbound
 
-Reporting is split by direction:
+Reporting covers two directions:
 
 | Direction | What it measures |
 |-----------|-------------------|
 | Inbound | Mail arriving at the org's protected domains — volume, and how much was allowed vs. filtered |
 | Outbound | Mail sent from the org's protected domains through Essentials |
 
-Request each direction explicitly; a report call scoped to `inbound` will
-not also return outbound figures.
+The MCP tool has no `direction` argument. Check which direction(s) the
+returned series covers before reporting on either one.
 
 ### It's a time series, not a single snapshot
 
@@ -61,21 +61,22 @@ they look like they mean.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_essentials_reporting_get` | Get inbound or outbound mail flow time-series for an org | `org_name`, `direction` (`inbound`\|`outbound`), `start_date`, `end_date` |
+| `proofpoint_essentials_reporting_get` | Get the mail flow time-series for an org | `orgDomain`, `start` and `end` (`YYYY-MM-DD`, optional), `params` (optional) |
 
-There is a single reporting tool covering both directions — call it twice
-(once per direction) to build a full inbound + outbound picture.
+There is a single reporting tool. `orgDomain` is the org's primary domain.
+Any other Essentials report query parameter goes in `params`, which is
+passed to the API unchanged.
 
 ## Common Workflows
 
 ### Monthly MSP status report for a customer
 
-1. Confirm the org's regional pod is resolved.
-2. Call `proofpoint_essentials_reporting_get` with `direction=inbound` for
-   the reporting month.
-3. Call `proofpoint_essentials_reporting_get` with `direction=outbound` for
-   the same window.
-4. Compare against the prior month's figures (re-run both calls for the
+1. Confirm the Conduit connection's region is the org's regional pod.
+2. Call `proofpoint_essentials_reporting_get` with the org's `orgDomain`
+   and `start`/`end` set to the reporting month.
+3. Split the returned series into inbound and outbound, and say so if
+   either direction is missing from the response.
+4. Compare against the prior month's figures (re-run the call for the
    prior period, or reuse a saved result) to show trend, not just a
    snapshot.
 5. Present volume and any notable delta — do not silently drop a direction
@@ -97,7 +98,7 @@ There is a single reporting tool covering both directions — call it twice
 
 | Symptom | Cause | Resolution |
 |---------|-------|------------|
-| Empty series for an active, known-good org | Wrong regional pod, or date range outside retained reporting data | Re-run endpoint discovery; narrow the date range |
+| Empty series for an active, known-good org | The connection's region is not the org's pod, or the date range is outside retained reporting data | Check with `proofpoint_essentials_endpoint_discover`; narrow the date range |
 | Inbound and outbound totals don't reconcile with the customer's own mail platform counts | Different measurement points (Essentials counts what transited Essentials, not total mailbox traffic) | State the metric's scope explicitly rather than presenting it as a total traffic count |
 | Report looks flat/zero right after onboarding | Domain not yet DNS-verified, so mail isn't routing through Essentials yet | Confirm domain verification state before troubleshooting reporting itself |
 
