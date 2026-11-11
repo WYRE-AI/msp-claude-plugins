@@ -144,6 +144,33 @@ class InventoryFixtures(unittest.TestCase):
             self.assertEqual(result[1],'partial')
             self.assertNotIn('cu.u',result[2])
 
+    def test_fifo_manifest_does_not_block(self):
+        for os_name, profile in [('lin', 'home/a/.config/google-chrome'),
+                                 ('mac', 'Users/a/Library/Application Support/Google/Chrome')]:
+            with self.subTest(os_name=os_name):
+                folder = self.directory(profile+'/Default/Extensions/id/1')
+                os.mkfifo(folder/'manifest.json')
+                # run_scan enforces a subprocess timeout and checks no fixture changes.
+                result = self.run_scan(os_name)
+                self.assertEqual(result[1], 'partial')
+                self.assertEqual(result[2], set())
+
+    def test_literal_star_does_not_reglob_symlink(self):
+        with tempfile.TemporaryDirectory(prefix='sai-outside-') as outside:
+            target = Path(outside)/'1'
+            target.mkdir()
+            (target/'manifest.json').write_text(json.dumps({'name': 'ChatGPT'}))
+            for os_name, profile in [('lin', 'home/a/.config/google-chrome'),
+                                     ('mac', 'Users/a/Library/Application Support/Google/Chrome')]:
+                with self.subTest(os_name=os_name):
+                    extensions = self.directory(profile+'/Default/Extensions')
+                    self.file(profile+'/Default/Extensions/*/1/manifest.json',
+                              json.dumps({'name': 'Unrelated Extension'}))
+                    (extensions/'evil').symlink_to(outside)
+                    result = self.run_scan(os_name)
+                    self.assertEqual(result[1], 'partial')
+                    self.assertEqual(result[2], set())
+
     def test_large_manifest_partial(self):
         self.file('Users/alice/Library/Application Support/Google/Chrome/Default/Extensions/id/1/manifest.json',' ' * 1048577)
         self.assertEqual(self.run_scan('mac')[1],'partial')

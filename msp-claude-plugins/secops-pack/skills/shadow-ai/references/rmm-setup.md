@@ -11,6 +11,28 @@ field timestamp, then schedule daily in the console. Use SYSTEM on Windows
 Disk Access to the RMM agent where required. These are deployment recommendations,
 not claims that every RMM has identical controls.
 
+The scanners enumerate **every user profile's** browser extensions, IDE plugins,
+and per-user installs. This is employee/endpoint monitoring. Before deploying,
+the MSP must confirm the client's written authorization and any employee-notice,
+works-council or GDPR obligations. Results carry no usernames (`.u` means one or
+more users) and are not proof of usage.
+
+The PowerShell and macOS scanners have not been run on real Windows or macOS
+endpoints, and no live RMM field write has been exercised. Validation covers
+only Linux fixtures, a real non-root Linux run, and a pwsh fixture run.
+
+Shell scanners pin PATH to `/usr/bin:/bin:/usr/sbin:/sbin`. Production macOS uses
+`/usr/bin/plutil` exclusively for JSON and never invokes the Xcode CLT Python
+shim; missing plutil marks coverage partial. Linux and fixture JSON use
+`/usr/bin/python3`. If `timeout` is missing, RPM enumeration is skipped and the
+scan is partial. Regular-file checks reject special files; Python's `O_NOFOLLOW`
+narrows the TOCTOU window and `O_NONBLOCK` prevents FIFO replacement hangs.
+PowerShell resolves vendor-documented `Send-CustomField`, `Ninja-Property-Set`
+and `Set-Asset-Field` by command lookup, so the machine PATH must not include
+user-writable directories. HKU covers only loaded hives: logged-off users'
+per-user uninstall entries aren't read; filesystem profile scanning still
+covers those profiles.
+
 Windows selects `-Rmm`, `-Field`, `-Udf`, `-MaxLength`; shells select environment
 variables `RMM`, `FIELD`, `MAX_LEN`. Default adapter is stdout, length 255.
 Each OS file is standalone; do not upload the TSV or sync tool to endpoints.
@@ -20,6 +42,13 @@ detection itself performs no network access. Printing stdout alone does
 adapters exit nonzero; retain the prior timestamp as stale rather than
 assuming the field was refreshed. Do not embed endpoint-derived values in
 commands, SQL, or procedure expressions.
+
+On macOS/Linux, the NinjaOne (`ninjarmm-cli`) and macOS Syncro (`/usr/local/bin/syncro`)
+adapters run the vendor CLI by absolute path only when the binary and its parent
+directory are root-owned, not symlinks, and not group/other-writable. Otherwise
+the adapter writes nothing, notes this on stderr, and prints the result to stdout
+(fail closed). Intel Macs where Homebrew owns `/usr/local/bin` therefore fall back
+to stdout for Syncro until that directory is root-owned.
 
 ## Datto RMM
 
@@ -118,7 +147,10 @@ Create a text Asset Custom Field `ShadowAIInventory`. Add the OS script to
 the Scripts library and schedule daily as SYSTEM/root. Windows selects
 `-Rmm syncro`; it imports the agent-provided Syncro module and calls
 `Set-Asset-Field -Name ... -Value ...`. macOS selects `RMM=syncro` and uses
-`syncro set-asset-field` with quoted name/value arguments. Linux scripting
+`/usr/local/bin/syncro set-asset-field` with quoted name/value arguments.
+The absolute CLI path is documented in Syncro's
+[Mac agent restart instructions](https://docs.syncrosecure.com/agents-alerts-automations/mac-agent);
+the field-helper syntax is documented separately below. Linux scripting
 is now documented: choose **Bash**, load the RMM's Script module using its
 runner's supplied initialization, and select `RMM=syncro`; the adapter calls
 the documented `Set-Asset-Field` function. Do not invent a module path.

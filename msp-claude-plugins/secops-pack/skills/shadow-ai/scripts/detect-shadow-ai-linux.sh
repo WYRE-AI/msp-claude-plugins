@@ -1,6 +1,7 @@
 #!/bin/sh
 # shellcheck disable=SC2034
 # SC2034: TSV schema columns retained for review.
+PATH=/usr/bin:/bin:/usr/sbin:/sbin; export PATH
 OS=lin
 # BEGIN SAI SIGNATURES
 SIGNATURES=$(cat <<'SAI_SIGNATURES'
@@ -387,6 +388,7 @@ TAB=$(printf '\t')
 # Expand one component at a time, never traversing a symlink, including ancestors.
 # Each directory is capped at 2000 entries. Subshell recursion isolates variables.
 expand() (
+    set +f # Only this component-by-component trusted pattern expansion may glob.
     if [ "$(date +%s)" -gt "$DEADLINE" ]; then printf '!\n'; exit; fi
     parent=$1 rest=$2
     if [ -L "$parent" ]; then printf '!\n'; exit; fi
@@ -414,43 +416,73 @@ safe_expand() {
 }
 # Only JSON schema fields are read; endpoint strings never enter the result.
 # Python is optional; missing interpreter/malformed/oversized JSON makes scan partial.
+regular_file() {
+    [ -f "$1" ] && [ ! -L "$1" ]
+}
+file_size() {
+    regular_file "$1" || return 1
+    wc -c 2>/dev/null < "$1"
+}
+read_plutil() {
+    # Recheck immediately before each content read, including per-addon reads.
+    regular_file "$1" || { printf '!\n'; return 1; }
+    plutil_file=$1
+    shift
+    /usr/bin/plutil "$@" "$plutil_file" 2>/dev/null
+}
 json_names() {
-    if [ "$OS" = mac ] && [ -z "$ROOT" ] && [ -x /usr/bin/plutil ]; then
-        if [ "$(wc -c < "$1")" -gt 1048576 ] || ! /usr/bin/plutil -lint "$1" >/dev/null 2>&1; then printf '!\n'; return; fi
+    regular_file "$1" || { printf '!\n'; return; }
+    if [ "$OS" = mac ] && [ -z "$ROOT" ]; then
+        [ -x /usr/bin/plutil ] || { printf '!\n'; return; } # Never invoke the CLT Python shim.
+        size=$(file_size "$1") || { printf '!\n'; return; }
+        if [ "$size" -gt 1048576 ] || ! read_plutil "$1" -lint >/dev/null 2>&1; then printf '!\n'; return; fi
         if [ "$2" = firefox ]; then
-            addons=$(/usr/bin/plutil -extract addons json -o - "$1" 2>/dev/null) || { printf '!\n'; return; }
+            addons=$(read_plutil "$1" -extract addons json -o - 2>/dev/null) || { printf '!\n'; return; }
             case "$addons" in \[*) ;; *) printf '!\n'; return;; esac
             index=0
-            while /usr/bin/plutil -extract "addons.$index" json -o - "$1" >/dev/null 2>&1; do
+            while :; do
+                if [ "$(date +%s)" -gt "$DEADLINE" ]; then printf '!\n'; break; fi
+                regular_file "$1" || { printf '!\n'; break; }
+                read_plutil "$1" -extract "addons.$index" json -o - >/dev/null 2>&1 || break
                 if [ "$index" -ge 2000 ]; then printf '!\n'; break; fi
-                active=$(/usr/bin/plutil -extract "addons.$index.active" raw -o - "$1" 2>/dev/null)
+                active=$(read_plutil "$1" -extract "addons.$index.active" raw -o - 2>/dev/null)
                 if [ "$active" != false ]; then
-                    /usr/bin/plutil -extract "addons.$index.defaultLocale.name" raw -o - "$1" 2>/dev/null || printf '!\n'
+                    read_plutil "$1" -extract "addons.$index.defaultLocale.name" raw -o - 2>/dev/null || printf '!\n'
                 fi
                 index=$((index + 1))
             done
         else
-            name=$(/usr/bin/plutil -extract name raw -o - "$1" 2>/dev/null) || { printf '!\n'; return; }
+            name=$(read_plutil "$1" -extract name raw -o - 2>/dev/null) || { printf '!\n'; return; }
             if [ -z "$name" ]; then printf '!\n'; return; fi
             case "$name" in
                 *__MSG_*)
-                    locale=$(/usr/bin/plutil -extract default_locale raw -o - "$1" 2>/dev/null) || { printf '!\n'; return; }
+                    locale=$(read_plutil "$1" -extract default_locale raw -o - 2>/dev/null) || { printf '!\n'; return; }
                     key=${name#\_\_MSG_}; key=${key%__}
                     case "$locale:$key" in *[!a-zA-Z0-9_:@-]*|:*) printf '!\n'; return;; esac
                     messages=$(safe_expand "${1%/*}/_locales/$locale/messages.json")
                     case "$messages" in ''|*'!'*) printf '!\n'; return;; esac
-                    if [ "$(wc -c < "$messages")" -gt 1048576 ]; then printf '!\n'; return; fi
-                    /usr/bin/plutil -extract "$key.message" raw -o - "$messages" 2>/dev/null || printf '!\n';;
+                    regular_file "$messages" || { printf '!\n'; return; }
+                    size=$(file_size "$messages") || { printf '!\n'; return; }
+                    if [ "$size" -gt 1048576 ]; then printf '!\n'; return; fi
+                    read_plutil "$messages" -extract "$key.message" raw -o - 2>/dev/null || printf '!\n';;
                 *) printf '%s\n' "$name";;
             esac
         fi
         return
     fi
-    if ! command -v python3 >/dev/null 2>&1; then printf '!\n'; return; fi
-    python3 -I -S -B -c '
-import json,sys,os,re
+    if [ ! -x /usr/bin/python3 ]; then printf '!\n'; return; fi
+    /usr/bin/python3 -I -S -B -c '
+import json,sys,os,re,stat
+def read_regular(path):
+ if not os.path.isfile(path) or os.path.islink(path): raise ValueError()
+ # O_NOFOLLOW narrows the TOCTOU window; NONBLOCK prevents FIFO replacement hangs.
+ fd=os.open(path,os.O_RDONLY|getattr(os,"O_NOFOLLOW",0)|getattr(os,"O_NONBLOCK",0))
+ try:
+  if not stat.S_ISREG(os.fstat(fd).st_mode): raise ValueError()
+  with os.fdopen(fd,"rb",closefd=False) as f: return f.read(1048577)
+ finally: os.close(fd)
 try:
- with open(sys.argv[1], "rb") as f: raw=f.read(1048577)
+ raw=read_regular(sys.argv[1])
  if len(raw)>1048576: raise ValueError()
  obj=json.loads(raw)
  if not isinstance(obj,dict): raise ValueError()
@@ -466,7 +498,7 @@ try:
    for part in ["_locales",locale,"messages.json"]:
     folder=os.path.join(folder,part)
     if os.path.islink(folder): raise ValueError()
-   with open(folder,"rb") as f: messages=f.read(1048577)
+   messages=read_regular(folder)
    if len(messages)>1048576: raise ValueError()
    name=json.loads(messages)[token.group(1)]["message"]
   if not isinstance(name,str) or not name or "__MSG_" in name or "\n" in name or "\r" in name: print("!")
@@ -484,6 +516,7 @@ $SIGNATURES
 EOF
 }
 scan_root() (
+    set -f # Newline lists are data, never patterns.
     base=$1 target_scope=$2
     if [ "$(date +%s)" -gt "$DEADLINE" ]; then printf '!\n'; exit; fi
     while IFS="$TAB" read -r sid product vendor category sos scope kind pattern confidence notes; do
@@ -573,9 +606,11 @@ snap/firefox/common/.mozilla/firefox
 '
                 for file in $entries; do
                     [ "$file" = '!' ] && continue
-                    [ -f "$file" ] || continue
+                    regular_file "$file" || { printf '!\n'; continue; }
                     case "$file" in *.desktop) ;; *) continue;; esac
-                    if [ ! -r "$file" ] || [ "$(wc -c < "$file")" -gt 1048576 ]; then printf '!\n'; continue; fi
+                    size=$(file_size "$file") || { printf '!\n'; continue; }
+                    if [ ! -r "$file" ] || [ "$size" -gt 1048576 ]; then printf '!\n'; continue; fi
+                    regular_file "$file" || { printf '!\n'; continue; }
                     NAMES=$(sed -n 's/^Name=//p' "$file" 2>/dev/null) || printf '!\n'
                     match_names pwa u
                     match_names shortcut u
@@ -586,6 +621,7 @@ snap/firefox/common/.mozilla/firefox
     fi
 )
 scan() {
+    set -f # Includes profiles and package/desktop entry lists.
     scan_root "${ROOT:-/}" m
     if [ "$(id -u)" -ne 0 ]; then printf '!\n'; fi
     if [ "$OS" = mac ]; then profile_pattern=Users; else profile_pattern=home; fi
@@ -605,15 +641,17 @@ scan() {
         # Read dpkg DB directly, avoiding locks and helper executables.
         db="$ROOT/var/lib/dpkg/status"
         paths=$(safe_expand "$db")
-        if [ "$paths" = '!' ]; then printf '!\n'; elif [ -f "$db" ]; then
-            NAMES=$(awk 'BEGIN {RS=""; FS="\n"} /Status: install ok installed/ {for(i=1;i<=NF;i++) if($i ~ /^Package: /) print substr($i,10)}' "$db" 2>/dev/null) || printf '!\n'
-            match_names package m
+        if [ "$paths" = '!' ]; then printf '!\n'; elif [ -n "$paths" ]; then
+            if regular_file "$db"; then
+                NAMES=$(awk 'BEGIN {RS=""; FS="\n"} /Status: install ok installed/ {for(i=1;i<=NF;i++) if($i ~ /^Package: /) print substr($i,10)}' "$db" 2>/dev/null) || printf '!\n'
+                match_names package m
+            else printf '!\n'; fi
         fi
         # RPM only with a hard timeout and never in fixture mode. No snap/flatpak launch.
         if [ -z "$ROOT" ] && command -v rpm >/dev/null 2>&1; then
             if command -v timeout >/dev/null 2>&1; then
                 NAMES=$(timeout 10 rpm -qa --qf '%{NAME}\n' 2>/dev/null) || printf '!\n'
-                match_names package m
+                    match_names package m
             else printf '!\n'; fi
         fi
         for place in snap var/lib/flatpak/app usr/share/applications; do
@@ -627,9 +665,11 @@ scan() {
 '
                 for file in $entries; do
                     [ "$file" = '!' ] && continue
-                    [ -f "$file" ] || continue
+                    regular_file "$file" || { printf '!\n'; continue; }
                     case "$file" in *.desktop) ;; *) continue;; esac
-                    if [ ! -r "$file" ] || [ "$(wc -c < "$file")" -gt 1048576 ]; then printf '!\n'; continue; fi
+                    size=$(file_size "$file") || { printf '!\n'; continue; }
+                    if [ ! -r "$file" ] || [ "$size" -gt 1048576 ]; then printf '!\n'; continue; fi
+                    regular_file "$file" || { printf '!\n'; continue; }
                     NAMES=$(sed -n 's/^Name=//p' "$file" 2>/dev/null) || printf '!\n'
                     match_names pwa m
                     match_names shortcut m
@@ -658,21 +698,44 @@ while :; do
     case "$TOKENS" in *,*) TOKENS=${TOKENS%,*};; *) TOKENS=;; esac
     DROPPED=$((DROPPED + 1))
 done
+# Absolute vendor CLIs run as root only when they and their parent directory
+# are root-owned regular files/dirs that group/other cannot write; otherwise
+# fail closed (no field write, stdout only).
+trusted_cli() {
+    [ -f "$1" ] && [ ! -L "$1" ] && [ -x "$1" ] || return 1
+    for node in "$1" "${1%/*}"; do
+        meta=$(ls -ldn "$node" 2>/dev/null) || return 1
+        mode=${meta%% *}
+        uid=$(printf '%s\n' "$meta" | awk '{print $3}')
+        [ "$uid" = 0 ] || return 1
+        case "$mode" in ?????w????*|????????w?*) return 1;; esac
+    done
+    return 0
+}
 case "$RMM" in
     ninjaone)
         if [ "$OS" = mac ]; then cli=/Applications/NinjaRMMAgent/programdata/ninjarmm-cli; else cli=/opt/NinjaRMMAgent/programdata/ninjarmm-cli; fi
-        "$cli" set "$FIELD" "$RESULT" >/dev/null || exit 3;;
+        if trusted_cli "$cli"; then
+            "$cli" set "$FIELD" "$RESULT" >/dev/null || exit 3
+        else
+            echo 'NinjaOne CLI missing or not root-owned/protected; not writing field (stdout only)' >&2
+        fi;;
     superops)
         # Linux: select Bash in the RMM runner; module functions use Bash syntax.
         if [ -z "${BASH_VERSION:-}" ] || [ -z "${SuperOpsModule:-}" ]; then
             echo 'SuperOps adapter requires Bash and the RMM-provided module' >&2; exit 3
         fi
+        regular_file "$SuperOpsModule" || { echo 'SuperOps module is not a regular file' >&2; exit 3; }
         # shellcheck disable=SC1090
-        . "$SuperOpsModule"
+        . "$SuperOpsModule" 2>/dev/null
         Send-CustomField "$FIELD" "$RESULT" >/dev/null || exit 3;;
     syncro)
         if [ "$OS" = mac ]; then
-            syncro set-asset-field --name="$FIELD" --value="$RESULT" >/dev/null || exit 3
+            if trusted_cli /usr/local/bin/syncro; then
+                /usr/local/bin/syncro set-asset-field --name="$FIELD" --value="$RESULT" >/dev/null || exit 3
+            else
+                echo 'Syncro CLI missing or not root-owned/protected; not writing field (stdout only)' >&2
+            fi
         else
             if [ -z "${BASH_VERSION:-}" ]; then echo 'Syncro Linux adapter requires Bash with its Script module loaded' >&2; exit 3; fi
             Set-Asset-Field -Name "$FIELD" -Value "$RESULT" >/dev/null || exit 3

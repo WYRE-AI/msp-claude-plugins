@@ -66,6 +66,11 @@ SuperOps, and Syncro. Atera, Automate, and VSA have explicit read-back gaps.
 See the [output contract](skills/shadow-ai/references/output-contract.md) and
 [coverage/maintenance guide](skills/shadow-ai/references/script-maintenance.md).
 
+The PowerShell and macOS scanners have not been run on real Windows or macOS
+endpoints, and no live RMM field write has been exercised. Validation covers
+only Linux fixtures, a real non-root Linux run, and a pwsh fixture run.
+Pilot on one device per OS before deployment.
+
 ## Install
 
 ```

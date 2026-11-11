@@ -404,6 +404,7 @@ function Get-SafeMatch([string]$Base, [string]$Pattern) {
 }
 function Read-JsonFile([IO.FileSystemInfo]$File) {
     try {
+        if ($File -isnot [System.IO.FileInfo] -or ($File.Attributes -band [IO.FileAttributes]::ReparsePoint)) { Write-PartialStatus; return }
         if ($File.Length -gt 1MB) { Write-PartialStatus; return }
         Get-Content -LiteralPath $File.FullName -Raw | ConvertFrom-Json
     } catch { Write-PartialStatus }

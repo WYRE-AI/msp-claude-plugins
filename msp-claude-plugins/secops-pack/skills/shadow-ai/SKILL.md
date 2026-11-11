@@ -26,6 +26,12 @@ desktop, CLI, and local-LLM tools plus selected browser and IDE extensions
 on Windows, macOS, and Linux. Web-only AI use and built-in browser AI
 features remain outside coverage.
 
+The scanners enumerate **every user profile's** browser extensions, IDE plugins,
+and per-user installs. This is employee/endpoint monitoring. Before deployment,
+the MSP must confirm the client's written authorization and any employee-notice,
+works-council or GDPR obligations. Results contain no usernames (`.u` means one
+or more users) and are not proof of usage.
+
 ## Anti-triggers
 
 - **A single vendor's device or software record:** use `superops-assets`,
@@ -64,6 +70,18 @@ Use read-only list/get/search tools only. Never create, update, delete,
 install, publish, reboot, run scripts, or use raw, execute, passthrough, or
 custom-mutation tools, even if discovered. Do not substitute vendor REST
 recipes for missing MCP capabilities. Never call `datto_run_quickjob`.
+
+Before the first connector call in **each client pass**, show the client,
+RMM organization/site, tenant ID, device scope, and planned tools from discovery,
+including admin-tier `microsoft_graph_get`, `cipp_list_enterprise_apps`, and
+`datto_get_device_audit` when planned. Wait for an **explicit yes**. Silence,
+earlier approvals, or approval for another client do not count. Ask again if
+any of those change. `conduit__search_tools` discovery is not a connector call.
+Obtain the initial mapping and scope from operator-supplied context; ask the
+operator for missing names or IDs before any connector call. Confirmed mapping
+reads may verify that scope; if they change it, ask for an explicit yes again
+before further connector calls. A pass without recorded scope
+confirmation counts as **not run**.
 
 Resolve the client-to-RMM-organization and client-to-tenant mapping before
 joining records. Available mapping examples are `autotask_search_companies`,
@@ -247,6 +265,10 @@ or other table-breaking characters before placing them in the table.
 | Client / tenant | Coverage | Observed AI software | Entra match | Classification | Evidence / next review |
 |-----------------|----------|----------------------|-------------|----------------|------------------------|
 | [Client] / [Tenant] | [Sources, timestamps, devices read / in scope, pagination status] | [Software, publisher, version, N devices] | [Returned app and match rationale, no match, or unavailable] | [Matched in Entra, unsanctioned, needs review, or incomplete inventory] | [Source record references, limitations, and operator review] |
+
+- **Scope confirmation:** who confirmed, when in UTC, and the confirmed client,
+  RMM organization/site, tenant ID, device scope and planned tools. Without this
+  record the client pass counts as **not run**.
 
 For each client, state unavailable signals and reasons separately, including
 endpoint software, Entra inventory, and optional consent review. Include
