@@ -29,59 +29,27 @@ Meraki authenticates via an API key scoped to your Dashboard account:
 
 The API key inherits the permissions of the Dashboard account that generated it. Use a dedicated service account with least-privilege org access for automation.
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export MERAKI_API_KEY="your-api-key"
-export MERAKI_ORG_ID="123456"   # optional default org
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Meraki once in Conduit (**Connections → Meraki**, slug `meraki`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `MERAKI_API_KEY` | Yes | | Dashboard API key from Organization > Settings > Dashboard API access |
-| `MERAKI_ORG_ID` | No | | Default organization ID -- lets tools skip the org-selection step when you manage a single org |
-| `MERAKI_BASE_URL` | No | `https://api.meraki.com/api/v1` | API base URL -- override for regional clouds (China: `https://api.meraki.cn/api/v1`) |
-| `MERAKI_MCP_URL` | No | `https://conduit.wyre.ai/v1/meraki/mcp` | MCP server URL -- override to use a self-hosted gateway |
-
-The MCP server defaults to `READ_ONLY_MODE=true`. In read-only mode, curated write tools are still exposed but destructive operations require an explicit `confirm_destructive_action=true` flag. See the `api-patterns` skill for details.
+| Conduit connection field |
+|---|
+| API Key |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `MERAKI_MCP_URL` to your gateway's endpoint:
-
-```
-MERAKI_MCP_URL=https://your-gateway-domain/v1/meraki/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org -> Settings -> Integrations -> Meraki -> Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "MERAKI_MCP_URL": "https://your-gateway-domain/v1/meraki/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http meraki https://your-gateway-domain/v1/meraki/mcp`. The gateway then holds the Meraki credentials, not the client.
 
 ## Installation
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your Dashboard API key (and optional default org ID), and you're done.
-
-### Self-Hosted (Docker)
-
-Run the Meraki MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
+Connect Meraki in [Conduit](https://conduit.wyre.ai) and paste your Dashboard API key. There is no organization field.
 
 ### Claude Code CLI
 
-Set the environment variables and connect through the gateway:
-
-```bash
-export MERAKI_API_KEY="your-api-key"
-export MERAKI_ORG_ID="123456"
-```
+Install this plugin (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install meraki@msp-claude-plugins`), connect Meraki in Conduit as above, and add the unified connector `https://conduit.wyre.ai/v1/mcp` to Claude Code (or install the `wyre-gateway` plugin). There are no environment variables to set.
 
 ## Available Skills
 
@@ -150,7 +118,7 @@ Product lines you will encounter:
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via the Meraki Dashboard (My Profile)
 - Use a least-privilege service account rather than a full-org admin key
 - Review Dashboard API access and change logs regularly
@@ -166,7 +134,7 @@ Product lines you will encounter:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `MERAKI_API_KEY` is set correctly and API access is enabled at Organization > Settings > Dashboard API access
+1. Check the Meraki connection in Conduit (**Connections → Meraki**): reconnect it, or re-enter the credentials and API access is enabled at Organization > Settings > Dashboard API access
 2. Check that the API key has not been revoked or regenerated
 3. Confirm the account has admin access to the target organization
 

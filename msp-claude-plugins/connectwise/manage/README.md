@@ -14,65 +14,21 @@ This plugin provides Claude with deep knowledge of ConnectWise PSA, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect ConnectWise PSA once in Conduit (**Connections → ConnectWise PSA**, slug `connectwise-psa`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "CW_COMPANY_ID": "acmemsp",
-    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "CW_API_URL": "api-na.myconnectwise.net"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "CW_COMPANY_ID": "acmemsp",
-    "CW_PUBLIC_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_PRIVATE_KEY": "xxxxxxxxxxxxxxxx",
-    "CW_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "CW_API_URL": "api-na.myconnectwise.net"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `CW_COMPANY_ID` | Yes | | Your ConnectWise company identifier (codebase) |
-| `CW_PUBLIC_KEY` | Yes | | API member public key |
-| `CW_PRIVATE_KEY` | Yes | | API member private key |
-| `CW_CLIENT_ID` | Yes | | Registered application client ID |
-| `CW_API_URL` | Yes | | Regional API endpoint (e.g., `api-na.myconnectwise.net`) |
-| `CONNECTWISE_MANAGE_MCP_URL` | No | `https://connectwise-manage-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Company ID |
+| Public Key |
+| Private Key |
+| Client ID |
+| Server URL (self-hosted / regional) |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CONNECTWISE_MANAGE_MCP_URL` to your gateway's endpoint:
-
-```
-CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-manage/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → ConnectWise PSA → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "CONNECTWISE_MANAGE_MCP_URL": "https://your-gateway-domain/v1/connectwise-manage/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http connectwise-psa https://your-gateway-domain/v1/connectwise-psa/mcp`. The gateway then holds the ConnectWise PSA credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -106,7 +62,7 @@ CONNECTWISE_MANAGE_MCP_URL=https://your-gateway-domain/v1/connectwise-manage/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+To check the credentials directly against ConnectWise PSA before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Build authorization header (Base64 of company+publicKey:privateKey)
@@ -121,9 +77,12 @@ curl -s "https://${CW_API_URL}/v4_6_release/apis/3.0/system/info" \
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. Skills and commands will be automatically available
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install connectwise-psa@msp-claude-plugins
+```
+
+Then connect ConnectWise PSA in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -134,6 +93,8 @@ curl -s "https://${CW_API_URL}/v4_6_release/apis/3.0/system/info" \
 | `contacts` | Contact management, communication items, portal access |
 | `projects` | Project CRUD, phases, templates, resource allocation |
 | `time-entries` | Time entry CRUD, billable/non-billable, work types |
+| `scheduling` | Schedule entries: booking, moving and reviewing technician time |
+| `procurement` | Purchase and sales orders, procurement products, warehouses, inventory adjustments |
 | `api-patterns` | Authentication, pagination, conditions syntax, rate limiting |
 
 Contact communication type ids and names differ per ConnectWise tenant. Use `cw_list_communication_types` to see them; `cw_create_contact` also accepts `emailTypeId`, `emailTypeName`, `phoneTypeId`, `phoneTypeName`. See the `contacts` skill.

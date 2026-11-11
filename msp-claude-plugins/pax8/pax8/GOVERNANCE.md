@@ -37,7 +37,7 @@ are empty, and that is the whole safety story.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change Pax8 state, spend money, or provision anything. | `read` for seven tools, `admin` for the other nine — see below | `pax8-list-companies`, `pax8-list-products`, `pax8-get-product-by-uuid`, `pax8-lookup-product`, `pax8-list-subscriptions`, `pax8-list-orders`, `pax8-list-invoices`, `pax8-get-company-by-uuid`, `pax8-get-product-pricing-by-uuid`, `pax8-get-subscription-by-uuid`, `pax8-get-usage-summary`, `pax8-get-detailed-usage-summary`, `pax8-get-order-by-uuid`, `pax8-get-invoice-by-uuid`, `pax8-list-quotes`, `pax8-get-quote-by-uuid` |
+| **Read** | Cannot change Pax8 state, spend money, or provision anything. | `read` for all fifteen classified tools; `pax8-lookup-product` is unclassified, so `admin` — see below | `pax8-list-companies`, `pax8-list-products`, `pax8-get-product-by-uuid`, `pax8-lookup-product`, `pax8-list-subscriptions`, `pax8-list-orders`, `pax8-list-invoices`, `pax8-get-company-by-uuid`, `pax8-get-product-pricing-by-uuid`, `pax8-get-subscription-by-uuid`, `pax8-get-usage-summary`, `pax8-get-detailed-usage-summary`, `pax8-get-order-by-uuid`, `pax8-get-invoice-by-uuid`, `pax8-list-quotes`, `pax8-get-quote-by-uuid` |
 | **Write** | *Empty.* | — | — |
 | **Delete** | *Empty.* | — | — |
 | **Admin** | *Empty.* No passthrough, dispatcher, or credential-reading tool. | — | — |
@@ -56,11 +56,9 @@ are analysis-only for the same reason.
 
 ### What Conduit actually classifies
 
-(`pax8-lookup-product` is classified but was missing from the table above until now.)
+All fifteen `pax8-list-*` and `pax8-get-*` tools are classified `read` in Conduit, so a `read` grant reaches every list and every single-record fetch.
 
-**So on a read-only connector, over half the read surface today requires tier `admin`.** The list tools work at `read`; the moment an agent drills from a list into a single record, it needs `admin`.
-
-That is worth fixing rather than working around, because classifying them is a privilege *reduction* — it moves them down from `admin` to `read`.
+The one exception is `pax8-lookup-product`, which has **no** Conduit classification and therefore fails closed to `admin`. Classifying it `read` would be a privilege *reduction*; until then, prefer `pax8-list-products` and `pax8-get-product-by-uuid`, which reach the same data at `read`.
 
 ### There is no write surface to grant, and no delete row to misread
 

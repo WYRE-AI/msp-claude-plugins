@@ -29,11 +29,19 @@ Perform a deep investigation of a specific alert. Retrieves full alert details, 
 
    Call `get_alert_history` with the `alertId` to retrieve the complete timeline of status changes, assignments, and updates.
 
-4. **Investigate with Purple AI** (optional but recommended)
+4. **Read the auto-investigation report** (optional)
+
+   Call `get_alert_investigation_report` with the `alert_id` (not classified in Conduit, so it needs the `admin` grant). If Purple AI's Auto Investigations already ran on this alert, start from its findings instead of repeating them. If the grant is missing or no report exists, say so and continue with the evidence you have.
+
+5. **Enrich indicators** (optional)
+
+   For the alert's file hash and network indicators, call `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_domain` or `threat_intel_by_url`. These send the indicator to VirusTotal. Skip anything the customer considers confidential, and ask the user before sending any indicator whose confidentiality you do not know (internal hostnames, URLs with tokens); skip it if they do not approve. Like the report above, the threat-intel tools are unclassified in Conduit and need the `admin` grant.
+
+6. **Investigate with Purple AI** (optional but recommended)
 
    Call `purple_ai` with a natural language query based on the alert details. For example: "Investigate [threat name] on endpoint [endpoint name] -- what is the attack chain and are there related indicators?"
 
-5. **Present investigation summary**
+7. **Present investigation summary**
 
    Combine all data into a structured investigation report with alert context, timeline, MITRE mappings, and recommended next steps.
 
@@ -230,6 +238,8 @@ Alert details shown below...
 | `get_alert` | Retrieve full alert details |
 | `get_alert_notes` | Retrieve analyst comments and investigation notes |
 | `get_alert_history` | Retrieve timeline of status changes |
+| `get_alert_investigation_report` | Purple AI auto-investigation report for the alert |
+| `threat_intel_by_hash` / `threat_intel_by_ip` / `threat_intel_by_domain` / `threat_intel_by_url` | Indicator enrichment |
 | `purple_ai` | Investigate threat context and generate hunting queries |
 
 ## Related Commands

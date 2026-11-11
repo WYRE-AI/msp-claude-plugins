@@ -8,6 +8,16 @@ arguments: [filter, export]
 
 Audit Microsoft 365 MFA enrollment for all users, producing a prioritized list of accounts that need attention.
 
+## Conduit tools
+
+The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
+
+| Step | Tool | Tier |
+|------|------|------|
+| MFA registration for every user | `cipp_list_mfa_users` (`tenantFilter`; pass `"allTenants"` as its value for the fleet) | admin |
+| Registration-details report (alternative) | `microsoft_graph_get` on `/v1.0/reports/authenticationMethods/userRegistrationDetails` | admin |
+| Conditional Access coverage | `cipp_list_conditional_access_policies` | admin |
+
 ## Arguments
 
 - `filter` (optional) — Filter results - "all", "enrolled", "not-enrolled", or "admin-only"
@@ -20,7 +30,9 @@ Audit Microsoft 365 MFA enrollment for all users, producing a prioritized list o
 
 ## Steps
 
-1. **Pull registration details report** (most efficient — single call)
+1. **Pull MFA registration** (one call per tenant)
+   - Through Conduit, call `cipp_list_mfa_users` (`tenantFilter`). Each row reports whether the user is MFA-registered and which methods are registered; map those fields to the categories in step 2.
+   - Alternative: the Graph registration-details report, sent as `microsoft_graph_get` with this path. Use it when you need `isMfaCapable` or `isAdmin`, which the CIPP rows may not carry:
    ```http
    GET /v1.0/reports/authenticationMethods/userRegistrationDetails?$select=userPrincipalName,isMfaRegistered,isMfaCapable,methodsRegistered,isAdmin
    ```

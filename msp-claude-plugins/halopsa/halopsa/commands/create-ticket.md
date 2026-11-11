@@ -1,7 +1,7 @@
 ---
 description: Create a new service ticket in HaloPSA
-argument-hint: "<client> <summary> [details] [priority] [tickettype] [contact] [site] [agent]"
-arguments: [client, summary, details, priority, tickettype, contact, site, agent]
+argument-hint: "<client> <summary> [details] [priority] [tickettype] [contact] [site] [agent] [category]"
+arguments: [client, summary, details, priority, tickettype, contact, site, agent, category]
 ---
 
 # Create HaloPSA Ticket
@@ -10,15 +10,14 @@ Create a new service ticket in HaloPSA with specified details.
 
 ## Prerequisites
 
-- Valid HaloPSA OAuth credentials configured
+- HaloPSA connected in Conduit (Client ID, Client Secret, Tenant); Conduit handles the OAuth token
 - Client must exist in HaloPSA
 - User must have ticket creation permissions
 
 ## Steps
 
-1. **Authenticate with OAuth 2.0**
-   - Obtain access token using client credentials flow
-   - Token endpoint: `{base_url}/auth/token?tenant={tenant}`
+1. **Check the connection**
+   - Call `halopsa_status`; if it fails, ask the user to fix the HaloPSA connection in Conduit. Do not ask for credentials or request a token yourself
 
 2. **Validate client exists**
    - If numeric, use as client ID directly
@@ -34,13 +33,13 @@ Create a new service ticket in HaloPSA with specified details.
    - Look up contact/user ID if contact provided
    - Look up site ID from name if provided
    - Look up agent ID from name if provided
+   - If `category` was given, resolve it with `halopsa_categories_list` (`search` by name; admin grant on the `halopsa` connector) and pass the name as `category_1`–`category_4` by its level. Skip the lookup when no category was given
    - Apply default priority if not specified
 
 5. **Check contract coverage**
-   - Query active contracts for client
-   - Warn if no active contract (T&M billing)
+   - The HaloPSA connector has no contract tool, so ask the operator to confirm coverage in HaloPSA, or report it as unknown. Do not assume T&M billing
 
-6. **Create the ticket**
+6. **Create the ticket** with `halopsa_tickets_create` (`summary`, `client_id`, `tickettype_id` required; `details`, `priority_id`, `site_id`, `agent_id`, `category_1`–`category_4` optional). The underlying request:
    ```json
    POST /api/Tickets
    Authorization: Bearer {token}
@@ -55,7 +54,8 @@ Create a new service ticket in HaloPSA with specified details.
        "status_id": 1,
        "user_id": <resolved_contact_id>,
        "site_id": <resolved_site_id>,
-       "agent_id": <resolved_agent_id>
+       "agent_id": <resolved_agent_id>,
+       "category_1": "<level-1 category name>"
      }
    ]
    ```
@@ -76,6 +76,7 @@ Create a new service ticket in HaloPSA with specified details.
 | contact | string | No | - | Contact name or email |
 | site | string | No | - | Site name or ID |
 | agent | string | No | - | Assigned agent name or ID |
+| category | string | No | - | Ticket category name; resolved with `halopsa_categories_list` |
 
 ## Examples
 

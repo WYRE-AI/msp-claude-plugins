@@ -2,6 +2,8 @@
 
 Claude Code plugin for Stripe — payments, subscriptions, invoices, and customer management via Stripe's first-party hosted MCP server.
 
+> **Not currently brokered by Conduit.** Conduit has no `stripe` vendor, so there is no slug to connect and a connect attempt through `https://conduit.wyre.ai` fails. The connection model below describes how a gateway operator would wire Stripe's hosted MCP server; it is not available in Conduit today. This plugin ships no `.mcp.json`, so nothing is silently misrouted.
+
 ## Overview
 
 This plugin connects to Stripe's hosted MCP server at `mcp.stripe.com`, exposing Stripe API operations to Claude:
@@ -30,6 +32,6 @@ The hosted Stripe MCP server serves its own tools through the connection; this p
 
 ## See also
 
-- WYRE MCP Gateway vendor config: the gateway vendor registry (`stripe:` entry)
+- Conduit vendor config: none yet (`stripe` is not in Conduit's `VENDORS`)
 - Stripe MCP docs: https://docs.stripe.com/mcp
 - Hosted endpoint: https://mcp.stripe.com

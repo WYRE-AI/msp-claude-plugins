@@ -14,60 +14,19 @@ This plugin provides Claude with deep knowledge of HaloPSA, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect HaloPSA once in Conduit (**Connections → HaloPSA**, slug `halopsa`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "HALOPSA_TENANT": "acmemsp",
-    "HALOPSA_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "HALOPSA_CLIENT_SECRET": "your-client-secret"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "HALOPSA_TENANT": "acmemsp",
-    "HALOPSA_CLIENT_ID": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "HALOPSA_CLIENT_SECRET": "your-client-secret"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `HALOPSA_TENANT` | Yes | | Your HaloPSA tenant name (from `https://{tenant}.halopsa.com`) |
-| `HALOPSA_CLIENT_ID` | Yes | | OAuth 2.0 Client ID |
-| `HALOPSA_CLIENT_SECRET` | Yes | | OAuth 2.0 Client Secret |
-| `HALOPSA_AUTH_SERVER` | No | `https://{tenant}.halopsa.com/auth` | Auth server URL |
-| `HALOPSA_MCP_URL` | No | `https://halopsa-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Client ID |
+| Client Secret |
+| Tenant |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `HALOPSA_MCP_URL` to your gateway's endpoint:
-
-```
-HALOPSA_MCP_URL=https://your-gateway-domain/v1/halopsa/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → HaloPSA → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "HALOPSA_MCP_URL": "https://your-gateway-domain/v1/halopsa/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http halopsa https://your-gateway-domain/v1/halopsa/mcp`. The gateway then holds the HaloPSA credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -113,7 +72,7 @@ curl -X POST "https://${HALOPSA_TENANT}.halopsa.com/auth/token" \
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+To check the credentials directly against HaloPSA before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Get token

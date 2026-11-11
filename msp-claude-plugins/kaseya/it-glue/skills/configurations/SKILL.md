@@ -197,6 +197,15 @@ async function generateNetworkInventory(orgId) {
 }
 ```
 
+### Archiving Configurations
+
+- `archive_configuration` (write) soft-deletes a configuration: it is hidden from normal views but recoverable.
+- `unarchive_configuration` (write) restores it.
+
+Configurations synced from a PSA or RMM can be re-created or re-activated by the next sync, so archive the record at its source as well when the device is really gone. Archive rather than leave stale configurations in place: decommissioned devices in IT Glue mislead technicians and inflate audits.
+
+Files on a configuration (photos of a rack, exported configs) are listed with `list_attachments` and added with `create_attachment` (`resource_type: "configurations"`).
+
 ## Gotchas
 
 - IT Glue has no server-side date-range filter, so warranty/expiration reporting must fetch and filter client-side (see Warranty Tracking above).

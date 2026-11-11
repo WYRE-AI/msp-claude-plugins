@@ -55,6 +55,8 @@ Microsoft Graph is enormous and its URL/`$filter`/`$select` syntax is full of sh
 | `microsoft_graph_get` | Executes a read-only Graph `GET`. Input: a Graph API call (ideally one returned by `suggest_queries`). Honors the caller's roles, granted scopes, and Graph throttling. |
 | `microsoft_graph_list_properties` | Returns the schema for a Graph entity — its properties and relationships. Use it when you need to know what's selectable before constructing or refining a call. |
 
+The live connector also lists a fourth tool, `request_access`. Call it only when the user asks for access, or when `microsoft_graph_get` fails because the signed-in user lacks access to a resource: it files a governed access request (`accessIntent`, plus an optional `justification` and `requestedDuration`) and walks the user through Microsoft's confirmation prompts. It returns no tenant data, and acceptance must come from the user, never be inferred. Conduit has no classification for it, so it enforces at `admin`.
+
 ## The query loop
 
 ```

@@ -32,6 +32,16 @@ SuperOps.ai RMM generates alerts when monitored conditions are triggered on mana
 - **Fixing what the alert reports** — remediation runs through
   `superops-runbooks`; resolving an alert does not fix a machine.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_assets_get` | read | Context for the alerting asset |
+| `superops_custom_query` | admin | List or read alerts (no typed alert tool exists) |
+| `superops_custom_mutation` | admin | Acknowledge or resolve alerts (no typed alert tool exists) |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Alert Severity Levels
 
 | Severity | Description | Typical Response |
@@ -64,11 +74,10 @@ SuperOps.ai RMM generates alerts when monitored conditions are triggered on mana
 
 ## Key Alert Fields
 
-An alert carries `alertId`, `message`, `severity`, `status`, `type`, and the
-`createdTime`/`acknowledgedTime`/`resolvedTime` timestamps. It associates to an
-`asset`, `client`, `site`, the triggering `monitor`, and optionally a linked
-`ticket`. Resolution metadata lives in `acknowledgedBy`, `resolvedBy`, and
-`resolutionNotes`.
+In the published SuperOps schema an `Alert` carries `id`, `message`,
+`description`, `severity`, `status`, `createdTime`, `resolvedTime`,
+`occurrenceCount`, and `asset` and `policy`. `asset` and `policy` are `JSON`
+scalars: select them by name only, with no nested field selection.
 
 See [references/fields.md](references/fields.md) for the complete field reference.
 
@@ -76,16 +85,19 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 
 | Operation | Type | Purpose |
 |-----------|------|---------|
-| `getAlertList` | query | List/filter alerts across all assets |
-| `getAlertsForAsset` | query | Alerts scoped to one `assetId` |
-| `getAlert` | query | Full detail including `monitor` threshold and `history` |
-| `acknowledgeAlerts` | mutation | Takes an `alertIds` array — bulk-capable |
-| `resolveAlerts` | mutation | Takes `alertIds` plus `resolutionNotes` |
-| `createTicketFromAlert` | mutation | Converts an alert to a linked ticket |
+| `getAlertList` | query | List/filter alerts across all assets (`input: ListInfoInput!`) |
+| `getAlertsForAsset` | query | Alerts scoped to one asset (`input: AssetDetailsListInput!`) |
+| `resolveAlerts` | mutation | `input: [ResolveAlertInput]`, each `{ id }`; returns `Boolean` |
 
-Both mutations take arrays (`alertIds`), so a single call handles bulk
-acknowledgment or resolution. `getAlertList` returns a `listInfo` block
-(`totalCount`, `hasNextPage`, `endCursor`) for cursor pagination.
+The published schema has **no** acknowledge mutation, no single-alert query and no
+alert-to-ticket mutation: acknowledge in the SuperOps console, and create a ticket
+with `superops_tickets_create`. `getAlertList` returns `listInfo` (`page`,
+`pageSize`, `hasMore`, `totalCount`): page with `page`/`pageSize` only while `hasMore`
+is `true`.
+
+The longer examples in `references/` and in the alert commands predate the published
+schema (`schema/superops.graphql` in superops-mcp) and use fields and operations it
+does not define. Check an operation against the schema before sending it.
 
 Filters accept either a scalar or an array for `status` and `severity`
 (`"status": "Active"` and `"status": ["Active", "Acknowledged"]` are both valid),
@@ -100,9 +112,9 @@ request shapes and variable examples.
 
 1. Query `getAlertList` filtered to `status: "Active"`, `severity: "Critical"`,
    ordered by `createdTime` ascending (oldest first).
-2. `acknowledgeAlerts` on the alert being worked, with investigation notes.
-3. `createTicketFromAlert` if the issue needs tracked service delivery.
-4. `resolveAlerts` with `resolutionNotes` once fixed.
+2. Acknowledge the alert being worked in the SuperOps console (there is no API mutation for it).
+3. `superops_tickets_create` if the issue needs tracked service delivery.
+4. Once fixed, `resolveAlerts` with `input: [{ id: "<alert id>" }]`, sent through `superops_custom_mutation` (admin tier). Never send it without a human approver who has seen the exact mutation.
 
 ### Alert Summary Dashboard
 

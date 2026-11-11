@@ -9,7 +9,7 @@ This plugin provides Claude with deep knowledge of ConnectWise Automate, enablin
 - **Computer Management** - Search, view, and manage endpoints across all clients
 - **Script Execution** - Run scripts on computers with parameters and results tracking
 - **Monitor Configuration** - Manage monitoring templates, thresholds, and assignments
-- **Alert Handling** - View, acknowledge, and create tickets from alerts
+- **Alert Handling** - View and triage alerts (read-only; follow-up goes to a PSA ticket)
 - **Client Management** - Manage clients, locations, and group configurations
 
 ## Prerequisites
@@ -28,51 +28,20 @@ You need ConnectWise Automate API credentials. There are two authentication meth
 1. Use your Automate user credentials
 2. If 2FA is enabled, you'll need to provide the TOTP code or bypass key
 
-### Environment Variables
+### Connect through Conduit
 
-Set the following environment variables:
+This plugin ships no `.mcp.json` and reads no environment variables. Connect ConnectWise Automate once in Conduit (**Connections → ConnectWise Automate**, slug `connectwise-automate`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```bash
-# Option 1: Integrator credentials (recommended)
-export CONNECTWISE_AUTOMATE_SERVER="your-automate-server.com"
-export CONNECTWISE_AUTOMATE_USERNAME="integrator-username"
-export CONNECTWISE_AUTOMATE_PASSWORD="integrator-password"
-
-# Option 2: User credentials with 2FA
-export CONNECTWISE_AUTOMATE_SERVER="your-automate-server.com"
-export CONNECTWISE_AUTOMATE_USER="username"
-export CONNECTWISE_AUTOMATE_PASS="password"
-export CONNECTWISE_AUTOMATE_2FA="optional-2fa-key"
-```
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `CONNECTWISE_AUTOMATE_SERVER` | Yes | | Your Automate server hostname |
-| `CONNECTWISE_AUTOMATE_USERNAME` | Yes (option 1) | | Integrator username |
-| `CONNECTWISE_AUTOMATE_PASSWORD` | Yes (option 1) | | Integrator password |
-| `CONNECTWISE_AUTOMATE_USER` | Yes (option 2) | | User login username |
-| `CONNECTWISE_AUTOMATE_PASS` | Yes (option 2) | | User login password |
-| `CONNECTWISE_AUTOMATE_2FA` | No | | TOTP bypass key for 2FA |
-| `CONNECTWISE_AUTOMATE_MCP_URL` | No | `https://connectwise-automate-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Server URL |
+| Client ID |
+| Username |
+| Password |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `CONNECTWISE_AUTOMATE_MCP_URL` to your gateway's endpoint:
-
-```
-CONNECTWISE_AUTOMATE_MCP_URL=https://your-gateway-domain/v1/connectwise-automate/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → ConnectWise Automate → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "CONNECTWISE_AUTOMATE_MCP_URL": "https://your-gateway-domain/v1/connectwise-automate/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http connectwise-automate https://your-gateway-domain/v1/connectwise-automate/mcp`. The gateway then holds the ConnectWise Automate credentials, not the client.
 
 ### API Base URL
 
@@ -86,9 +55,12 @@ ConnectWise Automate enforces rate limits of approximately **60 requests per min
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. Skills and commands will be available automatically
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install connectwise-automate@msp-claude-plugins
+```
+
+Then connect ConnectWise Automate in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -98,7 +70,7 @@ ConnectWise Automate enforces rate limits of approximately **60 requests per min
 | `clients` | Client CRUD operations, locations, settings, groups |
 | `scripts` | Script listing, execution, parameters, results |
 | `monitors` | Monitor types, thresholds, templates, assignments |
-| `alerts` | Alert listing, acknowledgment, history, ticket creation |
+| `alerts` | Read-only alert listing and triage by client and severity |
 | `api-patterns` | Authentication, pagination, filtering, error handling |
 
 ## Available Commands

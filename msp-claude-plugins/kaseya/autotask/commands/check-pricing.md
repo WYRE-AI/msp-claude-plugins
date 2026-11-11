@@ -1,5 +1,5 @@
 ---
-description: Check pricing details for an Autotask product or service from price lists
+description: Check pricing details for an Autotask product or service (price-list overrides are UI-only)
 argument-hint: "<product> [type]"
 arguments: [product, type]
 ---
@@ -15,8 +15,8 @@ arguments: [product, type]
 
 1. Resolve the product/service (search by name/SKU if not an ID)
 2. Get the item's base pricing (unitCost, unitPrice, MSRP)
-3. Look up price list entries for this item
-4. Display comparison of base vs price list pricing with margins
+3. Note that price-list overrides are not reachable through the connector (Autotask UI only)
+4. Display cost, price, MSRP and margin from the product or service record
 
 ### Step 1: Find the Product/Service
 
@@ -36,28 +36,29 @@ Args: { searchTerm: "$product" }
 
 ### Step 2: Get Full Details
 
+For a product:
+
 ```
 Tool: autotask_get_product
 Args: { productId: <resolved_id> }
 ```
 
-### Step 3: Check Price List
+For a service (`type="service"`, or an ID resolved from `autotask_search_services`):
 
 ```
-Tool: autotask_search_price_list_products
-Args: { productID: <resolved_id> }
+Tool: autotask_get_service
+Args: { serviceId: <resolved_id> }
 ```
 
-Or for services:
+Product and service IDs are separate sequences, so never look a service ID up as a product.
 
-```
-Tool: autotask_search_price_list_services
-Args: { serviceID: <resolved_id> }
-```
+### Step 3: Price-list overrides
+
+There is no MCP tool for Autotask Price Lists or Inventory Items (both are real Autotask entities, but the connector does not expose them). Check price-list overrides and stock levels directly in the Autotask UI, and say so in the answer rather than guessing.
 
 ### Step 4: Calculate and Display
 
-Show: unit cost, default price, MSRP, price list price, and margin percentage.
+Show: unit cost, default price, MSRP, and margin percentage from the product or service record. Note that any customer price-list override must be checked in the Autotask UI. A service sold on a recurring contract can carry its own unit price on the contract service line; for what a specific customer pays, read it with the `autotask-contract-services` skill rather than quoting the catalog price.
 
 ## Parameters
 
@@ -93,12 +94,10 @@ Base Pricing:
   Unit Price: $1,299.00 (default)
   MSRP:       $1,499.00
 
-Price List Pricing:
-  USD: $1,199.00
+Price list overrides: check in the Autotask UI (not available through the connector)
 
 Margins:
   Default margin: 34.6%
-  Price list margin: 29.2%
   vs MSRP discount: 20.0%
 ```
 

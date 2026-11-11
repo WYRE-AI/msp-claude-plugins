@@ -1,11 +1,11 @@
 {
   "name": "rocketcyber",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "description": "Claude plugins for RocketCyber managed SOC - incidents, agents, accounts, threat detection",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

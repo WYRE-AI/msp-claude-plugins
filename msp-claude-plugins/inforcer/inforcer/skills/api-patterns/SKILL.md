@@ -35,22 +35,14 @@ on the connection, envelope, and tenant-id conventions described here.
 
 ## Connection & Authentication
 
-The gateway authenticates to Inforcer using **two** credentials, each
-on its own `X-` header:
+Conduit authenticates to Inforcer using **two** credentials stored on
+the Inforcer connection. It injects each on its own `X-` header when it
+calls the MCP server; nothing is set on the client:
 
-| Gateway header | Env var | Value |
-|----------------|---------|-------|
-| `X-Inforcer-Region` | `INFORCER_REGION` | One of `us`, `uk`, `eu`, `anz` (**required**) |
-| `X-Inforcer-Api-Key` | `INFORCER_API_KEY` | Your raw Inforcer API key |
-
-```bash
-export INFORCER_REGION="us"        # or uk / eu / anz
-export INFORCER_API_KEY="your-inforcer-api-key"
-```
-
-The `.mcp.json` substitutes `${INFORCER_REGION}` and
-`${INFORCER_API_KEY}` into the `X-Inforcer-Region` and
-`X-Inforcer-Api-Key` headers respectively.
+| Conduit field | Header sent to the MCP server | Value |
+|---------------|-------------------------------|-------|
+| Region | `X-Inforcer-Region` | One of `us`, `uk`, `eu`, `anz` (**required**) |
+| API Key | `X-Inforcer-Api-Key` | Your raw Inforcer API key |
 
 ### What the MCP server does upstream
 
