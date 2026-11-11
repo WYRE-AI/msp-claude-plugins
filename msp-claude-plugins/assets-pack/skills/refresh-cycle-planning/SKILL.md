@@ -55,9 +55,15 @@ automatically.
 - **ScalePad Lifecycle Manager roadmaps** — LM has its own initiatives,
   goals, QBR meetings, and budget forecasting; use
   `scalepad-lifecycle-manager` rather than rebuilding its calendar here.
-- **Pricing the replacements** — use `scalepad-quoter`,
-  `connectwise-cpq-quotes`, or `kaseya-quote-manager-quotes`; this skill
-  produces a tiered calendar and device counts, never a dollar figure.
+- **Drafting a per-client refresh quote list:** use
+  [Refresh Quote List](../refresh-quote-list/SKILL.md). This skill stops
+  at the calendar.
+- **Building or publishing a quote:** build it with `scalepad-quoter`
+  (which can also publish) or `connectwise-cpq-quotes`; a CPQ quote is
+  published from the CPQ web app. Kaseya Quote Manager's tools are
+  read-only, so a Kaseya quote is built in the Quote Manager web app.
+  This skill produces a tiered calendar and device counts, never a
+  dollar figure.
 
 ## Discovering available tools first
 

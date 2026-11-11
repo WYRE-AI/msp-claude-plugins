@@ -1404,7 +1404,7 @@ export const plugins: Plugin[] = [
     agents: [],
     commands: [
       { name: '/org-health-check', description: 'Full health check for one Proofpoint Essentials customer org' },
-      { name: '/search-org', description: 'Resolve a Proofpoint Essentials customer org by name or domain and show its details' }
+      { name: '/search-org', description: 'Resolve a Proofpoint Essentials customer org by its primary domain and show its details' }
     ],
     apiInfo: {
       baseUrl: '',
@@ -2751,12 +2751,14 @@ export const plugins: Plugin[] = [
     features: [
       'Alert Severity Normalization',
       'Bec Response',
-      'Containment Playbooks'
+      'Containment Playbooks',
+      'Shadow Ai'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
-      { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' }
+      { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
+      { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' }
     ],
     agents: [
       { name: 'incident-timeline-builder', description: 'Use this agent when a security incident needs to be reconstructed into a single chronological timeline suitable for a client-facing incident report, pulling every relevant event across every connected security, PSA, and documentation tool for the client and time window in question.' },
@@ -3063,11 +3065,13 @@ export const plugins: Plugin[] = [
     features: [
       'Eol Eos Flagging',
       'Refresh Cycle Planning',
+      'Refresh Quote List',
       'Warranty Tracking'
     ],
     skills: [
       { name: 'eol-eos-flagging', description: 'End-of-life versus end-of-support risk for devices, OS versions, and firmware: combining RMM inventory (make, model, OS version, firmware) with general lifecycle knowledge, the mandatory verify-against-vendor-lifecycle caveat, what qualifies as a finding versus merely "old", and criticality-first prioritization of the resulting risk list.' },
       { name: 'refresh-cycle-planning', description: 'Forward-looking hardware refresh planning: combining warranty expiration, EOL/EOS timing, and device age from whatever RMM and documentation platforms are connected into replace-now / plan-this-year / monitor tiers, laying those tiers onto a dated calendar, surfacing replacement clusters, and keeping an explicit insufficient-data bucket.' },
+      { name: 'refresh-quote-list', description: 'Turns a Refresh Cycle Planning calendar into a per-client list of devices to quote, matched against a connected ScalePad Quoter, Kaseya Quote Manager, or ConnectWise PSA product catalog, then hands off to a quoting skill.' },
       { name: 'warranty-tracking', description: 'Endpoint hardware warranty status across whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected: the reliability spread between OEM-resolved and hand-entered warranty fields, serial/asset-tag cross-referencing when RMM data is missing or stale, and the expired / expiring-soon / covered / unknown bucketing.' }
     ],
     agents: [

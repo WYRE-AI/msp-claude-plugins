@@ -34,9 +34,13 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change Xero state. Safe for autonomous agents, but see Data handling. | `xero_accounts_list`, `xero_accounts_get`, `xero_contacts_list`, `xero_contacts_get`, `xero_contacts_search`, `xero_invoices_list`, `xero_invoices_get`, `xero_payments_list`, `xero_payments_get`, `xero_reports_profit_and_loss`, `xero_reports_balance_sheet`, `xero_reports_aged_receivables`, `xero_reports_aged_payables`, `xero_status`, `xero_navigate`, `xero_back` |
+| **Read** | Cannot change Xero state. Safe for autonomous agents, but see Data handling. | `xero_accounts_list`, `xero_accounts_get`, `xero_contacts_list`, `xero_contacts_get`, `xero_contacts_search`, `xero_invoices_list`, `xero_invoices_get`, `xero_payments_list`, `xero_payments_get`, `xero_reports_profit_and_loss`, `xero_reports_balance_sheet`, `xero_reports_aged_receivables`, `xero_reports_aged_payables`, `xero_status` |
 | **Write** | Creates a record with no financial effect. Reversible. | `xero_contacts_create` |
 | **Destructive** | Creates, issues, cancels, or settles a financial obligation. | `xero_invoices_create`, `xero_invoices_update_status`, `xero_payments_create` |
+
+`xero_navigate` and `xero_back` are not listed because Conduit refuses them
+for every caller and leaves them out of the tool list. `conduit__my_access`
+replaces them. `xero_status` is deliberately kept.
 
 The write tier holds exactly one tool. That is not an accident of the API
 surface — it reflects that in an accounting system almost nothing that changes
