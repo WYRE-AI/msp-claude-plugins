@@ -77,7 +77,8 @@ That is six to eight calls for one client, well inside the 50 per minute limit.
 
 1. **Header** — client, meeting title, date, purpose, vCIO.
 2. **Position** — alignment score, last review date, open review and its status,
-   number of overdue standards categories.
+   number of standards categories due or overdue (the tool does not separate
+   the two).
 3. **Since last meeting** — agenda items from the last `Past` meeting and their
    status now (`Completed`, `InProgress`, still `NotDiscussed`).
 4. **Decisions to ask for** — agenda recommendations that are `NotDiscussed` or
@@ -89,7 +90,7 @@ That is six to eight calls for one client, well inside the 50 per minute limit.
 6. **Gaps without a plan** — unassigned findings from the last review, by
    `question.label`. Mark this section internal: findings describe security
    gaps.
-7. **Next review** — the overdue categories, as the scope to schedule.
+7. **Next review** — the categories due or overdue, as the scope to schedule.
 
 Keep sections that have nothing in them, with a one-line "none", so the reader
 knows the data was checked.

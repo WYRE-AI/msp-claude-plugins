@@ -86,9 +86,14 @@ When `gogetssl_orders_list` for a status is truncated or too large:
    every order ID, and keep the ones with the status you were listing.
 2. Call `gogetssl_orders_get_statuses` with those IDs in batches of 100.
    For active orders, use `expires` as the expiry date (`valid_till`).
+   Expired orders get no `expires`, so call `gogetssl_orders_get_status`
+   for each expired ID to read `valid_till` before filtering by date. If
+   any expiry date cannot be retrieved, mark the expired-orders report
+   incomplete and list the order IDs you could not date.
 3. These results carry no domain. Call `gogetssl_orders_get_status` for
    each order you will report (for the expiry sweep, the ones inside the
    planning window) to get `common_name` and the SANs before grouping.
+   Reuse any order detail you already retrieved in step 2.
 
 ### Recently expired certificates
 

@@ -17,6 +17,7 @@ const marketplacePlugins = getPluginsByCategory('marketplace');
 const accountingPlugins = getPluginsByCategory('accounting');
 const productivityPlugins = getPluginsByCategory('productivity');
 const infrastructurePlugins = getPluginsByCategory('infrastructure');
+const bcdrPlugins = getPluginsByCategory('bcdr');
 ---
 
 <DocsLayout title="Plugin Catalog">
@@ -169,6 +170,20 @@ const infrastructurePlugins = getPluginsByCategory('infrastructure');
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
         {infrastructurePlugins.map(plugin => (
+          <PluginCard plugin={plugin} />
+        ))}
+      </div>
+    </>
+  )}
+
+  {bcdrPlugins.length > 0 && (
+    <>
+      <h2>Backup & DR ({bcdrPlugins.length})</h2>
+
+      <p>Backup, disaster recovery, and business continuity plugins.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 not-prose my-6">
+        {bcdrPlugins.map(plugin => (
           <PluginCard plugin={plugin} />
         ))}
       </div>
