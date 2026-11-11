@@ -19,8 +19,8 @@ ControlMap is ScalePad's compliance product: per-client risk
 registers, control libraries mapped to framework objectives, evidence
 collection, policies/procedures/governance documents, assessments,
 and action items. Regional: set `X-ScalePad-Region` to `us` (default),
-`eu`, `ca`, or `au` to match the tenant's data residency. Discover
-this domain's tools with `scalepad_navigate` (domain `controlmap`).
+`eu`, `ca`, or `au` to match the tenant's data residency. Its tools
+are named `scalepad_cm_*`.
 Search endpoints are
 POST with filter bodies upstream — the tools accept normal filter
 arguments.

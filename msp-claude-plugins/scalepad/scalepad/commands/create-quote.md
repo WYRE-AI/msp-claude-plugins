@@ -11,7 +11,6 @@ Build a Quoter quote from a plain-language description: pick the recipient, add 
 ## Prerequisites
 
 - ScalePad MCP server connected with a valid `X_SCALEPAD_API_KEY` (the ScalePad-hosted Quoter path is the default; Quoter OAuth credentials are NOT required)
-- Optional discovery: `scalepad_navigate` with `domain: "quoter"` lists the relevant tools
 - Tools used: `scalepad_quoter_quote_templates_list`, `scalepad_quoter_contacts_list`, `scalepad_quoter_contacts_create`, `scalepad_quoter_items_list`, `scalepad_quoter_quotes_create`, `scalepad_quoter_quotes_create_section`, `scalepad_quoter_quotes_create_section_line_item`, `scalepad_quoter_quotes_get`, `scalepad_quoter_quotes_publish`
 
 ## Steps

@@ -56,9 +56,9 @@ Product endpoints return HTTP 402 when the account lacks an active subscription 
 ## Tools
 
 **381 tools**, provided by the ScalePad MCP server through the WYRE MCP Gateway.
-All are exposed upfront; `scalepad_navigate` is a discovery aid that lists a
-product domain's tools, and `scalepad_status` reports credential status and
-available domains.
+All are exposed upfront. `scalepad_status` reports credential status and
+available domains. The server's `scalepad_navigate` menu is refused by
+Conduit; use `conduit__my_access` to see which tools you can call.
 
 | Domain | Prefix | Tools | Read | Write | Notes |
 |--------|--------|-------|------|-------|-------|
