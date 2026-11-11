@@ -50,24 +50,51 @@ org-scoped tool takes the org's primary domain (`domain` or `orgDomain`).
 
 ## Configuration
 
-Proofpoint Essentials authenticates with **org-admin credentials** — the
-same email/password used to sign into the Essentials console — not an API
-key. A reseller-level admin can act on any customer org the reseller
+### Connect through Conduit
+
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Proofpoint Essentials once in Conduit at `https://conduit.wyre.ai/connect/proofpoint-essentials` (**Connections → Proofpoint Essentials**, slug `proofpoint-essentials`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
+
+| Conduit connection field | Notes |
+|---|---|
+| Username | Essentials console login (email) |
+| Password | Password for that login |
+| Region | Optional; defaults to `us1` |
+
+Proofpoint Essentials authenticates with **org-admin credentials**, the
+same email and password used to sign into the Essentials console, not an
+API key. A reseller-level admin can act on any customer org the reseller
 manages; a customer-org admin is scoped to that one org only. There is no
-separate key to generate or rotate — see the `api-patterns` skill for the
-full authentication and regional-routing model.
+separate key to generate or rotate. `us1` also serves as the
+endpoint-discovery anchor for orgs hosted on other regional pods. See the
+`api-patterns` skill for the full authentication and regional-routing
+model.
 
-Connect Proofpoint Essentials in [Conduit](https://conduit.wyre.ai) and
-enter the connection fields there:
+Conduit only checks that Username and Password are filled in when you save
+the connection: Essentials has no org-independent endpoint to test them
+against. A wrong password shows up as a 401 on the first tool call.
 
-| Field | Required | Notes |
-|---|---|---|
-| Username | Yes | The admin login email |
-| Password | Yes | The admin login password |
-| Region | No | Regional pod, e.g. `us1` or `eu1`. Defaults to `us1` |
+## Self-Hosted Gateway
 
-Every tool call goes to the connection's region. Use
-`proofpoint_essentials_endpoint_discover` to find which pod hosts an org.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http proofpoint-essentials https://your-gateway-domain/v1/proofpoint-essentials/mcp`. The gateway then holds the Proofpoint Essentials credentials, not the client. In that case install only this plugin (`/plugin install proofpoint-essentials@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
+
+## Installation
+
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install proofpoint-essentials@msp-claude-plugins
+```
+
+Then connect Proofpoint Essentials in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
+
+## Troubleshooting
+
+### Authentication Errors
+
+If a tool call returns "401 Unauthorized":
+1. Open the Proofpoint Essentials connection in Conduit (`https://conduit.wyre.ai/connect/proofpoint-essentials`) and re-enter the Username and Password
+2. Sign in to the Essentials console with the same credentials to confirm they still work
+3. Check that the login is an org admin (or reseller admin, for customer orgs you manage)
 
 ## Available Skills
 
@@ -82,7 +109,7 @@ Every tool call goes to the connection's region. Use
 
 | Command | Description |
 |---------|-------------|
-| `/search-org` | Resolve a customer org by its primary domain and show its details |
+| `/search-org` | Resolve a customer org by name or domain and show its details |
 | `/org-health-check` | Full read-only health sweep: lifecycle, domains, users, features/licensing, recent mail flow |
 
 ## API Documentation

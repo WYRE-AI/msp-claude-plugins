@@ -14,74 +14,45 @@ This plugin provides Claude with deep knowledge of Liongard, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Liongard once in Conduit at `https://conduit.wyre.ai/connect/liongard` (**Connections → Liongard**, slug `liongard`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "LIONGARD_INSTANCE": "yourcompany",
-    "LIONGARD_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  }
-}
-```
+| Conduit connection field | Notes |
+|---|---|
+| Instance Name | Your Liongard subdomain, e.g. `us7` or `eu1`. Pasting `eu1.app.liongard.com` or the full instance URL works too. |
+| Access Key ID | From **Profile > Account Settings > Access Tokens** |
+| Access Key Secret | Shown once, when the token is generated |
 
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "LIONGARD_INSTANCE": "yourcompany",
-    "LIONGARD_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `LIONGARD_INSTANCE` | Yes | Instance name (subdomain from `https://{instance}.app.liongard.com`) |
-| `LIONGARD_API_KEY` | Yes | API key from Settings > Access Keys |
+Conduit checks the key against your Liongard instance when you save the connection.
 
 ### Obtaining API Credentials
 
 1. **Log into Liongard**
-   - Navigate to `https://yourcompany.app.liongard.com`
+   - Open your Liongard instance, e.g. `https://us7.app.liongard.com`
 
-2. **Generate an API Key**
-   - Go to **Settings > Access Keys**
-   - Click **Create Access Key**
-   - Copy the generated key (store securely)
+2. **Generate an Access Key**
+   - Open the profile menu (upper right) and go to **Account Settings > Access Tokens**
+   - Click **Generate New Token**
+   - Copy the Access Key ID and the Access Key Secret (the secret is not shown again after you leave the page)
 
 3. **Find Your Instance Name**
    - Your instance is the first part of your Liongard URL
-   - Example: If your URL is `https://acmemsp.app.liongard.com`, your instance is `acmemsp`
+   - Example: if your URL is `https://us7.app.liongard.com`, your instance is `us7`
 
-### Testing Your Connection
+## Self-Hosted Gateway
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
-
-```bash
-# Test connection
-curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments/count" \
-  -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-  -H "Content-Type: application/json" | jq
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http liongard https://your-gateway-domain/v1/liongard/mcp`. The gateway then holds the Liongard credentials, not the client. In that case install only this plugin (`/plugin install liongard@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Installation
 
-```bash
-# Clone the repository
-git clone https://github.com/WYRE-AI/msp-claude-plugins.git
-
-# Navigate to plugin
-cd msp-claude-plugins/liongard/liongard
-
-# Use with Claude Code
-claude --plugin .
 ```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install liongard@msp-claude-plugins
+```
+
+Then connect Liongard in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -102,33 +73,25 @@ claude --plugin .
 
 ## MCP Server
 
-The Liongard MCP server provides tool-based access to Liongard APIs with a decision-tree architecture:
-
-```json
-{
-  "mcpServers": {
-    "liongard-mcp": {
-      "command": "npx",
-      "args": ["-y", "@wyre-technology/liongard-mcp"],
-      "env": {
-        "LIONGARD_INSTANCE": "yourcompany",
-        "LIONGARD_API_KEY": "your-api-key"
-      }
-    }
-  }
-}
-```
-
-The MCP server lists every domain tool (environments, agents, inspections, systems, detections, alerts, metrics, timeline, inventory) up front, so there is no domain to select first. Its `liongard_navigate` helper is refused by Conduit for every caller; use `conduit__my_access` to see which tools you can call.
+Conduit runs the Liongard MCP server for you; there is nothing to install or configure locally. The server lists every domain tool (environments, agents, inspections, systems, detections, alerts, metrics, timeline, inventory) up front, so there is no domain to select first. Its `liongard_navigate` helper is refused by Conduit for every caller; use `conduit__my_access` to see which tools you can call.
 
 ## API Reference
 
 - **Base URL (v1)**: `https://{instance}.app.liongard.com/api/v1`
 - **Base URL (v2)**: `https://{instance}.app.liongard.com/api/v2`
-- **Auth**: `X-ROAR-API-KEY` header
+- **Auth**: Access Key ID and Secret, stored on the Conduit connection
 - **Rate Limit**: ~300 requests per minute (conservative)
 - **Pagination**: `page`/`pageSize` params (GET), `Pagination` object (POST), max 2000 per page
 - **Docs**: [Liongard Developer Guide](https://docs.liongard.com/reference/developer-guide)
+
+## Troubleshooting
+
+### Authentication Errors
+
+If a tool call returns "401 Unauthorized":
+1. Open the Liongard connection in Conduit (`https://conduit.wyre.ai/connect/liongard`) and check the Instance Name, Access Key ID and Access Key Secret
+2. Check that the token has not been deleted: in Liongard, sign in as the user who generated it and open **Profile > Account Settings > Access Tokens**
+3. Generate a new token if needed, then update the Conduit connection
 
 ## Contributing
 

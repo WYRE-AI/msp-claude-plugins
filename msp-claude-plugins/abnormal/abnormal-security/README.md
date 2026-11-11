@@ -22,53 +22,19 @@ message search.
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Abnormal Security once in Conduit at `https://conduit.wyre.ai/connect/abnormal-security` (**Connections → Abnormal Security**, slug `abnormal-security`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "ABNORMAL_API_TOKEN": "your-api-token"
-  }
-}
-```
+| Conduit connection field |
+|---|
+| API Token |
 
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "ABNORMAL_API_TOKEN": "your-api-token"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ABNORMAL_API_TOKEN` | Yes | | API token from Settings > Integrations > API |
-| `ABNORMAL_MCP_URL` | No | `https://conduit.wyre.ai/v1/abnormal-security/mcp` | MCP server URL -- override to use a self-hosted gateway |
+Conduit checks the token against the Abnormal API when you save the connection.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ABNORMAL_MCP_URL` to your gateway's endpoint:
-
-```
-ABNORMAL_MCP_URL=https://your-gateway-domain/v1/abnormal-security/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Abnormal Security > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ABNORMAL_MCP_URL": "https://your-gateway-domain/v1/abnormal-security/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http abnormal-security https://your-gateway-domain/v1/abnormal-security/mcp`. The gateway then holds the Abnormal Security credentials, not the client. In that case install only this plugin (`/plugin install abnormal-security@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ### Obtaining API Credentials
 
@@ -91,12 +57,7 @@ ABNORMAL_MCP_URL=https://your-gateway-domain/v1/abnormal-security/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
-
-```bash
-# Report server and credential status (takes no arguments)
-mcp-cli call abnormal-security/abnormal_status '{}'
-```
+After connecting Abnormal Security in Conduit, ask Claude to run `abnormal_status`. It takes no arguments and reports the server and credential status.
 
 ### API Documentation
 
@@ -105,9 +66,13 @@ mcp-cli call abnormal-security/abnormal_status '{}'
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install abnormal-security@msp-claude-plugins
+```
+
+Then connect Abnormal Security in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -174,7 +139,7 @@ leaves it half-remediated. See [GOVERNANCE.md](GOVERNANCE.md).
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep the token in the Conduit connection, not in local files or environment variables
 - Rotate API tokens periodically via the Abnormal Security portal
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Abnormal Security audit log
@@ -191,9 +156,9 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `ABNORMAL_API_TOKEN` is set correctly
+1. Open the Abnormal Security connection in Conduit (`https://conduit.wyre.ai/connect/abnormal-security`) and check the API Token
 2. Check that the API token has not been revoked
-3. Regenerate the token at Abnormal Security Portal > Settings > Integrations > API
+3. Regenerate the token at Abnormal Security Portal > Settings > Integrations > API, then update the Conduit connection
 
 ### Rate Limits
 
@@ -206,8 +171,8 @@ Abnormal Security enforces API rate limits:
 
 If the MCP server fails to connect:
 1. Verify network connectivity to `https://conduit.wyre.ai`
-2. Check that your API token is valid
-3. Ensure the MCP Gateway service is running
+2. Check that Abnormal Security shows as connected in Conduit
+3. Make sure your client is still signed in to Conduit; re-authenticate the connector if its OAuth sign-in has expired
 
 ## Contributing
 

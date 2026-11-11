@@ -1,0 +1,11 @@
+{
+  "name": "myitprocess",
+  "version": "1.0.0",
+  "description": "Kaseya myITprocess - read-only vCIO data for MSPs: client alignment scores, alignment reviews and overdue standards categories, findings, roadmap recommendations and initiatives, and client meetings (QBRs)",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

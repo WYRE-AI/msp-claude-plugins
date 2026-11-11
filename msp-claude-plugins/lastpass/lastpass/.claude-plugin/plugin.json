@@ -1,0 +1,11 @@
+{
+  "name": "lastpass",
+  "version": "1.0.0",
+  "description": "Claude plugins for LastPass Business and MSP admin - read-only access reviews through Conduit: leaver checks, MFA and security-score posture, privileged-access reviews across the client book, and MSP license/billing reconciliation. No vault data.",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}
