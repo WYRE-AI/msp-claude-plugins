@@ -39,6 +39,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **GitHub Actions bumped and SHA-pinned ([#250](https://github.com/WYRE-AI/msp-claude-plugins/pull/250)).** `actions/checkout` v7.0.1, `actions/setup-node` v7.1.0, `actions/upload-pages-artifact` v5.0.0, `actions/deploy-pages` v5.0.1, `peter-evans/repository-dispatch` v4.0.1, `anthropics/claude-code-action` v1.0.266 and `alibaba/open-code-review` v1.13.3 (CLI pin `ocr_version` matches). Every pin is a full commit SHA with its exact version in the comment, including `validate.yml`, which used floating major tags. Each input the workflows pass still exists in the new `action.yml` files.
+
 - Docs site: `bcdr` plugins are now labelled "Backup & DR". The plugin table on `/plugins/` labels `bcdr` as "Backup & DR" instead of leaving it blank, the catalog page has a "Backup & DR" section, and plugin cards and detail pages show a "Backup & DR" badge.
 
 - **`autotask` 0.6.6 — tickets skill documents `searchTerm` as a ticket-number prefix ([WYREAI-369](https://linear.app/wyre-ai/issue/WYREAI-369/autotask-searchterm-is-a-ticket-prefix-skills-say-title-search)).** `autotask_search_tickets` matches `searchTerm` with `beginsWith` on `ticketNumber`, so title words return nothing. The skill now says so, shows a `"T20260917"` lookup, and lists every filter the live tool accepts. It also notes that a number lookup skips Complete tickets unless `status: 5` is passed, and that `page` is ignored by the server, so only the first `pageSize` (max 500) results come back. The duplicate check lists the company's open tickets and compares titles client-side instead of searching by title, and treats a full 500-row result as inconclusive.
