@@ -124,18 +124,45 @@ look up the client and that ticket with the PSA tools in Step 3.
 
 These two tools only filter the most recent page of up to 100 surveys,
 so their results can be incomplete, and they never see responses older
-than `<since>`. Before drafting for a candidate, page through
-`crewhu_surveys_list` with `sentiment: "negative"` and an increasing
-`step` (omit `since`), until it reports no more results, to check that
-customer's older negative responses. If you cannot page to the end, say
-so and ask the operator to confirm that the client has no unresolved
-detractor survey of any age before you draft.
+than `<since>`. Before drafting for a candidate, check that customer's
+older negative responses by paging `crewhu_surveys_list` with
+`sentiment: "negative"` and no `since`, using the bounded paging below.
+If the paging does not cover every survey, say so and ask the operator
+to confirm that the client has no unresolved detractor survey of any age
+before you draft.
+
+#### Bounded paging for `crewhu_surveys_list`
+
+`crewhu_surveys_list` takes `limit` (1 to 100), `step` (a 1-based page
+number), and `sentiment`. The sentiment filter runs on the page after it
+is fetched, so a page can come back empty while later pages still hold
+matches.
+
+1. Call with `limit: 100`, `step: 1`, and the `sentiment` you need.
+2. Read `TOTAL` from the result header, `(N shown, TOTAL total, ...)`.
+   `TOTAL` counts every survey in scope, not only those matching the
+   sentiment. `N` is only the matches on this page.
+3. While `step * 100 < TOTAL`, call again with `step + 1`.
+4. Stop at the first of these: `step * 100 >= TOTAL`, `step` reaches 10
+   (1,000 surveys), or a call returns an error.
+5. Do not use the "More results available" footer or the message "No
+   surveys found matching the criteria." as the stop signal. The footer
+   is left off when the filter empties a page, so an empty page does not
+   mean the data has ended.
+
+If you stopped on the cap or an error, report how many surveys you
+covered out of `TOTAL`, treat the check as incomplete, and ask the
+operator to confirm the point in question (no older detractor, or whether
+recent promoters exist) rather than paging further.
 
 With SmileBack, call `smileback_nps_responses_list` with
 `created_since` and `score_gt: 8` for promoters (scores of 9 or 10), and
-again with `score_lt: 7` for detractors. Page with `limit` and `offset`
-until `next` is null, as the connector's own API patterns skill
-describes. Check negative and neutral CSAT reactions with
+again with `score_lt: 7` for detractors. Use `limit: 100` and step
+`offset` by 100 while `next` is not null, for at most 10 pages per call
+(1,000 responses). If a page comes back with `truncated: true`, continue
+from `offset + returned_items` instead. If `next` is still set after 10
+pages, or a call returns an error, report the check as incomplete and
+ask the operator to verify rather than paging further. Check negative and neutral CSAT reactions with
 `smileback_reviews_list` (read the `rating` values on the first page
 rather than assuming their encoding) and keep only the reviews whose
 `rated_on` falls in the window. Each NPS response carries
@@ -201,11 +228,11 @@ connector, and retry." Do not build the list from tickets alone.
 
 ### Promoters list is empty
 
-An empty promoter result covers only the page that was checked. If more
-survey pages exist (`crewhu_surveys_list` reports more results), page
-through them with `sentiment: "positive"`, the same `<since>`, and an
-increasing `step` before reporting none. If you cannot, say the list
-may be incomplete and ask the operator whether recent promoters exist. Do not widen the net to detractors or to
+An empty promoter result covers only the page that was checked. Before
+reporting none, page `crewhu_surveys_list` with `sentiment: "positive"`
+and the same `<since>`, using the bounded paging in Step 2. If that
+paging is incomplete, say the list may be incomplete and ask the operator
+whether recent promoters exist. Do not widen the net to detractors or to
 unsurveyed clients in order to produce drafts.
 
 ### Survey and tickets disagree
