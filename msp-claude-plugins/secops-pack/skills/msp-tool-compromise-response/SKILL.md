@@ -35,6 +35,9 @@ mail fraud is [BEC Response](../bec-response/SKILL.md).
 
 ## Anti-triggers
 
+- **Vendor Entra app / Partner Center integration compromise or stolen client
+  secret:** use [Vendor App Compromise Response](../vendor-app-compromise-response/SKILL.md).
+
 - **Ordinary first-response for a compromised mailbox, malware, or a
   leaked user password** — use `secops-pack-containment-playbooks` or
   `secops-pack-bec-response`.
