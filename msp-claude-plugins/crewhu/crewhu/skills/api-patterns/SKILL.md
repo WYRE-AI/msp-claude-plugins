@@ -27,12 +27,9 @@ Crewhu uses an API token passed via header:
 |--------|-------|
 | `X-Crewhu-Api-Token` | The raw API token |
 
-The gateway maps the environment variable `X_CREWHU_APITOKEN` onto the
-`X-Crewhu-Api-Token` header automatically.
-
-```bash
-export X_CREWHU_APITOKEN="your-crewhu-api-token"
-```
+The token is stored on the Crewhu connection in Conduit, which injects
+it as `X-Crewhu-Api-Token` on every request; nothing is set on the
+client.
 
 ## Tool Surface
 
@@ -56,7 +53,7 @@ stable denominator.
 
 | Status | Meaning | Action |
 |--------|---------|--------|
-| 401 | Missing or invalid token | Re-check `X_CREWHU_APITOKEN` |
+| 401 | Missing or invalid token | Re-check the API token on the Crewhu connection in Conduit |
 | 403 | Token valid but not authorized for this resource | Check token scope |
 | 404 | Unknown survey / user / badge / prize ID | Re-list to confirm |
 | 429 | Rate limit | Back off and retry |

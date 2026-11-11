@@ -49,15 +49,10 @@ key is sent in the `apiKey` HTTP header:
 
 Generate the key in Quote Manager under **Settings → API**.
 
-When used through the WYRE MCP gateway, the gateway maps the environment
-variable `X_KQM_APIKEY` onto an `X-Kqm-Api-Key` header, and the MCP server
-translates that into the upstream `apiKey` header automatically. You do not
-need to construct headers by hand — set the credential and the server
-handles upstream auth translation.
-
-```bash
-export X_KQM_APIKEY="your-quote-manager-api-key"
-```
+Through Conduit, the key is stored on the Kaseya Quote Manager connection.
+Conduit injects it as an `X-Kaseya-Quote-Manager-API-Key` header, and the MCP
+server translates that into the upstream `apiKey` header automatically. You do
+not construct headers by hand, and nothing is set on the client.
 
 ## Base URL
 

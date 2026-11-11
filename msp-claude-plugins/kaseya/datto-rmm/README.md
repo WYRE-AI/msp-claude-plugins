@@ -24,41 +24,19 @@ You need a Datto RMM API key with appropriate permissions:
 3. Create a new API key or use existing credentials
 4. Note your platform (pinotage, merlot, concord, vidal, zinfandel, syrah)
 
-### Environment Variables
+### Connect through Conduit
 
-Set the following environment variables:
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Datto RMM once in Conduit (**Connections → Datto RMM**, slug `datto-rmm`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```bash
-export DATTO_API_KEY="your-api-key"
-export DATTO_API_SECRET="your-api-secret"
-export DATTO_PLATFORM="merlot"  # Your platform
-```
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DATTO_API_KEY` | Yes | | Your Datto RMM API key |
-| `DATTO_API_SECRET` | Yes | | Your Datto RMM API secret |
-| `DATTO_PLATFORM` | Yes | | Your platform (e.g., `merlot`, `pinotage`, `concord`) |
-| `DATTO_RMM_MCP_URL` | No | `https://datto-rmm-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| API Secret |
+| Platform |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `DATTO_RMM_MCP_URL` to your gateway's endpoint:
-
-```
-DATTO_RMM_MCP_URL=https://your-gateway-domain/v1/datto-rmm/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Datto RMM → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "DATTO_RMM_MCP_URL": "https://your-gateway-domain/v1/datto-rmm/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http datto-rmm https://your-gateway-domain/v1/datto-rmm/mcp`. The gateway then holds the Datto RMM credentials, not the client.
 
 ### Supported Platforms
 
@@ -75,9 +53,12 @@ Datto RMM operates across 6 regional platforms:
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install datto-rmm@msp-claude-plugins
+```
+
+Then connect Datto RMM in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 

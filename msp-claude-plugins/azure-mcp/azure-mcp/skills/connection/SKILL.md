@@ -29,11 +29,14 @@ The `azure-mcp` vendor runs Microsoft's official Azure MCP Server (`mcr.microsof
 
 ## Read-only deployment — read this first
 
-The gateway runs the Azure MCP Server with the `--read-only` flag and a deliberately constrained namespace allowlist. Day-one the connector exposes exactly eight read-leaning namespaces:
+The gateway runs the Azure MCP Server with the `--read-only` flag and a deliberately constrained namespace allowlist. The live connector lists eleven tools:
 
 ```
-monitor   pricing   quota   advisor   resourcehealth   applens   subscription   group
+subscription_list   group_list   group_resource_list   advisor   monitor   resourcehealth
+applens   pricing   quota   foundry   search
 ```
+
+`subscription_list`, `group_list`, `group_resource_list` and `advisor` are classified `read` in Conduit. The rest are unclassified and enforce at `admin`; `foundry` (Azure AI Foundry) and `search` (Azure AI Search) are newer namespaces that this plugin does not otherwise cover.
 
 Write- and delete-capable namespaces (`storage`, `keyvault`, `compute`, `role`, `aks`, and others) are **not enabled**. This is intentional defense-in-depth: even if a service principal were over-privileged, the gateway cannot route a mutating call. As shipped, `azure-mcp` is an Azure observability, cost, and resource-health tool — nothing it does changes infrastructure.
 
@@ -93,14 +96,14 @@ In the gateway connection UI, choose the **`azure-mcp`** vendor and supply:
 2. **Service Principal Client ID** — the app registration's `appId`
 3. **Service Principal Client Secret** — the secret from Step 1
 
-The gateway authenticates the Azure MCP sidecar with these credentials and routes the eight enabled namespaces' tools into your session. No Azure credentials are stored client-side.
+The gateway authenticates the Azure MCP sidecar with these credentials and routes the enabled namespaces' 11 tools into your session. No Azure credentials are stored client-side.
 
 ## Verifying the connection
 
 After connecting, confirm the connector is live with a harmless read:
 
-1. List subscriptions (`subscription` namespace) — confirms the service principal authenticated and has at least Reader visibility.
-2. List resource groups (`group` namespace) for one subscription — confirms scope is correct.
+1. List subscriptions (`subscription_list`) — confirms the service principal authenticated and has at least Reader visibility.
+2. List resource groups (`group_list`) for one subscription, then one group's resources (`group_resource_list`) — confirms scope is correct.
 3. If either returns an empty result or an authorization error, the service principal lacks a role assignment at the expected scope, or the client secret has expired — re-check Step 2 and the secret's validity.
 
 ## Troubleshooting

@@ -1,71 +1,75 @@
 ---
 name: "KPN API Patterns"
 description: >
-  How the KPN tool surface behaves through Conduit: the X-KPN-* credential
-  headers and the two OAuth token realms (API Store vs Mobile Services
-  Management), why a valid key can still fail with 401/403 (product
-  entitlement), quota headers and 429 handling, the write-confirmation
-  flow, and why failed MSM writes are never retried automatically.
+  How the KPN tool surface behaves through Conduit: the Grexx (IRMA) wholesale
+  interface behind the kpn_grexx_* tools, the client-ID/secret credential pair
+  and the optional Grexx URL fields, the IRMA customer/order model, the one
+  write tool, and common errors.
 when_to_use: >-
   When calling any KPN tool, diagnosing a KPN connection or permission
   failure, or deciding whether a KPN operation is possible. Use when: kpn
-  credentials, kpn 401, kpn 403, kpn not entitled, kpn quota, kpn test
-  connection, kpn mobile services management access, developer.kpn.com keys.
+  credentials, kpn grexx, kpn irma, kpn 401, kpn test connection, kpn order id,
+  or grexx api gegevens.
 ---
 
 # KPN API Patterns
 
 ## Overview
 
-KPN exposes its APIs through an Apigee gateway at `api-prd.kpn.com`. The
-kpn-mcp sidecar mints and caches OAuth2 client-credentials tokens itself;
-Conduit only forwards the stored keys as headers. Start any troubleshooting
-with `kpn_test_connection`.
+Conduit's `kpn` connector talks to KPN's **Grexx** wholesale interface (the IRMA ordering platform used by KPN partners), not to the developer.kpn.com API Store. Every tool is named `kpn_grexx_*`. The kpn-mcp sidecar mints and caches an OAuth 2.0 client-credentials token against Grexx itself; Conduit only supplies the stored credentials. Start any troubleshooting with `kpn_grexx_test_connection`.
 
-## Credentials and token realms
+## Credentials
 
-| Conduit field | Header | Used for |
+| Conduit field | Required | Sent to the sidecar as | Notes |
+|---|---|---|---|
+| Client ID (Grexx username) | Yes | `X-KPN-Grexx-Username` | From the Grexx portal, **API Gegevens** |
+| Client secret (Grexx password) | Yes | `X-KPN-Grexx-Password` | |
+| Grexx API URL / token URL | No (both or neither) | Validated by Conduit on every call | Leave both blank to use KPN's Grexx **test** environment (acceptatie). Set both for production. |
+
+Nothing is set on the client. A connection that works but returns test data is almost always one with the URL fields left blank.
+
+## Tools
+
+| Tool | Tier | Purpose |
 |---|---|---|
-| Client ID / Secret (required) | `X-KPN-Client-Id`, `X-KPN-Client-Secret` | Disturbance Check, Speed Check, SIM Swap; also MSM when no MSM pair is set |
-| MSM Client ID / Secret (optional, both or neither) | `X-KPN-MSM-Client-Id`, `X-KPN-MSM-Client-Secret` | Mobile Services Management (`kpn_mobile_*`) |
+| `kpn_grexx_test_connection` | read | Verify the credentials mint a token |
+| `kpn_grexx_zipcode_check` | read | Technology and speeds at a Dutch address, per supplier |
+| `kpn_grexx_prequalification` | read | Product-type availability per supplier at an address |
+| `kpn_grexx_carrier_info` | read | Infrastructure at an address: connection points, line details, planned work |
+| `kpn_grexx_customer_data` | read | Search IRMA customer cards (paged, `take` up to 100) |
+| `kpn_grexx_order_summary` | read | Orders for a customer card, filterable by state, product group, dates, label or attribute |
+| `kpn_grexx_order_data` | read | Customer, product code and quantity for one order |
+| `kpn_grexx_radius_check` | read | RADIUS login history of a connectivity order's modem, last 7 days |
+| `kpn_grexx_ras_check` | read | Whether a PPP session is up and its IP address |
+| `kpn_grexx_mobile_orders` | read | Number, SIM, subscription and bundles for 1-50 mobile orders |
+| `kpn_grexx_get_sim` | read | Active SIM / eSIM on a mobile order (ICCID, type; PUK and eSIM codes masked) |
+| `kpn_grexx_mobile_settings` | read | Blocks and limits on a mobile number |
+| `kpn_grexx_mobile_usage` | read | Current data, voice and SMS usage |
+| `kpn_grexx_available_portings` | read | Number portings available for a customer's mobile subscriptions or a HIP group |
+| `kpn_grexx_start_line_diagnose` | write | Start a KPN line diagnose on an xDSL order |
 
-The two realms mint tokens from different endpoints. MSM access is tied to a
-KPN business-mobile customer and may need an app that KPN set up for that
-customer, which is why it has its own optional pair.
+## Object model
 
-## Key concepts
+```
+IRMA customer card (customerId)
+ └── Order (orderId) — product group: Connectivity, Internet, Voip, Mobile, ...
+      ├── Connectivity order → radius_check, ras_check, start_line_diagnose
+      └── Mobile order       → mobile_orders, get_sim, mobile_settings, mobile_usage
+```
 
-- **A valid key is not an entitled key.** KPN mints a token for any valid
-  project, even if the product was never added to it. The call then fails
-  with 401 or 403. Tell the user to add the product to their project on
-  developer.kpn.com rather than to re-enter credentials.
-- **Quotas are per project and unpublished.** Responses carry `quota-*`
-  headers; `kpn_test_connection` reports the last seen values. On 429 the
-  error includes when the quota resets.
-- **Test and production share one host.** The account tier (demo/prod)
-  is a property of the project, reported by `kpn_test_connection`.
+Almost every per-line tool takes an IRMA **order ID**. Find it with `kpn_grexx_order_summary` (filter by `customerId`, `productGroup`, or `attribute` such as a phone number), after resolving the customer with `kpn_grexx_customer_data`.
 
-## Writes
+## The write tool
 
-The five MSM write tools and `kpn_mobile_contracts_get_puk` ask the user to
-confirm before running. Clients that cannot show a prompt must pass
-`confirm_destructive_action: true`, and should only do so after the user has
-agreed in the conversation.
+`kpn_grexx_start_line_diagnose` starts a test on KPN's side for an xDSL order that is out of sync, with a `symptomCode` of `Sym103`, `Sym104`, `Sym105` or `Sym111`. It is not retried automatically. Confirm the order and symptom with the user before starting it, and do not start a second diagnose while one is running.
 
-MSM writes create **orders**. Success means KPN accepted the order, not that
-the SIM is already blocked or replaced; the order may sit in `UNAUTHORIZED`
-until someone approves it (`kpn_mobile_orders_authorize`).
-
-A failed write is never retried automatically, because a duplicate block or
-authorize is a real side effect. Before retrying after an error, check
-`kpn_mobile_orders_list` for an order that already went through.
+There are no tools to block or replace a SIM, authorise orders, or read invoices. Those operations happen in the Grexx portal.
 
 ## Common errors
 
 | Symptom | Likely cause | Action |
 |---|---|---|
-| `kpn_test_connection` fails on the main realm | Wrong client ID/secret | Re-check the project keys on developer.kpn.com |
-| Token mints, tool returns 401/403 | Product not added to the project | Add the product to the project |
-| MSM token fails, network tools work | MSM needs a customer-bound app | Ask KPN for MSM access; set the optional MSM pair |
-| 404 on SIM Swap | Not a KPN mobile number | SIM Swap only covers KPN NL numbers |
-| 429 | Project quota reached | Wait for the reset time in the error |
+| `kpn_grexx_test_connection` fails | Wrong client ID/secret | Re-copy both from Grexx portal → API Gegevens |
+| Works, but data looks like test data | URL fields blank (acceptatie) | Set both production Grexx URLs on the connection |
+| Mobile settings or usage empty | Order activated less than 5 minutes ago | Retry after activation settles |
+| Unknown order ID | Wrong customer card | Re-run `kpn_grexx_order_summary` for the customer |

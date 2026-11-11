@@ -19,7 +19,7 @@ Mimecast authenticates via OAuth 2.0 client credentials. The MCP Gateway injects
 
 | Header | Description |
 |--------|-------------|
-| `X-Mimecast-Client-ID` | OAuth 2.0 Client ID |
+| `X-Mimecast-Client-Id` | OAuth 2.0 Client ID |
 | `X-Mimecast-Client-Secret` | OAuth 2.0 Client Secret |
 | `X-Mimecast-Region` | Regional API endpoint (us, eu, de, ca, za, au) |
 
@@ -49,19 +49,9 @@ Mimecast operates regional API endpoints. Use the region matching your Mimecast 
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your Client ID, Client Secret, and select your region.
 
-### Self-Hosted (Docker)
-
-Run the Mimecast MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export MIMECAST_CLIENT_ID="your-client-id"
-export MIMECAST_CLIENT_SECRET="your-client-secret"
-export MIMECAST_REGION="us"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Mimecast in the Conduit web UI (`/connect/mimecast`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

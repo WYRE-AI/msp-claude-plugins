@@ -104,7 +104,7 @@ function buildOgTree() {
                 props: {
                   style: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'flex-end' },
                   children: [
-                    { type: 'div', props: { style: { fontSize: '24px', color: '#7dd3fc', fontWeight: 500 }, children: 'mcp.wyre.ai' } },
+                    { type: 'div', props: { style: { fontSize: '24px', color: '#7dd3fc', fontWeight: 500 }, children: 'conduit.wyre.ai' } },
                   ],
                 },
               },

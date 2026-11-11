@@ -91,6 +91,17 @@ See [references/examples.md](references/examples.md) for the full `restructureDo
 
 Ensure the target folder exists, build HTML content section by section (overview, prerequisites, steps, embedded credentials), create the document, then create related items linking it to relevant configurations.
 
+### Renaming, Deleting and Attachments
+
+- `update_document` (write) **renames** a document (`document_id`, `name`). It cannot move a document between folders: IT Glue does not accept `document_folder_id` on update.
+- `delete_document` (admin) permanently deletes a document and all its sections. Prefer `archive_document`, which is recoverable with `unarchive_document`; delete only when the user explicitly asks and has confirmed the document ID.
+- `create_attachment` (write) attaches a file (`resource_type`, `resource_id`, `file_name`, base64 `content` without a `data:` prefix) to a document or any other record. It is the only supported way to get an image into a document body: upload it, then reference the returned download URL from an `<img src>` in a section.
+- `list_attachments` (read) lists the files on a record with their download URLs.
+
+### Who Has Been Using IT Glue
+
+`search_user_metrics` (read) returns per-user, per-organization, per-resource-type counts of created, viewed, edited and deleted actions by date. The date range is at most 7 days per call; page through longer periods week by week. Use it for "who viewed the passwords for this client last week?" and for documentation-engagement reports.
+
 ## API Patterns
 
 - **List documents by organization only** — `GET /documents` (top-level) returns 404 in practice. Use `GET /organizations/:id/relationships/documents` instead.

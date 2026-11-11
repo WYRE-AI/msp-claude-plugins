@@ -24,21 +24,24 @@ You need an IT Glue API key with appropriate permissions:
 3. Create a new API key with required permissions
 4. Note your region (US, EU, or AU)
 
-### Environment Variables
+### Connect through Conduit
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ITGLUE_API_KEY` | Yes | — | IT Glue API key |
-| `ITGLUE_REGION` | No | `us` | API region: `us`, `eu`, or `au` |
-| `ITGLUE_MCP_URL` | No | `https://itglue-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+This plugin ships no `.mcp.json` and reads no environment variables. Connect IT Glue once in Conduit (**Connections → IT Glue**, slug `itglue`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
+| API host |
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables above
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install itglue@msp-claude-plugins
+```
+
+Then connect IT Glue in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -106,7 +109,7 @@ If `search_documents` returns 404, use `list_flexible_asset_types` + `search_fle
 ### API Key Security
 
 - Never commit API keys to version control
-- Use environment variables for credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically
 - Use minimum required permissions
 
@@ -114,7 +117,7 @@ If `search_documents` returns 404, use `list_flexible_asset_types` + `search_fle
 
 IT Glue operates in multiple regions:
 
-| Region | Base URL | `ITGLUE_REGION` value |
+| Region | Base URL | Conduit Region value |
 |--------|----------|------------------------|
 | US | `https://api.itglue.com` | `us` (default) |
 | EU | `https://api.eu.itglue.com` | `eu` |
@@ -122,11 +125,7 @@ IT Glue operates in multiple regions:
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ITGLUE_MCP_URL` to your gateway's IT Glue endpoint:
-
-
-
-The gateway handles authentication via OAuth — remove the `ITGLUE_API_KEY` header from your setup when using gateway mode.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http itglue https://your-gateway-domain/v1/itglue/mcp`. The gateway then holds the IT Glue credentials, not the client.
 
 ## API Rate Limits
 
@@ -139,13 +138,13 @@ IT Glue enforces rate limits:
 
 ### Authentication Errors (401)
 
-1. Verify `ITGLUE_API_KEY` is set correctly
+1. Check the IT Glue connection in Conduit (**Connections → IT Glue**): reconnect it, or re-enter the credentials
 2. Check the API key hasn't expired
 3. Confirm the key has required permissions
 
 ### Wrong Region (404 on valid resources)
 
-1. Verify `ITGLUE_REGION` matches your IT Glue account
+1. Verify the Region on the IT Glue connection in Conduit matches your IT Glue account
 2. Try `us`, `eu`, or `au` if unsure
 
 ### Documents return 404

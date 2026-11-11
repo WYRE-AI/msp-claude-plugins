@@ -131,24 +131,9 @@ msp-claude-plugins/
 | REST Client | API testing | Thunder Client extension |
 | Claude Code | Testing plugins locally | https://claude.ai/code |
 
-### Environment Variables
+### Vendor Credentials
 
-When testing MCP integrations, configure these environment variables:
-
-```bash
-# Autotask
-export AUTOTASK_USERNAME="your-api-user@domain.com"
-export AUTOTASK_INTEGRATION_CODE="YOUR_INTEGRATION_CODE"
-export AUTOTASK_SECRET="YOUR_SECRET"
-
-# ConnectWise
-export CW_COMPANY_ID="your-company"
-export CW_PUBLIC_KEY="your-public-key"
-export CW_PRIVATE_KEY="your-private-key"
-export CW_CLIENT_ID="your-client-id"
-
-# Never commit these values!
-```
+Plugins read no environment variables. To test a plugin against a vendor, connect the vendor in Conduit (its connection fields come from Conduit's `vendor-config.ts`) and use the unified connector, as described under the `.mcp.json` convention below. Conduit stores the credentials and injects them on each request. Never commit vendor credentials.
 
 ---
 
@@ -406,59 +391,60 @@ Before submitting:
 
 ## MCP Server Integration Guide
 
-MCP (Model Context Protocol) enables direct API connectivity from Claude.
+MCP (Model Context Protocol) enables direct API connectivity from Claude. Plugins in this marketplace reach vendors through the **WYRE Conduit gateway**, which holds vendor credentials, enforces per-tool permission tiers, and audits every call. Plugins never carry vendor secrets.
 
-### MCP Configuration File
+### The `.mcp.json` convention
 
-Create `.mcp.json` in your plugin root:
+Choose one of two shapes. Both are URL-only: **no `headers` block and no environment variables.**
 
-```json
-{
-  "mcpServers": {
-    "vendor-product": {
-      "command": "npx",
-      "args": ["-y", "@vendor/mcp-server-product"],
-      "env": {
-        "API_USERNAME": "${VENDOR_USERNAME}",
-        "API_KEY": "${VENDOR_API_KEY}"
-      }
-    }
-  }
-}
-```
+1. **Connector-only (preferred for new plugins).** Ship no `.mcp.json`. The user installs the `wyre-gateway` plugin (or any workflow pack), which connects to the unified endpoint, and connects the vendor in the Conduit web UI. Say so in the README.
 
-### Environment Variable References
+2. **Per-vendor URL** (the 12 existing vendor plugins that ship one). Deprecated by Conduit but still supported — the per-slug route answers with `Deprecation: true` and a successor link to `/v1/mcp`:
 
-- Use `${VARIABLE_NAME}` syntax for environment variables
-- Document all required variables in README.md
-- Never hardcode credentials
+   ```json
+   {
+     "mcpServers": {
+       "<conduit-slug>": {
+         "type": "http",
+         "url": "https://conduit.wyre.ai/v1/<conduit-slug>/mcp"
+       }
+     }
+   }
+   ```
+
+   `<conduit-slug>` must be the vendor's key in Conduit's `VENDORS` (for example `connectwise-psa`, not `connectwise-manage`; `avanan`, not `checkpoint-avanan`).
+
+Workflow packs and `wyre-gateway` use the unified endpoint, `https://conduit.wyre.ai/v1/mcp`. The packs name the server `conduit`; `wyre-gateway` keeps its existing name, `msp-mcp-gateway`, because renaming it would change the tool IDs in users' permission allowlists.
+
+### Why there are no headers
+
+Conduit forwards only `mcp-session-id` from the client (`buildUpstreamHeaders` in Conduit's `src/proxy/router.ts`). Vendor credentials are stored on the Conduit connection and injected after the OAuth check, mapped onto the `X-<Vendor>-*` headers in Conduit's `vendor-config.ts` `headerMapping`. Client-sent `X-<Vendor>-*` headers are dropped, so putting them in `.mcp.json` only asks users to keep secrets in environment variables for nothing. Document the **Conduit connection fields** in the README instead, and mention the header names only when explaining what the MCP server receives.
+
+### Tool names
+
+Every tool a skill, agent or command names must exist on the live Conduit connector for that vendor (check Conduit's `VENDOR_TOOL_CONFIG` in `src/proxy/result-cache.ts` and the connector's `tools/list`). `scripts/check-tool-anchoring.mjs` only finds documents that name no tool at all; it does not prove a named tool exists. `scripts/tool-drift-audit.mjs` checks names against a live tool list, and only when you pass one (`--live`), so run it with a live list when you add or rename tool references. State each write or admin tool's Conduit tier where you describe it.
 
 ### Testing MCP Integration
 
 ```bash
-# 1. Set environment variables
-export VENDOR_USERNAME="test-user"
-export VENDOR_API_KEY="test-key"
-
-# 2. Start Claude Code with plugin
+# 1. Install the gateway plugin and connect the vendor in the Conduit web UI
+# 2. Start Claude Code with your plugin
 cd vendor/product
 claude --plugin .
-
-# 3. Test MCP tools
-# Claude should have access to vendor API tools
+# 3. Exercise the skills; the vendor's tools come from Conduit
 ```
 
 ### MCP Server Development
 
-If creating a new MCP server:
+New vendor MCP servers are built as Conduit sidecars (see the `mcp-vendor-scaffolding` process), not published for clients to run with `npx`. When a new server ships:
 
-1. Follow [MCP specification](https://modelcontextprotocol.io/)
-2. Publish to npm as `@vendor/mcp-server-product`
-3. Document all available tools
-4. Include authentication guidance
-5. Handle rate limiting appropriately
+1. Follow the [MCP specification](https://modelcontextprotocol.io/)
+2. Register the vendor in Conduit (`vendor-config.ts`) and classify every tool in `VENDOR_TOOL_CONFIG`
+3. Name the plugin exactly after the Conduit `VENDORS` key, so the skill catalog links them
+4. Document all tools and their tiers in the plugin
 
 ---
+
 
 ## Testing Requirements
 

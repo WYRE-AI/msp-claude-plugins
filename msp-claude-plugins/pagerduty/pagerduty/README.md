@@ -16,60 +16,32 @@ This plugin provides Claude with deep knowledge of PagerDuty, enabling:
 
 ### API Credentials
 
-PagerDuty authenticates via a User API Token:
+Through Conduit there is no token to create: Conduit connects PagerDuty with OAuth. A **self-hosted** gateway authenticates with a User API Token:
 
 1. Log into [PagerDuty](https://app.pagerduty.com)
 2. Navigate to **My Profile > User Settings > API Access**
 3. Click **Create New API Key**
 4. Copy the generated token
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export PAGERDUTY_API_TOKEN="your-api-token"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect PagerDuty once in Conduit (**Connections → PagerDuty**, slug `pagerduty`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PAGERDUTY_API_TOKEN` | Yes | | User API Token from My Profile > User Settings > API Access |
-| `PAGERDUTY_MCP_URL` | No | `https://conduit.wyre.ai/v1/pagerduty/mcp` | MCP server URL -- override to use a self-hosted gateway |
+There are no fields to paste: Conduit signs in to PagerDuty with OAuth.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `PAGERDUTY_MCP_URL` to your gateway's endpoint:
-
-```
-PAGERDUTY_MCP_URL=https://your-gateway-domain/v1/pagerduty/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > PagerDuty > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "PAGERDUTY_MCP_URL": "https://your-gateway-domain/v1/pagerduty/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http pagerduty https://your-gateway-domain/v1/pagerduty/mcp`. The gateway then holds the PagerDuty credentials, not the client.
 
 ## Installation
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
-
-### Self-Hosted (Docker)
-
-Run the PagerDuty MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
+Connect PagerDuty in [Conduit](https://conduit.wyre.ai) and sign in to PagerDuty with OAuth; there is no token to paste.
 
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export PAGERDUTY_API_TOKEN="your-api-token"
-```
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install pagerduty@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect PagerDuty in the Conduit web UI (`/connect/pagerduty`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -129,7 +101,7 @@ export PAGERDUTY_API_TOKEN="your-api-token"
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API tokens periodically via the PagerDuty dashboard
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the PagerDuty audit log
@@ -146,10 +118,8 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `PAGERDUTY_API_TOKEN` is set correctly
-2. Check that the API token has not been revoked
-3. Regenerate the token at My Profile > User Settings > API Access
-4. Ensure the token type is correct (User Token vs. Account-level API Key)
+1. Reconnect PagerDuty in Conduit (**Connections → PagerDuty**); Conduit signs in with OAuth, so there is no token to paste
+2. On a self-hosted gateway, check that its API token has not been revoked, regenerate it at My Profile > User Settings > API Access if needed, and make sure the token type is right (User Token vs. Account-level API Key)
 
 ### Rate Limits
 

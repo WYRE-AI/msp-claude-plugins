@@ -7,7 +7,7 @@ description: >-
   rootly. Examples: "What incidents are currently open?", "Walk me through the active SEV-1
   incident", "Use AI to find similar past incidents", "Help me write the postmortem for the
   incident we just resolved", "Generate a handoff summary for the incoming on-call"
-tools: ["mcp__rootly__list_incidents", "mcp__rootly__list_severities", "mcp__rootly__list_services", "mcp__rootly__list_teams", "mcp__rootly__create_incident", "mcp__rootly__update_incident", "mcp__rootly__find_related_incidents", "mcp__rootly__suggest_solutions", "mcp__rootly__create_incident_action_item", "mcp__rootly__list_incident_action_items", "mcp__rootly__attach_alert", "mcp__rootly__get_oncall_handoff_summary", "mcp__rootly__check_oncall_health_risk", "mcp__rootly__get_oncall_shift_metrics", "Bash", "Read", "Write", "Glob", "Grep"]
+tools: ["mcp__rootly__list_incidents", "mcp__rootly__list_severities", "mcp__rootly__list_services", "mcp__rootly__list_teams", "mcp__rootly__create_incident", "mcp__rootly__update_incident", "mcp__rootly__find_related_incidents", "mcp__rootly__suggest_solutions", "mcp__rootly__create_incident_action_item", "mcp__rootly__list_incident_action_items", "mcp__rootly__attach_alert", "mcp__rootly__get_oncall_handoff_summary", "mcp__rootly__check_responder_availability", "mcp__rootly__get_oncall_shift_metrics", "Bash", "Read", "Write", "Glob", "Grep"]
 model: inherit
 ---
 
@@ -32,7 +32,7 @@ For MSP environments, you also manage the cross-system correlation workflow: Roo
 - Create and track action items for each active incident to drive remediation steps
 - Attach alerts to incidents for a complete audit trail
 - Generate on-call handoff summaries with open incidents, current responder, and next responder details
-- Check on-call health risk before major deployments or maintenance windows
+- Check responder load (`get_oncall_shift_metrics`) and availability (`check_responder_availability`) before major deployments or maintenance windows
 - Review shift metrics to identify responder load imbalances and burnout risk indicators
 - Draft stakeholder communication updates appropriate to severity level
 - Produce structured post-incident reviews (PIRs) from incident timeline and action item data

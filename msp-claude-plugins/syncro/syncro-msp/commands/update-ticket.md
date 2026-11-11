@@ -203,4 +203,3 @@ Please provide at least one field to update:
 - `/create-ticket` - Create a new ticket
 - `/search-tickets` - Search for tickets
 - `/add-ticket-comment` - Add a comment to a ticket
-- `/log-time` - Log time against a ticket
