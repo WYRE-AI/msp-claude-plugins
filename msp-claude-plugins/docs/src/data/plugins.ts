@@ -2745,19 +2745,21 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
     maturity: 'beta',
     features: [
       'Alert Severity Normalization',
       'Bec Response',
       'Containment Playbooks',
+      'Msp Tool Compromise Response',
       'Shadow Ai'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
+      { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
       { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' }
     ],
     agents: [
@@ -2788,13 +2790,17 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Agreement Reconciliation',
+      'Churn Scanner',
       'License True Up',
-      'Margin Analysis'
+      'Margin Analysis',
+      'Renewal And Price Increase Prep'
     ],
     skills: [
       { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
+      { name: 'churn-scanner', description: 'Cross-vendor client retention risk ranking from ticket volume, customer sentiment, SLA misses, overdue invoices, upcoming agreement renewals, and RMM availability proxies.' },
       { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
-      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' }
+      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' },
+      { name: 'renewal-and-price-increase-prep', description: 'Composes Agreement Reconciliation and Margin Analysis into per-client talking points for an upcoming renewal or a price-increase conversation.' }
     ],
     agents: [
       { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },
@@ -2860,11 +2866,13 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Pipeline Health',
+      'Prospect Security Snapshot',
       'Quote To Close Tracking',
       'Warm Lead Routing'
     ],
     skills: [
       { name: 'pipeline-health', description: 'CRM pipeline health assessment against whatever CRM is discovered through the gateway: stage-velocity norms derived from closed-won deals, activity-based stalled-deal detection, raw and quality-adjusted pipeline coverage against a revenue target, and the CRM-less degradation rule (report nothing rather than fabricate figures).' },
+      { name: 'prospect-security-snapshot', description: 'A one-page, plain-language public-domain risk report for a first sales conversation: SPF, DKIM, and DMARC from CIPP only after the operator confirms any CIPP use and the domain is a connected tenant\'s default or initial domain (MX from the agent\'s own DNS lookups, or unavailable); certificates and exposed services only when a read-only tool or an in-session lookup already has that data; breach mentions only when a tool or a cited public search exists.' },
       { name: 'quote-to-close-tracking', description: 'The quote-to-close handoff chain — a Pax8/Sherweb/Kaseya Quote Manager quote or SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won CRM deal — and the four distinct stall points along it (quote built with no proposal document, proposal sent but not opened, viewed but not signed, signed but the CRM deal never marked closed-won), including cross-system record matching and what to report when only part of the chain is connected.' },
       { name: 'warm-lead-routing', description: 'Lead-warmth scoring from intent and engagement signals — Warmly website-visitor identification, CRM form fills and email engagement, and Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool tiering, plus routing recommendations based on owner continuity, CRM routing rules, or rep capacity, and the degradation path to CRM-only signals when intent tools aren\'t connected.' }
     ],

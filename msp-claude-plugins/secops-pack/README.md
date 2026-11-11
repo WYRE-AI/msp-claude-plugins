@@ -2,9 +2,11 @@
 
 Cross-vendor security alert triage and incident response for MSPs. This
 pack normalizes severity across whatever EDR/MDR/SIEM stack you have
-connected, runs standard first-response containment playbooks, and
-assembles chronological incident timelines for client-facing reports — all
-without hardcoding to any single vendor.
+connected, runs standard first-response containment playbooks, investigates
+a suspected compromise of an RMM or other management-plane tool by
+correlating independent sources, and assembles chronological incident
+timelines for client-facing reports — all without hardcoding to any
+single vendor.
 
 It is one of the industry workflow packs described in the repo
 [ROADMAP.md](../ROADMAP.md): job-shaped rather than tool-shaped, composing
@@ -28,7 +30,11 @@ have connected, but none of them are individually required:
 - **SaaS security** — SaaS Alerts
 - **Email security** — Mimecast, Proofpoint, Abnormal, Ironscales, Avanan, SpamTitan
 - **PSA** (for ticket cross-referencing and response timelines) and an
-  **RMM** (for device inventory used in EDR coverage-gap checks)
+  **RMM** (for device inventory and, when investigating a management-plane
+  incident, supporting reads from the implicated platform)
+- **Network (optional)** — Auvik, Domotz, or ThreatLocker, used to
+  corroborate tunnels, peers, and activity that the implicated platform
+  cannot attest on its own
 
 A client with only one of these connected still gets a useful result — the
 pack reports what it can verify and calls out, explicitly, what it can't.
@@ -39,9 +45,12 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   model and how to map each vendor's native severity into it),
   `containment-playbooks` (first-response sequences for compromised account,
   malware/ransomware, BEC, and exposed credential), `bec-response`
-  (detection and response sequence for Business Email Compromise), and
+  (detection and response sequence for Business Email Compromise),
   `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
-  with unsanctioned-tool findings and explicit coverage gaps)
+  with unsanctioned-tool findings and explicit coverage gaps), and
+  `msp-tool-compromise-response` (cross-tool investigation when an RMM
+  or other management-plane platform is implicated in a vendor advisory
+  or suspected compromise)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,
