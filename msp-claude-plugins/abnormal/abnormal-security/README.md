@@ -93,12 +93,13 @@ Then connect Abnormal Security in Conduit (see **Connect through Conduit**). The
 
 ## MCP Tools
 
-All ten tools are available at all times — there is no progressive
-disclosure.
+Nine tools are available at all times through Conduit — there is no progressive
+disclosure. The server's tenth tool, the `abnormal_navigate` menu, is refused
+by Conduit for every caller; use `conduit__my_access` to see which tools you
+can call.
 
 | Tool | Tier | Notes |
 |------|------|-------|
-| `abnormal_navigate` | read | Domain discovery: `threats`, `messages`, `remediation`, `abuse`, `cases` |
 | `abnormal_status` | read | Server and credential status; no arguments |
 | `abnormal_threats_list` | read | `pageSize`, `pageNumber`, `filter` (OData) |
 | `abnormal_threats_get` | read | `threatId` (UUID string) |

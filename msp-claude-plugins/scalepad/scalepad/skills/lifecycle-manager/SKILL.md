@@ -19,7 +19,7 @@ Lifecycle Manager (LM) is ScalePad's client engagement product: asset
 lifecycle tracking, warranty services, vCIO roadmaps (initiatives and
 goals), QBR meetings, assessments, deliverables, and budget
 forecasting. It is full CRUD — most write tools exist alongside the
-reads. Discover this domain's tools with `scalepad_navigate` (domain `lifecycle-manager`).
+reads. Its tools are named `scalepad_lm_*`.
 US-only.
 
 ## Anti-triggers

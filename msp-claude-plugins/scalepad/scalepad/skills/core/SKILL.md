@@ -18,8 +18,7 @@ when_to_use: >-
 Core is ScalePad's read-only unified data surface (US-only). It is the
 best starting point for cross-product work: resolve client IDs, asset
 IDs, and serial numbers here before touching Lifecycle Manager,
-ControlMap, or Quoter. Discover this domain's tools with
-`scalepad_navigate` (domain `core`).
+ControlMap, or Quoter. Its tools are named `scalepad_core_*`.
 
 ## Anti-triggers
 
