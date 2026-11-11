@@ -46,7 +46,9 @@ authentication failure even with a valid token.
 
 **Note:** You can only have one active API token. Regenerating creates a new token and invalidates the old one.
 
-### Environment Variables
+### Environment Variables (direct API calls only)
+
+Inside Conduit the SuperOps connection holds the token and subdomain, and nothing reads environment variables. These exports are only for calling SuperOps directly, as in `references/examples.md`.
 
 ```bash
 export SUPEROPS_API_KEY="your-api-token"
