@@ -211,7 +211,7 @@ Please verify your Liongard credentials:
 - LIONGARD_INSTANCE: Your instance subdomain
 - LIONGARD_API_KEY: Your API key
 
-Obtain credentials from Liongard Settings > Access Keys.
+Obtain credentials from Liongard Profile > Account Settings > Access Tokens.
 ```
 
 ### Rate Limited

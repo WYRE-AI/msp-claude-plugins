@@ -147,8 +147,8 @@ https://acmemsp.app.liongard.com/api/v1/environments
 ### Obtaining API Credentials
 
 1. Log into your Liongard instance
-2. Navigate to **Settings > Access Keys**
-3. Click **Create Access Key**
+2. Navigate to **Profile > Account Settings > Access Tokens**
+3. Click **Generate New Token**
 4. Copy the API key (store securely)
 5. Note your instance name from the URL
 

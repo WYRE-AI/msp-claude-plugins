@@ -119,7 +119,7 @@ Error: Invalid API key. Please verify LIONGARD_API_KEY is correct.
 
 Steps to resolve:
 1. Check that LIONGARD_API_KEY is set correctly
-2. Verify the key has not been revoked in Liongard Settings > Access Keys
+2. Verify the key has not been revoked in Liongard Profile > Account Settings > Access Tokens
 3. Confirm LIONGARD_INSTANCE matches your Liongard subdomain
 ```
 
@@ -168,7 +168,7 @@ Please verify your Liongard credentials:
 - LIONGARD_INSTANCE: Your instance subdomain
 - LIONGARD_API_KEY: Your API key
 
-Obtain credentials from Liongard Settings > Access Keys.
+Obtain credentials from Liongard Profile > Account Settings > Access Tokens.
 ```
 
 ### Connection Error

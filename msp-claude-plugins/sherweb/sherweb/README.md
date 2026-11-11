@@ -36,7 +36,7 @@ Sherweb uses OAuth 2.0 client credentials for API authentication, plus an API ma
 
 ## Self-Hosted Gateway
 
-There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http sherweb https://your-gateway-domain/v1/sherweb/mcp`. The gateway then holds the Sherweb credentials, not the client.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http sherweb https://your-gateway-domain/v1/sherweb/mcp`. The gateway then holds the Sherweb credentials, not the client. In that case install only this plugin (`/plugin install sherweb@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Installation
 

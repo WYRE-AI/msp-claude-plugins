@@ -31,16 +31,15 @@ API, enabling:
 
 ## Tool Surface
 
-This plugin documents the tool surface of the companion
+This plugin documents the 20 tools of the companion
 [`proofpoint-essentials-mcp`](https://github.com/WYRE-AI/proofpoint-essentials-mcp)
-server, which is under active development and not yet published. Tool names
-below follow the `proofpoint_essentials_{resource}_{operation}` convention
-the server is being built to.
+server, which Conduit brokers as the `proofpoint-essentials` vendor. Every
+org-scoped tool takes the org's primary domain (`domain` or `orgDomain`).
 
 | Group | Tools |
 |---|---|
-| Discovery | `proofpoint_essentials_endpoint_resolve` |
-| Organizations | `proofpoint_essentials_org_get`, `proofpoint_essentials_org_activate`, `proofpoint_essentials_org_deactivate`, `proofpoint_essentials_org_delete` |
+| Discovery | `proofpoint_essentials_endpoint_discover` |
+| Organizations | `proofpoint_essentials_org_get`, `proofpoint_essentials_org_set_active`, `proofpoint_essentials_org_delete` |
 | Domains | `proofpoint_essentials_domains_list`, `proofpoint_essentials_domains_create`, `proofpoint_essentials_domains_update`, `proofpoint_essentials_domains_delete` |
 | Users | `proofpoint_essentials_users_list`, `proofpoint_essentials_users_get`, `proofpoint_essentials_users_create`, `proofpoint_essentials_users_update`, `proofpoint_essentials_users_delete` |
 | Features | `proofpoint_essentials_features_get`, `proofpoint_essentials_features_update` |
@@ -48,12 +47,6 @@ the server is being built to.
 | Package | `proofpoint_essentials_package_update` |
 | Reporting | `proofpoint_essentials_reporting_get` |
 | SSO | `proofpoint_essentials_token_create` |
-
-Until the MCP server ships, this plugin's skills and commands are still
-useful on their own: they document the Proofpoint Essentials REST API
-directly (auth model, base URL/region resolution, resource shapes, batch
-semantics, error handling) for anyone calling the API by hand or building
-against it.
 
 ## Configuration
 
@@ -82,7 +75,7 @@ against. A wrong password shows up as a 401 on the first tool call.
 
 ## Self-Hosted Gateway
 
-There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http proofpoint-essentials https://your-gateway-domain/v1/proofpoint-essentials/mcp`. The gateway then holds the Proofpoint Essentials credentials, not the client.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http proofpoint-essentials https://your-gateway-domain/v1/proofpoint-essentials/mcp`. The gateway then holds the Proofpoint Essentials credentials, not the client. In that case install only this plugin (`/plugin install proofpoint-essentials@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Installation
 

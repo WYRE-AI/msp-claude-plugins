@@ -33,7 +33,7 @@ Conduit checks the key against the Salesbuildr public API (`https://portal.sales
 
 ## Self-Hosted Gateway
 
-There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http salesbuildr https://your-gateway-domain/v1/salesbuildr/mcp`. The gateway then holds the Salesbuildr credentials, not the client.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http salesbuildr https://your-gateway-domain/v1/salesbuildr/mcp`. The gateway then holds the Salesbuildr credentials, not the client. In that case install only this plugin (`/plugin install salesbuildr@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Available Skills
 

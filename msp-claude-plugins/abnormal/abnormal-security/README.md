@@ -34,7 +34,7 @@ Conduit checks the token against the Abnormal API when you save the connection.
 
 ## Self-Hosted Gateway
 
-There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http abnormal-security https://your-gateway-domain/v1/abnormal-security/mcp`. The gateway then holds the Abnormal Security credentials, not the client.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http abnormal-security https://your-gateway-domain/v1/abnormal-security/mcp`. The gateway then holds the Abnormal Security credentials, not the client. In that case install only this plugin (`/plugin install abnormal-security@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ### Obtaining API Credentials
 

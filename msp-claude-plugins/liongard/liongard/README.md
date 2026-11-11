@@ -21,8 +21,8 @@ This plugin ships no `.mcp.json` and reads no environment variables. Connect Lio
 | Conduit connection field | Notes |
 |---|---|
 | Instance Name | Your Liongard subdomain, e.g. `us7` or `eu1`. Pasting `eu1.app.liongard.com` or the full instance URL works too. |
-| Access Key ID | From **Settings > Access Keys** |
-| Access Key Secret | Shown once, when the key is created |
+| Access Key ID | From **Profile > Account Settings > Access Tokens** |
+| Access Key Secret | Shown once, when the token is generated |
 
 Conduit checks the key against your Liongard instance when you save the connection.
 
@@ -32,9 +32,9 @@ Conduit checks the key against your Liongard instance when you save the connecti
    - Open your Liongard instance, e.g. `https://us7.app.liongard.com`
 
 2. **Generate an Access Key**
-   - Go to **Settings > Access Keys**
-   - Click **Create Access Key**
-   - Copy the Access Key ID and the Access Key Secret (the secret is only shown once)
+   - Open the profile menu (upper right) and go to **Account Settings > Access Tokens**
+   - Click **Generate New Token**
+   - Copy the Access Key ID and the Access Key Secret (the secret is not shown again after you leave the page)
 
 3. **Find Your Instance Name**
    - Your instance is the first part of your Liongard URL
@@ -42,7 +42,7 @@ Conduit checks the key against your Liongard instance when you save the connecti
 
 ## Self-Hosted Gateway
 
-There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http liongard https://your-gateway-domain/v1/liongard/mcp`. The gateway then holds the Liongard credentials, not the client.
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http liongard https://your-gateway-domain/v1/liongard/mcp`. The gateway then holds the Liongard credentials, not the client. In that case install only this plugin (`/plugin install liongard@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Installation
 
@@ -90,8 +90,8 @@ Conduit runs the Liongard MCP server for you; there is nothing to install or con
 
 If a tool call returns "401 Unauthorized":
 1. Open the Liongard connection in Conduit (`https://conduit.wyre.ai/connect/liongard`) and check the Instance Name, Access Key ID and Access Key Secret
-2. Check that the access key has not been deleted in Liongard under **Settings > Access Keys**
-3. Create a new access key if needed, then update the Conduit connection
+2. Check that the token has not been deleted: in Liongard, sign in as the user who generated it and open **Profile > Account Settings > Access Tokens**
+3. Generate a new token if needed, then update the Conduit connection
 
 ## Contributing
 
