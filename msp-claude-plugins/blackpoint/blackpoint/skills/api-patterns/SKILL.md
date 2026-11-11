@@ -31,17 +31,14 @@ token in the partner portal.
 |--------|-------|
 | `X-Blackpoint-Api-Token` | The raw CompassOne token |
 
-The gateway maps the environment variable `BLACKPOINT_API_TOKEN` onto
-the `X-Blackpoint-Api-Token` header automatically. Internally, the
-Blackpoint MCP server forwards this to CompassOne as a `Bearer` token —
-you do not need to add the `Bearer ` prefix yourself.
+The token is stored on the Blackpoint connection in Conduit, which
+injects it as `X-Blackpoint-Api-Token` on every request; nothing is set
+on the client. The Blackpoint MCP server forwards it to CompassOne as a
+`Bearer` token, so you do not add the `Bearer ` prefix yourself.
 
-```bash
-export BLACKPOINT_API_TOKEN="your-compassone-token"
-```
-
-Optional: `BLACKPOINT_BASE_URL` overrides the CompassOne base URL for
-regional or partner-specific deployments.
+Optional: the connection's **Base URL** field (sent as
+`X-Blackpoint-Base-Url`) overrides the CompassOne base URL for regional
+or partner-specific deployments.
 
 ## Hierarchy
 

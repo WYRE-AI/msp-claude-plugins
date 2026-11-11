@@ -19,38 +19,30 @@ Run a quick job (component script) on a device in Datto RMM.
 ## Steps
 
 1. **Resolve device identifier**
-   - If UUID format, use as device UID directly
-   - Otherwise, search by hostname using device lookup
+   - If a UID was given, use it; otherwise `datto_find_device` with the hostname (`exactMatch: true`), optionally scoped by `siteUid`
+   - If several devices match, stop and ask which one
 
 2. **Verify device is online**
-   - Check device status
-   - If offline, return error with last seen time
+   - `datto_get_device` and check its online state and last seen time
 
 3. **Resolve component**
-   - If UUID format, use as component UID directly
-   - Otherwise, search components by name
+   - Use the component UID the user gave, or find it in the Datto RMM ComStore (the connector has no component-search tool)
 
 4. **Validate component variables**
-   - Get component definition to check required variables
-   - Verify all required variables are provided
+   - Confirm every variable the component needs is supplied as a key-value pair
 
-5. **Create quick job**
-   ```http
-   POST /api/v2/device/{deviceUid}/quickjob
-   Content-Type: application/json
+5. **Run the quick job (after approval)**
+   - `datto_run_quickjob` with `deviceUid`, `componentUid`, `jobName` and `variables`. It is **admin** tier and runs code on the customer's device; get explicit approval for the exact component and device first
+   - It returns a job UID
 
-   {
-     "componentUid": "{componentUid}",
-     "variables": {
-       "key1": "value1",
-       "key2": "value2"
-     }
-   }
-   ```
+6. **Check the result**
+   - `datto_get_job` (read) for status: queued, running or completed
+   - `datto_get_job_components` (read) to show what the job ran
+   - When completed: `datto_get_job_results` for exit code and error message, and `datto_get_job_stdout` / `datto_get_job_stderr` for what the script printed. These three are **admin** tier in Conduit because job output can contain anything the script printed
+   - If the job is still running, poll `datto_get_job`; do not launch it again
 
-6. **Handle result**
-   - If `--wait` flag, poll for completion
-   - Return job status and output
+Underlying REST: `POST /api/v2/device/{deviceUid}/quickjob` creates the job; the read tools wrap the job, job-result, stdout and stderr endpoints.
+
 
 ## Parameters
 

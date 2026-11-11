@@ -13,6 +13,16 @@ when_to_use: >-
 
 # Microsoft 365 User Management
 
+## Conduit tools
+
+The Conduit `m365` connector (hidden, personal-only) has no tools for this area. Through Conduit, reads go to the `microsoft-graph` connector as `microsoft_graph_get` (admin tier, read-only; use `microsoft_graph_suggest_queries` to build the query) and fleet operations go to the `cipp` connector:
+
+- Look up and list users: `cipp_list_users`; groups: `cipp_list_user_groups`; devices: `cipp_list_user_devices`
+- Create, edit or disable: `cipp_create_user`, `cipp_edit_user`, `cipp_disable_user`
+- Reset password or MFA: `cipp_reset_password`, `cipp_reset_mfa`; end sessions: `cipp_revoke_sessions`
+- Every create, edit, disable, reset and revoke tool above is an admin-tier write in Conduit, so it needs admin access to the `cipp` connector. `cipp_list_users` and `cipp_list_user_groups` are read; `cipp_list_user_devices` is admin
+- Offboard: `cipp_offboard_user` (irreversible, admin)
+
 ## Overview
 
 Users in Microsoft 365 (Entra ID) are the central identity object for your tenant. Every licensed service — Exchange, Teams, OneDrive, SharePoint — flows through the user object. For MSPs, user management spans onboarding new staff, offboarding leavers, license optimization, and security posture checks across customer tenants.

@@ -1,0 +1,11 @@
+{
+  "name": "cove",
+  "version": "1.0.0",
+  "description": "Cove Data Protection (N-able) - backup health triage, customer and storage inventory, and console access review for MSPs (read-only)",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

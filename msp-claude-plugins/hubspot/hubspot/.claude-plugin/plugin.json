@@ -1,11 +1,11 @@
 {
   "name": "hubspot",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "description": "Claude plugins for HubSpot CRM - contacts, companies, deals, tickets, activities, and associations",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

@@ -89,13 +89,14 @@ if (!SERVERS_ROOT && !RUNTIME_JSON && !LIVE_JSON) {
 const PLUGINS = join(PLUGINS_REPO, "msp-claude-plugins");
 
 // ---------------------------------------------------------------- plugin -> server/vendor map
+// `vendor` is the Conduit VENDORS slug, so a --live JSON keyed by Conduit slug lines up.
 // Plugin dirs whose slug does not equal `<server-repo minus -mcp>` are listed here.
 // `server: null` = no local WYRE server repo (hosted vendor or unbuilt).
 const PLUGIN_MAP = {
   "abnormal/abnormal-security": { server: "abnormal-mcp", vendor: "abnormal-security" },
   "connectwise/automate": { server: "connectwise-automate-mcp", vendor: "connectwise-automate" },
   "connectwise/cpq": { server: "connectwise-cpq-mcp", vendor: null },
-  "connectwise/manage": { server: "connectwise-manage-mcp", vendor: "connectwise-manage" },
+  "connectwise/manage": { server: "connectwise-manage-mcp", vendor: "connectwise-psa" },
   "email-security/checkpoint-avanan": { server: "avanan-mcp", vendor: "avanan" },
   "email-security/knowbe4": { server: "knowbe4-mcp", vendor: "knowbe4" },
   "email-security/proofpoint": { server: "proofpoint-mcp", vendor: "proofpoint" },
@@ -317,8 +318,13 @@ function documentedNames(pluginDir) {
   for (const f of files) {
     const lines = readFileSync(f, "utf8").split("\n");
     for (let i = 0; i < lines.length; i++) {
-      // Prose wraps, so a trigger on the previous line still governs this one.
-      const prev = i > 0 ? lines[i - 1] : "";
+      // Prose wraps, so a trigger earlier in the same paragraph still governs
+      // this line ("There is no MCP tool to search … (no\n`x` / `y` exist …").
+      // Join back to the previous blank line (at most 6 lines); the sentence
+      // split below still limits the trigger to this token's own sentence.
+      let start = i;
+      while (start > 0 && i - start < 6 && lines[start - 1].trim() !== "") start--;
+      const prev = lines.slice(start, i).join(" ");
       const joined = `${prev} ${lines[i]}`;
       const offset = prev.length + 1;
       // backtick-quoted tokens, plus mcp__vendor__tool references

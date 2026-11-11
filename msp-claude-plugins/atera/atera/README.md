@@ -14,34 +14,13 @@ This plugin provides Claude with deep knowledge of Atera RMM/PSA, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Atera once in Conduit (**Connections → Atera**, slug `atera`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "ATERA_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "ATERA_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ATERA_API_KEY` | Yes | | API key from Admin > API |
-| `ATERA_MCP_URL` | No | `https://atera-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
 
 ### Obtaining API Credentials
 
@@ -59,26 +38,11 @@ For project-specific configuration, use `.claude/settings.local.json` (gitignore
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ATERA_MCP_URL` to your gateway's endpoint:
-
-```
-ATERA_MCP_URL=https://your-gateway-domain/v1/atera/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Atera → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ATERA_MCP_URL": "https://your-gateway-domain/v1/atera/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http atera https://your-gateway-domain/v1/atera/mcp`. The gateway then holds the Atera credentials, not the client.
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection (env vars injected by Claude Code):
+To check the credentials directly against Atera before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test connection

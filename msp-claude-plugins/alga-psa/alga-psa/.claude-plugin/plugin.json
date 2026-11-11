@@ -1,0 +1,11 @@
+{
+  "name": "alga-psa",
+  "version": "1.0.0",
+  "description": "Claude plugin for Alga PSA through Conduit - read-only ticket triage, client reviews, time sheet and invoice checks, and project status across your own Alga instance",
+  "author": {
+    "name": "WYRE Technology"
+  },
+  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "license": "Apache-2.0"
+}

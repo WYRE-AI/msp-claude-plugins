@@ -1,11 +1,11 @@
 {
   "name": "datto-rmm",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "Claude plugins for Datto RMM - devices, alerts, sites, jobs, remote monitoring",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

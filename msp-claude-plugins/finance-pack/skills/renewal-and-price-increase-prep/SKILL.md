@@ -74,8 +74,10 @@ below. Never create, update, send, void, or raw/execute.
 `autotask_search_contract_service_bundles`,
 `autotask_search_contract_service_bundle_units`, `cw_search_agreements`, `cw_get_agreement`, `cw_get_agreement_additions`.
 For a renewal window in Autotask, `autotask_list_expiring_contracts`
-returns contracts whose end date falls within `daysAhead` days, optionally
-scoped to one `companyID`:
+returns contracts whose end date falls within `daysAhead` days (default
+60), optionally scoped to one `companyID`. Pass `includeExpired: true` to
+also catch contracts already past their end date, and if a full page
+comes back the list may be incomplete:
 
 ```json
 { "tool": "autotask_list_expiring_contracts", "arguments": { "companyID": 12345, "daysAhead": 90 } }
@@ -87,8 +89,12 @@ service lines. Read the lines with `autotask_search_contract_services`
 and `autotask_search_contract_service_bundles`, and the billed
 quantities with the two `*_units` tools, counting bundle units alongside
 service units. The `*_units` tools return rows active on one `activeOn`
-day (default today), so pass a date inside the invoice period being
-reconciled, such as the invoice date, rather than relying on the default.
+day (default today), so never rely on the default for a past invoice.
+Query both tools at the start and end of the invoice period being
+reconciled, and on further dates if the period is long. Matching
+endpoint quantities do not rule out a change between them. If the
+period coverage or billing treatment cannot be established, mark the
+reconciliation incomplete instead of reporting a discrepancy.
 HaloPSA MCP has no contract or agreement list tool, and
 Syncro MCP has no contract list tool: when those are the only PSA, say
 the contract side is unavailable.

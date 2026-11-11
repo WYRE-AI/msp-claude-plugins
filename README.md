@@ -8,13 +8,13 @@
 
 Then restart Claude Code. That's it.
 
-**Documentation:** [mcp.wyre.ai](https://mcp.wyre.ai)
+**Documentation:** [wyre-ai.github.io/msp-claude-plugins](https://wyre-ai.github.io/msp-claude-plugins/)
 
 ---
 
 ## What you get
 
-83 vendor-specific plugins with domain knowledge for PSA, RMM, documentation, security, accounting, CRM, and productivity tools — the count keeps growing, so treat [`marketplace.json`](.claude-plugin/marketplace.json) as the source of truth and [mcp.wyre.ai](https://mcp.wyre.ai) as the browsable catalog. The table below highlights the most commonly used integrations, not the full list:
+Vendor-specific plugins with domain knowledge for PSA, RMM, documentation, security, accounting, CRM, and productivity tools — the count keeps growing, so treat [`marketplace.json`](.claude-plugin/marketplace.json) as the source of truth and the [plugin catalog](https://wyre-ai.github.io/msp-claude-plugins/plugins/) as the browsable view. The table below highlights the most commonly used integrations, not the full list:
 
 | Plugin | Description |
 |--------|-------------|
@@ -56,7 +56,7 @@ Plus shared skills for MSP terminology, ticket triage, cross-vendor incident cor
 
 ### Plugin Maturity
 
-Maturity status for the plugins listed above (not the full catalog — see [`marketplace.json`](.claude-plugin/marketplace.json) for all 83):
+Maturity status for the plugins listed above (not the full catalog — see [`marketplace.json`](.claude-plugin/marketplace.json) for the full list):
 
 | Plugin | Status | MCP Server |
 |--------|--------|------------|
@@ -102,7 +102,7 @@ Maturity status for the plugins listed above (not the full catalog — see [`mar
 
 ### Hosted Gateway (Recommended)
 
-Use the [WYRE Conduit gateway](https://conduit.wyre.ai) to connect your MSP tools to Claude with zero infrastructure. OAuth 2.1 + PKCE authentication, encrypted credential storage, and all 98 vendor integrations available immediately.
+Use the [WYRE Conduit gateway](https://conduit.wyre.ai) to connect your MSP tools to Claude with zero infrastructure. OAuth 2.1 + PKCE authentication, encrypted credential storage, and every vendor in the [Conduit catalog](https://conduit.wyre.ai) available immediately.
 
 **Claude Code (CLI):**
 
@@ -130,7 +130,7 @@ The installer scripts preserve your existing config, create a backup, and only a
 
 Run MCP servers yourself for full control. Each server is available as an npm package, Docker image, or MCPB bundle for Claude Desktop.
 
-See the [Getting Started guide](https://mcp.wyre.ai/getting-started/) for installation instructions.
+See the [Getting Started guide](https://wyre-ai.github.io/msp-claude-plugins/getting-started/) for installation instructions.
 
 ---
 

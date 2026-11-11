@@ -32,6 +32,17 @@ Devices are the core managed entities in Datto RMM. Each device represents an en
   `ninjaone-devices`, or `atera-agents` (Atera reserves
   "device" for agentless monitors).
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `datto_find_device` | read | Resolve a hostname to a device UID (`exactMatch`, optional `siteUid`) |
+| `datto_list_devices` / `datto_get_device` | read | Devices and one device's detail |
+| `datto_get_device_patches` | admin (unclassified) | Per-patch installed/missing/pending status, severity, reboot requirement, KB |
+| `datto_get_device_audit` | admin | Full hardware/software audit of a device |
+
+Tiers are Conduit's classification. REST examples later in this skill show what the tools call underneath.
+
 ## Key Concepts
 
 ### Device Identifiers

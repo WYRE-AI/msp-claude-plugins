@@ -38,14 +38,10 @@ gateway-facing surface uses two `X-` headers, one credential per header:
 | `X-Freshdesk-Domain` | The account subdomain (the `yourcompany` in `yourcompany.freshdesk.com`) |
 | `X-Freshdesk-Api-Key` | The raw Freshdesk API key |
 
-The gateway maps the environment variables `FRESHDESK_DOMAIN` and
-`FRESHDESK_API_KEY` onto those headers automatically. The MCP server then
-translates them into the upstream Freshdesk Basic auth (`apikey:X`).
-
-```bash
-export FRESHDESK_DOMAIN="yourcompany"
-export FRESHDESK_API_KEY="your-freshdesk-api-key"
-```
+Both values are stored on the Freshdesk connection in Conduit, which
+injects them as those headers on every request; nothing is set on the
+client. The MCP server then translates them into the upstream Freshdesk
+Basic auth (`apikey:X`).
 
 ## Base URL
 
@@ -206,7 +202,7 @@ channels; 1-3 are the most common in MSP workflows.)
 | Status | Meaning | Action |
 |--------|---------|--------|
 | 400 | Validation failed | Check required fields and encodings |
-| 401 | Missing or invalid credentials | Re-check `FRESHDESK_DOMAIN` / `FRESHDESK_API_KEY` |
+| 401 | Missing or invalid credentials | Re-check the Domain and API Key fields on the Freshdesk connection in Conduit |
 | 403 | Authenticated but not permitted | Check the API key's agent scope |
 | 404 | Unknown ticket / contact / company / article ID | Re-list or re-search to confirm |
 | 429 | Rate limit exceeded | Read `Retry-After` and back off |

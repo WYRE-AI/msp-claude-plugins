@@ -33,8 +33,8 @@ Ironscales authenticates via API key and company ID:
 
 | Header | Description |
 |--------|-------------|
-| `X-IronScales-API-Key` | Your Ironscales API key |
-| `X-IronScales-Company-ID` | Your Ironscales company ID |
+| `X-Ironscales-API-Key` | Your Ironscales API key |
+| `X-Ironscales-Company-Id` | Your Ironscales company ID |
 
 To obtain credentials:
 
@@ -48,18 +48,9 @@ To obtain credentials:
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your API key and Company ID.
 
-### Self-Hosted (Docker)
-
-Run the Ironscales MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export IRONSCALES_API_KEY="your-api-key"
-export IRONSCALES_COMPANY_ID="your-company-id"
-```
+This plugin does not ship its own `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect IRONSCALES in the Conduit web UI (`/connect/ironscales`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 

@@ -17,59 +17,31 @@ This plugin provides Claude with deep knowledge of Better Stack, enabling:
 
 ### API Credentials
 
-Better Stack authenticates via a Bearer token:
+Through Conduit there is no token to create: Conduit connects Better Stack with OAuth. A **self-hosted** gateway authenticates with a Bearer token:
 
 1. Log into [Better Stack](https://betterstack.com)
 2. Navigate to **API tokens** in your account settings
 3. Generate a new API token
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export BETTERSTACK_API_TOKEN="your-api-token"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Better Stack once in Conduit (**Connections → BetterStack**, slug `betterstack`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `BETTERSTACK_API_TOKEN` | Yes | | API token from Better Stack > API tokens |
-| `BETTERSTACK_MCP_URL` | No | `https://conduit.wyre.ai/v1/betterstack/mcp` | MCP server URL -- override to use a self-hosted gateway |
+There are no fields to paste: Conduit signs in to Better Stack with OAuth.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `BETTERSTACK_MCP_URL` to your gateway's endpoint:
-
-```
-BETTERSTACK_MCP_URL=https://your-gateway-domain/v1/betterstack/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Better Stack > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "BETTERSTACK_MCP_URL": "https://your-gateway-domain/v1/betterstack/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http betterstack https://your-gateway-domain/v1/betterstack/mcp`. The gateway then holds the Better Stack credentials, not the client.
 
 ## Installation
 
 ### Via MCP Gateway (Recommended)
 
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API token and you're done.
-
-### Self-Hosted (Docker)
-
-Run the Better Stack MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
+Connect Better Stack in [Conduit](https://conduit.wyre.ai) and sign in to Better Stack with OAuth; there is no token to paste.
 
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export BETTERSTACK_API_TOKEN="your-api-token"
-```
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install betterstack@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Better Stack in the Conduit web UI (`/connect/betterstack`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -129,7 +101,7 @@ export BETTERSTACK_API_TOKEN="your-api-token"
 ### Credential Handling
 
 - Never commit API tokens to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API tokens periodically via Better Stack settings
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Better Stack audit log
@@ -146,9 +118,8 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `BETTERSTACK_API_TOKEN` is set correctly
-2. Check that the API token has not been revoked
-3. Regenerate the token at Better Stack > API tokens
+1. Reconnect Better Stack in Conduit (**Connections → BetterStack**); Conduit signs in with OAuth, so there is no token to paste
+2. On a self-hosted gateway, check that its API token has not been revoked, and regenerate it at Better Stack > API tokens if needed
 
 ### Rate Limits
 
