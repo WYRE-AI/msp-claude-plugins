@@ -143,6 +143,21 @@ Follow pagination within scope; preserve device/user IDs, UTC timestamps,
 source, inventory freshness, and evidence references. Missing pages, refused
 reads, stale inventory, and absent process/network telemetry are gaps.
 
+The JSON below is an illustrative scoped read only. Use fake IDs here as a
+shape, never as live identifiers. Confirm arguments against the discovered
+tool schema; that schema takes precedence over this example.
+
+```json
+{
+  "deviceUid": "00000000-0000-4000-8000-00000000abcd",
+  "auditType": "software"
+}
+```
+
+This is a `datto_get_device_audit` call bound to one device in the active
+client, with `auditType` pinned to `software`. Every other read in this
+step must likewise be bound to the mapped client or device.
+
 | Family | Allowed reads when discovered | Hunt and limits |
 |--------|--------------------------------|-----------------|
 | EDR / MDR | `huntress_incidents_list`, `huntress_signals_list`, `huntress_agents_list`; SentinelOne `list_alerts`, `search_alerts`, `get_alert`, `search_inventory_items`; `blackpoint_detections_list`, `blackpoint_assets_list`; `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_list_agents`, `rocketcyber_list_apps` | Detections and returned process lineage: `ScreenConnect.ClientService.exe` / `ScreenConnect.WindowsClient.exe` spawning cmd, PowerShell, msiexec or curl; browser-token extraction on tech hosts; files, persistence, and network indicators in the IOC reference. Inventory is not process telemetry; ask for out-of-band evidence when lineage is unavailable. |
