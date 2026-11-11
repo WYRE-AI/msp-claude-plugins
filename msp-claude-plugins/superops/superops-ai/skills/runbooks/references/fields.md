@@ -1,51 +1,43 @@
-# SuperOps.ai Script and Execution Field Reference
+# SuperOps.ai Script Field Reference
 
-## Script Definition Fields
+These tables list the fields on the `Script`, `RunScriptInput` and
+`RunScriptData` types in `schema/superops.graphql`
+([superops-mcp](https://github.com/WYRE-AI/superops-mcp)).
+
+## Script (`getScriptList`, `getScriptListByType`)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `scriptId` | ID | Unique identifier |
+| `scriptId` | ID | Script ID, passed to `runScriptOnAsset` |
 | `name` | String | Script name |
 | `description` | String | What the script does |
-| `type` | Enum | PowerShell, Batch, Bash, Python |
-| `content` | String | Script source code |
-| `parameters` | [Parameter] | Input parameters |
-| `timeout` | Int | Execution timeout (seconds) |
-| `osType` | Enum | Windows, macOS, Linux |
+| `language` | String | Script language, such as PowerShell or Bash |
+| `runAs` | String | Execution context. Set on the script, not per run |
+| `timeOut` | Int | Execution timeout. Set on the script, not per run |
+| `runTimeVariables` | [String] | Argument names the script expects |
+| `tags` | JSON | Tags |
+| `readMe` | String | Usage notes |
+| `favourite` | Boolean | Marked as a favourite |
+| `addedBy` | JSON | Author |
+| `createdTime` | String | When the script was added |
 
-## Execution Fields
+## Run input (`RunScriptInput`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `assetId` | ID | Yes | Target asset |
+| `scriptId` | ID | Yes | Script to run |
+| `scriptArguments` | JSON | No | A list of `{ name, value }` pairs, each value a string |
+
+## Run result (`RunScriptData`)
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `actionConfigId` | ID | Execution instance ID |
-| `status` | Enum | Pending, Running, Success, Failed |
-| `startTime` | DateTime | Execution start |
-| `endTime` | DateTime | Execution end |
-| `exitCode` | Int | Script exit code |
-| `output` | String | Script output |
-| `error` | String | Error messages |
+| `actionConfigId` | ID | ID of the queued run |
+| `script` | JSON | The script that was queued |
+| `scriptArguments` | JSON | The arguments sent |
+| `addedBy` | JSON | Who queued it |
 
-## Script Types
-
-| Type | Description | Use Case |
-|------|-------------|----------|
-| **PowerShell** | Windows PowerShell scripts | Windows automation |
-| **Batch** | Windows batch scripts | Simple Windows tasks |
-| **Bash** | Unix shell scripts | macOS/Linux automation |
-| **Python** | Python scripts | Cross-platform automation |
-
-## Run As Options
-
-| Option | Description | When to Use |
-|--------|-------------|-------------|
-| **System** | Run as SYSTEM account | Admin tasks, service management |
-| **Logged-in User** | Current user context | User-specific tasks |
-| **Specific User** | Custom credentials | Specific permission needs |
-
-## Execution Priority
-
-| Priority | Description |
-|----------|-------------|
-| **Immediate** | Execute as soon as possible |
-| **Normal** | Standard queue priority |
-| **Low** | Execute during low activity |
+The schema has no type for an execution's status, start or end time, exit code or
+output, and no query that reads them. Run results are visible only in the
+SuperOps console.

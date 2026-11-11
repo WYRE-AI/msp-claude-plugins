@@ -1,388 +1,196 @@
 # SuperOps.ai Alert GraphQL Operations
 
-## List Alerts
+Every document on this page validates against `schema/superops.graphql` in
+[superops-mcp](https://github.com/WYRE-AI/superops-mcp) and uses only operations
+listed in the published API reference at <https://developer.superops.com/msp>.
+
+The Conduit `superops` connector has no typed alert tool. Alert reads go through
+`superops_custom_query` and alert writes through `superops_custom_mutation`. Both
+are admin tier, so a human approver must see the exact document and variables
+before each call.
+
+## What the schema has
+
+| Operation | Type | Input | Returns |
+|-----------|------|-------|---------|
+| `getAlertList` | query | `ListInfoInput!` | `AlertList { alerts, listInfo }` |
+| `getAlertsForAsset` | query | `AssetDetailsListInput!` (`assetId`, `listInfo`) | `AlertList` |
+| `resolveAlerts` | mutation | `[ResolveAlertInput]`, each `{ id }` | `Boolean` |
+| `createAlert` | mutation | `CreateAlertInput!` (`assetId`, `message`, `description`, `severity`) | `Alert` |
+
+The schema has no single-alert query (`getAlert`), no acknowledge mutation
+(`acknowledgeAlerts`) and no alert-to-ticket mutation (`createTicketFromAlert`).
+Acknowledge an alert in the SuperOps console. To track an alert as a ticket,
+create the ticket with `superops_tickets_create`.
+
+An `Alert` has these fields: `id`, `message`, `description`, `severity`, `status`,
+`createdTime`, `resolvedTime`, `occurrenceCount`, `asset` and `policy`. `asset`
+and `policy` are `JSON` scalars, so select them by name with no sub-selection.
+An alert has no `client`, `site`, `type`, `acknowledgedBy` or `ticket` field.
+
+`status` and `severity` are plain `String` in the schema, and the schema does not
+list their values. It also does not document which attributes an alert
+`condition` accepts. An unrecognised attribute or value returns zero rows without
+an error. Read a page of alerts first and filter on the values you see. Before
+you trust a filtered count, compare its `totalCount` with an unfiltered call.
+
+## List alerts
 
 ```graphql
 query getAlertList($input: ListInfoInput!) {
   getAlertList(input: $input) {
     alerts {
-      alertId
+      id
       message
+      description
       severity
       status
-      type
       createdTime
-      acknowledgedTime
       resolvedTime
-      asset {
-        assetId
-        name
-        status
-      }
-      client {
-        accountId
-        name
-      }
-      site {
-        id
-        name
-      }
-      acknowledgedBy {
-        id
-        name
-      }
-      ticket {
-        ticketId
-        ticketNumber
-      }
+      occurrenceCount
+      asset
+      policy
     }
     listInfo {
+      page
+      pageSize
       totalCount
-      hasNextPage
-      endCursor
+      hasMore
     }
   }
 }
 ```
 
-**Variables - Active Critical Alerts:**
+**Variables: newest first, one status, several severities.** `includes` takes
+an array, and `joinOperator` must be uppercase. SuperOps treats any other spelling
+as `OR` without reporting an error.
+
 ```json
 {
   "input": {
-    "first": 50,
-    "filter": {
-      "status": "Active",
-      "severity": ["Critical", "High"]
+    "page": 1,
+    "pageSize": 50,
+    "condition": {
+      "joinOperator": "AND",
+      "operands": [
+        { "attribute": "status", "operator": "includes", "value": ["<status>"] },
+        { "attribute": "severity", "operator": "includes", "value": ["<severity-1>", "<severity-2>"] }
+      ]
     },
-    "orderBy": {
-      "field": "createdTime",
-      "direction": "DESC"
-    }
+    "sort": [{ "attribute": "createdTime", "order": "DESC" }]
   }
 }
 ```
 
-**Variables - Alerts by Client:**
-```json
-{
-  "input": {
-    "first": 100,
-    "filter": {
-      "client": {
-        "accountId": "client-uuid"
-      },
-      "status": ["Active", "Acknowledged"]
-    }
-  }
-}
-```
+Pagination is by offset. Increment `page` while `listInfo.hasMore` is `true`.
+SuperOps returns `null` instead of `false` on the last page.
 
-**Variables - Alerts by Type:**
-```json
-{
-  "input": {
-    "filter": {
-      "type": "Disk Space",
-      "status": "Active"
-    }
-  }
-}
-```
+## Alerts for one asset
 
-## Get Alerts for Specific Asset
+Use this query to scope alerts to a single asset. A client is the set of assets
+listed by `superops_assets_list` with `clientId`. To gather a client's alerts, run
+this query once for each of those assets.
 
 ```graphql
 query getAlertsForAsset($input: AssetDetailsListInput!) {
   getAlertsForAsset(input: $input) {
     alerts {
-      alertId
+      id
       message
       severity
       status
-      type
       createdTime
-      monitor {
-        id
-        name
-        type
-      }
+      resolvedTime
     }
     listInfo {
+      page
+      pageSize
       totalCount
-      hasNextPage
+      hasMore
     }
   }
 }
 ```
 
-**Variables:**
 ```json
 {
   "input": {
-    "assetId": "asset-uuid",
-    "first": 50,
-    "filter": {
-      "status": ["Active", "Acknowledged"]
-    }
+    "assetId": "<asset id>",
+    "listInfo": { "page": 1, "pageSize": 50 }
   }
 }
 ```
 
-## Get Single Alert Details
+## Resolve alerts
+
+`resolveAlerts` takes a list. Pass one `{ id }` object per alert, even when there
+is only one. The mutation returns a bare `Boolean` and has no field for resolution
+notes, so record the note on the related ticket with `superops_tickets_add_note`.
 
 ```graphql
-query getAlert($input: AlertIdentifierInput!) {
-  getAlert(input: $input) {
-    alertId
-    message
-    severity
-    status
-    type
-    createdTime
-    acknowledgedTime
-    resolvedTime
-    asset {
-      assetId
-      name
-      ipAddress
-      status
-      client {
-        accountId
-        name
-      }
-    }
-    monitor {
-      id
-      name
-      type
-      threshold
-      condition
-    }
-    acknowledgedBy {
-      id
-      name
-      email
-    }
-    resolvedBy {
-      id
-      name
-      email
-    }
-    resolutionNotes
-    ticket {
-      ticketId
-      ticketNumber
-      status
-    }
-    history {
-      timestamp
-      action
-      performedBy {
-        name
-      }
-      notes
-    }
-  }
-}
-```
-
-## Acknowledge Alerts
-
-```graphql
-mutation acknowledgeAlerts($input: AcknowledgeAlertsInput!) {
-  acknowledgeAlerts(input: $input) {
-    success
-    acknowledgedCount
-    alerts {
-      alertId
-      status
-      acknowledgedTime
-      acknowledgedBy {
-        id
-        name
-      }
-    }
-  }
-}
-```
-
-**Variables - Single Alert:**
-```json
-{
-  "input": {
-    "alertIds": ["alert-uuid"],
-    "notes": "Investigating disk space issue on server"
-  }
-}
-```
-
-**Variables - Bulk Acknowledge:**
-```json
-{
-  "input": {
-    "alertIds": ["alert-1", "alert-2", "alert-3"],
-    "notes": "Bulk acknowledgment - scheduled maintenance window"
-  }
-}
-```
-
-## Resolve Alerts
-
-```graphql
-mutation resolveAlerts($input: ResolveAlertInput!) {
+mutation resolveAlerts($input: [ResolveAlertInput]) {
   resolveAlerts(input: $input)
 }
 ```
 
-**Variables:**
 ```json
 {
-  "input": {
-    "alertIds": ["alert-uuid"],
-    "resolutionNotes": "Cleared temp files, disk space now at 45% free"
-  }
+  "input": [{ "id": "<alert id>" }, { "id": "<another alert id>" }]
 }
 ```
 
-## Create Ticket from Alert
+## Workflow: alert summary in one request
+
+Aliases batch several counts into one `superops_custom_query` call. Each count
+reads only `listInfo { totalCount }`. Put the tenant's status and severity values
+in `condition`.
 
 ```graphql
-mutation createTicketFromAlert($input: CreateTicketFromAlertInput!) {
-  createTicketFromAlert(input: $input) {
-    ticketId
-    ticketNumber
-    subject
-    status
-    alert {
-      alertId
-      status
+query alertSummary {
+  openCritical: getAlertList(input: {
+    pageSize: 1
+    condition: {
+      joinOperator: "AND"
+      operands: [
+        { attribute: "status", operator: "includes", value: ["<open status>"] }
+        { attribute: "severity", operator: "includes", value: ["<critical severity>"] }
+      ]
     }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "alertId": "alert-uuid",
-    "subject": "Critical: Low disk space on ACME-SERVER01",
-    "priority": "HIGH",
-    "techGroup": {
-      "name": "Service Desk"
-    },
-    "additionalNotes": "Auto-generated from monitoring alert"
-  }
-}
-```
-
-## Workflow Examples
-
-### Alert Triage Workflow
-
-```graphql
-# Step 1: Get all active critical alerts
-query getCriticalAlerts {
-  getAlertList(input: {
-    filter: {
-      status: "Active",
-      severity: "Critical"
-    },
-    orderBy: { field: "createdTime", direction: "ASC" }
-  }) {
-    alerts {
-      alertId
-      message
-      asset { name }
-      client { name }
-      createdTime
-    }
-  }
-}
-
-# Step 2: Acknowledge alert being worked
-mutation acknowledgeAlert {
-  acknowledgeAlerts(input: {
-    alertIds: ["alert-uuid"],
-    notes: "Investigating issue"
-  })
-}
-
-# Step 3: Create ticket if needed
-mutation createTicket {
-  createTicketFromAlert(input: {
-    alertId: "alert-uuid",
-    priority: "CRITICAL"
-  })
-}
-
-# Step 4: Resolve when fixed
-mutation resolveAlert {
-  resolveAlerts(input: {
-    alertIds: ["alert-uuid"],
-    resolutionNotes: "Issue resolved - rebooted service"
-  })
-}
-```
-
-### Alert Summary Dashboard
-
-```graphql
-query getAlertSummary {
-  criticalAlerts: getAlertList(input: {
-    filter: { status: "Active", severity: "Critical" }
   }) {
     listInfo { totalCount }
   }
-  highAlerts: getAlertList(input: {
-    filter: { status: "Active", severity: "High" }
+  allOpen: getAlertList(input: {
+    pageSize: 1
+    condition: { attribute: "status", operator: "includes", value: ["<open status>"] }
   }) {
     listInfo { totalCount }
   }
-  acknowledgedAlerts: getAlertList(input: {
-    filter: { status: "Acknowledged" }
+  newest: getAlertList(input: {
+    pageSize: 10
+    sort: [{ attribute: "createdTime", order: DESC }]
   }) {
-    listInfo { totalCount }
-  }
-  recentResolved: getAlertList(input: {
-    filter: { status: "Resolved" },
-    first: 10,
-    orderBy: { field: "resolvedTime", direction: "DESC" }
-  }) {
-    alerts {
-      alertId
-      message
-      resolvedTime
-      asset { name }
-    }
+    alerts { id message severity status createdTime asset }
   }
 }
 ```
 
-### Client Alert Report
+## Workflow: triage
 
-```graphql
-query getClientAlertReport($clientId: ID!, $startDate: DateTime!, $endDate: DateTime!) {
-  getAlertList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      createdTime: {
-        gte: $startDate,
-        lte: $endDate
-      }
-    }
-  }) {
-    alerts {
-      alertId
-      message
-      severity
-      status
-      type
-      createdTime
-      resolvedTime
-      asset { name }
-    }
-    listInfo { totalCount }
-  }
-}
-```
+1. List alerts newest first with `getAlertList` through `superops_custom_query`.
+2. Read the alert's asset with `superops_assets_get`. Take the `assetId` from the
+   alert's `asset` JSON.
+3. Acknowledge the alert in the SuperOps console. The API cannot acknowledge alerts.
+4. If the work needs tracking, call `superops_tickets_create`. Put the alert `id`
+   and message in the description.
+5. When the issue is fixed, send `resolveAlerts` through `superops_custom_mutation`
+   with human approval.
+
+## Workflow: client alert report
+
+The schema offers no client attribute on `Alert` and no documented date-range
+operator. The supported operators are `is`, `isNot`, `contains`, `notContains`,
+`startsWith`, `endsWith`, `includes` and `notIncludes`. To report on one client:
+
+1. Call `superops_assets_list` with `clientId` to list the client's assets.
+2. For each asset, page through `getAlertsForAsset`.
+3. Keep the alerts whose `createdTime` falls inside the reporting window.

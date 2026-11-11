@@ -6,286 +6,110 @@ arguments: [alert_id, resolution_note, create_ticket, ticket_subject]
 
 # Resolve SuperOps.ai Alert
 
-Resolve an RMM alert and optionally create a ticket for documentation or follow-up.
+Resolve an RMM alert. Optionally record the work on a new ticket.
 
 ## How this runs through Conduit
 
-The Conduit `superops` connector has **no alert tool**. The only route is the generic GraphQL passthrough:
-`superops_custom_mutation` (admin tier) sends the GraphQL mutation shown in the steps below. It executes an arbitrary mutation against the tenant, so every call needs a named human approver who has seen the exact mutation text and variables. Never run it from a scheduled or unattended agent.
+The Conduit `superops` connector has **no alert tool**. Resolving goes through
+the generic GraphQL passthrough `superops_custom_mutation`, which is admin tier.
+It runs an arbitrary mutation against the tenant, so every call needs a named
+human approver who has seen the exact mutation text and variables. Never run it
+from a scheduled or unattended agent.
 
-Use the typed tools for context first (`superops_assets_list`, `superops_assets_get`, `superops_clients_search`), and only fall back to the passthrough for the alert step itself. If the operator has no `admin` grant on SuperOps, stop and say so rather than looking for another route.
-
-## Prerequisites
-
-- Valid SuperOps.ai API token configured
-- Alert must exist and not already be resolved
-- User must have alert management permissions
-- RMM module enabled in SuperOps.ai
+The ticket is created with the typed `superops_tickets_create` tool (write tier).
+The schema has no alert-to-ticket mutation. If the operator has no `admin` grant
+on SuperOps, stop and say so rather than looking for another route.
 
 ## Steps
 
-1. **Validate alert exists**
-   - Query alert by ID
-   - Return error if alert not found
-   - Show current alert details for confirmation
+1. **Confirm the alert.** Read it with `getAlertList` or `getAlertsForAsset`
+   through `superops_custom_query`, exactly as in `/acknowledge-alert`. Show
+   the operator its `message`, `severity`, `status` and asset. If `resolvedTime`
+   is already set, report that and stop.
 
-2. **Check alert status**
-   - Can resolve from Active or Acknowledged status
-   - Warn if already resolved
-   - Show resolution history if exists
+2. **Resolve the alert.** `resolveAlerts` takes a list of `{ id }` and returns a
+   bare `Boolean`:
 
-3. **Resolve the alert**
    ```graphql
-   mutation resolveAlerts($input: ResolveAlertInput!) {
-     resolveAlerts(input: $input) {
-       alert {
-         alertId
-         status
-         resolvedTime
-         resolvedBy {
-           id
-           name
-         }
-         resolutionNotes
-       }
-       ticket {
-         ticketId
-         ticketNumber
-         subject
-       }
-       errors {
-         field
-         message
-       }
-     }
+   mutation resolveAlerts($input: [ResolveAlertInput]) {
+     resolveAlerts(input: $input)
    }
    ```
 
-   Variables:
+   ```json
+   { "input": [{ "id": "<alert_id>" }] }
+   ```
+
+   The mutation takes no resolution note. A `false` result means SuperOps did not
+   resolve the alert, so report it and do not retry blindly.
+
+3. **Create a ticket, if requested.** Call `superops_tickets_create`:
+
    ```json
    {
-     "input": {
-       "alertIds": ["<alert_id>"],
-       "resolutionNotes": "<resolution_note>",
-       "createTicket": false,
-       "ticketSubject": "<ticket_subject>"
-     }
+     "subject": "<ticket_subject, or the alert message>",
+     "clientId": "<accountId from the asset's client JSON>",
+     "description": "Alert <alert_id> on <asset name>: <message>\n\nResolution: <resolution_note>",
+     "status": "Resolved"
    }
    ```
 
-4. **Create ticket if requested**
-   - If create_ticket is true, create linked ticket
-   - Use ticket_subject or generate from alert message
-   - Link ticket to alert and asset
+   Take the client's `accountId` from `superops_assets_get` on the alerting asset.
 
-5. **Confirm resolution**
-   - Display updated alert status
-   - Show ticket details if created
-   - Confirm documentation is complete
+4. **Record the resolution note.** If there is a ticket, call
+   `superops_tickets_add_note` with the `resolution_note`. Otherwise give the note
+   back to the operator. The alert itself cannot store it.
+
+5. **Confirm.** Re-read the alert and report its `status` and `resolvedTime`, plus
+   the ticket's `displayId` if one was created.
 
 ## Parameters
 
 | Parameter | Type | Required | Default | Description |
 |-----------|------|----------|---------|-------------|
-| alert_id | string | Yes | - | The alert ID to resolve |
-| resolution_note | string | No | - | Note explaining the resolution |
-| create_ticket | boolean | No | false | Create a ticket from this alert |
-| ticket_subject | string | No | - | Subject if creating ticket |
+| alert_id | string | Yes | - | The alert `id` |
+| resolution_note | string | No | - | What was done. Goes on the ticket, not the alert |
+| create_ticket | boolean | No | false | Record the work as a ticket |
+| ticket_subject | string | No | alert message | Ticket subject |
 
 ## Examples
 
-### Basic Resolution
-
 ```
-/resolve-alert alert_9876
-```
-
-### With Resolution Note
-
-```
-/resolve-alert alert_9876 --resolution_note "Disk space cleared by removing temp files"
-```
-
-### Create Ticket on Resolution
-
-```
-/resolve-alert alert_9876 --create_ticket true --ticket_subject "Server disk space issue - resolved"
-```
-
-### With Custom Ticket Subject
-
-```
-/resolve-alert alert_9876 --resolution_note "Cleared 50GB of temp files" --create_ticket true --ticket_subject "ACME-DC01: Disk cleanup performed"
+/resolve-alert 4417
+/resolve-alert 4417 --resolution_note "Cleared 50 GB of temp files" --create_ticket true --ticket_subject "ACME-DC01: Disk cleanup performed"
 ```
 
 ## Output
 
-### Basic Resolution
-
 ```
-Alert Resolved Successfully
-
-Alert ID: alert_9876
-Status: Acknowledged -> Resolved
-
-Alert Details:
+Alert 4417 resolved (resolveAlerts returned true)
   Asset: ACME-DC01
-  Client: Acme Corporation
-  Type: Disk Space
-  Severity: Critical
   Message: Disk Space Critical: C: drive at 5% free
+  Resolved at: 2026-02-04T14:45:00Z
 
-Resolution:
-  Resolved By: Jane Technician
-  Resolved At: 2026-02-04 14:45:00 UTC
-  Note: Disk space cleared by removing temp files
-
-Duration:
-  Created: 2026-02-04 12:30:00 UTC
-  Acknowledged: 2026-02-04 14:32:00 UTC
-  Resolved: 2026-02-04 14:45:00 UTC
-  Total Time: 2h 15m
-```
-
-### Resolution with Ticket Created
-
-```
-Alert Resolved Successfully
-
-Alert ID: alert_9876
-Status: Active -> Resolved
-
-Alert Details:
-  Asset: ACME-DC01
-  Client: Acme Corporation
-  Type: Disk Space
-  Severity: Critical
-  Message: Disk Space Critical: C: drive at 5% free
-
-Resolution:
-  Resolved By: Jane Technician
-  Resolved At: 2026-02-04 14:45:00 UTC
-  Note: Cleared 50GB of temp files
-
-Ticket Created:
-  Ticket Number: TICK-2026-0123
-  Subject: ACME-DC01: Disk cleanup performed
-  Status: Resolved
-  URL: https://yourcompany.superops.ai/tickets/ticket-uuid
-
-The ticket has been linked to this alert and asset for tracking.
-```
-
-### Already Resolved
-
-```
-Alert Already Resolved
-
-Alert ID: alert_9876
-Status: Resolved
-
-Previous Resolution:
-  Resolved By: John Smith
-  Resolved At: 2026-02-04 12:00:00 UTC
-  Note: Issue auto-cleared after restart
-
-This alert has already been resolved.
-If the issue has returned, a new alert should be triggered.
-```
-
-## curl Example
-
-```bash
-curl -X POST 'https://yourcompany.superops.ai/graphql' \
-  -H 'Authorization: Bearer YOUR_API_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "query": "mutation resolveAlerts($input: ResolveAlertInput!) { resolveAlerts(input: $input) { alert { alertId status resolvedTime resolvedBy { id name } resolutionNotes } ticket { ticketId ticketNumber subject } } }",
-    "variables": {
-      "input": {
-        "alertIds": ["alert-uuid-here"],
-        "resolutionNotes": "Disk space cleared by removing temp files",
-        "createTicket": true,
-        "ticketSubject": "Server disk space issue - resolved"
-      }
-    }
-  }'
+Ticket created: #1042 "ACME-DC01: Disk cleanup performed" (Resolved)
+  Note added: Cleared 50 GB of temp files
 ```
 
 ## Error Handling
 
-### Alert Not Found
-
-```
-Alert not found: "alert_99999"
-
-Please verify the alert ID is correct.
-Use /list-alerts to find active alerts.
-```
-
-### Alert Already Resolved
-
-```
-Alert already resolved: "alert_9876"
-
-Resolved By: John Smith
-Resolved At: 2026-02-04 12:00:00 UTC
-
-If the issue has reoccurred, check for a new active alert.
-Use /list-alerts --asset_id <asset_id> to see current alerts.
-```
-
-### Ticket Creation Failed
-
-```
-Alert resolved but ticket creation failed.
-
-Alert ID: alert_9876
-Status: Resolved
-
-Ticket Error: Invalid client configuration
-
-The alert has been resolved. To create a ticket manually:
-/create-ticket "Acme Corporation" "ACME-DC01: Disk space issue"
-```
-
-### API Errors
-
-| Error | Resolution |
-|-------|------------|
-| Invalid alert ID | Verify alert exists using /list-alerts |
-| Already resolved | Alert was already resolved |
-| Invalid ticket subject | Provide a valid ticket subject |
-| Permission denied | Check user permissions for alert management |
-| Rate limited | Wait and retry (800 req/min limit) |
+| Situation | Response |
+|-----------|----------|
+| Alert not found | Re-check the ID with `/list-alerts` |
+| `resolveAlerts` returns `false` | Report it. Do not assume the alert was resolved |
+| Alert resolved but ticket creation failed | Report the resolved alert and offer `/create-ticket` |
+| No `admin` grant | Stop and say so |
 
 ## When to Create Tickets
 
-Create a ticket when:
-- Work was performed that should be billed
-- Follow-up actions are needed
-- Documentation is required for compliance
-- The issue may recur and needs tracking
-- Client communication is required
-
-Skip ticket creation when:
-- Alert auto-resolved (transient issue)
-- No significant work was performed
-- Issue was a false positive
-- Monitoring threshold needs adjustment
-
-## Best Practices
-
-1. **Add resolution notes** - Document what was done
-2. **Create tickets for significant work** - Track billable time
-3. **Be specific** - Future technicians will thank you
-4. **Review patterns** - Recurring alerts may need root cause analysis
-5. **Verify resolution** - Confirm the issue is actually fixed
+Create a ticket when the work is billable, needs follow-up or documentation, may
+recur, or needs client communication. Skip it for transient alerts that cleared
+by themselves and for false positives.
 
 ## Related Commands
 
-- `/list-alerts` - List active alerts
+- `/list-alerts` - List alerts
 - `/acknowledge-alert` - Acknowledge an alert
-- `/create-ticket` - Create ticket manually
+- `/create-ticket` - Create a ticket manually
 - `/get-asset` - View asset details
-- `/run-script` - Run remediation script
+- `/run-script` - Run a remediation script

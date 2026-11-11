@@ -1755,12 +1755,12 @@ export const plugins: Plugin[] = [
       'Ticket Management'
     ],
     skills: [
-      { name: 'alerts', description: 'SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle and valid transitions, asset/client/monitor associations, and the GraphQL operations for listing, acknowledging, resolving, and converting alerts into tickets.' },
+      { name: 'alerts', description: 'SuperOps.ai RMM alerting: alert types, severity levels, status lifecycle and valid transitions, asset/client/monitor associations, the GraphQL operations for listing and resolving alerts, and the hand-offs for acknowledging them (console) and ticketing them (superops_tickets_create).' },
       { name: 'assets', description: 'SuperOps.ai RMM asset inventory: asset status and platform enums, hardware, network, OS and association fields, software inventory, disk usage, patch status, activity history, and the GraphQL queries and script-execution mutations behind them.' },
       { name: 'clients', description: 'SuperOps.ai client (account) management: stage and status enums, core/business/ address fields, client CRUD mutations, site and contact (requester) management, custom fields, soft vs. hard delete, and onboarding workflows.' },
-      { name: 'runbooks', description: 'SuperOps.ai RMM script automation: script types and OS targeting, run-as contexts, execution priority, parameterized arguments, single-asset and batch execution, recurring schedules, execution status polling, and exit-code interpretation.' },
+      { name: 'runbooks', description: 'SuperOps.ai RMM script automation: finding scripts in the library (all, or by OS), their run-time variables, running one script on one asset with runScriptOnAsset through the admin-tier GraphQL passthrough, and what the API cannot do (batch runs, schedules, reading execution results back).' },
       { name: 'tickets', description: 'SuperOps.ai service desk ticketing: ticket fields, status and priority enums, client/site/requester/assignee associations, notes, time entries, and the GraphQL mutations and queries behind them.' },
-      { name: 'api-patterns', description: 'SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth, region-specific endpoints, request/variable structure, cursor pagination, the 800 req/min rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.' }
+      { name: 'api-patterns', description: 'SuperOps.ai GraphQL API fundamentals: Bearer token plus CustomerSubDomain header auth, region-specific endpoints, request/variable structure, offset (page/pageSize) pagination, the 800 req/min rate limit, filter operators, UTC date handling, error codes, and null-reset semantics.' }
     ],
     agents: [
       { name: 'automation-opportunity-finder', description: 'Use this agent when an MSP operations lead, service manager, or technician wants to identify repetitive ticket patterns in SuperOps.ai that should be automated — not live operations management, but a retrospective analysis of ticket history to find recurring issues with the same client, same category, and same resolution, calculate the manual time cost, and recommend runbooks or automation scripts to eliminate the pattern.' },
@@ -1773,7 +1773,7 @@ export const plugins: Plugin[] = [
       { name: '/get-asset', description: 'Get detailed asset information including hardware, software, and alerts' },
       { name: '/list-alerts', description: 'List active RMM alerts across all clients or filtered by criteria' },
       { name: '/list-assets', description: 'List and filter assets in SuperOps.ai' },
-      { name: '/log-time', description: 'Log a time entry against a SuperOps.ai ticket' },
+      { name: '/log-time', description: 'Log a worklog (time) entry against a SuperOps.ai ticket' },
       { name: '/resolve-alert', description: 'Resolve an RMM alert and optionally create a ticket' },
       { name: '/run-script', description: 'Execute a script on a remote asset via SuperOps RMM' },
       { name: '/update-ticket', description: 'Update fields on an existing SuperOps.ai ticket' }
@@ -2745,19 +2745,21 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
     maturity: 'beta',
     features: [
       'Alert Severity Normalization',
       'Bec Response',
       'Containment Playbooks',
+      'Msp Tool Compromise Response',
       'Shadow Ai'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
+      { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
       { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' }
     ],
     agents: [
@@ -2788,13 +2790,17 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Agreement Reconciliation',
+      'Churn Scanner',
       'License True Up',
-      'Margin Analysis'
+      'Margin Analysis',
+      'Renewal And Price Increase Prep'
     ],
     skills: [
       { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
+      { name: 'churn-scanner', description: 'Cross-vendor client retention risk ranking from ticket volume, customer sentiment, SLA misses, overdue invoices, upcoming agreement renewals, and RMM availability proxies.' },
       { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
-      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' }
+      { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' },
+      { name: 'renewal-and-price-increase-prep', description: 'Composes Agreement Reconciliation and Margin Analysis into per-client talking points for an upcoming renewal or a price-increase conversation.' }
     ],
     agents: [
       { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },

@@ -61,10 +61,12 @@ against customer endpoints is only reachable through
 the destructive tier. Script execution is destructive regardless of what
 the API calls it.
 
-`superops_custom_query` cannot mutate, but it can read anything the token
-can see, including entities no typed tool surfaces. It is the exfiltration
-path, not the damage path, and Conduit holds it at `admin` for that reason.
-Alert listing and every other read that has no typed tool goes through it.
+`superops_custom_query` is meant for query documents only, but the server
+passes the caller's string straight to the SuperOps API, so a mutation sent to
+it would execute. Conduit classifies it write and `admin`, the same as
+`superops_custom_mutation`. It can also read anything the token can see,
+including entities no typed tool surfaces. Alert listing and every other read
+that has no typed tool goes through it, so send it query documents only.
 
 Nothing sits between an agent and an arbitrary GraphQL mutation once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 
