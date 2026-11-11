@@ -9,7 +9,7 @@ This plugin provides Claude with deep knowledge of SuperOps.ai, enabling:
 - **Ticket Management** - Create, search, update, and manage service tickets
 - **Asset Management** - Query assets, run scripts, monitor patches
 - **Client Operations** - Client and site management
-- **Alert Handling** - Monitor, acknowledge, and resolve alerts
+- **Alert Handling** - Monitor and resolve alerts (acknowledgement is console-only)
 - **Runbook Execution** - Execute automation scripts on assets
 
 ## Configuration
@@ -27,7 +27,7 @@ This plugin ships no `.mcp.json` and reads no environment variables. Connect Sup
 
 There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http superops https://your-gateway-domain/v1/superops/mcp`. The gateway then holds the SuperOps credentials, not the client.
 
-### Obtaining API Credentials
+## Obtaining API Credentials
 
 1. **Log into SuperOps.ai**
    - Navigate to your SuperOps instance
@@ -42,21 +42,21 @@ There is no per-plugin URL setting, and setting an environment variable does not
    - Your subdomain is your company identifier in SuperOps
    - This is typically your company name or a custom identifier
 
-4. **Determine Your API Region**
-   - **US Region**: `https://api.superops.ai/graphql`
-   - **EU Region**: `https://euapi.superops.ai/graphql`
+4. **Determine Your API Region** (Conduit connects to the US region only; the EU endpoint matters only if you call SuperOps directly)
+   - **US Region**: `https://api.superops.ai/msp`
+   - **EU Region**: `https://euapi.superops.ai/msp`
 
-### Testing Your Connection
+## Testing Your Connection
 
 To check the credentials directly against SuperOps before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test connection (GraphQL query)
-curl -X POST "https://api.superops.ai/graphql" \
+curl -X POST "https://api.superops.ai/msp" \
   -H "Authorization: Bearer ${SUPEROPS_API_TOKEN}" \
   -H "CustomerSubDomain: ${SUPEROPS_SUBDOMAIN}" \
   -H "Content-Type: application/json" \
-  -d '{"query": "{ clients { edges { node { id name } } } }"}' | jq
+  -d '{"query": "{ getClientList(input: { page: 1, pageSize: 1 }) { listInfo { totalCount } } }"}' | jq
 ```
 
 ## Installation
@@ -92,10 +92,10 @@ claude --plugin .
 
 ## API Reference
 
-- **Base URL**: `https://api.superops.ai/graphql` (US) or `https://euapi.superops.ai/graphql` (EU)
+- **Base URL**: `https://api.superops.ai/msp` (US) or `https://euapi.superops.ai/msp` (EU)
 - **Auth**: Bearer token + `CustomerSubDomain` header
 - **Rate Limit**: 800 requests per minute
-- **Docs**: [SuperOps.ai API Documentation](https://developer.superops.ai/)
+- **Docs**: [SuperOps.ai API Documentation](https://developer.superops.com/msp)
 
 ## Contributing
 

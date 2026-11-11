@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.36.0",
+  "version": "1.37.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -40,7 +40,11 @@
       "source": "./msp-claude-plugins/advanced-workflows/advanced-workflows",
       "description": "Vendor-generic MSP automation workflows that adapt to the customer's connected stack.",
       "category": "automation",
-      "tags": ["workflows", "automation", "msp"]
+      "tags": [
+        "workflows",
+        "automation",
+        "msp"
+      ]
     },
     {
       "name": "atera",
@@ -969,7 +973,7 @@
     {
       "name": "secops-pack",
       "source": "./msp-claude-plugins/secops-pack",
-      "description": "Security Operations \u2014 cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
+      "description": "Security Operations \u2014 cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1026,12 +1030,14 @@
     {
       "name": "marketing-pack",
       "source": "./msp-claude-plugins/marketing-pack",
-      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
         "marketing",
         "case-studies",
+        "reviews",
+        "referrals",
         "msp"
       ]
     },
