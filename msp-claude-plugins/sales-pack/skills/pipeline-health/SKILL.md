@@ -180,3 +180,4 @@ picking one.
   exactly where in the handoff chain it's stuck
 - [Warm Lead Routing](../warm-lead-routing/SKILL.md) — upstream of this skill,
   for deals that haven't yet been created in the CRM
+- [Prospect Security Snapshot](../prospect-security-snapshot/SKILL.md): a public-domain risk brief for a first conversation with a prospect, not a pipeline read

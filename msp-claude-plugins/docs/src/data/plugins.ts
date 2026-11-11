@@ -2866,11 +2866,13 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Pipeline Health',
+      'Prospect Security Snapshot',
       'Quote To Close Tracking',
       'Warm Lead Routing'
     ],
     skills: [
       { name: 'pipeline-health', description: 'CRM pipeline health assessment against whatever CRM is discovered through the gateway: stage-velocity norms derived from closed-won deals, activity-based stalled-deal detection, raw and quality-adjusted pipeline coverage against a revenue target, and the CRM-less degradation rule (report nothing rather than fabricate figures).' },
+      { name: 'prospect-security-snapshot', description: 'A one-page, plain-language public-domain risk report for a first sales conversation: SPF, DKIM, and DMARC from CIPP only after the operator confirms any CIPP use and the domain is a connected tenant\'s default or initial domain (MX from the agent\'s own DNS lookups, or unavailable); certificates and exposed services only when a read-only tool or an in-session lookup already has that data; breach mentions only when a tool or a cited public search exists.' },
       { name: 'quote-to-close-tracking', description: 'The quote-to-close handoff chain — a Pax8/Sherweb/Kaseya Quote Manager quote or SalesBuildr proposal, through a PandaDoc document\'s sent/viewed/signed status, to a closed-won CRM deal — and the four distinct stall points along it (quote built with no proposal document, proposal sent but not opened, viewed but not signed, signed but the CRM deal never marked closed-won), including cross-system record matching and what to report when only part of the chain is connected.' },
       { name: 'warm-lead-routing', description: 'Lead-warmth scoring from intent and engagement signals — Warmly website-visitor identification, CRM form fills and email engagement, and Calendly booking activity — using an explainable Hot/Warm/Warm-Cool/Cool tiering, plus routing recommendations based on owner continuity, CRM routing rules, or rep capacity, and the degradation path to CRM-only signals when intent tools aren\'t connected.' }
     ],
