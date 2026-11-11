@@ -44,15 +44,17 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
 | `superops_assets_software` | read | Installed software on an asset |
 | `superops_assets_patches` | read | Patch status for an asset |
 
-Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+Anything without a typed tool goes through `superops_custom_query` (admin tier; send query documents only, since the tool does not stop a mutation) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
 
 ## Asset Status Values
 
-| Status | Description | Indicator |
-|--------|-------------|-----------|
-| **Online** | Agent connected and reporting | Green |
-| **Offline** | Agent not responding | Red |
-| **Maintenance** | In maintenance mode | Yellow |
+`status` is a plain `String`. The values observed live are `ONLINE` and
+`OFFLINE`, and filters match them without regard to case.
+
+| Status | Description |
+|--------|-------------|
+| **ONLINE** | Agent connected and reporting |
+| **OFFLINE** | Agent not responding |
 
 ## Asset Platform Types
 
@@ -80,45 +82,44 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 |-----------|------|---------|
 | `getAssetList` | query | List/filter assets; includes a `patchStatus` rollup per asset |
 | `getAsset` | query | Full detail for one asset (hardware, OS, network, associations) |
-| `getAssetSoftwareList` | query | Installed software, filterable by `name` substring |
-| `getAssetDiskDetails` | query | Per-volume space and `usedPercentage` |
-| `getAssetPatchDetails` | query | Patch list plus a `summary` counts block |
-| `getAssetActivity` | query | Audit history of actions performed on the asset |
+| `getAssetSoftwareList` | query | Installed software. `superops_assets_software` filters it on `software.name` |
+| `getAssetSummary` | query | CPU, memory, disk totals and interfaces for one asset |
+| `getAssetDiskDetails` | query | Per-volume `size`, `freeSize` and `driveUsage` (all `JSON`) |
+| `getAssetPatchDetails` | query | Per-patch detail, approval and installation status |
+| `getAssetActivity` | query | Activity recorded against the asset |
 | `runScriptOnAsset` | mutation | Run a script on one asset (`input: RunScriptInput!`) |
 
-There is no bulk script mutation: run `runScriptOnAsset` once per asset. List
+There is no bulk script mutation, so run `runScriptOnAsset` once per asset. List
 queries take `input: ListInfoInput!` (`page`, `pageSize`, `condition`, `sort`) and
-return `listInfo` (`page`, `pageSize`, `hasMore`, `totalCount`).
+return `listInfo` (`page`, `pageSize`, `hasMore`, `totalCount`). `hasMore` is
+`null`, not `false`, on the last page.
 
-The longer examples in `references/` predate the published schema
-(`schema/superops.graphql` in superops-mcp) and select nested fields on `client`,
-`site` and `patchStatus`, which the schema does not allow. Check a query against
-the schema before sending it.
-
-See [references/api.md](references/api.md) for the full operation catalog with
-request shapes and variable examples.
+See [references/api.md](references/api.md) for the documents and variables.
+Every example there validates against the schema.
 
 ## Common Workflows
 
 ### Asset Health Check
 
-Query `getAssetList` filtered to `status: "Online"` with
-`diskSpacePercentFree: { lt: 10 }` to surface endpoints running out of disk,
-returning `freeDiskSpace`/`totalDiskSpace` alongside the client name.
+No list query filters on disk space. List the client's online assets with
+`superops_assets_list` (`status: "ONLINE"`, `clientId`). Then read each one's
+`getAssetDiskDetails` or `getAssetSummary` through `superops_custom_query`, and
+compare the free-space figures yourself.
 
 ### Patch Compliance Report
 
-Read the per-asset `patchStatus` string from `getAssetList` (or the typed
-`superops_assets_patches` tool), then `getAssetPatchDetails` for the assets that
-need detail. `patchStatus` is a plain string, not a rollup object.
+Read the per-asset `patchStatus` string from `superops_assets_list`. Then call
+`superops_assets_patches` (`installationStatus: "NewOrMissing"`) for the assets
+that need detail. `patchStatus` is a plain string, not a rollup object.
 
 ### Software Audit
 
-Query `getAssetList` filtered on `software: { name: "..." }` to find every asset
-with a given application installed — useful for license reconciliation and
-removing unsanctioned remote-access tools.
+`software` is not an asset-list attribute. List the client's assets, then call
+`superops_assets_software` with `search` set to the application name for each
+asset. This is useful for license reconciliation and for removing unsanctioned
+remote-access tools.
 
-See [references/api.md](references/api.md) for all three workflow queries.
+See [references/api.md](references/api.md) for all three workflows.
 
 ## Error Handling
 
