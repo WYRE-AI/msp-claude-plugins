@@ -72,7 +72,8 @@ below. Never create, update, send, void, or raw/execute.
 `autotask_search_contract_services`,
 `autotask_search_contract_service_units`,
 `autotask_search_contract_service_bundles`,
-`autotask_search_contract_service_bundle_units`, `cw_search_agreements`, `cw_get_agreement`, `cw_get_agreement_additions`.
+`autotask_search_contract_service_bundle_units`, `cw_search_agreements`,
+`cw_get_agreement`, `cw_get_agreement_additions`.
 For a renewal window in Autotask, `autotask_list_expiring_contracts`
 returns contracts whose end date falls within `daysAhead` days (default
 60), optionally scoped to one `companyID`. Pass `includeExpired: true` to
@@ -111,9 +112,8 @@ a substitute for line-level reconciliation.
 **Marketplace (optional cost and subscription context):**
 `pax8-list-subscriptions`, `pax8-get-subscription-by-uuid`,
 `pax8-list-invoices`, `pax8-get-invoice-by-uuid`,
-`sherweb_subscriptions_list`, `sherweb_subscriptions_get`. Pax8 get-by-uuid
-and some invoice tools may require a higher Conduit grant than the list
-tools; only call them when discovery shows they are callable. Never call
+`sherweb_subscriptions_list`, `sherweb_subscriptions_get`. Only call
+these when discovery shows they are callable. Never call
 `pax8_orders_create`, `pax8_subscriptions_update`, or
 `sherweb_subscriptions_change_quantity` (the first two are not served on
 the hosted Pax8 path anyway).
@@ -132,6 +132,10 @@ unavailable when marketplace cost is also missing.
 `cw_search_tickets`, `halopsa_tickets_list`, `syncro_tickets_list`.
 Use these only to summarize the client's closed work for the value
 section. Never create, update, or comment on tickets.
+
+Some accounting reads (QuickBooks Online and Xero) may need an admin
+grant, because Conduit treats tools it has not classified as admin. If
+discovery does not show one as callable, treat that input as unavailable.
 
 If a vendor is connected but the needed tool is not in this list, treat
 that input as unavailable.

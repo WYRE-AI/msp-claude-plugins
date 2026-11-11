@@ -73,7 +73,7 @@ Then connect Liongard in Conduit (see **Connect through Conduit**). The plugin a
 
 ## MCP Server
 
-Conduit runs the Liongard MCP server for you; there is nothing to install or configure locally. The server exposes a `liongard_navigate` root tool that lets you select a domain (environments, agents, inspections, systems, detections, alerts, metrics, timeline, inventory) and then dynamically loads domain-specific tools.
+Conduit runs the Liongard MCP server for you; there is nothing to install or configure locally. The server lists every domain tool (environments, agents, inspections, systems, detections, alerts, metrics, timeline, inventory) up front, so there is no domain to select first. Its `liongard_navigate` helper is refused by Conduit for every caller; use `conduit__my_access` to see which tools you can call.
 
 ## API Reference
 

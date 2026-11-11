@@ -49,11 +49,15 @@ hasn't propagated yet.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_essentials_users_list` | List users in an org | `org_name` |
-| `proofpoint_essentials_users_get` | Get one user by email address | `org_name`, `email` |
-| `proofpoint_essentials_users_create` | Create one or more users in an org | `org_name`, `users[]` |
-| `proofpoint_essentials_users_update` | Update a user's settings | `org_name`, `email` |
-| `proofpoint_essentials_users_delete` | Remove a user from an org | `org_name`, `email` |
+| `proofpoint_essentials_users_list` | List users in an org | `orgDomain` |
+| `proofpoint_essentials_users_get` | Get one user by email address | `orgDomain`, `email` |
+| `proofpoint_essentials_users_create` | Create one or more users in an org | `orgDomain`, `users[]` (each needs `primary_email`) |
+| `proofpoint_essentials_users_update` | Update a user's settings | `orgDomain`, `email`, `data` |
+| `proofpoint_essentials_users_delete` | Remove a user from an org | `orgDomain`, `email` |
+
+`orgDomain` is the org's primary domain. `users_delete` is irreversible and
+asks for confirmation; a client that cannot be prompted, such as one
+connected through Conduit, must pass `confirm_destructive_action: true`.
 
 `proofpoint_essentials_users_create` follows the batch-create / 207
 Multi-Status pattern described in `api-patterns` when given more than one
