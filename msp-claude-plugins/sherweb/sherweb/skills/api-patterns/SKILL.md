@@ -29,12 +29,10 @@ The Sherweb Partner API provides programmatic access to distributor-level operat
 - **Sherweb tools missing from the client entirely, or a 401 before any
   call succeeds** — that is a gateway-connection problem; use
   `shared-skills-wyre-gateway-troubleshooting`.
-- **A tool that seems not to exist** — this server uses progressive
-  disclosure, so domain tools are only visible after `sherweb_navigate`
-  or `sherweb_list_categories`. Check discovery before concluding a
-  capability is missing. Two capabilities really are absent, and no amount
-  of discovery will surface them: billing-period enumeration and invoice
-  retrieval. See the billing tool table below.
+- **A tool that seems not to exist** — through Conduit every domain tool
+  is listed up front, so check `conduit__my_access` for whether it is
+  granted to you. Two capabilities really are absent: billing-period
+  enumeration and invoice retrieval. See the billing tool table below.
 
 ## Authentication
 
@@ -201,11 +199,13 @@ balance) — neither is an invoice, and neither should be presented as one. See
 | Tool | Description | Parameters |
 |------|-------------|------------|
 | `sherweb_status` | Show credentials status and available domains | — |
-| `sherweb_navigate` | Discover tools by domain | `domain` (required) |
-| `sherweb_list_categories` | List tool categories with counts | — |
-| `sherweb_list_category_tools` | List a category's tools with full schemas | `category` (required) |
-| `sherweb_router` | Suggest tools for a plain-language intent | `intent` (required) |
-| `sherweb_execute_tool` | Dispatch any Sherweb tool by name | `toolName` (required) |
+
+That is the only discovery tool available through Conduit. Conduit
+refuses `sherweb_navigate` for every caller; use `conduit__my_access`
+to see which tools you can call. The server's lazy-loading meta-tools
+(`sherweb_list_categories`, `sherweb_list_category_tools`,
+`sherweb_router`, `sherweb_execute_tool`) are registered only when it
+runs with `LAZY_LOADING=true`, which Conduit does not use.
 
 ## Pagination
 

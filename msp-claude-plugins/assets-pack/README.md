@@ -59,6 +59,11 @@ for "what devices exist."
   calendar from warranty expiration + EOL/EOS timing + device age, and
   bucketing devices into replace-now / plan-this-year / monitor tiers so
   refresh conversations happen proactively, not after a failure
+- `refresh-quote-list` : turns that calendar into a per-client list of
+  devices to quote, matched against a connected ScalePad Quoter, Kaseya
+  Quote Manager, or ConnectWise PSA product catalog when one exists
+  (ConnectWise CPQ has no searchable catalog). Drafts the list only; it
+  does not create quotes
 
 **Agents**
 - `warranty-status-auditor` — portfolio-wide (or single-client) warranty
@@ -109,8 +114,9 @@ neither pack duplicates the other's judgment.
 **vs. `ops-pack` (MSP Operations)** — `ops-pack` is service-desk/ticket
 focused: board health, dispatch prioritization, SLA monitoring, and shift
 handoffs against whatever PSA you have connected. It answers "is the queue
-under control." `assets-pack` doesn't touch tickets or PSAs at all — it
-answers "what does the hardware itself need," independent of whether
+under control." `assets-pack` doesn't touch tickets at all (its only PSA
+use is `refresh-quote-list` reading a ConnectWise PSA product catalog) —
+it answers "what does the hardware itself need," independent of whether
 anyone has filed a ticket about it. A laptop three weeks from warranty
 expiration that nobody has reported a problem with yet is exactly the kind
 of finding `assets-pack` surfaces that `ops-pack` has no visibility into.

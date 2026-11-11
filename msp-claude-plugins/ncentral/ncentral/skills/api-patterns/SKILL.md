@@ -58,13 +58,16 @@ and the server does the rest. Two constraints on the N-central side:
 Use `ncentral_validate_token` to confirm the token is valid and see which
 user it authenticates as; `ncentral_server_info` reports the server version.
 
-## Tool Navigation
+## Tool Discovery
 
-Tools are exposed behind decision-tree navigation. Call `ncentral_navigate`
-to move into a domain (orgs, devices, monitoring, tasks, custom-properties,
-maintenance, access-groups), `ncentral_back` to go up a level, and
-`ncentral_status` to see where you are and what is currently available.
-`ncentral_health` works from anywhere.
+Every tool is listed up front and can be called by name. There is no
+domain to enter first. `ncentral_status` checks connectivity by calling
+the health and server-info endpoints. `ncentral_health` is the lighter
+health check.
+
+Through Conduit, `ncentral_navigate` is refused for every caller and never
+appears in the tool list. Use `conduit__my_access` to see which tools you
+can call. There is no `ncentral_back` tool.
 
 ## Pagination
 
