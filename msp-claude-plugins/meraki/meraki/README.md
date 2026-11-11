@@ -35,29 +35,19 @@ Meraki.com dashboards only. The China cloud, Federal, GovCloud and other localiz
 
 ## Installation
 
-### Via Conduit (recommended)
+### Connect through Conduit
 
-Connect Meraki in [Conduit](https://conduit.wyre.ai): paste the Dashboard API key into the Meraki connection form once. Conduit forwards it to Cisco as `Authorization: Bearer`, so nothing is stored on technicians' machines and the plugin needs no configuration. There is no organization setting; the org scope is whatever the key can see.
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Meraki once in Conduit (**Connections → Meraki**, slug `meraki`) by pasting the Dashboard API key into the connection form. Conduit stores the key and forwards it to Cisco as `Authorization: Bearer` on every request, so nothing is kept on technicians' machines. There is no organization setting; the org scope is whatever the key can see. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
+
+| Conduit connection field |
+|---|
+| API Key |
 
 Through Conduit the tools appear as `meraki__semantic_search` and `meraki__execute_api`. Conduit classifies `semantic_search` as read tier and `execute_api` as **admin tier**, because one tool name can run any capability. Members without an admin-tier Meraki grant see only `semantic_search`, which searches the capability catalog and returns no customer data. Grant admin tier on Meraki to the people and agents who need Meraki data.
 
-### Direct to Cisco's hosted server
+### Claude Code CLI
 
-Without Conduit, point your MCP client at Cisco's server and supply the key from your environment (see `.env.example`):
-
-```json
-{
-  "mcpServers": {
-    "meraki": {
-      "type": "http",
-      "url": "https://mcp.meraki.com/mcp",
-      "headers": {
-        "Authorization": "Bearer ${MERAKI_DASHBOARD_API_KEY}"
-      }
-    }
-  }
-}
-```
+Install this plugin (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install meraki@msp-claude-plugins`), connect Meraki in Conduit as above, and add the unified connector `https://conduit.wyre.ai/v1/mcp` to Claude Code (or install the `wyre-gateway` plugin). There are no environment variables to set.
 
 ## Available Skills
 
@@ -129,7 +119,7 @@ Cisco's hosted server is read-only and rejects state-changing operations; write 
 
 ### Credential handling
 
-- Never commit API keys. Through Conduit the key is pasted once into the connection form and never reaches technicians' machines.
+- Keep credentials in the Conduit connection, never in files, environment variables or chat. The key is pasted once into the connection form and never reaches technicians' machines.
 - Rotate keys periodically in the Meraki Dashboard and replace the key in Conduit.
 - Review the organization's Dashboard change log and API request history regularly.
 
@@ -141,7 +131,7 @@ Cisco states that the hosted server does not currently enforce your organization
 
 ### Authentication Errors (401)
 
-"Authentication failed." or HTTP 401 means the key is invalid, revoked or expired. Create a new key under Organization > API & Webhooks and replace it in Conduit's Meraki connection (or in `MERAKI_DASHBOARD_API_KEY` for direct use).
+"Authentication failed." or HTTP 401 means the key is invalid, revoked or expired. Create a new key under Organization > API & Webhooks and replace it in Conduit's Meraki connection.
 
 ### Permission Errors (403)
 
@@ -157,7 +147,7 @@ Your Conduit grant for Meraki is below admin tier, so only `semantic_search` is 
 
 ### Unsupported Dashboards
 
-China cloud, Federal, GovCloud and localized dashboards cannot be reached through Cisco's hosted server, with or without Conduit.
+China cloud, Federal, GovCloud and localized dashboards cannot be reached through Cisco's hosted server.
 
 ### Rate Limits
 

@@ -10,7 +10,7 @@ Pull a Cisco Meraki MX network's firewall configuration — L3 outbound rules, L
 
 ## Prerequisites
 
-- Meraki connected in Conduit (or Cisco's hosted server configured directly)
+- Meraki connected in Conduit
 - `execute_api` available — it is admin-tier in Conduit, see `meraki-api-patterns`
 - The target network contains an MX appliance
 

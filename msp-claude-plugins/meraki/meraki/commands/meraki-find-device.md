@@ -10,7 +10,7 @@ Locate a Cisco Meraki device by serial number, name, or MAC address across an or
 
 ## Prerequisites
 
-- Meraki connected in Conduit (or Cisco's hosted server configured directly)
+- Meraki connected in Conduit
 - `execute_api` available — it is admin-tier in Conduit, see `meraki-api-patterns`
 
 ## Steps

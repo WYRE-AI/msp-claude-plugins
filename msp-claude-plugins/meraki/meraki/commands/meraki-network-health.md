@@ -10,7 +10,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 ## Prerequisites
 
-- Meraki connected in Conduit (or Cisco's hosted server configured directly)
+- Meraki connected in Conduit
 - `execute_api` available — it is admin-tier in Conduit, see `meraki-api-patterns`
 
 ## Steps
