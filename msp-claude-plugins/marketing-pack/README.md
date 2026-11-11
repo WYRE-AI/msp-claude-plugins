@@ -9,7 +9,7 @@ This is a **workflow pack**, not a vendor plugin. It does not teach any
 single tool's API in depth. It bundles the judgment layer (what may be
 published, when a client can be named, and when a review or referral ask
 is appropriate) on top of whatever Autotask, ConnectWise, HaloPSA,
-Syncro, SuperOps, NinjaOne, Atera, IT Glue, Hudu, and/or CrewHu or SmileBack data your
+Syncro, SuperOps, NinjaOne, IT Glue, Hudu, and/or CrewHu or SmileBack data your
 connected tools return.
 
 This pack drafts only. It does not publish articles, send email, post
