@@ -3824,7 +3824,7 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'marketsharp',
-    name: 'Marketsharp',
+    name: 'MarketSharp',
     vendor: 'Marketsharp',
     description: 'MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting',
     category: 'crm',

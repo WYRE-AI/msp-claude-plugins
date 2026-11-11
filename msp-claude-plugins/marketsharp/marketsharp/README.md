@@ -91,10 +91,10 @@ This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any work
 
 ## Troubleshooting
 
-- **Search says an Employee ID is needed**, or `marketsharp_notes_list` fails: add an Employee ID to the MarketSharp connection in Conduit. `marketsharp_search_global` does not need one.
+- **A contact, inquiry or job search, or `marketsharp_notes_list`, returns a permission (403-type) error**: the connection probably has no Employee ID. The connector does not check for one before calling MarketSharp. Add an Employee ID to the MarketSharp connection in Conduit. `marketsharp_search_global` does not need one.
 - **A permission error on notes, opportunities or product interests**: the connection's employee lacks View Opportunity Note, View Opportunity or View Product Interest in MarketSharp.
 - **Recent leads are missing**: inquiries default to "only inquiries with an appointment". Pass `appointmentRequired: false`. See the `lead-pipeline` skill.
-- **A result says records were left out**: the response hit the size cap. Use the `pageNumber` and `rowsPerPage` the note names, or narrow with filters. See the `api-patterns` skill.
+- **A result has a `truncated: only the first N of M records` note**: the response hit the size cap and is incomplete, even though fewer rows came back. Use the `pageNumber` and `rowsPerPage` the note names and keep that `rowsPerPage` for later pages, or narrow with filters. See the `api-patterns` skill.
 - **Credentials rejected when saving**: re-copy the API key and secret. If there is no secret, MarketSharp support has to enable API access.
 
 ## API Documentation

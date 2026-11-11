@@ -60,8 +60,12 @@ schedule filters take it as `salespersonId`.
 Every filter is optional and they combine. Use `modifiedFrom` and `modifiedTo`
 instead to see appointments that were **changed** in a window, which is how you
 catch reschedules and new results. Use `inquiryIds` (at most 100) for the
-appointments on a known set of leads. Page until a page returns fewer rows than
-`rowsPerPage`. When you mean a whole day, give explicit start and end times as
+appointments on a known set of leads. Keep the window to a day or a week, and
+read at most 10 pages (about 1,000 records) per request before asking the
+operator whether to continue or narrow it. Look for the truncation note on every
+page: if records were left out, continue from the `pageNumber` and `rowsPerPage`
+it names and keep that `rowsPerPage` for the pages after it. Only a page with no
+note and fewer rows than `rowsPerPage` is the last page. When you mean a whole day, give explicit start and end times as
 above rather than relying on how a bare date is read.
 
 For one contact, `marketsharp_appointments_list_by_contact` returns every

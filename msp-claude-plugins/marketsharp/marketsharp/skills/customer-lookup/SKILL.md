@@ -71,7 +71,7 @@ With the contact ID:
 2. `marketsharp_inquiries_list_by_contact` with `appointmentRequired: false`,
    so leads with no appointment are included.
 3. `marketsharp_appointments_list_by_contact` for every appointment.
-4. `marketsharp_jobs_get` for each job ID you found on an inquiry.
+4. `marketsharp_jobs_get` for each job the inquiry lists, if it lists one.
 5. `marketsharp_notes_list` (needs an Employee ID):
 
 ```json

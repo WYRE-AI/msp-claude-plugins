@@ -6420,7 +6420,7 @@
     },
     {
       "name": "marketsharp",
-      "displayName": "Marketsharp",
+      "displayName": "MarketSharp",
       "version": "1.0.0",
       "description": "MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
       "category": "crm",
