@@ -1,5 +1,6 @@
 ---
 import DocsLayout from '@/layouts/DocsLayout.astro';
+const baseUrl = import.meta.env.BASE_URL;
 ---
 <DocsLayout title="Architecture" description="MSP Claude Plugins architecture: 3-layer design, deployment patterns, and how plugins relate to MCP servers.">
   <h1>Architecture</h1>
@@ -62,7 +63,7 @@ Vendor API</pre>
   <p>
     <strong>Best for:</strong> teams, on-premise deployments, persistent servers.<br/>
     Run MCP servers as Docker containers with SSE transport. All servers publish container images to
-    <code>ghcr.io/wyre-technology/</code>. See the <a href="/getting-started/deployment">deployment guide</a>.
+    <code>ghcr.io/wyre-technology/</code>. See the <a href={`${baseUrl}getting-started/deployment`}>deployment guide</a>.
   </p>
 
   <h3>Pattern 3: WYRE MCP Gateway (conduit.wyre.ai)</h3>
@@ -89,7 +90,7 @@ Vendor APIs</pre>
   <p>
     <strong>Best for:</strong> multi-tenant deployments, managed hosting, zero-config for end users.<br/>
     Just add a URL to Claude Desktop — no Docker, no environment variables, no config files.
-    See the <a href="/getting-started/gateway">gateway documentation</a>.
+    See the <a href={`${baseUrl}getting-started/gateway`}>gateway documentation</a>.
   </p>
 
   <h2>MCPB Distribution</h2>
@@ -107,7 +108,7 @@ Vendor APIs</pre>
     <li>Requires Claude Desktop 0.10+</li>
   </ul>
 
-  <p>See the <a href="/getting-started/deployment">deployment guide</a> for detailed MCPB installation instructions.</p>
+  <p>See the <a href={`${baseUrl}getting-started/deployment`}>deployment guide</a> for detailed MCPB installation instructions.</p>
 
   <h2>Plugins vs MCP Servers</h2>
 
@@ -152,9 +153,9 @@ Vendor APIs</pre>
   <h2>Next Steps</h2>
 
   <ul>
-    <li><a href="/getting-started/deployment">Deployment Guide</a> — install MCP servers via npm, Docker, MCPB, or DigitalOcean</li>
-    <li><a href="/getting-started/gateway">WYRE MCP Gateway</a> — hosted gateway at conduit.wyre.ai</li>
-    <li><a href="/mcp-servers">MCP Servers</a> — browse all available MCP servers</li>
-    <li><a href="/plugins">Plugins</a> — browse all available Claude plugins</li>
+    <li><a href={`${baseUrl}getting-started/deployment`}>Deployment Guide</a> — install MCP servers via npm, Docker, MCPB, or DigitalOcean</li>
+    <li><a href={`${baseUrl}getting-started/gateway`}>WYRE MCP Gateway</a> — hosted gateway at conduit.wyre.ai</li>
+    <li><a href={`${baseUrl}mcp-servers`}>MCP Servers</a> — browse all available MCP servers</li>
+    <li><a href={`${baseUrl}plugins`}>Plugins</a> — browse all available Claude plugins</li>
   </ul>
 </DocsLayout>

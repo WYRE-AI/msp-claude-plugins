@@ -14,55 +14,18 @@ This plugin provides Claude with deep knowledge of RocketCyber (a Kaseya product
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect RocketCyber once in Conduit (**Connections → RocketCyber**, slug `rocketcyber`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "ROCKETCYBER_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "ROCKETCYBER_API_KEY": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-    "ROCKETCYBER_REGION": "us"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `ROCKETCYBER_API_KEY` | Yes | | API key from Provider Settings > API tab |
-| `ROCKETCYBER_REGION` | No | `us` | Region prefix for base URL. Determines base URL: `https://api-{region}.rocketcyber.com/v3` |
-| `ROCKETCYBER_MCP_URL` | No | `https://rocketcyber-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `ROCKETCYBER_MCP_URL` to your gateway's endpoint:
-
-```
-ROCKETCYBER_MCP_URL=https://your-gateway-domain/v1/rocketcyber/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → RocketCyber → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "ROCKETCYBER_MCP_URL": "https://your-gateway-domain/v1/rocketcyber/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http rocketcyber https://your-gateway-domain/v1/rocketcyber/mcp`. The gateway then holds the RocketCyber credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -80,7 +43,7 @@ ROCKETCYBER_MCP_URL=https://your-gateway-domain/v1/rocketcyber/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+To check the credentials directly against RocketCyber before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test connection - list accounts
@@ -121,24 +84,11 @@ claude --plugin .
 
 ## MCP Server
 
-No community MCP server exists yet for RocketCyber. The `.mcp.json` file contains a placeholder configuration pointing to the REST API base URL.
+RocketCyber is brokered by [Conduit](https://conduit.wyre.ai) (vendor slug `rocketcyber`). This plugin does not ship its own `.mcp.json`: install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to `https://conduit.wyre.ai/v1/mcp`, then connect RocketCyber in the Conduit web UI. Conduit stores the API key and injects it on every request.
+
+The connector serves these tools, all read-only: `rocketcyber_get_account`, `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_get_event_summary`, `rocketcyber_list_agents`, `rocketcyber_list_apps`, `rocketcyber_list_firewalls`, `rocketcyber_get_defender`, `rocketcyber_get_office` and `rocketcyber_test_connection`.
 
 Reference implementation: [Celerium PowerShell wrapper](https://github.com/Celerium) provides a community-maintained PowerShell module for the RocketCyber API.
-
-```json
-{
-  "mcpServers": {
-    "rocketcyber": {
-      "type": "http",
-      "url": "https://api-us.rocketcyber.com/v3",
-      "headers": {
-        "Authorization": "Bearer ${ROCKETCYBER_API_KEY}"
-      },
-      "note": "No community MCP server exists yet."
-    }
-  }
-}
-```
 
 ## API Reference
 

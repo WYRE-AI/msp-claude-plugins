@@ -1,11 +1,11 @@
 {
   "name": "mimecast",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Claude plugins for Mimecast Email Security - message tracking, threat intelligence, queue management, and email security operations",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

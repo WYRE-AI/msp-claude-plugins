@@ -40,7 +40,7 @@ exact same artifact — there is no fork, no parallel format, no "community edit
                               │
           ┌───────────────────┴───────────────────┐
           │                                       │
-  Claude Code / Claude Desktop            Conduit (mcp.wyre.ai)
+  Claude Code / Claude Desktop            Conduit (conduit.wyre.ai)
   ──────────────────────────              ──────────────────────────
   /plugin marketplace add                 Marketplace ingestion,
     wyre-technology/msp-claude-plugins    pinned to a git SHA per sync
@@ -54,7 +54,7 @@ exact same artifact — there is no fork, no parallel format, no "community edit
 
 - **Claude Code path** — the classic open-source flow. Add the marketplace, install
   plugins, done. Free, no account, works offline once installed.
-- **Conduit path** — [Conduit](https://mcp.wyre.ai) syncs this repo into its
+- **Conduit path** — [Conduit](https://conduit.wyre.ai) syncs this repo into its
   curated skills catalog (each sync pinned to an exact commit SHA). Organizations
   get the same skills with governance on top: admins grant packs to teams, every
   ingested skill passes automated security scanning before it's enabled, and usage

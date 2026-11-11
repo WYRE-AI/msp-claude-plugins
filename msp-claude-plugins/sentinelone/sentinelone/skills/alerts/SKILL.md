@@ -74,6 +74,16 @@ get_alert_notes alertId=1234567890
 get_alert_history alertId=1234567890
 ```
 
+### get_alert_investigation_report — Purple AI auto-investigation
+
+```
+get_alert_investigation_report alert_id=1234567890
+```
+
+Returns the report Purple AI's Auto Investigations generated for the alert, when one ran. Read it before starting a manual investigation. Unclassified in Conduit, so it enforces at `admin`.
+
+To enrich the alert's hashes, IPs, domains and URLs, use the `sentinelone-threat-intel` skill (`threat_intel_by_hash`, `threat_intel_by_ip` and related tools).
+
 ## Key Concepts
 
 **Severity:** `CRITICAL` | `HIGH` | `MEDIUM` | `LOW` | `INFO` | `UNKNOWN`

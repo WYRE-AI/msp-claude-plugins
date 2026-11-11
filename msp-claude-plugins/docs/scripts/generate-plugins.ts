@@ -19,14 +19,29 @@ const OUTPUT_PATH_SHARED = path.join(DOCS_DIR, 'src', 'data', 'sharedSkills.ts')
 const VALID_CATEGORIES = new Set([
   'psa', 'rmm', 'documentation', 'security', 'sales', 'accounting',
   'productivity', 'email-security', 'incident-management', 'monitoring',
-  'network', 'crm', 'marketplace', 'marketing', 'infrastructure', 'bcdr',
+  'network', 'crm', 'marketplace', 'marketing', 'infrastructure',
+  'automation', 'bcdr', 'workflow-pack', 'legal',
 ]);
 
 function normalizeCategory(raw: string): string {
   if (raw === 'psa-rmm') return 'psa';
   if (raw === 'knowledge') return 'psa'; // fallback, but shared-skills is excluded anyway
   if (VALID_CATEGORIES.has(raw)) return raw;
-  return raw; // pass through — the type union will expand if needed
+  throw new Error(`Unknown marketplace category "${raw}" — add it to VALID_CATEGORIES in scripts/generate-plugins.ts`);
+}
+
+/**
+ * Truncate a long description to its first sentence. A sentence ends at
+ * . ! or ? followed by whitespace and a capital letter (or the end), but
+ * never at a common abbreviation such as "vs.", "e.g." or "i.e.", which
+ * previously produced cut-offs like "Global vs." on the site.
+ */
+const SENTENCE_END = /^.+?(?<!\b(?:vs|e\.g|i\.e|etc|cf|approx|incl|Inc|Ltd|Co|No))[.!?](?=\s+[A-Z]|\s*$)/;
+function firstSentence(description: string): string {
+  if (description.length <= 120) return description;
+  const match = description.match(SENTENCE_END);
+  if (match) return match[0];
+  return description.slice(0, 150).replace(/\s+\S*$/, '') + '...';
 }
 
 // ── Vendor derivation ──────────────────────────────────────────────────
@@ -39,7 +54,6 @@ function deriveVendor(sourcePath: string): string {
   const vendorMap: Record<string, string> = {
     kaseya: 'Kaseya',
     'kaseya-quote-manager': 'Kaseya',
-    'wyre-site-editor': 'WYRE',
     connectwise: 'ConnectWise',
     ninjaone: 'NinjaOne',
     syncro: 'Syncro',
@@ -74,18 +88,6 @@ function deriveVendor(sourcePath: string): string {
     'email-security': 'Email Security',
     'saas-alerts': 'SaaS Alerts',
     '3cx': '3CX',
-    'anthropic-admin': 'Anthropic',
-    'openai-admin': 'OpenAI',
-    '1password': '1Password',
-    lastpass: 'LastPass',
-    cove: 'N-able',
-    'unitrends-uniview': 'Kaseya',
-    myitprocess: 'Kaseya',
-    gogetssl: 'GoGetSSL',
-    smileback: 'SmileBack',
-    'alga-psa': 'Alga',
-    marketsharp: 'MarketSharp',
-    mspcfo: 'MSPCFO',
   };
 
   return vendorMap[topLevel] ?? capitalize(topLevel);
@@ -148,19 +150,6 @@ function deriveDisplayName(pluginJsonName: string | undefined, marketplaceName: 
     'rootly': 'Rootly',
     'cipp': 'CIPP',
     '3cx': '3CX',
-    'ai-org-admin': 'Anthropic Admin',
-    'openai-admin': 'OpenAI Admin',
-    '1password': '1Password',
-    'lastpass': 'LastPass',
-    'jamf': 'Jamf Pro',
-    'cove': 'Cove Data Protection',
-    'unitrends-uniview': 'Unitrends UniView',
-    'myitprocess': 'myITprocess',
-    'gogetssl': 'GoGetSSL',
-    'smileback': 'SmileBack',
-    'alga-psa': 'Alga PSA',
-    'marketsharp': 'MarketSharp',
-    'mspcfo': 'MSPCFO',
   };
 
   return nameMap[marketplaceName] ?? humanize(marketplaceName);
@@ -214,17 +203,7 @@ function scanSkills(pluginDir: string): SkillEntry[] {
     const content = fs.readFileSync(skillMd, 'utf-8');
     let description = extractFrontmatterField(content, 'description');
 
-    // Truncate to first sentence for brevity. Require the sentence-ending punctuation
-    // to be followed by whitespace + a capital letter (or end of string) so we don't
-    // cut inside abbreviations like "OAuth 2.0", "vs.", "i.e.", etc.
-    if (description.length > 120) {
-      const firstSentence = description.match(/^.+?[.!?](?=\s+[A-Z]|\s*$)/);
-      if (firstSentence) {
-        description = firstSentence[0];
-      } else {
-        description = description.slice(0, 150).replace(/\s+\S*$/, '') + '...';
-      }
-    }
+    description = firstSentence(description);
 
     skills.push({ name: entry.name, description: description || `${humanize(entry.name)} operations` });
   }
@@ -257,17 +236,7 @@ function scanAgents(pluginDir: string): AgentEntry[] {
     const name = extractFrontmatterField(content, 'name') || file.replace(/\.md$/, '');
     let description = extractFrontmatterField(content, 'description');
 
-    // Truncate to first sentence for brevity. Require the sentence-ending punctuation
-    // to be followed by whitespace + a capital letter (or end of string) so we don't
-    // cut inside abbreviations like "OAuth 2.0", "vs.", "i.e.", etc.
-    if (description.length > 120) {
-      const firstSentence = description.match(/^.+?[.!?](?=\s+[A-Z]|\s*$)/);
-      if (firstSentence) {
-        description = firstSentence[0];
-      } else {
-        description = description.slice(0, 150).replace(/\s+\S*$/, '') + '...';
-      }
-    }
+    description = firstSentence(description);
 
     agents.push({ name, description: description || `${humanize(file.replace(/\.md$/, ''))} agent` });
   }

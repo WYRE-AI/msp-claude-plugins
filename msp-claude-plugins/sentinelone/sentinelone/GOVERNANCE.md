@@ -25,17 +25,16 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 ## Tool permission groups
 
-**Six of this plugin's twenty-two tools are classified.** The other
-sixteen have no entry in that table, so no tier is invented for them
-below.
+**Eight of the sidecar's thirty-three tools are classified** in Conduit.
+The other twenty-five have no entry, so they fail closed to `admin`.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change SentinelOne or endpoint state. Safe for autonomous agents. | `read` | `list_alerts`, `get_alert`, `search_inventory_items`, `get_timestamp_range` |
+| **Read** | Cannot change SentinelOne or endpoint state. Safe for autonomous agents. | `read` | `list_alerts`, `get_alert`, `search_alerts`, `search_vulnerabilities`, `search_inventory_items`, `get_timestamp_range` |
 | **Write** | *Empty for this vendor.* | `write` | *None.* |
 | **Delete** | *Empty for this vendor.* |`write`| *None.* |
 | **Admin** | Unbounded query surfaces. They change nothing, but Conduit tiers them by what they can pull back, not by whether they mutate. | `admin` | `powerquery`, `purple_ai` |
-| **Not classified** |**Requires `admin` today.**| `admin` (coerced) | `search_alerts`, `get_alert_notes`, `get_alert_history`, `list_vulnerabilities`, `search_vulnerabilities`, `get_vulnerability`, `get_vulnerability_notes`, `get_vulnerability_history`, `list_misconfigurations`, `search_misconfigurations`, `get_misconfiguration`, `get_misconfiguration_notes`, `get_misconfiguration_history`, `list_inventory_items`, `get_inventory_item`, `iso_to_unix_timestamp` |
+| **Not classified** |**Requires `admin` today.**| `admin` (coerced) | `get_alert_notes`, `get_alert_history`, `get_alert_investigation_report`, `list_vulnerabilities`, `get_vulnerability`, `get_vulnerability_notes`, `get_vulnerability_history`, `list_misconfigurations`, `search_misconfigurations`, `get_misconfiguration`, `get_misconfiguration_notes`, `get_misconfiguration_history`, `list_inventory_items`, `get_inventory_item`, `iso_to_unix_timestamp`, `threat_intel_by_domain`, `threat_intel_by_hash`, `threat_intel_by_ip`, `threat_intel_by_url`, `threat_intel_get_file_behavior`, `threat_intel_get_file_relationships`, `threat_intel_search`, `cve_database_status`, `cve_search_by_id`, `cve_search_by_vendor` |
 
 ### This plugin is read-only — but "read-only" is not the same as tier `read`
 
@@ -50,7 +49,7 @@ about which grant an operator needs, and the two come apart badly here:
 
 Gateway configuration source is omitted from this repository.
 
-So a `read` grant on SentinelOne reaches four tools. Everything a vulnerability report or a misconfiguration sweep needs — every `*_vulnerabilities` and `*_misconfigurations` tool, `list_inventory_items`, and every `_notes` / `_history` detail call — requires `admin` today, which on any vendor grants the whole surface.
+So a `read` grant on SentinelOne reaches six tools, including the alert and vulnerability searches. Everything else a vulnerability report or a misconfiguration sweep needs — `list_vulnerabilities`, every `*_misconfigurations` tool, the threat-intel and CVE lookups, `list_inventory_items`, and every `_notes` / `_history` detail call — requires `admin` today, which on any vendor grants the whole surface.
 
 One more qualification, unchanged by any of this: **the read-only property belongs to the tool surface, not to the credential.** The Service User token behind Conduit may well carry response permissions in SentinelOne. Re-read this table after a vendor upgrade rather than assuming it still holds.
 
@@ -66,7 +65,7 @@ With no write or delete tier, the usual "propose and approve" ceremony
 has nothing to apply to. The policy that matters here is about data
 volume, cost, and the size of the grant:
 
-- Allow the four `read`-tier tools to scheduled and unattended agents.
+- Allow the six `read`-tier tools (`list_alerts`, `get_alert`, `search_alerts`, `search_vulnerabilities`, `search_inventory_items`, `get_timestamp_range`) to scheduled and unattended agents, subject to the `IDENTITY` exception below.
 - Everything else needs `admin`.
 - Bound `powerquery` and `purple_ai` in that allowlist deliberately. Require an explicit time range on every Data Lake query and cap how many an unattended agent may issue per run.
 - Keep `list_inventory_items` / `search_inventory_items` out of an

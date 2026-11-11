@@ -54,16 +54,19 @@ MICROSOFT_CLIENT_SECRET=your-client-secret
 MICROSOFT_TENANT_ID=your-tenant-id  # or "common" for multi-tenant
 ```
 
-### 5. Add to Claude Code
+Steps 1-4 describe a direct-to-Microsoft setup for local testing only. It bypasses Conduit and every governance tier in `GOVERNANCE.md`; do not use it against a production tenant.
 
-The `.mcp.json` configures the Softeria MS-365 MCP server:
+### 5. Connect through Conduit
 
-```bash
-# Add to your Claude Code project
-cp .mcp.json /path/to/your/project/.mcp.json
-```
+This plugin does not ship a `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`. What you can reach depends on which Microsoft connector your org has:
 
-Or add to your Claude Code MCP settings with the env vars from step 4.
+| Conduit connector | Status | What it covers |
+|-------------------|--------|----------------|
+| `m365` (Softeria MS-365 sidecar) | **Hidden and personal-only.** It does not appear in the customer catalog; it can only be connected as a personal connection where it has been enabled. | Mail, calendar, OneDrive/files, Excel, OneNote, Planner and To Do for the signed-in user. It has no user-administration, licence or MFA tools; `get-current-user` is its only user tool. |
+| `microsoft-graph` (Microsoft's hosted Graph MCP) | Visible (preview) | Read-only Graph through `microsoft_graph_get`, with `microsoft_graph_suggest_queries` and `microsoft_graph_list_properties` to build the query and `request_access` to request consent. |
+| `cipp` | Visible | Fleet-wide user, licence, MFA and offboarding operations: `cipp_list_users`, `cipp_list_mfa_users`, `cipp_list_licenses`, `cipp_offboard_user` and others. |
+
+The user-lookup, MFA audit, licence and offboarding commands below therefore run on `cipp` (writes) and `microsoft-graph` (reads), not on the `m365` connector. Each command lists the exact tools it uses.
 
 ## Commands
 

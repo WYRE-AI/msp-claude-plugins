@@ -719,7 +719,7 @@
     {
       "name": "datto-saas-protection",
       "source": "./msp-claude-plugins/kaseya/datto-saas-protection",
-      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -1150,7 +1150,7 @@
       "name": "kpn",
       "displayName": "KPN",
       "source": "./msp-claude-plugins/kpn/kpn",
-      "description": "KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)",
+      "description": "KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)",
       "category": "network",
       "tags": [
         "kpn",

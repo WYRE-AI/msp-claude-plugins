@@ -54,7 +54,7 @@ curl -u "SERVICE_PRINCIPAL:SERVICE_SECRET" \
 ```bash
 export PROOFPOINT_SERVICE_PRINCIPAL="your-service-principal"
 export PROOFPOINT_SERVICE_SECRET="your-service-secret"
-export PROOFPOINT_MCP_URL="https://proofpoint-mcp.wyre.workers.dev/mcp"
+export PROOFPOINT_MCP_URL="https://conduit.wyre.ai/v1/proofpoint/mcp"
 ```
 
 ### Obtaining Credentials
