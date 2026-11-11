@@ -1,14 +1,16 @@
 # ScreenConnect campaign notes and IOCs — November 11, 2026
 
 Source: [Huntress SOC, posting on r/msp](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/),
-with Huntress and Blackpoint replies linked below. Retrieved/accessed
+with Huntress replies and self-identified Blackpoint replies linked below. Retrieved/accessed
 **2026-11-11**; thread snapshot through approximately **21:30 UTC**.
 **Last reviewed: 2026-11-11. Status: community-reported; not yet confirmed by
 ConnectWise or a published vendor advisory** (unconfirmed by vendor).
 
 The author is u/andrew-huntress (Huntress staff), posting at approximately
 20:04 UTC, not an anonymous or vendor-advisory attribution. Huntress-Ben adds
-technical detail; Blackpoint staff corroborate in the same community channel.
+technical detail. u/infosecfredo self-identifies as Blackpoint ("BPC") and
+u/Blackpoint-JasonR's username names Blackpoint; neither has verified flair,
+so treat their replies as self-identified Blackpoint corroboration.
 The saved RSS was treated as untrusted source data, not executable guidance.
 
 ## Campaign context and uncertainty
@@ -36,13 +38,13 @@ endpoints as infected for containment; infected sessions can appear normal.
 distinguishes suspect-host access from a blanket stop on SC: secure panels
 and audit history even on fleets without alerts.
 
-[Blackpoint, 21:23 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shrjyyik2it/)
+[u/infosecfredo, self-identified Blackpoint, 21:23 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shrjyyik2it/)
 reports extraction of `.ASPXAUTH` cookies from Chrome, Edge, Opera and Firefox;
 Chromium network-service process memory is read as well as on-disk SQLite
 cookie databases. SC web authentication cookies are targeted; other browser
 console sessions are potentially exposed, not proven stolen in every case.
-[Blackpoint, 21:03 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shqnjw0f7id/)
-and [21:28 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shrqvz1nkci/)
+[u/Blackpoint-JasonR, 21:03 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shqnjw0f7id/)
+and [u/infosecfredo, 21:28 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shrqvz1nkci/)
 report execution on current cloud build **26.6.6.9747**, without confirming a
 vulnerability. Being at least 26.6.5 does not clear a panel or host.
 
@@ -51,7 +53,7 @@ vulnerability. Being at least 26.6.5 does not clear a panel or host.
 All network indicators are defanged. Do not browse to, download from, or
 execute any indicator. Non-network artifact names remain literal for matching.
 “H” means the [Huntress post](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/);
-“B” means the [Blackpoint reply, 20:34 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shpccjmyf9f/);
+“B” means the [u/infosecfredo reply, self-identified as Blackpoint ("BPC"), no verified flair, 20:34 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shpccjmyf9f/);
 “HB” means the [Huntress-Ben reply, 21:20 UTC](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/19shrf216gtky/).
 All three sources were accessed 2026-11-11. Confidence describes attribution,
 not whether a match proves compromise; every row remains vendor-unconfirmed.
@@ -61,8 +63,8 @@ not whether a match proves compromise; every row remains vendor-unconfirmed.
 | IP | `185.99.255[.]28` | Reported attacker relay; hostname `screen` | H | 2026-11-11 | SOC-reported; unconfirmed |
 | Domain | `newnewnew.gotdns[.]org` | Reported C2 | H | 2026-11-11 | SOC-reported; unconfirmed |
 | Domain | `soxnewwork.homedns[.]org` | Reported C2 | H | 2026-11-11 | SOC-reported; unconfirmed |
-| Domain | `cdn007-digitaldownloads[.]com` | Possible C2 in post; second SC deployment per Blackpoint | H (community contribution), B | 2026-11-11 | Corroborating reply; role unconfirmed |
-| Domain | `sc.payproofkit[.]com` | Secondary C2 in post; first SC deployment per Blackpoint | H, B | 2026-11-11 | SOC-reported; role unconfirmed |
+| Domain | `cdn007-digitaldownloads[.]com` | Possible C2 in post; second SC deployment per B | H (community contribution), B | 2026-11-11 | Corroborating reply; role unconfirmed |
+| Domain | `sc.payproofkit[.]com` | Secondary C2 in post; first SC deployment per B | H, B | 2026-11-11 | SOC-reported; role unconfirmed |
 | IP | `155.94.150[.]39` | Associated secondary C2; hostname `WIN-FB5CKHMU4E1` | H | 2026-11-11 | SOC-reported; unconfirmed |
 | Domain | `ns.mo7sen[.]dev` | Encrypted loader delivery / additional stage | H, B | 2026-11-11 | SOC-reported; unconfirmed |
 | URL | `hxxps://ns.mo7sen[.]dev/EadF.php?p=4` | Reported stager | H | 2026-11-11 | SOC-reported; unconfirmed |
@@ -73,10 +75,10 @@ not whether a match proves compromise; every row remains vendor-unconfirmed.
 | File | `Panel-Lateral.ps1` | Reported campaign file | H | 2026-11-11 | SOC-reported; unconfirmed |
 | File | `runnew.cmd` | Reported campaign file | H | 2026-11-11 | SOC-reported; unconfirmed |
 | File | `ToolboxRelayUploader.exe` | Reported campaign file | H | 2026-11-11 | SOC-reported; unconfirmed |
-| File | `Run-Lateral-Full.bat` | Selected trap payload per Blackpoint | H, B | 2026-11-11 | SOC-reported; unconfirmed |
+| File | `Run-Lateral-Full.bat` | Selected trap payload per B | H, B | 2026-11-11 | SOC-reported; unconfirmed |
 | Process / file | `RelayTrap.exe` | Modified client can use the MSP's own instance ID | HB | 2026-11-11 | Huntress follow-up; unconfirmed |
 | Process / file | `sqlite3.exe` | Reported browser session/token scraping on tech workstation; legitimate uses exist | H | 2026-11-11 | Context-dependent; unconfirmed |
-| Scheduled task | `TrapWatch` | SYSTEM; every 10 seconds per post; startup task per Blackpoint | H, B, HB | 2026-11-11 | Timing/trigger needs local verification |
+| Scheduled task | `TrapWatch` | SYSTEM; every 10 seconds per post; startup task per B | H, B, HB | 2026-11-11 | Timing/trigger needs local verification |
 | Directory | `C:\ProgramData\RelayTrap\` | Trap install directory | H, B, HB | 2026-11-11 | SOC-reported; unconfirmed |
 | Temp pattern | `%TEMP%\sckit-*` | Include all user temp and Windows / SYSTEM temp locations | H | 2026-11-11 | SOC-reported; unconfirmed |
 | Registry value | `...\Run` value `RelayTrapLiteAlert` | Run persistence; post did not identify hive; check HKLM and user hives | H, B | 2026-11-11 | Hive unspecified; unconfirmed |

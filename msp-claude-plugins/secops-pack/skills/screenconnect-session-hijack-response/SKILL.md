@@ -35,7 +35,8 @@ recommends; it does not contain, rotate, isolate, or eradicate. Reuse
 its general correlation method and connected-source rules.
 
 The November 11 reports come from Huntress SOC, posting on r/msp, with
-Blackpoint corroboration in replies. Initial access is unconfirmed; telemetry
+corroborating replies from accounts that self-identify as Blackpoint
+(no verified flair). Initial access is unconfirmed; telemetry
 suggests stolen credentials or operator sessions, with no new vulnerability
 confirmed. The exact reverse-pivot mechanism remains an unconfirmed hypothesis.
 See the dated [campaign notes and IOC starting list](references/screenconnect-iocs-nov-2026.md).
@@ -103,6 +104,14 @@ correlation and retain only the active client's records in each report.
    IOCs using the [update procedure](references/screenconnect-iocs-nov-2026.md#update-procedure).
    This list is a starting point, not a detector. Dynamic-DNS domains and
    shared-hosting IPs can be noisy; corroborate hits with behavior.
+5. **Confirm each client pass before any connector call.** Before the first
+   connector call in every pass (the internal MSP pass included), show the
+   operator the mapped client / tenant (name and ID), the UTC window, and
+   the planned tools from discovery. Wait for an explicit yes. Silence,
+   earlier approvals, or approval for another client do not count. Record
+   who confirmed, when (UTC), and the confirmed scope in that client's
+   report. If the scope, window, or tool list changes, confirm again.
+   `conduit__search_tools` discovery is not a connector call.
 
 ## Step 1: Operator pulls panel evidence manually
 
@@ -139,7 +148,7 @@ reads, stale inventory, and absent process/network telemetry are gaps.
 | EDR / MDR | `huntress_incidents_list`, `huntress_signals_list`, `huntress_agents_list`; SentinelOne `list_alerts`, `search_alerts`, `get_alert`, `search_inventory_items`; `blackpoint_detections_list`, `blackpoint_assets_list`; `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_list_agents`, `rocketcyber_list_apps` | Detections and returned process lineage: `ScreenConnect.ClientService.exe` / `ScreenConnect.WindowsClient.exe` spawning cmd, PowerShell, msiexec or curl; browser-token extraction on tech hosts; files, persistence, and network indicators in the IOC reference. Inventory is not process telemetry; ask for out-of-band evidence when lineage is unavailable. |
 | RMM inventory | `ncentral_get_device_assets`; `datto_get_device_audit` with `auditType=software` **only**; `ninjaone_devices_services`; `superops_assets_list`, `superops_assets_get`, `superops_assets_software` | Compare each device's ScreenConnect clients and service paths with approved IDs and known-good binaries. NinjaOne exposes Windows services, not dedicated software inventory here. Datto software audits cannot establish task, service, or process coverage. |
 | Network / DNS | DNSFilter query logs, firewall or SIEM logs **if discovered** as verified, client-bound reads; Auvik `auvik_devices_list`, `auvik_alerts_list`, `auvik_networks_list` for supporting inventory/alerts | Search reference indicators, unknown relays on port 8041, and non-MSP `*.screenconnect.com` instances. Auvik device/network inventory does not establish DNS or firewall-log coverage. No usable log read means a gap and a manual export request. |
-| Identity | `cipp_list_user_signin_logs` per user, `cipp_list_mfa_users`, `cipp_list_audit_logs`; `microsoft_graph_suggest_queries` then `microsoft_graph_get` | MSP tenant first: each tech with panel access. Review interactive sign-ins, MFA registration, new MFA methods, consents, and inbox-rule changes where returned. Use only tenant-bound suggested Graph candidates for non-interactive sign-ins, risky users, or directory audits; never hand-write endpoints. No suitable candidate, retention or admin permission means a gap, not no activity. |
+| Identity | `cipp_list_user_signin_logs` per user, `cipp_list_mfa_users`, `cipp_list_audit_logs`; `microsoft_graph_suggest_queries` then `microsoft_graph_get` (pinned, see below) | MSP tenant first: each tech with panel access. Review interactive sign-ins, MFA registration, new MFA methods, consents, and inbox-rule changes where CIPP returns them. Graph is limited to the pinned reads below. No suitable candidate, retention or admin permission means a gap, not no activity. |
 | Documentation, names only | `hudu_list_assets`; IT Glue `search_flexible_assets`, `search_configurations`; Keeper `list_secrets`, `list_folders` | Identify panels, admin account names, techs, and other consoles whose browser sessions may reside on their workstations. Titles/folders do not prove a browser held a session. Never retrieve passwords, secrets or TOTP values. |
 
 A legitimate install often appears as `ScreenConnect Client (<16-hex instance id>)`.
@@ -148,6 +157,23 @@ reports a modified client under the **MSP's own ID** too: hunt the modified
 client process/file, directory, and task in the IOC reference even when every
 ID matches. Agents can lag and clients can be renamed; matching IDs or missing
 inventory entries do not clear a device.
+
+**Graph pin.** `microsoft_graph_get` is allowed only for tenant-bound GETs
+against these resources, each with a restricted `$select` of the fields
+needed and a filter on the window and, where supported, the technician:
+
+| Resource | `$select` (only these fields) |
+|----------|-------------------------------|
+| `auditLogs/signIns` | `id`, `createdDateTime`, `userId`, `userPrincipalName`, `appDisplayName`, `ipAddress`, `location`, `deviceDetail`, `clientAppUsed`, `status`, `correlationId` |
+| `auditLogs/directoryAudits` | `id`, `activityDateTime`, `activityDisplayName`, `category`, `initiatedBy`, `targetResources`, `result`, `correlationId` |
+| `identityProtection/riskyUsers` | `id`, `userPrincipalName`, `riskLevel`, `riskState`, `riskDetail`, `riskLastUpdatedDateTime` |
+| `identityProtection/riskDetections` (optional) | `id`, `userPrincipalName`, `riskEventType`, `riskLevel`, `riskState`, `detectedDateTime`, `ipAddress`, `location` |
+
+Run `microsoft_graph_suggest_queries` first and accept only candidates for
+these resources, narrowing `$select` to the list above. Discard every other
+candidate. Never read mail or messages, `passwordCredentials` or
+`keyCredentials`, and never send POST, PATCH, DELETE, or `$batch`. If a
+pinned read is not offered, refused, or cannot be tenant-bound, record a gap.
 
 For identity, correlate new IPs / ASNs / devices and non-interactive reuse of
 existing sessions with each technician's suspect GUI-session time. Report
@@ -192,9 +218,11 @@ The operator approves and executes each change:
    local admin, LAPS, service accounts, and cached credentials; assess each
    client's exposure and rotate after eradication.
 
-Do not rely on the cloud “Quarantine instance” setting as containment:
-community replies suggest conditional malicious-command detection and no
-reliable disconnection of existing sessions; vendor behavior is unconfirmed.
+Do not rely on the cloud “Quarantine instance” setting as containment. The
+community disagrees about what it does: one reply says enabling it blocks
+and disconnects sessions, others say it only acts if ScreenConnect detects
+malicious commands and did not disconnect client sessions. Vendor behavior
+is unconfirmed.
 
 ## Step 5: Operator-run out-of-band cleanup
 
@@ -220,6 +248,9 @@ report before client passes; do not mix tenants.
 |---------|-------------------------|------------|--------------------------------------|
 | [Observation] | [Record IDs; corroboration or platform-only] | [Confirmed / suspected / needs review] | [Owner and priority] |
 
+- **Scope confirmation:** who confirmed the client / tenant, UTC window and
+  planned tools, and when (UTC). No recorded confirmation means the pass
+  did not run.
 - **SC panel data pulled manually: yes/no**; panels, export times, missing records.
 - **Not verified / gaps:** unavailable connectors, admin-tier refusals,
   mapping ambiguity, log retention, stale or partial inventories, missing
