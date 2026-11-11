@@ -10,25 +10,51 @@ Check Liongard API connectivity and return an overall system health summary incl
 
 ## Prerequisites
 
-- Liongard connected in Conduit (`https://conduit.wyre.ai/connect/liongard`) with the Instance Name, Access Key ID and Access Key Secret
-- The Liongard user that generated the access token has read permissions
+- Valid Liongard API key configured
+- Liongard instance name configured
+- User must have read permissions
 
 ## Steps
 
-1. **Verify connectivity**
-   - Call `liongard_environments_count` (no arguments). A count back means the Conduit connection and access token work.
+1. **Verify API connectivity**
+   - Call the environments count endpoint to confirm the API key is valid
+   ```bash
+   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments/count" \
+     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
+     -H "Content-Type: application/json"
+   ```
 
 2. **Get environment summary**
-   - Call `liongard_environments_list` with `page` and `pageSize` (up to 2000), paging until every environment is read
+   - Retrieve total environment count
    - Count active vs inactive environments
+   ```bash
+   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments?page=1&pageSize=2000" \
+     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
+     -H "Content-Type: application/json"
+   ```
 
 3. **Get agent status summary**
-   - Call `liongard_agents_list` with `page` and `pageSize`, paging until every agent is read
-   - Summarize online/offline counts
+   - List all agents and summarize online/offline counts
+   ```bash
+   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/agents?page=1&pageSize=2000" \
+     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
+     -H "Content-Type: application/json"
+   ```
 
-4. **Get recent detections**
-   - Call `liongard_detections_list` with `startDate` set to 24 hours ago (ISO-8601) and a small `pageSize`
-   - Use the envelope's total row count, and break the returned detections down by severity
+4. **Get recent detections count**
+   - Query detections from the last 24 hours
+   ```bash
+   curl -s -X POST "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/detections" \
+     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
+     -H "Content-Type: application/json" \
+     -d '{
+       "Pagination": {"Page": 1, "PageSize": 1},
+       "conditions": [
+         {"path": "DetectedOn", "op": "gte", "value": "<24h_ago_iso>"},
+         {"path": "Status", "op": "eq", "value": "New"}
+       ]
+     }'
+   ```
 
 5. **Format results in a clear summary table**
    - Display connectivity status
@@ -54,7 +80,7 @@ This command takes no parameters.
 Liongard Health Check
 =====================
 
-Connection:     OK (access token valid)
+Connection:     OK (API key valid)
 Instance:       acmemsp.app.liongard.com
 
 Environments
@@ -89,12 +115,12 @@ Liongard Health Check
 Connection:     FAILED (401 Unauthorized)
 Instance:       acmemsp.app.liongard.com
 
-Error: Liongard rejected the access token.
+Error: Invalid API key. Please verify LIONGARD_API_KEY is correct.
 
 Steps to resolve:
-1. Open the Liongard connection in Conduit (https://conduit.wyre.ai/connect/liongard) and check the Access Key ID and Access Key Secret
-2. Verify the token has not been deleted: sign in as the user who generated it and open Profile > Account Settings > Access Tokens
-3. Confirm the connection's Instance Name matches your Liongard subdomain
+1. Check that LIONGARD_API_KEY is set correctly
+2. Verify the key has not been revoked in Liongard Settings > Access Keys
+3. Confirm LIONGARD_INSTANCE matches your Liongard subdomain
 ```
 
 ### Degraded Example
@@ -103,7 +129,7 @@ Steps to resolve:
 Liongard Health Check
 =====================
 
-Connection:     OK (access token valid)
+Connection:     OK (API key valid)
 Instance:       acmemsp.app.liongard.com
 
 Environments
@@ -138,11 +164,11 @@ Liongard Health Check: FAILED
 
 Error: Authentication failed (401 Unauthorized)
 
-Check the Liongard connection in Conduit (https://conduit.wyre.ai/connect/liongard):
-- Instance Name: your Liongard subdomain
-- Access Key ID and Access Key Secret: both halves of the access token
+Please verify your Liongard credentials:
+- LIONGARD_INSTANCE: Your instance subdomain
+- LIONGARD_API_KEY: Your API key
 
-Generate a new token in Liongard under Profile > Account Settings > Access Tokens if needed.
+Obtain credentials from Liongard Settings > Access Keys.
 ```
 
 ### Connection Error
