@@ -61,6 +61,23 @@ cipp_list_domain_health(tenantFilter='contoso.onmicrosoft.com')
 
 Per-domain SPF, DKIM, DMARC, MX, and DNSSEC results. Run for any tenant where mail authentication is suspect or before/after migrating mail.
 
+### `cipp_get_tenant_alignment` / `cipp_get_tenant_drift`
+
+```
+cipp_get_tenant_alignment()                                   # all tenants
+cipp_get_tenant_drift(tenantFilter='contoso.onmicrosoft.com')
+```
+Alignment is each tenant's percentage match with its assigned Standards Templates, the signal for deciding which standards are safe to promote to Remediate. Drift lists the individual settings that deviate. Omit `tenantFilter` for the whole estate. Both are admin-tier in Conduit.
+
+### Standards Templates: `cipp_list_standard_templates`, `cipp_create_standard_template`, `cipp_delete_standard_template`
+
+```
+cipp_list_standard_templates()
+cipp_create_standard_template(template={...})   # upsert by GUID; must include tenantFilter
+cipp_delete_standard_template(templateId='<guid>')
+```
+Listing is read. Creating/updating and deleting are **admin** and high-impact: a template assigned to tenants with any Remediate-action standard changes those tenants on the next standards run, and deleting a template removes the standards it enforced from every tenant assigned to it. Always show the full template JSON (or the template being deleted and its tenants) and get explicit approval first.
+
 ## Standards model
 
 A "standard" in CIPP has three modes:

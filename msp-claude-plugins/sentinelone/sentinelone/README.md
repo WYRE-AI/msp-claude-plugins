@@ -42,12 +42,9 @@ Install `uv`:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Environment Variables
+### Credentials
 
-```bash
-export SENTINELONE_TOKEN="your-service-user-token"
-export SENTINELONE_BASE_URL="https://your-console.sentinelone.net"
-```
+Through Conduit, paste the Service User token and console URL into the SentinelOne connection (**API Token**, **Console URL**); Conduit stores them, and nothing is set on the client. Environment variables apply only to the self-hosted setup below.
 
 ## Installation
 
@@ -71,7 +68,8 @@ Add to your Claude Desktop config:
       ],
       "env": {
         "PURPLEMCP_CONSOLE_TOKEN": "YOUR_SERVICE_USER_TOKEN",
-        "PURPLEMCP_CONSOLE_BASE_URL": "https://your-console.sentinelone.net"
+        "PURPLEMCP_CONSOLE_BASE_URL": "https://your-console.sentinelone.net",
+        "PURPLEMCP_VT_API_KEY": "YOUR_VIRUSTOTAL_API_KEY"
       }
     }
   }
@@ -79,6 +77,10 @@ Add to your Claude Desktop config:
 ```
 
 > **Note:** The Purple MCP server is installed from GitHub via `uvx`. This plugin adds MSP-specific skills, commands, and workflow knowledge on top of SentinelOne's official Purple MCP server.
+
+`PURPLEMCP_VT_API_KEY` is optional, but the `threat_intel_*` VirusTotal tools fail without it. Get a key from https://www.virustotal.com/gui/my-apikey.
+
+Through Conduit there is no connection field for a VirusTotal key: it must be set on the SentinelOne sidecar by whoever runs the gateway. If the `threat_intel_*` tools return an authentication error, VirusTotal lookups are not available on that deployment; the CVE tools still work.
 
 ## Available Skills
 
@@ -91,6 +93,7 @@ Add to your Claude Desktop config:
 | `misconfigurations` | Cloud security posture -- misconfigurations across cloud, Kubernetes, identity, and IaC |
 | `inventory` | Unified asset inventory -- endpoints, cloud resources, identities, and network discovery |
 | `threat-hunting` | PowerQuery execution against the Singularity Data Lake for deep forensic analysis |
+| `threat-intel` | VirusTotal indicator enrichment (hash, IP, domain, URL, sandbox behaviour) and CVE lookups |
 
 ## Available Commands
 

@@ -1,11 +1,11 @@
 {
   "name": "inforcer",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Inforcer - read-only Microsoft 365 security baseline governance for MSPs: tenants, baselines, alignment/drift, secure scores, identity inventory, audit events, and assessments",
   "author": {
-    "name": "WYRE AI"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

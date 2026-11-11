@@ -14,7 +14,7 @@ Search Crewhu CSAT/NPS responses, then break the result into detractors and prom
 
 ## Prerequisites
 
-- Crewhu MCP server connected with a valid `X_CREWHU_APITOKEN`
+- Crewhu connected in Conduit with a valid API token
 - Tools available: `crewhu_surveys_search`, `crewhu_surveys_detractors`, `crewhu_surveys_promoters`
 
 ## Steps

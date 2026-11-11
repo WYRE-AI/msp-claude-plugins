@@ -23,37 +23,18 @@ Huntress authenticates via HTTP Basic Auth using an API key and secret:
 2. Navigate to **Settings > API Credentials**
 3. Generate an API key and secret pair
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export HUNTRESS_API_KEY="your-api-key"
-export HUNTRESS_API_SECRET="your-api-secret"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Huntress once in Conduit (**Connections → Huntress**, slug `huntress`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `HUNTRESS_API_KEY` | Yes | | API key from Settings > API Credentials |
-| `HUNTRESS_API_SECRET` | Yes | | API secret from Settings > API Credentials |
-| `HUNTRESS_MCP_URL` | No | `https://conduit.wyre.ai/v1/huntress/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| API Secret |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `HUNTRESS_MCP_URL` to your gateway's endpoint:
-
-```
-HUNTRESS_MCP_URL=https://your-gateway-domain/v1/huntress/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Huntress → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "HUNTRESS_MCP_URL": "https://your-gateway-domain/v1/huntress/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http huntress https://your-gateway-domain/v1/huntress/mcp`. The gateway then holds the Huntress credentials, not the client.
 
 ## Installation
 
@@ -61,18 +42,9 @@ HUNTRESS_MCP_URL=https://your-gateway-domain/v1/huntress/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API key and secret and you're done.
 
-### Self-Hosted (Docker)
-
-Run the Huntress MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export HUNTRESS_API_KEY="your-api-key"
-export HUNTRESS_API_SECRET="your-api-secret"
-```
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install huntress@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Huntress in the Conduit web UI (`/connect/huntress`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -128,7 +100,7 @@ export HUNTRESS_API_SECRET="your-api-secret"
 ### Credential Handling
 
 - Never commit API keys or secrets to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API credentials periodically via the Huntress Dashboard
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Huntress audit log
@@ -145,7 +117,7 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `HUNTRESS_API_KEY` and `HUNTRESS_API_SECRET` are set correctly
+1. Check the Huntress connection in Conduit (**Connections → Huntress**): reconnect it, or re-enter the credentials
 2. Check that the API credentials have not been revoked
 3. Regenerate credentials at Huntress Dashboard > Settings > API Credentials
 

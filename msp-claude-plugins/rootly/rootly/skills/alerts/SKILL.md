@@ -151,13 +151,7 @@ update_alert
 
 ### Acknowledge / Resolve an Alert
 
-```
-acknowledge_alert
-resolve_alert
-```
-
-Parameters:
-- Alert ID
+The hosted Rootly MCP has **no acknowledge or resolve tool**. Acknowledge and resolve alerts from Rootly's paging surfaces (web, mobile app or Slack). Through the MCP you can annotate an alert with `update_alert` (write tier; pass `id`): mark it `noise`, change `alert_urgency_id`, edit the summary or description, or attach services and environments.
 
 ### List Alert Sources
 
@@ -202,7 +196,7 @@ list_escalation_policies
 2. Group by `source` and `alert_urgency_id`
 3. Identify alerts not yet linked to an incident
 4. For uncaught critical alerts, attach them to an incident with `attach_alert` (see [incidents](../incidents/SKILL.md))
-5. `acknowledge_alert` once triage begins
+5. Mark confirmed noise with `update_alert` (`noise: "noise"`); acknowledge the page itself in Rootly's paging app or Slack
 
 ### Escalation Policy Review
 

@@ -21,27 +21,21 @@ The Cisco Meraki MCP server provides AI tool integration with the Meraki cloud-m
 
 ## Connection & Authentication
 
-### Gateway Header Authentication
+### Conduit Authentication
 
-The MCP gateway authenticates to Meraki using headers you supply, and translates them to the upstream Meraki API internally:
+Through Conduit, the `meraki` connector is **Cisco's hosted Meraki MCP server** (`https://mcp.meraki.com/mcp`), not a WYRE sidecar. Connect it once in the Conduit web UI with a single field:
 
-| Header | Required | Description |
-|--------|----------|-------------|
-| `X-Meraki-Api-Key` | Yes | Your Dashboard API key |
-| `X-Meraki-Org-Id` | No | Default organization ID -- applied when a tool omits an explicit org |
+| Conduit field | Required | Description |
+|---------------|----------|-------------|
+| API Key | Yes | Your Meraki Dashboard API key |
 
-The gateway maps `X-Meraki-Api-Key` to the upstream Meraki `Authorization: Bearer <key>` header for you. You never send the `Authorization` header directly -- the MCP server handles that translation.
+Conduit stores the key and sends it upstream as `Authorization: Bearer <key>`. There are no client-side headers or environment variables, and there is **no default-organization field**: pass the organization explicitly on every call.
 
-Generate credentials at: **Meraki Dashboard > Organization > Settings > Dashboard API access** (then generate the key under **My Profile**).
+Cisco's hosted connection is in beta, read-only, and works with Meraki.com dashboards only. Create the key from a read-only dashboard admin, and note that organization IP restrictions are not enforced on Cisco's hosted MCP; organizations that require IP allowlisting should not use this connection.
 
-**Environment Variables:**
+Generate credentials at: **Meraki Dashboard > Organization > API & Webhooks**. The key inherits the permissions of the Dashboard account that generated it, so prefer a least-privilege, read-only admin.
 
-```bash
-export MERAKI_API_KEY="your-api-key"
-export MERAKI_ORG_ID="123456"   # optional default org
-```
-
-> **IMPORTANT:** Never hardcode credentials. Always use environment variables. The key inherits the permissions of the Dashboard account that generated it -- prefer a least-privilege service account.
+> The tool tables below describe WYRE's self-hosted `meraki-mcp` server (environment variables `MERAKI_API_KEY`, `MERAKI_ORG_ID` and `MERAKI_BASE_URL` apply only there). Cisco's hosted server, which Conduit brokers, publishes its own tool surface; check `tools/list` on the connector before relying on a tool name from these tables.
 
 ### Regional Clouds
 

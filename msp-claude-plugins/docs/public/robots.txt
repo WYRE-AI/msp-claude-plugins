@@ -26,4 +26,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://mcp.wyre.ai/sitemap-index.xml
+Sitemap: https://wyre-ai.github.io/msp-claude-plugins/sitemap-index.xml

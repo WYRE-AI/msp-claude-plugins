@@ -33,100 +33,78 @@ NinjaOne includes a built-in ticketing system that integrates with device monito
   cross-tool lookup; use `shared-skills-incident-correlation`.
 - **The alert that would become a ticket** — use `ninjaone-alerts`.
 
-## API Endpoints
+## MCP Tools
 
-### Create Ticket
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `ninjaone_tickets_boards_list` | read | Ticket boards; listing tickets needs a `board_id` |
+| `ninjaone_tickets_list` | read | Tickets on one board (`board_id` required) |
+| `ninjaone_tickets_get` | read | One ticket, including its `version` for optimistic locking |
+| `ninjaone_tickets_comments` | read | Log entries for a ticket, filterable by entry `type` |
+| `ninjaone_tickets_forms_list` | admin (unclassified) | Ticket forms; a form ID is **required** to create a ticket |
+| `ninjaone_tickets_form_get` | admin (unclassified) | One form's fields (`form_id`) |
+| `ninjaone_tickets_statuses_list` | admin (unclassified) | The tenant's status IDs |
+| `ninjaone_tickets_attributes_list` | admin (unclassified) | Custom-field attribute IDs for `attributes` |
+| `ninjaone_tickets_contacts_list` | admin (unclassified) | Contacts, for `requester_uid` |
+| `ninjaone_tickets_users_list` | admin (unclassified) | Technicians / end users / contacts, for `assignee_id` |
+| `ninjaone_tickets_create` | write | Create a ticket (`subject`, `organization_id`, `ticket_form_id` required) |
+| `ninjaone_tickets_update` | write | Update a ticket (`ticket_id`; pass `version` from `ninjaone_tickets_get`) |
+| `ninjaone_tickets_add_comment` | write | Add a public or internal comment |
 
-```http
-POST /api/v2/ticketing/ticket
-Content-Type: application/json
-Authorization: Bearer {token}
-```
+The six lookup tools were added in ninjaone-mcp's ticketing release and have no Conduit classification yet, so they enforce at `admin` until Conduit classifies them. A `write` grant alone can create a ticket only if the form ID is already known; status and assignee are optional (the status defaults to New), so leave them out when their IDs are unknown.
 
-```json
-{
-  "clientId": 123,
-  "subject": "Server disk space critical",
-  "description": "C: drive on SERVER-01 is at 95% capacity",
-  "priority": "HIGH",
-  "status": "OPEN",
-  "assignedTechnicianId": 456,
-  "deviceId": 789,
-  "tags": ["disk", "server", "critical"]
-}
-```
+### Creating a ticket
 
-### Update Ticket
+1. `ninjaone_organizations_list` for `organization_id`.
+2. `ninjaone_tickets_forms_list` for `ticket_form_id` (NinjaOne rejects a ticket without one).
+3. Optional: `ninjaone_tickets_statuses_list` (status ID, default 1000 = New), `ninjaone_tickets_users_list` (`assignee_id`), `ninjaone_tickets_contacts_list` (`requester_uid`), `ninjaone_tickets_attributes_list` (`attributes`).
+4. `ninjaone_tickets_create` with those IDs plus `description`, `priority`, `severity`, `type`, `device_id` and `tags`.
 
-```http
-PUT /api/v2/ticketing/ticket/{ticketId}
-Content-Type: application/json
-```
-
-```json
-{
-  "status": "IN_PROGRESS",
-  "priority": "MEDIUM",
-  "assignedTechnicianId": 456
-}
-```
-
-### Get Ticket Log Entries
-
-```http
-GET /api/v2/ticketing/ticket/{ticketId}/log-entry
-```
-
-Returns all log entries (comments, status changes, time entries) for a ticket.
+Underlying REST: `POST /api/v2/ticketing/ticket`, `PUT /api/v2/ticketing/ticket/{ticketId}`, `GET /api/v2/ticketing/ticket/{ticketId}/log-entry`. The tools map `organization_id` to `clientId`, `device_id` to `nodeId` and `assignee_id` to `assignedAppUserId`.
 
 ## Ticket Fields
 
-### Core Fields
-
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `id` | integer | System | Auto-generated ID |
-| `subject` | string | Yes | Brief issue summary |
-| `description` | text | No | Detailed description |
-| `clientId` | integer | Yes | Organization ID |
-| `deviceId` | integer | No | Related device |
-
-### Status Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `status` | string | Current ticket status |
-| `priority` | string | Urgency level |
-| `assignedTechnicianId` | integer | Assigned tech |
-
-### Metadata
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `tags` | array | Categorization tags |
-| `createTime` | datetime | Creation timestamp |
-| `updateTime` | datetime | Last modified |
+| Tool argument | REST field | Required | Notes |
+|---------------|------------|----------|-------|
+| `subject` | `subject` | Yes | Max 200 characters |
+| `organization_id` | `clientId` | Yes | |
+| `ticket_form_id` | `ticketFormId` | Yes | From `ninjaone_tickets_forms_list` |
+| `description` | first log entry | No | `description_public: false` keeps it internal |
+| `device_id` | `nodeId` | No | |
+| `status` | `status` | No | Per-tenant status ID |
+| `priority` | `priority` | No | See below |
+| `severity` | `severity` | No | See below |
+| `type` | `type` | No | `PROBLEM`, `QUESTION`, `INCIDENT`, `TASK`, `CHANGE_REQUEST`, `SERVICE_REQUEST`, `PROJECT`, `APPOINTMENT`, `MISCELLANEOUS` |
+| `assignee_id` | `assignedAppUserId` | No | |
+| `requester_uid` | `requesterUid` | No | Contact UUID |
+| `tags` | `tags` | No | |
+| `attributes` | `attributes` | No | Array of `{ attributeId, value }` |
 
 ## Status Values
 
-| Status | Description |
-|--------|-------------|
-| `OPEN` | New ticket, awaiting triage |
-| `IN_PROGRESS` | Actively being worked |
-| `WAITING` | Waiting for customer/vendor |
-| `ON_HOLD` | Paused pending action |
-| `RESOLVED` | Issue resolved |
-| `CLOSED` | Ticket complete |
+Statuses are **per tenant**. Read them with `ninjaone_tickets_statuses_list`; do not assume names such as `OPEN` or `IN_PROGRESS`. Create and update take the status **ID** (a new ticket defaults to 1000, New). The `status` filter on `ninjaone_tickets_list` takes the status **display name**, matched client-side.
 
-## Priority Levels
+## Priority and Severity
 
-| Priority | Description | SLA Target |
-|----------|-------------|------------|
-| `CRITICAL` | Business down | Immediate |
-| `HIGH` | Major impact | 1 hour |
-| `MEDIUM` | Moderate impact | 4 hours |
-| `LOW` | Minor issue | 24 hours |
-| `NONE` | No urgency | Best effort |
+NinjaOne separates urgency (priority) from impact (severity). **There is no `CRITICAL` priority**; sending it is rejected.
+
+| Priority | Typical SLA target |
+|----------|--------------------|
+| `HIGH` | 1 hour |
+| `MEDIUM` | 4 hours |
+| `LOW` | 24 hours |
+| `NONE` | Best effort |
+
+| Severity | Meaning |
+|----------|---------|
+| `CRITICAL` | Business down |
+| `MAJOR` | Major impact |
+| `MODERATE` | Moderate impact |
+| `MINOR` | Minor issue |
+| `NONE` | No impact recorded |
+
+For a "critical" ticket, set `severity: "CRITICAL"`, and set `priority: "HIGH"` only if the user did not ask for a priority (keep an explicit one, even `LOW`).
+
 
 ## Log Entries
 
@@ -134,12 +112,7 @@ Log entries track all ticket activity:
 
 ### Entry Types
 
-| Type | Description |
-|------|-------------|
-| `COMMENT` | Public or private comment |
-| `STATUS_CHANGE` | Status transition |
-| `ASSIGNMENT` | Technician assignment change |
-| `TIME_ENTRY` | Logged work time |
+The `type` filter accepts `DESCRIPTION`, `COMMENT`, `CONDITION`, `SAVE`, `DELETE`, `PRODUCT` and `INFO`. Use `COMMENT` for just the conversation.
 
 ### Log Entry Structure
 

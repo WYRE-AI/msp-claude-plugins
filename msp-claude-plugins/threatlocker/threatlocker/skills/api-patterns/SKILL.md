@@ -49,12 +49,13 @@ ThreatLocker authenticates with a raw API key — no `Bearer` prefix:
 > **Common mistake:** Sending `Authorization: Bearer <key>` returns
 > 401. Send the key bare.
 
-### Environment Variables
+### Credentials
 
-```bash
-export THREATLOCKER_API_KEY="your-raw-api-key"
-export THREATLOCKER_BASE_URL="https://portalapi.g.threatlocker.com/portalapi"
-```
+The API key, optional organization ID and optional instance are stored on
+the ThreatLocker connection in Conduit. Conduit injects them on every
+request (as `X-Threatlocker-Api-Key`, `X-Threatlocker-Organization-Id` and
+`X-Threatlocker-Instance`), and the MCP server turns them into the upstream
+headers above. Nothing is set on the client.
 
 ## Multi-Tenant Routing
 

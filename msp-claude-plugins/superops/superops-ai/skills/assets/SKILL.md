@@ -35,6 +35,17 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
 - **Hardware refresh and warranty programmes** — asset lifecycle
   planning is `scalepad-lifecycle-manager`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_assets_list` | read | List assets |
+| `superops_assets_get` | read | One asset |
+| `superops_assets_software` | read | Installed software on an asset |
+| `superops_assets_patches` | read | Patch status for an asset |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Asset Status Values
 
 | Status | Description | Indicator |
@@ -53,15 +64,13 @@ SuperOps.ai RMM provides comprehensive asset management capabilities. Assets rep
 
 ## Key Asset Fields
 
-Identity and state: `assetId`, `name`, `status`, `platform`, `lastSeen`,
-`agentVersion`. Network: `ipAddress`, `macAddress`, `publicIp`, `hostname`.
-Hardware: `manufacturer`, `model`, `serialNumber`, `processorName`,
-`processorCores`, `totalMemory`, `totalDiskSpace`, `freeDiskSpace`. OS:
-`osName`, `osVersion`, `osBuild`, `architecture`. Associations: `client`,
-`site`, `tags`, `customFields`.
-
-Memory and disk fields are `Long` values **in bytes** — convert before
-displaying or comparing against percentage thresholds.
+In the published schema an `Asset` carries `assetId`, `name`, `status`,
+`platform`, `platformVersion`, `agentVersion`, `lastCommunicatedTime`,
+`hostName`, `publicIp`, `primaryMac`, `manufacturer`, `model`,
+`serialNumber`, `loggedInUser` and `patchStatus` (a `String`). `client`, `site`,
+`assetClass` and `requester` are `JSON` scalars, and `customFields(fields: [...])`
+returns `JSON`: select them by name only, with no nested field selection. Disk
+and patch detail come from `getAssetDiskDetails` and `getAssetPatchDetails`.
 
 See [references/fields.md](references/fields.md) for the complete field reference.
 
@@ -75,14 +84,16 @@ See [references/fields.md](references/fields.md) for the complete field referenc
 | `getAssetDiskDetails` | query | Per-volume space and `usedPercentage` |
 | `getAssetPatchDetails` | query | Patch list plus a `summary` counts block |
 | `getAssetActivity` | query | Audit history of actions performed on the asset |
-| `runScriptOnAsset` | mutation | Run a script on one asset with `arguments` and `runAs` |
-| `runScriptOnAssets` | mutation | Bulk run across an `assetIds` array; returns a `batchId` |
+| `runScriptOnAsset` | mutation | Run a script on one asset (`input: RunScriptInput!`) |
 
-List queries return a `listInfo` block (`totalCount`, `hasNextPage`,
-`endCursor`) for cursor pagination; `first` sets the page size.
+There is no bulk script mutation: run `runScriptOnAsset` once per asset. List
+queries take `input: ListInfoInput!` (`page`, `pageSize`, `condition`, `sort`) and
+return `listInfo` (`page`, `pageSize`, `hasMore`, `totalCount`).
 
-Filters support nested comparison objects, not just equality — e.g.
-`"diskSpacePercentFree": { "lt": 10 }` and `"patchStatus": { "hasPending": true }`.
+The longer examples in `references/` predate the published schema
+(`schema/superops.graphql` in superops-mcp) and select nested fields on `client`,
+`site` and `patchStatus`, which the schema does not allow. Check a query against
+the schema before sending it.
 
 See [references/api.md](references/api.md) for the full operation catalog with
 request shapes and variable examples.
@@ -97,9 +108,9 @@ returning `freeDiskSpace`/`totalDiskSpace` alongside the client name.
 
 ### Patch Compliance Report
 
-Query `getAssetList` filtered on `patchStatus: { hasPending: true, severity: ["Critical"] }`
-and read the per-asset `patchStatus` rollup (`pendingCount`, `installedCount`,
-`failedCount`, `lastScanDate`).
+Read the per-asset `patchStatus` string from `getAssetList` (or the typed
+`superops_assets_patches` tool), then `getAssetPatchDetails` for the assets that
+need detail. `patchStatus` is a plain string, not a rollup object.
 
 ### Software Audit
 
@@ -124,19 +135,23 @@ See [references/api.md](references/api.md) for all three workflow queries.
 ### Asset Status Checks
 
 A `status` of `Online` alone is not sufficient — the status field can lag a
-dropped agent. Also check `lastSeen` freshness before dispatching a remote action:
+dropped agent. Also check `lastCommunicatedTime` freshness before dispatching a remote action, and refuse when it is missing or unparseable:
 
 ```javascript
 // Check if asset is available for remote actions
 function canRunRemoteAction(asset) {
-  if (asset.status !== 'Online') {
+  if (typeof asset.status !== 'string' || asset.status.toLowerCase() !== 'online') {
     return {
       canRun: false,
-      reason: `Asset is ${asset.status}. Last seen: ${asset.lastSeen}`
+      reason: `Asset is ${asset.status}. Last communicated: ${asset.lastCommunicatedTime}`
     };
   }
 
-  const lastSeenMinutes = (Date.now() - new Date(asset.lastSeen)) / 60000;
+  const last = Date.parse(asset.lastCommunicatedTime ?? '');
+  if (Number.isNaN(last)) {
+    return { canRun: false, reason: 'No valid lastCommunicatedTime on the asset' };
+  }
+  const lastSeenMinutes = (Date.now() - last) / 60000;
   if (lastSeenMinutes > 5) {
     return {
       canRun: false,
@@ -152,7 +167,7 @@ function canRunRemoteAction(asset) {
 
 1. **Filter queries** - Always use filters to limit result sets
 2. **Check status first** - Verify asset is online before running scripts
-3. **Use pagination** - Handle large asset lists with cursor pagination
+3. **Use pagination** - Page large asset lists with `page` and `pageSize` in `ListInfoInput`, and keep going while `listInfo.hasMore` is true
 4. **Cache static data** - Cache client/site associations locally
 5. **Monitor execution** - Track script execution results
 6. **Set appropriate timeouts** - Long-running scripts need adequate timeouts
