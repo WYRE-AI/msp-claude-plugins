@@ -61,6 +61,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`assets-pack` 0.1.5: Refresh Quote List ([WYREAI-733](https://linear.app/wyre-ai/issue/WYREAI-733/conduit-skill-hardware-refresh-quote-list)).** Adds a companion skill that turns a Refresh Cycle Planning calendar into a per-client list of devices to quote, matched against a ScalePad Quoter, Kaseya Quote Manager, or ConnectWise PSA product catalog, and handing off to `scalepad-quoter` or `connectwise-cpq-quotes`. Read-only: it drafts the list and does not create quotes. Amounts appear only when a catalog tool returns them.
+
 - **18 new plugins for the Nov 9 Conduit connector batch (marketplace 1.36.0).** All version 1.0.0, each with an `api-patterns` skill, task skills, and one agent: `ai-org-admin` (Anthropic Admin), `openai-admin`, `jamf`, `acronis`, `bitwarden`, `1password`, `zabbix`, `lastpass`, `moovila` (plus a `/project-review` command), `webroot`, `cove`, `unitrends-uniview`, `gogetssl`, `smileback`, `myitprocess`, `alga-psa`, `dubber` and `mspcfo`. All of the connectors are in the Conduit catalog. `dubber` is still a preview vendor.
 
   **What each plugin can change.** 14 are read-only. Three have write or admin tools, gated as each plugin describes. `mspcfo` is unclassified (see below):
