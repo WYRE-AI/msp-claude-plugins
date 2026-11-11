@@ -38,9 +38,11 @@ Grouped by blast radius, not HTTP verb.
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change SuperOps or endpoint state. Safe for autonomous agents. | `superops_navigate`, `superops_status`, `superops_test_connection`, `superops_assets_list`, `superops_assets_get`, `superops_assets_patches`, `superops_assets_software`, `superops_clients_list`, `superops_clients_get`, `superops_clients_search`, `superops_technicians_list`, `superops_technicians_get`, `superops_technicians_groups`, `superops_tickets_list`, `superops_tickets_get`, `superops_custom_query` |
+| **Read** | Cannot change SuperOps or endpoint state. Safe for autonomous agents. | `superops_navigate`, `superops_status`, `superops_test_connection`, `superops_assets_list`, `superops_assets_get`, `superops_assets_patches`, `superops_assets_software`, `superops_clients_list`, `superops_clients_get`, `superops_clients_search`, `superops_technicians_list`, `superops_technicians_get`, `superops_technicians_groups`, `superops_technicians_lookups`, `superops_tickets_list`, `superops_tickets_get` |
 | **Write** | Creates or modifies PSA records. Reversible, customer-visible. | `superops_tickets_create`, `superops_tickets_update`, `superops_tickets_add_note`, `superops_tickets_log_time` |
-| **Destructive** | Unbounded write access to the tenant. | `superops_custom_mutation` |
+| **Destructive** | Unbounded read or write access to the tenant. | `superops_custom_mutation`, `superops_custom_query` |
+
+Conduit enforces this table as `read` / `write` / `admin`: both custom GraphQL tools are classified `admin`.
 
 `superops_custom_mutation` is the single most dangerous tool in this
 plugin and the reason its destructive tier is not empty. It executes an
@@ -59,9 +61,10 @@ against customer endpoints is only reachable through
 the destructive tier. Script execution is destructive regardless of what
 the API calls it.
 
-`superops_custom_query` stays in Read because it cannot mutate, but it
-can read anything the token can see, including entities no typed tool
-surfaces. It is the exfiltration path, not the damage path.
+`superops_custom_query` cannot mutate, but it can read anything the token
+can see, including entities no typed tool surfaces. It is the exfiltration
+path, not the damage path, and Conduit holds it at `admin` for that reason.
+Alert listing and every other read that has no typed tool goes through it.
 
 Nothing sits between an agent and an arbitrary GraphQL mutation once the tier is granted. Where this document asks for a named human approver, that is a policy you impose on your agents, and it is only as good as the agent configuration that carries it.
 

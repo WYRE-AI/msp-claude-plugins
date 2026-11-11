@@ -114,7 +114,6 @@ Found 8 assets matching "ACME"
 
 Quick Actions:
 - View asset: Click asset name in Syncro
-- View alerts: /list-alerts --asset_id <id>
 - View customer: /get-customer <customer_id>
 ```
 
@@ -320,6 +319,4 @@ Verify new assets are registered:
 ## Related Commands
 
 - `/get-customer` - Get customer details with asset summary
-- `/list-alerts` - View alerts for an asset
 - `/create-ticket` - Create a ticket for an asset issue
-- `/resolve-alert` - Resolve an asset alert

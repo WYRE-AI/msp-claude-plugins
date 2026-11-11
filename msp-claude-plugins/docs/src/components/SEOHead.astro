@@ -12,7 +12,7 @@ const {
   title,
   description,
   canonicalURL = Astro.url.href,
-  ogImage = '/og-image.png',
+  ogImage = `${import.meta.env.BASE_URL}og-image.png`,
   ogType = 'website',
   twitterCard = 'summary_large_image'
 } = Astro.props;

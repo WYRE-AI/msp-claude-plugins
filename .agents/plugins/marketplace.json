@@ -708,7 +708,7 @@
     },
     {
       "name": "datto-saas-protection",
-      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/kaseya/datto-saas-protection"
@@ -1006,6 +1006,19 @@
       "category": "Workflow Pack"
     },
     {
+      "name": "marketing-pack",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/marketing-pack"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflow Pack"
+    },
+    {
       "name": "devops-pack",
       "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
       "source": {
@@ -1111,7 +1124,7 @@
     },
     {
       "name": "kpn",
-      "description": "KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)",
+      "description": "KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/kpn/kpn"

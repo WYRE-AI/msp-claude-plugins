@@ -17,53 +17,34 @@ Create a schedule entry/appointment in ConnectWise, optionally linked to a ticke
 ## Steps
 
 1. **Validate date/time inputs**
-   - Parse start_date and end_date
-   - Validate end_date is after start_date
-   - Check for schedule conflicts (if enabled)
+   - Parse `start_date` and `end_date` in the user's timezone and convert both to UTC ISO 8601
+   - Check `end_date` is after `start_date`
 
-2. **Resolve member (if provided)**
-   ```http
-   GET /system/members?conditions=identifier='{member}'
-   ```
-   - Default to current authenticated user if not specified
+2. **Resolve the member**
+   - `cw_search_members` with `conditions: "identifier = '<member>'"` (or by name)
+   - The member is required and never defaulted: if none was given, ask
 
-3. **Validate ticket (if ticket_id provided)**
-   ```http
-   GET /service/tickets/{ticket_id}
-   ```
-   - Confirm ticket exists and is accessible
+3. **Resolve what the time is booked against** (`objectId` is required)
+   - With `ticket_id`: `cw_get_ticket` to confirm it exists; its ID becomes `objectId`
+   - Without one: ask for the service ticket, project ticket or activity to book against. `cw_create_schedule_entry` cannot create a booking that is not linked to one, so stop rather than book without it
 
-4. **Resolve schedule type (if provided)**
-   ```http
-   GET /schedule/types?conditions=name='{type}'
-   ```
+4. **Resolve the schedule type and status**
+   - `cw_list_schedule_types` (use the `S`/Service type for a service ticket)
+   - `cw_list_schedule_statuses` if a status such as Tentative or Firm was named
 
-5. **Resolve schedule status (if provided)**
-   ```http
-   GET /schedule/statuses?conditions=name='{status}'
-   ```
+5. **Check for conflicts**
+   - `cw_search_schedule_entries` with `conditions: "member/id = <id> and dateStart < [<end>] and dateEnd > [<start>]"`
+   - If anything overlaps, show it and ask before booking (`allowScheduleConflictsFlag: true` only on explicit request)
 
-6. **Create schedule entry**
-   ```http
-   POST /schedule/entries
-   Content-Type: application/json
+6. **Create the entry**
+   - `cw_create_schedule_entry` with `objectId`, `typeId`, `memberId`, `dateStart`, `dateEnd`, and optional `name`, `statusId`, `whereId`, `reminderId`
+   - `location`: `whereId` is a service location (On-Site, In-house, Remote), not an address. Map the request to one of those if it names one. The entry has no free-text address field, so tell the user an address cannot be saved on it (put it in the ticket notes instead)
+   - `reminder_minutes`: `reminderId` values have no list endpoint. Use the `reminderId` from an existing entry (`cw_search_schedule_entries`) whose reminder matches the requested interval. If no entry shows that interval, tell the user it cannot be set rather than using some other entry's ID
 
-   {
-     "name": "<name>",
-     "dateStart": "<start_date>",
-     "dateEnd": "<end_date>",
-     "member": {"identifier": "<member>"},
-     "objectId": <ticket_id>,
-     "type": {"id": <type_id>},
-     "where": {"id": <location_id>},
-     "status": {"id": <status_id>},
-     "reminder": {
-       "minutes": <reminder_minutes>
-     }
-   }
-   ```
+7. **Report** the entry ID and the booked time in the user's local timezone
 
-7. **Return confirmation with calendar details**
+To move or re-assign an existing booking, use `cw_update_schedule_entry` instead of creating a second one. See the `connectwise-psa-scheduling` skill for the full model.
+
 
 ## Parameters
 
@@ -72,10 +53,10 @@ Create a schedule entry/appointment in ConnectWise, optionally linked to a ticke
 | name | string | Yes | - | Entry name/subject |
 | start_date | datetime | Yes | - | Start date and time |
 | end_date | datetime | Yes | - | End date and time |
-| member | string | No | Current user | Member identifier |
-| ticket_id | integer | No | - | Associated ticket ID |
+| member | string | Yes | - | Member identifier; never defaulted, asked for if missing |
+| ticket_id | integer | Yes* | - | Ticket to book against. *Required unless the user names another project ticket or activity |
 | type | string | No | - | Schedule type |
-| location | string | No | - | Location/address |
+| location | string | No | - | Service location (On-Site, In-house, Remote); not a street address |
 | reminder_minutes | integer | No | - | Minutes before reminder |
 | status | string | No | - | Schedule status |
 
@@ -200,42 +181,10 @@ Linked Ticket:
 Note: Ticket status updated to "Scheduled"
 ```
 
-## API Authentication
+## Authentication
 
-```bash
-# Base64 encode credentials: company+publicKey:privateKey
-AUTH=$(echo -n "${CW_COMPANY}+${CW_PUBLIC_KEY}:${CW_PRIVATE_KEY}" | base64)
+Through Conduit no credentials are handled here: the ConnectWise PSA connection (company ID, public/private key, client ID, server URL) is stored in Conduit and injected on every call. `cw_create_schedule_entry` is `write` tier; the lookups are `read`.
 
-# Create schedule entry
-curl -s -X POST \
-  "https://${CW_HOST}/v4_6_release/apis/3.0/schedule/entries" \
-  -H "Authorization: Basic ${AUTH}" \
-  -H "clientId: ${CW_CLIENT_ID}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Server Maintenance",
-    "dateStart": "2026-02-10T09:00:00Z",
-    "dateEnd": "2026-02-10T12:00:00Z",
-    "member": {"identifier": "jtechnician"},
-    "objectId": 12345,
-    "type": {"id": 1},
-    "status": {"id": 1}
-  }'
-
-# Get schedule types
-curl -s -X GET \
-  "https://${CW_HOST}/v4_6_release/apis/3.0/schedule/types" \
-  -H "Authorization: Basic ${AUTH}" \
-  -H "clientId: ${CW_CLIENT_ID}" \
-  -H "Content-Type: application/json"
-
-# Get schedule statuses
-curl -s -X GET \
-  "https://${CW_HOST}/v4_6_release/apis/3.0/schedule/statuses" \
-  -H "Authorization: Basic ${AUTH}" \
-  -H "clientId: ${CW_CLIENT_ID}" \
-  -H "Content-Type: application/json"
-```
 
 ## Error Handling
 

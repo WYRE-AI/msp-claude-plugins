@@ -132,13 +132,13 @@ For the cause, hand off to `meraki-troubleshooting`.
 2. `getOrganizationInventoryDevices` with `eoxStatuses: ["endOfSupport", "nearEndOfSupport"]` to name the affected serials and models.
 3. `getOrganizationFirmwareUpgradesByDevice` with `currentUpgradesOnly: true` for upgrades that are scheduled or in progress.
 4. `getOrganizationDevices` (narrowed with `networkIds`) for every assigned device's current `firmware`; the calls above only cover filtered or pending devices.
-5. Group by model and `firmware`. Flag end-of-support hardware first, then devices running a firmware train that differs from the rest of their network.
+5. Group by network, `productType` and model, then by `firmware`. Flag end-of-support hardware first, then devices whose firmware differs from other devices of the same product family in the same network. MX, MS and MR run separate firmware trains, so a switch and an AP on different versions in one network is normal.
 
 ### Reboot or removal request
 
 The hosted server cannot reboot or remove a device. Prepare the change for a human:
 
-1. Confirm identity with `getDevice`: name, model, network, `productType`. Read its network with `getNetwork` and check the `organizationId` is the org the request is about.
+1. Confirm identity with `getDevice`: name, model, network, `productType`. Read its network with `getNetwork` and check the `organizationId` is the org the request is about. A device that is not in a network (an unclaim of spare hardware, or `getDevice` returns not found) has no network to read: call `getOrganizationInventoryDevice` with the requested `organizationId` and the serial instead. A record with a null `networkId` confirms the device is claimed in that org and unassigned; not found means it is not in that org.
 2. Check availability. An `offline` device cannot receive a reboot from the Dashboard; it needs a local power cycle.
 3. Assess impact. Rebooting an MX or a core switch drops the whole site; rebooting an AP drops its clients, and if it is a mesh gateway, every repeater that reaches the network through it and their clients too. Check for mesh repeaters (find the capability with `semantic_search`) before stating the impact.
 4. Hand over a precise instruction, for example:

@@ -27,6 +27,19 @@ Syncro customers are the foundation of your service delivery. Every ticket, asse
 - **Documentation about the client** — `hudu-companies` or
   `itglue-organizations`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `syncro_customers_list` | read | List customers |
+| `syncro_customers_search` | read | Find customers by name or email |
+| `syncro_customers_get` | read | One customer |
+| `syncro_contacts_list` / `syncro_contacts_get` | read | Customer contacts |
+| `syncro_customers_create` | write | Create a customer |
+| `syncro_contacts_create` | write | Create a contact |
+
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+
 ## Key Concepts
 
 ### Customer

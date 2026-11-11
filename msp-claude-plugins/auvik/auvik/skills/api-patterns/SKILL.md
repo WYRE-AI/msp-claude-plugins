@@ -23,10 +23,10 @@ Auvik authenticates with HTTP Basic - the username is the Auvik user's email and
 | Field | Value |
 |-------|-------|
 | Auth scheme | HTTP Basic |
-| Username | `AUVIK_USERNAME` (your Auvik login email) |
-| Password | `AUVIK_API_KEY` |
+| Username | The connection's **Username** field (your Auvik login email) |
+| Password | The connection's **API Key** field |
 
-The MCP server handles the basic-auth encoding. Set the env vars; do not pre-encode.
+Both are stored on the Auvik connection in Conduit, which injects them on every request. The MCP server handles the basic-auth encoding; do not pre-encode.
 
 ## Region Routing
 
@@ -38,12 +38,15 @@ Auvik tenants live in one of several regional clusters:
 | `us2` | `auvikapi.us2.my.auvik.com` |
 | `us3` | `auvikapi.us3.my.auvik.com` |
 | `us4` | `auvikapi.us4.my.auvik.com` |
+| `us5` | `auvikapi.us5.my.auvik.com` |
+| `us6` | `auvikapi.us6.my.auvik.com` |
 | `eu1` | `auvikapi.eu1.my.auvik.com` |
 | `eu2` | `auvikapi.eu2.my.auvik.com` |
 | `au1` | `auvikapi.au1.my.auvik.com` |
 | `ca1` | `auvikapi.ca1.my.auvik.com` |
+| `lnx` | `auvikapi.lnx.my.auvik.com` |
 
-Set `AUVIK_REGION` to pin the region. If omitted, the server attempts to detect the region from the credentials. Misroutes typically surface as 404 or redirect loops on calls that should obviously succeed.
+Set the Region field on the Auvik connection in Conduit to pin the region. If omitted, the server attempts to detect the region from the credentials. Misroutes typically surface as 404 or redirect loops on calls that should obviously succeed.
 
 ## JSON:API Envelope
 
@@ -120,7 +123,7 @@ Auvik is multi-tenant by design - a single MSP credential sees every client tena
 
 | Code | Meaning | Fix |
 |------|---------|-----|
-| 401 | Bad credentials | Check `AUVIK_USERNAME` + `AUVIK_API_KEY` |
+| 401 | Bad credentials | Check the username and API key on the Auvik connection in Conduit |
 | 403 | Credentials valid, no access to the resource | Wrong tenant, or key lacks scope |
 | 404 | Unknown ID, or wrong region | Verify region; verify ID |
 | 429 | Rate limit | Back off; narrow the query |

@@ -36,29 +36,26 @@ tier each bucket actually enforces at.
 
 | Group | What it can do | Enforcement tier | Tools |
 |---|---|---|---|
-| **Read** | Cannot change Syncro or endpoint state. Safe for autonomous agents. | `read` | `syncro_status`, `syncro_assets_list`, `syncro_customers_list`, `syncro_tickets_list`, `syncro_invoices_list` |
-| **Write** | Adds a customer-visible note to a ticket. | `write` | `syncro_tickets_add_comment` |
+| **Read** | Cannot change Syncro or endpoint state. Safe for autonomous agents. | `read` | `syncro_status`, `syncro_navigate`, `syncro_assets_list`, `syncro_assets_get`, `syncro_assets_search`, `syncro_customers_list`, `syncro_customers_get`, `syncro_customers_search`, `syncro_contacts_list`, `syncro_contacts_get`, `syncro_tickets_list`, `syncro_tickets_get`, `syncro_invoices_list`, `syncro_invoices_get` |
+| **Write** | Creates or changes Syncro records, including invoices and customer-visible ticket comments. | `write` | `syncro_customers_create`, `syncro_contacts_create`, `syncro_tickets_create`, `syncro_tickets_update`, `syncro_tickets_add_comment`, `syncro_invoices_create` |
 | **Delete** | — | `write` — **not** a tier of its own | **Empty.** No Syncro tool name carries a delete-verb token. |
-| **Admin** |including invoice creation and invoice emailing.| `admin` | see below |
+| **Admin** | Sends an invoice to the client. | `admin` | `syncro_invoices_email` |
 
-Five readable tools and one write. That is the whole of Syncro's
-classified surface in Conduit, and it is the most important fact in this
-document.
+Twenty-one tools: fourteen read, six write and one admin, all classified
+in Conduit. A `read` grant can list, search and open every record type.
 
 Confirm the live permission grant in the gateway access editor before you rely on a tier in this document. This note does not describe gateway enforcement internals.
 
 ### Where the mechanical tier and the risk judgement disagree
 
-- **`syncro_invoices_email` is the sharpest tool here, and it currently
-  enforces at `admin` by accident.** It sends a finished invoice to the
+- **`syncro_invoices_email` is the sharpest tool here, and Conduit holds
+  it at `admin` on purpose.** It sends a finished invoice to the
   client's billing contact — plus any `cc_emails` the caller supplies,
   with a caller-supplied subject and body. There is no unsend. An agent
   that emails a draft, a duplicate, or the wrong client's invoice creates
   a commercial incident that a human has to apologise for, and the damage
   is done the instant the call returns. Nothing else in this plugin
   leaves the MSP's own systems.
-
-That would be a real regression against today's accidental `admin`.
 
 - **`syncro_invoices_create` is the closest call in this batch.** It
   creates a financial record that flows into revenue reporting and, in
@@ -74,15 +71,15 @@ The safe default is **read autonomously, propose writes, never
 self-approve deletes.**
 
 - Read tools: allow. Asset audits, ticket reporting, and AR ageing
-  reviews across customers are the intended autonomous use — noting that
-  a `read` agent can only list, not open.
+  reviews across customers are the intended autonomous use.
 - Write tools: agent drafts the exact call, human approves, then it
   runs. Invoice creation deserves a second reader.
-- Admin tools: today this grant is the whole write surface plus every
-  detail read, so it is close to "full Syncro operator". Do not give it
-  to a scheduled or unattended agent. If an agent genuinely needs to
-  create tickets, give it a granular grant listing exactly those tools
-  and omitting `syncro_invoices_email`.
+- Admin (`syncro_invoices_email` only): require a named human approver
+  per invocation. Do not give it to a scheduled or unattended agent.
+
+Alerts, appointments and timers are **not** on this connector. They exist
+only on the separate `syncro-official` connector (Syncro's hosted MCP),
+which uses different tool names; this plugin does not target it.
 - For `syncro_invoices_email`: a named human approver per invocation who
   has seen the invoice total, the recipient, and the CC list. Conduit
   will not ask, and will not record the arguments afterwards. "Email

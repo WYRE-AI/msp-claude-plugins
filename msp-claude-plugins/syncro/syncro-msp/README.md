@@ -13,56 +13,20 @@ This plugin provides Claude with domain knowledge of Syncro MSP, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Syncro once in Conduit (**Connections → Syncro (API connector)**, slug `syncro`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "SYNCRO_SUBDOMAIN": "acmemsp",
-    "SYNCRO_API_KEY": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-  }
-}
-```
+| Conduit connection field |
+|---|
+| API Key |
+| Subdomain |
 
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "SYNCRO_SUBDOMAIN": "acmemsp",
-    "SYNCRO_API_KEY": "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `SYNCRO_SUBDOMAIN` | Yes | | Your Syncro subdomain (from `https://{subdomain}.syncromsp.com`) |
-| `SYNCRO_API_KEY` | Yes | | API key from Admin > API Tokens |
-| `SYNCRO_MCP_URL` | No | `https://syncro-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+`syncro` is Syncro's API connector, which serves the `syncro_*` tools this plugin documents. Conduit steers new sign-ins to Syncro's hosted MCP (`syncro-official`), whose tools are different.
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `SYNCRO_MCP_URL` to your gateway's endpoint:
-
-```
-SYNCRO_MCP_URL=https://your-gateway-domain/v1/syncro/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Syncro → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "SYNCRO_MCP_URL": "https://your-gateway-domain/v1/syncro/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http syncro https://your-gateway-domain/v1/syncro/mcp`. The gateway then holds the Syncro credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -81,7 +45,7 @@ SYNCRO_MCP_URL=https://your-gateway-domain/v1/syncro/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+To check the credentials directly against Syncro before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test connection (env vars injected by Claude Code)
@@ -105,7 +69,7 @@ claude --plugin .
 
 | Skill | Description |
 |-------|-------------|
-| `tickets` | Service ticket management, statuses, timers |
+| `tickets` | Service ticket management, statuses, comments |
 | `customers` | Customer and contact management |
 | `assets` | Asset tracking and RMM integration |
 | `invoices` | Invoice generation and payments |

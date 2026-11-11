@@ -23,16 +23,17 @@ Install via the [MSP Claude Plugins marketplace](https://github.com/WYRE-AI/msp-
 /plugin install threatlocker
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/threatlocker/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/threatlocker/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-Set the following environment variables (or paste your credentials into the gateway UI):
+Connect ThreatLocker once in the Conduit web UI (**Connections → ThreatLocker**). Conduit stores these credentials and injects them on every request:
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `THREATLOCKER_API_KEY` | Yes | API key generated from your ThreatLocker portal under user profile / API keys |
-| `THREATLOCKER_ORGANIZATION_ID` | No | Organization UUID to scope requests. Leave blank to use your primary organization. MSPs can pivot to child orgs via `threatlocker_organizations_list_children` |
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Key | Yes | API key generated from your ThreatLocker portal under user profile / API keys |
+| Organization ID | No | Organization UUID to scope requests. Leave blank to use your primary organization. MSPs can pivot to child orgs via `threatlocker_organizations_list_children` |
+| Instance | No | Your ThreatLocker portal instance, if it is not the default |
 
 See [ThreatLocker documentation](https://docs.threatlocker.com/) for instructions on issuing an API key and locating your organization UUID.
 

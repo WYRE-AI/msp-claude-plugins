@@ -6,16 +6,17 @@ This plugin orients Claude around the [`cipp-mcp`](https://github.com/WYRE-AI/ci
 
 ## What's in this plugin
 
-### Skills (9)
+### Skills (10)
 
 | Skill | Tools covered |
 |-------|---------------|
 | `cipp-tenants` | `cipp_list_tenants`, `cipp_get_tenant_details` |
 | `cipp-users` | `cipp_list_users`, `cipp_create_user`, `cipp_edit_user`, `cipp_disable_user`, `cipp_reset_password`, `cipp_reset_mfa`, `cipp_revoke_sessions`, `cipp_offboard_user`, `cipp_bec_check`, `cipp_list_mfa_users`, `cipp_list_user_devices`, `cipp_list_user_groups` |
 | `cipp-groups` | `cipp_list_groups`, `cipp_create_group` |
-| `cipp-mailboxes` | `cipp_list_mailboxes`, `cipp_list_mailbox_permissions`, `cipp_set_out_of_office`, `cipp_set_email_forwarding` |
-| `cipp-security` | `cipp_list_conditional_access_policies`, `cipp_list_named_locations` |
-| `cipp-standards` | `cipp_list_standards`, `cipp_run_standards_check`, `cipp_list_bpa`, `cipp_list_domain_health` |
+| `cipp-mailboxes` | `cipp_list_mailboxes`, `cipp_list_mailbox_permissions`, `cipp_set_out_of_office`, `cipp_set_email_forwarding`, `cipp_list_mailbox_usage`, `cipp_get_mailbox_usage`, `cipp_list_trusted_blocked_senders` |
+| `cipp-security` | `cipp_list_conditional_access_policies`, `cipp_list_named_locations`, `cipp_list_enterprise_apps`, `cipp_list_user_signin_logs` |
+| `cipp-standards` | `cipp_list_standards`, `cipp_run_standards_check`, `cipp_list_bpa`, `cipp_list_domain_health`, `cipp_get_tenant_alignment`, `cipp_get_tenant_drift`, `cipp_list_standard_templates`, `cipp_create_standard_template`, `cipp_delete_standard_template` |
+| `cipp-secure-score` | `cipp_get_secure_score`, `cipp_list_secure_score_controls` |
 | `cipp-licenses` | `cipp_list_licenses`, `cipp_list_csp_licenses` |
 | `cipp-alerts` | `cipp_list_audit_logs`, `cipp_list_alert_queue` |
 | `cipp-ops` | `cipp_list_gdap_roles`, `cipp_list_gdap_invites`, `cipp_list_scheduled_items`, `cipp_add_scheduled_item`, `cipp_ping`, `cipp_get_version`, `cipp_list_logs` |

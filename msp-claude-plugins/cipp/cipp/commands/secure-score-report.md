@@ -19,11 +19,13 @@ For each tenant in scope:
 
 | Metric | Source |
 |--------|--------|
+| Microsoft Secure Score (current %, 30-day change, vs similar-size tenants) | `cipp_get_secure_score` (`top: 31`, so a reading 30 days before the latest is included. Use the reading dated 30 days before the latest as the baseline; if that reading is missing, show the change with its actual comparison dates, or report the 30-day change as unavailable) |
+| Top 3 controls by points available | `cipp_list_secure_score_controls` joined to the score |
 | BPA fail count (Identity / Mail / Security) | `cipp_list_bpa` |
 | Enabled CA policies (count + presence of MFA-for-all-apps) | `cipp_list_conditional_access_policies` |
 | MFA enrollment % | `cipp_list_mfa_users` |
 | Domain health (DMARC enforced, SPF valid, DKIM enabled) | `cipp_list_domain_health` |
-| Standards baseline coverage | `cipp_list_standards` |
+| Standards baseline coverage and alignment % | `cipp_list_standards`, `cipp_get_tenant_alignment` |
 | Computed risk band | High / Medium / Low |
 
 Tenants are sorted with high-risk first.

@@ -2,10 +2,7 @@
   "mcpServers": {
     "timezest": {
       "type": "http",
-      "url": "https://conduit.wyre.ai/v1/timezest/mcp",
-      "headers": {
-        "X-Timezest-Api-Token": "${TIMEZEST_API_TOKEN}"
-      }
+      "url": "https://conduit.wyre.ai/v1/timezest/mcp"
     }
   }
 }

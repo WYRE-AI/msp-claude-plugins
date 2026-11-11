@@ -27,6 +27,16 @@ Clients (also called Accounts) are the foundation of SuperOps.ai's PSA. Every ti
 - **What a client owns** — endpoints are `superops-assets`, open work is
   `superops-tickets`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_clients_list` | read | List clients |
+| `superops_clients_search` | read | Find a client by name |
+| `superops_clients_get` | read | One client |
+
+Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+
 ## Key Concepts
 
 **Stage** tracks the sales lifecycle; **status** tracks the service relationship. They are independent — a `Customer` can be `Inactive`.
@@ -82,20 +92,24 @@ Variables for fuzzy search:
 ```json
 {
   "input": {
-    "filter": {
-      "or": [
-        { "name": { "contains": "acme" } },
-        { "emailDomains": { "contains": "acme.com" } }
+    "page": 1,
+    "pageSize": 10,
+    "condition": {
+      "joinOperator": "OR",
+      "operands": [
+        { "attribute": "name", "operator": "contains", "value": "acme" },
+        { "attribute": "emailDomains", "operator": "contains", "value": "acme.com" }
       ]
-    },
-    "first": 10
+    }
   }
 }
 ```
 
+`joinOperator` must be uppercase: SuperOps silently treats anything else as `OR`. Valid string operators are `is`, `isNot`, `contains`, `notContains`, `startsWith` and `endsWith`; `includes` / `notIncludes` take an array.
+
 ### Client Health Dashboard
 
-Batch related counts into a single GraphQL request with aliases:
+Batch related counts into a single GraphQL request with aliases. The `filter` objects below predate the published schema: `ListInfoInput` takes a `condition` (as in the search example above), not `filter`, so rewrite them before sending (tracked in #270):
 
 ```graphql
 query getClientHealth($clientId: ID!) {
@@ -135,19 +149,19 @@ query getClientHealth($clientId: ID!) {
 | List clients | `getClientList(input: ListInfoInput!)` |
 | Get client | `getClient(input: ClientIdentifierInput!)` |
 | Update client | `updateClient(input: UpdateClientInput!)` |
-| Soft delete | `softDeleteClients(input: DeleteClientsInput!)` |
-| Hard delete | `hardDeleteClients(input: DeleteClientsInput!)` |
-| Restore | `restoreClients(input: RestoreClientsInput!)` |
-| Create site | `createSite(input: CreateSiteInput!)` |
-| List sites | `getClientSites(input: ClientSitesInput!)` |
-| Update site | `updateSite(input: UpdateSiteInput!)` |
-| Create contact | `createRequester(input: CreateRequesterInput!)` |
-| List contacts | `getClientRequesters(input: ClientRequestersInput!)` |
-| Update contact | `updateRequester(input: UpdateRequesterInput!)` |
+| Soft delete | `softDeleteClients(input: [ClientIdentifierInput!]!)` |
+| Hard delete | `hardDeleteClients(input: [ClientIdentifierInput!]!)` |
+| Restore | `restoreClients(input: [ClientIdentifierInput!]!)` |
 
 Note the `V2` suffix on client creation — `createClientV2` is the current mutation, while
-update/delete have no version suffix. Deletes take an array (`accountIds`), even for one
-client. Soft-deleted clients can be recovered with `restoreClients`; hard deletes cannot.
+update/delete have no version suffix. Delete and restore take an array of
+`{ accountId }` objects, even for one client: `input: [{ accountId: "<id>" }]`.
+Soft-deleted clients can be recovered with `restoreClients`; hard deletes cannot.
+
+The site and requester operations in `references/api.md` (`createSite`,
+`getClientSites`, `updateSite`, `createRequester`, `getClientRequesters`,
+`updateRequester`) are not in the published schema (`schema/superops.graphql` in
+superops-mcp); do not send them.
 
 See [references/api.md](references/api.md) for the complete operation catalog with
 request/response examples.

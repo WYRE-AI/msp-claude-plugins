@@ -2,26 +2,29 @@
 
 Claude Code skills for working with Datto SaaS Protection (formerly Backupify) — cloud-to-cloud backup for Microsoft 365 and Google Workspace.
 
-## Status
+## Connection
 
-**Scaffolding** — skill content is in place; the matching MCP server (`datto-saas-protection-mcp`) and SDK (`node-datto-saas-protection`) are in development.
+The plugin reaches Datto SaaS Protection through [Conduit](https://conduit.wyre.ai) (vendor slug `datto-saas-protection`), which runs the `datto-saas-protection-mcp` sidecar. This plugin does not ship its own `.mcp.json`: install the `wyre-gateway` plugin (or any workflow pack) to connect Claude Code to `https://conduit.wyre.ai/v1/mcp`, then connect Datto SaaS Protection in the Conduit web UI with the public/secret API key pair from the Datto Partner Portal.
 
-## Capabilities (planned)
+## Tools
 
-- Backup status: per-seat, per-tenant
-- Seat management: list, license assignment, archived seats
-- Restore operations: file/email/site restore queueing
-- Tenant inventory: M365 & Google Workspace organizations
-- Activity log: backup runs, errors, restores
-- Domain mapping (M365 tenant → SaaS Protection org)
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `datto_saas_list_domains` | read | Customers / M365 tenants / Google domains, with the IDs every other tool needs |
+| `datto_saas_list_seats` | read | Seats per customer, filterable by type and state |
+| `datto_saas_get_seat` | read | One seat by email, site URL or remote ID |
+| `datto_saas_list_applications` | read | Backup history per application (Exchange, OneDrive, SharePoint, Teams, Gmail, Drive) |
+| `datto_saas_get_backup_stats` | read | Detailed per-service backup statistics |
+| `datto_saas_bulk_seat_change` | write | License, Pause or Unlicense up to 100 seats. Confirm-gated, but on a client that cannot show the prompt an agent can pass `confirm: true` itself, so the gate is not a guarantee of human approval |
 
-## Authentication
-
-REST API key issued from the SaaS Protection partner portal. Send as `Authorization: Bearer <key>`. See `skills/api-patterns/SKILL.md`.
+There is no restore or activity-log tool; restores are started in the SaaS Protection portal.
 
 ## Skills
 
-- `api-patterns` — auth, pagination, error handling
+- `api-patterns` — auth, tools, object model, bulk seat change, errors
+- `seat-coverage` — unprotected/paused seat sweep and backup-health review
+
+See `GOVERNANCE.md` for the permission tiers.
 
 ## License
 

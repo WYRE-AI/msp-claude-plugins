@@ -2,10 +2,7 @@
   "mcpServers": {
     "crewhu": {
       "type": "http",
-      "url": "https://conduit.wyre.ai/v1/crewhu/mcp",
-      "headers": {
-        "X-Crewhu-Api-Token": "${X_CREWHU_APITOKEN}"
-      }
+      "url": "https://conduit.wyre.ai/v1/crewhu/mcp"
     }
   }
 }
