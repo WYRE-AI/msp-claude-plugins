@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 105,
-    "skills": 479,
+    "skills": 480,
     "commands": 314,
     "agents": 172
   },
@@ -5020,13 +5020,15 @@
     {
       "name": "marketing-pack",
       "displayName": "MSP Marketing",
-      "version": "0.1.0",
-      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.",
+      "version": "0.2.0",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
         "marketing",
         "case-studies",
+        "reviews",
+        "referrals",
         "msp"
       ],
       "path": "msp-claude-plugins/marketing-pack",
@@ -5042,6 +5044,10 @@
         {
           "id": "case-study-drafter",
           "path": "msp-claude-plugins/marketing-pack/skills/case-study-drafter/SKILL.md"
+        },
+        {
+          "id": "review-and-referral-ask",
+          "path": "msp-claude-plugins/marketing-pack/skills/review-and-referral-ask/SKILL.md"
         }
       ],
       "commands": [],

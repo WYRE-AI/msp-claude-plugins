@@ -1030,12 +1030,14 @@
     {
       "name": "marketing-pack",
       "source": "./msp-claude-plugins/marketing-pack",
-      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
         "marketing",
         "case-studies",
+        "reviews",
+        "referrals",
         "msp"
       ]
     },
