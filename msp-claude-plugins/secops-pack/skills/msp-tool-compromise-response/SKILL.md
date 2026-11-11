@@ -67,6 +67,13 @@ tool. Never call create, update, delete, isolate, disable, reset,
 revoke, reboot, run-script, run-job, permit, raw, execute, passthrough,
 or custom-mutation tools, even if they appear in discovery.
 
+Conduit tiers every tool read, write, or admin, and denies a tool it
+has not classified. Many evidence reads below are admin tier (CIPP
+sign-in, audit, MFA, and enterprise-app reads, `microsoft_graph_get`,
+Datto audit and job-output reads, ThreatLocker audit search), so a
+connection without admin access will refuse them. Record a refused or
+undiscovered read as a coverage gap. Do not look for a way around it.
+
 Recommend changes only. The operator executes containment, rotation, or
 eradication after explicit approval. Do not infer approval from an
 advisory, a severity label, or a previous incident.
@@ -95,7 +102,7 @@ sources before drawing conclusions from them alone.
    `autotask_search_companies`, `halopsa_clients_list`,
    `cw_search_companies`, `syncro_customers_list`,
    `superops_clients_list`, `ninjaone_organizations_list`,
-   `atera_customers_list`, `cwautomate_clients_list`,
+   `cwautomate_clients_list`,
    `datto_list_sites`, `ncentral_list_customers`, `cipp_list_tenants`,
    and `cipp_get_tenant_details`.
 
@@ -107,19 +114,21 @@ filling them with assumptions.
 
 | Family | What to look for in the window | Catalog reads (when discovered and in scope) |
 |--------|--------------------------------|-----------------------------------------------|
-| EDR / MDR | New incidents, signals, detections, or SOC events; unexpected or disabled security software; unknown remote-access tools | Huntress: `huntress_incidents_list` / `_get`, `huntress_signals_list` / `_get`, `huntress_agents_list` / `_get`. SentinelOne: `list_alerts`, `search_alerts`, `get_alert`, `purple_ai`, `list_inventory_items`. Blackpoint: `blackpoint_detections_list` / `_get`, `blackpoint_assets_list` / `_search`. RocketCyber: `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_list_agents`, `rocketcyber_list_apps`, `rocketcyber_get_defender`. Blumira: `blumira_findings_list` / `_get`. |
+| EDR / MDR | New incidents, signals, detections, or SOC events; unexpected or disabled security software; unknown remote-access tools | Huntress: `huntress_incidents_list` / `_get`, `huntress_signals_list` / `_get`, `huntress_agents_list` / `_get`. SentinelOne: `list_alerts`, `search_alerts`, `get_alert`, `search_inventory_items`. Blackpoint: `blackpoint_detections_list`, `blackpoint_assets_list` / `_search`. RocketCyber: `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_list_agents`, `rocketcyber_list_apps`, `rocketcyber_get_defender`. Blumira findings: use the list/get tools discovery returns, if any (Conduit has no tier entry for Blumira). |
 | Identity | New or unusual sign-ins, MFA changes, new admins, new enterprise apps, inbox or forwarding changes on accounts the platform could reach | `cipp_list_user_signin_logs`, `cipp_list_audit_logs`, `cipp_bec_check`, `cipp_list_enterprise_apps`, `cipp_list_users`, `cipp_list_mfa_users`. Graph: `microsoft_graph_suggest_queries` then `microsoft_graph_get` only for tenant-bound sign-in, risky-user, or directory-audit candidates. SaaS Alerts: `saas_alerts_events_query` for the one mapped customer, never the cross-tenant advanced form. |
-| Endpoint inventory | Installed software, Windows services, and activity that can corroborate unexpected tools, services, or scheduled tasks | `ncentral_get_device_assets`, `datto_get_device_audit` with `auditType=software` only, `kaseya_vsa_get_software_inventory`, `immybot_computers_inventory`, `rocketcyber_list_apps`, `ninjaone_devices_services`, `ninjaone_devices_activities`. If `datto_get_device_audit` is callable, never also call `datto_run_quickjob`. |
-| Network / cloud | Unexpected tunnels, peers, rules, or activity in the same window | Meraki (Cisco's hosted server exposes only `semantic_search` and `execute_api`): use `semantic_search` to find the read-only MX L3 firewall-rule and VPN-status capabilities, then call `execute_api` for those named reads only. Auvik: `auvik_devices_list`, `auvik_alerts_list`, `auvik_networks_list`. Domotz: `domotz_devices_list`, `domotz_network_topology`. runZero: `runzero_assets_list` / `_search`, `runzero_services_list`. ThreatLocker: `threatlocker_computers_list` / `_get`, `threatlocker_audit_search`. Azure: the `monitor` and `resourcehealth` namespaces, described by capability, scoped to the client's subscription or workspace. |
+| Endpoint inventory | Installed software, Windows services, and activity that can corroborate unexpected tools, services, or scheduled tasks | `ncentral_get_device_assets`, `datto_get_device_audit` with `auditType=software` only, `rocketcyber_list_apps`, `ninjaone_devices_services`, `ninjaone_devices_activities`. Kaseya VSA and ImmyBot software inventory only if discovery returns a read tool (Conduit's tier table lists only their write tools). If `datto_get_device_audit` is callable, never also call `datto_run_quickjob`. |
+| Network / cloud | Unexpected tunnels, peers, rules, or activity in the same window | Auvik: `auvik_devices_list`, `auvik_alerts_list`, `auvik_networks_list`. Domotz: `domotz_devices_list`, `domotz_network_topology`. ThreatLocker: `threatlocker_computers_list`, `threatlocker_audit_search`. Meraki, runZero, and Azure Monitor are not usable here (see [connected-sources.md](references/connected-sources.md)); record them as gaps. |
 | Implicated platform (supporting, not sufficient) | Version / patch state, unexpected tasks or scripts, unexpected access groups, unexpected admins | Only the read tools in [connected-sources.md](references/connected-sources.md). |
 
-Do not retrieve password values. For credential *inventory*, names and
-locations only: `hudu_list_asset_passwords` (not `hudu_get_asset_password`),
-IT Glue `search_passwords` (not `get_password`), and Keeper
-`list_secrets` / `search_secrets` / `list_folders` (never `unmask` or
-`get_secret` unless the operator explicitly asks for a single named
-record, which this workflow does not require). Do not call
-`ncentral_get_registration_token`.
+Do not retrieve password values, and do not call any vault tool that
+can return them. Conduit tiers the Hudu and IT Glue password tools
+(`hudu_list_asset_passwords`, `hudu_get_asset_password`,
+`search_passwords`, `get_password`) as admin credential reads, and
+Keeper's `search_secrets` and `get_secret` likewise, so none of them
+belong in this workflow. For credential *inventory*, use documentation
+reads instead (`hudu_list_assets`, IT Glue `search_flexible_assets` and
+`search_configurations`) and Keeper `list_secrets` / `list_folders`
+(titles and folders only). Do not call `ncentral_get_registration_token`.
 
 ## Correlate, do not declare
 

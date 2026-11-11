@@ -10,7 +10,7 @@ already cited from `SKILL.md`.
 ### N-central
 
 Allowed: `ncentral_server_info`, `ncentral_validate_token`,
-`ncentral_health`, `ncentral_status`, `ncentral_navigate`,
+`ncentral_health`, `ncentral_status`,
 `ncentral_list_service_orgs`, `ncentral_list_customers`,
 `ncentral_get_customer`, `ncentral_list_sites`, `ncentral_get_site`,
 `ncentral_list_org_units`, `ncentral_get_org_unit`,
@@ -62,12 +62,11 @@ or disk audits in this workflow.
 
 ### Kaseya VSA
 
-Allowed: `kaseya_vsa_list_organizations`, `kaseya_vsa_list_machine_groups`,
-`kaseya_vsa_list_agents`, `kaseya_vsa_get_agent`,
-`kaseya_vsa_get_software_inventory`, `kaseya_vsa_list_procedures`,
-`kaseya_vsa_list_alarms`. Optional if already in scope:
-`kaseya_vsa_get_hardware_inventory`, `kaseya_vsa_get_patch_status`,
-`kaseya_vsa_list_tickets`.
+Conduit's tier table classifies only `kaseya_vsa_run_procedure` and
+`kaseya_vsa_deploy_patches_now` (both admin writes). Its list/get tools
+have no tier entry, so the gateway may deny them. Use a read tool only
+if `conduit__search_tools` returns one; otherwise record Kaseya VSA as
+a gap.
 
 Never call `kaseya_vsa_run_procedure` or `kaseya_vsa_deploy_patches_now`.
 
@@ -85,14 +84,16 @@ Never call `ninjaone_devices_reboot`, `ninjaone_alerts_reset`, or
 
 ## Identity, vault, and other supporting reads
 
-Identity and EDR tools are listed in `SKILL.md`. Additional
-name-only credential inventory:
+Identity and EDR tools are listed in `SKILL.md`. Credential
+inventory uses documentation and titles only:
 
-- Hudu: `hudu_list_asset_passwords` only. Never
-  `hudu_get_asset_password` or any password create/update/delete tool.
-- IT Glue: `search_passwords` (metadata only). Never `get_password`.
-- Keeper: `list_secrets`, `search_secrets`, `list_folders`. Never
-  unmask or retrieve secret values for this workflow.
+- Hudu: `hudu_list_assets` and `hudu_list_asset_layouts`. Never any
+  `hudu_*_asset_password` tool (admin credential reads).
+- IT Glue: `search_flexible_assets`, `search_configurations`. Never
+  `search_passwords` or `get_password` (admin credential reads).
+- Keeper: `list_secrets`, `list_folders`. Never `search_secrets` (admin;
+  it matches on stored values), `get_secret`, `get_field`, or
+  `get_totp_code`.
 
 ## Known catalog gaps
 
@@ -108,6 +109,16 @@ still do not invent names.
 - Bitdefender GravityZone and ESET PROTECT are live Conduit connectors
   but have no marketplace pack on `origin/main`. If
   `conduit__search_tools` finds them, use only their list/get read tools.
-- No Fortinet, Palo Alto, or SonicWall firewall plugin. Meraki MX L3
-  get is the curated firewall read; Auvik and Domotz can identify
-  devices, not manage those vendors' rulesets.
+- No Fortinet, Palo Alto, or SonicWall firewall plugin. Auvik and
+  Domotz can identify devices, not read those vendors' rulesets.
+- Meraki is not used. Cisco's hosted server offers `semantic_search`
+  and `execute_api`; Conduit tiers `execute_api` as admin because the
+  caller names the capability (an unbounded passthrough), which this
+  read-only workflow does not call. Check Meraki firewall and VPN
+  history in the Meraki dashboard.
+- runZero and Azure `monitor` / `resourcehealth` have no entry in
+  Conduit's tier table, so the gateway denies them. Treat runZero
+  discovery and Azure activity as gaps.
+- Kaseya VSA read tools, ImmyBot computer inventory, and Blumira are
+  likewise unclassified (see above); use them only if discovery returns
+  them.

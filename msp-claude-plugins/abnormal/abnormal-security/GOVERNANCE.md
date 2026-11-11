@@ -31,9 +31,13 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change mailbox or Abnormal state. Safe for autonomous agents. | `abnormal_threats_list`, `abnormal_threats_get`, `abnormal_messages_list`, `abnormal_messages_get`, `abnormal_cases_list`, `abnormal_cases_get`, `abnormal_abuse_list`, `abnormal_navigate`, `abnormal_status` |
+| **Read** | Cannot change mailbox or Abnormal state. Safe for autonomous agents. | `abnormal_threats_list`, `abnormal_threats_get`, `abnormal_messages_list`, `abnormal_messages_get`, `abnormal_cases_list`, `abnormal_cases_get`, `abnormal_abuse_list`, `abnormal_status` |
 | **Write** | Empty. Abnormal exposes no reversible bookkeeping write — the only mutating tool acts directly on customer mailboxes. | — |
 | **Destructive** | Moves real mail into or out of a user's mailbox. | `abnormal_remediation_manage` |
+
+`abnormal_navigate` is not listed because Conduit refuses it for every
+caller and leaves it out of the tool list. `conduit__my_access` replaces
+it. `abnormal_status` is deliberately kept.
 
 ### The tier depends on an argument, not on the tool name
 

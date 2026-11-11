@@ -31,9 +31,13 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change Salesbuildr state. Safe for autonomous agents. | `salesbuildr_companies_list`, `salesbuildr_companies_get`, `salesbuildr_contacts_list`, `salesbuildr_contacts_get`, `salesbuildr_opportunities_list`, `salesbuildr_opportunities_get`, `salesbuildr_products_list`, `salesbuildr_products_get`, `salesbuildr_quotes_list`, `salesbuildr_quotes_get`, `salesbuildr_status`, `salesbuildr_navigate` |
+| **Read** | Cannot change Salesbuildr state. Safe for autonomous agents. | `salesbuildr_companies_list`, `salesbuildr_companies_get`, `salesbuildr_contacts_list`, `salesbuildr_contacts_get`, `salesbuildr_opportunities_list`, `salesbuildr_opportunities_get`, `salesbuildr_products_list`, `salesbuildr_products_get`, `salesbuildr_quotes_list`, `salesbuildr_quotes_get`, `salesbuildr_status` |
 | **Write** | Creates or modifies records. Reversible in principle, but see below. | `salesbuildr_companies_create`, `salesbuildr_companies_update`, `salesbuildr_contacts_create`, `salesbuildr_contacts_update`, `salesbuildr_opportunities_create`, `salesbuildr_opportunities_update`, `salesbuildr_quotes_create` |
 | **Destructive** | Removes records and everything hanging off them. | `salesbuildr_companies_delete`, `salesbuildr_contacts_delete` |
+
+`salesbuildr_navigate` is not listed because Conduit refuses it for every
+caller and leaves it out of the tool list. `conduit__my_access` replaces it.
+`salesbuildr_status` is deliberately kept.
 
 `salesbuildr_quotes_create` is deliberately **not** in the destructive tier.
 The API creates a priced quote record; it does not publish or email it — that

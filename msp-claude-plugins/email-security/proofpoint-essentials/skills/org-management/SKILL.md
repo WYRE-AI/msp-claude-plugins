@@ -22,9 +22,11 @@ An Essentials **organization** is one customer tenant under an MSP's
 reseller account: a set of domains, mailbox-protected users, enabled
 features, a license allocation, and a package tier. This skill covers the
 org-level lifecycle and everything scoped to the org as a whole rather than
-to an individual mailbox. Every call here requires the org's regional pod —
-resolve it first with `proofpoint_essentials_endpoint_resolve` (see the
-`api-patterns` skill) before calling any tool below.
+to an individual mailbox. Every tool below is sent to the region set on the
+Conduit connection (`us1` when left blank), and every org-scoped tool
+identifies the org by its primary domain. If you don't know which region
+hosts an org, check with `proofpoint_essentials_endpoint_discover` first
+(see the `api-patterns` skill).
 
 ## Anti-triggers
 
@@ -62,20 +64,25 @@ it does not itself complete DNS verification.
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `proofpoint_essentials_org_get` | Get an org's details and its domain list | `org_name` |
-| `proofpoint_essentials_org_activate` | Reactivate a deactivated org | `org_name` |
-| `proofpoint_essentials_org_deactivate` | Suspend an org (reversible) | `org_name` |
-| `proofpoint_essentials_org_delete` | Permanently delete an org | `org_name` |
-| `proofpoint_essentials_domains_list` | List an org's domains | `org_name` |
-| `proofpoint_essentials_domains_create` | Add one or more domains to an org | `org_name`, `domains[]` |
-| `proofpoint_essentials_domains_update` | Update a domain's settings | `org_name`, `domain_name` |
-| `proofpoint_essentials_domains_delete` | Remove a domain from an org | `org_name`, `domain_name` |
-| `proofpoint_essentials_features_get` | View which product features are enabled for an org | `org_name` |
-| `proofpoint_essentials_features_update` | Enable/disable product features for an org | `org_name`, `features` |
-| `proofpoint_essentials_licensing_get` | View an org's license allocation | `org_name` |
-| `proofpoint_essentials_licensing_update` | Modify an org's license allocation | `org_name`, `license_count` |
-| `proofpoint_essentials_package_update` | Change an org's subscription/package tier | `org_name`, `package` |
-| `proofpoint_essentials_token_create` | Mint an Odin-based SSO token for console handoff | `org_name` |
+| `proofpoint_essentials_org_get` | Get an org's details and its domain list | `domain` |
+| `proofpoint_essentials_org_set_active` | Activate (`isActive: true`) or deactivate (`isActive: false`) an org. Deactivation is reversible | `domain`, `isActive` |
+| `proofpoint_essentials_org_delete` | Permanently delete an org | `domain` |
+| `proofpoint_essentials_domains_list` | List an org's domains | `orgDomain` |
+| `proofpoint_essentials_domains_create` | Add one or more domains to an org | `orgDomain`, `domains[]` |
+| `proofpoint_essentials_domains_update` | Update a domain's settings | `orgDomain`, `domain`, `data` |
+| `proofpoint_essentials_domains_delete` | Remove a domain from an org | `orgDomain`, `domain` |
+| `proofpoint_essentials_features_get` | View which product features are enabled for an org | `orgDomain` |
+| `proofpoint_essentials_features_update` | Enable/disable product features for an org | `orgDomain`, `features` |
+| `proofpoint_essentials_licensing_get` | View an org's license allocation | `orgDomain` |
+| `proofpoint_essentials_licensing_update` | Modify an org's license allocation | `orgDomain`, `licensing` |
+| `proofpoint_essentials_package_update` | Change an org's subscription/package tier | `orgDomain`, `package` |
+| `proofpoint_essentials_token_create` | Mint an Odin-based SSO token for console handoff | `body` (optional) |
+
+The org tools take the org's primary domain as `domain`; the domain,
+feature, licensing and package tools take it as `orgDomain`. The two
+irreversible deletes (`org_delete`, `domains_delete`) ask for confirmation.
+A client that cannot be prompted, such as one connected through Conduit,
+must pass `confirm_destructive_action: true` instead.
 
 `proofpoint_essentials_domains_create` follows the batch-create / 207
 Multi-Status pattern described in `api-patterns` when given more than one
@@ -105,7 +112,8 @@ all-or-nothing.
 
 1. Call `proofpoint_essentials_org_get` to confirm current state and record
    it (domains, features, license count) in case of later disputes.
-2. Call `proofpoint_essentials_org_deactivate` with the org name.
+2. Call `proofpoint_essentials_org_set_active` with the org's `domain` and
+   `isActive: false`.
 3. Confirm mail flow protection has stopped by re-checking org state — do
    not assume the call succeeded silently; verify.
 
@@ -117,7 +125,7 @@ all-or-nothing.
    `proofpoint_essentials_org_get`, `proofpoint_essentials_domains_list`,
    `proofpoint_essentials_licensing_get` — since none of it is recoverable
    afterward.
-3. Call `proofpoint_essentials_org_delete` with the org name.
+3. Call `proofpoint_essentials_org_delete` with the org's `domain`.
 
 ### Upgrade a customer's package tier
 
@@ -141,9 +149,9 @@ all-or-nothing.
 
 | Symptom | Cause | Resolution |
 |---------|-------|------------|
-| 404 on `org_get` for an org you can see in the console | Wrong regional pod | Re-run endpoint discovery |
+| 404 on `org_get` for an org you can see in the console | The connection's region is not the one that hosts the org | Check with `proofpoint_essentials_endpoint_discover`, then set that region on the Conduit connection |
 | `domains_create` 207 with a failed entry | Domain already claimed by another org, or malformed domain string | Inspect the per-item error; do not resubmit the whole batch |
-| `org_deactivate` succeeds but mail still appears to flow | DNS/MX still pointed at Essentials from the customer's registrar | Deactivation stops Essentials-side processing; it does not change the customer's DNS |
+| `org_set_active` with `isActive: false` succeeds but mail still appears to flow | DNS/MX still pointed at Essentials from the customer's registrar | Deactivation stops Essentials-side processing; it does not change the customer's DNS |
 | `package_update` succeeds but a feature is still unavailable | Feature requires a separate toggle | Call `proofpoint_essentials_features_update` explicitly — package tier changes seat/feature *eligibility*, not necessarily every feature's on/off state |
 | `org_delete` returns 403 | Credential is a customer-org admin, not a reseller admin | Org deletion typically requires reseller-level admin credentials |
 

@@ -31,6 +31,9 @@ confirmed or strongly suspected.
 
 ## Anti-triggers
 
+- **Unsanctioned AI software across endpoints and Entra apps:** use
+  `secops-pack-shadow-ai` for the per-client inventory comparison.
+
 - **A vendor's own case record** — Abnormal tracks investigations as
   cases with their own remediation actions; use
   `abnormal-security-cases` when working inside one. It has no separate

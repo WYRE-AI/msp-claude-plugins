@@ -25,14 +25,16 @@ have connected, but none of them are individually required:
 - **MDR / SOC-managed** — Blackpoint Cyber, RocketCyber
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
+- **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
+  installed-software source, both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
 - **Email security** — Mimecast, Proofpoint, Abnormal, Ironscales, Avanan, SpamTitan
 - **PSA** (for ticket cross-referencing and response timelines) and an
   **RMM** (for device inventory and, when investigating a management-plane
   incident, supporting reads from the implicated platform)
-- **Network / cloud (optional)** — Meraki, Auvik, Domotz, runZero, or Azure
-  Monitor, used to corroborate tunnels, peers, and activity that the
-  implicated platform cannot attest on its own
+- **Network (optional)** — Auvik, Domotz, or ThreatLocker, used to
+  corroborate tunnels, peers, and activity that the implicated platform
+  cannot attest on its own
 
 A client with only one of these connected still gets a useful result — the
 pack reports what it can verify and calls out, explicitly, what it can't.
@@ -44,6 +46,8 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   `containment-playbooks` (first-response sequences for compromised account,
   malware/ransomware, BEC, and exposed credential), `bec-response`
   (detection and response sequence for Business Email Compromise),
+  `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
+  with unsanctioned-tool findings and explicit coverage gaps), and
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
   or suspected compromise)

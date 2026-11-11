@@ -1,7 +1,7 @@
 ---
 description: Full health check for one Proofpoint Essentials customer org
-argument-hint: "<org_name>"
-arguments: [org_name]
+argument-hint: "<org_domain>"
+arguments: [org_domain]
 ---
 
 # Org Health Check
@@ -12,9 +12,9 @@ flow trend.
 
 ## Prerequisites
 
-- Proofpoint Essentials reseller or org-admin credentials configured (see
-  the `api-patterns` skill)
-- MCP tools `proofpoint_essentials_endpoint_resolve`,
+- Proofpoint Essentials reseller or org-admin credentials configured on the
+  Conduit connection (see the `api-patterns` skill)
+- MCP tools `proofpoint_essentials_endpoint_discover`,
   `proofpoint_essentials_org_get`, `proofpoint_essentials_domains_list`,
   `proofpoint_essentials_users_list`, `proofpoint_essentials_features_get`,
   `proofpoint_essentials_licensing_get`, and
@@ -24,37 +24,39 @@ flow trend.
 
 1. **Resolve and confirm the org**
 
-   Call `proofpoint_essentials_endpoint_resolve` for the org, then
-   `proofpoint_essentials_org_get` against the resolved region. Note
+   Call `proofpoint_essentials_endpoint_discover` with the org's `domain`,
+   then `proofpoint_essentials_org_get` with the same `domain`. Note
    lifecycle state — a deactivated org is the single most important finding
    and should lead the report if present.
 
 2. **Check domains**
 
-   Call `proofpoint_essentials_domains_list`. Note the domain count and flag
-   anything that looks unverified or stale (the API call itself doesn't
-   report DNS-verification status directly — cross-check against what the
-   customer expects to see filtered).
+   Call `proofpoint_essentials_domains_list` with `orgDomain`. Note the
+   domain count and flag anything that looks unverified or stale (the API
+   call itself doesn't report DNS-verification status directly —
+   cross-check against what the customer expects to see filtered).
 
 3. **Check users**
 
-   Call `proofpoint_essentials_users_list`. Note the user count per domain
-   if the customer has more than one domain, since an unexpectedly low
-   count on one domain often means onboarding stalled partway through.
+   Call `proofpoint_essentials_users_list` with `orgDomain`. Note the user
+   count per domain if the customer has more than one domain, since an
+   unexpectedly low count on one domain often means onboarding stalled
+   partway through.
 
 4. **Check features and licensing**
 
    Call `proofpoint_essentials_features_get` and
-   `proofpoint_essentials_licensing_get`. Flag any mismatch between the
-   customer's expected package and what's actually enabled or licensed.
+   `proofpoint_essentials_licensing_get` with `orgDomain`. Flag any mismatch
+   between the customer's expected package and what's actually enabled or
+   licensed.
 
 5. **Check recent mail flow**
 
-   Call `proofpoint_essentials_reporting_get` with `direction=inbound` and
-   again with `direction=outbound` for a recent window (start with the last
-   7 days). A flat-zero series for an active org with verified domains is a
-   stronger warning sign than the org/domain/user checks above will
-   individually surface.
+   Call `proofpoint_essentials_reporting_get` with `orgDomain` and
+   `start`/`end` covering a recent window (start with the last 7 days).
+   Read the inbound and outbound series from the response. A flat-zero
+   series for an active org with verified domains is a stronger warning
+   sign than the org/domain/user checks above will individually surface.
 
 6. **Synthesize**
 
@@ -70,18 +72,18 @@ flow trend.
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|--------------|
-| org_name | string | Yes | The Proofpoint Essentials org name to check |
+| org_domain | string | Yes | The Proofpoint Essentials org's primary domain |
 
 ## Examples
 
 ```
-/org-health-check --org_name "acmecorp"
+/org-health-check --org_domain "acmecorp.com"
 ```
 
 ## Error Handling
 
-- **Endpoint resolution fails:** Not a known org under this reseller's
-  account — confirm the exact org name via `/search-org` first.
+- **Endpoint discovery fails:** Not a known org domain under this
+  reseller's account — confirm it via `/search-org` first.
 - **Reporting call returns an empty series for an active org:** Don't
   report this as "no issues found" — an active org with verified domains
   and zero mail flow is itself the finding. Check domain verification
