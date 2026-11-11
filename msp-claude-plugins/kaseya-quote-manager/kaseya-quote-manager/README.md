@@ -12,21 +12,20 @@ distribution workflows.
 
 ## Configuration
 
-This plugin is served through the WYRE MCP gateway. Provide your Kaseya Quote
-Manager API key as the gateway credential.
+This plugin is served through [Conduit](https://conduit.wyre.ai) (vendor slug `kaseya-quote-manager`). Connect Kaseya Quote Manager once in the Conduit web UI; Conduit stores the key and injects it on every request as `X-Kaseya-Quote-Manager-API-Key`, and the MCP server sends it upstream as the `apiKey` header. Nothing is set on the client.
 
-### Environment Variables
+### Conduit Connection
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `X_KQM_APIKEY` | Yes | API key from Quote Manager (Settings > API). The gateway maps it to the upstream `apiKey` header. |
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Key | Yes | API key from Quote Manager (Settings > API) |
 
 ### Obtaining Credentials
 
 1. Log in to Kaseya Quote Manager
 2. Navigate to **Settings > API**
 3. Generate a new API key
-4. Provide the key as the `X_KQM_APIKEY` gateway credential
+4. Paste the key into the **API Key** field of the Kaseya Quote Manager connection in Conduit
 
 ## Read-Only
 

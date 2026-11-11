@@ -1,11 +1,11 @@
 {
   "name": "avanan",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Claude plugins for Checkpoint Harmony Email & Collaboration (Avanan) - email security, threat detection, quarantine actions, sender exceptions",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

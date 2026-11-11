@@ -271,4 +271,3 @@ Search by name first, then use the ID for subsequent operations:
 - `/search-tickets` - Search tickets for a customer
 - `/search-assets` - Search customer assets
 - `/create-ticket` - Create a ticket for this customer
-- `/list-alerts` - View alerts for customer assets

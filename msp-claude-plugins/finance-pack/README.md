@@ -23,7 +23,7 @@ hardcoded to one PSA or one accounting platform.
 Churn Scanner needs a client roster from at least one connected PSA it supports
 (Autotask, HaloPSA, ConnectWise PSA, Syncro, or SuperOps). A roster from any
 other source cannot start the scan. Every signal source is optional, including
-CrewHu surveys and RMM last-seen/online data. The table above describes the
+CrewHu or SmileBack surveys and RMM last-seen/online data. The table above describes the
 other finance workflows' connection needs.
 
 Every skill, agent, and command in this pack discovers what's actually

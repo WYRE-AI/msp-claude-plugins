@@ -27,37 +27,18 @@ Domotz authenticates via an API key:
 2. Navigate to **User Menu > API Keys**
 3. Generate a new API key
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export DOMOTZ_API_KEY="your-api-key"
-export DOMOTZ_REGION="us-east-1"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Domotz once in Conduit (**Connections → Domotz**, slug `domotz`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DOMOTZ_API_KEY` | Yes | | API key from User Menu > API Keys |
-| `DOMOTZ_REGION` | No | `us-east-1` | API region (`us-east-1` or `eu-central-1`) |
-| `DOMOTZ_MCP_URL` | No | `https://conduit.wyre.ai/v1/domotz/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `DOMOTZ_MCP_URL` to your gateway's endpoint:
-
-```
-DOMOTZ_MCP_URL=https://your-gateway-domain/v1/domotz/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org -> Settings -> Integrations -> Domotz -> Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "DOMOTZ_MCP_URL": "https://your-gateway-domain/v1/domotz/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http domotz https://your-gateway-domain/v1/domotz/mcp`. The gateway then holds the Domotz credentials, not the client.
 
 ## Installation
 
@@ -65,18 +46,9 @@ DOMOTZ_MCP_URL=https://your-gateway-domain/v1/domotz/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API key and select your region, and you're done.
 
-### Self-Hosted (Docker)
-
-Run the Domotz MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variables:
-
-```bash
-export DOMOTZ_API_KEY="your-api-key"
-export DOMOTZ_REGION="us-east-1"
-```
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install domotz@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Domotz in the Conduit web UI (`/connect/domotz`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -122,7 +94,7 @@ export DOMOTZ_REGION="us-east-1"
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via the Domotz Portal
 - Use the minimum scope necessary for your use case
 - Monitor API usage in the Domotz audit log
@@ -139,9 +111,9 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `DOMOTZ_API_KEY` is set correctly
+1. Check the Domotz connection in Conduit (**Connections → Domotz**): reconnect it, or re-enter the credentials
 2. Check that the API key has not been revoked
-3. Verify `DOMOTZ_REGION` matches your account's region
+3. Verify the Region on the Domotz connection in Conduit matches your account's region
 4. Regenerate credentials at Domotz Portal > User Menu > API Keys
 
 ### Region Mismatch

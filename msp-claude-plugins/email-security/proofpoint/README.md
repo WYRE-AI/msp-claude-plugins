@@ -53,56 +53,19 @@ to use instead.
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Proofpoint once in Conduit (**Connections → Proofpoint**, slug `proofpoint`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "PROOFPOINT_SERVICE_PRINCIPAL": "your-service-principal",
-    "PROOFPOINT_SERVICE_SECRET": "your-service-secret"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "PROOFPOINT_SERVICE_PRINCIPAL": "your-service-principal",
-    "PROOFPOINT_SERVICE_SECRET": "your-service-secret"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `PROOFPOINT_SERVICE_PRINCIPAL` | Yes | | Service principal from Proofpoint TAP dashboard |
-| `PROOFPOINT_SERVICE_SECRET` | Yes | | Service secret associated with the principal |
-| `PROOFPOINT_MCP_URL` | No | `https://proofpoint-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Service Principal |
+| API Key |
+| Cluster URL |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `PROOFPOINT_MCP_URL` to your gateway's endpoint:
-
-```
-PROOFPOINT_MCP_URL=https://your-gateway-domain/v1/proofpoint/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > Proofpoint > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "PROOFPOINT_MCP_URL": "https://your-gateway-domain/v1/proofpoint/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http proofpoint https://your-gateway-domain/v1/proofpoint/mcp`. The gateway then holds the Proofpoint credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -122,7 +85,7 @@ PROOFPOINT_MCP_URL=https://your-gateway-domain/v1/proofpoint/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+To check the credentials directly against Proofpoint before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test TAP API access (using curl)
@@ -138,9 +101,12 @@ curl -u "${PROOFPOINT_SERVICE_PRINCIPAL}:${PROOFPOINT_SERVICE_SECRET}" \
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install proofpoint@msp-claude-plugins
+```
+
+Then connect Proofpoint in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 

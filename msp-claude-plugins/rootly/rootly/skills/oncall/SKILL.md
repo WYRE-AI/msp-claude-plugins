@@ -2,8 +2,8 @@
 name: "Rootly On-Call"
 description: >
   Rootly on-call visibility built on the get_oncall_handoff_summary,
-  get_oncall_shift_metrics, get_shift_incidents, and check_oncall_health_risk
-  tools: schedule and rotation coverage, structured shift handoffs, per-shift
+  get_oncall_shift_metrics, get_shift_incidents, get_oncall_schedule_summary
+  and check_responder_availability tools: schedule and rotation coverage, structured shift handoffs, per-shift
   incident scoping, shift metric fields, and the burnout risk signals.
 when_to_use: >-
   When handing off or reviewing an on-call shift, checking schedule coverage, or assessing
@@ -52,7 +52,10 @@ does not author rotations or decide who gets paged.
 | `get_oncall_handoff_summary` | Current/next on-call status plus incidents from the current shift | Schedule or team context |
 | `get_oncall_shift_metrics` | Shift metrics grouped by user, team, or schedule | `group_by`, time range |
 | `get_shift_incidents` | Incidents filtered to a specific shift timeframe | `severity`, `status`, `tags`, time range |
-| `check_oncall_health_risk` | Detects workload health risk in scheduled responders | Schedule/team context |
+| `get_oncall_schedule_summary` | Schedule coverage summary | Schedule or team, time range |
+| `check_responder_availability` | Whether specific users are scheduled on-call in a date range | `user_ids` (numeric, comma-separated; resolve emails with `list_users`), `start_date`, `end_date` |
+
+The hosted Rootly MCP no longer serves a dedicated health-risk tool; derive workload risk from `get_oncall_shift_metrics` and `get_shift_incidents` as below.
 
 ## Key Concepts
 
@@ -67,7 +70,7 @@ A **shift** is a period assigned to one or more responders in a schedule. Rootly
 
 ### Health Risk Indicators
 
-`check_oncall_health_risk` analyses patterns that correlate with burnout:
+Workload risk is derived, not returned by a single tool. Compute these from `get_oncall_shift_metrics` (grouped by `user`) and `get_shift_incidents` for the period:
 
 | Indicator | Description |
 |-----------|-------------|
@@ -102,13 +105,13 @@ Before handing off to the incoming responder:
 
 ### Reviewing Shift Health (Manager / Team Lead)
 
-1. Call `check_oncall_health_risk` for the current schedule or team
-2. Review flagged risks (high volume, late-night pages, repeat alerts)
+1. Call `get_oncall_shift_metrics` with `group_by=user` for the last 30 days, and `get_shift_incidents` for the same window
+2. Flag the risk indicators above (high volume, late-night pages, repeat alerts, short recovery time)
 3. If risk is elevated:
    - Consider temporarily adding a secondary responder
    - Review the repeat alerts for systemic fixes (runbook gaps, noisy alerts)
    - Check if open incidents can be deprioritised to reduce cognitive load
-4. Call `get_oncall_shift_metrics` grouped by `user` to identify individual responder load imbalances
+4. Call `check_responder_availability` for the flagged users to see whether they are scheduled again soon
 
 ### Weekly On-Call Retrospective
 
@@ -122,7 +125,7 @@ Before handing off to the incoming responder:
 
 Before a major deployment or planned maintenance window:
 
-1. Call `check_oncall_health_risk` to confirm responders are not already overloaded
+1. Call `get_oncall_shift_metrics` (`group_by=user`, last 7 days) to confirm responders are not already overloaded, and `check_responder_availability` for the people you need during the window
 2. Call `get_oncall_handoff_summary` to confirm the on-call team is available during the deployment window
 3. If health risk is elevated, consider scheduling the deployment during a lighter shift
 

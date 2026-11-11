@@ -15,6 +15,15 @@ when_to_use: >-
 
 # Microsoft 365 Security Posture
 
+## Conduit tools
+
+The Conduit `m365` connector (hidden, personal-only) has no tools for this area. Through Conduit, reads go to the `microsoft-graph` connector as `microsoft_graph_get` (admin tier, read-only; use `microsoft_graph_suggest_queries` to build the query) and fleet operations go to the `cipp` connector:
+
+- MFA registration: `cipp_list_mfa_users`; Conditional Access: `cipp_list_conditional_access_policies`, `cipp_list_named_locations`
+- Sign-ins and audit: `cipp_list_user_signin_logs`, `cipp_list_audit_logs`
+- Compromise check: `cipp_bec_check` (admin tier, read-only); response: `cipp_revoke_sessions`, `cipp_reset_password`, `cipp_reset_mfa`, `cipp_disable_user` (all admin-tier writes in Conduit, so the caller needs admin access to the `cipp` connector)
+- Secure Score: `cipp_get_secure_score`, `cipp_list_secure_score_controls`
+
 ## Overview
 
 Security checks are among the most high-value tasks an MSP can perform in a customer's M365 tenant. Account compromises, inadequate MFA coverage, and misconfigured mail rules are the leading causes of M365 security incidents. This skill covers the key checks and indicators that separate a secure tenant from a vulnerable one.

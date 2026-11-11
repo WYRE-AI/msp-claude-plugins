@@ -15,11 +15,19 @@ This plugin provides Claude with deep knowledge of Blumira, enabling:
 
 > **Note:** This plugin supports both read and write operations. Resolution, assignment, and commenting actions modify finding state. Review actions before confirming.
 
-## Prerequisites
+## Configuration
 
-### JWT Token
+### Connect through Conduit
 
-Blumira MCP authenticates with a JWT token:
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Blumira once in Conduit at `https://conduit.wyre.ai/connect/blumira` (**Connections → Blumira**, slug `blumira`); Conduit stores the credentials and injects them on every request. Then install the `wyre-gateway` plugin (or add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client); your client signs in to Conduit with OAuth.
+
+| Conduit connection field |
+|---|
+| JWT Token |
+
+Conduit checks the token against the Blumira API when you save the connection.
+
+### Obtaining the JWT Token
 
 1. Log into your Blumira Portal
 2. Navigate to **Settings > API Access**
@@ -27,67 +35,19 @@ Blumira MCP authenticates with a JWT token:
 
 > **IMPORTANT:** For MSP operations, the token must have MSP-level permissions. Org-level tokens only access the single organization.
 
-### Environment Variables
-
-```bash
-export BLUMIRA_JWT_TOKEN="your-jwt-token"
-```
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `BLUMIRA_JWT_TOKEN` | Yes | | JWT token from Settings > API Access |
-| `BLUMIRA_MCP_URL` | No | `https://conduit.wyre.ai/v1/blumira/mcp` | MCP server URL — override to use a self-hosted gateway |
-
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `BLUMIRA_MCP_URL` to your gateway's endpoint:
-
-```
-BLUMIRA_MCP_URL=https://your-gateway-domain/v1/blumira/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Blumira → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "BLUMIRA_MCP_URL": "https://your-gateway-domain/v1/blumira/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http blumira https://your-gateway-domain/v1/blumira/mcp`. The gateway then holds the Blumira credentials, not the client. In that case install only this plugin (`/plugin install blumira@msp-claude-plugins`) and skip `wyre-gateway` and the Conduit connection.
 
 ## Installation
 
-### Via MCP Gateway (Recommended)
-
-Use the [MCP Gateway](https://conduit.wyre.ai) to connect — just paste your JWT token and you're done.
-
-### Self-Hosted (Docker)
-
-Add to your MCP configuration:
-
-```json
-{
-  "mcpServers": {
-    "blumira": {
-      "type": "http",
-      "url": "https://conduit.wyre.ai/v1/blumira/mcp",
-      "headers": {
-        "X-Blumira-JWT-Token": "${BLUMIRA_JWT_TOKEN}"
-      }
-    }
-  }
-}
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install wyre-gateway@msp-claude-plugins
+/plugin install blumira@msp-claude-plugins
 ```
 
-### Claude Code CLI
-
-Install as a Claude Code plugin:
-
-```bash
-claude plugin add /path/to/msp-claude-plugins/blumira/blumira
-```
+Then connect Blumira in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
@@ -148,7 +108,7 @@ claude plugin add /path/to/msp-claude-plugins/blumira/blumira
 ### Token Handling
 
 - Never commit JWT tokens to version control
-- Use environment variables for all credentials
+- Keep the token in the Conduit connection, not in local files or environment variables
 - Rotate tokens periodically via the Blumira Portal
 - Use minimum necessary scope — org tokens for single-org, MSP tokens only when needed
 - Monitor token usage in the Blumira audit log
@@ -164,7 +124,7 @@ Review all write actions before confirming. Use investigation and triage command
 
 ### HTTP Transport Security
 
-When using the MCP Gateway, connections are secured via HTTPS. If self-hosting:
+Connections to Conduit are secured via HTTPS. If self-hosting:
 - Use TLS for all API communication
 - Restrict access to trusted networks
 - Use authentication at the proxy layer
@@ -175,15 +135,15 @@ When using the MCP Gateway, connections are secured via HTTPS. If self-hosting:
 
 If you see "401 Unauthorized" or "Forbidden":
 1. Verify the JWT token has not expired
-2. Check that `BLUMIRA_JWT_TOKEN` is set correctly
-3. Regenerate the token from Blumira Portal > Settings > API Access
+2. Open the Blumira connection in Conduit (`https://conduit.wyre.ai/connect/blumira`) and check the JWT Token
+3. Regenerate the token from Blumira Portal > Settings > API Access, then update the Conduit connection
 4. For MSP endpoints, ensure the token has MSP-level permissions
 
 ### MSP Endpoints Return 403
 
 MSP endpoints (`/msp/*`) require MSP-scoped credentials:
 1. Verify your account has MSP access enabled
-2. Generate an MSP-level JWT token
+2. Generate an MSP-level JWT token and save it on the Conduit connection
 3. Org-level tokens cannot access MSP endpoints
 
 ### Filtering Syntax Errors

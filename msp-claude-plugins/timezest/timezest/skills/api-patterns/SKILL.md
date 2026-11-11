@@ -29,14 +29,10 @@ TimeZest uses an API token passed via header.
 |--------|-------|
 | `X-Timezest-Api-Token` | The raw TimeZest API token |
 
-The gateway maps the environment variable `TIMEZEST_API_TOKEN` onto
-the `X-Timezest-Api-Token` header automatically. Internally, the
-TimeZest MCP server forwards this to TimeZest as a `Bearer` token — you
-do not need to add the `Bearer ` prefix yourself.
-
-```bash
-export TIMEZEST_API_TOKEN="your-timezest-token"
-```
+The token is stored on the TimeZest connection in Conduit, which
+injects it as `X-Timezest-Api-Token` on every request; nothing is set on
+the client. The TimeZest MCP server forwards it to TimeZest as a
+`Bearer` token, so you do not add the `Bearer ` prefix yourself.
 
 ## Navigation Tools
 
