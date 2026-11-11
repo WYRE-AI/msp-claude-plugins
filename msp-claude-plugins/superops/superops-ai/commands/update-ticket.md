@@ -1,201 +1,83 @@
 ---
 description: Update fields on an existing SuperOps.ai ticket
-argument-hint: "<ticket_id> [status] [priority] [technician_id] [due_date] [category]"
-arguments: [ticket_id, status, priority, technician_id, due_date, category]
+argument-hint: "<ticket_id> [status] [priority] [technician_id] [tech_group_id] [category] [resolution_code]"
+arguments: [ticket_id, status, priority, technician_id, tech_group_id, category, resolution_code]
 ---
 
 # Update SuperOps.ai Ticket
 
-Update fields on an existing SuperOps.ai ticket including status, priority, technician assignment, and due date.
+Change a ticket's status, priority, assignment, category or resolution code.
 
-## Prerequisites
+## How this runs through Conduit
 
-- Valid SuperOps.ai API token configured
-- Ticket must exist in SuperOps.ai
-- User must have ticket update permissions
+Use the typed tool `superops_tickets_update` (write tier). It sends
+`updateTicket`. The tool also accepts `subject`, `impact`, `urgency`,
+`subcategory` and `requestType`. The schema has no due-date field on a ticket.
 
 ## Steps
 
-1. **Validate ticket exists**
-   - Query ticket by ID or ticket number
-   - Return error if ticket not found
-   - Display current ticket state
+1. **Read the ticket.** Call `superops_tickets_get` and show its current
+   `status`, `priority` and `technician`.
+2. **Resolve the assignee.** If the user gave a name, find the `userId` with
+   `superops_technicians_list` (`search`) or the `groupId` with
+   `superops_technicians_groups`.
+3. **Update.**
 
-2. **Validate status transition**
-   - Check if status change is allowed
-   - Valid transitions:
-     - Open -> In Progress, Pending, Resolved, Closed
-     - In Progress -> Open, Pending, Resolved, Closed
-     - Pending -> Open, In Progress, Resolved, Closed
-     - Resolved -> Closed, Open (reopen)
-     - Closed -> Open (reopen)
-
-3. **Resolve technician if needed**
-   - If technician_id looks like a name/email, search for technician
-   - Validate technician exists and has access to ticket's client
-
-4. **Update the ticket**
-   ```graphql
-   mutation updateTicket($input: UpdateTicketInput!) {
-     updateTicket(input: $input) {
-       ticketId
-       ticketNumber
-       subject
-       status
-       priority
-       assignee {
-         id
-         name
-       }
-       dueDate
-       lastUpdatedTime
-     }
-   }
-   ```
-
-   Variables:
    ```json
    {
-     "input": {
-       "ticketId": "<ticket_id>",
-       "status": "<status>",
-       "priority": "<priority>",
-       "assignee": { "id": "<technician_id>" },
-       "dueDate": "<due_date>"
-     }
+     "ticketId": "<ticket_id>",
+     "status": "<status>",
+     "priority": "<priority>",
+     "technicianId": "<technician user id>"
    }
    ```
 
-5. **Return updated ticket details**
-   - Show changed fields
-   - Display ticket URL
+   Send only the fields that change. Status and priority must match the tenant's
+   lists. Stock statuses are Open, On Hold, Resolved, Closed and Waiting on third
+   party. When resolving, also set `resolutionCode`. Put free-text resolution
+   notes in `/add-ticket-note`.
+4. **Report** the before and after values for each changed field.
 
 ## Parameters
 
-| Parameter | Type | Required | Default | Description |
-|-----------|------|----------|---------|-------------|
-| ticket_id | string | Yes | - | Ticket ID or ticket number |
-| status | string | No | - | Open, In Progress, Pending, Resolved, Closed |
-| priority | string | No | - | Low, Medium, High, Critical |
-| technician_id | string | No | - | Technician ID to assign |
-| due_date | datetime | No | - | Due date (ISO 8601 format) |
-| category | string | No | - | Ticket category |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| ticket_id | string | Yes | Ticket ID |
+| status | string | No | The tenant's status value |
+| priority | string | No | The tenant's priority value |
+| technician_id | string | No | Technician `userId` |
+| tech_group_id | string | No | Technician group `groupId` |
+| category | string | No | The tenant's category value |
+| resolution_code | string | No | Stock values: Permanent Fix, Workaround, Resolved by Requester, Exception |
 
 ## Examples
 
-### Update Status
-
 ```
-/update-ticket TICK-12345 --status "In Progress"
-```
-
-### Change Priority
-
-```
-/update-ticket TICK-12345 --priority Critical
-```
-
-### Assign Technician and Update Status
-
-```
-/update-ticket TICK-12345 --status "In Progress" --technician_id tech_789
-```
-
-### Set Due Date
-
-```
-/update-ticket TICK-12345 --due_date "2026-02-10T17:00:00Z"
-```
-
-### Full Update
-
-```
-/update-ticket TICK-12345 --status "In Progress" --priority High --technician_id tech_789 --due_date "2026-02-10"
+/update-ticket 88213 --status "On Hold"
+/update-ticket 88213 --priority Critical --tech_group_id 40021
+/update-ticket 88213 --status Resolved --resolution_code "Permanent Fix"
 ```
 
 ## Output
 
 ```
-Ticket Updated Successfully
-
-Ticket Number: TICK-12345
-Subject: Email not working - Outlook disconnected
-
-Changes Applied:
-  Status: Open -> In Progress
+Ticket #1042 updated
+  Status:   Open -> On Hold
   Priority: Medium -> High
-  Assigned To: (none) -> John Smith
-  Due Date: (none) -> 2026-02-10 17:00 UTC
-
-Last Updated: 2026-02-04 14:32:00
-
-URL: https://yourcompany.superops.ai/tickets/abc123-def456
-```
-
-## curl Example
-
-```bash
-curl -X POST 'https://yourcompany.superops.ai/graphql' \
-  -H 'Authorization: Bearer YOUR_API_TOKEN' \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "query": "mutation updateTicket($input: UpdateTicketInput!) { updateTicket(input: $input) { ticketId ticketNumber status priority assignee { id name } lastUpdatedTime } }",
-    "variables": {
-      "input": {
-        "ticketId": "ticket-uuid-here",
-        "status": "In Progress",
-        "priority": "HIGH",
-        "assignee": { "id": "tech-uuid" }
-      }
-    }
-  }'
+  Technician: (none) -> John Smith
 ```
 
 ## Error Handling
 
-### Ticket Not Found
-
-```
-Ticket not found: "TICK-99999"
-
-Please verify the ticket ID or number is correct.
-Use /search-tickets to find the correct ticket.
-```
-
-### Invalid Status Transition
-
-```
-Invalid status transition: Closed -> In Progress
-
-Valid transitions from "Closed":
-- Open (reopen ticket)
-
-Did you mean to reopen the ticket?
-```
-
-### Technician Not Found
-
-```
-Technician not found: "john.smith"
-
-Did you mean one of these?
-- John Smith (ID: tech_123)
-- Johnny Smith (ID: tech_456)
-```
-
-### API Errors
-
 | Error | Resolution |
 |-------|------------|
-| Invalid ticket ID | Verify ticket exists using /search-tickets |
-| Invalid status | Use: Open, In Progress, Pending, Resolved, Closed |
-| Invalid priority | Use: Low, Medium, High, Critical |
-| Permission denied | Check user permissions for this ticket |
+| Ticket not found | Look it up with `superops_tickets_list` |
+| Unknown status or priority | Read the tenant's lists with `getAllFields(input: "TICKET")` through `superops_custom_query` |
+| Technician not found | Search with `superops_technicians_list` |
 | Rate limited | Wait and retry (800 req/min limit) |
 
 ## Related Commands
 
 - `/create-ticket` - Create a new ticket
-- `/add-ticket-note` - Add a note to ticket
-- `/log-time` - Log time entry on ticket
-- `/list-assets` - View client assets
+- `/add-ticket-note` - Add a note
+- `/log-time` - Log a worklog entry

@@ -1,9 +1,10 @@
 ---
 name: "SuperOps Runbooks"
 description: >
-  SuperOps.ai RMM script automation: script types and OS targeting, run-as contexts,
-  execution priority, parameterized arguments, single-asset and batch execution,
-  recurring schedules, execution status polling, and exit-code interpretation.
+  SuperOps.ai RMM script automation: finding scripts in the library (all, or by
+  OS), their run-time variables, running one script on one asset with
+  runScriptOnAsset through the admin-tier GraphQL passthrough, and what the API
+  cannot do (batch runs, schedules, reading execution results back).
 when_to_use: >-
   When listing, executing, monitoring, and managing automated scripts on assets. Use when:
   superops runbook, superops script, run script superops, execute script, automation superops,
@@ -14,7 +15,10 @@ when_to_use: >-
 
 ## Overview
 
-SuperOps.ai provides automation through scripts (runbooks) that execute on managed assets — maintenance tasks, remediation actions, data collection, and custom automation. This skill covers script discovery, execution, scheduling, and result monitoring.
+SuperOps.ai runs automation as scripts (runbooks) on managed assets: maintenance
+tasks, remediation, data collection and custom automation. This skill covers
+finding a script and running it on an asset through the SuperOps API, and the
+parts that only the SuperOps console can do.
 
 ## Anti-triggers
 
@@ -33,99 +37,93 @@ SuperOps.ai provides automation through scripts (runbooks) that execute on manag
 - **Choosing the targets** — asset selection and online checks are
   `superops-assets`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `superops_assets_get` | read | Confirm the target asset is online before a run |
+| `superops_custom_query` | admin | `getScriptList` / `getScriptListByType` (no typed script tool exists) |
+| `superops_custom_mutation` | admin | `runScriptOnAsset` |
+
+Both passthrough tools are admin tier. Running a script changes a client's
+machine, so a named human approver must see the exact mutation and variables
+before every run. Never send one from a scheduled or unattended agent.
+
 ## Key Concepts
 
-A **script** is a stored definition (`scriptId`, type, content, parameters, timeout, `osType`).
-Executing it creates an **execution instance** identified by `actionConfigId`; running it
-across multiple assets creates a **batch** identified by `batchId`. Scheduling produces a
-`scheduleId`.
+A **script** is a stored library entry with these fields: `scriptId`, `name`,
+`description`, `language`, `runAs`, `timeOut`, `runTimeVariables`, `tags` and
+`readMe`. `runAs` and `timeOut` belong to the stored script. They cannot be
+overridden per run.
 
-| Script type | Target OS |
-|------|-------------|
+Running a script returns an `actionConfigId`. The API has no query that reads
+that run's status, exit code or output, so check the result in the SuperOps
+console.
+
+| Language | Typical target |
+|----------|----------------|
 | **PowerShell** | Windows automation |
 | **Batch** | Simple Windows tasks |
 | **Bash** | macOS/Linux automation |
 | **Python** | Cross-platform automation |
 
-| Run As | When to use |
-|--------|-------------|
-| **System** | Admin tasks, service management |
-| **Logged-in User** | User-specific tasks |
-| **Specific User** | Specific permission needs |
-
-| Priority | Behavior |
-|----------|-------------|
-| **Immediate** | Execute as soon as possible |
-| **Normal** | Standard queue priority |
-| **Low** | Execute during low activity |
-
-See [references/fields.md](references/fields.md) for the complete script and execution
-field reference.
-
-## Common Workflows
-
-### Remediation
-
-1. Query the asset (`getAsset`) and confirm `status` is Online — a script queued to an
-   offline asset stays Pending until it checks in.
-2. `runScriptOnAsset` with `priority: "Immediate"` and the required `arguments`.
-3. Capture the returned `actionConfigId`.
-4. Poll `getScriptExecution` until status reaches a terminal value, then read `exitCode`,
-   `output`, and `error`.
-
-### Maintenance Window
-
-Use `runScriptOnAssets` with an `assetIds` array, a future `scheduledTime` (UTC ISO 8601),
-and `priority: "Low"`. Track the returned `batchId` with `getBatchExecution`, which
-reports `successCount` / `failedCount` alongside per-asset results.
-
-### Data Collection
-
-1. `getAssetList` filtered by client and `status: "Online"` to build the asset list.
-2. Feed those `assetId` values into `runScriptOnAssets` with the collection script.
-3. Read results from `getBatchExecution`.
-
-### Recurring Schedules
-
-`scheduleScript` accepts a `recurrence` object (`type`, `interval`, `daysOfWeek`) alongside
-`scheduledTime`. Omit `recurrence` for a one-time run.
+See [references/fields.md](references/fields.md) for the field reference.
 
 ## API Patterns
 
 | Operation | GraphQL |
 |-----------|---------|
 | List scripts | `getScriptList(input: ListInfoInput!)` |
-| List by OS | `getScriptListByType(input: ScriptListByTypeInput!)` |
-| Get script | `getScript(input: ScriptIdentifierInput!)` |
-| Run on one asset | `runScriptOnAsset(input: RunScriptInput!)` |
-| Run on many assets | `runScriptOnAssets(input: RunScriptOnAssetsInput!)` |
-| Schedule | `scheduleScript(input: ScheduleScriptInput!)` |
-| Execution status | `getScriptExecution(input: ScriptExecutionInput!)` |
-| Batch results | `getBatchExecution(input: BatchExecutionInput!)` |
-| Execution history | `getScriptExecutionHistory(input: ScriptExecutionHistoryInput!)` |
+| List by OS | `getScriptListByType(input: ScriptListByTypeInput!)` (`type`: `WINDOWS`, `MAC`, …) |
+| Run on one asset | `runScriptOnAsset(input: RunScriptInput!)` (`assetId`, `scriptId`, `scriptArguments`) |
 
-Arguments are passed as an array of `{ name, value }` objects — values are strings even
-for numeric parameters. `runAs` must be supplied per execution; it is not inherited from
-the script definition's `runAs` default unless omitted.
+That is the whole script surface. The schema has no `getScript`,
+`runScriptOnAssets`, `scheduleScript`, `getScriptExecution`, `getBatchExecution`
+or `getScriptExecutionHistory`.
 
-See [references/api.md](references/api.md) for the complete operation catalog with
-request/response examples and end-to-end workflow queries.
+`scriptArguments` is a list of `{ name, value }` pairs, one for each name in the
+script's `runTimeVariables`. Each value is a string, even for numeric
+parameters.
+
+See [references/api.md](references/api.md) for the documents and variables.
+Every example there validates against the schema.
+
+## Common Workflows
+
+### Remediation
+
+1. Call `superops_assets_get`. Continue only if `status` is online and
+   `lastCommunicatedTime` is recent. A run queued to an offline asset waits until
+   the asset checks in.
+2. Find the script with `getScriptList` or `getScriptListByType`, and read its
+   `runTimeVariables`.
+3. Show the operator the `runScriptOnAsset` mutation and variables. Send it
+   through `superops_custom_mutation` once they approve.
+4. Report the returned `actionConfigId`. Ask the operator to confirm the outcome
+   in the console. Record the outcome on the ticket with
+   `superops_tickets_add_note`.
+
+### Several assets, or a maintenance window
+
+The API cannot run a script in a batch or on a schedule. Get approval for the
+full list of assets, then send one `runScriptOnAsset` per asset. To run at a
+future time, schedule the job in the SuperOps console.
 
 ## Error Handling
 
 | Error | Cause | Resolution |
 |-------|-------|------------|
-| Script not found | Invalid script ID | Verify script exists |
-| Asset offline | Cannot reach asset | Wait for asset to come online |
-| Timeout exceeded | Script ran too long | Increase timeout or optimize script |
-| Permission denied | Insufficient RunAs rights | Check execution context |
-| Parameter missing | Required param not provided | Add required arguments |
+| Script not found | Invalid script ID | Re-list with `getScriptList` |
+| Asset offline | Cannot reach asset | Wait for the asset to check in |
+| Missing argument | A `runTimeVariables` name has no value | Add it to `scriptArguments` |
+| Permission denied | Token lacks script rights | Check the API user's role |
 | Rate limit exceeded | Over 800 req/min | Implement backoff |
 
 ### Exit Code Interpretation
 
-Exit code 137 means the agent killed the script on timeout, not that the script failed
-on its own — check the script's `timeout` before assuming a logic error.
+Exit codes are only visible in the SuperOps console. Exit code 137 means the
+agent killed the script on timeout, not that the script failed by itself. Check
+the script's `timeOut` before you assume a logic error.
 
 ```javascript
 // Common exit codes
@@ -146,40 +144,15 @@ function interpretExitCode(code) {
 }
 ```
 
-### Execution Status Handling
-
-Execution is asynchronous — the mutation returns before the script runs. Poll until the
-status is one of `Success`, `Failed`, `Timeout`, or `Cancelled`.
-
-```javascript
-// Poll for execution completion
-async function waitForExecution(actionConfigId, maxWaitMs = 300000) {
-  const startTime = Date.now();
-  const pollInterval = 5000;
-
-  while (Date.now() - startTime < maxWaitMs) {
-    const result = await getScriptExecution({ actionConfigId });
-
-    if (['Success', 'Failed', 'Timeout', 'Cancelled'].includes(result.status)) {
-      return result;
-    }
-
-    await sleep(pollInterval);
-  }
-
-  throw new Error('Execution timed out waiting for completion');
-}
-```
-
 ## Best Practices
 
-1. **Test scripts first** - Test on a single asset before bulk execution
-2. **Use parameters** - Make scripts reusable with parameters
-3. **Set appropriate timeouts** - Prevent hung scripts
+1. **Test scripts first** - Test on a single asset before running across a fleet
+2. **Use parameters** - Make scripts reusable with run-time variables
+3. **Set appropriate timeouts** - On the stored script, to prevent hung runs
 4. **Handle errors in scripts** - Return meaningful exit codes
-5. **Use scheduling** - Run maintenance during off-hours
-6. **Monitor batch executions** - Track success/failure rates
-7. **Document scripts** - Clear descriptions and parameter docs
+5. **Schedule in the console** - Maintenance windows are a console feature
+6. **Record outcomes** - Note each run's result on the ticket
+7. **Document scripts** - Clear descriptions and `readMe`
 8. **Check asset status** - Verify online before running
 
 ## Related Skills

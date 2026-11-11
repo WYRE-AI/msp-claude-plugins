@@ -1,10 +1,64 @@
-# SuperOps.ai Client GraphQL Operations
+# SuperOps.ai Client, Site and Contact Operations
 
-Complete operation catalog for clients, sites, and contacts (requesters).
+Every GraphQL document on this page validates against `schema/superops.graphql`
+in [superops-mcp](https://github.com/WYRE-AI/superops-mcp). Every operation except
+`createClientV2` is also listed in the published API reference at
+<https://developer.superops.com/msp>. The docs still list only the older
+`createClient`, which the live schema marks deprecated in favour of
+`createClientV2`.
 
-## Client Operations
+Reads go through the typed tools where one exists. Everything else needs
+`superops_custom_query` or `superops_custom_mutation`. Both are admin tier and need
+a human approver who has seen the exact document and variables.
 
-### Create a Client
+## Typed tools
+
+| Tool | GraphQL it sends | Arguments |
+|------|------------------|-----------|
+| `superops_clients_list` | `getClientList(input: ListInfoInput!)` | `stage`, `status`, `page`, `pageSize` |
+| `superops_clients_search` | `getClientList`, with `name` or `emailDomains` `contains` the term | `query`, `page`, `pageSize` |
+| `superops_clients_get` | `getClient(input: { accountId })` | `accountId` |
+
+```json
+{ "tool": "superops_clients_search", "arguments": { "query": "acme" } }
+```
+
+## Fields
+
+`Client` has these fields: `accountId`, `name`, `stage`, `status`,
+`emailDomains`, `createdTime` and `updatedTime`. These fields are `JSON`:
+`accountManager`, `primaryContact`, `secondaryContact`, `hqSite`,
+`technicianGroups` and `customFields`. Select a JSON field by name with no
+sub-selection. A client has no `website`, `phone`, `industry`, `address` or
+`sites` field. Addresses belong to sites, which are listed below.
+
+`stage` and `status` are tenant-configured strings. `status` depends on `stage`.
+A stock tenant has these values:
+
+| Stage | Statuses |
+|-------|----------|
+| Active | Paid, Unpaid |
+| Prospect | New, Negotiation, Won, Lost |
+| Inactive | (none) |
+
+To read the tenant's own lists, send this query through `superops_custom_query`:
+
+```graphql
+query clientFields {
+  getAllFields(input: "CLIENT") {
+    columnName
+    options { value }
+    parentField { columnName }
+  }
+}
+```
+
+## Clients
+
+### Create (custom mutation)
+
+`createClientV2` requires `hqSite`, so the client and its headquarters site are
+created together.
 
 ```graphql
 mutation createClientV2($input: CreateClientInputV2!) {
@@ -14,165 +68,37 @@ mutation createClientV2($input: CreateClientInputV2!) {
     stage
     status
     emailDomains
-    createdTime
+    hqSite
   }
 }
 ```
 
-**Variables:**
 ```json
 {
   "input": {
     "name": "Acme Corporation",
-    "stage": "Customer",
-    "status": "Active",
-    "emailDomains": ["acme.com", "acmecorp.com"],
-    "website": "https://www.acme.com",
-    "phone": "+1-555-123-4567",
-    "industry": "Technology",
-    "employeeCount": 150,
-    "address": {
-      "street": "123 Main Street",
+    "stage": "Active",
+    "status": "Paid",
+    "emailDomains": ["acme.com"],
+    "accountManager": { "userId": "<technician user id>" },
+    "hqSite": {
+      "name": "Head Office",
+      "working24x7": true,
+      "timezoneCode": "America/Los_Angeles",
+      "line1": "123 Main Street",
       "city": "San Francisco",
-      "state": "CA",
-      "country": "USA",
-      "postalCode": "94102"
-    },
-    "accountManager": {
-      "email": "sarah.tech@msp.com"
+      "postalCode": "94102",
+      "countryCode": "US"
     }
   }
 }
 ```
 
-### List Clients
+`working24x7` and `timezoneCode` are required. If the site has business hours,
+set `working24x7: false` and pass `businessHour`. This is a list of
+`{ day, start, end }`, where `day` is a `DayOfWeek` value such as `MONDAY`.
 
-```graphql
-query getClientList($input: ListInfoInput!) {
-  getClientList(input: $input) {
-    clients {
-      accountId
-      name
-      stage
-      status
-      emailDomains
-      phone
-      website
-      industry
-      employeeCount
-      accountManager {
-        id
-        name
-        email
-      }
-      primaryContact {
-        id
-        name
-        email
-      }
-      createdTime
-      lastUpdatedTime
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-**Variables - Active Customers:**
-```json
-{
-  "input": {
-    "first": 50,
-    "filter": {
-      "stage": "Customer",
-      "status": "Active"
-    },
-    "orderBy": {
-      "field": "name",
-      "direction": "ASC"
-    }
-  }
-}
-```
-
-**Variables - Search by Name:**
-```json
-{
-  "input": {
-    "first": 20,
-    "filter": {
-      "name": {
-        "contains": "Acme"
-      }
-    }
-  }
-}
-```
-
-### Get Single Client
-
-```graphql
-query getClient($input: ClientIdentifierInput!) {
-  getClient(input: $input) {
-    accountId
-    name
-    stage
-    status
-    emailDomains
-    website
-    phone
-    industry
-    employeeCount
-    annualRevenue
-    address {
-      street
-      city
-      state
-      country
-      postalCode
-    }
-    accountManager {
-      id
-      name
-      email
-      phone
-    }
-    primaryContact {
-      id
-      name
-      email
-      phone
-    }
-    sites {
-      id
-      name
-      address
-      isDefault
-    }
-    customFields {
-      name
-      value
-    }
-    createdTime
-    lastUpdatedTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "accountId": "client-uuid-here"
-  }
-}
-```
-
-### Update a Client
+### Update (custom mutation)
 
 ```graphql
 mutation updateClient($input: UpdateClientInput!) {
@@ -181,245 +107,234 @@ mutation updateClient($input: UpdateClientInput!) {
     name
     stage
     status
-    lastUpdatedTime
+    accountManager
+    primaryContact
+    updatedTime
   }
 }
 ```
 
-**Variables:**
 ```json
 {
   "input": {
-    "accountId": "client-uuid",
-    "stage": "Customer",
-    "status": "Active",
-    "accountManager": {
-      "id": "tech-uuid"
-    },
-    "customFields": [
-      {
-        "name": "Contract Type",
-        "value": "Managed Services"
-      },
-      {
-        "name": "Monthly Retainer",
-        "value": "5000"
-      }
+    "accountId": "<account id>",
+    "stage": "Active",
+    "status": "Paid",
+    "accountManager": { "userId": "<technician user id>" },
+    "primaryContact": { "userId": "<client user id>" }
+  }
+}
+```
+
+### Delete and restore (custom mutation)
+
+All three take a list of `{ accountId }`, even for one client. A soft delete can
+be reversed with `restoreClients`. A hard delete is permanent.
+
+```graphql
+mutation softDeleteClients($input: [ClientIdentifierInput!]!) {
+  softDeleteClients(input: $input)
+}
+```
+
+```graphql
+mutation restoreClients($input: [ClientIdentifierInput!]!) {
+  restoreClients(input: $input)
+}
+```
+
+```graphql
+mutation hardDeleteClients($input: [ClientIdentifierInput!]!) {
+  hardDeleteClients(input: $input)
+}
+```
+
+```json
+{ "input": [{ "accountId": "<account id>" }] }
+```
+
+## Sites
+
+### List a client's sites (custom query)
+
+```graphql
+query getClientSiteList($input: GetClientSiteListInput!) {
+  getClientSiteList(input: $input) {
+    sites {
+      id
+      name
+      hq
+      timezoneCode
+      working24x7
+      line1
+      city
+      stateCode
+      postalCode
+      countryCode
+      contactNumber
+    }
+    listInfo {
+      page
+      pageSize
+      totalCount
+      hasMore
+    }
+  }
+}
+```
+
+```json
+{ "input": { "clientId": "<account id>", "listInfo": { "page": 1, "pageSize": 50 } } }
+```
+
+### Create a site (custom mutation)
+
+```graphql
+mutation createClientSite($input: CreateClientSiteInput!) {
+  createClientSite(input: $input) {
+    id
+    name
+    timezoneCode
+    client
+  }
+}
+```
+
+```json
+{
+  "input": {
+    "client": { "accountId": "<account id>" },
+    "name": "San Francisco Office",
+    "working24x7": true,
+    "timezoneCode": "America/Los_Angeles",
+    "line1": "456 Market Street",
+    "city": "San Francisco",
+    "postalCode": "94103",
+    "countryCode": "US",
+    "contactNumber": "+15552345678"
+  }
+}
+```
+
+### Update or delete a site (custom mutation)
+
+```graphql
+mutation updateClientSite($input: UpdateClientSiteInput!) {
+  updateClientSite(input: $input) {
+    id
+    name
+    hq
+  }
+}
+```
+
+```json
+{ "input": { "id": "<site id>", "name": "SF Office (Market St)" } }
+```
+
+```graphql
+mutation deleteClientSites($input: [ClientSiteIdentifierInput!]!) {
+  deleteClientSites(input: $input)
+}
+```
+
+## Contacts (client users)
+
+SuperOps calls a client's contacts *client users*. Ticket inputs refer to them as
+`requester: { userId }`.
+
+### List a client's contacts (custom query)
+
+```graphql
+query getClientUserList($input: GetClientUserListInput!) {
+  getClientUserList(input: $input) {
+    userList {
+      userId
+      name
+      email
+      contactNumber
+      role
+    }
+    listInfo {
+      page
+      pageSize
+      totalCount
+      hasMore
+    }
+  }
+}
+```
+
+```json
+{ "input": { "clientId": "<account id>", "listInfo": { "page": 1, "pageSize": 50 } } }
+```
+
+### Create a contact (custom mutation)
+
+`role` is required. Read the requester role IDs first:
+
+```graphql
+query requesterRoles {
+  getRequesterRoleList {
+    roleId
+    name
+  }
+}
+```
+
+```graphql
+mutation createClientUser($input: CreateClientUserInput!) {
+  createClientUser(input: $input) {
+    userId
+    name
+    email
+  }
+}
+```
+
+```json
+{
+  "input": {
+    "firstName": "John",
+    "lastName": "Smith",
+    "email": "john.smith@acme.com",
+    "contactNumber": "+15553456789",
+    "role": { "roleId": "<requester role id>" },
+    "addAssociations": [
+      { "client": { "accountId": "<account id>" }, "site": { "id": "<site id>" } }
     ]
   }
 }
 ```
 
-### Delete Clients
+To make the contact the client's primary contact, follow up with `updateClient`
+and set `primaryContact: { "userId": "<new user id>" }`.
 
-**Soft Delete (Recoverable):**
-```graphql
-mutation softDeleteClients($input: DeleteClientsInput!) {
-  softDeleteClients(input: $input)
-}
-```
-
-**Hard Delete (Permanent):**
-```graphql
-mutation hardDeleteClients($input: DeleteClientsInput!) {
-  hardDeleteClients(input: $input)
-}
-```
-
-**Restore Deleted Clients:**
-```graphql
-mutation restoreClients($input: RestoreClientsInput!) {
-  restoreClients(input: $input)
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "accountIds": ["client-uuid-1", "client-uuid-2"]
-  }
-}
-```
-
-## Site Management
-
-### Create a Site
+### Update a contact (custom mutation)
 
 ```graphql
-mutation createSite($input: CreateSiteInput!) {
-  createSite(input: $input) {
-    id
+mutation updateClientUser($input: UpdateClientUserInput!) {
+  updateClientUser(input: $input) {
+    userId
     name
-    address {
-      street
-      city
-      state
-      country
-      postalCode
-    }
-    isDefault
-    client {
-      accountId
-      name
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "clientId": "client-uuid",
-    "name": "San Francisco Office",
-    "address": {
-      "street": "456 Market Street",
-      "city": "San Francisco",
-      "state": "CA",
-      "country": "USA",
-      "postalCode": "94103"
-    },
-    "isDefault": false,
-    "phone": "+1-555-234-5678",
-    "timezone": "America/Los_Angeles"
-  }
-}
-```
-
-### List Client Sites
-
-```graphql
-query getClientSites($input: ClientSitesInput!) {
-  getClientSites(input: $input) {
-    sites {
-      id
-      name
-      address {
-        street
-        city
-        state
-        country
-        postalCode
-      }
-      phone
-      timezone
-      isDefault
-      assetCount
-      contactCount
-    }
-    listInfo {
-      totalCount
-    }
-  }
-}
-```
-
-### Update a Site
-
-```graphql
-mutation updateSite($input: UpdateSiteInput!) {
-  updateSite(input: $input) {
-    id
-    name
-    isDefault
-    lastUpdatedTime
-  }
-}
-```
-
-## Contact Management
-
-### Create a Contact (Requester)
-
-```graphql
-mutation createRequester($input: CreateRequesterInput!) {
-  createRequester(input: $input) {
-    id
-    firstName
-    lastName
     email
-    phone
-    title
-    client {
-      accountId
-      name
-    }
-    site {
-      id
-      name
-    }
+    contactNumber
+    updatedTime
   }
 }
 ```
 
-**Variables:**
 ```json
-{
-  "input": {
-    "clientId": "client-uuid",
-    "firstName": "John",
-    "lastName": "Smith",
-    "email": "john.smith@acme.com",
-    "phone": "+1-555-345-6789",
-    "title": "IT Manager",
-    "siteId": "site-uuid",
-    "isPrimaryContact": true
-  }
-}
+{ "input": { "userId": "<client user id>", "contactNumber": "+15550001111" } }
 ```
 
-### List Client Contacts
+## Workflow: onboarding
 
-```graphql
-query getClientRequesters($input: ClientRequestersInput!) {
-  getClientRequesters(input: $input) {
-    requesters {
-      id
-      firstName
-      lastName
-      email
-      phone
-      title
-      site {
-        id
-        name
-      }
-      isPrimaryContact
-      isVIP
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-    }
-  }
-}
-```
+1. `createClientV2` creates the client and its HQ site in one call.
+2. Use `createClientSite` for each additional location.
+3. Use `createClientUser` for each contact, associated with the client and a site.
+4. Call `updateClient` to set `primaryContact`, and `accountManager` if it was not
+   set on create.
 
-### Update a Contact
-
-```graphql
-mutation updateRequester($input: UpdateRequesterInput!) {
-  updateRequester(input: $input) {
-    id
-    firstName
-    lastName
-    email
-    phone
-    lastUpdatedTime
-  }
-}
-```
-
-## Client Onboarding Mutation Shape
-
-```graphql
-mutation onboardClient($client: CreateClientInputV2!, $site: CreateSiteInput!, $contact: CreateRequesterInput!) {
-  createClientV2(input: $client) {
-    accountId
-    name
-  }
-}
-```
-
-Then create site and primary contact.
+Each step is a separate `superops_custom_mutation` call, and each needs its own
+approval.

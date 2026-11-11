@@ -1,32 +1,41 @@
 # SuperOps.ai Ticket Field Reference
 
-## Core Fields
+These tables list the fields on the `Ticket` type and its create and update
+inputs in `schema/superops.graphql`
+([superops-mcp](https://github.com/WYRE-AI/superops-mcp)).
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `ticketId` | ID | System | Auto-generated unique identifier |
-| `ticketNumber` | String | System | Human-readable ticket number |
-| `subject` | String | Yes | Brief issue summary |
-| `description` | String | No | Detailed description |
-| `ticketType` | Enum | No | Incident, Service Request, Problem, Change |
-| `requestType` | Enum | No | Classification type |
-| `source` | Enum | No | How ticket was created (email, portal, phone) |
+## Read fields (`Ticket`)
 
-## Assignment Fields
+| Field | Type | Description |
+|-------|------|-------------|
+| `ticketId` | ID | Ticket ID. Tools take this |
+| `displayId` | String | Human-facing ticket number |
+| `subject` | String | Summary |
+| `status`, `priority`, `impact`, `urgency` | String | Tenant-configured values |
+| `category`, `subcategory`, `cause`, `subcause` | String | Classification |
+| `resolutionCode` | String | Set when resolving |
+| `requestType` | String | Incident, Service Request and similar. Replaces the deprecated `ticketType` |
+| `source` | String | How the ticket was created |
+| `approvalStatus` | String | Approval state |
+| `createdTime` / `updatedTime` | String | Record timestamps |
+| `firstResponseDueTime` / `firstResponseTime` / `firstResponseViolated` | String / String / Boolean | First-response SLA |
+| `resolutionDueTime` / `resolutionTime` / `resolutionViolated` | String / String / Boolean | Resolution SLA |
+| `worklogTimespent` | String | Logged time |
+| `client`, `site`, `requester`, `additionalRequester`, `followers`, `techGroup`, `technician`, `sla`, `customFields` | JSON | Select by name only |
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `client` | ClientIdentifier | Yes | Client/account reference |
-| `site` | SiteIdentifier | No | Site within client |
-| `requester` | RequesterIdentifier | No | Person who reported |
-| `assignee` | TechnicianIdentifier | No | Assigned technician |
-| `techGroup` | TechGroupIdentifier | No | Technician group |
+A ticket has no `ticketNumber`, `assignee`, `dueDate` or readable `description`.
 
-## Classification Fields
+## Write fields (`CreateTicketInput` / `UpdateTicketInput`)
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `priority` | Enum | No | Critical, High, Medium, Low |
-| `impact` | Enum | No | Impact level |
-| `urgency` | Enum | No | Urgency level |
-| `category` | CategoryIdentifier | No | Service category |
+| Field | Shape | Notes |
+|-------|-------|-------|
+| `subject` | String | Required on create |
+| `client` | `{ accountId }` | Required on create |
+| `source` | `TicketSource` enum | Required on create. `superops_tickets_create` defaults it to `INTEGRATION` |
+| `description` | String | Create only. Write-only |
+| `site` | `{ id }` | |
+| `requester` | `{ userId }` | A client user |
+| `technician` | `{ userId }` | |
+| `techGroup` | `{ groupId }` | |
+| `status`, `priority`, `impact`, `urgency`, `category`, `subcategory`, `requestType`, `resolutionCode` | String | Must match the tenant's values |
+| `addAssets` | `[{ assetId }]` | Create only. Not exposed by `superops_tickets_create` |

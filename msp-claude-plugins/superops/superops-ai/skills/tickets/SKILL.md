@@ -41,19 +41,24 @@ SuperOps.ai tickets are the core unit of service delivery in the PSA. Every clie
 | `superops_technicians_list` / `superops_technicians_get` / `superops_technicians_groups` | read | Resolve an assignee or group |
 | `superops_technicians_lookups` | read | Roles, teams, designations, business functions and technician groups as `{id, name}` |
 
-Anything without a typed tool goes through `superops_custom_query` (read-only GraphQL) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
+Anything without a typed tool goes through `superops_custom_query` (admin tier; send query documents only, since the tool does not stop a mutation) or `superops_custom_mutation` (arbitrary GraphQL mutation); both are `admin` tier and need human approval. The GraphQL examples in this skill show what those passthrough calls send.
 
 ## Ticket Status Values
 
-| Status | Description | Business Logic |
-|--------|-------------|----------------|
-| **Open** | Newly created or reopened | Default for new tickets |
-| **In Progress** | Actively being worked | Technician assigned |
-| **Pending** | Waiting for external action | SLA clock may pause |
-| **Resolved** | Issue addressed | Awaiting confirmation |
-| **Closed** | Ticket complete | No further action |
+Status is a tenant-configured string, not an enum. A stock tenant ships with these
+values. Read the tenant's own list with `getAllFields(input: "TICKET")`.
+
+| Status | Description |
+|--------|-------------|
+| **Open** | Newly created or reopened. The default for new tickets |
+| **On Hold** | Paused |
+| **Waiting on third party** | Blocked on a vendor or other outside party |
+| **Resolved** | Issue addressed |
+| **Closed** | Ticket complete |
 
 ## Ticket Priority Levels
+
+Priority is also a tenant-configured string. Stock values:
 
 | Priority | Description | Typical Response |
 |----------|-------------|------------------|
@@ -61,22 +66,28 @@ Anything without a typed tool goes through `superops_custom_query` (read-only Gr
 | **High** | Major productivity impact | 1-2 hours |
 | **Medium** | Single user/workaround exists | 4-8 hours |
 | **Low** | Minor issue/enhancement | Next business day |
+| **Very Low** | Cosmetic or deferred | When convenient |
 
 ## Key Ticket Fields
 
-Only two fields are required on create: `subject` (String) and `client`
-(ClientIdentifier). The rest are optional but drive routing and reporting:
+`createTicket` requires only `subject`, `client` and `source`.
+`superops_tickets_create` defaults `source` to `INTEGRATION`. The other fields are
+optional but drive routing and reporting:
 
-| Field | Type | Purpose |
-|-------|------|---------|
-| `assignee` / `techGroup` | Identifier | Routing to a technician or queue |
-| `requester` | RequesterIdentifier | Person who reported (accepts `email`) |
-| `priority` | Enum | Critical, High, Medium, Low |
-| `ticketType` | Enum | Incident, Service Request, Problem, Change |
-| `category` | CategoryIdentifier | Service category |
+| Input field | Shape | Tool argument |
+|-------------|-------|---------------|
+| `client` | `{ accountId }` | `clientId` |
+| `technician` | `{ userId }` | `technicianId` |
+| `techGroup` | `{ groupId }` | `techGroupId` |
+| `requester` | `{ userId }` (a client user) | `requesterId` |
+| `site` | `{ id }` | `siteId` |
+| `priority`, `status`, `category`, `subcategory`, `requestType` | `String` | same name |
 
-Identifier inputs are objects, not scalars — `client` takes `{ "accountId": ... }`,
-`techGroup` and `category` accept `{ "name": ... }`, `requester` accepts `{ "email": ... }`.
+Identifier inputs take IDs only. Resolve names to IDs first with
+`superops_clients_search`, `superops_technicians_list` and
+`superops_technicians_groups`. On a ticket that is read back, `client`,
+`technician`, `techGroup` and `requester` are `JSON`. The human-facing ticket
+number is `displayId`.
 
 See [references/fields.md](references/fields.md) for the complete field reference.
 
@@ -95,35 +106,36 @@ notes with the typed `superops_tickets_add_note` tool and log time with
 `createWorklogEntries(input: [CreateWorklogEntryInput!]!)`, which needs the
 admin-tier passthrough and human approval. `getTicketList` takes
 `input: ListInfoInput!` and returns `listInfo` (`page`, `pageSize`, `hasMore`,
-`totalCount`). Note-and-time examples in `references/api.md` predate the schema.
+`totalCount`).
 
-See [references/api.md](references/api.md) for the full operation catalog with
-request shapes and variable examples.
+See [references/api.md](references/api.md) for the tool arguments, documents and
+variables. Every GraphQL example there validates against the schema.
 
 ## Common Workflows
 
 ### Ticket Creation Flow
 
-1. **Validate client exists** - Query client by name or ID
-2. **Check for duplicates** - Search recent tickets with similar subject
-3. **Set defaults:**
-   - Status: Open
-   - Priority: Medium (if not specified)
-4. **Create ticket** - Use createTicket mutation
-5. **Send acknowledgment** - Note auto-reply to requester
+1. **Validate the client.** Call `superops_clients_search` and take the
+   `accountId`.
+2. **Check for duplicates.** Call `superops_tickets_list` with `clientId` and look
+   for similar subjects.
+3. **Create the ticket.** Call `superops_tickets_create`. Leave `status` unset to
+   get the tenant default.
 
 ### Ticket Triage Workflow
 
-1. Query `getTicketList` filtered to `status: ["Open"]` with `assignee: null`,
-   ordered by `priority` descending.
-2. Assign each ticket via `updateTicket` (set `assignee` and `status: "In Progress"`).
+1. Call `superops_tickets_list` with `status: ["Open"]`. Keep the rows whose
+   `technician` is `null`. The tool cannot filter on a missing technician.
+2. Assign each ticket with `superops_tickets_update` (`technicianId` or
+   `techGroupId`).
 
 ### Escalation Workflow
 
-Escalation is an `updateTicket` call that raises `priority` and reassigns
-`techGroup` to the higher tier, with an `escalationReason` recording why.
+Escalation is a `superops_tickets_update` call that raises `priority` and moves
+`techGroupId` to the higher tier. Record the reason with
+`superops_tickets_add_note`, because the schema has no escalation-reason field.
 
-See [references/api.md](references/api.md) for both workflow queries.
+See [references/api.md](references/api.md) for both workflows.
 
 ## Error Handling
 
@@ -141,7 +153,7 @@ See [references/api.md](references/api.md) for both workflow queries.
 
 ```javascript
 // Validate before creating ticket
-function validateTicketInput(input) {
+function validateTicketInput(input, tenantPriorities) {
   const errors = [];
 
   if (!input.subject || input.subject.trim().length === 0) {
@@ -152,8 +164,10 @@ function validateTicketInput(input) {
     errors.push('Client is required');
   }
 
-  if (input.priority && !['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'].includes(input.priority)) {
-    errors.push('Invalid priority level');
+  // Priority is a tenant-configured string, not an enum: check it against the
+  // tenant's list (getAllFields(input: "TICKET")), not a hard-coded set.
+  if (input.priority && tenantPriorities && !tenantPriorities.includes(input.priority)) {
+    errors.push(`Unknown priority "${input.priority}" for this tenant`);
   }
 
   return errors;
