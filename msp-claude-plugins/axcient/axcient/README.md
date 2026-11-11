@@ -28,35 +28,17 @@ x360Recover authenticates via an API key:
 2. Navigate to **Settings > API Keys**
 3. Click **Add API Key**, fill in the details, and generate
 
-### Environment Variables
+### Connect through Conduit
 
-```bash
-export AXCIENT_API_KEY="your-api-key"
-```
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Axcient once in Conduit (**Connections → Axcient x360Recover**, slug `axcient`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `AXCIENT_API_KEY` | Yes | | API key from Settings > API Keys |
-| `AXCIENT_MCP_URL` | No | `https://conduit.wyre.ai/v1/axcient/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `AXCIENT_MCP_URL` to your gateway's endpoint:
-
-```
-AXCIENT_MCP_URL=https://your-gateway-domain/v1/axcient/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org -> Settings -> Integrations -> Axcient -> Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "AXCIENT_MCP_URL": "https://your-gateway-domain/v1/axcient/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http axcient https://your-gateway-domain/v1/axcient/mcp`. The gateway then holds the Axcient credentials, not the client.
 
 ## Installation
 
@@ -64,17 +46,9 @@ AXCIENT_MCP_URL=https://your-gateway-domain/v1/axcient/mcp
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- paste your API key, and you're done.
 
-### Self-Hosted (Docker)
-
-Run the Axcient MCP server via Docker with the MCP Gateway self-hosted option. See the [MCP Gateway documentation](https://mcp.wyre.ai) for setup instructions.
-
 ### Claude Code CLI
 
-Add the `.mcp.json` from this plugin to your project and set the environment variable:
-
-```bash
-export AXCIENT_API_KEY="your-api-key"
-```
+This plugin does not ship its own `.mcp.json`. Install it for its skills and commands (`/plugin marketplace add WYRE-AI/msp-claude-plugins`, then `/plugin install axcient@msp-claude-plugins`), and install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Axcient in the Conduit web UI (`/connect/axcient`). Conduit stores the credentials and injects them on every request, so there are no environment variables to set.
 
 ## Available Skills
 
@@ -113,7 +87,7 @@ export AXCIENT_API_KEY="your-api-key"
 ### Credential Handling
 
 - Never commit API keys to version control
-- Use environment variables for all credentials
+- Keep credentials in the Conduit connection, never in files, environment variables or chat
 - Rotate API keys periodically via partner.axcient.com
 - Use the minimum scope necessary for your use case
 
@@ -129,7 +103,7 @@ If using the MCP server over HTTP transport, ensure:
 ### Authentication Errors
 
 If you see "401 Unauthorized":
-1. Verify `AXCIENT_API_KEY` is set correctly
+1. Check the Axcient connection in Conduit (**Connections → Axcient x360Recover**): reconnect it, or re-enter the credentials
 2. Check that the API key has not been revoked in partner.axcient.com
 3. Note that a malformed path parameter (e.g. a non-numeric ID) also
    surfaces as 401 in this API — see the `api-patterns` skill before

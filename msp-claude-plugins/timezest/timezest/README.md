@@ -16,13 +16,15 @@ Claude Code plugin for [TimeZest](https://timezest.com) - PSA-coupled customer s
 /plugin install timezest
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/timezest/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/timezest/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `TIMEZEST_API_TOKEN` | Yes | TimeZest API token (sent as `Authorization: Bearer ...`) |
+Connect TimeZest once in the Conduit web UI (**Connections → TimeZest**). Conduit stores the token and injects it on every request; the MCP server sends it upstream as `Authorization: Bearer ...`:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Token | Yes | TimeZest API token |
 
 ## Skills
 

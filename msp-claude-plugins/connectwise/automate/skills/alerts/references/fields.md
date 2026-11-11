@@ -1,6 +1,6 @@
 # Alert Field Reference
 
-### Alert Fields
+Fields commonly present on an alert returned by `cwautomate_alerts_list` and `cwautomate_alerts_get`. Exact shape varies by Automate version; treat unlisted fields as informational.
 
 ```typescript
 interface Alert {
@@ -16,51 +16,23 @@ interface Alert {
   // Target
   ComputerID: number;           // Affected computer
   ComputerName: string;         // Computer hostname
-  ClientID: number;             // Parent client
-  ClientName: string;           // Client name
+  Client?: { Id: number; Name: string }; // Parent client; may be absent. `client_id` filters on Client.Id
   LocationID: number;           // Location ID
 
   // Alert Details
   Subject: string;              // Alert title
   Message: string;              // Detailed message
-  Severity: AlertSeverity;      // 1-4 severity level
-  Status: AlertStatus;          // Current status
+  Severity: { Id: AlertSeverity; Name: string }; // 1-4; filter with `severity`
 
   // Timestamps
   TimeGenerated: string;        // When created
-  TimeAcknowledged: string;     // When acknowledged
-  TimeResolved: string;         // When resolved
-  LastUpdate: string;           // Last status change
-
-  // Acknowledgment
-  AcknowledgedBy: string;       // User who acknowledged
-  Notes: string;                // Acknowledgment notes
-
-  // Ticket Integration
-  TicketID: number;             // Linked ticket ID
-  TicketStatus: string;         // Ticket status
 
   // Context
   Category: string;             // Alert category
-  AdditionalData: object;       // Extra context data
 }
 
-type AlertSource = 'Monitor' | 'Script' | 'EventLog' | 'System' | 'Manual';
+type AlertSource = 'Monitor' | 'Script' | 'EventLog' | 'System';
 type AlertSeverity = 1 | 2 | 3 | 4;
-type AlertStatus = 'New' | 'Active' | 'Acknowledged' | 'Resolved' | 'Cleared' | 'Suppressed';
 ```
 
-### Alert History Fields
-
-```typescript
-interface AlertHistory {
-  HistoryID: number;
-  AlertID: number;
-  Action: string;               // Status change, note added, etc.
-  ActionBy: string;             // User who made change
-  ActionTime: string;           // When action occurred
-  PreviousStatus: string;
-  NewStatus: string;
-  Notes: string;
-}
-```
+The API returns **no status, acknowledgment, history or ticket-link fields**: alerts are read-only, and the Automate REST API has no route that changes or annotates them.

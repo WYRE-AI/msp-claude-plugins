@@ -14,6 +14,16 @@ when_to_use: >-
 
 # Microsoft 365 Licensing
 
+## Conduit tools
+
+The Conduit `m365` connector (hidden, personal-only) has no tools for this area. Through Conduit, reads go to the `microsoft-graph` connector as `microsoft_graph_get` (admin tier, read-only; use `microsoft_graph_suggest_queries` to build the query) and fleet operations go to the `cipp` connector:
+
+- Assignments and usage: `cipp_list_licenses`; CSP subscriptions: `cipp_list_csp_licenses`
+- SKU detail not in CIPP: `microsoft_graph_get` on `/v1.0/subscribedSkus`
+- Removing all of a leaver's licences: `cipp_offboard_user` with `RemoveLicenses: true` (admin tier). It removes every licence and the user's licence-assigning group memberships, and it only queues a job: check the user's licences afterwards before reporting success
+- Assigning or removing a SKU: `cipp_edit_user` (admin tier) with `licenses` set to the **complete** list of SKU IDs the user should hold; CIPP adds missing SKUs and removes any others, so include every SKU the user keeps
+- Changing service plans inside a SKU: no Conduit tool does this (`microsoft_graph_get` is read-only); do it in the Microsoft 365 admin center
+
 ## Overview
 
 M365 licensing is a top billing concern for MSPs. Licenses are purchased as SKU subscriptions, each containing bundles of service plans (Exchange, Teams, SharePoint, etc.). Efficient license management — finding unused seats, rightsizing SKUs, ensuring all users have what they need — directly impacts both the MSP's margin and the customer's costs.

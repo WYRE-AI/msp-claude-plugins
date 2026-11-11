@@ -255,7 +255,7 @@ Verify your Rootly API token:
 4. **Scope to the right team** — Include `team_ids` when creating incidents so on-call routing works correctly
 5. **Map severity consistently** — Use `list_severities` to confirm slug-to-ID mapping rather than hardcoding
 6. **Use sequential IDs in external tools** — Reference `INC-{sequential_id}` in PSA tickets and Slack
-7. **Check on-call health** — Use `check_oncall_health_risk` before major deployments or planned maintenance
+7. **Check on-call health** — Use `get_oncall_shift_metrics` and `check_responder_availability` before major deployments or planned maintenance
 
 ## Related Skills
 

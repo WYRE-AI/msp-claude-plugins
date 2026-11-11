@@ -16,8 +16,7 @@ Stage a desired-state deployment of "$ARGUMENTS.software" to
 
 ## Prerequisites
 
-- ImmyBot MCP server connected with valid `IMMYBOT_INSTANCE_SUBDOMAIN`,
-  `IMMYBOT_TENANT_ID`, `IMMYBOT_CLIENT_ID`, `IMMYBOT_CLIENT_SECRET`
+- ImmyBot connected in Conduit (instance subdomain, tenant ID, client ID and client secret)
 - Maintenance sessions are destructive — this command requires
   explicit human approval before reconciling
 

@@ -16,21 +16,18 @@ Claude Code plugin for [Freshdesk](https://www.freshworks.com/freshdesk/) - clou
 /plugin install freshdesk
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/freshdesk/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/freshdesk/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `FRESHDESK_DOMAIN` | Yes | Freshdesk account subdomain (sent as the `X-Freshdesk-Domain` header) |
-| `FRESHDESK_API_KEY` | Yes | Freshdesk API key (sent as the `X-Freshdesk-Api-Key` header) |
+Connect Freshdesk once in the Conduit web UI (**Connections → Freshdesk**). Conduit stores these credentials and injects them on every request:
 
-The gateway maps `FRESHDESK_DOMAIN` onto the `X-Freshdesk-Domain` header and `FRESHDESK_API_KEY` onto the `X-Freshdesk-Api-Key` header. The MCP server translates these into the upstream Freshdesk HTTP Basic auth (`apikey:X`) automatically.
+| Field | Required | Description |
+|-------|----------|-------------|
+| Domain | Yes | Freshdesk account subdomain (`yourcompany` for `yourcompany.freshdesk.com`) |
+| API Key | Yes | Freshdesk API key |
 
-```bash
-export FRESHDESK_DOMAIN="yourcompany"
-export FRESHDESK_API_KEY="your-freshdesk-api-key"
-```
+The MCP server translates these into the upstream Freshdesk HTTP Basic auth (`apikey:X`) automatically.
 
 ## Skills
 

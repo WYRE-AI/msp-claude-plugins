@@ -32,6 +32,16 @@ Syncro assets represent the hardware, software, and devices you manage for custo
 - **Hardware refresh programmes** — Syncro stores `warranty_expires` but
   does no lifecycle planning; use `scalepad-lifecycle-manager`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `syncro_assets_list` | read | List assets |
+| `syncro_assets_search` | read | Find assets by name or serial |
+| `syncro_assets_get` | read | One asset with RMM details |
+
+The Conduit `syncro` connector has no alert, appointment or timer tools; those exist only on the separate `syncro-official` connector. Where this skill describes a REST call with no tool below, the agent cannot make it.
+
 ## Key Concepts
 
 ### Asset

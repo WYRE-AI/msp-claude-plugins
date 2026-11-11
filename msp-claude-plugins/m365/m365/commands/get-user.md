@@ -8,6 +8,21 @@ arguments: [query]
 
 Look up a Microsoft 365 user and return a comprehensive summary of their account state.
 
+## Conduit tools
+
+The Conduit `m365` connector has no user, licence or MFA tools, so this command runs on the `cipp` and `microsoft-graph` connectors. The Graph requests further down show what each step reads; through Conduit, send a read as `microsoft_graph_get` with that path as `relativeUrl` (call `microsoft_graph_suggest_queries` first if unsure of the query), and perform writes through the CIPP tool named for that step.
+
+| Step | Tool | Tier |
+|------|------|------|
+| Find the user | `cipp_list_users` (`tenantFilter`), or `microsoft_graph_get` on `/v1.0/users?$filter=...` | read / admin |
+| Groups | `cipp_list_user_groups` | read |
+| Devices | `cipp_list_user_devices` | admin |
+| MFA state | `cipp_list_mfa_users` | admin |
+| Licences | `cipp_list_licenses` | read |
+| Recent sign-ins | `cipp_list_user_signin_logs` | admin |
+
+CIPP reads the customer tenant named in `tenantFilter`. A `microsoft_graph_get` read goes to whichever tenant the `microsoft-graph` connection is signed into. Before combining the two, check that they are the same tenant: compare the tenant ID from `microsoft_graph_get` on `/v1.0/organization` with the CIPP tenant. If you cannot confirm a match, report the Graph data separately or leave it out.
+
 ## Arguments
 
 - `query` (required) — User's email address (UPN), display name, or partial name

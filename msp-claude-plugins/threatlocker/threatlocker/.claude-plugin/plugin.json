@@ -1,11 +1,11 @@
 {
   "name": "threatlocker",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Claude plugins for ThreatLocker - zero-trust application allowlisting, approval request triage, audit log investigation, and computer/group inventory for MSPs",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

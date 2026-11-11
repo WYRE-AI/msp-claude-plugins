@@ -1,86 +1,58 @@
 ---
 name: "KPN Mobile Fleet"
 description: >
-  KPN business mobile through Mobile Services Management (MSM v11):
-  subscribers, contracts (lines/SIMs), allowed operations per contract,
-  orders and service requests, invoices and invoice PDFs, the customer's
-  organisation tree and usage thresholds; plus the confirmed writes (SIM
-  block, unblock, replace; order authorize and cancel) and PIN/PUK handling.
+  KPN business mobile through the Grexx (IRMA) interface: finding a
+  customer's mobile orders, reading number/SIM/subscription/bundle data
+  (kpn_grexx_mobile_orders), the active SIM or eSIM (kpn_grexx_get_sim),
+  blocks and limits (kpn_grexx_mobile_settings), current usage
+  (kpn_grexx_mobile_usage) and available number portings. Read-only: SIM
+  blocks, replacements and order approvals happen in the Grexx portal.
 when_to_use: >-
-  When managing a customer's KPN business-mobile fleet: finding who has
-  which number or SIM, handling a lost or stolen phone, replacing a SIM or
-  moving to eSIM, approving or cancelling KPN orders, pulling KPN mobile
-  invoices, or unlocking a PUK-locked phone. Use when: kpn zakelijk mobiel,
-  block sim, lost phone, stolen phone, replace sim, esim, puk code, kpn
-  order approval, kpn invoice, mobile subscribers.
+  When looking up a customer's KPN business-mobile lines: who has which number
+  or SIM, what a line is using, which blocks are set, or which numbers can be
+  ported. Use when: kpn zakelijk mobiel, kpn mobile usage, kpn sim, iccid,
+  esim, lost phone, kpn bundle, number porting, mobile subscribers.
 ---
 
 # KPN Mobile Fleet
 
 ## Overview
 
-MSM is KPN's business-mobile management API. All `kpn_mobile_*` tools use
-the MSM token realm (see the api-patterns skill). Identifiers are MSM ids:
-look a contract up before acting on it.
+Through Conduit, KPN business mobile is **read-only**. The Grexx tools return order, SIM, setting and usage data for a customer's mobile subscriptions. There is no tool to block, unblock or replace a SIM, read a PUK, authorise or cancel an order, or pull invoices; those are done in the Grexx portal.
 
-## Finding the right record
+## Finding a line
 
-| Starting from | Tool |
-|---|---|
-| A person's name or employee number | `kpn_mobile_subscribers_list` → `kpn_mobile_subscribers_get` (includes their contracts) |
-| A phone number, ICCID or IMEI | `kpn_mobile_contracts_list` with `mobileNumber` / `simCardNumber` / `imei` |
-| A contract id | `kpn_mobile_contracts_get` |
-| Cost centres, debtors, locations | `kpn_mobile_hierarchy_list` (omit `parentId` for the roots) |
+Every mobile tool is keyed on an IRMA **order ID** (one per mobile subscription).
 
-Lists page with `offset`/`limit` (max 100). If the result says there are more
-items, page before concluding something doesn't exist.
+1. `kpn_grexx_customer_data` — find the customer card (by `name`, `chamberOfCommerceNumber`, `zipCode`, ...).
+2. `kpn_grexx_order_summary` with `customerId` and `productGroup: "Mobile"` lists the mobile orders. To find one number, pass it as `attribute`.
+3. `kpn_grexx_mobile_orders` with up to 50 `orderIds` returns number, SIM, subscription and bundles in one call.
 
-## Before any write: check allowed operations
+## Per-line reads
 
-`kpn_mobile_contracts_get_operations` shows which actions (block, unblock,
-replace, ...) are currently allowed on a contract and which open orders block
-them. The write tools check this themselves and refuse when the operation is
-not allowed, but calling it first gives the user a clear answer instead of
-a refusal.
-
-## Writes
-
-All five write tools ask for confirmation first and create a KPN **order**:
-
-| Tool | Effect | Notes |
+| Tool | Returns | Notes |
 |---|---|---|
-| `kpn_mobile_sim_block` | Calls, SMS and data stop | For lost/stolen phones; reversible |
-| `kpn_mobile_sim_unblock` | Restores service | Only once the device is back with its owner |
-| `kpn_mobile_sim_replace` | New physical SIM (`newSimCardNumber`) or eSIM (`esim: true` + `email` for the QR code) | Old SIM stops when the order completes |
-| `kpn_mobile_orders_authorize` | Approves an `UNAUTHORIZED` order | May commit the customer to costs |
-| `kpn_mobile_orders_cancel` | Cancels an open order | Cannot be resumed |
+| `kpn_grexx_get_sim` | Active SIM or eSIM: ICCID and SIM type | PUK and eSIM activation/confirmation codes are masked |
+| `kpn_grexx_mobile_settings` | Blocks and limits on the number | Available from 5 minutes after activation |
+| `kpn_grexx_mobile_usage` | Current data, voice and SMS usage | Available from 5 minutes after activation |
+| `kpn_grexx_available_portings` | Portings available for every mobile subscription of a customer (`customerId`) or every number of a HIP group / KPN EEN switchboard (`hipGroupOrderId`) | |
 
-Report the order id and status after a write, and say plainly that the change
-takes effect when KPN completes the order. If the status is `UNAUTHORIZED`,
-someone with approval rights still has to authorize it.
+## Workflows
 
-Every write accepts a `referenceNumber` (max 25 characters, defaults to
-`WYRE-<timestamp>`). Put the ticket number there so the KPN order traces
-back to the PSA.
+### Fleet overview for a customer
 
-## PIN and PUK
+`kpn_grexx_order_summary` (`productGroup: "Mobile"`, `orderState: "Active"`), paging with `skip` and `take` (up to 2500 per page) until every order is collected. Then `kpn_grexx_mobile_orders` with those order IDs in batches of 50. Report number, user label, subscription and bundles.
 
-Contract output always masks PIN and PUK. `kpn_mobile_contracts_get_puk`
-reveals one PUK after confirmation. A PUK lets someone take over a locked
-SIM: verify who is asking first (call back on a known number; consider
-`kpn_sim_swap_get_date`), and give it only to the SIM's user.
+### Usage review
 
-## Orders, service requests, invoices
+`kpn_grexx_mobile_usage` per order. It returns current usage only. Flag lines near their bundle limits. Treat a line with no usage as something to investigate, not as proof it is unused: check its history in the Grexx portal and ask the customer before suggesting a cancellation (which the customer requests through the portal).
 
-- `kpn_mobile_orders_list` / `kpn_mobile_service_requests_list` default to
-  open items (`NEW`, `IN_PROGRESS`, `UNAUTHORIZED`). Pass `status` for others.
-- `kpn_mobile_invoices_list` filters by `debtorId` (from the hierarchy) and a
-  `searchFrom`/`searchTo` date range; `kpn_mobile_invoices_get_pdf` returns
-  the PDF as an embedded resource.
-- `kpn_mobile_thresholds_list` shows daily usage caps (data, voice, roaming
-  cost); pass `thresholdId` to see which contracts a cap applies to.
+### Lost or stolen phone
 
-## Anti-triggers
+Find the order for the number (`attribute` on `kpn_grexx_order_summary`), confirm it with the user, and read `kpn_grexx_get_sim` and `kpn_grexx_mobile_settings` so they have the ICCID and current blocks. The block itself must be placed in the Grexx portal; say so plainly rather than implying it was done.
 
-Outages, address availability and SIM-swap lookups belong to the
-network-checks skill; they don't use MSM.
+## Gotchas
+
+- **Order IDs, not phone numbers.** Search by number through `attribute` on the order summary, then work with the order ID.
+- **Freshly activated lines** return nothing from settings and usage for the first few minutes. Retry after the 5-minute window; an empty result after that is a real failure to report, not a new line.
+- **Masked codes are masked on purpose.** Do not try to recover a PUK through another route; the user gets it from the portal.

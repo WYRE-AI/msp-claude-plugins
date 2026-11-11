@@ -30,12 +30,7 @@ Huntress authenticates using an API key and secret passed as HTTP headers:
 
 Generate credentials at: **Huntress Dashboard > Settings > API Credentials**
 
-**Environment Variables:**
-
-```bash
-export HUNTRESS_API_KEY="your-api-key"
-export HUNTRESS_API_SECRET="your-api-secret"
-```
+Through Conduit, paste both values into the Huntress connection; Conduit injects them as the headers above. Nothing is set on the client.
 
 ## Available MCP Tools
 

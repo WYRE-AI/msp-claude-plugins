@@ -13,56 +13,18 @@ This plugin provides Claude with deep knowledge of KnowBe4, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect KnowBe4 once in Conduit (**Connections → KnowBe4**, slug `knowbe4`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "KNOWBE4_API_KEY": "your-api-token",
-    "KNOWBE4_REGION": "US"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "KNOWBE4_API_KEY": "your-api-token",
-    "KNOWBE4_REGION": "US"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `KNOWBE4_API_KEY` | Yes | | API token from KnowBe4 console |
-| `KNOWBE4_REGION` | Yes | `US` | Account region: `US`, `EU`, `CA`, `UK`, `DE` |
-| `KNOWBE4_MCP_URL` | No | `https://knowbe4-mcp.wyre.workers.dev/mcp` | MCP server URL -- override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| API Key |
+| Region |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `KNOWBE4_MCP_URL` to your gateway's endpoint:
-
-```
-KNOWBE4_MCP_URL=https://your-gateway-domain/v1/knowbe4/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org > Settings > Integrations > KnowBe4 > Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "KNOWBE4_MCP_URL": "https://your-gateway-domain/v1/knowbe4/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http knowbe4 https://your-gateway-domain/v1/knowbe4/mcp`. The gateway then holds the KnowBe4 credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -82,7 +44,7 @@ KNOWBE4_MCP_URL=https://your-gateway-domain/v1/knowbe4/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+To check the credentials directly against KnowBe4 before you save them in Conduit, export them in your shell and run:
 
 ```bash
 # Test with curl (env vars must be set)
@@ -97,9 +59,12 @@ curl -H "Authorization: Bearer ${KNOWBE4_API_KEY}" \
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install knowbe4@msp-claude-plugins
+```
+
+Then connect KnowBe4 in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## MCP Tool Surface
 

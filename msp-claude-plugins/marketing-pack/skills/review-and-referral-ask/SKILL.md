@@ -1,8 +1,8 @@
 ---
 name: "Review and Referral Ask"
 description: >
-  Picks clients who appear happy from CrewHu survey results (or another
-  discovered survey tool) together with ticket SLA and resolution data,
+  Picks clients who appear happy from CrewHu or SmileBack survey results
+  (or another discovered survey tool) together with ticket SLA and resolution data,
   then drafts a review or referral request for the MSP to send. Drafts
   only; never sends email, never creates outreach tickets, and never
   posts a review.
@@ -20,8 +20,8 @@ when_to_use: >-
 
 The right time to ask for a review or a referral is after real evidence
 that the client is happy, not after a quiet week on the board. This skill
-finds candidate clients from CrewHu (preferred) or another survey tool
-discovered at run time, checks recent ticket SLA and resolution data, and
+finds candidate clients from CrewHu (preferred), SmileBack, or another
+survey tool discovered at run time, checks recent ticket SLA and resolution data, and
 drafts a short request for the MSP to send themselves.
 
 This skill drafts only. It never sends email, never creates or updates a
@@ -39,12 +39,11 @@ ticket, never posts a review, and never messages a client.
 
 | System | Role | Required? |
 |--------|------|-----------|
-| CrewHu, or another discovered survey tool | Promoters, scores, and survey comments that identify happy clients | Yes (at least one survey source, or the skill stops) |
+| CrewHu, SmileBack, or another discovered survey tool | Promoters, scores, and survey comments that identify happy clients | Yes (at least one survey source, or the skill stops) |
 | PSA ticket tools | Recent resolution and SLA fields, used to confirm the client is in a good window to ask | Optional, but recommended |
 
-There is no SmileBack MCP tool in this catalog. Do not invent one. If
-CrewHu is not connected and discovery finds no other survey list/get/search
-tool, stop and say a survey source is required.
+If neither CrewHu nor SmileBack is connected and discovery finds no other
+survey list/get/search tool, stop and say a survey source is required.
 
 ## Workflow
 
@@ -68,6 +67,11 @@ respondent to a client or contact already in the survey result, not to
 browse staff or run a prize workflow. Do not call `crewhu_badges_update_contest`
 or other write tools.
 
+**SmileBack:** `smileback_nps_responses_list`,
+`smileback_nps_responses_get`, `smileback_reviews_list`,
+`smileback_reviews_list_recent`, `smileback_reviews_get`,
+`smileback_csat_companies_list`.
+
 **PSA tickets and companies, for SLA and resolution context:**
 
 - Autotask: `autotask_search_companies`, `autotask_search_tickets`,
@@ -83,7 +87,6 @@ or other write tools.
   `superops_clients_search`, `superops_tickets_list`,
   `superops_tickets_get`
 - NinjaOne: `ninjaone_tickets_list`, `ninjaone_tickets_get`
-- Atera: `atera_tickets_list`, `atera_tickets_get`
 
 There is no dedicated "list SLA breaches" tool. Use due-date or SLA
 fields on the ticket list/get tools above, the same way ops-pack SLA
@@ -92,7 +95,7 @@ against a made-up industry benchmark.
 
 If a survey tool other than CrewHu appears in discovery and offers
 read-only list, get, or search survey tools, you may use those exact
-discovered names. Do not invent a SmileBack tool.
+discovered names. Do not invent tool names.
 
 ### Step 2: Find happy-client candidates
 
@@ -127,6 +130,20 @@ than `<since>`. Before drafting for a candidate, page through
 customer's older negative responses. If you cannot page to the end, say
 so and ask the operator to confirm that the client has no unresolved
 detractor survey of any age before you draft.
+
+With SmileBack, call `smileback_nps_responses_list` with
+`created_since` and `score_gt: 8` for promoters (scores of 9 or 10), and
+again with `score_lt: 7` for detractors. Page with `limit` and `offset`
+until `next` is null, as the connector's own API patterns skill
+describes. Check negative and neutral CSAT reactions with
+`smileback_reviews_list` (read the `rating` values on the first page
+rather than assuming their encoding) and keep only the reviews whose
+`rated_on` falls in the window. Each NPS response carries
+`has_marketing_permission`; if it is false, do not draft a testimonial
+or public-review ask for that contact, and tell the operator why.
+Match NPS responses to a client by company name, report any you could
+not match, and exclude a client with an unresolved negative response of
+any age, or ask the operator to verify.
 
 Keep only clients with a clearly positive signal from the survey tool
 (for example, a promoter record or a high score as returned). If the

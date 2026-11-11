@@ -11,13 +11,13 @@ Generate a summary of the HubSpot deal pipeline showing deals per stage, total a
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `hubspot_search_deals` and `hubspot_access_associations` available
+- MCP tools `search_crm_objects` (`objectType: "deals"`) and `search_crm_objects` (`associatedWith` filter) available
 
 ## Steps
 
 1. **Fetch all open deals** in the pipeline
 
-   Call `hubspot_search_deals` with filters:
+   Call `search_crm_objects` (`objectType: "deals"`) with filters:
    - Exclude `closedwon` and `closedlost` stages
    - If a pipeline is specified, filter by `pipeline`
    - If an owner is specified, filter by `hubspot_owner_id`
@@ -26,7 +26,7 @@ Generate a summary of the HubSpot deal pipeline showing deals per stage, total a
 
 2. **Fetch closed-won deals** for the period (if period filter is set)
 
-   Call `hubspot_search_deals` with `dealstage=closedwon` and the period filter to get won deals.
+   Call `search_crm_objects` (`objectType: "deals"`) with `dealstage=closedwon` and the period filter to get won deals. Set `limit=100` and paginate with `offset` through all results, as for open deals, so the revenue totals include every won deal.
 
 3. **Group deals by stage** and calculate metrics
 
@@ -205,10 +205,11 @@ Please wait a moment and try again.
 
 | Tool | Purpose |
 |------|---------|
-| `hubspot_search_deals` | Fetch deals by stage, owner, and close date |
-| `hubspot_retrieve_deal` | Get full deal details |
-| `hubspot_access_associations` | Get associated companies for deal names |
-| `hubspot_get_user_details` | Resolve owner names |
+| `search_crm_objects` (`objectType: "deals"`) | Fetch deals by stage, owner, and close date |
+| `get_crm_objects` (`objectType: "deals"`) | Get full deal details |
+| `search_crm_objects` (`associatedWith` filter) | Get associated companies for deal names |
+| `search_owners` | Resolve owner names and HubSpot owner IDs |
+| `get_user_details` | Identify the connected user (for "my deals") |
 
 ## Related Commands
 

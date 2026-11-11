@@ -128,6 +128,15 @@ POST /api/Attachment          # multipart/form-data: file, ticket_id, filename, 
 GET  /api/Attachment?ticket_id=54321   # list attachments
 ```
 
+## Ticket Categories
+
+Halo tickets carry up to four category levels. The create and update tools take them as **names**, not IDs: `category_1` to `category_4` on `halopsa_tickets_create` and `halopsa_tickets_update`.
+
+- `halopsa_categories_list` (`search`, `inactive`, `limit`, `page_no`) lists the configured categories; match the name and its level.
+- `halopsa_categories_get` (`category_id`) reads one category.
+
+Both lookups are new and have no Conduit classification yet, so they enforce at `admin` until classified. Never invent a category name: an unknown value is either rejected or silently stored as free text, depending on the Halo configuration, and breaks category reporting.
+
 ## Ticket Creation Workflow (with Validation)
 
 1. **Validate client** -- `GET /api/Clients/{client_id}`. If not found: stop and report error.

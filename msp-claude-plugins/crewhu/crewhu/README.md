@@ -16,13 +16,17 @@ Claude Code plugin for [Crewhu](https://crewhu.com) - CSAT/NPS surveys, recognit
 /plugin install crewhu
 ```
 
-The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/crewhu/mcp`.
+The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/crewhu/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.
 
 ## Configuration
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `X_CREWHU_APITOKEN` | Yes | Crewhu API token (sent as `X-Crewhu-Api-Token` header) |
+Connect Crewhu once in the Conduit web UI (**Connections → Crewhu**). Conduit stores the token and injects it on every request:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| API Token | Yes | Crewhu API token |
+
+> The Crewhu connector is currently hidden in the Conduit catalog. Until it is unhidden, only orgs it has been enabled for can connect it.
 
 ## Skills
 

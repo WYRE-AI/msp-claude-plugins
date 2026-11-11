@@ -9,7 +9,7 @@ This is a **workflow pack**, not a vendor plugin. It does not teach any
 single tool's API in depth. It bundles the judgment layer (what may be
 published, when a client can be named, and when a review or referral ask
 is appropriate) on top of whatever Autotask, ConnectWise, HaloPSA,
-Syncro, SuperOps, NinjaOne, Atera, IT Glue, Hudu, and/or CrewHu data your
+Syncro, SuperOps, NinjaOne, Atera, IT Glue, Hudu, and/or CrewHu or SmileBack data your
 connected tools return.
 
 This pack drafts only. It does not publish articles, send email, post
@@ -19,9 +19,9 @@ reviews, or create or update tickets.
 
 | Category | Required? | Vendors |
 |---|---|---|
-| PSA | Required for a case study (a closed project or resolved ticket). Optional, but recommended, for a review or referral ask | Autotask, ConnectWise, HaloPSA, Syncro, or SuperOps. A review or referral ask can also read NinjaOne or Atera tickets. |
+| PSA | Required for a case study (a closed project or resolved ticket). Optional, but recommended, for a review or referral ask | Autotask, ConnectWise, HaloPSA, Syncro, or SuperOps. A review or referral ask can also read NinjaOne tickets. |
 | Documentation | Optional background for a case study | IT Glue or Hudu |
-| Survey tool | Required for a review or referral ask | CrewHu (preferred), or another discovered survey connector. There is no SmileBack MCP tool in this catalog. |
+| Survey tool | Required for a review or referral ask | CrewHu (preferred), SmileBack, or another discovered survey connector. |
 
 Every skill in this pack discovers what's actually connected via
 `conduit__search_tools` before running. It never assumes a fixed vendor
@@ -35,8 +35,8 @@ connector or a needed tool is missing.
   incident, plus optional documentation records, into an anonymized case
   study (challenge, approach, and result with real metrics only), with
   an approval step before any client is named
-- `review-and-referral-ask` : picks happy clients from CrewHu (or another
-  discovered survey tool) plus ticket SLA and resolution data, then drafts
+- `review-and-referral-ask` : picks happy clients from CrewHu or SmileBack (or
+  another discovered survey tool) plus ticket SLA and resolution data, then drafts
   a review or referral request for the MSP to send. Drafts only; never
   sends.
 
@@ -49,7 +49,7 @@ connector or a needed tool is missing.
 
 On first use, Claude Code will prompt to connect the Conduit MCP
 server. Connect at least one PSA before drafting a case study, and
-CrewHu or another survey connector before drafting a review or referral
+CrewHu, SmileBack, or another survey connector before drafting a review or referral
 ask.
 
 ## Related

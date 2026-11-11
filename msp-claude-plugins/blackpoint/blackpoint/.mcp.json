@@ -2,10 +2,7 @@
   "mcpServers": {
     "blackpoint": {
       "type": "http",
-      "url": "https://conduit.wyre.ai/v1/blackpoint/mcp",
-      "headers": {
-        "X-Blackpoint-Api-Token": "${BLACKPOINT_API_TOKEN}"
-      }
+      "url": "https://conduit.wyre.ai/v1/blackpoint/mcp"
     }
   }
 }

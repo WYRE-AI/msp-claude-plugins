@@ -1,9 +1,10 @@
 ---
 name: "HubSpot API Patterns"
 description: >
-  HubSpot's official remote MCP server and the CRM Search API behind it: the
-  complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP,
-  automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/
+  HubSpot's official remote MCP server (brokered by Conduit) and the CRM
+  Search API behind it: the live tool catalog (search_crm_objects,
+  get_crm_objects, manage_crm_objects, properties and owners), OAuth via the
+  Conduit connect flow, scopes, sensitive-data (PHI) exclusion, filter/sort/
   pagination syntax, plan-tier rate limits, and error handling.
 when_to_use: >-
   When connecting to the HubSpot MCP server, constructing CRM search queries, or diagnosing auth,
@@ -17,7 +18,7 @@ when_to_use: >-
 
 ## Overview
 
-HubSpot provides a first-party remote MCP server at `https://mcp.hubspot.com/` for AI tool integration. The MCP server uses OAuth 2.0 with PKCE for authentication and Streamable HTTP as its transport protocol. Tools are backed by the HubSpot CRM Search API and cover contacts, companies, deals, tickets, tasks, notes, and associations. This skill covers MCP server connection, the complete tool reference, search patterns, error handling, and best practices.
+HubSpot provides a first-party remote MCP server, which Conduit brokers as the `hubspot` connector. Its CRM tools are generic over object type and are backed by the HubSpot CRM Search API; they cover contacts, companies, deals, tickets, tasks, notes, associations and custom objects. This skill covers MCP server connection, the complete tool reference, search patterns, error handling, and best practices.
 
 ## Anti-triggers
 
@@ -31,121 +32,50 @@ HubSpot provides a first-party remote MCP server at `https://mcp.hubspot.com/` f
 
 ## Connection & Authentication
 
-### MCP Server
+Through Conduit, the `hubspot` connector is HubSpot's own hosted MCP server at `https://mcp.hubspot.com/anthropic/v1/mcp`. Connect it once in the Conduit web UI: HubSpot's OAuth flow runs there, Conduit stores and refreshes the token, and sends it upstream as `Authorization: Bearer`. Nothing is configured on the client; this plugin ships no `.mcp.json`, so install the `wyre-gateway` plugin to reach Conduit at `https://conduit.wyre.ai/v1/mcp`.
 
-HubSpot hosts an official remote MCP server. Authentication uses OAuth 2.0 with PKCE, handled by the `mcp-remote` bridge:
-
-1. Go to [developers.hubspot.com](https://developers.hubspot.com)
-2. Navigate to **Development > MCP Auth Apps**
-3. Create a new MCP Auth App
-4. Copy the **Client ID** and **Client Secret**
-
-**MCP Server URL:** `https://mcp.hubspot.com/`
-
-**Transport:** Streamable HTTP
-
-**Authentication:** OAuth 2.0 + PKCE (handled automatically by `mcp-remote`)
-
-### Environment Variables
-
-```bash
-export HUBSPOT_CLIENT_ID="your-client-id"
-export HUBSPOT_CLIENT_SECRET="your-client-secret"
-```
-
-### Claude Desktop Configuration
-
-```json
-{
-  "mcpServers": {
-    "hubspot": {
-      "command": "npx",
-      "args": [
-        "-y", "mcp-remote",
-        "https://mcp.hubspot.com/"
-      ],
-      "env": {
-        "HUBSPOT_CLIENT_ID": "YOUR_CLIENT_ID",
-        "HUBSPOT_CLIENT_SECRET": "YOUR_CLIENT_SECRET"
-      }
-    }
-  }
-}
-```
+The older community server (`WYRE-AI/hubspot-mcp`, whose tools were prefixed hubspot_ and split per object type) is **not** what Conduit serves. Those names do not exist on the live connector.
 
 ### Scopes
 
-HubSpot MCP automatically derives required OAuth scopes from the tools you use. You do not need to manually configure scopes. For example:
-
-- Using contact tools automatically requests `crm.objects.contacts.read` and `crm.objects.contacts.write`
-- Using deal tools automatically requests `crm.objects.deals.read` and `crm.objects.deals.write`
-- Using association tools automatically requests the appropriate association scopes
+Scopes are granted on HubSpot's consent screen during the Conduit connect flow. A tool whose object type the connected user cannot read or write returns a permission error rather than an empty result; `discover_hubspot_schema` shows which object types are readable and writable.
 
 ### Sensitive Data
 
-HubSpot MCP excludes sensitive data properties (PHI -- Protected Health Information) from tool responses by default. Properties marked as sensitive in HubSpot settings will not appear in MCP tool results.
+HubSpot's hosted server excludes properties marked as sensitive (for example PHI) from results. A property that exists in the portal but never appears in a response may be one of these.
 
 ## Complete MCP Tool Reference
 
-### Contact Tools
+### CRM records
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_retrieve_contact` | Get a single contact by ID | `contactId` (required) |
-| `hubspot_create_contact` | Create a new contact | `email` (required), `firstname`, `lastname`, `phone`, `company` |
-| `hubspot_update_contact` | Update an existing contact | `contactId` (required), property fields to update |
-| `hubspot_list_contacts` | List contacts with pagination | `limit`, `after` (cursor) |
-| `hubspot_list_contact_properties` | List all contact properties | None |
-| `hubspot_search_contacts` | Search contacts by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+| Tool | Purpose | Key arguments |
+|------|---------|---------------|
+| `search_crm_objects` | Search and list records of one object type | `objectType` (`contacts`, `companies`, `deals`, `tickets`, `notes`, `tasks`, ... or a custom `p<portalId>_<name>`), `query`, `filterGroups` (property `filters` + `associatedWith`), `properties`, `sorts`, `limit` (max 200), `offset` |
+| `get_crm_objects` | Fetch up to 100 records of one type by ID | `objectType`, `objectIds`, `properties` |
+| `manage_crm_objects` | Create or update records, and create associations. Not classified in Conduit, so it needs the `admin` grant. | `createRequest` / `updateRequest` with `objects[]` (`objectType`, `properties`, `associations`, `objectId` on update); `confirmationStatus` |
+| `query_crm_data` | Read-only SQL over CRM data, for counts and aggregates | `sql`; call `tool_guidance` first |
+| `discover_hubspot_schema` | Object types (including custom objects) and access | — |
 
-### Company Tools
+There is no delete tool and no separate association tool. Associations are read with an `associatedWith` filter on `search_crm_objects` and written through the `associations` array on `manage_crm_objects`. Notes and tasks are created with `manage_crm_objects` (`objectType: "notes"` / `"tasks"`) and associated to the record they belong to.
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_retrieve_company` | Get a single company by ID | `companyId` (required) |
-| `hubspot_create_company` | Create a new company | `name` (required), `domain`, `industry`, `phone` |
-| `hubspot_update_company` | Update an existing company | `companyId` (required), property fields to update |
-| `hubspot_list_company_properties` | List all company properties | None |
-| `hubspot_search_companies` | Search companies by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+### Properties and people
 
-### Deal Tools
+| Tool | Purpose |
+|------|---------|
+| `search_properties` | Find property definitions by keyword (all properties when no keywords) |
+| `get_properties` | Full definitions, including enumeration values, for named properties |
+| `search_owners` | Resolve owners by name, email or owner ID (`hubspot_owner_id` values) |
+| `get_user_details` | The connected user's identity, owner ID, teams and roles |
+| `tool_guidance` | Required guidance before `query_crm_data`, and usage notes for other tools |
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_retrieve_deal` | Get a single deal by ID | `dealId` (required) |
-| `hubspot_create_deal` | Create a new deal | `dealname` (required), `amount`, `dealstage`, `pipeline` |
-| `hubspot_update_deal` | Update an existing deal | `dealId` (required), property fields to update |
-| `hubspot_list_deal_properties` | List all deal properties | None |
-| `hubspot_search_deals` | Search deals by criteria | `filterGroups`, `sorts`, `limit`, `after` |
+### Marketing, content and reporting
 
-### Ticket Tools
+The same connector also serves marketing and CMS tools that this plugin does not cover in depth: `manage_campaign_objects`, `read_campaign_data`, `get_campaign_attribution_reports`, `manage_segment`, `query_segments`, `manage_social_posts`, `read_social_posts`, `get_social_channels`, `get_social_post_analytics`, `manage_blog_post`, `manage_landing_page`, `manage_website_page`, `get_content_analytics_report`, `manage_saved_reports`, `get_aeo_metrics`, `manage_aeo_prompts`, `manage_aeo_recommendations`, `search_intent_signals`, `get_organization_details`, `manage_onboarding`, `render_asset` and `import-claude-design-from-url`. Treat every `manage_*` tool as a write.
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_retrieve_ticket` | Get a single ticket by ID | `ticketId` (required) |
-| `hubspot_create_ticket` | Create a new ticket | `subject` (required), `content`, `hs_pipeline`, `hs_pipeline_stage` |
-| `hubspot_update_ticket` | Update an existing ticket | `ticketId` (required), property fields to update |
+### Writes need confirmation
 
-### Activity Tools
+`manage_crm_objects` takes a `confirmationStatus`. Set `CONFIRMED` only after the user has approved the exact objects and property values; `CONFIRMATION_WAIVED_FOR_SESSION` only if the user explicitly said not to ask again this session. Creating or updating a **contact** can enrol that person in HubSpot workflows that send email (see `GOVERNANCE.md`).
 
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_create_task` | Create a task | `hs_task_subject` (required), `hs_task_body`, `hs_task_priority`, `hs_timestamp` |
-| `hubspot_create_note` | Create a note | `hs_note_body` (required), `hs_timestamp` |
-
-### Utility Tools
-
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_open_hubspot_ui` | Open HubSpot UI for an object | `objectType`, `objectId` |
-| `hubspot_get_user_details` | Get details of the current user | None |
-
-### Association Tools
-
-| Tool | Description | Key Parameters |
-|------|-------------|----------------|
-| `hubspot_create_association` | Create an association between objects | `fromObjectType`, `fromObjectId`, `toObjectType`, `toObjectId`, `associationType` |
-| `hubspot_access_associations` | List associations for an object | `objectType`, `objectId`, `toObjectType` |
 
 ## CRM Search API
 
@@ -206,19 +136,20 @@ HubSpot MCP tools that search records use the CRM Search API under the hood. Sea
 
 ### Pagination
 
-Search results use cursor-based pagination:
+`search_crm_objects` pages with an integer `offset` token:
 
 | Parameter | Description | Default | Max |
 |-----------|-------------|---------|-----|
-| `limit` | Results per page | 10 | 100 |
-| `after` | Cursor for next page | None | - |
+| `limit` | Results per page | 100 | 200 |
+| `offset` | Paging token from the previous page | None | - |
 
 **Iterating through all results:**
 
-1. Call the search tool with `limit=100`
-2. Check the response for a `paging.next.after` value
-3. If present, call again with `after` set to that value
-4. Repeat until no `paging.next.after` is returned
+1. Call `search_crm_objects` with `limit` (up to 200) and no `offset`
+2. If the response carries a next-page offset, call again with `offset` set to it
+3. Repeat until no next offset is returned
+
+The raw HubSpot REST `after` / `paging.next.after` cursor below is what the server translates; do not pass `after` to the MCP tool.
 
 ## Response Format
 
@@ -298,23 +229,22 @@ When rate limited, the MCP tool will return a 429 error. Wait before retrying. T
 | 404 Not Found | Invalid object ID | Verify the record ID exists |
 | 409 Conflict | Duplicate record | Check for existing records before creating |
 | 429 Too Many Requests | Rate limit exceeded | Wait 10 seconds and retry |
-| Invalid property | Property name not valid | Use `list_*_properties` tools to check available properties |
+| Invalid property | Property name not valid | Use `search_properties` to find the property, then `get_properties` for its definition and allowed values |
 
 ### Troubleshooting MCP Connection
 
-1. **Verify credentials** - Ensure `HUBSPOT_CLIENT_ID` and `HUBSPOT_CLIENT_SECRET` are correct
-2. **Check URL** - MCP server URL must be `https://mcp.hubspot.com/`
-3. **Test with a simple call** - Try `hubspot_get_user_details` to verify connectivity
-4. **Re-authenticate** - Restart the MCP connection to force a fresh OAuth flow
+1. **Check the Conduit connection** - Reconnect HubSpot in the Conduit web UI if the token was revoked or the user lost access
+2. **Test with a simple call** - `get_user_details` confirms the connection and returns the user's owner ID. If it also returns 401, fix the HubSpot connection in Conduit rather than retrying
+3. **Check object access** - `discover_hubspot_schema` shows which object types the connected user can read and write
 5. **Check plan** - Ensure your HubSpot plan supports the API features you need
 
 ## Best Practices
 
-1. **Filter server-side** - Use `hubspot_search_*` tools with `filterGroups` instead of listing all records
+1. **Filter server-side** - Use `search_crm_objects` with `filterGroups` instead of listing all records
 2. **Use maximum page size** - Set `limit=100` to minimize total tool calls
 3. **Monitor rate limits** - Stay well under 100 requests per 10 seconds
 4. **Use associations** - Link related objects (contacts to companies, deals to contacts) for full context
-5. **Check properties first** - Use `list_*_properties` tools to discover available fields before searching
+5. **Check properties first** - Use `search_properties` / `get_properties` to discover available fields before searching
 6. **Validate before creating** - Search for existing records before creating duplicates
 7. **Use lifecycle stages** - Track contacts and companies through their lifecycle for accurate reporting
 8. **Cache property lists** - Property definitions change infrequently; reference them across multiple operations
