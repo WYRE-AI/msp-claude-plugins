@@ -3821,6 +3821,39 @@ export const plugins: Plugin[] = [
     },
     path: 'mspcfo/mspcfo',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'marketsharp',
+    name: 'Marketsharp',
+    vendor: 'Marketsharp',
+    description: 'MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting',
+    category: 'crm',
+    maturity: 'beta',
+    features: [
+      'Appointments',
+      'Customer Lookup',
+      'Lead Pipeline',
+      'Sales Opportunities'
+    ],
+    skills: [
+      { name: 'appointments', description: 'Reading MarketSharp appointments: the schedule for a date range or one salesperson, appointments changed since a date, appointments for a set of leads or one contact, and the active appointment results and result reasons used to read outcomes.' },
+      { name: 'customer-lookup', description: 'Finding one customer in MarketSharp from whatever the caller gave you (name, phone, email, address or job number) and assembling their contact record, inquiries, appointments, jobs and notes.' },
+      { name: 'lead-pipeline', description: 'Reporting on MarketSharp inquiries (leads): listing them by modified date, appointment window or salesperson, resolving status, lead source and product interest IDs against the company\'s reference lists, counting by status and source, and the appointment default that hides leads nobody has booked yet.' },
+      { name: 'sales-opportunities', description: 'Reporting on sold jobs and open leads from MarketSharp\'s opportunities list: jobs and leads changed since a date with job numbers, sale and contract dates, contract totals, contract status and balance due.' },
+      { name: 'api-patterns', description: 'The MarketSharp tool surface as exposed through Conduit: the 25 read-only tools over the MarketSharp REST API, the Conduit connection fields (Company ID, API key, API secret, optional Employee ID), which tools need the Employee ID or a MarketSharp permission, read-tier access, page-size and record caps, the 200,000-character response cap and how an oversized page is cut, the appointment default on inquiries, date formats, untrusted-content wrapping, retries and errors.' }
+    ],
+    agents: [
+      { name: 'marketsharp-customer-briefer', description: 'Use this agent when someone needs a one-page brief on a customer from MarketSharp before a call, an appointment or a support request: who they are, their leads, appointments, any job and its balance, and recent notes.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'marketsharp/marketsharp',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
 

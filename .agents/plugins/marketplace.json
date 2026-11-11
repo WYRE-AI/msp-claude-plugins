@@ -1368,6 +1368,19 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Accounting"
+    },
+    {
+      "name": "marketsharp",
+      "description": "MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/marketsharp/marketsharp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "CRM"
     }
   ]
 }
