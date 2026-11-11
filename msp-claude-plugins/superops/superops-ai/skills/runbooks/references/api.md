@@ -1,8 +1,36 @@
-# SuperOps.ai Runbook & Script GraphQL Operations
+# SuperOps.ai Script Operations
 
-Complete operation catalog for script discovery, execution, scheduling, and results.
+Every GraphQL document on this page validates against `schema/superops.graphql`
+in [superops-mcp](https://github.com/WYRE-AI/superops-mcp) and uses only
+operations listed in the published API reference at
+<https://developer.superops.com/msp>.
 
-## List Available Scripts
+The Conduit `superops` connector has no typed script tool. Script lookups go
+through `superops_custom_query`, and execution goes through
+`superops_custom_mutation`. Both are admin tier. Running a script changes a
+client's machine, so a named human approver must see the exact mutation and
+variables before every run. Never send one from a scheduled or unattended agent.
+
+## What the schema has
+
+| Operation | Type | Input | Returns |
+|-----------|------|-------|---------|
+| `getScriptList` | query | `ListInfoInput!` | `ScriptList { scripts, listInfo }` |
+| `getScriptListByType` | query | `ScriptListByTypeInput!` (`type`, e.g. `WINDOWS` or `MAC`, plus `listInfo`) | `ScriptList` |
+| `runScriptOnAsset` | mutation | `RunScriptInput!` (`assetId`, `scriptId`, `scriptArguments`) | `RunScriptData` |
+
+That is the whole script surface. The schema has none of the following:
+
+- a single-script query (`getScript`)
+- a multi-asset run (`runScriptOnAssets`)
+- scheduling (`scheduleScript`)
+- any way to read an execution back (`getScriptExecution`,
+  `getBatchExecution`, `getScriptExecutionHistory`)
+
+`runScriptOnAsset` also takes no `runAs`, `timeout` or `priority`. Those are
+properties of the stored script.
+
+## List scripts
 
 ```graphql
 query getScriptList($input: ListInfoInput!) {
@@ -11,54 +39,37 @@ query getScriptList($input: ListInfoInput!) {
       scriptId
       name
       description
-      type
-      osType
-      category
-      parameters {
-        name
-        description
-        type
-        required
-        defaultValue
-      }
-      createdTime
-      lastModifiedTime
+      language
+      runAs
+      timeOut
+      runTimeVariables
+      tags
     }
     listInfo {
+      page
+      pageSize
       totalCount
-      hasNextPage
-      endCursor
+      hasMore
     }
   }
 }
 ```
 
-**Variables - All Scripts:**
 ```json
-{
-  "input": {
-    "first": 50,
-    "orderBy": {
-      "field": "name",
-      "direction": "ASC"
-    }
-  }
-}
+{ "input": { "page": 1, "pageSize": 100 } }
 ```
 
-**Variables - Windows PowerShell Scripts:**
-```json
-{
-  "input": {
-    "filter": {
-      "osType": "Windows",
-      "type": "PowerShell"
-    }
-  }
-}
-```
+The schema does not document which attributes a script `condition` accepts, and
+an unrecognised attribute returns zero rows without an error. Page through the
+list and match on `name` yourself. If you do try a `condition`, compare its
+`totalCount` with an unfiltered call.
 
-## Get Scripts by OS Type
+`runTimeVariables` lists the argument names the script expects.
+`scriptArguments` on the run must supply a value for each of them.
+
+## List scripts for one OS
+
+`getScriptListByType` includes SuperOps' predefined scripts for that platform.
 
 ```graphql
 query getScriptListByType($input: ScriptListByTypeInput!) {
@@ -66,422 +77,76 @@ query getScriptListByType($input: ScriptListByTypeInput!) {
     scripts {
       scriptId
       name
-      description
-      type
-      parameters {
-        name
-        type
-        required
-      }
+      language
+      runTimeVariables
     }
     listInfo {
+      page
+      pageSize
       totalCount
+      hasMore
     }
   }
 }
 ```
 
-**Variables:**
 ```json
-{
-  "input": {
-    "osType": "Windows",
-    "first": 100
-  }
-}
+{ "input": { "type": "WINDOWS", "listInfo": { "page": 1, "pageSize": 100 } } }
 ```
 
-## Get Script Details
-
-```graphql
-query getScript($input: ScriptIdentifierInput!) {
-  getScript(input: $input) {
-    scriptId
-    name
-    description
-    type
-    osType
-    category
-    content
-    timeout
-    parameters {
-      name
-      description
-      type
-      required
-      defaultValue
-      validValues
-    }
-    runAs
-    createdBy {
-      id
-      name
-    }
-    createdTime
-    lastModifiedTime
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "scriptId": "script-uuid"
-  }
-}
-```
-
-## Run Script on Single Asset
+## Run a script on one asset
 
 ```graphql
 mutation runScriptOnAsset($input: RunScriptInput!) {
   runScriptOnAsset(input: $input) {
     actionConfigId
-    script {
-      scriptId
-      name
-    }
-    asset {
-      assetId
-      name
-    }
-    arguments {
-      name
-      value
-    }
-    status
-    scheduledTime
-    runAs
+    script
+    scriptArguments
+    addedBy
   }
 }
 ```
 
-**Variables - Immediate Execution:**
 ```json
 {
   "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "runAs": "System",
-    "priority": "Immediate"
+    "assetId": "<asset id>",
+    "scriptId": "<script id>",
+    "scriptArguments": [
+      { "name": "path", "value": "C:\\Temp" },
+      { "name": "days", "value": "30" }
+    ]
   }
 }
 ```
 
-**Variables - With Parameters:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "ServiceName",
-        "value": "Spooler"
-      },
-      {
-        "name": "Action",
-        "value": "Restart"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
-```
+`scriptArguments` is a list of `{ name, value }` pairs, and each value is a
+string. Inside the script, an argument named `path` is read as `$path`.
+`script`, `scriptArguments` and `addedBy` in the response are `JSON`. Select them
+by name only.
 
-## Run Script on Multiple Assets
+The mutation queues the run and returns `actionConfigId`. Nothing in the schema
+reads the status, exit code or output for that ID. Check the result in the
+SuperOps console. `getAssetActivity` (see the
+[assets reference](../../assets/references/api.md)) lists the actions recorded
+against an asset, but the schema does not say whether script runs appear there.
 
-```graphql
-mutation runScriptOnAssets($input: RunScriptOnAssetsInput!) {
-  runScriptOnAssets(input: $input) {
-    batchId
-    script {
-      scriptId
-      name
-    }
-    assetsCount
-    status
-    scheduledTime
-  }
-}
-```
+## Workflow: remediation
 
-**Variables:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-1", "asset-2", "asset-3"],
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "param1",
-        "value": "value1"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
-```
+1. Call `superops_assets_get`. Continue only if `status` is online and
+   `lastCommunicatedTime` is recent.
+2. Find the script with `getScriptList` or `getScriptListByType` through
+   `superops_custom_query`. Note its `runTimeVariables`.
+3. Show the operator the `runScriptOnAsset` document and variables, and get
+   approval.
+4. Send the mutation through `superops_custom_mutation` and report the returned
+   `actionConfigId`.
+5. Ask the operator to confirm the outcome in the console. Record the result on
+   the ticket with `superops_tickets_add_note`.
 
-## Schedule Script Execution
+## Workflow: the same script on several assets
 
-```graphql
-mutation scheduleScript($input: ScheduleScriptInput!) {
-  scheduleScript(input: $input) {
-    scheduleId
-    script {
-      scriptId
-      name
-    }
-    assets {
-      assetId
-      name
-    }
-    scheduledTime
-    recurrence {
-      type
-      interval
-      daysOfWeek
-    }
-    status
-  }
-}
-```
-
-**Variables - One-Time Schedule:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-uuid"],
-    "scriptId": "script-uuid",
-    "scheduledTime": "2024-02-15T22:00:00Z",
-    "runAs": "System"
-  }
-}
-```
-
-**Variables - Recurring Schedule:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-uuid"],
-    "scriptId": "script-uuid",
-    "scheduledTime": "2024-02-15T22:00:00Z",
-    "recurrence": {
-      "type": "Weekly",
-      "interval": 1,
-      "daysOfWeek": ["Monday", "Wednesday", "Friday"]
-    },
-    "runAs": "System"
-  }
-}
-```
-
-## Get Script Execution Status
-
-```graphql
-query getScriptExecution($input: ScriptExecutionInput!) {
-  getScriptExecution(input: $input) {
-    actionConfigId
-    script {
-      scriptId
-      name
-    }
-    asset {
-      assetId
-      name
-    }
-    status
-    startTime
-    endTime
-    exitCode
-    output
-    error
-    duration
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "actionConfigId": "execution-uuid"
-  }
-}
-```
-
-## Get Batch Execution Results
-
-```graphql
-query getBatchExecution($input: BatchExecutionInput!) {
-  getBatchExecution(input: $input) {
-    batchId
-    script {
-      scriptId
-      name
-    }
-    status
-    totalAssets
-    completedCount
-    successCount
-    failedCount
-    executions {
-      asset {
-        assetId
-        name
-      }
-      status
-      exitCode
-      output
-      error
-    }
-  }
-}
-```
-
-## List Script Execution History
-
-```graphql
-query getScriptExecutionHistory($input: ScriptExecutionHistoryInput!) {
-  getScriptExecutionHistory(input: $input) {
-    executions {
-      actionConfigId
-      script {
-        scriptId
-        name
-      }
-      asset {
-        assetId
-        name
-        client { name }
-      }
-      status
-      startTime
-      endTime
-      exitCode
-      triggeredBy {
-        id
-        name
-      }
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-    }
-  }
-}
-```
-
-**Variables - Recent Executions:**
-```json
-{
-  "input": {
-    "first": 50,
-    "orderBy": {
-      "field": "startTime",
-      "direction": "DESC"
-    }
-  }
-}
-```
-
-**Variables - By Asset:**
-```json
-{
-  "input": {
-    "filter": {
-      "assetId": "asset-uuid"
-    },
-    "first": 20
-  }
-}
-```
-
-## Workflow Examples
-
-### Remediation Workflow
-
-```graphql
-# 1. Check if asset is online
-query checkAssetStatus {
-  getAsset(input: { assetId: "asset-uuid" }) {
-    status
-    lastSeen
-  }
-}
-
-# 2. Run remediation script
-mutation runRemediation {
-  runScriptOnAsset(input: {
-    assetId: "asset-uuid",
-    scriptId: "restart-service-script",
-    arguments: [{ name: "ServiceName", value: "Spooler" }],
-    runAs: "System",
-    priority: "Immediate"
-  }) {
-    actionConfigId
-    status
-  }
-}
-
-# 3. Check execution result
-query checkResult {
-  getScriptExecution(input: { actionConfigId: "exec-uuid" }) {
-    status
-    exitCode
-    output
-    error
-  }
-}
-```
-
-### Maintenance Window Automation
-
-```graphql
-# Schedule maintenance scripts for multiple assets
-mutation scheduleMaintenanceWindow {
-  runScriptOnAssets(input: {
-    assetIds: ["asset-1", "asset-2", "asset-3"],
-    scriptId: "windows-update-script",
-    scheduledTime: "2024-02-17T02:00:00Z",
-    runAs: "System",
-    priority: "Low"
-  }) {
-    batchId
-    assetsCount
-    scheduledTime
-  }
-}
-```
-
-### Data Collection Workflow
-
-```graphql
-# Run inventory collection across client assets
-mutation collectInventory($clientId: ID!) {
-  # First get all assets for client
-  assets: getAssetList(input: {
-    filter: {
-      client: { accountId: $clientId },
-      status: "Online"
-    }
-  }) {
-    assets { assetId }
-  }
-}
-
-# Then run collection script
-mutation runCollection {
-  runScriptOnAssets(input: {
-    assetIds: ["asset-1", "asset-2"],
-    scriptId: "software-inventory-script",
-    runAs: "System"
-  }) {
-    batchId
-  }
-}
-```
+The schema has no batch or scheduled run. Repeat `runScriptOnAsset` once per
+asset, and get approval for the full list of assets first. For a maintenance
+window, run the calls when the window opens, or schedule the job in the SuperOps
+console.

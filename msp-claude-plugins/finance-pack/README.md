@@ -38,6 +38,7 @@ skipping or guessing when a connector is missing.
 - `agreement-reconciliation` — PSA contract/agreement vs. accounting invoice reconciliation
 - `license-true-up` — marketplace-provisioned vs. billed vs. deployed seat reconciliation
 - `margin-analysis` — per-client/service-line margin, with explicit handling of missing cost data
+- `renewal-and-price-increase-prep` : composes Agreement Reconciliation and Margin Analysis into per-client talking points for a renewal or price-increase conversation, without inventing rates or amounts
 
 **Agents**
 - `billing-drift-detector` — portfolio-wide contract-vs-invoice mismatch sweep, ranked by dollar impact

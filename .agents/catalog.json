@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 105,
-    "skills": 476,
+    "skills": 478,
     "commands": 314,
     "agents": 172
   },
@@ -3055,7 +3055,7 @@
     {
       "name": "superops",
       "displayName": "Superops",
-      "version": "0.2.11",
+      "version": "0.2.12",
       "description": "SuperOps.ai - tickets, assets, clients, runbooks (GraphQL)",
       "category": "psa-rmm",
       "tags": [
@@ -4735,8 +4735,8 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.6",
-      "description": "Security Operations — cross-vendor alert triage, containment playbooks, and incident timelines across your EDR/MDR/SIEM stack.",
+      "version": "0.1.7",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -4767,6 +4767,10 @@
         {
           "id": "containment-playbooks",
           "path": "msp-claude-plugins/secops-pack/skills/containment-playbooks/SKILL.md"
+        },
+        {
+          "id": "msp-tool-compromise-response",
+          "path": "msp-claude-plugins/secops-pack/skills/msp-tool-compromise-response/SKILL.md"
         },
         {
           "id": "shadow-ai",
@@ -4805,7 +4809,7 @@
     {
       "name": "finance-pack",
       "displayName": "Finance & Billing",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
       "category": "workflow-pack",
       "tags": [
@@ -4841,6 +4845,10 @@
         {
           "id": "margin-analysis",
           "path": "msp-claude-plugins/finance-pack/skills/margin-analysis/SKILL.md"
+        },
+        {
+          "id": "renewal-and-price-increase-prep",
+          "path": "msp-claude-plugins/finance-pack/skills/renewal-and-price-increase-prep/SKILL.md"
         }
       ],
       "commands": [

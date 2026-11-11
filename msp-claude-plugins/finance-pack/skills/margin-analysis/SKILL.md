@@ -52,6 +52,9 @@ Cost    = marketplace wholesale cost (Pax8/Sherweb) + estimated labor cost
   skill assembles.
 - **Time entries or billing items as records** — use
   `autotask-time-entries` or `autotask-billing`.
+- **Renewal or price-increase talking points** for a client conversation:
+  use [Renewal and Price-Increase Prep](../renewal-and-price-increase-prep/SKILL.md),
+  which composes Agreement Reconciliation with this skill.
 
 ## Connected Systems
 
@@ -183,4 +186,5 @@ SUMMARY
 
 - [`agreement-reconciliation`](../agreement-reconciliation/SKILL.md) — confirm billed revenue is accurate before trusting it as a margin input
 - [`license-true-up`](../license-true-up/SKILL.md) — confirm marketplace cost inputs reflect actual provisioned/deployed seats, not stale subscription data
+- [`renewal-and-price-increase-prep`](../renewal-and-price-increase-prep/SKILL.md): composes Agreement Reconciliation and this skill into renewal or price-increase talking points
 - [`shared/skills/billing-reconciliation`](../../../shared/skills/billing-reconciliation/SKILL.md) — margin math reference for Pax8-cost-vs-sell-price comparisons at the subscription level
