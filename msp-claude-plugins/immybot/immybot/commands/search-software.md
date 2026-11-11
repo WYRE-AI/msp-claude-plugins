@@ -14,7 +14,7 @@ Search the ImmyBot software catalog before configuring a deployment, to confirm 
 
 ## Prerequisites
 
-- ImmyBot MCP server connected with valid `IMMYBOT_INSTANCE_SUBDOMAIN`, `IMMYBOT_TENANT_ID`, `IMMYBOT_CLIENT_ID`, `IMMYBOT_CLIENT_SECRET`
+- ImmyBot connected in Conduit (instance subdomain, tenant ID, client ID and client secret)
 - Tools available: `immybot_software_search`, `immybot_software_get`, `immybot_software_versions`, `immybot_software_latest_version`
 
 ## Steps

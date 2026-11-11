@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.34.0",
+  "version": "1.36.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -719,7 +719,7 @@
     {
       "name": "datto-saas-protection",
       "source": "./msp-claude-plugins/kaseya/datto-saas-protection",
-      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)",
+      "description": "Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing",
       "category": "bcdr",
       "tags": [
         "kaseya",
@@ -1024,6 +1024,18 @@
       ]
     },
     {
+      "name": "marketing-pack",
+      "source": "./msp-claude-plugins/marketing-pack",
+      "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.",
+      "category": "workflow-pack",
+      "tags": [
+        "workflow-pack",
+        "marketing",
+        "case-studies",
+        "msp"
+      ]
+    },
+    {
       "name": "devops-pack",
       "source": "./msp-claude-plugins/devops-pack",
       "description": "DevOps & Reliability \u2014 cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
@@ -1138,7 +1150,7 @@
       "name": "kpn",
       "displayName": "KPN",
       "source": "./msp-claude-plugins/kpn/kpn",
-      "description": "KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)",
+      "description": "KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)",
       "category": "network",
       "tags": [
         "kpn",
@@ -1146,6 +1158,246 @@
         "netherlands",
         "mobile",
         "network",
+        "msp"
+      ]
+    },
+    {
+      "name": "ai-org-admin",
+      "source": "./msp-claude-plugins/anthropic-admin/ai-org-admin",
+      "description": "Anthropic Admin API - read-only review of a client's Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed",
+      "category": "productivity",
+      "tags": [
+        "anthropic",
+        "claude",
+        "ai-governance",
+        "spend",
+        "seats",
+        "msp"
+      ]
+    },
+    {
+      "name": "openai-admin",
+      "source": "./msp-claude-plugins/openai-admin/openai-admin",
+      "description": "OpenAI Admin API - read-only review of a client's OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log",
+      "category": "productivity",
+      "tags": [
+        "openai",
+        "chatgpt",
+        "ai-governance",
+        "spend",
+        "seats",
+        "msp"
+      ]
+    },
+    {
+      "name": "jamf",
+      "source": "./msp-claude-plugins/jamf/jamf",
+      "description": "Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage",
+      "category": "rmm",
+      "tags": [
+        "jamf",
+        "jamf-pro",
+        "apple",
+        "macos",
+        "ios",
+        "mdm",
+        "msp"
+      ]
+    },
+    {
+      "name": "acronis",
+      "source": "./msp-claude-plugins/acronis/acronis",
+      "description": "Acronis Cyber Protect Cloud - backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting",
+      "category": "bcdr",
+      "tags": [
+        "acronis",
+        "backup",
+        "bcdr",
+        "edr",
+        "msp"
+      ]
+    },
+    {
+      "name": "bitwarden",
+      "source": "./msp-claude-plugins/bitwarden/bitwarden",
+      "description": "Bitwarden - read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and subscription (never vault items)",
+      "category": "security",
+      "tags": [
+        "bitwarden",
+        "password-manager",
+        "access-review",
+        "audit",
+        "msp"
+      ]
+    },
+    {
+      "name": "1password",
+      "source": "./msp-claude-plugins/1password/1password",
+      "description": "1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)",
+      "category": "security",
+      "tags": [
+        "1password",
+        "password-manager",
+        "access-review",
+        "audit",
+        "msp"
+      ]
+    },
+    {
+      "name": "zabbix",
+      "source": "./msp-claude-plugins/zabbix/zabbix",
+      "description": "Zabbix - read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability reporting",
+      "category": "network",
+      "tags": [
+        "zabbix",
+        "monitoring",
+        "noc",
+        "sla",
+        "msp"
+      ]
+    },
+    {
+      "name": "lastpass",
+      "source": "./msp-claude-plugins/lastpass/lastpass",
+      "description": "LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)",
+      "category": "security",
+      "tags": [
+        "lastpass",
+        "password-manager",
+        "access-review",
+        "msp"
+      ]
+    },
+    {
+      "name": "moovila",
+      "source": "./msp-claude-plugins/moovila/moovila",
+      "description": "Moovila - read-only project, budget, task, time entry and resource reporting for project profitability and billing reconciliation",
+      "category": "psa",
+      "tags": [
+        "moovila",
+        "project-management",
+        "profitability",
+        "time-tracking",
+        "msp"
+      ]
+    },
+    {
+      "name": "webroot",
+      "source": "./msp-claude-plugins/webroot/webroot",
+      "description": "Webroot (OpenText) GSM - read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits",
+      "category": "security",
+      "tags": [
+        "webroot",
+        "opentext",
+        "endpoint-protection",
+        "antivirus",
+        "msp"
+      ]
+    },
+    {
+      "name": "cove",
+      "source": "./msp-claude-plugins/cove/cove",
+      "description": "Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review",
+      "category": "bcdr",
+      "tags": [
+        "cove",
+        "n-able",
+        "backup",
+        "bcdr",
+        "msp"
+      ]
+    },
+    {
+      "name": "unitrends-uniview",
+      "source": "./msp-claude-plugins/unitrends-uniview/unitrends-uniview",
+      "description": "Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup",
+      "category": "bcdr",
+      "tags": [
+        "unitrends",
+        "uniview",
+        "kaseya",
+        "backup",
+        "bcdr",
+        "msp"
+      ]
+    },
+    {
+      "name": "gogetssl",
+      "source": "./msp-claude-plugins/gogetssl/gogetssl",
+      "description": "GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation",
+      "category": "infrastructure",
+      "tags": [
+        "gogetssl",
+        "ssl",
+        "certificates",
+        "renewals",
+        "msp"
+      ]
+    },
+    {
+      "name": "smileback",
+      "source": "./msp-claude-plugins/smileback/smileback",
+      "description": "SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching",
+      "category": "productivity",
+      "tags": [
+        "smileback",
+        "csat",
+        "nps",
+        "customer-feedback",
+        "qbr",
+        "msp"
+      ]
+    },
+    {
+      "name": "myitprocess",
+      "source": "./msp-claude-plugins/myitprocess/myitprocess",
+      "description": "Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings",
+      "category": "productivity",
+      "tags": [
+        "myitprocess",
+        "kaseya",
+        "vcio",
+        "qbr",
+        "roadmap",
+        "msp"
+      ]
+    },
+    {
+      "name": "alga-psa",
+      "source": "./msp-claude-plugins/alga-psa/alga-psa",
+      "description": "Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance",
+      "category": "psa",
+      "tags": [
+        "alga",
+        "alga-psa",
+        "psa",
+        "ticketing",
+        "msp"
+      ]
+    },
+    {
+      "name": "dubber",
+      "source": "./msp-claude-plugins/dubber/dubber",
+      "description": "Dubber call recording - capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and webhook health",
+      "category": "productivity",
+      "tags": [
+        "dubber",
+        "call-recording",
+        "compliance",
+        "voip",
+        "msp"
+      ]
+    },
+    {
+      "name": "mspcfo",
+      "source": "./msp-claude-plugins/mspcfo/mspcfo",
+      "description": "MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)",
+      "category": "accounting",
+      "tags": [
+        "mspcfo",
+        "profitability",
+        "finance",
+        "agreements",
         "msp"
       ]
     }

@@ -41,12 +41,7 @@ Args: {
 
 ### For Inventory
 
-```
-Tool: autotask_search_inventory_items
-Args: {
-  productID: <resolved from search>
-}
-```
+There is no MCP tool for Autotask Price Lists or Inventory Items (both are real Autotask entities, but the connector does not expose them). Check price-list overrides and stock levels directly in the Autotask UI, and say so in the answer rather than guessing.
 
 ## Parameters
 
@@ -74,7 +69,7 @@ Args: {
 /search-products category=5 active-only=true
 ```
 
-### Check inventory for a product
+### Check inventory for a product (answers that stock levels are UI-only)
 ```
 /search-products search="laptop" type="inventory"
 ```

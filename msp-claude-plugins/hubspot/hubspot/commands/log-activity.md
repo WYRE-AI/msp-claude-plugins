@@ -11,7 +11,8 @@ Log a note or create a follow-up task on a HubSpot contact, company, or deal. En
 ## Prerequisites
 
 - HubSpot MCP server connected with valid OAuth credentials
-- MCP tools `hubspot_create_note`, `hubspot_create_task`, `hubspot_create_association`, and search tools available
+- `manage_crm_objects` is not classified in Conduit, so logging an activity needs the `admin` grant
+- MCP tools `manage_crm_objects` (`createRequest`, `objectType: "notes"`), `manage_crm_objects` (`createRequest`, `objectType: "tasks"`), `manage_crm_objects` (`updateRequest` with `associations`), and search tools available
 - At least one object (contact, company, or deal) must be specified for association
 
 ## Steps
@@ -25,17 +26,17 @@ Log a note or create a follow-up task on a HubSpot contact, company, or deal. En
 2. **Create the activity** based on the type
 
    **For notes:**
-   - Call `hubspot_create_note` with `hs_note_body` set to the content
+   - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `hs_note_body` set to the content
    - Set `hs_timestamp` to the current time
 
    **For tasks:**
-   - Call `hubspot_create_task` with `hs_task_subject` set to a summary and `hs_task_body` set to the full content
+   - Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) with `hs_task_subject` set to a summary and `hs_task_body` set to the full content
    - Set `hs_task_priority` to the specified priority
    - Set `hs_timestamp` to the due date
 
 3. **Associate with objects** - Link the activity to all specified objects
 
-   For each resolved object, call `hubspot_create_association` to link the note or task.
+   For each resolved object, call `manage_crm_objects` (`updateRequest` with `associations`) to link the note or task.
 
 4. **Confirm the activity** was created and associated
 
@@ -184,12 +185,12 @@ Please wait a moment and try again.
 
 | Tool | Purpose |
 |------|---------|
-| `hubspot_create_note` | Create a note record |
-| `hubspot_create_task` | Create a task record |
-| `hubspot_create_association` | Link activity to contact, company, or deal |
-| `hubspot_search_contacts` | Find contact by name |
-| `hubspot_search_companies` | Find company by name |
-| `hubspot_search_deals` | Find deal by name |
+| `manage_crm_objects` (`createRequest`, `objectType: "notes"`) | Create a note record |
+| `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) | Create a task record |
+| `manage_crm_objects` (`updateRequest` with `associations`) | Link activity to contact, company, or deal |
+| `search_crm_objects` (`objectType: "contacts"`) | Find contact by name |
+| `search_crm_objects` (`objectType: "companies"`) | Find company by name |
+| `search_crm_objects` (`objectType: "deals"`) | Find deal by name |
 
 ## Related Commands
 

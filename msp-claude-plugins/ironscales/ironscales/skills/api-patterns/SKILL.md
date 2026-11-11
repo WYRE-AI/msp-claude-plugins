@@ -33,8 +33,8 @@ call to `https://appapi.ironscales.com`:
 
 | Header | Description |
 |--------|-------------|
-| `X-IronScales-API-Key` | Your Ironscales API key |
-| `X-IronScales-Company-ID` | Your Ironscales company (tenant) ID |
+| `X-Ironscales-API-Key` | Your Ironscales API key |
+| `X-Ironscales-Company-Id` | Your Ironscales company (tenant) ID |
 
 Generate credentials at: **Ironscales Platform > Settings > API**
 

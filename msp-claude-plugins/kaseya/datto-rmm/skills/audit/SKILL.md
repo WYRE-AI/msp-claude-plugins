@@ -28,6 +28,15 @@ Audit data in Datto RMM provides detailed hardware and software inventory for ma
 - **Inventory as documentation of record** — use
   `itglue-configurations`.
 
+## MCP Tools
+
+| Tool | Tier | Purpose |
+|------|------|---------|
+| `datto_get_device_audit` | admin | Hardware, software and system audit for one device |
+| `datto_get_device_patches` / `datto_get_site_patches` | admin (unclassified) | Patch posture per device or per site |
+
+Tiers are Conduit's classification. REST examples later in this skill show what the tools call underneath.
+
 ## Key Concepts
 
 ### Audit Categories

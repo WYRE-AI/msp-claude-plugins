@@ -1,11 +1,11 @@
 {
   "name": "azure-mcp",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Claude plugins for the Azure MCP Server — read-only Azure observability, cost, and resource health in natural language: Monitor metrics and Log Analytics KQL, retail pricing, quotas, Advisor recommendations, Resource Health, AppLens diagnostics, and subscription/resource-group inventory across tenants",
   "author": {
-    "name": "MSP Claude Plugins Community"
+    "name": "WYRE Technology"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

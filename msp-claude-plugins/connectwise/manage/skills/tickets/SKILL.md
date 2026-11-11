@@ -87,6 +87,10 @@ Set `resolutionFlag: true` for resolution notes visible to the customer on close
 GET /service/tickets?conditions=company/id=12345 and status/name!="Closed"&orderBy=priority/id asc
 ```
 
+### Configurations on a Ticket
+
+`cw_get_ticket_configurations` (read) lists the configuration items (devices, applications) linked to a ticket; `cw_update_ticket_configurations` (write) links or unlinks them. Link the affected device when a ticket is about specific hardware, so its history shows on the configuration in PSA and IT Glue.
+
 ## Common Query Patterns
 
 ```

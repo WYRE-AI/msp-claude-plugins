@@ -17,6 +17,20 @@ when_to_use: >-
 
 Tickets in HubSpot represent support requests, service issues, or tasks that need resolution. For MSPs, tickets are the backbone of client service delivery -- tracking everything from break-fix requests and password resets to complex infrastructure projects. Tickets belong to a pipeline (e.g., "Support Pipeline") and progress through stages (e.g., "New", "In Progress", "Resolved"). They can be associated with contacts (the person who reported the issue), companies (the client organization), and deals (if the ticket relates to a service agreement).
 
+## Conduit connector
+
+Conduit's `hubspot` connector is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`, OAuth). Its CRM tools are generic over object type, so every call names the `objectType`:
+
+| Tool | Call shape |
+|------|-----------|
+| `search_crm_objects` | `objectType`, optional `query` (free text), `filterGroups` (property `filters` and `associatedWith` association filters), `properties`, `sorts`, `limit` (max 200), `offset` |
+| `get_crm_objects` | `objectType`, `objectIds` (1-100), `properties` |
+| `manage_crm_objects` | `createRequest.objects[]` or `updateRequest.objects[]` (each with `objectType`, `properties`, optional `associations`, and `objectId` for updates), plus `confirmationStatus` (`CONFIRMED` only after the user approved the exact change) |
+| `search_properties` / `get_properties` | Discover property names and enumeration values for an `objectType` |
+| `search_owners` | Resolve `hubspot_owner_id` values to people |
+
+Parameter names in the tables below (such as `contactId`) describe the HubSpot fields involved; send them in the call shapes above. See `hubspot-api-patterns` for the full tool list.
+
 ## Anti-triggers
 
 - **The MSP's service desk** — HubSpot tickets are a CRM-side service
@@ -32,13 +46,13 @@ Tickets in HubSpot represent support requests, service issues, or tasks that nee
 
 | Tool | Description | Key Parameters |
 |------|-------------|----------------|
-| `hubspot_retrieve_ticket` | Get a single ticket by ID | `ticketId` (required) |
-| `hubspot_create_ticket` | Create a new ticket | `subject` (required), `content`, `hs_pipeline`, `hs_pipeline_stage` |
-| `hubspot_update_ticket` | Update an existing ticket | `ticketId` (required), property fields to update |
+| `get_crm_objects` (`objectType: "tickets"`) | Get tickets by ID | `objectIds` (required, 1-100) |
+| `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) | Create a new ticket | `subject` (required), `content`, `hs_pipeline`, `hs_pipeline_stage` |
+| `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) | Update an existing ticket | `objectId` (required), property fields to update |
 
 ### Create a Ticket
 
-Call `hubspot_create_ticket` with the ticket's properties:
+Call `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) with the ticket's properties:
 
 **Example: Create a support ticket:**
 - `subject`: `Email delivery issues - Acme Corp`
@@ -50,30 +64,30 @@ Call `hubspot_create_ticket` with the ticket's properties:
 
 ### Update a Ticket
 
-Call `hubspot_update_ticket` with the `ticketId` and the properties to change:
+Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) with the ticket's `objectId` and the properties to change:
 
 **Example: Move ticket to In Progress:**
-- `ticketId`: `77777`
+- `objectId`: `77777`
 - `hs_pipeline_stage`: `2`
 
 **Example: Resolve a ticket:**
-- `ticketId`: `77777`
+- `objectId`: `77777`
 - `hs_pipeline_stage`: `4`
 - `hs_resolution`: `Reconfigured mail relay settings. Confirmed delivery restored for all 5 users.`
 
 ### Retrieve a Ticket
 
-Call `hubspot_retrieve_ticket` with the `ticketId`:
+Call `get_crm_objects` (`objectType: "tickets"`) with the ticket ID in `objectIds`:
 
 **Example:**
-- `hubspot_retrieve_ticket` with `ticketId=77777`
+- `get_crm_objects` (`objectType: "tickets"`) with `objectIds: [77777]`
 
 ### Search Tickets
 
 Tickets can be found via the associations API. To find tickets for a specific contact or company:
 
-1. Call `hubspot_access_associations` with the contact or company ID and `toObjectType=ticket`
-2. Retrieve each ticket by ID using `hubspot_retrieve_ticket`
+1. Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the contact or company ID
+2. Retrieve each ticket by ID using `get_crm_objects` (`objectType: "tickets"`)
 
 ## Key Concepts
 
@@ -136,31 +150,31 @@ MSPs commonly categorize tickets by type:
 
 ### Create a Support Ticket
 
-1. **Find the contact** - Call `hubspot_search_contacts` to find the person reporting the issue
-2. **Find the company** - Call `hubspot_search_companies` to find the client organization
-3. **Create the ticket** - Call `hubspot_create_ticket` with subject, content, pipeline, stage, priority, and owner
-4. **Associate with contact** - Call `hubspot_create_association` from ticket to contact
-5. **Associate with company** - Call `hubspot_create_association` from ticket to company
-6. **Log initial note** - Call `hubspot_create_note` to document initial triage findings
+1. **Find the contact** - Call `search_crm_objects` (`objectType: "contacts"`) to find the person reporting the issue
+2. **Find the company** - Call `search_crm_objects` (`objectType: "companies"`) to find the client organization
+3. **Create the ticket** - Call `manage_crm_objects` (`createRequest`, `objectType: "tickets"`) with subject, content, pipeline, stage, priority, and owner
+4. **Associate with contact** - Call `manage_crm_objects` (`updateRequest` with `associations`) from ticket to contact
+5. **Associate with company** - Call `manage_crm_objects` (`updateRequest` with `associations`) from ticket to company
+6. **Log initial note** - Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the new ticket to document initial triage findings
 
 ### Search Tickets for a Client
 
-1. Find the company with `hubspot_search_companies`
-2. Call `hubspot_access_associations` with the company ID and `toObjectType=ticket`
-3. For each ticket ID, call `hubspot_retrieve_ticket` to get full details
+1. Find the company with `search_crm_objects` (`objectType: "companies"`)
+2. Call `search_crm_objects` with `objectType: "tickets"` and an `associatedWith` filter on the company ID
+3. For each ticket ID, call `get_crm_objects` (`objectType: "tickets"`) to get full details
 4. Filter by pipeline stage to find open tickets
 
 ### Update Ticket Status
 
-1. Call `hubspot_retrieve_ticket` to confirm current state
-2. Call `hubspot_update_ticket` with the new `hs_pipeline_stage`
+1. Call `get_crm_objects` (`objectType: "tickets"`) to confirm current state
+2. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) with the new `hs_pipeline_stage`
 3. If closing, include `hs_resolution` describing the fix
-4. Call `hubspot_create_note` to log the status change details
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the ticket to log the status change details
 
 ### Ticket Volume Report for a Client
 
-1. Find the company with `hubspot_search_companies`
-2. Call `hubspot_access_associations` to get all tickets
+1. Find the company with `search_crm_objects` (`objectType: "companies"`)
+2. Call `search_crm_objects` (`associatedWith` filter) to get all tickets
 3. Retrieve each ticket and categorize by:
    - Status (open vs. closed)
    - Priority (high, medium, low)
@@ -170,11 +184,11 @@ MSPs commonly categorize tickets by type:
 
 ### Escalation Workflow
 
-1. Call `hubspot_retrieve_ticket` to review the current ticket
-2. Call `hubspot_update_ticket` to set `hs_ticket_priority` to `HIGH`
-3. Call `hubspot_update_ticket` to reassign `hubspot_owner_id` to the escalation engineer
-4. Call `hubspot_create_note` to document the escalation reason
-5. Call `hubspot_create_task` to create a follow-up task for the assigned engineer
+1. Call `get_crm_objects` (`objectType: "tickets"`) to review the current ticket
+2. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) to set `hs_ticket_priority` to `HIGH`
+3. Call `manage_crm_objects` (`updateRequest`, `objectType: "tickets"`) to reassign `hubspot_owner_id` to the escalation engineer
+4. Call `manage_crm_objects` (`createRequest`, `objectType: "notes"`) with `associations` to the ticket to document the escalation reason
+5. Call `manage_crm_objects` (`createRequest`, `objectType: "tasks"`) to create a follow-up task for the assigned engineer
 
 ## Response Examples
 

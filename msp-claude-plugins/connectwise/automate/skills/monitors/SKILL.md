@@ -19,7 +19,7 @@ Monitors in ConnectWise Automate continuously evaluate conditions on managed end
 ## Anti-triggers
 
 - **A monitor that has already fired** — the resulting notification has
-  its own lifecycle, acknowledgment and history; use
+  its own record (read-only through the API); use
   `connectwise-automate-alerts`.
 - **Response and resolution targets** — SLA clocks and escalation rules
   are ConnectWise PSA ticket behaviour, not Automate thresholds; use

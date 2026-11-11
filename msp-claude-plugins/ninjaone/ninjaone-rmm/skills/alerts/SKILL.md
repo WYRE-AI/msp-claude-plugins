@@ -64,7 +64,7 @@ Dismisses an alert by its unique identifier. The underlying condition may still 
 
 Tool: `ninjaone_alerts_reset_all`
 
-Dismisses all alerts for a specific device or organization. Use with care — this cannot be undone.
+Dismisses all alerts for a specific device or organization. Use with care — this cannot be undone. Conduit classifies it `admin` (the single-alert `ninjaone_alerts_reset` is `write`).
 
 Key parameters:
 - `device_id` — Reset all alerts for a single device

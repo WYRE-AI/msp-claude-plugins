@@ -179,6 +179,8 @@ Args: {
 
 ### Search Tickets
 
+`searchTerm` is a **ticket-number prefix**, not free-text title search. Title words such as `"email"` return 0 results; prefixes such as `"T20260917"` match ticket numbers that start with that string.
+
 ```
 Tool: autotask_search_tickets
 Args: {
@@ -189,7 +191,16 @@ Args: {
 }
 ```
 
-**Filters:** `companyID`, `status`, `priority`, `queueID`, `assignedResourceID`, `pageSize`
+**Filters:** `companyID`, `status` (omit to get all non-Complete tickets), `priority`, `queueID`, `assignedResourceID`, `contactID`, `unassigned`, `createdAfter`, `createdBefore`, `lastActivityAfter`, `searchTerm` (ticket-number prefix only — not title or description text), `pageSize` (default 25, max 500)
+
+Only the first `pageSize` results come back. The schema accepts `page`, but the server ignores it, so later pages return the same first results. If you get exactly `pageSize` results, assume there are more and narrow the filters (for example `createdAfter`) instead of paging.
+
+To look up tickets by number, pass the prefix alone. Without `status`, Complete tickets (status 5) are excluded, so repeat with `"status": 5` if the ticket may be closed:
+
+```
+Tool: autotask_search_tickets
+Args: { "searchTerm": "T20260917" }
+```
 
 ### Get Ticket Details
 
@@ -293,7 +304,7 @@ See [references/api.md](references/api.md) for additional query patterns (SLA-br
 ### Ticket Creation Flow
 
 1. **Validate company exists** and has active contract
-2. **Check for duplicates** - search open tickets with similar title
+2. **Check for duplicates** - list the company's open tickets (`companyID`, `status` omitted, `pageSize: 500`) and compare titles client-side. If 500 come back the list may be incomplete, so tell the user the duplicate check was inconclusive before creating. Narrowing (for example with `createdAfter`) only rules out duplicates inside that window, so say which window you checked. Do not pass title text as `searchTerm`; that filter is a ticket-number prefix only.
 3. **Auto-set defaults:**
    - Status → NEW (1)
    - Priority → MEDIUM (2) if not specified

@@ -6,51 +6,51 @@ arguments: [computer, script, params, wait]
 
 # Run Script
 
-Execute a script on an endpoint in ConnectWise Automate with optional parameters.
+Execute a script on an endpoint in ConnectWise Automate with optional parameters, then collect its result without re-running it.
 
 ## Prerequisites
 
-- Valid ConnectWise Automate API credentials configured
-- `CONNECTWISE_AUTOMATE_SERVER` environment variable set
-- `CONNECTWISE_AUTOMATE_USERNAME` and `CONNECTWISE_AUTOMATE_PASSWORD` environment variables set
-- Computer must be online for immediate script execution
+- ConnectWise Automate connected in Conduit (server URL, client ID, username, password)
+- An `admin` grant on the `connectwise-automate` vendor: `cwautomate_computers_run_script` and `cwautomate_scripts_execute` are admin-tier
+- Operator approval of the exact script and target before step 5
 
 ## Steps
 
 1. **Resolve computer identifier**
-   - If numeric, use as Computer ID directly
-   - Otherwise, search by hostname
+   - If numeric, use it as the computer ID
+   - Otherwise `cwautomate_computers_search` with the hostname
 
-2. **Verify computer is online**
-   - Check computer status
-   - If offline, return error with last contact time
+2. **Verify the computer is online**
+   - `cwautomate_computers_get`; if offline, stop and report the last contact time
 
-3. **Resolve script**
-   - If numeric, use as Script ID directly
-   - Otherwise, search scripts by name
+3. **Resolve the script**
+   - If numeric, use it as the script ID
+   - Otherwise `cwautomate_scripts_list` and match by name; `cwautomate_scripts_get` to read its parameters
 
-4. **Validate script parameters**
-   - Get script definition to check required parameters
-   - Verify all required parameters are provided
-   - Parse params string into key-value pairs
+4. **Check nothing is already running**
+   - `cwautomate_scripts_running` with the computer ID; if the same script is running, report that instead of launching it again
 
-5. **Execute script**
-   ```http
-   POST /cwa/api/v1/Computers/{computerID}/Scripts/{scriptID}/Execute
-   Authorization: Bearer {token}
-   Content-Type: application/json
+5. **Execute (after approval)**
+   - One computer: `cwautomate_computers_run_script` with `computer_id`, `script_id` and `parameters` (key-value pairs). It waits up to 20 seconds.
+   - Several computers: `cwautomate_scripts_execute` with `script_id`, `computer_ids` and the same approved `parameters`, which apply to every target; it schedules the script and polls its history for the per-computer outcome.
 
-   {
-     "Parameters": {
-       "key1": "value1",
-       "key2": "value2"
-     }
-   }
-   ```
+6. **Collect the result**
+   - If the run finished inside the wait, report its pass/fail state and Automate's diagnostic message.
+   - If the result has `completed: false`, the script is **still running**. Do not launch it again.
+     - Without `--wait`: report it as queued or running and stop.
+     - With `--wait`: read `cwautomate_scripts_history` for that computer (and `cwautomate_scripts_running` to see it is still in progress) every 30 seconds until the run appears in history, for at most 10 minutes. At the deadline, report the run as still running or unknown, and never relaunch it.
 
-6. **Handle result**
-   - If `--wait` flag, poll for completion
-   - Return execution status and output
+Under the hood step 5 issues `POST /cwa/api/v1/Computers/{computerID}/Scripts/{scriptID}/Execute`; Automate has no synchronous run, which is why history is the source of truth for the outcome.
+
+## Catalog commands (not scripts)
+
+Automate's fixed command catalog (for example reboot, refresh inventory) is a separate surface:
+
+1. `cwautomate_commands_list` — find the command ID; free-text commands are not accepted.
+2. `cwautomate_computers_run_command` (admin) with `computer_id`, `command_id` and positional `parameters`. It queues the command and returns an `execution_id`.
+3. `cwautomate_computers_command_status` with `computer_id` and `execution_id` to read the outcome. Never re-issue on a timeout or a "Duplicate command" result; poll instead.
+
+`cwautomate_computers_reboot` follows the same queue-and-poll pattern.
 
 ## Parameters
 
@@ -59,289 +59,62 @@ Execute a script on an endpoint in ConnectWise Automate with optional parameters
 | computer | string | Yes | - | Computer hostname or ID |
 | script | string | Yes | - | Script name or ID |
 | params | string | No | - | Parameters as `key=value,key2=value2` |
-| wait | flag | No | false | Wait for script completion |
+| wait | flag | No | false | Keep polling `cwautomate_scripts_history` until the run completes |
 
 ## Examples
 
-### Basic Script Execution
-
 ```
 /run-script "ACME-DC01" "Clear Temp Files"
-```
-
-### With Parameters
-
-```
 /run-script "ACME-DC01" "Clear Temp Files" --params "days=30,path=C:\\Temp"
-```
-
-### Wait for Completion
-
-```
-/run-script "ACME-DC01" "Clear Temp Files" --wait
-```
-
-### Using Computer ID
-
-```
-/run-script 12345 "Clear Temp Files" --wait
-```
-
-### Using Script ID
-
-```
-/run-script "ACME-DC01" 1001 --wait
-```
-
-### Full Example with All Options
-
-```
-/run-script "ACME-DC01" "Disk Cleanup" --params "drives=C,days=7,logs=true" --wait
+/run-script 12345 1001 --wait
 ```
 
 ## Output
 
-### Script Queued (No Wait)
+### Completed
 
 ```
-Script Queued Successfully
+Script Completed
 
-Execution ID:  98765
 Computer:      ACME-DC01 (ID: 12345)
 Script:        Clear Temp Files (ID: 1001)
-Status:        Pending
-
-Parameters:
-  days: 30
-  path: C:\Temp
-
-Script will run when the computer checks in (typically within 5 minutes).
-
-To check status later:
-  GET /cwa/api/v1/Scripts/Executions/98765
+Result:        Success
+Message:       Successfully deleted 156 files (2.3 GB freed)
 ```
 
-### Script Running (With Wait)
+### Still running
 
 ```
-Running script on ACME-DC01...
+Script still running on ACME-DC01 (ID: 12345)
 
-Script:        Clear Temp Files
-Started At:    2024-02-15 10:45:00 UTC
-Status:        Running
-
-[=========>          ] Executing...
+The run was queued and has not finished within the wait window.
+Not re-launching. Checking cwautomate_scripts_history for the result.
 ```
 
-### Script Completed Successfully
-
-```
-Script Completed Successfully
-
-Execution ID:  98765
-Computer:      ACME-DC01
-Script:        Clear Temp Files
-Duration:      45 seconds
-Exit Code:     0
-
-Output:
-----------------------------------------------------------------------
-Scanning temporary directories...
-Found 156 files older than 30 days
-Deleting files...
-Successfully deleted 156 files (2.3 GB freed)
-----------------------------------------------------------------------
-
-Errors: None
-```
-
-### Script Failed
+### Failed
 
 ```
 Script Failed
 
-Execution ID:  98765
 Computer:      ACME-DC01
 Script:        Clear Temp Files
-Duration:      12 seconds
-Exit Code:     1
-
-Output:
-----------------------------------------------------------------------
-Scanning temporary directories...
-Error: Access denied to C:\Temp\locked.file
-----------------------------------------------------------------------
-
-Errors:
-----------------------------------------------------------------------
-ERROR: Could not delete locked file
-Process exited with code 1
-----------------------------------------------------------------------
+Message:       Access denied to C:\Temp\locked.file
 
 Suggestions:
-- Check if file is in use by another process
-- Verify script has appropriate permissions
-- Run script again after resolving file lock
-```
-
-### Script Timeout
-
-```
-Script Timed Out
-
-Execution ID:  98765
-Computer:      ACME-DC01
-Script:        Long Running Script
-Duration:      300 seconds (timeout)
-Status:        Timeout
-
-The script exceeded the maximum execution time.
-
-Partial Output:
-----------------------------------------------------------------------
-Step 1 complete...
-Step 2 complete...
-Step 3 in progress...
-----------------------------------------------------------------------
-
-The script may still be running on the computer.
-Check computer logs or run a shorter test script.
+- Check whether the file is in use
+- Verify the script runs with the permissions it needs
 ```
 
 ## Error Handling
 
-### Computer Offline
-
-```
-Cannot run script - Computer is offline
-
-Computer:     ACME-DC01 (ID: 12345)
-Status:       Offline
-Last Contact: 2024-02-15 08:30:00 UTC (2 hours ago)
-
-Scripts require the computer to be online.
-
-Options:
-1. Wait for computer to come online
-2. Schedule script for later execution
-3. Contact on-site personnel to check computer
-```
-
-### Computer Not Found
-
-```
-Computer not found: "UNKNOWN-PC"
-
-No computer matching "UNKNOWN-PC" was found.
-
-Suggestions:
-- Verify the hostname spelling
-- Use /list-computers to search for computers
-- Check if the computer exists in Automate
-```
-
-### Multiple Computers Match
-
-```
-Multiple computers match "DC01":
-
-  # | Computer      | Client           | Status  | ID
-----+---------------+------------------+---------+-------
-  1 | ACME-DC01     | Acme Corporation | Online  | 12345
-  2 | ACME-DC02     | Acme Corporation | Online  | 12346
-  3 | TECH-DC01     | TechStart Inc    | Online  | 12400
-
-Please specify a more precise hostname or use the Computer ID.
-```
-
-### Script Not Found
-
-```
-Script not found: "Clear Temp Filess"
-
-Did you mean one of these?
-  - Clear Temp Files (ID: 1001, Folder: Maintenance/Disk)
-  - Clear Browser Cache (ID: 1002, Folder: Maintenance/Browser)
-  - Disk Cleanup (ID: 1003, Folder: Maintenance/Disk)
-
-Use the exact script name or Script ID.
-```
-
-### Missing Required Parameter
-
-```
-Missing required parameter
-
-Script:   Backup Script (ID: 2001)
-Missing:  BACKUP_PATH, RETENTION_DAYS
-
-Required parameters for this script:
-  - BACKUP_PATH (required): Destination path for backups
-  - RETENTION_DAYS (required): Number of days to retain backups
-  - COMPRESSION (optional, default: true): Enable compression
-
-Usage:
-  /run-script "ACME-DC01" "Backup Script" --params "BACKUP_PATH=D:\\Backup,RETENTION_DAYS=30"
-```
-
-### Permission Denied
-
-```
-Permission denied
-
-Unable to run script on this computer.
-
-Possible causes:
-- API credentials don't have script execution permissions
-- API credentials don't have access to this client
-- Script is restricted to certain users
-
-Contact your ConnectWise Automate administrator.
-```
-
-## Parameter Format
-
-Parameters are passed as comma-separated `key=value` pairs:
-
-```
---params "key1=value1,key2=value2,key3=value3"
-```
-
-### Special Characters
-
-- Use double quotes around the entire value
-- Escape backslashes in paths: `path=C:\\Temp`
-- Boolean values: `true`, `false`
-- Numbers: `30`, `100`
-
-### Parameter Examples
-
-```
---params "days=30"
---params "path=D:\\Backups,retention=7"
---params "enabled=true,threshold=90,email=admin@company.com"
---params "drives=C:;D:,excludeFolders=Windows;Program Files"
-```
-
-## Exit Code Reference
-
-| Exit Code | Typical Meaning |
-|-----------|-----------------|
-| 0 | Success |
-| 1 | General error |
-| 2 | Misuse of command |
-| 3 | File not found |
-| 5 | Access denied |
-| 87 | Invalid parameter |
-| 1603 | Installation failed |
-| -1 | Script exception |
+| Error | Cause | Resolution |
+|-------|-------|------------|
+| Computer offline | Agent not checked in | Report last contact; do not queue unless the operator wants it to run on next check-in |
+| Script not found | Wrong name or ID | Re-list with `cwautomate_scripts_list` |
+| Missing parameters | Required script parameter omitted | Read `cwautomate_scripts_get` and ask for the value |
+| Not permitted | No `admin` grant on the vendor | The operator must grant it; do not fall back to another tool |
+| `completed: false` | Run outlasted the wait | Poll `cwautomate_scripts_history`; never re-launch |
 
 ## Related Commands
 
-- `/list-computers` - Find computers to run scripts on
-
-## Related Skills
-
-- [Scripts Skill](../skills/scripts/SKILL.md) - Script management patterns
-- [Computers Skill](../skills/computers/SKILL.md) - Computer lookup
-- [API Patterns Skill](../skills/api-patterns/SKILL.md) - Authentication and error handling
+- `/list-computers` - Find computer IDs

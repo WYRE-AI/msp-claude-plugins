@@ -60,7 +60,7 @@ export const plugins: Plugin[] = [
       { name: 'calls-queues', description: '3CX\'s live-operations surface: read-only visibility into active calls, recordings, voicemail, department and queue membership, and forwarding/presence profiles, plus the write actions that change live call routing — dropping a call, switching a profile, and logging a queue agent in or out.' },
       { name: 'directory', description: '3CX\'s read-only directory surface: resolving a caller by email or by exact extension, searching the PBX\'s own phonebooks, searching contacts synced from an integrated CRM, and listing PBX users/extensions.' },
       { name: 'pbx-admin', description: '3CX\'s system-and-configuration surface: server time, PBX event log and application log search, service status, database schema and the read-only SELECT-only Query tool, DIDs, IP and phone blocklists, SIP trunks, call flow apps, and the configuration write/delete actions that change what calls the PBX accepts or how they route.' },
-      { name: 'api-patterns', description: '3CX\'s native PBX MCP server: the per-PBX endpoint shape (every PBX is its own FQDN and its own OAuth authorization server — there is no shared mcp.3cx.com), the Admin Console + client setup flow, the permission model (fully inherited from the 3CX account that approved the connection), and how to discover the live tool surface since 3CX has not published exact tool-name strings.' }
+      { name: 'api-patterns', description: '3CX\'s native PBX MCP server: the per-PBX endpoint shape (every PBX is its own FQDN and its own OAuth authorization server — there is no shared mcp.3cx.com), how Conduit\'s catalog connects one anyway, the Admin Console + client setup flow, the permission model (fully inherited from the 3CX account that approved the connection), and how to discover the live tool surface since 3CX has not published exact tool-name strings.' }
     ],
     agents: [],
     commands: [
@@ -237,6 +237,7 @@ export const plugins: Plugin[] = [
     features: [
       'Billing',
       'Configuration Items',
+      'Contract Services',
       'Contract Management',
       'CRM Operations',
       'Expense Management',
@@ -252,6 +253,7 @@ export const plugins: Plugin[] = [
     skills: [
       { name: 'billing', description: 'Autotask billing item retrieval, approval-level workflows, and invoice search — covering billing item types, approval status filtering, and reconciliation of billable work against invoices for MSP finance teams.' },
       { name: 'configuration-items', description: 'Autotask Configuration Item (CI) asset management: CI types and categories, lifecycle status codes, the CI field schema, related-item relationships, DNS records, notes, and contract/billing associations for MSP infrastructure tracking.' },
+      { name: 'contract-services', description: 'The recurring-billing side of Autotask contracts: service and bundle lines (autotask_search_contract_services, autotask_search_contract_service_bundles), the billed unit rows behind them (autotask_search_contract_service_units, autotask_search_contract_service_bundle_units), the per-contract monthly recurring-revenue roll-up (autotask_get_contract_recurring_lines), and writing service lines and onboarding contract shells.' },
       { name: 'contracts', description: 'Autotask contract and service agreement management - contract types (recurring services, block hours, time & materials, fixed price, retainer), service/service bundle associations, SLAs, and how contracts drive billing for MSP account managers.' },
       { name: 'crm', description: 'Autotask CRM entities - companies (accounts), contacts, and sites/locations - including field references, company type classifications, and how these records underpin tickets, contracts, and projects for MSP account management.' },
       { name: 'expenses', description: 'Autotask expense report and expense item structure - the report/item parent-child relationship, approval status workflow, expense categories, payment types, and the billable vs reimbursable distinction for MSP operational expenses.' },
@@ -273,7 +275,7 @@ export const plugins: Plugin[] = [
     commands: [
       { name: '/add-note', description: 'Add a note or comment to an existing Autotask ticket' },
       { name: '/check-contract', description: 'View contract status, entitlements, and remaining hours for a company or specific contract' },
-      { name: '/check-pricing', description: 'Check pricing details for an Autotask product or service from price lists' },
+      { name: '/check-pricing', description: 'Check pricing details for an Autotask product or service (price-list overrides are UI-only)' },
       { name: '/create-quote', description: 'Create a new Autotask quote with line items for products, services, and service bundles' },
       { name: '/create-ticket', description: 'Create a new service ticket in Autotask PSA' },
       { name: '/expenses', description: 'Use this skill when working with Autotask expense reports - creating reports, adding expense items, searching by status or submitter, and tracking reimbursable and billable expenses' },
@@ -462,6 +464,7 @@ export const plugins: Plugin[] = [
       'Licenses',
       'Mailbox & Email',
       'Ops',
+      'Secure Score',
       'Security Posture',
       'Standards',
       'Tenants',
@@ -473,6 +476,7 @@ export const plugins: Plugin[] = [
       { name: 'licenses', description: 'Read-only M365 license visibility through CIPP: per-tenant SKU purchase vs. consumption, portfolio-wide CSP license commitments, common SKU part numbers and their friendly names, and the license-mix red flags that drive rightsizing and billing reconciliation.' },
       { name: 'mailboxes', description: 'The four Exchange Online mailbox operations CIPP exposes — mailbox inventory, delegate/full-access permission audit, out-of-office, and email forwarding — plus the BEC-remediation, offboarding, and leave-coverage sequences built from them.' },
       { name: 'ops', description: 'CIPP\'s own operational layer rather than the tenants it manages: GDAP role definitions and pending invites, the CIPP scheduler, and the ping/version/log endpoints used to diagnose why other CIPP tools fail silently.' },
+      { name: 'secure-score', description: 'Microsoft Secure Score through CIPP: the live per-tenant score and its history (cipp_get_secure_score), the recommendation catalog behind it (cipp_list_secure_score_controls), and how to turn the two into a ranked, client-ready improvement plan.' },
       { name: 'security', description: 'Read-only access to a tenant\'s Conditional Access policy graph and named locations through CIPP: policy state semantics, the findings that matter in a CA review, portfolio drift detection, and why CA writes are absent from the MCP surface.' },
       { name: 'standards', description: 'CIPP\'s tenant-baseline enforcement model: the Report/Alert/Remediate standards modes and how to roll them out, on-demand standards evaluation, Best Practice Analyser reports, and SPF/DKIM/DMARC domain health results with their remediation actions.' },
       { name: 'tenants', description: 'The top-level CIPP scope: enumerating managed M365 tenants, retrieving tenant detail, and the accepted `tenantFilter` identifier formats (default domain, custom domain, GUID, `allTenants`).' },
@@ -588,7 +592,7 @@ export const plugins: Plugin[] = [
       'Script Execution'
     ],
     skills: [
-      { name: 'alerts', description: 'ConnectWise Automate alert management: alert sources (monitors, scripts, events), severity levels, lifecycle states, acknowledgment, resolution, history tracking, and PSA ticket creation from alerts.' },
+      { name: 'alerts', description: 'ConnectWise Automate alerts through Conduit: the read-only cwautomate_alerts_list and cwautomate_alerts_get tools, filtering by computer, client and severity, alert sources and severity levels, and triage workflows that hand follow-up to the PSA.' },
       { name: 'clients', description: 'ConnectWise Automate client management: client CRUD, client identifiers, locations, client hierarchy, groups, extra data fields (EDFs), and client-level settings.' },
       { name: 'computers', description: 'ConnectWise Automate computer/endpoint management: computer identifiers (ComputerID, Name, ComputerGUID, MAC), status values, OS types, hardware/software inventory, disk, patch, and antivirus status, plus remote management operations.' },
       { name: 'monitors', description: 'ConnectWise Automate monitor management: monitor types (internal, remote, agent, SNMP, script), categories, threshold configuration, templates, assignment methods (computer/group/client), and status evaluation.' },
@@ -653,16 +657,20 @@ export const plugins: Plugin[] = [
     features: [
       'Company Management',
       'Contact Management',
+      'Procurement',
       'Product Catalog',
       'Project Management',
+      'Scheduling',
       'Ticket Management',
       'Time Entry Tracking'
     ],
     skills: [
       { name: 'companies', description: 'ConnectWise PSA company/account management: company types, statuses, sites/locations, custom fields, and company relationships.' },
       { name: 'contacts', description: 'ConnectWise PSA contact management: contact records, contact types, communication items (email, phone), portal access, and relationships to companies.' },
+      { name: 'procurement', description: 'ConnectWise PSA procurement and stock through Conduit: purchase orders and their line items, sales orders and their products, procurement product items placed on tickets/projects/opportunities, warehouses and bins, inventory on hand, and the three-step inventory adjustment (cw_create_adjustment, cw_add_adjustment_detail, cw_close_adjustment).' },
       { name: 'product-catalog', description: 'ConnectWise PSA product catalog: catalog items (SKUs), categories, subcategories, manufacturers, and their use on quotes, opportunities, agreements, and tickets.' },
       { name: 'projects', description: 'ConnectWise PSA project management: project lifecycle and status/type values, phases, templates, resource/team allocation, budgeting, billing methods, and project tickets.' },
+      { name: 'scheduling', description: 'ConnectWise PSA schedule entries through Conduit: booking a member\'s time against a service ticket, project ticket or activity (cw_create_schedule_entry), finding and moving bookings (cw_search_schedule_entries, cw_update_schedule_entry), schedule types and statuses, UTC date handling, and the difference between a booking and a time entry.' },
       { name: 'tickets', description: 'ConnectWise PSA ticket management: ticket fields, service boards, statuses, priorities, SLAs, ticket notes, and workflow automation.' },
       { name: 'time-entries', description: 'ConnectWise PSA time entry management: charge-to types (tickets, projects, charge codes), billable vs non-billable time, work types and work roles, time sheets, and the time entry approval workflow.' },
       { name: 'api-patterns', description: 'ConnectWise PSA REST API fundamentals: public/private key + clientId authentication, page/pageSize pagination, the conditions query syntax, rate limiting (60/min), and error-response handling.' }
@@ -1117,12 +1125,14 @@ export const plugins: Plugin[] = [
     maturity: 'production',
     features: [
       'Alert Handling',
+      'Custom Fields',
       'Device Management',
       'Organization Management',
       'Ticket Management'
     ],
     skills: [
       { name: 'alerts', description: 'NinjaOne alerts and the conditions behind them: retrieving device alerts, dismissing individual alerts and bulk resets, alert summaries, severity and priority levels, common hardware/service/security/connectivity alert types and thresholds, alert webhooks, and triage workflows.' },
+      { name: 'custom-fields', description: 'Reading and writing NinjaOne device and organization custom fields through ninjaone_devices_get_custom_fields, ninjaone_devices_update_custom_fields, ninjaone_organizations_get_custom_fields and ninjaone_organizations_update_custom_fields: field-name keys, partial updates, and safe write practice.' },
       { name: 'devices', description: 'NinjaOne device management: device details and updates, Windows service control, inventory, maintenance windows, reboot modes, and health-check workflows for Windows, Mac, and Linux endpoints running the NinjaRMM agent.' },
       { name: 'organizations', description: 'NinjaOne organizations — the top-level container for devices, representing MSP clients: creation and listing, locations, node approval modes, policy mappings and node role IDs, custom fields, tags, cursor pagination, and error codes.' },
       { name: 'tickets', description: 'NinjaOne\'s built-in ticketing system, which integrates with device monitoring: ticket creation and updates, core/status/metadata fields, status and priority values with SLA targets, log entry types, device linkage, tagging patterns, and error codes.' },
@@ -1533,13 +1543,13 @@ export const plugins: Plugin[] = [
       'Workflows'
     ],
     skills: [
-      { name: 'alerts', description: 'Rootly\'s alerting layer between monitoring tools and incident management: alert sources and integrations (Datadog, PagerDuty, New Relic, Grafana), routing rules, escalation policies and their acknowledgement windows, suppression, and the conditions under which an alert auto-creates an incident.' },
+      { name: 'alerts', description: 'Rootly\'s alerting layer between monitoring tools and incident management: alert sources (`alerts_source`) and their webhook/email intake, alert routing rules, alert groups (deduplication/noise reduction), alert urgencies, escalation policies, and the acknowledge/resolve actions on an individual alert.' },
       { name: 'incidents', description: 'Incidents, Rootly\'s primary resource: the incident lifecycle and status transitions, severity levels, the incident field reference, AI-assisted analysis via find_related_incidents and suggest_solutions, action items, alert attachment, and cross-vendor PSA ticket correlation.' },
-      { name: 'oncall', description: 'Rootly on-call visibility built on the get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents, and check_oncall_health_risk tools: schedule and rotation coverage, structured shift handoffs, per-shift incident scoping, shift metric fields, and the burnout risk signals.' },
-      { name: 'postmortems', description: 'Rootly postmortems as structured post-incident retrospectives: the postmortem lifecycle, templates and automatic timeline import, action item creation and tracking through to project-management tools, and the blameless review practices Rootly\'s model assumes.' },
-      { name: 'services', description: 'The Rootly service catalog: tier classification by business criticality, the ownership attributes attached to each service (team, Slack channel, escalation policy, runbooks), upstream/downstream dependency modeling for blast-radius analysis, service CRUD, and how services link back to incidents and alerts.' },
-      { name: 'workflows', description: 'Rootly\'s incident-response automation model: the trigger / condition / action structure, the full catalog of trigger, action, and condition types, workflow CRUD and enable/disable, and the failure modes behind stale, over-firing, or circularly chained workflows.' },
-      { name: 'api-patterns', description: 'The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs.' }
+      { name: 'oncall', description: 'Rootly on-call visibility built on the get_oncall_handoff_summary, get_oncall_shift_metrics, get_shift_incidents, get_oncall_schedule_summary and check_responder_availability tools: schedule and rotation coverage, structured shift handoffs, per-shift incident scoping, shift metric fields, and the burnout risk signals.' },
+      { name: 'postmortems', description: 'Rootly postmortems as structured post-incident retrospectives: Rootly\'s retrospective process/step model (there is no standalone "postmortem" object), per-step status tracking through to completion, action item creation and tracking, and the blameless review practices Rootly\'s model assumes.' },
+      { name: 'services', description: 'The Rootly service catalog: the real service record (ownership via owner teams/users, Slack channels, dependency modeling via linked service IDs, and third-party links to PagerDuty/Opsgenie/Cortex/Backstage/GitHub/GitLab), service CRUD, incident/uptime charts per service, and how services link back to incidents and alerts.' },
+      { name: 'workflows', description: 'Rootly\'s incident-response automation model: workflow tasks (each with a concrete `task_type` like `create_slack_channel` or `page_rootly_on_call_responders`), the trigger-type/`triggers`-event structure (incident, post_mortem, action_item, alert, pulse, simple), the ID-list based condition/matching fields, and the `enabled` flag used to turn a workflow on or off (there is no separate enable/disable tool).' },
+      { name: 'api-patterns', description: 'The Rootly hosted MCP server and the JSON:API REST surface behind it: Global vs. Team token types and how the gateway injects credentials, the catalog of roughly 253 dynamically generated tools by category, page-number pagination and relationship includes, filter syntax, rate limits, and error handling.' }
     ],
     agents: [
       { name: 'incident-commander', description: 'Use this agent when an MSP engineer, SRE, or incident manager needs to command an active Rootly incident or review open incidents.' },
@@ -1658,6 +1668,7 @@ export const plugins: Plugin[] = [
       'Cloud Security Posture',
       'Purple AI Threat Hunting',
       'PowerQuery Analytics',
+      'Threat Intel',
       'Vulnerability Management'
     ],
     skills: [
@@ -1666,6 +1677,7 @@ export const plugins: Plugin[] = [
       { name: 'misconfigurations', description: 'Cloud security posture findings from SentinelOne\'s XSPM module across AWS, Azure, GCP, Kubernetes, identity providers, and infrastructure-as-code.' },
       { name: 'purple-ai', description: 'The `purple_ai` tool — SentinelOne\'s natural language investigation assistant over the full Singularity telemetry model.' },
       { name: 'threat-hunting', description: 'PowerQuery against the Singularity Data Lake: the Scalyr-based pipeline syntax (distinct from SPL, SQL, KQL, and Elasticsearch DSL), the powerquery, get_timestamp_range, and iso_to_unix_timestamp tools, time-range and row-limit handling, common hunting scenarios, and the Purple AI generation path.' },
+      { name: 'threat-intel', description: 'The SentinelOne sidecar\'s enrichment tools: VirusTotal / Google Threat Intelligence lookups by hash, IP, domain and URL (threat_intel_*), sandbox behaviour and file relationships, advanced VirusTotal search, and the CVE database (cve_search_by_id, cve_search_by_vendor, cve_database_status).' },
       { name: 'vulnerabilities', description: 'CVE tracking through SentinelOne\'s XSPM module: the read-only vulnerability tools, EPSS scores and exploit-maturity values and why they outrank raw CVSS severity for prioritization, status values and their transitions, the vulnerability field reference, and patch-prioritization and reporting workflows.' },
       { name: 'api-patterns', description: 'The SentinelOne Purple MCP server and the APIs behind it: uvx installation and transport modes, Service User token levels, the 23 read-only tools organized by domain, and the dual GraphQL (cursor pagination) / REST (offset pagination) architecture with its differing filter syntaxes, rate limits, and error causes.' }
     ],
@@ -1801,12 +1813,8 @@ export const plugins: Plugin[] = [
     ],
     commands: [
       { name: '/add-ticket-comment', description: 'Add a comment to an existing Syncro ticket' },
-      { name: '/create-appointment', description: 'Create a calendar appointment in Syncro' },
       { name: '/create-ticket', description: 'Create a new service ticket in Syncro MSP' },
       { name: '/get-customer', description: 'Get detailed customer information from Syncro' },
-      { name: '/list-alerts', description: 'List active RMM alerts from Syncro' },
-      { name: '/log-time', description: 'Log a time entry against a Syncro ticket' },
-      { name: '/resolve-alert', description: 'Resolve an RMM alert in Syncro' },
       { name: '/search-assets', description: 'Search for customer assets in Syncro' },
       { name: '/search-tickets', description: 'Search for tickets in Syncro MSP by various criteria' },
       { name: '/update-ticket', description: 'Update fields on an existing Syncro ticket' }
@@ -2115,12 +2123,15 @@ export const plugins: Plugin[] = [
     id: 'datto-saas-protection',
     name: 'Datto Saas Protection',
     vendor: 'Kaseya',
-    description: 'Datto SaaS Protection (Backupify) - M365 / Google Workspace cloud-to-cloud backup (scaffolding)',
+    description: 'Datto SaaS Protection (Backupify) - M365 / Google Workspace seat coverage, backup health, and seat licensing',
     category: 'bcdr',
     maturity: 'alpha',
-    features: [],
+    features: [
+      'Seat Coverage'
+    ],
     skills: [
-      { name: 'api-patterns', description: 'Datto SaaS Protection (formerly Backupify) REST API fundamentals: regional base URLs, bearer-token auth, the seat/tenant object model, backup status queries, and restore operations.' }
+      { name: 'seat-coverage', description: 'Seat-coverage and backup-health sweep for Datto SaaS Protection: finding unprotected and paused seats per customer, reading per-application backup status and detailed stats, and proposing (never silently applying) seat licence changes with datto_saas_bulk_seat_change.' },
+      { name: 'api-patterns', description: 'Datto SaaS Protection (formerly Backupify) through Conduit: the six datto_saas_* tools, the customer/domain/seat object model, Basic-auth key pair, seat types and states, and the confirm-gated bulk seat change.' }
     ],
     agents: [],
     commands: [],
@@ -2195,9 +2206,9 @@ export const plugins: Plugin[] = [
       { name: 'activities', description: 'HubSpot tasks, notes, and associations: task priority and status values, notes-vs-tasks semantics, the association type matrix linking contacts, companies, deals, and tickets, and engagement-history workflows.' },
       { name: 'companies', description: 'HubSpot company records: core fields, industry classification values, lifecycle stages, domain-based deduplication and automatic contact-company matching, and cross-referencing associated contacts, deals, and tickets.' },
       { name: 'contacts', description: 'HubSpot contact records: core and MSP-relevant custom fields, lifecycle stages, lead status values, contact ownership, CRM search filter patterns, and associations to companies and deals.' },
-      { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs.' },
+      { name: 'deals', description: 'HubSpot deal records and sales pipelines: deal fields, default and custom pipeline stages, deal amount conventions (MRR vs. TCV), forecast categories and weighted forecasting, and associating deals with contacts and companies.' },
       { name: 'tickets', description: 'HubSpot support tickets: core fields, default pipeline stages, priority levels, MSP ticket categories, SLA timestamp properties, and associating tickets with contacts, companies, and deals.' },
-      { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server and the CRM Search API behind it: the complete MCP tool catalog, OAuth 2.0 + PKCE connection over Streamable HTTP, automatic scope derivation, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
+      { name: 'api-patterns', description: 'HubSpot\'s official remote MCP server (brokered by Conduit) and the CRM Search API behind it: the live tool catalog (search_crm_objects, get_crm_objects, manage_crm_objects, properties and owners), OAuth via the Conduit connect flow, scopes, sensitive-data (PHI) exclusion, filter/sort/ pagination syntax, plan-tier rate limits, and error handling.' }
     ],
     agents: [
       { name: 'client-relationship-manager', description: 'Use this agent when an MSP account manager or vCIO needs to review account health across the client portfolio in HubSpot.' },
@@ -2875,6 +2886,30 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
+    id: 'marketing-pack',
+    name: 'Marketing Pack',
+    vendor: 'Marketing-pack',
+    description: 'MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, across whatever PSA and documentation tools you have connected.',
+    category: 'workflow-pack',
+    maturity: 'alpha',
+    features: [
+      'Case Study Drafter'
+    ],
+    skills: [
+      { name: 'case-study-drafter', description: 'Turns a closed PSA project or a resolved incident, plus optional documentation records, into an anonymized case study with a challenge, approach, and result.' }
+    ],
+    agents: [],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'marketing-pack',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
     id: 'devops-pack',
     name: 'Devops Pack',
     vendor: 'Devops-pack',
@@ -2995,7 +3030,7 @@ export const plugins: Plugin[] = [
       'Retention Rpo Compliance'
     ],
     skills: [
-      { name: 'backup-job-health', description: 'Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: the two structurally different job models (image-based appliance backup vs.' },
+      { name: 'backup-job-health', description: 'Portfolio-wide backup job health across whatever BCDR and SaaS-backup tools are connected: the two structurally different job models (image-based appliance backup vs. SaaS-data snapshot backup) and how to normalize them into one health record per protected unit, why a live consecutive-failure streak matters more than a trailing success rate, the missed-versus-failed distinction and its different root causes, and the two storage-trending risk patterns (approaching capacity, anomalous growth).' },
       { name: 'restore-test-verification', description: 'Whether a backup is actually recoverable rather than merely present: the ranked hierarchy of restore evidence (actual restore performed, full boot/virtualization verification, screenshot verification, spot-check restore drill, no evidence at all), adequate test cadence per data-criticality tier, and why a never-tested backup is the highest-priority finding — outranking even an actively failing job.' },
       { name: 'retention-rpo-compliance', description: 'Comparing configured backup retention and cadence against contracted retention windows and RPO (recovery point objective) targets: the two distinct retention gap types (configured-shorter-than-contracted vs. storage-forced truncation), why achievable RPO must be derived from actual job success history rather than the nominal schedule, where the contracted side of the comparison actually lives, and why "no documented requirement" is its own finding rather than an automatic pass.' }
     ],
@@ -3171,7 +3206,7 @@ export const plugins: Plugin[] = [
     id: 'kpn',
     name: 'KPN',
     vendor: 'Kpn',
-    description: 'KPN (Dutch telco) - outage and speed checks by address, SIM-swap fraud checks, and business-mobile fleet management: subscribers, contracts, orders, invoices, SIM block/replace (alpha - no verified KPN developer-portal credentials yet)',
+    description: 'KPN (Dutch telco) via the Grexx/IRMA interface - address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders, SIM, usage, settings)',
     category: 'network',
     maturity: 'beta',
     features: [
@@ -3179,14 +3214,14 @@ export const plugins: Plugin[] = [
       'Network Checks'
     ],
     skills: [
-      { name: 'mobile-fleet', description: 'KPN business mobile through Mobile Services Management (MSM v11): subscribers, contracts (lines/SIMs), allowed operations per contract, orders and service requests, invoices and invoice PDFs, the customer\'s organisation tree and usage thresholds; plus the confirmed writes (SIM block, unblock, replace; order authorize and cancel) and PIN/PUK handling.' },
-      { name: 'network-checks', description: 'Address- and number-level lookups against KPN: current and planned outages at a Dutch address (Disturbance Check), available access technology and speeds at an address (Speed Check), and the date of the last SIM swap on a KPN mobile number as a fraud signal.' },
-      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the X-KPN-* credential headers and the two OAuth token realms (API Store vs Mobile Services Management), why a valid key can still fail with 401/403 (product entitlement), quota headers and 429 handling, the write-confirmation flow, and why failed MSM writes are never retried automatically.' }
+      { name: 'mobile-fleet', description: 'KPN business mobile through the Grexx (IRMA) interface: finding a customer\'s mobile orders, reading number/SIM/subscription/bundle data (kpn_grexx_mobile_orders), the active SIM or eSIM (kpn_grexx_get_sim), blocks and limits (kpn_grexx_mobile_settings), current usage (kpn_grexx_mobile_usage) and available number portings.' },
+      { name: 'network-checks', description: 'Address- and line-level checks against KPN\'s Grexx interface: technology, speeds and product availability at a Dutch address (kpn_grexx_zipcode_check, kpn_grexx_prequalification), infrastructure and planned work (kpn_grexx_carrier_info), and live line diagnostics on a connectivity order (kpn_grexx_radius_check, kpn_grexx_ras_check, kpn_grexx_start_line_diagnose).' },
+      { name: 'api-patterns', description: 'How the KPN tool surface behaves through Conduit: the Grexx (IRMA) wholesale interface behind the kpn_grexx_* tools, the client-ID/secret credential pair and the optional Grexx URL fields, the IRMA customer/order model, the one write tool, and common errors.' }
     ],
     agents: [],
     commands: [
-      { name: '/check-outage', description: 'Check a Dutch address for KPN outages and report what connectivity is available there' },
-      { name: '/lost-phone', description: 'Find the KPN business-mobile contract for a lost or stolen phone and block its SIM after confirmation' }
+      { name: '/check-outage', description: 'Check a Dutch KPN site for line problems and planned work, and report what connectivity is available there' },
+      { name: '/lost-phone', description: 'Find the KPN business-mobile line and SIM for a lost or stolen phone so it can be blocked in the Grexx portal' }
     ],
     apiInfo: {
       baseUrl: '',
@@ -3195,6 +3230,582 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'kpn/kpn',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'ai-org-admin',
+    name: 'Ai Org Admin',
+    vendor: 'Anthropic-admin',
+    description: 'Anthropic Admin API - read-only review of a client\'s Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Claude Code Adoption',
+      'Key And Audit Review',
+      'Seat Inventory',
+      'Spend Review'
+    ],
+    skills: [
+      { name: 'claude-code-adoption', description: 'Claude Code adoption and value reporting for a client\'s Anthropic organization: the per-user daily Claude Code usage report (sessions, lines added and removed, commits, pull requests, tool accept/reject counts, tokens and estimated cost per model), how to roll days up into a month, and how to set it against seat inventory to find unused seats.' },
+      { name: 'key-and-audit-review', description: 'Security review of a client\'s Anthropic organization from the two admin-gated surfaces: the API key inventory (status, workspace scope, creator, principal, expiry, partial hint; never the secret) and the compliance activity feed (sign-ins, membership and role changes, key lifecycle events).' },
+      { name: 'seat-inventory', description: 'Seat and access inventory for a client\'s Anthropic organization: members and their organization roles, pending and expired invites, workspaces and per-workspace membership, and how to turn them into a seat count, an admin-role review, and an offboarding check against the client\'s leaver list.' },
+      { name: 'spend-review', description: 'Claude API spend and token usage for a client\'s Anthropic organization: the daily cost report, the Messages usage report, and the beta cost and usage analytics, with breakdowns by workspace, model, API key, and person; month-over-month comparison, per-client chargeback when clients are split by workspace, spike investigation, and rate-limit headroom.' },
+      { name: 'api-patterns', description: 'Anthropic Admin MCP fundamentals: the Conduit X-Anthropic-Admin-Key header and the sk-ant-admin key it carries, one key = one Anthropic organization, the 19 read-only tools and which three are admin-gated in Conduit, the two pagination styles (ID cursors and page tokens), response truncation, the cents-not-dollars cost units, time-range limits, and how vendor errors and 429s come back.' }
+    ],
+    agents: [
+      { name: 'anthropic-org-reviewer', description: 'Use this agent when an MSP account manager, vCIO, or security lead needs a periodic review of a client\'s Anthropic organization - seats and admin roles, pending invites, API key hygiene, Claude API spend and its drivers, and Claude Code adoption - rolled into one findings report.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'anthropic-admin/ai-org-admin',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'openai-admin',
+    name: 'Openai Admin',
+    vendor: 'Openai-admin',
+    description: 'OpenAI Admin API - read-only review of a client\'s OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Seat Key Inventory',
+      'Security Review',
+      'Spend Review'
+    ],
+    skills: [
+      { name: 'seat-key-inventory', description: 'Building the access inventory of a client\'s OpenAI organization: organization members and their roles, pending and expired invites, projects and their members, service accounts, project API keys and Admin keys with owner and last-used dates, and how to reconcile that inventory against the client\'s staff list to find stale seats and orphaned keys.' },
+      { name: 'security-review', description: 'Security and offboarding review of a client\'s OpenAI organization from the audit log (logins, membership and role changes, key and project lifecycle), the key inventory (keys left behind by removed users, unused and over-privileged Admin keys), and mTLS certificate expiry, plus how to scope an incident question to an actor, a project, or a time window.' },
+      { name: 'spend-review', description: 'Turning the OpenAI Admin usage and cost reports into a per-client spend review: daily cost by project, line item, user, or API key; token and request volume behind that cost; month-over-month comparison; spike attribution; and project rate-limit headroom when a client reports 429s.' },
+      { name: 'api-patterns', description: 'OpenAI Admin MCP fundamentals: the Admin key sent as the `X-OpenAI-Admin-Key` header through Conduit, the 30-tool read-only surface and which five tools Conduit admin-gates, the two pagination styles (object cursors for lists, page tokens for usage and cost reports), Unix-second time ranges, truncated pages, and the error and 429 shapes the server returns.' }
+    ],
+    agents: [
+      { name: 'openai-org-reviewer', description: 'Use this agent when an MSP account manager, vCIO, or security lead needs a monthly or QBR review of a client\'s OpenAI organization - seats, keys, spend, and audit findings in one report.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'openai-admin/openai-admin',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'jamf',
+    name: 'Jamf',
+    vendor: 'Jamf',
+    description: 'Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage',
+    category: 'rmm',
+    maturity: 'beta',
+    features: [
+      'Device Compliance',
+      'Device Offboarding',
+      'Patch Management',
+      'User Onboarding'
+    ],
+    skills: [
+      { name: 'device-compliance', description: 'Fleet compliance review for Jamf Pro: what jamf_backup_check measures on Macs (FileVault, recovery key escrow, managed state, inventory and check-in age) and iOS/iPadOS (passcode, data protection, device-reported iCloud Backup), its finding codes and severities, drilling into single devices, safe remediation with the write-tier tools, and smart groups for ongoing visibility.' },
+      { name: 'device-offboarding', description: 'Lost, stolen, and leaver device handling in Jamf Pro, almost all of it in the admin tier: operator-only Mac locking through jamf_prepare_computer_lock, mobile device lock, wipe, unmanage, record deletion, static group removal (write tier), and the read-only evidence to gather before any of them.' },
+      { name: 'patch-management', description: 'OS and third-party patch posture in Jamf Pro: which macOS and iOS versions Jamf can deploy, measuring OS version spread from inventory, managed software update plans and their status, patch management titles and per-title patch reports, the policies that deliver patches, and scheduling OS updates without forcing restarts.' },
+      { name: 'user-onboarding', description: 'New-hire setup in Jamf Pro: user records and how to avoid duplicates, scoping a new Mac\'s serial to a computer PreStage enrollment for Automated Device Enrollment, assigning computers and mobile devices to a user, building, department, and site, and adding Macs to static groups so the right policies and profiles apply.' },
+      { name: 'api-patterns', description: 'Jamf Pro MCP fundamentals through Conduit: the three X-Jamf-* credential headers and the API client they come from, the read/write/admin tool tiers and how Conduit and the sidecar each gate them, zero-based paging and RSQL filters on the Jamf Pro API tools, contains/limit on the Classic API list tools, inventory sections, response caps, and the error and rate-limit messages the sidecar returns.' }
+    ],
+    agents: [
+      { name: 'jamf-posture-auditor', description: 'Use this agent when an MSP technician or vCIO needs a read-only posture review of a client\'s Jamf Pro fleet: encryption and recovery key escrow, managed state, stale check-ins, OS currency, and third-party app patch currency, written up for a QBR or a cyber-insurance questionnaire.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'jamf/jamf',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'acronis',
+    name: 'Acronis',
+    vendor: 'Acronis',
+    description: 'Acronis Cyber Protect Cloud - backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting',
+    category: 'bcdr',
+    maturity: 'beta',
+    features: [
+      'Backup Health',
+      'Edr Incidents',
+      'Protection Coverage',
+      'Tenants And Usage'
+    ],
+    skills: [
+      { name: 'backup-health', description: 'Alert-driven backup health triage in Acronis Cyber Protect Cloud: ranking customers by active alert load, drilling into the worst machines, reading an alert\'s plan, resource and error context, separating real backup failures from noise, and the false-positive write (off by default, write tier in Conduit).' },
+      { name: 'edr-incidents', description: 'Endpoint Detection and Response (EDR) incident review in Acronis Cyber Protect Cloud: listing open incidents across customers, reading an incident\'s detections, activities and response actions, checking the status of a response action started in the console, and updating the investigation state or adding a comment (off by default, write tier in Conduit).' },
+      { name: 'protection-coverage', description: 'Protection coverage in Acronis Cyber Protect Cloud: which machines and workloads have no protection plan, which plans failed to deploy or are blocked, which agents are offline, outdated or unsupported, and how to reconcile Acronis resources against the client\'s machine list.' },
+      { name: 'tenants-and-usage', description: 'The Acronis Cyber Protect Cloud tenant hierarchy as an MSP sees it: finding the partner tenant, listing and searching customer tenants, mapping them to PSA companies, reading per-customer usage for billing reconciliation, listing a customer\'s Acronis users and their roles for access reviews, and checking MFA enrollment.' },
+      { name: 'api-patterns', description: 'Acronis Cyber Protect Cloud MCP fundamentals through Conduit: the three `X-Acronis-*` headers (data center URL, API client ID and secret), the partner → customer → unit tenant hierarchy and what an API client can see, the 37-tool surface (34 reads plus 3 writes that are off by default, one of them admin-only in Conduit), the `path` / `query` / `body` argument shape, the different pagination styles per API family, filter operator syntax, nanosecond alert timestamps, response size caps, and the error shape.' }
+    ],
+    agents: [
+      { name: 'acronis-backup-health-reviewer', description: 'Use this agent when an MSP technician or BCDR lead needs a cross-customer Acronis Cyber Protect Cloud backup health review - which clients have failed or missed backups, which machines are unprotected, and which agents are offline or out of date - ranked into a fix-first list.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'acronis/acronis',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'bitwarden',
+    name: 'Bitwarden',
+    vendor: 'Bitwarden',
+    description: 'Bitwarden - read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and subscription (never vault items)',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Event Log Review',
+      'License Reconciliation',
+      'Offboarding Access Review',
+      'Security Posture'
+    ],
+    skills: [
+      { name: 'event-log-review', description: 'Reading a client\'s Bitwarden organization event log through the admin-gated bitwarden_events_list tool: date ranges and the 367-day limit, continuationToken paging, the one-filter rule, the event types that matter to an MSP (failed logins, 2FA changes, vault exports, item views and copies, member and policy changes), resolving IDs back to members, groups and collections, and handling the personal data events carry.' },
+      { name: 'license-reconciliation', description: 'Reconciling a client\'s Bitwarden subscription against its real membership: Password Manager and Secrets Manager seats and autoscale limits from the subscription, member counts by status, invites that never completed, revoked members still listed, and the figures to check against the MSP\'s billing agreement.' },
+      { name: 'offboarding-access-review', description: 'Mapping everything a departing user could reach in a client\'s Bitwarden organization: their membership, role and status, collections granted directly and through groups, their recent vault activity from the admin-gated event log, and the follow-up list (revoke in the Admin Console, rotate exposed shared credentials, rotate the organization API key if they were an owner).' },
+      { name: 'security-posture', description: 'Assessing a client\'s Bitwarden organization posture from the read-only Public API: which security policies are enabled and how they are set, two-step login coverage across confirmed members, owner and admin sprawl, members stuck in Invited or Accepted, and the SSO caveat on the 2FA flag.' },
+      { name: 'api-patterns', description: 'Bitwarden MCP fundamentals: the organization API key passed through Conduit as X-Bitwarden-Client-Id / X-Bitwarden-Client-Secret / X-Bitwarden-Region, the 12 read-only tools and which one is admin-gated, full-list responses versus the paged event log, response truncation, the member role and status enums, error and rate-limit handling, and what the Public API can never return.' }
+    ],
+    agents: [
+      { name: 'bitwarden-org-auditor', description: 'Use this agent when an MSP security lead, vCISO or account manager needs a full read-only audit of a client\'s Bitwarden organization - policy posture, two-step login coverage, owner and admin sprawl, seat reconciliation, and (with the admin grant) notable events - rolled into one prioritized report.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'bitwarden/bitwarden',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: '1password',
+    name: '1password',
+    vendor: '1password',
+    description: '1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Account Hygiene',
+      'Offboarding Review',
+      'Signin Triage'
+    ],
+    skills: [
+      { name: 'account-hygiene', description: 'Periodic hygiene review of a client\'s 1Password account for QBRs and license true-ups: reconciling active and suspended seats against the client\'s headcount, finding long-suspended and never-used seats, and summarising the admin changes made during the review period (who was invited, who gained or lost group and vault access, who changed account settings).' },
+      { name: 'offboarding-review', description: 'How to review a departing or departed user\'s 1Password footprint with the read-only tools: confirm the seat is suspended, find every shared-vault item they used so the client can rotate it, catch sign-ins or item access after the departure date, and see who suspended them and when.' },
+      { name: 'signin-triage', description: 'Triage of 1Password sign-in attempts for one client account: pulling the sign-in feed over a window, grouping failures by user, category and country, separating password-guessing from MFA failures and firewall blocks, spotting successes from new countries after a run of failures, and deciding what is noise and what goes to the client.' },
+      { name: 'api-patterns', description: '1Password MCP fundamentals through Conduit: the region plus two independent credential halves (Events Reporting token, Users API client) and their X-OnePassword-* headers, which of the six read-only tools needs which half, which three are admin-gated in Conduit, cursor paging on the Events feeds, page-token paging on users, time windows and 120-day retention, rate limits, and how vendor errors come back.' }
+    ],
+    agents: [
+      { name: 'access-reviewer', description: 'Use this agent when an MSP technician or security lead needs a complete, read-only access review of one client\'s 1Password Business or Enterprise account.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: '1password/1password',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'zabbix',
+    name: 'Zabbix',
+    vendor: 'Zabbix',
+    description: 'Zabbix - read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability reporting',
+    category: 'network',
+    maturity: 'beta',
+    features: [
+      'Monitoring Coverage',
+      'Problem Triage',
+      'Sla Reporting'
+    ],
+    skills: [
+      { name: 'monitoring-coverage', description: 'Monitoring-coverage and collector-health review for a customer\'s Zabbix: disabled and unreachable hosts, hosts with no templates or triggers, templates linked to nothing, site proxies that stopped reporting, proxy group HA state, maintenance windows that never end, and disabled web scenarios.' },
+      { name: 'problem-triage', description: 'NOC triage of Zabbix problems for MSPs: pulling open problems by severity and customer host group, resolving each problem to its host through the trigger or event, separating cause from symptom and suppressed problems, checking maintenance and acknowledgement state, confirming whether an alert was actually sent, and reading recent event history for flapping.' },
+      { name: 'sla-reporting', description: 'Customer availability reporting from Zabbix: the business service tree and its status, SLA definitions (SLO, period, schedule, excluded downtime), per-period SLI figures from sla.getsli, a problem-history summary for customers without configured SLAs, and hourly trend aggregates for capacity notes.' },
+      { name: 'api-patterns', description: 'Zabbix MCP fundamentals through Conduit: the X-Zabbix-Base-Url and X-Zabbix-Api-Token headers, version-dependent token auth, the read-only 18-tool surface (one admin-gated tool, three opt-in tools Conduit does not list), the shared JSON-RPC get parameters (output, filter, search, tags, sortfield, limit), keyset paging by event ID or time range, the 500-row cap, output truncation and redaction, and the error types the sidecar returns.' }
+    ],
+    agents: [
+      { name: 'noc-triage-analyst', description: 'Use this agent when a NOC technician or dispatcher needs a ranked, customer-by-customer view of what is broken in Zabbix, with each problem resolved to its host, checked against maintenance, paging and flapping history, and turned into ticket-ready notes.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'zabbix/zabbix',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'lastpass',
+    name: 'Lastpass',
+    vendor: 'Lastpass',
+    description: 'LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Msp Billing',
+      'Offboarding Review',
+      'Privileged Access',
+      'Security Posture'
+    ],
+    skills: [
+      { name: 'msp-billing', description: 'Reconciling LastPass MSP license consumption: billing cycles, the per-company billing report (`dailyAverageLicenseCount`, `licenseType`, `addons`), managed-company license limits and active/suspended status, and matching all of it against what the MSP bills each client in the PSA.' },
+      { name: 'offboarding-review', description: 'Leaver access review in LastPass: finding a departing user in the MSP\'s own company or a client company, reading their account status, admin level and group memberships, catching a pending invite that was never revoked, and producing the checklist of actions a LastPass admin must take in the Admin Console, because this connector cannot disable or remove anyone.' },
+      { name: 'privileged-access', description: 'Reviewing who holds LastPass admin rights: admin levels (RBAC roles) and their permissions, the users in each level, the MSP cross-tenant admin-user report, and how to cross-check admins for MFA, dormancy and leaver status.' },
+      { name: 'security-posture', description: 'Per-client LastPass account hygiene from user records: MFA coverage (`advancedMfaStatus`, `enabledMfa`), weak Security Challenge and master-password scores, stale master passwords, dormant enrolled accounts, invitations that never converted, and how to roll those into a client-facing posture summary.' },
+      { name: 'api-patterns', description: 'The LastPass Business and MSP admin tool surface as exposed through Conduit: the 23 read-only tools and their Conduit tier, Business key versus MSP key scope, the `X-LastPass-API-Key` header, `max_results` / `page_token` pagination, wildcard and `[from:to]` range filters, the users LastPass silently omits from lists, the user record fields, and the error vocabulary (401 early access, 403 wrong key type, 429 shared limits, oversize pages).' }
+    ],
+    agents: [
+      { name: 'posture-sweep', description: 'Use this agent when an MSP security lead or vCIO needs a LastPass posture review across every managed client in one pass - admins, MFA coverage, weak scores, dormant accounts and unconverted invites - ranked so the worst clients surface first.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'lastpass/lastpass',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'moovila',
+    name: 'Moovila',
+    vendor: 'Moovila',
+    description: 'Moovila - read-only project, budget, task, time entry and resource reporting for project profitability and billing reconciliation',
+    category: 'psa',
+    maturity: 'beta',
+    features: [
+      'Project Health',
+      'Project Profitability',
+      'Resource Utilization',
+      'Time Reconciliation'
+    ],
+    skills: [
+      { name: 'project-health', description: 'Portfolio-level project health for MSP project delivery in Moovila: building the active-project list per customer, finding overdue and stalled tasks, milestones at risk, blocked work waiting on predecessors, projects past their due or forecast date, and producing a weekly project status report or a per-customer project review for a QBR.' },
+      { name: 'project-profitability', description: 'Budget versus actual for MSP projects in Moovila: reading project budget lines (total, allocated, unallocated, percentage committed), task-level totalBudget/totalActual/remainingBudget, labor cost from time entries at pay rate or labor type fully burdened cost, revenue from billable hours at bill rate or projectValue, and rolling these up to a per-project and per-customer margin view.' },
+      { name: 'resource-utilization', description: 'Technician utilization from Moovila data: the active user roster with labor types, hours logged per user from time entries, billable utilization against each labor type\'s workTargetBillable, open task load and work estimates per owner, and spotting over- and under-allocated technicians before scheduling new project work.' },
+      { name: 'time-reconciliation', description: 'Reviewing Moovila time entries for billing: pulling a billing period\'s entries completely and filtering them on startTime, separating billable from non-billable and time adjustments, catching entries with missing billing codes, zero bill rates, billable flags that disagree with billable hours, or no task, and reconciling Moovila hours against PSA time per customer and project before invoicing.' },
+      { name: 'api-patterns', description: 'The Moovila tool surface as exposed through Conduit: the 19 read-only report tools and their tiers, the bring-your-own-client OAuth connection and the X-Moovila-Access-Token header Conduit injects, offset/limit paging with the 100-record cap and truncation notes, lastChangedDate incremental pulls, GUID validation, the record shapes (Project, ProjectBudget, Task, TimeEntry, User, labor type), and the error vocabulary.' }
+    ],
+    agents: [
+      { name: 'project-portfolio-reviewer', description: 'Use this agent for a full read-only review of an MSP\'s Moovila project portfolio: schedule health, budget burn, and billable time readiness across every customer in one pass, ending in a single ranked action list.' }
+    ],
+    commands: [
+      { name: '/project-review', description: 'Review one Moovila project or one customer\'s projects for schedule, budget, and time issues' }
+    ],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'moovila/moovila',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'webroot',
+    name: 'Webroot',
+    vendor: 'Webroot',
+    description: 'Webroot (OpenText) GSM - read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits',
+    category: 'security',
+    maturity: 'beta',
+    features: [
+      'Console Audit',
+      'Endpoint Health',
+      'Threat Review',
+      'Usage Reconciliation'
+    ],
+    skills: [
+      { name: 'console-audit', description: 'Webroot GSM console access and agent-command audit using the four admin-gated tools: console and per-site administrators with their roles (names, emails, phone numbers), and the history of agent commands (scan, cleanup, uninstall, changekeycode, restart, deactivate, reactivate, sysisolate) with command states.' },
+      { name: 'endpoint-health', description: 'Webroot endpoint protection posture triage: console-wide and per-site statistics (infected, needs attention, active threats), stale agents by last seen, outdated agent versions, endpoints on detect-only or unmanaged policies, SkyStatus agent status classes, and coverage gaps against the site\'s expected device count.' },
+      { name: 'threat-review', description: 'Webroot detection review for a site or endpoint: threat history (file, path, malware group, first/last seen), repeat infections, Web Threat Shield URL actions, and DNS Protection traffic and blocked domains, with explicit date windows and paging.' },
+      { name: 'usage-reconciliation', description: 'Webroot seat and usage reconciliation for MSP billing: the per-site usage report and its three report types, console seats allowed vs. deployed, per-site devices allowed vs. total endpoints, trial, expiring, suspended and deactivated sites, and how to compare the result with PSA agreement quantities.' },
+      { name: 'api-patterns', description: 'Webroot Unity API fundamentals through Conduit: the five X-Webroot-* headers and the console-user password grant behind them, the GSM key bound to the connection, the 25 read-only tools and which four Conduit admin-gates, the three paging styles (PageNr/TotalAvailable, PageNr/MoreAvailable, ContinuationToken), siteId vs. site keycode, date-range defaults, error statuses, and response size limits.' }
+    ],
+    agents: [
+      { name: 'site-security-reviewer', description: 'Use this agent for a monthly or QBR security review of one Webroot customer site: protection health, stale and outdated agents, policy posture, threat history and DNS/web blocks for the period, seat usage against devices allowed, and (when the user has Admin access to Webroot in Conduit) agent command history and site admin access.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'webroot/webroot',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'cove',
+    name: 'Cove',
+    vendor: 'Cove',
+    description: 'Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review',
+    category: 'bcdr',
+    maturity: 'beta',
+    features: [
+      'Access Review',
+      'Backup Health',
+      'Customer Inventory'
+    ],
+    skills: [
+      { name: 'access-review', description: 'Reviewing who can sign in to the Cove Management Console for each customer and with which role, spotting leavers and over-privileged accounts, and reading the user-action audit log (cove_audit_actions_list, admin-gated in Conduit and needing an Administrator API user in Cove) to see who changed devices, retention, users or customers.' },
+      { name: 'backup-health', description: 'Finding Cove devices whose backups failed, finished with errors, or have gone stale, for one customer or the whole customer tree, using cove_device_statistics_list column queries; classifying each device; drilling into a device\'s profile and data sources; and writing a ranked triage list a technician can work through.' },
+      { name: 'customer-inventory', description: 'Building a per-customer inventory from Cove: the customer (partner) tree and each customer\'s state, assigned products and retention, protected device counts, storage used and its growth, and the storage locations that hold the data.' },
+      { name: 'api-patterns', description: 'How the Cove Data Protection MCP tools talk to N-able\'s JSON-RPC API through Conduit: the three X-Cove-* headers and the API user behind them, the 15-minute visa session, finding partner (customer) IDs, statistics column codes and units, paging and truncation, Cove error numbers, and which tool is admin-gated in Conduit.' }
+    ],
+    agents: [
+      { name: 'backup-health-triager', description: 'Use this agent when an MSP technician or service desk lead needs a complete Cove Data Protection backup health check for one client or the whole customer tree, with every failed, stale and never-run device ranked into a work list.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'cove/cove',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'unitrends-uniview',
+    name: 'Unitrends Uniview',
+    vendor: 'Unitrends-uniview',
+    description: 'Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup',
+    category: 'bcdr',
+    maturity: 'beta',
+    features: [
+      'Backup Health Triage',
+      'Protection Coverage',
+      'Spanning Saas Backup'
+    ],
+    skills: [
+      { name: 'backup-health-triage', description: 'The cross-customer backup health sweep in Unitrends UniView: failed and warning backup jobs, failed replication, open BackupIQ alerts, offline appliances and low appliance storage, how to tell a one-off failure from a protection gap, and how to rank the findings into a technician work queue.' },
+      { name: 'protection-coverage', description: 'Per-customer protection inventory in Unitrends UniView: appliance-protected assets with their last backup, Endpoint Backup devices, Spanning and Entra tenants mapped to the customer, and the appliances behind them; how to spot stale or missing protection and assemble a coverage summary for a QBR or onboarding review.' },
+      { name: 'spanning-saas-backup', description: 'Spanning SaaS backup data in Unitrends UniView: Microsoft 365 and Google Workspace domains with their mapped customer, user and license counts and expiration, per-user last backup status, the v1 and v2 tool shapes, and the personal-data handling the user tools need.' },
+      { name: 'api-patterns', description: 'Unitrends UniView MCP fundamentals: the two Conduit credential headers and the OAuth2 client_credentials exchange behind them, the flat 12-tool read-only surface, the {data, paging} response shape, page_number/page_size paging and truncation, parameter validation (enums, UUIDs, ISO 8601, include objects), error and 429 handling, and which tools return personal data.' }
+    ],
+    agents: [
+      { name: 'backup-health-reviewer', description: 'Use this agent when an MSP technician or NOC lead needs the cross-customer Unitrends UniView backup health sweep: offline appliances, failed and warning backups, failed replication, open BackupIQ alerts and low appliance storage, ranked into a per-customer work queue.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'unitrends-uniview/unitrends-uniview',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'gogetssl',
+    name: 'Gogetssl',
+    vendor: 'Gogetssl',
+    description: 'GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation',
+    category: 'infrastructure',
+    maturity: 'beta',
+    features: [
+      'Billing Reconciliation',
+      'Certificate Expiry',
+      'Renewal Prep'
+    ],
+    skills: [
+      { name: 'billing-reconciliation', description: 'Reconciling a GoGetSSL reseller account against client billing: the prepaid balance, unpaid orders and invoices, invoice line items for a date window, the invoice behind a single order, and mapping certificate spend back to client domains so it can be rebilled.' },
+      { name: 'certificate-expiry', description: 'Tracking SSL certificate expiry across every client domain in a GoGetSSL reseller account: which order fields carry the expiry date, how to treat unissued orders, grouping certificates by client domain, renewal tiers, batch status checks for a known set of orders, and reading one order\'s validity and renewal flags.' },
+      { name: 'renewal-prep', description: 'Getting a GoGetSSL certificate renewal or reissue ready before anyone places it in the client area: choosing and pricing a product, checking wildcard and SAN support, confirming which approver email addresses email domain validation will accept, decoding the client\'s CSR to catch mistakes, and confirming the prepaid balance covers the renewals.' },
+      { name: 'api-patterns', description: 'GoGetSSL MCP fundamentals: the username plus API-password credential pair Conduit sends as X-GoGetSSL-* headers, the sidecar\'s cached auth-key login, the flat 20-tool read-only surface (none admin-gated), the single reseller account model with no client scoping, which list tools page and which do not, response-size limits, and GoGetSSL\'s error envelope.' }
+    ],
+    agents: [
+      { name: 'ssl-renewal-planner', description: 'Use this agent when an MSP technician or service manager needs a renewal plan for client SSL certificates bought through GoGetSSL: which certificates expire soon, whether each needs a reissue or a new purchase, whether email validation will work, what the renewals cost, and whether the prepaid balance covers them.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'gogetssl/gogetssl',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'smileback',
+    name: 'Smileback',
+    vendor: 'Smileback',
+    description: 'SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Csat Qbr Summary',
+      'Detractor Follow Up',
+      'Technician Csat'
+    ],
+    skills: [
+      { name: 'csat-qbr-summary', description: 'Building a per-client customer-satisfaction section for a QBR or account review from SmileBack: resolving the client, pulling a quarter of CSAT reviews and NPS responses, computing satisfaction, response rate and NPS with period-over-period change, reading project survey results, picking representative comments, and the sample-size and data-protection caveats that keep the numbers honest.' },
+      { name: 'detractor-follow-up', description: 'Finding and triaging unhappy customers in SmileBack: negative and neutral CSAT reviews on recent tickets and NPS detractors, enriching each with the ticket, board, technicians and comment, spotting repeat detractors and at-risk clients, checking what follow-up SmileBack already records, and handing each case to the PSA because SmileBack\'s API cannot record a follow-up.' },
+      { name: 'technician-csat', description: 'Reporting CSAT by technician and by PSA service board from SmileBack: mapping reviews to the agents and boards on each ticket, per-tech response rate and satisfaction with minimum sample sizes, handling tickets credited to several agents and techs who have left, surfacing praise for recognition and negatives for coaching, and keeping the output fair enough to use in a one-to-one.' },
+      { name: 'api-patterns', description: 'The SmileBack tool surface as exposed through Conduit: the 12 read-only tools over the Data Replication API v3, the five-header credential (OAuth2 password grant run by the server), the US/EU region, Conduit access tiers (all read, none admin-gated), limit/offset pagination, response truncation, client-side filtering because the API has no per-company or date-range filter, the error vocabulary, and the personal data the responses carry.' }
+    ],
+    agents: [
+      { name: 'smileback-qbr-analyst', description: 'Use this agent when an account manager or vCIO needs the customer-satisfaction section of one or more QBRs built from SmileBack: per-client CSAT, response rate, NPS, board breakdown, representative comments and open detractors, compared with the previous quarter.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'smileback/smileback',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'myitprocess',
+    name: 'Myitprocess',
+    vendor: 'Myitprocess',
+    description: 'Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Alignment Reviews',
+      'Qbr Prep',
+      'Roadmap'
+    ],
+    skills: [
+      { name: 'alignment-reviews', description: 'The myITprocess alignment-review pipeline: review status stages (New through Complete), engineer and vCIO due dates, standards categories that are up for review or overdue per client, and client-level staleness signals (last review date, last assigned-member activity, alignment score).' },
+      { name: 'qbr-prep', description: 'Assembling a one-client brief from myITprocess before a QBR or strategy meeting: the meeting record and its agenda recommendations, the client\'s alignment score and review history, open and recently changed recommendations, budget for the coming quarters, initiatives, and open review gaps.' },
+      { name: 'roadmap', description: 'The myITprocess strategic roadmap: findings from alignment reviews, the recommendations they become (type, responsible party, status, priority, budget, budget month, hours), the initiatives that group recommendations, and the IT Glue configurations attached to a recommendation.' },
+      { name: 'api-patterns', description: 'myITprocess MCP fundamentals: the single X-MyITprocess-Api-Key header Conduit sends (forwarded upstream as MITP-API-KEY), the nine read-only list tools and their shared page / page_size / filters / sort parameters, the {page, pageSize, totalCount, items} response shape, the 50 requests per minute account-wide rate limit, and the error messages the server returns.' }
+    ],
+    agents: [
+      { name: 'vcio-review-prep', description: 'Use this agent when a vCIO or account manager needs a client\'s myITprocess position pulled together before an alignment review or a QBR: alignment score, open and late reviews, overdue standards categories, unaddressed findings, open recommendations with budget by quarter, and the next meeting\'s agenda.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'myitprocess/myitprocess',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'alga-psa',
+    name: 'Alga Psa',
+    vendor: 'Alga-psa',
+    description: 'Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance',
+    category: 'psa',
+    maturity: 'beta',
+    features: [
+      'Client Review',
+      'Project Status',
+      'Ticket Triage',
+      'Time And Billing'
+    ],
+    skills: [
+      { name: 'client-review', description: 'Building a per-client account picture from Alga PSA for a QBR, renewal or health check: client record, locations and contacts, ticket volume and open backlog over a period, time spent, invoices and payment state, contracts, assets, and active projects.' },
+      { name: 'project-status', description: 'Reading Alga PSA projects for status reporting: projects by client, status or search; phases; tasks per project or phase; the ordered task status columns (project_status_mapping_id) a project or phase uses; and time logged against project tasks.' },
+      { name: 'ticket-triage', description: 'Reading the Alga PSA service desk: open queues by board, status, priority and assignee; stale, unassigned and aging tickets; a single ticket\'s full history (comments with internal notes, logged time, linked assets); finding the ticket behind an RMM alert by external link; and knowledge articles that match a problem.' },
+      { name: 'time-and-billing', description: 'Alga PSA time and billing reads: time sheet approval states and the backlog waiting for a manager, time entries by technician, work item type, service and billable flag, technician schedules, invoice status (draft, sent, overdue, paid ...) with date-range filters, invoice line items, and the service catalog.' },
+      { name: 'api-patterns', description: 'Alga PSA MCP fundamentals through Conduit: the X-Alga-Instance-Url / X-Alga-Api-Key / X-Alga-Tenant-Id headers, the 42-tool read-only surface (no writes, nothing admin-gated), the four pagination styles (page/limit, limit-only search, offset, cursor), response truncation, error messages, concurrency and retry limits, and the untrusted-content envelope.' }
+    ],
+    agents: [
+      { name: 'alga-client-review-analyst', description: 'Use this agent to build a complete client review from Alga PSA for a QBR, renewal or account health check: ticket volume and themes, open backlog, time spent, invoices and overdue balance, contracts, managed assets and project progress over a period.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'alga-psa/alga-psa',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'dubber',
+    name: 'Dubber',
+    vendor: 'Dubber',
+    description: 'Dubber call recording - capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and webhook health',
+    category: 'productivity',
+    maturity: 'beta',
+    features: [
+      'Call Retrieval',
+      'Recording Coverage',
+      'User Lifecycle'
+    ],
+    skills: [
+      { name: 'call-retrieval', description: 'Finding specific Dubber recordings for a complaint, billing dispute, HR matter or QA sample: resolving a person or line to Dub.Points, windowed recording searches in the client\'s timezone, reading recording details, and marking calls with tags or metadata for follow-up or retention.' },
+      { name: 'recording-coverage', description: 'Read-only audit that proves Dubber is actually capturing calls for a client: which Dub.Points (recorded lines) have recent recordings and which have gone silent, recordings Dubber could not match to an account, and whether REST-hook integrations are active and draining.' },
+      { name: 'user-lifecycle', description: 'Adding, updating and removing Dubber users on a client account during staff onboarding and offboarding, and reviewing who has a Dubber login.' },
+      { name: 'api-patterns', description: 'How the Dubber tool surface behaves through Conduit: the five X-Dubber-* credential headers and the password-grant token they mint, region selection, the account/group/Dub.Point/recording hierarchy, how dubber_recordings_list pages and filters, which list tools return a single page, the error and rate-limit behaviour, the confirm_destructive_action flow, and which tools Conduit treats as read, write or admin.' }
+    ],
+    agents: [
+      { name: 'recording-compliance-auditor', description: 'Use this agent when an MSP compliance lead or service manager needs proof that Dubber call recording is working across one or more client accounts, ahead of a compliance review, QBR or audit request.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'dubber/dubber',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'mspcfo',
+    name: 'Mspcfo',
+    vendor: 'Mspcfo',
+    description: 'MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)',
+    category: 'accounting',
+    maturity: 'beta',
+    features: [
+      'Agreement Pricing Review',
+      'Client Profitability',
+      'Technician Utilization'
+    ],
+    skills: [
+      { name: 'agreement-pricing-review', description: 'Using MSPCFO\'s profitability data to review managed-services agreements: finding underpriced, over-consumed or declining agreements, ranking the weakest, working out a defensible annual rate increase toward MSPCFO\'s efficiency target, and drafting a vCIO plan per agreement.' },
+      { name: 'client-profitability', description: 'Reading MSPCFO\'s Client P&L, Client Segments and Market Segments reports to find which clients make or lose money, why, and what to do about it: margin ranking, flagged clients, segment comparison, separating real margin problems from PSA data problems, and preparing the profitability section of a client review.' },
+      { name: 'technician-utilization', description: 'Reading MSPCFO\'s Member Work Report, Utilization Hours and Members Billing by Month reports: billable vs. non-billable time, utilization trends, cost per hour and revenue per member, how labor drives client and agreement margin, and handling this employee performance data responsibly.' },
+      { name: 'api-patterns', description: 'MSPCFO MCP fundamentals for this plugin: OAuth 2.0 + PKCE browser sign-in brokered by Conduit (no API key, no headers), the admin-only tool gate while MSPCFO\'s tools are unclassified in Conduit, discovering tool names at runtime because MSPCFO does not publish them, report parameters and result size, error handling, and data-freshness caveats.' }
+    ],
+    agents: [
+      { name: 'profitability-review-analyst', description: 'Use this agent when an MSP owner, CFO, service manager or vCIO needs a multi-step profitability review from MSPCFO data — ranking the weakest clients or agreements, explaining each with utilization detail, and drafting a vCIO action plan or rate-increase proposal.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'mspcfo/mspcfo',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];

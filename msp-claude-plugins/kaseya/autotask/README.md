@@ -15,62 +15,19 @@ This plugin provides Claude with deep knowledge of Autotask PSA, enabling:
 
 ## Configuration
 
-### Claude Code Settings (Recommended)
+### Connect through Conduit
 
-Add your credentials to `~/.claude/settings.json` (user scope, encrypted on macOS):
+This plugin ships no `.mcp.json` and reads no environment variables. Connect Autotask once in Conduit (**Connections → Autotask PSA**, slug `autotask`); Conduit stores the credentials and injects them on every request. Then add the unified connector `https://conduit.wyre.ai/v1/mcp` to your MCP client (or install the `wyre-gateway` plugin); your client signs in to Conduit with OAuth.
 
-```json
-{
-  "env": {
-    "AUTOTASK_USERNAME": "api-user@mycompany.com",
-    "AUTOTASK_SECRET": "your-secret-key",
-    "AUTOTASK_INTEGRATION_CODE": "ABC123DEF456",
-    "AUTOTASK_API_ZONE": "webservices5"
-  }
-}
-```
-
-For project-specific configuration, use `.claude/settings.local.json` (gitignored):
-
-```json
-{
-  "env": {
-    "AUTOTASK_USERNAME": "api-user@mycompany.com",
-    "AUTOTASK_SECRET": "your-secret-key",
-    "AUTOTASK_INTEGRATION_CODE": "ABC123DEF456",
-    "AUTOTASK_API_ZONE": "webservices5"
-  }
-}
-```
-
-### Environment Variables Reference
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `AUTOTASK_USERNAME` | Yes | | API user email address |
-| `AUTOTASK_SECRET` | Yes | | API secret key |
-| `AUTOTASK_INTEGRATION_CODE` | Yes | | Your integration code |
-| `AUTOTASK_API_ZONE` | Yes | | Data center zone (e.g., `webservices5`) |
-| `AUTOTASK_MCP_URL` | No | `https://autotask-mcp.wyre.workers.dev/mcp` | MCP server URL — override to use a self-hosted gateway |
+| Conduit connection field |
+|---|
+| Username |
+| Secret |
+| Integration Code |
 
 ## Self-Hosted Gateway
 
-If you run the [mcp-gateway](https://github.com/WYRE-AI/mcp-gateway), set `AUTOTASK_MCP_URL` to your gateway's endpoint:
-
-```
-AUTOTASK_MCP_URL=https://your-gateway-domain/v1/autotask/mcp
-```
-
-**Setting env vars in Claude.ai:** Go to your org → Settings → Integrations → Autotask → Configure and add the variable.
-
-**Setting env vars in Claude Code:** Add to `~/.claude/settings.json`:
-```json
-{
-  "env": {
-    "AUTOTASK_MCP_URL": "https://your-gateway-domain/v1/autotask/mcp"
-  }
-}
-```
+There is no per-plugin URL setting, and setting an environment variable does not register an MCP server. To use your own gateway instead of Conduit, register it as an MCP server in your client, for example `claude mcp add --transport http autotask https://your-gateway-domain/v1/autotask/mcp`. The gateway then holds the Autotask credentials, not the client.
 
 ### Obtaining API Credentials
 
@@ -95,14 +52,11 @@ AUTOTASK_MCP_URL=https://your-gateway-domain/v1/autotask/mcp
 
 ### Testing Your Connection
 
-Once configured in Claude Code settings, test the connection:
+To check the credentials directly against Autotask before you save them in Conduit, export them in your shell and run:
 
 ```bash
-# Test connection (using the Autotask MCP tool)
-# Claude Code will inject the environment variables automatically
-mcp-cli call autotask-mcp/autotask_test_connection '{}'
-
-# Or test manually with curl (env vars must be set)
+# Authenticated check: through Conduit, call autotask_test_connection.
+# Zone lookup only (no secret needed; export AUTOTASK_USERNAME first):
 curl "https://webservices5.autotask.net/atservicesrest/v1.0/zoneInformation?user=${AUTOTASK_USERNAME}"
 ```
 
@@ -113,9 +67,12 @@ curl "https://webservices5.autotask.net/atservicesrest/v1.0/zoneInformation?user
 
 ## Installation
 
-1. Clone this plugin to your Claude plugins directory
-2. Configure environment variables
-3. The MCP server will be automatically started when needed
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install autotask@msp-claude-plugins
+```
+
+Then connect Autotask in Conduit (see **Connect through Conduit**). The plugin adds skills and commands; the tools come from the Conduit connector.
 
 ## Available Skills
 
