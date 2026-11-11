@@ -1,406 +1,160 @@
-# SuperOps.ai Asset GraphQL Operations
+# SuperOps.ai Asset Operations
 
-## List Assets
+Every GraphQL document on this page validates against `schema/superops.graphql`
+in [superops-mcp](https://github.com/WYRE-AI/superops-mcp) and uses only
+operations listed in the published API reference at
+<https://developer.superops.com/msp>.
+
+Start with the typed tools. They send the same GraphQL as the sidecar and need no
+admin approval. Use `superops_custom_query` (admin tier, human approval) only for
+the reads that have no typed tool.
+
+## Typed tools
+
+| Tool | GraphQL it sends | Arguments |
+|------|------------------|-----------|
+| `superops_assets_list` | `getAssetList(input: ListInfoInput!)` | `status`, `platform`, `clientId`, `page`, `pageSize` |
+| `superops_assets_get` | `getAsset(input: { assetId })` | `assetId` |
+| `superops_assets_software` | `getAssetSoftwareList(input: AssetDetailsListInput!)` | `assetId`, `search`, `page`, `pageSize` |
+| `superops_assets_patches` | `getAssetPatchDetails(input: AssetDetailsListInput!)` | `assetId`, `installationStatus`, `severity`, `page`, `pageSize` |
+
+```json
+{ "tool": "superops_assets_list", "arguments": { "status": "ONLINE", "platform": "Windows", "clientId": "<account id>", "pageSize": 100 } }
+```
+
+- `status` is matched whole and without case. Observed values are `ONLINE` and
+  `OFFLINE`.
+- `platform` is a substring match. SuperOps stores the full OS name, such as
+  `Microsoft Windows 10 Pro`, so pass a fragment like `Windows` or `darwin`.
+- `clientId` is the `accountId` inside an asset's `client` JSON.
+- When there are several filters, an asset must match all of them.
+- `listInfo.hasMore` is `true` while another page exists and `null` on the last
+  page. It is never `false`.
+
+## Fields
+
+`Asset` has these fields: `assetId`, `name`, `hostName`, `status`, `platform`,
+`platformFamily`, `platformCategory`, `platformVersion`, `manufacturer`, `model`,
+`serialNumber`, `primaryMac`, `publicIp`, `gateway`, `domain`, `loggedInUser`,
+`sysUptime`, `agentVersion`, `patchStatus`, `warrantyExpiryDate`, `purchasedDate`,
+`lastCommunicatedTime`, `lastReportedTime`, `lifecycleState`, `createdTime` and
+`updatedTime`. These fields are `JSON` scalars: `client`, `site`, `requester`,
+`assetClass`, `deviceCategory` and `customFields`. Select a JSON field by name
+with no sub-selection, or the API rejects the whole request.
+
+An asset has no `ipAddress`, `macAddress`, `osVersion`, `lastSeen`, `tags`, CPU,
+memory or disk field. Use `publicIp`, `primaryMac`, `platformVersion` and
+`lastCommunicatedTime` instead. The two queries below return hardware figures.
+
+## Hardware summary (custom query)
+
+`getAssetSummary` returns CPU, memory, disk totals, network interfaces and the
+last logged-in user.
 
 ```graphql
-query getAssetList($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      status
-      platform
-      lastSeen
-      ipAddress
-      osName
-      osVersion
-      client {
-        accountId
-        name
-      }
-      site {
-        id
-        name
-      }
-      patchStatus {
-        pendingCount
-        installedCount
-        failedCount
-      }
+query getAssetSummary($input: AssetIdentifierInput!) {
+  getAssetSummary(input: $input) {
+    cpu {
+      cpuName
+      physicalCore
+      logicalCore
+      architecture
+      cpuUsage
     }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
+    memory {
+      totalMemory
+      usedMemory
+      availableMemory
+      memoryUsage
+    }
+    disk {
+      totalSize
+      totalFreeSpace
     }
   }
 }
 ```
 
-**Variables - All Online Assets:**
 ```json
-{
-  "input": {
-    "first": 100,
-    "filter": {
-      "status": "Online"
-    },
-    "orderBy": {
-      "field": "name",
-      "direction": "ASC"
-    }
-  }
-}
+{ "input": { "assetId": "<asset id>" } }
 ```
 
-**Variables - Filter by Client and Platform:**
-```json
-{
-  "input": {
-    "first": 50,
-    "filter": {
-      "client": {
-        "accountId": "client-uuid"
-      },
-      "platform": "Windows",
-      "status": "Online"
-    }
-  }
-}
-```
-
-## Get Asset Details
-
-```graphql
-query getAsset($input: AssetIdentifierInput!) {
-  getAsset(input: $input) {
-    assetId
-    name
-    status
-    platform
-    lastSeen
-
-    # Network
-    ipAddress
-    macAddress
-    publicIp
-    hostname
-
-    # Hardware
-    manufacturer
-    model
-    serialNumber
-    processorName
-    processorCores
-    totalMemory
-
-    # OS
-    osName
-    osVersion
-    osBuild
-    architecture
-
-    # Disk
-    totalDiskSpace
-    freeDiskSpace
-
-    # Associations
-    client {
-      accountId
-      name
-    }
-    site {
-      id
-      name
-      address
-    }
-    tags
-    customFields {
-      name
-      value
-    }
-
-    # Agent
-    agentVersion
-    agentInstallDate
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid-here"
-  }
-}
-```
-
-## Get Asset Software List
-
-```graphql
-query getAssetSoftwareList($input: AssetSoftwareListInput!) {
-  getAssetSoftwareList(input: $input) {
-    software {
-      name
-      version
-      publisher
-      installDate
-      size
-    }
-    listInfo {
-      totalCount
-      hasNextPage
-      endCursor
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "first": 100,
-    "filter": {
-      "name": "Microsoft"
-    }
-  }
-}
-```
-
-## Get Asset Disk Details
+## Disk details (custom query)
 
 ```graphql
 query getAssetDiskDetails($input: AssetIdentifierInput!) {
   getAssetDiskDetails(input: $input) {
-    disks {
-      driveLetter
-      volumeName
-      fileSystem
-      totalSpace
-      freeSpace
-      usedPercentage
-    }
+    drive
+    fileSystem
+    size
+    freeSize
+    driveUsage
   }
 }
 ```
 
-## Get Asset Patch Details
+`size`, `freeSize` and `driveUsage` are `JSON`. Read the values from a response
+before you compare them against a threshold.
+
+## Activity log (custom query)
 
 ```graphql
-query getAssetPatchDetails($input: AssetPatchInput!) {
-  getAssetPatchDetails(input: $input) {
-    patches {
-      patchId
-      title
-      severity
-      status
-      releaseDate
-      kbNumber
-      category
-    }
-    summary {
-      pendingCount
-      installedCount
-      failedCount
-      lastScanDate
-    }
-  }
-}
-```
-
-**Variables:**
-```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "filter": {
-      "status": "Pending",
-      "severity": ["Critical", "Important"]
-    }
-  }
-}
-```
-
-## Get Asset Activity
-
-```graphql
-query getAssetActivity($input: AssetActivityInput!) {
+query getAssetActivity($input: AssetDetailsListInput!) {
   getAssetActivity(input: $input) {
     activities {
       activityId
-      type
-      description
-      timestamp
-      performedBy {
-        id
-        name
-      }
-      result
+      module
+      activityType
+      activityData
+      createdBy
+      createdTime
     }
     listInfo {
+      page
+      pageSize
       totalCount
-      hasNextPage
+      hasMore
     }
   }
 }
 ```
 
-## Run Script on Asset
-
-```graphql
-mutation runScriptOnAsset($input: RunScriptInput!) {
-  runScriptOnAsset(input: $input) {
-    actionConfigId
-    script {
-      scriptId
-      name
-    }
-    arguments {
-      name
-      value
-    }
-    status
-    scheduledTime
-  }
-}
-```
-
-**Variables:**
 ```json
-{
-  "input": {
-    "assetId": "asset-uuid",
-    "scriptId": "script-uuid",
-    "arguments": [
-      {
-        "name": "param1",
-        "value": "value1"
-      }
-    ],
-    "runAs": "System",
-    "priority": "Normal"
-  }
-}
+{ "input": { "assetId": "<asset id>", "listInfo": { "page": 1, "pageSize": 25 } } }
 ```
 
-## Bulk Script Execution
+## Alerts on an asset
 
-```graphql
-mutation runScriptOnAssets($input: RunScriptOnAssetsInput!) {
-  runScriptOnAssets(input: $input) {
-    batchId
-    assetsCount
-    status
-    scheduledTime
-  }
-}
-```
+See [the alerts reference](../../alerts/references/api.md) for
+`getAlertsForAsset`.
 
-**Variables:**
-```json
-{
-  "input": {
-    "assetIds": ["asset-1", "asset-2", "asset-3"],
-    "scriptId": "script-uuid",
-    "runAs": "System"
-  }
-}
-```
+## Running a script
 
-## Workflow Examples
+`runScriptOnAsset` runs one script on one asset. The schema has no bulk or
+scheduled variant. See [the runbooks reference](../../runbooks/references/api.md).
 
-### Asset Health Check
+## Workflows
 
-```graphql
-# Query assets with low disk space
-query getLowDiskAssets($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      freeDiskSpace
-      totalDiskSpace
-      client { name }
-    }
-  }
-}
-```
+### Asset health check
 
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "status": "Online",
-      "diskSpacePercentFree": {
-        "lt": 10
-      }
-    }
-  }
-}
-```
+1. Call `superops_assets_list` with `status: "ONLINE"` and the client's
+   `clientId` to list the client's online assets.
+2. For each asset, send `getAssetDiskDetails` or `getAssetSummary` through
+   `superops_custom_query`.
+3. Compare the free-space figures yourself. No list query filters on disk space.
 
-### Patch Compliance Report
+### Patch compliance report
 
-```graphql
-query getPatchCompliance($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      client { name }
-      patchStatus {
-        pendingCount
-        installedCount
-        failedCount
-        lastScanDate
-      }
-    }
-  }
-}
-```
+1. Call `superops_assets_list` for the client. Each row carries `patchStatus`, a
+   plain string.
+2. For the assets that need detail, call `superops_assets_patches`. Use
+   `installationStatus: "NewOrMissing"` for the outstanding patches.
 
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "patchStatus": {
-        "hasPending": true,
-        "severity": ["Critical"]
-      }
-    }
-  }
-}
-```
+### Software audit
 
-### Software Audit
+`software` is not an asset-list attribute. To find which assets have an
+application installed:
 
-```graphql
-# Find assets with specific software
-query findAssetsWithSoftware($input: ListInfoInput!) {
-  getAssetList(input: $input) {
-    assets {
-      assetId
-      name
-      client { name }
-    }
-  }
-}
-```
-
-Variables:
-```json
-{
-  "input": {
-    "filter": {
-      "software": {
-        "name": "TeamViewer"
-      }
-    }
-  }
-}
-```
+1. Call `superops_assets_list` for the client.
+2. For each asset, call `superops_assets_software` with `search` set to the
+   application name. The tool filters on `software.name` with `contains`.

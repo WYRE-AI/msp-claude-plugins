@@ -1,52 +1,54 @@
 # SuperOps.ai Asset Field Reference
 
-## Core Fields
+These tables list the fields on the `Asset` type in `schema/superops.graphql`
+([superops-mcp](https://github.com/WYRE-AI/superops-mcp)). Every value-bearing
+field is a `String`, not an enum.
+
+## Identity and status
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `assetId` | ID | Unique identifier |
-| `name` | String | Computer/device name |
-| `status` | Enum | Online, Offline, Maintenance |
-| `platform` | Enum | Windows, macOS, Linux |
-| `lastSeen` | DateTime | Last check-in time |
+| `assetId` | ID | Asset ID |
+| `name` | String | Device name |
+| `hostName` | String | Network host name |
+| `status` | String | Observed values are `ONLINE` and `OFFLINE` |
+| `lastCommunicatedTime` | String | Last agent check-in |
+| `lastReportedTime` | String | Last inventory report |
 | `agentVersion` | String | RMM agent version |
+| `lifecycleState` | String | Lifecycle state |
+| `createdTime` / `updatedTime` | String | Record timestamps |
 
-## Network Fields
+## Platform
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `ipAddress` | String | Primary IP address |
-| `macAddress` | String | MAC address |
+| `platform` | String | Full OS name, such as `Microsoft Windows 10 Pro` |
+| `platformFamily` | String | OS family |
+| `platformCategory` | String | Workstation, server and similar |
+| `platformVersion` | String | OS version |
+| `patchStatus` | String | Patch roll-up, a plain string |
+| `sysUptime` | String | Uptime |
+
+## Network and hardware
+
+| Field | Type | Description |
+|-------|------|-------------|
 | `publicIp` | String | External IP |
-| `hostname` | String | Network hostname |
+| `primaryMac` | String | Primary MAC address |
+| `gateway` | String | Default gateway |
+| `domain` | String | Domain |
+| `loggedInUser` | String | Current user |
+| `manufacturer` / `model` / `serialNumber` | String | Hardware identity |
+| `warrantyExpiryDate` / `purchasedDate` | String | Lifecycle dates |
 
-## Hardware Fields
+## JSON fields (select by name only)
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `manufacturer` | String | Hardware manufacturer |
-| `model` | String | Device model |
-| `serialNumber` | String | Serial number |
-| `processorName` | String | CPU model |
-| `processorCores` | Int | CPU core count |
-| `totalMemory` | Long | RAM in bytes |
-| `totalDiskSpace` | Long | Total disk space |
-| `freeDiskSpace` | Long | Available disk space |
+`client`, `site`, `requester`, `assetClass`, `deviceCategory` and
+`customFields(fields: [String])`.
 
-## Operating System Fields
+## Not on `Asset`
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `osName` | String | Operating system name |
-| `osVersion` | String | OS version |
-| `osBuild` | String | OS build number |
-| `architecture` | String | 32-bit or 64-bit |
-
-## Association Fields
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `client` | Client | Associated client |
-| `site` | Site | Associated site |
-| `tags` | [String] | Asset tags |
-| `customFields` | [CustomField] | Custom field values |
+There is no `ipAddress`, `macAddress`, `osName`, `osVersion`, `lastSeen` or
+`tags`, and no CPU, memory or disk figures. Use `publicIp`, `primaryMac`,
+`platform`, `platformVersion` and `lastCommunicatedTime`. Read CPU, memory and
+disk from `getAssetSummary` and `getAssetDiskDetails`.
