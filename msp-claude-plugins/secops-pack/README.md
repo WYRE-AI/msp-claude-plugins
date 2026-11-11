@@ -25,6 +25,9 @@ have connected, but none of them are individually required:
 - **MDR / SOC-managed** — Blackpoint Cyber, RocketCyber
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
+- **Vendor app compromise investigation** — Microsoft Graph / CIPP identity
+  reads are the primary sources, for the partner tenant and each mapped
+  client tenant separately
 - **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
   installed-software source, both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
@@ -47,10 +50,11 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   malware/ransomware, BEC, and exposed credential), `bec-response`
   (detection and response sequence for Business Email Compromise),
   `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
-  with unsanctioned-tool findings and explicit coverage gaps), and
+  with unsanctioned-tool findings and explicit coverage gaps),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
-  or suspected compromise)
+  or suspected compromise), and `vendor-app-compromise-response` (vendor Entra
+  app-identity investigation, tenant timelines, and operator remediation plans)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,

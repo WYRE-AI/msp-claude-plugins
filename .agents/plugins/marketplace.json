@@ -955,7 +955,7 @@
     },
     {
       "name": "secops-pack",
-      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/secops-pack"

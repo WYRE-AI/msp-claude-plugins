@@ -2745,22 +2745,24 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
-    maturity: 'beta',
+    maturity: 'production',
     features: [
       'Alert Severity Normalization',
       'Bec Response',
       'Containment Playbooks',
       'Msp Tool Compromise Response',
-      'Shadow Ai'
+      'Shadow Ai',
+      'Vendor App Compromise Response'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
       { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
-      { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' }
+      { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' },
+      { name: 'vendor-app-compromise-response', description: 'Read-only investigation of vendor Entra application-identity abuse across an MSP partner tenant and mapped client tenants.' }
     ],
     agents: [
       { name: 'incident-timeline-builder', description: 'Use this agent when a security incident needs to be reconstructed into a single chronological timeline suitable for a client-facing incident report, pulling every relevant event across every connected security, PSA, and documentation tool for the client and time window in question.' },
