@@ -32,6 +32,15 @@ The sibling's reviewed SKILL.md anchors these read families:
 | NinjaOne | `ninjaone_devices_services` | Sibling; vendor `ninjaone-mcp/src/domains/devices.ts`; Conduit read classification. Windows services, not dedicated installed-software inventory. |
 | SuperOps (additional to sibling) | `superops_assets_list`, `superops_assets_get`, `superops_assets_software` | Shadow AI, SuperOps assets skill and GOVERNANCE.md; vendor `superops-mcp/src/domains/assets.ts`; all three Conduit read-tier. Scope asset list by mapped client, then only its asset IDs. |
 
+The Datto software-audit JSON above is illustrative; the discovered tool
+schema takes precedence over the example. Precedence covers parameter
+names and argument shapes only. It never
+relaxes this skill's limits: `auditType=software` only, the Graph
+resource and `$select` pin, single-tenant binding with no `allTenants`,
+the never-call and execution bans, and Step Zero confirmation. If a
+discovered schema cannot express a limit, do not call the tool; record
+a gap.
+
 Conduit classification verified read-only against `origin/main` in
 `/workspace/conduit`, `src/proxy/result-cache.ts` (`VENDOR_TOOL_CONFIG`);
 All 46 vendor tool names cited here also match exact classification keys,

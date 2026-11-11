@@ -146,6 +146,12 @@ reads, stale inventory, and absent process/network telemetry are gaps.
 The JSON below is an illustrative scoped read only. Use fake IDs here as a
 shape, never as live identifiers. Confirm arguments against the discovered
 tool schema; that schema takes precedence over this example.
+Precedence covers parameter names and argument shapes only. It never
+relaxes this skill's limits: `auditType=software` only, the Graph
+resource and `$select` pin, single-tenant binding with no `allTenants`,
+the never-call and execution bans, and Step Zero confirmation. If a
+discovered schema cannot express a limit, do not call the tool; record
+a gap.
 
 ```json
 {
