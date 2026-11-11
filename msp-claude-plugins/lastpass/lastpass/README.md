@@ -50,8 +50,7 @@ You need a LastPass API key (it starts with `lpkey_`).
 
 The LastPass API is in early access: LastPass has to enable it for your
 account before a key works. A 401 on a new account usually means the
-account is not enrolled yet. If the LastPass connector is not in your
-Conduit catalog yet, it is still rolling out.
+account is not enrolled yet.
 
 ## Conduit connection field
 

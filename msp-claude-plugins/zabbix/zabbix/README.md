@@ -61,9 +61,6 @@ token, and rejects the connection if either fails.
 commands on every monitored agent), so a leaked Super admin token is remote code
 execution across the customer estate. This plugin never needs it.
 
-Zabbix is new in the Conduit catalog. If it is not in your connector list yet, it has
-not been enabled for your organization.
-
 ### Zabbix versions
 
 The sidecar reads the frontend version first and picks the auth style: Zabbix 6.4 and

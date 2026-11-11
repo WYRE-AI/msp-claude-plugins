@@ -25,12 +25,6 @@ make instead.
   overdue and draft invoices, invoice line items.
 - **Project status**: projects by client, phases, tasks and the status each task sits in.
 
-## Status
-
-The Alga PSA connector is new in Conduit and is hidden from the catalog until its
-rollout checks pass. If you can't find **Alga PSA** under Connections, ask your Conduit
-admin to enable it.
-
 ## Installation
 
 ```

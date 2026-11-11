@@ -64,7 +64,7 @@ Mobile devices have no serial-scoping tool here. The client's Apple Business Man
 
 - Lookups are **read** tier.
 - `jamf_create_user`, `jamf_update_user`, `jamf_add_serials_to_computer_prestage`, `jamf_assign_computer`, `jamf_assign_mobile_device`, and `jamf_add_computers_to_static_group` are **write** tier.
-- Nothing in onboarding is admin-gated. The reverse operations are: `jamf_remove_computers_from_static_group` and `jamf_delete_user` are admin-gated in Conduit.
+- Nothing in onboarding is admin tier. The reverse operations differ: `jamf_remove_computers_from_static_group` is also **write** tier, while `jamf_delete_user` is **admin** tier.
 
 ## Gotchas
 

@@ -104,7 +104,7 @@ from each tool's input schema. In practice:
 | Situation | Likely cause | Action |
 |---|---|---|
 | No MSPCFO tools listed | Caller's Conduit tier is below admin | Ask a Conduit admin; sign-in is fine |
-| Connect refused or MSPCFO missing from Connections | Connector still hidden in Conduit | Nothing to fix client-side; contact WYRE |
+| Connect refused or never completes | Sign-in cancelled, or MSPCFO rejected the OAuth request | Retry the sign-in once; if it still fails, contact WYRE |
 | Auth error after a working period | Refresh failed (MSPCFO user disabled, password reset, access revoked) | Reconnect in Conduit and sign in again |
 | Empty report, no error | Period has no data, filter too narrow, or the MSPCFO user cannot see it | Widen the period, then check the user's MSPCFO permissions |
 | Throttling or upstream 5xx | MSPCFO or Conduit is rate limiting or degraded | Wait, then retry once with a smaller scope; do not loop |

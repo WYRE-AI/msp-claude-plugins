@@ -33,8 +33,7 @@ reported as not collected. See [GOVERNANCE.md](GOVERNANCE.md).
 
 ## Connect
 
-OpenAI Admin connects through [Conduit](https://conduit.wyre.ai). The
-connector may not appear in every Conduit catalog yet while it rolls out.
+OpenAI Admin connects through [Conduit](https://conduit.wyre.ai).
 
 1. An organization **owner** in the client's OpenAI organization creates
    an Admin key at

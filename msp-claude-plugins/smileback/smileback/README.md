@@ -10,10 +10,6 @@ Claude Code plugin for [SmileBack](https://www.smileback.com), the CSAT and NPS 
 
 The connector is **read-only**. SmileBack's Data Replication API v3 only offers read scopes, so all 12 tools are GET requests and nothing can create, change or delete data in SmileBack. Follow-up actions (call-backs, tickets, notes) are recorded in your PSA.
 
-## Status
-
-SmileBack is in Conduit's catalog as a hidden connector until its release is complete. If SmileBack is not in your Conduit connector list yet, it is not generally available.
-
 ## Connect SmileBack in Conduit
 
 Conduit asks for five values:

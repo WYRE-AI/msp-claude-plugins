@@ -15,10 +15,6 @@ anything in 1Password. Suspending a departed user, removing vault access or rota
 credential happens in the 1Password admin console. Vault contents (1Password Connect)
 are out of scope: Conduit never reads them.
 
-**Preview.** The 1Password connector is hidden in the Conduit catalog until the sidecar
-is pinned and passes a staging connect and tool listing. Until then this plugin has no
-live account behind it.
-
 ## Tools
 
 | Tool | What it returns | Needs | Conduit tier |

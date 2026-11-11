@@ -8,14 +8,12 @@ This plugin gives Claude working knowledge of Jamf Pro so MSP technicians can re
 
 This plugin manages devices in a client's Jamf Pro tenant. Conduit also has a separate **Jamf Developer Docs** connector that searches Jamf's API documentation and never touches a tenant. This plugin does not use it.
 
-> **Preview.** Conduit currently hides the Jamf Pro connector from the public catalog while the sidecar finishes security review. Until it is approved, it may not appear under **Connections** for your org.
-
 ## What This Plugin Does
 
 - **Device compliance**: FileVault and recovery-key escrow on Macs, passcode and data protection on iOS, stale inventory and check-in, unmanaged devices
 - **Patch posture**: available macOS/iOS versions, OS version spread, managed software update plans, and per-title third-party patch reports
 - **User onboarding**: create Jamf user records, assign Macs and mobile devices, scope serials to a PreStage enrollment, add Macs to static groups
-- **Device loss and offboarding**: admin-gated lock, wipe, unmanage, and record deletion, with operator-only Mac locking
+- **Device loss and offboarding**: admin-tier lock, wipe, unmanage, and record deletion, with operator-only Mac locking
 
 ## Installation
 
@@ -65,15 +63,15 @@ Two independent gates decide which tools you see:
 1. **Sidecar deployment tiers.** The sidecar groups its 45 tools into `read` (21), `write` (11), and `admin` (13). `read` and `write` are on by default. `admin` is **off by default** and is only listed when the deployment explicitly enables it.
 2. **Your Conduit access.** Conduit forwards only the tiers your access grant allows for Jamf Pro, and the sidecar intersects that with its deployment tiers. A read-only grant sees only read tools.
 
-Jamf tools are not yet classified in Conduit's tool table. Until they are, Conduit sets each tool's required tier from the sidecar's MCP annotations: read-only tools need `read`, destructive tools need `admin`, and everything else needs `write`. In practice:
+Conduit classifies every Jamf tool at the tier the sidecar declares (45 tools: 21 read, 11 write, 13 admin), so the two gates agree and a tool needs the tier it ships in:
 
-| Gate | Tools |
+| Tier | Tools |
 |------|-------|
-| Read | `jamf_search_computers`, `jamf_get_computer`, `jamf_search_mobile_devices`, `jamf_get_mobile_device`, `jamf_search_users`, `jamf_get_user`, `jamf_list_policies`, `jamf_get_policy`, `jamf_list_patch_titles`, `jamf_get_patch_report`, `jamf_list_available_os_updates`, `jamf_list_software_update_plans`, `jamf_list_computer_groups`, `jamf_get_computer_group`, `jamf_list_mobile_device_groups`, `jamf_list_computer_prestages`, `jamf_list_mobile_device_prestages`, `jamf_list_buildings`, `jamf_list_departments`, `jamf_list_sites`, `jamf_backup_check` |
-| Write | `jamf_create_user`, `jamf_update_user`, `jamf_assign_computer`, `jamf_assign_mobile_device`, `jamf_add_computers_to_static_group`, `jamf_create_smart_computer_group`, `jamf_add_serials_to_computer_prestage`, `jamf_redeploy_management_framework`, `jamf_update_mobile_device_inventory`, `jamf_schedule_os_update` |
-| **Admin-gated in Conduit** | `jamf_remove_computers_from_static_group` (sidecar write tier, but annotated destructive, so Conduit requires admin) |
-| **Sidecar admin tier (off by default), but read in Conduit** | `jamf_prepare_computer_lock` (annotated read-only, so Conduit requires only `read`; it is still admin-only in practice because the sidecar lists it only when its admin tier is enabled and Conduit's forwarded tiers include admin. It sends nothing to the device.) |
-| **Admin tier (off by default) and admin-gated in Conduit** | `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role` |
+| Read (21) | `jamf_search_computers`, `jamf_get_computer`, `jamf_search_mobile_devices`, `jamf_get_mobile_device`, `jamf_search_users`, `jamf_get_user`, `jamf_list_policies`, `jamf_get_policy`, `jamf_list_patch_titles`, `jamf_get_patch_report`, `jamf_list_available_os_updates`, `jamf_list_software_update_plans`, `jamf_list_computer_groups`, `jamf_get_computer_group`, `jamf_list_mobile_device_groups`, `jamf_list_computer_prestages`, `jamf_list_mobile_device_prestages`, `jamf_list_buildings`, `jamf_list_departments`, `jamf_list_sites`, `jamf_backup_check` |
+| Write (11) | `jamf_create_user`, `jamf_update_user`, `jamf_assign_computer`, `jamf_assign_mobile_device`, `jamf_add_computers_to_static_group`, `jamf_remove_computers_from_static_group`, `jamf_create_smart_computer_group`, `jamf_add_serials_to_computer_prestage`, `jamf_redeploy_management_framework`, `jamf_update_mobile_device_inventory`, `jamf_schedule_os_update` |
+| **Admin (13, off by default in the sidecar)** | `jamf_prepare_computer_lock`, `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role` |
+
+Two admin tools are worth knowing about. `jamf_list_api_roles` and `jamf_list_api_integrations` are reads, but Conduit gates them at admin because they expose API access configuration. `jamf_prepare_computer_lock` is flagged both write and admin in Conduit, although it sends nothing to the device; it returns a console link for a human operator.
 
 Every admin-tier tool except `jamf_prepare_computer_lock` also requires `"confirm": true`. That argument guards against accidental calls. It does not prove a human approved the action, so confirm the exact target with the user first.
 
@@ -91,7 +89,7 @@ What the sidecar never exposes, at any tier:
 | `jamf-device-compliance` | FileVault/escrow, passcode, stale check-in, unmanaged devices; fleet compliance reports |
 | `jamf-patch-management` | OS version spread, available updates, update plans, third-party patch reports, scheduling updates |
 | `jamf-user-onboarding` | New-hire user records, device assignment, PreStage scoping, static groups |
-| `jamf-device-offboarding` | Lost or stolen devices and departing users: lock, wipe, unmanage, delete (sidecar admin tier; see the tier table for the one tool Conduit gates at read) |
+| `jamf-device-offboarding` | Lost or stolen devices and departing users: lock, wipe, unmanage, delete (admin tier, plus group removal at write) |
 
 ## Available Agents
 

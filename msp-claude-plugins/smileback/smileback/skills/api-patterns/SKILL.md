@@ -57,10 +57,6 @@ The server runs the OAuth2 password grant itself, caches the access
 token, and on a 401 fetches one fresh token and retries once. Refresh
 tokens are not used.
 
-SmileBack is in Conduit's catalog as a hidden connector until its
-release is complete. If it is not in your Conduit connector list yet,
-it is not generally available.
-
 ## Conduit Access Tiers
 
 All 12 tools are classified **read** in Conduit. None is admin-gated and

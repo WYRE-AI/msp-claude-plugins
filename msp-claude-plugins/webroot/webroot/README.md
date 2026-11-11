@@ -8,10 +8,6 @@ Conduit gateway. Backed by [`WYRE-AI/webroot-mcp`](https://github.com/WYRE-AI/we
 cleanup, uninstall, isolate), change policies, deactivate devices, add admins, or touch
 the shop. Remediation still happens in the GSM console.
 
-**Preview.** The Webroot connector is new in Conduit and may not be visible in your
-Conduit catalog yet. Treat early results as unconfirmed until your first live connection
-completes a few calls.
-
 ## What It Does
 
 - **Endpoint protection health**: infected, attention-required and stale endpoints per

@@ -54,9 +54,6 @@ Things to know about the key:
 - myITprocess allows **50 API requests per minute per account**, shared with
   every other integration using that key.
 
-If myITprocess does not appear in your Conduit catalog yet, the connector is
-still rolling out.
-
 The key lives only in the Conduit connection. Conduit drops any
 `X-MyITprocess-Api-Key` header a client sends, so there is nothing to set in
 Claude Code.

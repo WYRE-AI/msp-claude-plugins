@@ -77,7 +77,7 @@ After scheduling, check `jamf_list_software_update_plans` for the new plans' sta
 
 - Posture review is entirely **read** tier.
 - `jamf_schedule_os_update` and `jamf_create_smart_computer_group` are **write** tier.
-- No patching tool is admin-gated in Conduit. Removing Macs from a patch group with `jamf_remove_computers_from_static_group` is: Conduit treats it as admin because removal stops policies applying to those Macs.
+- No patching tool is admin tier. `jamf_remove_computers_from_static_group`, which stops policies applying to the removed Macs, is **write** tier like the other group changes.
 
 ## Gotchas
 

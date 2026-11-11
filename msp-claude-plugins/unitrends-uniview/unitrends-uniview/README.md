@@ -64,9 +64,6 @@ One credential reads the **whole UniView tenant** that issued it: every customer
 appliance, asset, backup and alert. UniView has no way to limit a credential to one
 customer, so treat the secret as a tenant-wide read key.
 
-The Unitrends UniView connector may still be hidden in the Conduit catalog while it
-completes staging validation. If you cannot find it, ask your Conduit administrator.
-
 ## Conduit connection fields
 
 | Field | Required | Description |

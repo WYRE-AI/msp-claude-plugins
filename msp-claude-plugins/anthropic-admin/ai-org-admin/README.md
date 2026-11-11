@@ -42,8 +42,6 @@ The plugin is named `ai-org-admin`, not `anthropic-admin`: Claude Code reserves 
 
 **One key, one org.** An Admin key sees exactly one Anthropic organization. If each client has its own org, each needs its own Admin key.
 
-If Anthropic Admin is not in your Conduit catalog yet, the connector has not been enabled for your org. It is being rolled out in stages.
-
 ### How Claude Code reaches it
 
 This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to Conduit at `https://conduit.wyre.ai/v1/mcp`, then connect Anthropic Admin in the Conduit web UI (`/connect/anthropic-admin`) as above. Conduit stores the key and injects it on every request as the `X-Anthropic-Admin-Key` header, so there are no environment variables or headers to set on the client. Conduit drops any `X-Anthropic-Admin-Key` header a client sends.

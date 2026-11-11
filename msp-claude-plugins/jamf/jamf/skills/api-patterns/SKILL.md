@@ -41,19 +41,17 @@ The API client's **API Role** is the real permission boundary. A tool that is li
 | Tier | Count | Sidecar default | Conduit requirement |
 |------|-------|-----------------|---------------------|
 | read | 21 | on | read |
-| write | 11 | on | write, except `jamf_remove_computers_from_static_group`, which Conduit treats as admin |
-| admin | 13 | **off** | admin, except `jamf_prepare_computer_lock`, which Conduit treats as read |
+| write | 11 | on | write |
+| admin | 13 | **off** | admin |
 
 Two gates apply, and both must pass:
 
 1. **The sidecar deployment** lists only the tiers it enables. Admin is off unless the deployment turns it on.
 2. **Conduit** forwards only the tiers your access grant allows for Jamf Pro. A read grant forwards `read`; a write grant forwards `read,write`; an admin grant forwards all three. The sidecar intersects that with its own tiers. An empty result means no tools at all.
 
-Jamf tools are not yet classified in Conduit's tool table, so Conduit derives each tool's required tier from its MCP annotations: read-only tools need read, destructive tools need admin, and the rest need write. That is why `jamf_remove_computers_from_static_group` (annotated destructive) is admin-gated in Conduit even though the sidecar ships it in the write tier.
+Conduit classifies all 45 Jamf tools at exactly the tier the sidecar declares, so the two gates agree. The write tier includes `jamf_remove_computers_from_static_group`. The admin tier is `jamf_prepare_computer_lock`, `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, and `jamf_delete_api_role`.
 
-The same rule makes `jamf_prepare_computer_lock` a **read** tool in Conduit: it is annotated read-only and sends nothing to the device. It is still admin-only in practice, because it sits in the sidecar's admin tier, which is listed only when the deployment enables admin and your Conduit grant forwards admin.
-
-**Admin-gated in Conduit:** `jamf_wipe_computer`, `jamf_unmanage_computer`, `jamf_delete_computer`, `jamf_lock_mobile_device`, `jamf_wipe_mobile_device`, `jamf_unmanage_mobile_device`, `jamf_delete_user`, `jamf_delete_computer_group`, `jamf_list_api_roles`, `jamf_list_api_integrations`, `jamf_create_api_role`, `jamf_delete_api_role`, and `jamf_remove_computers_from_static_group`.
+`jamf_list_api_roles` and `jamf_list_api_integrations` are reads that Conduit gates at admin because they expose API access configuration. `jamf_prepare_computer_lock` is flagged both write and admin in Conduit. It sends nothing to the device (it returns a console link for a human operator), but it still needs an admin grant and the sidecar's admin tier.
 
 Every admin-tier tool except `jamf_prepare_computer_lock` requires `"confirm": true`. Set it only after the user has confirmed the exact action and target in this conversation.
 

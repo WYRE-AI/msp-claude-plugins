@@ -30,10 +30,10 @@
     }
   },
   "totals": {
-    "packs": 106,
-    "skills": 478,
+    "packs": 105,
+    "skills": 473,
     "commands": 314,
-    "agents": 173
+    "agents": 172
   },
   "packs": [
     {
@@ -6343,52 +6343,6 @@
         {
           "id": "recording-compliance-auditor",
           "path": "msp-claude-plugins/dubber/dubber/agents/recording-compliance-auditor.md"
-        }
-      ]
-    },
-    {
-      "name": "marketsharp",
-      "displayName": "Marketsharp",
-      "version": "1.0.0",
-      "description": "MarketSharp home-improvement CRM - read-only lead pipeline, appointments and close rates, customer history, and sold-job backlog",
-      "category": "crm",
-      "tags": [
-        "marketsharp",
-        "crm",
-        "home-improvement",
-        "sales",
-        "msp"
-      ],
-      "path": "msp-claude-plugins/marketsharp/marketsharp",
-      "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-      "skills": [
-        {
-          "id": "api-patterns",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/api-patterns/SKILL.md"
-        },
-        {
-          "id": "customer-history",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/customer-history/SKILL.md"
-        },
-        {
-          "id": "job-backlog",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/job-backlog/SKILL.md"
-        },
-        {
-          "id": "lead-pipeline",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/lead-pipeline/SKILL.md"
-        },
-        {
-          "id": "sales-appointments",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/sales-appointments/SKILL.md"
-        }
-      ],
-      "commands": [],
-      "agents": [
-        {
-          "id": "sales-pipeline-reviewer",
-          "path": "msp-claude-plugins/marketsharp/marketsharp/agents/sales-pipeline-reviewer.md"
         }
       ]
     },

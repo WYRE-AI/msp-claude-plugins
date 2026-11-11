@@ -20,8 +20,6 @@ The plugin is **read-only**. Conduit exposes 20 GoGetSSL tools and none of them 
 
 This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect GoGetSSL in the Conduit web UI (`/connect/gogetssl`). Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client.
 
-> The GoGetSSL connector is new in Conduit. If it does not appear in your Conduit catalog yet, it is still rolling out.
-
 ## Connecting GoGetSSL in Conduit
 
 Conduit asks for two fields:

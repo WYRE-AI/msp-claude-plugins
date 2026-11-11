@@ -1357,19 +1357,6 @@
       "category": "Productivity"
     },
     {
-      "name": "marketsharp",
-      "description": "MarketSharp home-improvement CRM - read-only lead pipeline, appointments and close rates, customer history, and sold-job backlog",
-      "source": {
-        "source": "local",
-        "path": "./msp-claude-plugins/marketsharp/marketsharp"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "CRM"
-    },
-    {
       "name": "mspcfo",
       "description": "MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)",
       "source": {

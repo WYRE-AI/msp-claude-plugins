@@ -31,8 +31,6 @@ Cove has no OAuth. You connect it with a Cove **API user**:
 
 Conduit checks the three values with a Cove login before it saves them. A wrong partner name fails the same way as a wrong token (Cove error 2100), so check the partner name first.
 
-The Cove connector is still being rolled out in Conduit. If it is not listed under Connections for your organization yet, it has not been enabled for you.
-
 Conduit drops any `X-Cove-*` header a client sends, so the token lives only in the Conduit connection. Never commit it or paste it into chat.
 
 ## Installation

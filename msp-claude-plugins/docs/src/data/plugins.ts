@@ -3234,8 +3234,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'ai-org-admin',
-    name: 'Anthropic Admin',
-    vendor: 'Anthropic',
+    name: 'Ai Org Admin',
+    vendor: 'Anthropic-admin',
     description: 'Anthropic Admin API - read-only review of a client\'s Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed',
     category: 'productivity',
     maturity: 'beta',
@@ -3267,8 +3267,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'openai-admin',
-    name: 'OpenAI Admin',
-    vendor: 'OpenAI',
+    name: 'Openai Admin',
+    vendor: 'Openai-admin',
     description: 'OpenAI Admin API - read-only review of a client\'s OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log',
     category: 'productivity',
     maturity: 'beta',
@@ -3298,7 +3298,7 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'jamf',
-    name: 'Jamf Pro',
+    name: 'Jamf',
     vendor: 'Jamf',
     description: 'Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage',
     category: 'rmm',
@@ -3311,7 +3311,7 @@ export const plugins: Plugin[] = [
     ],
     skills: [
       { name: 'device-compliance', description: 'Fleet compliance review for Jamf Pro: what jamf_backup_check measures on Macs (FileVault, recovery key escrow, managed state, inventory and check-in age) and iOS/iPadOS (passcode, data protection, device-reported iCloud Backup), its finding codes and severities, drilling into single devices, safe remediation with the write-tier tools, and smart groups for ongoing visibility.' },
-      { name: 'device-offboarding', description: 'Lost, stolen, and leaver device handling in Jamf Pro, all of it in the sidecar\'s admin tier (or admin-gated in Conduit): operator-only Mac locking through jamf_prepare_computer_lock, mobile device lock, wipe, unmanage, record deletion, static group removal, and the read-only evidence to gather before any of them.' },
+      { name: 'device-offboarding', description: 'Lost, stolen, and leaver device handling in Jamf Pro, almost all of it in the admin tier: operator-only Mac locking through jamf_prepare_computer_lock, mobile device lock, wipe, unmanage, record deletion, static group removal (write tier), and the read-only evidence to gather before any of them.' },
       { name: 'patch-management', description: 'OS and third-party patch posture in Jamf Pro: which macOS and iOS versions Jamf can deploy, measuring OS version spread from inventory, managed software update plans and their status, patch management titles and per-title patch reports, the policies that deliver patches, and scheduling OS updates without forcing restarts.' },
       { name: 'user-onboarding', description: 'New-hire setup in Jamf Pro: user records and how to avoid duplicates, scoping a new Mac\'s serial to a computer PreStage enrollment for Automated Device Enrollment, assigning computers and mobile devices to a user, building, department, and site, and adding Macs to static groups so the right policies and profiles apply.' },
       { name: 'api-patterns', description: 'Jamf Pro MCP fundamentals through Conduit: the three X-Jamf-* credential headers and the API client they come from, the read/write/admin tool tiers and how Conduit and the sidecar each gate them, zero-based paging and RSQL filters on the Jamf Pro API tools, contains/limit on the Classic API list tools, inventory sections, response caps, and the error and rate-limit messages the sidecar returns.' }
@@ -3397,8 +3397,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: '1password',
-    name: '1Password',
-    vendor: '1Password',
+    name: '1password',
+    vendor: '1password',
     description: '1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)',
     category: 'security',
     maturity: 'beta',
@@ -3459,8 +3459,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'lastpass',
-    name: 'LastPass',
-    vendor: 'LastPass',
+    name: 'Lastpass',
+    vendor: 'Lastpass',
     description: 'LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)',
     category: 'security',
     maturity: 'beta',
@@ -3560,8 +3560,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'cove',
-    name: 'Cove Data Protection',
-    vendor: 'N-able',
+    name: 'Cove',
+    vendor: 'Cove',
     description: 'Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review',
     category: 'bcdr',
     maturity: 'beta',
@@ -3591,8 +3591,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'unitrends-uniview',
-    name: 'Unitrends UniView',
-    vendor: 'Kaseya',
+    name: 'Unitrends Uniview',
+    vendor: 'Unitrends-uniview',
     description: 'Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup',
     category: 'bcdr',
     maturity: 'beta',
@@ -3622,8 +3622,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'gogetssl',
-    name: 'GoGetSSL',
-    vendor: 'GoGetSSL',
+    name: 'Gogetssl',
+    vendor: 'Gogetssl',
     description: 'GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation',
     category: 'infrastructure',
     maturity: 'beta',
@@ -3653,8 +3653,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'smileback',
-    name: 'SmileBack',
-    vendor: 'SmileBack',
+    name: 'Smileback',
+    vendor: 'Smileback',
     description: 'SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching',
     category: 'productivity',
     maturity: 'beta',
@@ -3684,8 +3684,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'myitprocess',
-    name: 'myITprocess',
-    vendor: 'Kaseya',
+    name: 'Myitprocess',
+    vendor: 'Myitprocess',
     description: 'Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings',
     category: 'productivity',
     maturity: 'beta',
@@ -3715,8 +3715,8 @@ export const plugins: Plugin[] = [
   },
   {
     id: 'alga-psa',
-    name: 'Alga PSA',
-    vendor: 'Alga',
+    name: 'Alga Psa',
+    vendor: 'Alga-psa',
     description: 'Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance',
     category: 'psa',
     maturity: 'beta',
@@ -3778,42 +3778,9 @@ export const plugins: Plugin[] = [
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   },
   {
-    id: 'marketsharp',
-    name: 'MarketSharp',
-    vendor: 'MarketSharp',
-    description: 'MarketSharp home-improvement CRM - read-only lead pipeline, appointments and close rates, customer history, and sold-job backlog',
-    category: 'crm',
-    maturity: 'beta',
-    features: [
-      'Customer History',
-      'Job Backlog',
-      'Lead Pipeline',
-      'Sales Appointments'
-    ],
-    skills: [
-      { name: 'customer-history', description: 'Finding one MarketSharp customer from partial details (name, phone, address, email or job number) and assembling their full history: contact record and do-not-contact flags, every inquiry, appointment and job, and notes.' },
-      { name: 'job-backlog', description: 'Using MarketSharp\'s opportunities list and job records to report sold jobs, contract totals, contract status, sale and completion dates and balance due: new sales for a period, the open (sold, not complete) backlog, and jobs carrying a balance.' },
-      { name: 'lead-pipeline', description: 'Reviewing a contractor\'s MarketSharp inquiries (leads) over a period: pulling the full lead list including leads with no appointment, decoding status, lead-source and product-interest IDs into names, and the breakdowns a sales manager asks for (volume by source, unset leads, stale leads).' },
-      { name: 'sales-appointments', description: 'Reading a contractor\'s MarketSharp sales appointments: the schedule for a day or week, per-salesperson load, appointment results and result reasons, and close rate (sold over appointments run) by salesperson and lead source.' },
-      { name: 'api-patterns', description: 'The MarketSharp tool surface as served through Conduit: the 25 read-only tools and their tier, the four `X-MarketSharp-*` connection headers, which tools need an Employee ID, the three paging styles and their limits, record caps, the appointment-required default on inquiries, permission errors, retry and rate-limit behaviour, and how tool output is wrapped.' }
-    ],
-    agents: [
-      { name: 'sales-pipeline-reviewer', description: 'Use this agent when an MSP account manager, or a contractor\'s owner or sales manager, needs a weekly or monthly sales review built from MarketSharp - leads in, appointments set and run, close rate by salesperson and lead source, new sold jobs and the install backlog.' }
-    ],
-    commands: [],
-    apiInfo: {
-      baseUrl: '',
-      auth: '',
-      rateLimit: '',
-      docsUrl: ''
-    },
-    path: 'marketsharp/marketsharp',
-    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
-  },
-  {
     id: 'mspcfo',
-    name: 'MSPCFO',
-    vendor: 'MSPCFO',
+    name: 'Mspcfo',
+    vendor: 'Mspcfo',
     description: 'MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)',
     category: 'accounting',
     maturity: 'beta',

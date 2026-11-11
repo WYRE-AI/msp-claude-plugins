@@ -13,7 +13,7 @@ Most of the plugin is read-only. Read [Writes are off by default](#writes-are-of
 
 ## Connect Acronis in Conduit
 
-This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect Acronis in the Conduit web UI (`/connect/acronis`). Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client. If Acronis isn't in your Conduit connector list yet, it hasn't been released to your account.
+This plugin ships no `.mcp.json`. Install the `wyre-gateway` plugin (or any workflow pack), which connects Claude Code to [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/mcp`, then connect Acronis in the Conduit web UI (`/connect/acronis`). Conduit stores the credentials and injects them on every request, so there are no environment variables or headers to set on the client.
 
 1. In the Acronis management portal, go to **Settings → API clients** and create an API client. Create it in your partner tenant if you want Conduit to see all your customers.
 2. Copy its **Client ID** and **Secret**, and the **data center URL** Acronis shows, such as `https://us5-cloud.acronis.com`. Leave off anything after `.com`.

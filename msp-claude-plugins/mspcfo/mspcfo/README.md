@@ -42,18 +42,14 @@ MSPCFO describes its MCP as early and asks customers to check important
 numbers against the report in the MSPCFO app. The skills repeat that
 check before anything goes to a client.
 
-## Conduit status: hidden and admin-only
+## Conduit status: admin-only
 
 Read this before you plan a rollout.
 
-1. **The MSPCFO connector ships hidden in Conduit.** It is out of the
-   public catalog, and Conduit refuses new connections until WYRE has
-   provisioned the OAuth client on every region and verified a live
-   connection. Until then, the connect flow below will not be offered.
-2. **Every MSPCFO tool is admin-gated in Conduit.** The tools are not yet
-   classified by tier, so Conduit fails closed: users with admin access to
-   MSPCFO in Conduit see the full upstream tool list, and everyone else
-   sees no MSPCFO tools at all. A teammate who connects and sees no tools
+**Every MSPCFO tool is admin-gated in Conduit.** The tools are not yet
+classified by tier, so Conduit fails closed: users with admin access to
+MSPCFO in Conduit see the full upstream tool list, and everyone else
+sees no MSPCFO tools at all. A teammate who connects and sees no tools
    has not hit a sign-in failure. Their Conduit access tier is below
    admin. This changes once WYRE classifies the tools after a verified
    live connection.
@@ -157,8 +153,7 @@ your access in the Conduit access editor.
 
 ### Connect option missing or refused
 
-The connector is still hidden in Conduit (see *Conduit status* above).
-Nothing on your side will fix it; contact WYRE.
+If the sign-in is refused or never completes, retry once, then contact WYRE.
 
 ### Authentication errors after a working connection
 

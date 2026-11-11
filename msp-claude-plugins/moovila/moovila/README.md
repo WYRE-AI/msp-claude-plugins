@@ -43,10 +43,6 @@ described below. Your MCP client authenticates to Conduit with OAuth (it
 prompts you to sign in on first use). There are no environment variables
 or headers to configure on the client.
 
-The Moovila connector is in staged rollout in Conduit. If Moovila does not
-appear under **Connections** yet, it has not been enabled for your
-workspace.
-
 ## Configuration
 
 Moovila uses OAuth with an app your MSP registers in its own Moovila
