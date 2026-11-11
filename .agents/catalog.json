@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 106,
-    "skills": 485,
+    "skills": 486,
     "commands": 314,
     "agents": 173
   },
@@ -4735,8 +4735,8 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.7",
-      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
+      "version": "0.1.10",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -4771,6 +4771,10 @@
         {
           "id": "msp-tool-compromise-response",
           "path": "msp-claude-plugins/secops-pack/skills/msp-tool-compromise-response/SKILL.md"
+        },
+        {
+          "id": "screenconnect-session-hijack-response",
+          "path": "msp-claude-plugins/secops-pack/skills/screenconnect-session-hijack-response/SKILL.md"
         },
         {
           "id": "shadow-ai",

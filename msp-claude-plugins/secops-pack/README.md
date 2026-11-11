@@ -47,10 +47,12 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   malware/ransomware, BEC, and exposed credential), `bec-response`
   (detection and response sequence for Business Email Compromise),
   `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
-  with unsanctioned-tool findings and explicit coverage gaps), and
+  with unsanctioned-tool findings and explicit coverage gaps),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
-  or suspected compromise)
+  or suspected compromise), and `screenconnect-session-hijack-response`
+  (panel abuse, rogue clients including modified clients under legitimate IDs,
+  technician reverse-pivot exposure, and operator-run out-of-band cleanup)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,
