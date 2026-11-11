@@ -23,6 +23,8 @@ have connected, but none of them are individually required:
 - **MDR / SOC-managed** — Blackpoint Cyber, RocketCyber
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
+- **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
+  installed-software source, both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
 - **Email security** — Mimecast, Proofpoint, Abnormal, Ironscales, Avanan, SpamTitan
 - **PSA** (for ticket cross-referencing and response timelines) and an
@@ -37,7 +39,9 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   model and how to map each vendor's native severity into it),
   `containment-playbooks` (first-response sequences for compromised account,
   malware/ransomware, BEC, and exposed credential), `bec-response`
-  (detection and response sequence for Business Email Compromise)
+  (detection and response sequence for Business Email Compromise), and
+  `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
+  with unsanctioned-tool findings and explicit coverage gaps)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,
