@@ -19,13 +19,13 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
    If `org_id` is given, use it. Otherwise list the organizations the key can see; use the only one, or list them and ask which to sweep.
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizations" }
    ```
 
 2. **Enumerate networks**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationNetworks", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
    ```
 
@@ -33,7 +33,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
    **Site scope.** If `network_id` is given, skip the list above, which may not include the site on its first page, and read the network directly:
 
-   ```
+   ```text
    execute_api { "capability_id": "getNetwork", "parameters": { "networkId": "<networkId>" } }
    ```
 
@@ -41,7 +41,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 3. **Get device totals**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationDevicesStatusesOverview", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"] } }
    ```
 
@@ -49,7 +49,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 4. **List the devices that need attention**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationDevicesAvailabilities", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "statuses": ["offline", "alerting", "dormant"], "perPage": 100 } }
    ```
 
@@ -57,7 +57,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 5. **Check appliance uplinks**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationApplianceUplinkStatuses", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "perPage": 100 } }
    ```
 
@@ -65,7 +65,7 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 6. **Check site-to-site VPN**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationApplianceVpnStatuses", "parameters": { "organizationId": "<orgId>", "networkIds": ["<networkId>"], "perPage": 100 } }
    ```
 
@@ -73,11 +73,11 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 7. **Optionally add alert counts**
 
-   ```
+   ```text
    execute_api { "capability_id": "getOrganizationAssuranceAlertsOverviewByNetwork", "parameters": { "organizationId": "<orgId>", "perPage": 100 } }
    ```
 
-   Adds active alert counts by severity per network. For a single-site sweep, add `"networkId": "<networkId>"` (this capability takes a single network) so the site's row is not lost past the first page. A successful result with no row for a network means that network has no active alerts: show 0. Only when `result.type` is `error` mark the Alerts column "unavailable" and say why.
+   Adds active alert counts by severity per network. For a single-site sweep, add `"networkId": "<networkId>"` (this capability takes a single network) so the site's row is not lost past the first page. A successful result with no row for a network means that network has no active alerts (show 0), but only when the result is complete: a single-site call, or an organization-wide page with fewer rows than `perPage`. If an organization-wide page is full, networks missing from it may have alerts on a later page, so show their count as "unknown" rather than 0; a single-site call with `networkId` confirms the true count. Only when `result.type` is `error` mark the Alerts column "unavailable" and say why.
 
 8. **Assemble the report**
 
@@ -111,19 +111,19 @@ Run a read-only health sweep across a Cisco Meraki organization. Uses org-wide c
 
 ### Sweep the only (or chosen) org
 
-```
+```text
 /meraki-network-health
 ```
 
 ### Sweep a specific org
 
-```
+```text
 /meraki-network-health 123456
 ```
 
 ### Focus on one site
 
-```
+```text
 /meraki-network-health 123456 L_123456789012345678
 ```
 
