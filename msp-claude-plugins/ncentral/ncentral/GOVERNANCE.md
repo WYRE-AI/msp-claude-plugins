@@ -44,9 +44,13 @@ entries are GET requests.
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change N-central or endpoint state. Safe for autonomous agents. | `ncentral_navigate`, `ncentral_back`, `ncentral_status`, `ncentral_health`, `ncentral_server_info`, `ncentral_validate_token`, `ncentral_list_service_orgs`, `ncentral_list_customers`, `ncentral_get_customer`, `ncentral_list_sites`, `ncentral_get_site`, `ncentral_list_org_units`, `ncentral_get_org_unit`, `ncentral_list_org_unit_children`, `ncentral_list_devices`, `ncentral_list_devices_by_org_unit`, `ncentral_list_device_filters`, `ncentral_get_device`, `ncentral_get_device_assets`, `ncentral_get_device_lifecycle`, `ncentral_get_device_service_status`, `ncentral_list_active_issues`, `ncentral_list_job_statuses`, `ncentral_list_device_tasks`, `ncentral_get_task`, `ncentral_get_task_status`, `ncentral_get_task_status_details`, `ncentral_list_org_custom_properties`, `ncentral_get_org_custom_property`, `ncentral_list_device_custom_properties`, `ncentral_get_device_custom_property`, `ncentral_list_maintenance_windows`, `ncentral_list_access_groups`, `ncentral_get_access_group` |
+| **Read** | Cannot change N-central or endpoint state. Safe for autonomous agents. | `ncentral_status`, `ncentral_health`, `ncentral_server_info`, `ncentral_validate_token`, `ncentral_list_service_orgs`, `ncentral_list_customers`, `ncentral_get_customer`, `ncentral_list_sites`, `ncentral_get_site`, `ncentral_list_org_units`, `ncentral_get_org_unit`, `ncentral_list_org_unit_children`, `ncentral_list_devices`, `ncentral_list_devices_by_org_unit`, `ncentral_list_device_filters`, `ncentral_get_device`, `ncentral_get_device_assets`, `ncentral_get_device_lifecycle`, `ncentral_get_device_service_status`, `ncentral_list_active_issues`, `ncentral_list_job_statuses`, `ncentral_list_device_tasks`, `ncentral_get_task`, `ncentral_get_task_status`, `ncentral_get_task_status_details`, `ncentral_list_org_custom_properties`, `ncentral_get_org_custom_property`, `ncentral_list_device_custom_properties`, `ncentral_get_device_custom_property`, `ncentral_list_maintenance_windows`, `ncentral_list_access_groups`, `ncentral_get_access_group` |
 | **Write** | Changes N-central-side records. Reversible, but see the custom-property caveat. | `ncentral_update_device_lifecycle`, `ncentral_update_org_custom_property`, `ncentral_update_device_custom_property`, `ncentral_add_maintenance_windows`, `ncentral_create_device_access_group`, `ncentral_create_org_unit_access_group` |
 | **Destructive** | Executes on a live endpoint, discloses a credential, or removes alert suppression. | `ncentral_create_direct_task`, `ncentral_get_registration_token`, `ncentral_delete_maintenance_windows` |
+
+`ncentral_navigate` is not listed because Conduit refuses it for every
+caller and leaves it out of the tool list. `conduit__my_access` replaces
+it. `ncentral_status` is deliberately kept.
 
 ### Why each destructive tool is there
 

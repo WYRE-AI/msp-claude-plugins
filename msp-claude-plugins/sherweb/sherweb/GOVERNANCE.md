@@ -36,10 +36,17 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change Sherweb state. Safe for autonomous agents. | `sherweb_status`, `sherweb_navigate`, `sherweb_list_categories`, `sherweb_list_category_tools`, `sherweb_router`, `sherweb_customers_list`, `sherweb_customers_get`, `sherweb_customers_accounts_receivable`, `sherweb_subscriptions_list`, `sherweb_subscriptions_get`, `sherweb_billing_payable_charges`, `sherweb_billing_charge_details`, `sherweb_catalog_list_products` |
+| **Read** | Cannot change Sherweb state. Safe for autonomous agents. | `sherweb_status`, `sherweb_customers_list`, `sherweb_customers_get`, `sherweb_customers_accounts_receivable`, `sherweb_subscriptions_list`, `sherweb_subscriptions_get`, `sherweb_subscriptions_amendment_status`, `sherweb_billing_payable_charges`, `sherweb_billing_charge_details`, `sherweb_catalog_list_products` |
 | **Write** | *Empty.* No tool in this plugin creates a customer, places an order, or edits a record. | — |
 | **Destructive** | Changes what the MSP is billed and what software a customer's users can open. | `sherweb_subscriptions_change_quantity` |
-| **Meta** | Dispatches another tool by name; inherits that tool's tier. | `sherweb_execute_tool` |
+| **Meta** | Lazy-loading mode only (see below). `sherweb_execute_tool` dispatches another tool by name and inherits that tool's tier. | `sherweb_list_categories`, `sherweb_list_category_tools`, `sherweb_router`, `sherweb_execute_tool` |
+
+The four Meta tools are registered only when `sherweb-mcp` runs with
+`LAZY_LOADING=true`. Conduit runs it without that, so through Conduit
+every domain tool is listed up front and the Meta tools are absent.
+`sherweb_navigate` is not listed above because Conduit refuses it for
+every caller and leaves it out of the tool list. `conduit__my_access`
+replaces it. `sherweb_status` is deliberately kept.
 
 `sherweb_subscriptions_change_quantity` is the only mutating tool here,
 and it is classified destructive rather than write on purpose. Three
@@ -115,10 +122,9 @@ change.**
 - **Quantity is absolute.** Repeated for emphasis because it is the one
   mistake here that costs a customer their working day. See the tier
   justification above.
-- **Progressive disclosure hides the tool surface.** Domain tools are
-  discovered through `sherweb_navigate` / `sherweb_list_categories`. A
-  tool that appears "missing" is usually just not yet discovered — an
-  agent should not conclude the capability does not exist.
+- **Every domain tool is listed up front.** Through Conduit there is no
+  discovery step: a tool missing from the client is either not granted to
+  you (check `conduit__my_access`) or does not exist.
 - **Two billing capabilities do not exist, and earlier revisions of this
   plugin claimed both.** The tool names have been corrected throughout, but
   the absences are permanent and worth stating plainly, because an operator
@@ -135,7 +141,7 @@ change.**
   everything not on that charge, and the AR view is a balance, not a
   document. Invoices live in the Sherweb partner portal.
 
-  Trust `sherweb_list_category_tools` over prose.
+  Trust the input schemas in the tool list over prose.
 - **Pagination is 1-based here** (`page`, `pageSize`, default 25) while
   the neighbouring Pax8 connector is 0-based. Copying a paging pattern
   between the two silently changes which records you get.

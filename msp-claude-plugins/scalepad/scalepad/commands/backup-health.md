@@ -11,7 +11,6 @@ Sweep Backup Radar for failed, stale, or missing backups and produce a prioritiz
 ## Prerequisites
 
 - ScalePad MCP server connected with a valid `X_SCALEPAD_API_KEY` (set `X_SCALEPAD_REGION=eu` for EU tenants)
-- Optional discovery: `scalepad_navigate` with `domain: "backup-radar"` lists the relevant tools
 - Tools used: `scalepad_br_backups_list_health`, `scalepad_br_backups_get_health`, `scalepad_br_backups_list_devices`
 
 ## Steps

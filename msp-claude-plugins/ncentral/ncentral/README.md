@@ -77,7 +77,7 @@ The JWT is the *permanent* User-API Token. The MCP server exchanges it for short
 
 ## Available Tools
 
-Provided by the N-central MCP server through Conduit. Tools sit behind decision-tree navigation: use `ncentral_navigate` to enter a domain, `ncentral_back` to go up, and `ncentral_status` to see where you are.
+Provided by the N-central MCP server through Conduit. Every tool is listed up front and can be called by name. `ncentral_status` checks connectivity. `ncentral_navigate` is refused by Conduit; use `conduit__my_access` to see which tools you can call.
 
 | Domain | Tools |
 |--------|-------|
