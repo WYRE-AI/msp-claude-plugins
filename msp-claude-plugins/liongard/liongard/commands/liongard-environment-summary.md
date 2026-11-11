@@ -10,63 +10,28 @@ Generate a comprehensive summary of a specific Liongard environment, including r
 
 ## Prerequisites
 
-- Valid Liongard API key configured
-- Liongard instance name configured
-- User must have read permissions
+- Liongard connected in Conduit (`https://conduit.wyre.ai/connect/liongard`) with the Instance Name, Access Key ID and Access Key Secret
+- The Liongard user that generated the access token has read permissions
 - Environment must exist in Liongard
 
 ## Steps
 
 1. **Look up environment by ID or name**
-   - If numeric, fetch directly by ID
-   ```bash
-   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments/{id}" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json"
-   ```
-   - If text, search environments by name
-   ```bash
-   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/environments?page=1&pageSize=100" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json"
-   ```
-   - Filter results for matching name
+   - If numeric, call `liongard_environments_get` with `id`
+   - If text, call `liongard_environments_list` (paging with `page` / `pageSize`) and filter the results for a matching name
    - Suggest similar names if no exact match found
 
 2. **Get agents for the environment**
-   ```bash
-   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/agents?environmentId={id}" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json"
-   ```
+   - Call `liongard_agents_list`, paging through all agents, and keep the ones whose environment ID matches
 
 3. **Get launchpoints for the environment**
-   ```bash
-   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/launchpoints?environmentId={id}&page=1&pageSize=500" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json"
-   ```
+   - Call `liongard_inspections_launchpoints`, paging through all launchpoints, and keep the ones whose environment ID matches
 
 4. **Get systems for the environment**
-   ```bash
-   curl -s "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/systems?environmentId={id}&page=1&pageSize=500" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json"
-   ```
+   - Call `liongard_systems_list`, paging through all systems, and keep the ones whose environment ID matches
 
 5. **Get recent detections for the environment**
-   ```bash
-   curl -s -X POST "https://${LIONGARD_INSTANCE}.app.liongard.com/api/v1/detections" \
-     -H "X-ROAR-API-KEY: ${LIONGARD_API_KEY}" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "Pagination": {"Page": 1, "PageSize": 20},
-       "conditions": [
-         {"path": "EnvironmentID", "op": "eq", "value": <env_id>}
-       ],
-       "orderBy": [{"path": "DetectedOn", "direction": "desc"}]
-     }'
-   ```
+   - Call `liongard_detections_list` with `filters` on the environment ID and `pageSize` 20; it covers the last 30 days unless you pass `startDate` / `endDate`
 
 6. **Format comprehensive summary with tables**
    - Environment details
@@ -175,8 +140,8 @@ Critical: 0 | High: 1 | Medium: 2 | Low: 1 | Info: 1
 ================================================================================
 
 Quick Actions:
-- Run all inspections:  POST /api/v1/launchpoints/{id}/run
-- View detections:      POST /api/v1/detections (filter by EnvironmentID: 1234)
+- Run an inspection:    liongard_inspections_run (per launchpoint)
+- View detections:      liongard_detections_list (filter by EnvironmentID: 1234)
 - Environment URL:      https://acmemsp.app.liongard.com/environments/1234
 ```
 
@@ -207,11 +172,11 @@ Use /liongard-health-check to verify connectivity.
 ```
 Authentication failed
 
-Please verify your Liongard credentials:
-- LIONGARD_INSTANCE: Your instance subdomain
-- LIONGARD_API_KEY: Your API key
+Check the Liongard connection in Conduit (https://conduit.wyre.ai/connect/liongard):
+- Instance Name: your Liongard subdomain
+- Access Key ID and Access Key Secret: both halves of the access token
 
-Obtain credentials from Liongard Profile > Account Settings > Access Tokens.
+Generate a new token in Liongard under Profile > Account Settings > Access Tokens if needed.
 ```
 
 ### Rate Limited
@@ -251,37 +216,6 @@ This environment appears to be newly created. Next steps:
 2. Configure launchpoints for the client's platforms
 3. Run initial inspections to capture baseline documentation
 ```
-
-## API Reference
-
-### GET /api/v1/environments/{id}
-
-Returns a single environment by ID.
-
-### GET /api/v1/agents
-
-Query parameters:
-- `environmentId={id}` - Filter by environment
-
-### GET /api/v1/launchpoints
-
-Query parameters:
-- `environmentId={id}` - Filter by environment
-- `page={n}` - Page number
-- `pageSize={n}` - Results per page
-
-### GET /api/v1/systems
-
-Query parameters:
-- `environmentId={id}` - Filter by environment
-- `page={n}` - Page number
-- `pageSize={n}` - Results per page
-
-### POST /api/v1/detections
-
-Body parameters:
-- `Pagination` - Page and PageSize
-- `conditions` - Filter conditions array
 
 ## Related Commands
 

@@ -115,11 +115,11 @@ Asset Inventory (v2) provides identity and device profile management across all 
 
 ## Authentication
 
-Liongard uses API key authentication via the `X-ROAR-API-KEY` header:
+Through Conduit, the Liongard connection stores the Instance Name, Access Key ID and Access Key Secret and signs every tool call, so you never build the header yourself. For a direct API call outside Conduit, Liongard expects the ID and secret joined by a colon and base64-encoded in the `X-ROAR-API-KEY` header:
 
 ```http
 GET /api/v1/environments
-X-ROAR-API-KEY: YOUR_API_KEY
+X-ROAR-API-KEY: base64("<Access Key ID>:<Access Key Secret>")
 Content-Type: application/json
 ```
 
@@ -127,7 +127,7 @@ Content-Type: application/json
 
 | Header | Value | Description |
 |--------|-------|-------------|
-| `X-ROAR-API-KEY` | `{api_key}` | API key from Liongard portal |
+| `X-ROAR-API-KEY` | base64 of `{accessKeyId}:{accessKeySecret}` | Both halves of the generated access token |
 | `Content-Type` | `application/json` | For POST/PUT requests |
 
 ### Instance-Based URLs
@@ -149,20 +149,14 @@ https://acmemsp.app.liongard.com/api/v1/environments
 1. Log into your Liongard instance
 2. Navigate to **Profile > Account Settings > Access Tokens**
 3. Click **Generate New Token**
-4. Copy the API key (store securely)
+4. Copy both the Access Key ID and the Access Key Secret and store them securely; the secret is not shown again after you leave the page
 5. Note your instance name from the URL
-
-### Environment Variable Setup
-
-```bash
-export LIONGARD_INSTANCE="yourcompany"
-export LIONGARD_API_KEY="your-api-key-here"
-```
+6. Enter the instance name, ID and secret on the Liongard connection in Conduit (`https://conduit.wyre.ai/connect/liongard`)
 
 ### Security Best Practices
 
-1. **Never commit API keys** - Use environment variables or secret managers
-2. **Rotate keys periodically** - Generate new keys on a regular schedule
+1. **Never commit access keys** - Keep them on the Conduit connection or in a secret manager
+2. **Rotate keys periodically** - Generate new tokens on a regular schedule
 3. **Monitor usage** - Watch for unauthorized access patterns
 
 ## API Patterns

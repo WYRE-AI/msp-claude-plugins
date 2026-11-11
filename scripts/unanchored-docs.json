@@ -75,7 +75,6 @@
     "itglue:skills/organizations": "names no MCP tool; 9 HTTP endpoint(s), 0 CLI flag(s) — first at skills/organizations/SKILL.md:110 GET /organizations",
     "kaseya-bms:skills/api-patterns": "names no MCP tool; 10 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:76 GET /api/v2/service/tickets",
     "kaseya-vsa:skills/api-patterns": "names no MCP tool; 13 HTTP endpoint(s), 0 CLI flag(s) — first at skills/api-patterns/SKILL.md:41 GET /api/v1.0/auth",
-    "liongard:commands/liongard-environment-summary.md": "names no MCP tool; 7 HTTP endpoint(s), 0 CLI flag(s) — first at commands/liongard-environment-summary.md:178 POST /api/v1/launchpoints/{id}/run",
     "liongard:skills/detections": "names no MCP tool; 18 HTTP endpoint(s), 0 CLI flag(s) — first at skills/detections/SKILL.md:104 POST /api/v1/detections",
     "liongard:skills/environments": "names no MCP tool; 19 HTTP endpoint(s), 0 CLI flag(s) — first at skills/environments/SKILL.md:54 POST /api/v2/environments",
     "liongard:skills/overview": "names no MCP tool; 2 HTTP endpoint(s), 0 CLI flag(s) — first at skills/overview/SKILL.md:121 GET /api/v1/environments",
