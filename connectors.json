@@ -1,0 +1,2132 @@
+{
+  "$comment": "Maps every plugin in .claude-plugin/marketplace.json to the Conduit connector(s) it documents, and lists every connector WYRE ships in the Conduit catalog. Tool lists live in scripts/connector-tools.snapshot.json. Checked by scripts/check-connector-tools.mjs; see CONTRIBUTING.md#connector-mapping.",
+  "catalog": "https://conduit.wyre.ai/vendors.json",
+  "connectors": [
+    {
+      "slug": "1password",
+      "name": "1Password",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/1password-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/1password-mcp",
+      "plugins": [
+        "1password"
+      ]
+    },
+    {
+      "slug": "abnormal-security",
+      "name": "Abnormal Security",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/abnormal-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/abnormal-mcp",
+      "plugins": [
+        "abnormal-security"
+      ]
+    },
+    {
+      "slug": "acronis",
+      "name": "Acronis Cyber Protect Cloud",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/acronis-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/acronis-mcp",
+      "plugins": [
+        "acronis"
+      ]
+    },
+    {
+      "slug": "action1",
+      "name": "Action1",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/action1-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/action1-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "alertops",
+      "name": "AlertOps",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/alertops-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/alertops-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "alga-psa",
+      "name": "Alga PSA",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/alga-psa-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/alga-psa-mcp",
+      "plugins": [
+        "alga-psa"
+      ]
+    },
+    {
+      "slug": "alloy",
+      "name": "Alloy Navigator",
+      "category": "ticketing",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/alloy-navigator-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/alloy-navigator-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "alternative-payments",
+      "name": "Alternative Payments",
+      "category": "accounting",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/alternative-payments-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/alternative-payments-mcp",
+      "plugins": [
+        "alternative-payments"
+      ]
+    },
+    {
+      "slug": "anthropic-admin",
+      "name": "Anthropic Admin",
+      "category": "devtools",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/anthropic-admin-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/anthropic-admin-mcp",
+      "plugins": [
+        "ai-org-admin"
+      ]
+    },
+    {
+      "slug": "atera",
+      "name": "Atera",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/atera-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/atera-mcp",
+      "plugins": [
+        "atera"
+      ]
+    },
+    {
+      "slug": "autotask",
+      "name": "Autotask PSA",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/autotask-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/autotask-mcp",
+      "plugins": [
+        "autotask"
+      ]
+    },
+    {
+      "slug": "auvik",
+      "name": "Auvik",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/auvik-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/auvik-mcp",
+      "plugins": [
+        "auvik"
+      ]
+    },
+    {
+      "slug": "avanan",
+      "name": "Checkpoint Avanan",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/avanan-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/avanan-mcp",
+      "plugins": [
+        "avanan"
+      ]
+    },
+    {
+      "slug": "avanan-legacy",
+      "name": "Avanan (Legacy SmartAPI)",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/avanan-legacy-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/avanan-legacy-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "axcient",
+      "name": "Axcient x360Recover",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/axcient-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/axcient-mcp",
+      "plugins": [
+        "axcient"
+      ]
+    },
+    {
+      "slug": "azure-mcp",
+      "name": "Azure MCP Server",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "Azure/azure-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-technology/azure-mcp",
+      "plugins": [
+        "azure-mcp"
+      ],
+      "note": "Microsoft Azure MCP Server, hosted by WYRE in the Conduit fleet."
+    },
+    {
+      "slug": "bitdefender",
+      "name": "Bitdefender GravityZone",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/bitdefender-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/bitdefender-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "bitwarden",
+      "name": "Bitwarden",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/bitwarden-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/bitwarden-mcp",
+      "plugins": [
+        "bitwarden"
+      ]
+    },
+    {
+      "slug": "blackpoint",
+      "name": "Blackpoint Cyber",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/blackpoint-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/blackpoint-mcp",
+      "plugins": [
+        "blackpoint"
+      ]
+    },
+    {
+      "slug": "blumira",
+      "name": "Blumira",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/blumira-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/blumira-mcp",
+      "plugins": [
+        "blumira"
+      ]
+    },
+    {
+      "slug": "cipp",
+      "name": "CIPP",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cipp-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/cipp-mcp",
+      "plugins": [
+        "cipp"
+      ]
+    },
+    {
+      "slug": "cisco-duo",
+      "name": "Cisco Duo",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cisco-duo-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/cisco-duo-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "cisco-umbrella",
+      "name": "Cisco Umbrella",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cisco-umbrella-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/cisco-umbrella-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "clio",
+      "name": "Clio",
+      "category": "legal",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/clio-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/clio-mcp",
+      "plugins": [
+        "clio"
+      ]
+    },
+    {
+      "slug": "connectwise-automate",
+      "name": "ConnectWise Automate",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/connectwise-automate-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/connectwise-automate-mcp",
+      "plugins": [
+        "connectwise-automate"
+      ]
+    },
+    {
+      "slug": "connectwise-cpq",
+      "name": "ConnectWise CPQ",
+      "category": "sales",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/connectwise-cpq-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/connectwise-cpq-mcp",
+      "plugins": [
+        "connectwise-cpq"
+      ]
+    },
+    {
+      "slug": "connectwise-psa",
+      "name": "ConnectWise PSA",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/connectwise-manage-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/connectwise-manage-mcp",
+      "plugins": [
+        "connectwise-psa"
+      ]
+    },
+    {
+      "slug": "cork",
+      "name": "Cork",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cork-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/cork-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "cove",
+      "name": "Cove Data Protection (N-able)",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cove-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/cove-mcp",
+      "plugins": [
+        "cove"
+      ]
+    },
+    {
+      "slug": "crewhu",
+      "name": "Crewhu",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/crewhu-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/crewhu-mcp",
+      "plugins": [
+        "crewhu"
+      ]
+    },
+    {
+      "slug": "customer-thermometer",
+      "name": "Customer Thermometer",
+      "category": "crm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/customer-thermometer-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/customer-thermometer-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "cyberqp",
+      "name": "CyberQP",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/cyberqp-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/cyberqp-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "datto-bcdr",
+      "name": "Datto BCDR",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/datto-bcdr-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/datto-bcdr-mcp",
+      "plugins": [
+        "datto-bcdr"
+      ]
+    },
+    {
+      "slug": "datto-rmm",
+      "name": "Datto RMM",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/datto-rmm-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/datto-rmm-mcp",
+      "plugins": [
+        "datto-rmm"
+      ]
+    },
+    {
+      "slug": "datto-saas-protection",
+      "name": "Datto SaaS Protection",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/datto-saas-protection-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/datto-saas-protection-mcp",
+      "plugins": [
+        "datto-saas-protection"
+      ]
+    },
+    {
+      "slug": "dicker-data",
+      "name": "Dicker Data",
+      "category": "sales",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/dicker-data-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/dicker-data-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "dnsfilter",
+      "name": "DNSFilter",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/dnsfilter-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/dnsfilter-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "domotz",
+      "name": "Domotz",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/domotz-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/domotz-mcp",
+      "plugins": [
+        "domotz"
+      ]
+    },
+    {
+      "slug": "dubber",
+      "name": "Dubber",
+      "category": "communications",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/dubber-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/dubber-mcp",
+      "plugins": [
+        "dubber"
+      ]
+    },
+    {
+      "slug": "eset-protect",
+      "name": "ESET PROTECT",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/eset-protect-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/eset-protect-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "freshdesk",
+      "name": "Freshdesk",
+      "category": "ticketing",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/freshdesk-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/freshdesk-mcp",
+      "plugins": [
+        "freshdesk"
+      ]
+    },
+    {
+      "slug": "gogetssl",
+      "name": "GoGetSSL",
+      "category": "infrastructure",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/gogetssl-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/gogetssl-mcp",
+      "plugins": [
+        "gogetssl"
+      ]
+    },
+    {
+      "slug": "gorelo",
+      "name": "Gorelo",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/gorelo-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/gorelo-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "halopsa",
+      "name": "HaloPSA",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/halopsa-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/halopsa-mcp",
+      "plugins": [
+        "halopsa"
+      ]
+    },
+    {
+      "slug": "hudu",
+      "name": "Hudu (API Key)",
+      "category": "documentation",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/hudu-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/hudu-mcp",
+      "plugins": [
+        "hudu"
+      ]
+    },
+    {
+      "slug": "huntress",
+      "name": "Huntress",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/huntress-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/huntress-mcp",
+      "plugins": [
+        "huntress"
+      ]
+    },
+    {
+      "slug": "immybot",
+      "name": "ImmyBot",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/immybot-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/immybot-mcp",
+      "plugins": [
+        "immybot"
+      ]
+    },
+    {
+      "slug": "inforcer",
+      "name": "Inforcer",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/inforcer-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/inforcer-mcp",
+      "plugins": [
+        "inforcer"
+      ]
+    },
+    {
+      "slug": "iqms",
+      "name": "IQMS / DELMIAworks",
+      "category": "erp",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/iqms-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/iqms-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "ironscales",
+      "name": "Ironscales",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/ironscales-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/ironscales-mcp",
+      "plugins": [
+        "ironscales"
+      ]
+    },
+    {
+      "slug": "island",
+      "name": "Island Browser",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/island-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/island-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "itglue",
+      "name": "IT Glue",
+      "category": "documentation",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/itglue-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/itglue-mcp",
+      "plugins": [
+        "itglue"
+      ]
+    },
+    {
+      "slug": "jamf",
+      "name": "Jamf Pro",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/jamf-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/jamf-mcp",
+      "plugins": [
+        "jamf"
+      ]
+    },
+    {
+      "slug": "kaseya-bms",
+      "name": "Kaseya BMS",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/kaseya-bms-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/kaseya-bms-mcp",
+      "plugins": [
+        "kaseya-bms"
+      ]
+    },
+    {
+      "slug": "kaseya-quote-manager",
+      "name": "Kaseya Quote Manager",
+      "category": "sales",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/kaseya-quote-manager-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/kaseya-quote-manager-mcp",
+      "plugins": [
+        "kaseya-quote-manager"
+      ]
+    },
+    {
+      "slug": "kaseya-vsa",
+      "name": "Kaseya VSA",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/kaseya-vsa-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/kaseya-vsa-mcp",
+      "plugins": [
+        "kaseya-vsa"
+      ]
+    },
+    {
+      "slug": "keeper",
+      "name": "Keeper Secrets Manager",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/keeper-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/keeper-mcp",
+      "plugins": [
+        "keeper"
+      ]
+    },
+    {
+      "slug": "knowbe4",
+      "name": "KnowBe4",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/knowbe4-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/knowbe4-mcp",
+      "plugins": [
+        "knowbe4"
+      ]
+    },
+    {
+      "slug": "kpn",
+      "name": "KPN",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/kpn-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/kpn-mcp",
+      "plugins": [
+        "kpn"
+      ]
+    },
+    {
+      "slug": "lastpass",
+      "name": "LastPass (Business + MSP admin)",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/lastpass-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/lastpass-mcp",
+      "plugins": [
+        "lastpass"
+      ]
+    },
+    {
+      "slug": "liongard",
+      "name": "Liongard",
+      "category": "documentation",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/liongard-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/liongard-mcp",
+      "plugins": [
+        "liongard"
+      ]
+    },
+    {
+      "slug": "m365",
+      "name": "Microsoft 365",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/ms-365-mcp-server",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-technology/m365-mcp",
+      "plugins": [
+        "m365"
+      ],
+      "note": "WYRE fork of softeria/ms-365-mcp-server; tool names are kebab-case."
+    },
+    {
+      "slug": "mailprotector",
+      "name": "Mailprotector",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/mailprotector-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/mailprotector-mcp",
+      "plugins": [
+        "mailprotector"
+      ]
+    },
+    {
+      "slug": "marketsharp",
+      "name": "MarketSharp",
+      "category": "crm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/marketsharp-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/marketsharp-mcp",
+      "plugins": [
+        "marketsharp"
+      ]
+    },
+    {
+      "slug": "mimecast",
+      "name": "Mimecast",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/mimecast-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/mimecast-mcp",
+      "plugins": [
+        "mimecast"
+      ]
+    },
+    {
+      "slug": "moovila",
+      "name": "Moovila",
+      "category": "psa",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/moovila-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/moovila-mcp",
+      "plugins": [
+        "moovila"
+      ]
+    },
+    {
+      "slug": "msp360",
+      "name": "MSP360",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/msp360-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/msp360-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "myitprocess",
+      "name": "myITprocess (Kaseya)",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/myitprocess-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/myitprocess-mcp",
+      "plugins": [
+        "myitprocess"
+      ]
+    },
+    {
+      "slug": "ncentral",
+      "name": "N-able N-central",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/ncentral-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/ncentral-mcp",
+      "plugins": [
+        "ncentral"
+      ]
+    },
+    {
+      "slug": "ninjaone",
+      "name": "NinjaOne",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/ninjaone-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/ninjaone-mcp",
+      "plugins": [
+        "ninjaone"
+      ]
+    },
+    {
+      "slug": "nutanix",
+      "name": "Nutanix",
+      "category": "infrastructure",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/nutanix-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/nutanix-mcp",
+      "plugins": [
+        "nutanix"
+      ]
+    },
+    {
+      "slug": "openai-admin",
+      "name": "OpenAI Admin",
+      "category": "devtools",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/openai-admin-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/openai-admin-mcp",
+      "plugins": [
+        "openai-admin"
+      ]
+    },
+    {
+      "slug": "printix",
+      "name": "Printix",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/printix-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/printix-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "proofpoint",
+      "name": "Proofpoint",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/proofpoint-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/proofpoint-mcp",
+      "plugins": [
+        "proofpoint"
+      ]
+    },
+    {
+      "slug": "proofpoint-essentials",
+      "name": "Proofpoint Essentials",
+      "category": "email-security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/proofpoint-essentials-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/proofpoint-essentials-mcp",
+      "plugins": [
+        "proofpoint-essentials"
+      ]
+    },
+    {
+      "slug": "prtg",
+      "name": "PRTG",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/prtg-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/prtg-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "qbo",
+      "name": "QuickBooks Online",
+      "category": "accounting",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/qbo-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/qbo-mcp",
+      "plugins": [
+        "qbo"
+      ]
+    },
+    {
+      "slug": "roboshadow",
+      "name": "RoboShadow",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/roboshadow-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/roboshadow-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "rocketcyber",
+      "name": "RocketCyber",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/rocketcyber-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/rocketcyber-mcp",
+      "plugins": [
+        "rocketcyber"
+      ]
+    },
+    {
+      "slug": "saas-alerts",
+      "name": "SaaS Alerts",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/saas-alerts-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/saas-alerts-mcp",
+      "plugins": [
+        "saas-alerts"
+      ]
+    },
+    {
+      "slug": "salesbuildr",
+      "name": "SalesBuildr",
+      "category": "sales",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/salesbuildr-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/salesbuildr-mcp",
+      "plugins": [
+        "salesbuildr"
+      ]
+    },
+    {
+      "slug": "salesforce",
+      "name": "Salesforce",
+      "category": "crm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/salesforce-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/salesforce-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "scalepad",
+      "name": "ScalePad",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/scalepad-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/scalepad-mcp",
+      "plugins": [
+        "scalepad"
+      ]
+    },
+    {
+      "slug": "sentinelone",
+      "name": "SentinelOne",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/sentinelone-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/sentinelone-mcp",
+      "plugins": [
+        "sentinelone"
+      ]
+    },
+    {
+      "slug": "sherweb",
+      "name": "Sherweb",
+      "category": "marketplace",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/sherweb-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/sherweb-mcp",
+      "plugins": [
+        "sherweb"
+      ]
+    },
+    {
+      "slug": "slide",
+      "name": "Slide",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/slide-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/slide-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "smileback",
+      "name": "SmileBack",
+      "category": "crm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/smileback-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/smileback-mcp",
+      "plugins": [
+        "smileback"
+      ]
+    },
+    {
+      "slug": "spamtitan",
+      "name": "SpamTitan",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/spamtitan-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/spamtitan-mcp",
+      "plugins": [
+        "spamtitan"
+      ]
+    },
+    {
+      "slug": "spanning",
+      "name": "Spanning",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/spanning-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/spanning-mcp",
+      "plugins": [
+        "spanning"
+      ]
+    },
+    {
+      "slug": "superops",
+      "name": "SuperOps",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/superops-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/superops-mcp",
+      "plugins": [
+        "superops"
+      ]
+    },
+    {
+      "slug": "syncro",
+      "name": "Syncro (API connector)",
+      "category": "rmm",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/syncro-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/syncro-mcp",
+      "plugins": [
+        "syncro"
+      ]
+    },
+    {
+      "slug": "telivy",
+      "name": "Telivy",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/telivy-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/telivy-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "teramind",
+      "name": "Teramind",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/teramind-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/teramind-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "threatlocker",
+      "name": "ThreatLocker",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/threatlocker-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/threatlocker-mcp",
+      "plugins": [
+        "threatlocker"
+      ]
+    },
+    {
+      "slug": "timedoctor",
+      "name": "Time Doctor",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/timedoctor-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/timedoctor-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "timezest",
+      "name": "TimeZest",
+      "category": "productivity",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/timezest-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/timezest-mcp",
+      "plugins": [
+        "timezest"
+      ]
+    },
+    {
+      "slug": "uisp",
+      "name": "UISP",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/uisp-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/uisp-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "unifi",
+      "name": "UniFi",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/unifi-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/unifi-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "unitrends",
+      "name": "Unitrends",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/unitrends-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/unitrends-mcp",
+      "plugins": [
+        "unitrends"
+      ]
+    },
+    {
+      "slug": "unitrends-uniview",
+      "name": "Unitrends UniView",
+      "category": "bcdr",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/unitrends-uniview-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/unitrends-uniview-mcp",
+      "plugins": [
+        "unitrends-uniview"
+      ]
+    },
+    {
+      "slug": "watchguard-cloud",
+      "name": "WatchGuard Cloud",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/watchguard-cloud-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/watchguard-cloud-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "webroot",
+      "name": "Webroot (OpenText)",
+      "category": "security",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/webroot-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/webroot-mcp",
+      "plugins": [
+        "webroot"
+      ]
+    },
+    {
+      "slug": "xero",
+      "name": "Xero",
+      "category": "accounting",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/xero-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/xero-mcp",
+      "plugins": [
+        "xero"
+      ]
+    },
+    {
+      "slug": "yeastar",
+      "name": "Yeastar P-Series PBX",
+      "category": "communications",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/yeastar-mcp",
+      "repoPublic": true,
+      "image": "ghcr.io/wyre-ai/yeastar-mcp",
+      "plugins": []
+    },
+    {
+      "slug": "zabbix",
+      "name": "Zabbix",
+      "category": "network",
+      "kind": "wyre-hosted",
+      "repo": "WYRE-AI/zabbix-mcp",
+      "repoPublic": false,
+      "image": "ghcr.io/wyre-ai/zabbix-mcp",
+      "plugins": [
+        "zabbix"
+      ]
+    },
+    {
+      "slug": "3cx",
+      "name": "3CX",
+      "category": "communications",
+      "kind": "vendor-hosted",
+      "upstream": "(your 3CX PBX MCP URL)",
+      "plugins": [
+        "3cx"
+      ]
+    },
+    {
+      "slug": "betterstack",
+      "name": "BetterStack",
+      "category": "network",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.betterstack.com",
+      "plugins": [
+        "betterstack"
+      ]
+    },
+    {
+      "slug": "conduit",
+      "name": "Conduit unified endpoint",
+      "category": "gateway",
+      "kind": "gateway",
+      "upstream": "https://conduit.wyre.ai/v1/mcp",
+      "plugins": [
+        "advanced-workflows",
+        "shared-skills",
+        "wyre-gateway",
+        "ops-pack",
+        "secops-pack",
+        "finance-pack",
+        "compliance-pack",
+        "sales-pack",
+        "marketing-pack",
+        "devops-pack",
+        "cloudops-pack",
+        "awareness-pack",
+        "backup-pack",
+        "assets-pack"
+      ]
+    },
+    {
+      "slug": "hubspot",
+      "name": "HubSpot",
+      "category": "crm",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.hubspot.com",
+      "plugins": [
+        "hubspot"
+      ]
+    },
+    {
+      "slug": "meraki",
+      "name": "Meraki",
+      "category": "network",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.meraki.com/mcp",
+      "plugins": [
+        "meraki"
+      ]
+    },
+    {
+      "slug": "microsoft-graph",
+      "name": "Microsoft Graph (Enterprise)",
+      "category": "productivity",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.svc.cloud.microsoft/enterprise",
+      "plugins": [
+        "microsoft-graph"
+      ]
+    },
+    {
+      "slug": "mspcfo",
+      "name": "MSPCFO",
+      "category": "accounting",
+      "kind": "vendor-hosted",
+      "upstream": "https://app.mspcfo.com/mcp",
+      "plugins": [
+        "mspcfo"
+      ]
+    },
+    {
+      "slug": "netsuite",
+      "name": "NetSuite",
+      "category": "erp",
+      "kind": "vendor-hosted",
+      "upstream": "(your NetSuite account MCP URL)",
+      "plugins": [
+        "netsuite"
+      ]
+    },
+    {
+      "slug": "pagerduty",
+      "name": "PagerDuty",
+      "category": "security",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.pagerduty.com",
+      "plugins": [
+        "pagerduty"
+      ]
+    },
+    {
+      "slug": "pandadoc",
+      "name": "PandaDoc",
+      "category": "sales",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.pandadoc.com",
+      "plugins": [
+        "pandadoc"
+      ]
+    },
+    {
+      "slug": "pax8",
+      "name": "Pax8",
+      "category": "sales",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.pax8.com/v1",
+      "plugins": [
+        "pax8"
+      ]
+    },
+    {
+      "slug": "posthog",
+      "name": "PostHog",
+      "category": "productivity",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.posthog.com",
+      "plugins": [
+        "posthog"
+      ]
+    },
+    {
+      "slug": "rootly",
+      "name": "Rootly",
+      "category": "security",
+      "kind": "vendor-hosted",
+      "upstream": "https://mcp.rootly.com",
+      "plugins": [
+        "rootly"
+      ]
+    },
+    {
+      "slug": "runzero",
+      "name": "runZero",
+      "category": "security",
+      "kind": "vendor-hosted",
+      "upstream": "https://console.runzero.com",
+      "plugins": [
+        "runzero"
+      ]
+    },
+    {
+      "slug": "slack",
+      "name": "Slack",
+      "category": null,
+      "kind": "vendor-direct",
+      "upstream": "https://mcp.slack.com/mcp",
+      "inConduitCatalog": false,
+      "plugins": [
+        "slack"
+      ]
+    },
+    {
+      "slug": "stripe",
+      "name": "Stripe",
+      "category": null,
+      "kind": "vendor-direct",
+      "upstream": "https://mcp.stripe.com",
+      "inConduitCatalog": false,
+      "plugins": [
+        "stripe"
+      ]
+    },
+    {
+      "slug": "warmly",
+      "name": "Warmly",
+      "category": null,
+      "kind": "vendor-direct",
+      "upstream": "https://opps-api.getwarmly.com/api/mcp",
+      "inConduitCatalog": false,
+      "plugins": [
+        "warmly"
+      ]
+    }
+  ],
+  "plugins": {
+    "1password": {
+      "source": "./msp-claude-plugins/1password/1password",
+      "connectors": [
+        "1password"
+      ]
+    },
+    "3cx": {
+      "source": "./msp-claude-plugins/3cx/3cx",
+      "connectors": [
+        "3cx"
+      ]
+    },
+    "abnormal-security": {
+      "source": "./msp-claude-plugins/abnormal/abnormal-security",
+      "connectors": [
+        "abnormal-security"
+      ]
+    },
+    "acronis": {
+      "source": "./msp-claude-plugins/acronis/acronis",
+      "connectors": [
+        "acronis"
+      ]
+    },
+    "advanced-workflows": {
+      "source": "./msp-claude-plugins/advanced-workflows/advanced-workflows",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "ai-org-admin": {
+      "source": "./msp-claude-plugins/anthropic-admin/ai-org-admin",
+      "connectors": [
+        "anthropic-admin"
+      ]
+    },
+    "alga-psa": {
+      "source": "./msp-claude-plugins/alga-psa/alga-psa",
+      "connectors": [
+        "alga-psa"
+      ]
+    },
+    "alternative-payments": {
+      "source": "./msp-claude-plugins/alternative-payments/alternative-payments",
+      "connectors": [
+        "alternative-payments"
+      ]
+    },
+    "assets-pack": {
+      "source": "./msp-claude-plugins/assets-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "atera": {
+      "source": "./msp-claude-plugins/atera/atera",
+      "connectors": [
+        "atera"
+      ]
+    },
+    "autotask": {
+      "source": "./msp-claude-plugins/kaseya/autotask",
+      "connectors": [
+        "autotask"
+      ],
+      "ignoreTools": [
+        {
+          "name": "autotask_search_inventory_items",
+          "reason": "Named only to say it does not exist on the shipped server."
+        },
+        {
+          "name": "autotask_search_price_list_products",
+          "reason": "Named only to say it does not exist on the shipped server."
+        },
+        {
+          "name": "autotask_search_price_list_services",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "auvik": {
+      "source": "./msp-claude-plugins/auvik/auvik",
+      "connectors": [
+        "auvik"
+      ]
+    },
+    "avanan": {
+      "source": "./msp-claude-plugins/email-security/checkpoint-avanan",
+      "connectors": [
+        "avanan"
+      ]
+    },
+    "awareness-pack": {
+      "source": "./msp-claude-plugins/awareness-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "axcient": {
+      "source": "./msp-claude-plugins/axcient/axcient",
+      "connectors": [
+        "axcient"
+      ]
+    },
+    "azure-mcp": {
+      "source": "./msp-claude-plugins/azure-mcp/azure-mcp",
+      "connectors": [
+        "azure-mcp"
+      ]
+    },
+    "backup-pack": {
+      "source": "./msp-claude-plugins/backup-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "betterstack": {
+      "source": "./msp-claude-plugins/betterstack/betterstack",
+      "connectors": [
+        "betterstack"
+      ]
+    },
+    "bitwarden": {
+      "source": "./msp-claude-plugins/bitwarden/bitwarden",
+      "connectors": [
+        "bitwarden"
+      ]
+    },
+    "blackpoint": {
+      "source": "./msp-claude-plugins/blackpoint/blackpoint",
+      "connectors": [
+        "blackpoint"
+      ]
+    },
+    "blumira": {
+      "source": "./msp-claude-plugins/blumira/blumira",
+      "connectors": [
+        "blumira"
+      ]
+    },
+    "cipp": {
+      "source": "./msp-claude-plugins/cipp/cipp",
+      "connectors": [
+        "cipp"
+      ]
+    },
+    "clio": {
+      "source": "./msp-claude-plugins/clio/clio",
+      "connectors": [
+        "clio"
+      ]
+    },
+    "cloudops-pack": {
+      "source": "./msp-claude-plugins/cloudops-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "compliance-pack": {
+      "source": "./msp-claude-plugins/compliance-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "connectwise-automate": {
+      "source": "./msp-claude-plugins/connectwise/automate",
+      "connectors": [
+        "connectwise-automate"
+      ],
+      "ignoreTools": [
+        {
+          "name": "cwautomate_alerts_acknowledge",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "connectwise-cpq": {
+      "source": "./msp-claude-plugins/connectwise/cpq",
+      "connectors": [
+        "connectwise-cpq"
+      ]
+    },
+    "connectwise-psa": {
+      "source": "./msp-claude-plugins/connectwise/manage",
+      "connectors": [
+        "connectwise-psa"
+      ]
+    },
+    "cove": {
+      "source": "./msp-claude-plugins/cove/cove",
+      "connectors": [
+        "cove"
+      ]
+    },
+    "crewhu": {
+      "source": "./msp-claude-plugins/crewhu/crewhu",
+      "connectors": [
+        "crewhu"
+      ]
+    },
+    "datto-bcdr": {
+      "source": "./msp-claude-plugins/kaseya/datto-bcdr",
+      "connectors": [
+        "datto-bcdr"
+      ]
+    },
+    "datto-rmm": {
+      "source": "./msp-claude-plugins/kaseya/datto-rmm",
+      "connectors": [
+        "datto-rmm"
+      ]
+    },
+    "datto-saas-protection": {
+      "source": "./msp-claude-plugins/kaseya/datto-saas-protection",
+      "connectors": [
+        "datto-saas-protection"
+      ]
+    },
+    "devops-pack": {
+      "source": "./msp-claude-plugins/devops-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "domotz": {
+      "source": "./msp-claude-plugins/domotz/domotz",
+      "connectors": [
+        "domotz"
+      ]
+    },
+    "dubber": {
+      "source": "./msp-claude-plugins/dubber/dubber",
+      "connectors": [
+        "dubber"
+      ]
+    },
+    "finance-pack": {
+      "source": "./msp-claude-plugins/finance-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "freshdesk": {
+      "source": "./msp-claude-plugins/freshdesk/freshdesk",
+      "connectors": [
+        "freshdesk"
+      ]
+    },
+    "gogetssl": {
+      "source": "./msp-claude-plugins/gogetssl/gogetssl",
+      "connectors": [
+        "gogetssl"
+      ]
+    },
+    "halopsa": {
+      "source": "./msp-claude-plugins/halopsa/halopsa",
+      "connectors": [
+        "halopsa"
+      ]
+    },
+    "hubspot": {
+      "source": "./msp-claude-plugins/hubspot/hubspot",
+      "connectors": [
+        "hubspot"
+      ]
+    },
+    "hudu": {
+      "source": "./msp-claude-plugins/hudu/hudu",
+      "connectors": [
+        "hudu"
+      ]
+    },
+    "huntress": {
+      "source": "./msp-claude-plugins/huntress/huntress",
+      "connectors": [
+        "huntress"
+      ]
+    },
+    "immybot": {
+      "source": "./msp-claude-plugins/immybot/immybot",
+      "connectors": [
+        "immybot"
+      ],
+      "ignoreTools": [
+        {
+          "name": "immybot_deployments_delete",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "inforcer": {
+      "source": "./msp-claude-plugins/inforcer/inforcer",
+      "connectors": [
+        "inforcer"
+      ]
+    },
+    "ironscales": {
+      "source": "./msp-claude-plugins/ironscales/ironscales",
+      "connectors": [
+        "ironscales"
+      ]
+    },
+    "itglue": {
+      "source": "./msp-claude-plugins/kaseya/it-glue",
+      "connectors": [
+        "itglue"
+      ],
+      "ignoreTools": [
+        {
+          "name": "itglue_create_document",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "jamf": {
+      "source": "./msp-claude-plugins/jamf/jamf",
+      "connectors": [
+        "jamf"
+      ]
+    },
+    "kaseya-bms": {
+      "source": "./msp-claude-plugins/kaseya/kaseya-bms",
+      "connectors": [
+        "kaseya-bms"
+      ]
+    },
+    "kaseya-quote-manager": {
+      "source": "./msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager",
+      "connectors": [
+        "kaseya-quote-manager"
+      ]
+    },
+    "kaseya-vsa": {
+      "source": "./msp-claude-plugins/kaseya/kaseya-vsa",
+      "connectors": [
+        "kaseya-vsa"
+      ]
+    },
+    "keeper": {
+      "source": "./msp-claude-plugins/keeper/keeper",
+      "connectors": [
+        "keeper"
+      ]
+    },
+    "knowbe4": {
+      "source": "./msp-claude-plugins/email-security/knowbe4",
+      "connectors": [
+        "knowbe4"
+      ]
+    },
+    "kpn": {
+      "source": "./msp-claude-plugins/kpn/kpn",
+      "connectors": [
+        "kpn"
+      ]
+    },
+    "lastpass": {
+      "source": "./msp-claude-plugins/lastpass/lastpass",
+      "connectors": [
+        "lastpass"
+      ]
+    },
+    "liongard": {
+      "source": "./msp-claude-plugins/liongard/liongard",
+      "connectors": [
+        "liongard"
+      ]
+    },
+    "m365": {
+      "source": "./msp-claude-plugins/m365/m365",
+      "connectors": [
+        "m365"
+      ]
+    },
+    "mailprotector": {
+      "source": "./msp-claude-plugins/mailprotector/mailprotector",
+      "connectors": [
+        "mailprotector"
+      ]
+    },
+    "marketing-pack": {
+      "source": "./msp-claude-plugins/marketing-pack",
+      "connectors": [
+        "conduit"
+      ],
+      "ignoreTools": [
+        {
+          "name": "autotask_get_project",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "marketsharp": {
+      "source": "./msp-claude-plugins/marketsharp/marketsharp",
+      "connectors": [
+        "marketsharp"
+      ]
+    },
+    "meraki": {
+      "source": "./msp-claude-plugins/meraki/meraki",
+      "connectors": [
+        "meraki"
+      ]
+    },
+    "microsoft-graph": {
+      "source": "./msp-claude-plugins/microsoft-graph/microsoft-graph",
+      "connectors": [
+        "microsoft-graph"
+      ]
+    },
+    "mimecast": {
+      "source": "./msp-claude-plugins/mimecast/mimecast",
+      "connectors": [
+        "mimecast"
+      ]
+    },
+    "moovila": {
+      "source": "./msp-claude-plugins/moovila/moovila",
+      "connectors": [
+        "moovila"
+      ]
+    },
+    "mspcfo": {
+      "source": "./msp-claude-plugins/mspcfo/mspcfo",
+      "connectors": [
+        "mspcfo"
+      ]
+    },
+    "myitprocess": {
+      "source": "./msp-claude-plugins/myitprocess/myitprocess",
+      "connectors": [
+        "myitprocess"
+      ]
+    },
+    "ncentral": {
+      "source": "./msp-claude-plugins/ncentral/ncentral",
+      "connectors": [
+        "ncentral"
+      ],
+      "ignoreTools": [
+        {
+          "name": "ncentral_back",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "netsuite": {
+      "source": "./msp-claude-plugins/netsuite/netsuite",
+      "connectors": [
+        "netsuite"
+      ]
+    },
+    "ninjaone": {
+      "source": "./msp-claude-plugins/ninjaone/ninjaone-rmm",
+      "connectors": [
+        "ninjaone"
+      ],
+      "ignoreTools": [
+        {
+          "name": "ninjaone_raw_request",
+          "reason": "Named only to say it does not exist on the shipped server."
+        },
+        {
+          "name": "ninjaone_execute_tool",
+          "reason": "Named only to say it does not exist on the shipped server."
+        },
+        {
+          "name": "ninjaone_router",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "nutanix": {
+      "source": "./msp-claude-plugins/nutanix/nutanix",
+      "connectors": [
+        "nutanix"
+      ]
+    },
+    "openai-admin": {
+      "source": "./msp-claude-plugins/openai-admin/openai-admin",
+      "connectors": [
+        "openai-admin"
+      ]
+    },
+    "ops-pack": {
+      "source": "./msp-claude-plugins/ops-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "pagerduty": {
+      "source": "./msp-claude-plugins/pagerduty/pagerduty",
+      "connectors": [
+        "pagerduty"
+      ]
+    },
+    "pandadoc": {
+      "source": "./msp-claude-plugins/pandadoc/pandadoc",
+      "connectors": [
+        "pandadoc"
+      ]
+    },
+    "pax8": {
+      "source": "./msp-claude-plugins/pax8/pax8",
+      "connectors": [
+        "pax8"
+      ]
+    },
+    "posthog": {
+      "source": "./msp-claude-plugins/posthog/posthog",
+      "connectors": [
+        "posthog"
+      ]
+    },
+    "proofpoint": {
+      "source": "./msp-claude-plugins/email-security/proofpoint",
+      "connectors": [
+        "proofpoint"
+      ]
+    },
+    "proofpoint-essentials": {
+      "source": "./msp-claude-plugins/email-security/proofpoint-essentials",
+      "connectors": [
+        "proofpoint-essentials"
+      ]
+    },
+    "qbo": {
+      "source": "./msp-claude-plugins/quickbooks/quickbooks-online",
+      "connectors": [
+        "qbo"
+      ]
+    },
+    "rocketcyber": {
+      "source": "./msp-claude-plugins/kaseya/rocketcyber",
+      "connectors": [
+        "rocketcyber"
+      ]
+    },
+    "rootly": {
+      "source": "./msp-claude-plugins/rootly/rootly",
+      "connectors": [
+        "rootly"
+      ],
+      "ignoreTools": [
+        {
+          "name": "check_oncall_health_risk",
+          "reason": "Named only to say the hosted Rootly server no longer serves it."
+        },
+        {
+          "name": "create_slack_channel",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        },
+        {
+          "name": "create_jira_issue",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        },
+        {
+          "name": "create_zoom_meeting",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        },
+        {
+          "name": "update_status",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        },
+        {
+          "name": "create_incident_postmortem",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        },
+        {
+          "name": "update_incident_postmortem",
+          "reason": "Rootly workflow task_type, not an MCP tool."
+        }
+      ]
+    },
+    "runzero": {
+      "source": "./msp-claude-plugins/runzero/runzero",
+      "connectors": [
+        "runzero"
+      ]
+    },
+    "saas-alerts": {
+      "source": "./msp-claude-plugins/saas-alerts/saas-alerts",
+      "connectors": [
+        "saas-alerts"
+      ]
+    },
+    "sales-pack": {
+      "source": "./msp-claude-plugins/sales-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "salesbuildr": {
+      "source": "./msp-claude-plugins/salesbuildr/salesbuildr",
+      "connectors": [
+        "salesbuildr"
+      ]
+    },
+    "scalepad": {
+      "source": "./msp-claude-plugins/scalepad/scalepad",
+      "connectors": [
+        "scalepad"
+      ]
+    },
+    "secops-pack": {
+      "source": "./msp-claude-plugins/secops-pack",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "sentinelone": {
+      "source": "./msp-claude-plugins/sentinelone/sentinelone",
+      "connectors": [
+        "sentinelone"
+      ]
+    },
+    "shared-skills": {
+      "source": "./msp-claude-plugins/shared",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "sherweb": {
+      "source": "./msp-claude-plugins/sherweb/sherweb",
+      "connectors": [
+        "sherweb"
+      ]
+    },
+    "slack": {
+      "source": "./msp-claude-plugins/slack/slack",
+      "connectors": [
+        "slack"
+      ]
+    },
+    "smileback": {
+      "source": "./msp-claude-plugins/smileback/smileback",
+      "connectors": [
+        "smileback"
+      ]
+    },
+    "spamtitan": {
+      "source": "./msp-claude-plugins/spamtitan/spamtitan",
+      "connectors": [
+        "spamtitan"
+      ]
+    },
+    "spanning": {
+      "source": "./msp-claude-plugins/kaseya/spanning",
+      "connectors": [
+        "spanning"
+      ]
+    },
+    "stripe": {
+      "source": "./msp-claude-plugins/stripe/stripe",
+      "connectors": [
+        "stripe"
+      ]
+    },
+    "superops": {
+      "source": "./msp-claude-plugins/superops/superops-ai",
+      "connectors": [
+        "superops"
+      ]
+    },
+    "syncro": {
+      "source": "./msp-claude-plugins/syncro/syncro-msp",
+      "connectors": [
+        "syncro"
+      ],
+      "ignoreTools": [
+        {
+          "name": "syncro_raw_request",
+          "reason": "Named only to say it does not exist on the shipped server."
+        },
+        {
+          "name": "syncro_execute_tool",
+          "reason": "Named only to say it does not exist on the shipped server."
+        }
+      ]
+    },
+    "threatlocker": {
+      "source": "./msp-claude-plugins/threatlocker/threatlocker",
+      "connectors": [
+        "threatlocker"
+      ]
+    },
+    "timezest": {
+      "source": "./msp-claude-plugins/timezest/timezest",
+      "connectors": [
+        "timezest"
+      ]
+    },
+    "unitrends": {
+      "source": "./msp-claude-plugins/kaseya/unitrends",
+      "connectors": [
+        "unitrends"
+      ]
+    },
+    "unitrends-uniview": {
+      "source": "./msp-claude-plugins/unitrends-uniview/unitrends-uniview",
+      "connectors": [
+        "unitrends-uniview"
+      ]
+    },
+    "warmly": {
+      "source": "./msp-claude-plugins/warmly/warmly",
+      "connectors": [
+        "warmly"
+      ]
+    },
+    "webroot": {
+      "source": "./msp-claude-plugins/webroot/webroot",
+      "connectors": [
+        "webroot"
+      ]
+    },
+    "wyre-gateway": {
+      "source": "./msp-claude-plugins/wyre-gateway",
+      "connectors": [
+        "conduit"
+      ]
+    },
+    "xero": {
+      "source": "./msp-claude-plugins/xero/xero",
+      "connectors": [
+        "xero"
+      ]
+    },
+    "zabbix": {
+      "source": "./msp-claude-plugins/zabbix/zabbix",
+      "connectors": [
+        "zabbix"
+      ]
+    }
+  }
+}
