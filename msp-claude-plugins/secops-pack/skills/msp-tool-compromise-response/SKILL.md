@@ -47,6 +47,9 @@ mail fraud is [BEC Response](../bec-response/SKILL.md).
 - **Day-to-day N-central inventory or tasking** — use
   `ncentral-devices`, `ncentral-organizations`, or
   `ncentral-monitoring-tasks`.
+- **ScreenConnect panel abuse, rogue second ScreenConnect client, Run Command
+  mass execution, or GUI-session reverse pivot** — use
+  [ScreenConnect Session Hijack Response](../screenconnect-session-hijack-response/SKILL.md).
 
 ## Untrusted data
 

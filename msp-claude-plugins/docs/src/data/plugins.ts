@@ -2745,14 +2745,15 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
-    maturity: 'beta',
+    maturity: 'production',
     features: [
       'Alert Severity Normalization',
       'Bec Response',
       'Containment Playbooks',
       'Msp Tool Compromise Response',
+      'Screenconnect Session Hijack Response',
       'Shadow Ai'
     ],
     skills: [
@@ -2760,6 +2761,7 @@ export const plugins: Plugin[] = [
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
       { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
+      { name: 'screenconnect-session-hijack-response', description: 'Read-only investigation of legitimate ScreenConnect panel abuse, rogue remote-access clients, and a reported GUI-session reverse pivot onto technician workstations.' },
       { name: 'shadow-ai', description: 'Use when reviewing unapproved AI tools across Windows, macOS, and Linux; compares RMM software and operator-deployed script fields with per-client Entra inventory, with conservative matching and explicit coverage gaps.' }
     ],
     agents: [

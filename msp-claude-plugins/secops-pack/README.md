@@ -49,10 +49,12 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   (detection and response sequence for Business Email Compromise),
   `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
   with unsanctioned-tool findings, standalone Windows/macOS/Linux detection
-  scripts, and [operator-owned RMM field setup](skills/shadow-ai/references/rmm-setup.md)), and
+  scripts, and [operator-owned RMM field setup](skills/shadow-ai/references/rmm-setup.md)),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
-  or suspected compromise)
+  or suspected compromise), and `screenconnect-session-hijack-response`
+  (panel abuse, rogue clients including modified clients under legitimate IDs,
+  technician reverse-pivot exposure, and operator-run out-of-band cleanup)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,
