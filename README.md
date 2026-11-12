@@ -1,251 +1,253 @@
 # MSP Claude Plugins
 
-> One command to supercharge Claude Code for MSP workflows.
+Claude plugins for managed service providers. Each plugin teaches Claude how one MSP tool works (Autotask, ConnectWise, NinjaOne, IT Glue, Huntress, CIPP and about 70 more): which tools to call, in what order, what the fields mean, and when to stop and ask a human. Workflow packs and shared skills cover jobs that span several tools.
 
-```
-/plugin marketplace add WYRE-AI/msp-claude-plugins
-```
+The plugins are Markdown (skills, agents, slash commands). The data comes from MCP connectors. Every plugin here is mapped to the connector it documents, and CI checks that each tool name a plugin uses exists on that connector (see [Plugins and connectors](#plugins-and-connectors)).
 
-Then restart Claude Code. That's it.
+- **Install:** `/plugin marketplace add WYRE-AI/msp-claude-plugins` in Claude Code
+- **Browse:** [plugin catalog](https://wyre-ai.github.io/msp-claude-plugins/plugins/), or the tables below
+- **Connectors:** [Conduit](https://conduit.wyre.ai), one MCP endpoint for every vendor below
+- **Help:** [hello@wyre.ai](mailto:hello@wyre.ai) or [GitHub Issues](https://github.com/WYRE-AI/msp-claude-plugins/issues)
 
-**Documentation:** [wyre-ai.github.io/msp-claude-plugins](https://wyre-ai.github.io/msp-claude-plugins/)
+## Install
 
----
+### Claude Code (terminal, VS Code, JetBrains)
 
-## What you get
+Add the marketplace once, then install the plugins you want:
 
-Vendor-specific plugins with domain knowledge for PSA, RMM, documentation, security, accounting, CRM, and productivity tools — the count keeps growing, so treat [`marketplace.json`](.claude-plugin/marketplace.json) as the source of truth and the [plugin catalog](https://wyre-ai.github.io/msp-claude-plugins/plugins/) as the browsable view. The table below highlights the most commonly used integrations, not the full list:
-
-| Plugin | Description |
-|--------|-------------|
-| **Autotask PSA** | Kaseya Autotask PSA - tickets, service calls, CRM, projects, contracts, billing |
-| **Datto RMM** | Datto remote monitoring - devices, alerts, jobs, patches |
-| **IT Glue** | IT documentation - organizations, assets, passwords, flexible assets |
-| **Hudu** | IT documentation - companies, assets, articles, passwords, websites |
-| **RocketCyber** | Managed SOC - incidents, agents, events, threat detection |
-| **Syncro** | All-in-one PSA/RMM - tickets, customers, assets, invoicing |
-| **Atera** | RMM/PSA platform - tickets, agents, customers, alerts, SNMP/HTTP monitors |
-| **SuperOps.ai** | Modern PSA/RMM with GraphQL - tickets, assets, clients, runbooks |
-| **HaloPSA** | Enterprise PSA with OAuth - tickets, clients, assets, contracts |
-| **Liongard** | Configuration monitoring - environments, inspections, systems, detections, alerts |
-| **ConnectWise Manage** | Industry-leading PSA - tickets, companies, contacts, projects, time (cloud and self-hosted) |
-| **ConnectWise Automate** | Enterprise RMM - computers, clients, scripts, monitors, alerts |
-| **NinjaOne** | NinjaOne RMM - devices, organizations, alerts, ticketing |
-| **SalesBuildr** | Sales CRM - contacts, companies, opportunities, quotes |
-| **Pax8** | Cloud marketplace - companies, products, subscriptions, orders, invoices |
-| **Xero** | Accounting - contacts, invoices, payments, accounts, reports |
-| **QuickBooks Online** | Accounting - customers, invoices, expenses, payments, reports |
-| **Microsoft 365** | M365 admin - users, mailboxes, Teams, OneDrive, licensing, security |
-| **Rootly** | Incident management - incidents, alerts, on-call, AI analysis, postmortems |
-| **Huntress** | Managed threat detection and response - agents, incidents, reports |
-| **Blumira** | Cloud SIEM - detections, findings, alerts, automated response |
-| **SentinelOne** | XDR platform - endpoints, threats, incidents, Purple AI integration |
-| **Abnormal Security** | AI-native email security - threats, cases, abuse mailbox |
-| **Avanan** | Check Point Harmony Email & Collaboration - email security, DLP |
-| **Ironscales** | AI-powered anti-phishing - incidents, simulations, threat intel |
-| **Mimecast** | Email security - message tracking, threat protection, compliance |
-| **SpamTitan** | Email security by TitanHQ - spam filtering, quarantine, policies |
-| **Proofpoint** | Targeted Attack Protection - threat intel, campaigns, forensics |
-| **KnowBe4** | Security awareness training - phishing simulations, PhishER, training |
-| **HubSpot** | CRM platform - contacts, companies, deals, tickets, marketing |
-| **PandaDoc** | Document automation - proposals, quotes, e-signatures, templates |
-| **BetterStack** | Uptime monitoring and on-call - monitors, incidents, heartbeats |
-| **PagerDuty** | Incident management and on-call - incidents, services, escalations |
-
-Plus shared skills for MSP terminology, ticket triage, cross-vendor incident correlation, and billing reconciliation.
-
-### Plugin Maturity
-
-Maturity status for the plugins listed above (not the full catalog — see [`marketplace.json`](.claude-plugin/marketplace.json) for the full list):
-
-| Plugin | Status | MCP Server |
-|--------|--------|------------|
-| **Autotask PSA** | ✅ Production | [autotask-mcp](https://github.com/WYRE-AI/autotask-mcp) |
-| **Datto RMM** | ✅ Production | [datto-rmm-mcp](https://github.com/WYRE-AI/datto-rmm-mcp) |
-| **IT Glue** | ✅ Production | [itglue-mcp](https://github.com/WYRE-AI/itglue-mcp) |
-| **Hudu** | 🔨 Beta | [hudu-mcp](https://github.com/WYRE-AI/hudu-mcp) |
-| **RocketCyber** | 🔨 Beta | [rocketcyber-mcp](https://github.com/WYRE-AI/rocketcyber-mcp) |
-| **Syncro** | 🔨 Beta | [syncro-mcp](https://github.com/WYRE-AI/syncro-mcp) |
-| **Atera** | 🔨 Beta | [atera-mcp](https://github.com/WYRE-AI/atera-mcp) |
-| **SuperOps.ai** | 🔨 Beta | [superops-mcp](https://github.com/WYRE-AI/superops-mcp) |
-| **HaloPSA** | 🔨 Beta | [halopsa-mcp](https://github.com/WYRE-AI/halopsa-mcp) |
-| **Liongard** | ✅ Production | [liongard-mcp](https://github.com/WYRE-AI/liongard-mcp) |
-| **ConnectWise Manage** | 🔨 Beta | [connectwise-manage-mcp](https://github.com/WYRE-AI/connectwise-manage-mcp) |
-| **ConnectWise Automate** | 🔨 Beta | [connectwise-automate-mcp](https://github.com/WYRE-AI/connectwise-automate-mcp) |
-| **NinjaOne** | 🔨 Beta | [ninjaone-mcp](https://github.com/WYRE-AI/ninjaone-mcp) |
-| **SalesBuildr** | 🚧 Alpha | [salesbuildr-mcp](https://github.com/WYRE-AI/salesbuildr-mcp) |
-| **Pax8** | ✅ Production | [Pax8 Hosted](https://mcp.pax8.com/v1/mcp) (official) |
-| **Xero** | 🔨 Beta | [xero-mcp](https://github.com/WYRE-AI/xero-mcp) |
-| **QuickBooks Online** | 🔨 Beta | [qbo-mcp](https://github.com/WYRE-AI/qbo-mcp) |
-| **Microsoft 365** | 🔨 Beta | [ms-365-mcp-server](https://github.com/softeria/ms-365-mcp-server) (Softeria) |
-| **Rootly** | 🔨 Beta | [Rootly Hosted](https://mcp.rootly.com) (official) |
-| **Huntress** | 🔨 Beta | [huntress-mcp](https://github.com/WYRE-AI/huntress-mcp) |
-| **Blumira** | 🔨 Beta | [blumira-mcp](https://github.com/WYRE-AI/blumira-mcp) |
-| **SentinelOne** | 🔨 Beta | [sentinelone-mcp](https://github.com/WYRE-AI/sentinelone-mcp) |
-| **Abnormal Security** | 🔨 Beta | [abnormal-mcp](https://github.com/WYRE-AI/abnormal-mcp) |
-| **Avanan** | 🔨 Beta | [avanan-mcp](https://github.com/WYRE-AI/avanan-mcp) |
-| **Ironscales** | 🔨 Beta | [ironscales-mcp](https://github.com/WYRE-AI/ironscales-mcp) |
-| **Mimecast** | 🔨 Beta | [mimecast-mcp](https://github.com/WYRE-AI/mimecast-mcp) |
-| **SpamTitan** | 🔨 Beta | [spamtitan-mcp](https://github.com/WYRE-AI/spamtitan-mcp) |
-| **Proofpoint** | 🔨 Beta | [proofpoint-mcp](https://github.com/WYRE-AI/proofpoint-mcp) |
-| **KnowBe4** | 🔨 Beta | [knowbe4-mcp](https://github.com/WYRE-AI/knowbe4-mcp) |
-| **HubSpot** | 🔨 Beta | [hubspot-mcp](https://github.com/WYRE-AI/hubspot-mcp) |
-| **PandaDoc** | 🔨 Beta | [pandadoc-mcp](https://github.com/WYRE-AI/pandadoc-mcp) |
-| **BetterStack** | 🔨 Beta | [betterstack-mcp](https://github.com/WYRE-AI/betterstack-mcp) |
-| **PagerDuty** | 🔨 Beta | [pagerduty-mcp](https://github.com/WYRE-AI/pagerduty-mcp) |
-
-> Maturity levels: ✅ **Production** — used in real MSP environments with comprehensive coverage. 🔨 **Beta** — functional with core features, feedback welcome. 🚧 **Alpha** — early implementation, expect gaps.
-
----
-
-## Two Ways to Connect
-
-### Hosted Gateway (Recommended)
-
-Use the [WYRE Conduit gateway](https://conduit.wyre.ai) to connect your MSP tools to Claude with zero infrastructure. OAuth 2.1 + PKCE authentication, encrypted credential storage, and every vendor in the [Conduit catalog](https://conduit.wyre.ai) available immediately.
-
-**Claude Code (CLI):**
-
-```bash
-claude mcp add --transport http msp-mcp-gateway https://conduit.wyre.ai/v1/mcp
-```
-
-**Claude Desktop (macOS / Linux):**
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.sh | bash
-```
-
-**Claude Desktop (Windows):**
-
-```powershell
-irm https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/wyre-gateway/install.ps1 | iex
-```
-
-The installer scripts preserve your existing config, create a backup, and only append the gateway entry.
-
-[Start a free trial](https://conduit.wyre.ai/signup)
-
-### Self-Hosted
-
-Run MCP servers yourself for full control. Each server is available as an npm package, Docker image, or MCPB bundle for Claude Desktop.
-
-See the [Getting Started guide](https://wyre-ai.github.io/msp-claude-plugins/getting-started/) for installation instructions.
-
----
-
-## How it works
-
-Plugins are just markdown files. They provide:
-
-- **Skills** — Domain knowledge Claude references when helping you (API patterns, field mappings, rate limits)
-- **Commands** — Slash commands like `/create-ticket` and `/search-tickets`
-
-When you ask "create a high priority ticket for Acme Corp", Claude knows:
-- Which API endpoint to call
-- What priority values mean (varies by vendor!)
-- How to authenticate
-- Rate limit boundaries
-
----
-
-## Architecture
-
-Each plugin consists of three layers:
-
-1. **Skills** — Markdown files with domain knowledge (API patterns, field mappings,
-   vendor terminology). Low maintenance, easy to contribute to.
-2. **Commands** — Slash commands for common MSP workflows. Moderate complexity.
-3. **MCP Servers** — Full server implementations that connect Claude to vendor APIs.
-   These handle authentication, rate limiting, and data transformation.
-
-Most contributions touch skills and commands. MCP server changes are more involved
-and benefit from familiarity with the vendor's API.
-
----
-
-## Individual plugins
-
-Want just one vendor? Add the marketplace once, then install plugins individually:
-
-```
+```text
 /plugin marketplace add WYRE-AI/msp-claude-plugins
 /plugin install autotask@msp-claude-plugins
-/plugin install syncro@msp-claude-plugins
-/plugin install halopsa@msp-claude-plugins
-/plugin install liongard@msp-claude-plugins
+/plugin install itglue@msp-claude-plugins
 ```
 
-### Codex example
+`/plugin install` opens the plugin's details so you can pick a scope (just you, everyone on this repository, or this repository only). Run `/plugin` with no arguments to browse the whole marketplace.
 
-This PR adds Codex metadata for the Autotask plugin as a first representative
-pattern for cross-harness distribution:
+On Claude Code 2.1.275 or later you can add the marketplace and install in one step:
 
-```bash
-codex plugin marketplace add https://github.com/WYRE-AI/msp-claude-plugins
+```text
+/plugin install autotask --marketplace WYRE-AI/msp-claude-plugins
 ```
 
-Then install **Kaseya Autotask** from the Codex Plugins UI. The same
-`.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json` pattern can
-be repeated for the other vendor plugins over time.
+From a shell or setup script, use `claude plugin marketplace add WYRE-AI/msp-claude-plugins` and `claude plugin install autotask@msp-claude-plugins`.
 
----
+Third-party marketplaces do not auto-update by default. To get plugin updates automatically, run `/plugin`, open the **Marketplaces** tab, select `msp-claude-plugins` and choose **Enable auto-update**. See Anthropic's [install and manage plugins](https://code.claude.com/docs/en/discover-plugins) guide.
 
-## Configuration
+### Claude Desktop
 
-Each plugin uses environment variables for authentication. See the plugin's README:
+- **Code tab:** the desktop app's Code sessions read the same plugin settings as Claude Code on that computer. Add the marketplace as above (or click **+** next to the prompt box, then **Add plugins**) and install from the plugin browser.
+- **Cowork and chat:** open **Customize**, then **Plugins**, select **Add marketplace**, and enter `WYRE-AI/msp-claude-plugins`. Install plugins from the list. See Anthropic's [Cowork plugin guide](https://claude.com/docs/cowork/guide/plugins).
 
-- [Autotask](msp-claude-plugins/kaseya/autotask/README.md) — API key + integration code
-- [Datto RMM](msp-claude-plugins/kaseya/datto-rmm/README.md) — API key header
-- [IT Glue](msp-claude-plugins/kaseya/it-glue/README.md) — API key header
-- [Hudu](msp-claude-plugins/hudu/hudu/README.md) — API key + base URL
-- [RocketCyber](msp-claude-plugins/kaseya/rocketcyber/README.md) — Bearer API key
-- [Syncro](msp-claude-plugins/syncro/syncro-msp/README.md) — API key query param
-- [Atera](msp-claude-plugins/atera/atera/README.md) — X-API-KEY header
-- [SuperOps.ai](msp-claude-plugins/superops/superops-ai/README.md) — Bearer token
-- [HaloPSA](msp-claude-plugins/halopsa/halopsa/README.md) — OAuth 2.0 client credentials
-- [Liongard](msp-claude-plugins/liongard/liongard/README.md) — Access Key ID + Secret (X-ROAR-API-KEY)
-- [ConnectWise Manage](msp-claude-plugins/connectwise/manage/README.md) — Public/private key + client ID
-- [ConnectWise Automate](msp-claude-plugins/connectwise/automate/README.md) — Integrator credentials
-- [NinjaOne](msp-claude-plugins/ninjaone/ninjaone-rmm/README.md) — OAuth 2.0 client credentials
-- [SalesBuildr](msp-claude-plugins/salesbuildr/salesbuildr/README.md) — API key
-- [Pax8](msp-claude-plugins/pax8/pax8/README.md) — MCP token ([official hosted server](https://mcp.pax8.com/v1/mcp))
-- [Xero](msp-claude-plugins/xero/xero/README.md) — OAuth 2.0
-- [QuickBooks Online](msp-claude-plugins/quickbooks/quickbooks-online/README.md) — OAuth 2.0
-- [Microsoft 365](msp-claude-plugins/m365/m365/README.md) — OAuth 2.0 (multi-tenant Entra ID)
-- [Rootly](msp-claude-plugins/rootly/rootly/README.md) — API token (Bearer)
+A plugin only brings the know-how. Claude also needs the connector itself; see the next section.
 
----
+## Connect the data: Conduit or a vendor MCP
+
+Plugins call MCP tools such as `autotask_search_tickets` or `cipp_list_users`. Those tools come from a connector. You have two options:
+
+1. **Conduit (recommended).** [Conduit](https://conduit.wyre.ai) is WYRE AI's hosted MCP gateway. Connect your vendors once in the Conduit web app, then point Claude at one endpoint, `https://conduit.wyre.ai/v1/mcp`, and every connected vendor's tools appear behind it. Sign-in is OAuth with your Conduit login; there is no API key to paste. Admins control who can use which vendor and tool, and every call is audited.
+
+   - Claude Code: `claude mcp add --transport http conduit https://conduit.wyre.ai/v1/mcp --scope user`
+   - Claude Desktop and claude.ai: **Customize**, **Connectors**, **Add custom connector**, URL `https://conduit.wyre.ai/v1/mcp`
+   - Australia and UK organizations use `https://au.conduit.wyre.ai/v1/mcp` or `https://uk.conduit.wyre.ai/v1/mcp`
+
+   Some plugins (the workflow packs, `wyre-gateway`, and a few vendor plugins) bundle this connection in a `.mcp.json`, so installing them adds it for you. Full client setup and the gateway tool reference: [Conduit MCP server docs](https://conduit.wyre.ai/docs/reference/conduit-mcp-server/).
+
+2. **Run a vendor MCP server yourself.** Most WYRE connectors are open source (Apache-2.0) under [github.com/WYRE-AI](https://github.com/WYRE-AI); the Connector column below links each one. Each repo's README covers running it locally with your own vendor credentials. Vendors that publish their own hosted MCP (Pax8, Rootly, PagerDuty, Meraki and others) work with their plugin directly.
+
+Each plugin's README lists the connection fields its vendor needs.
+
+## Plugins and connectors
+
+Every connector WYRE ships in the Conduit catalog, with its plugin. "No plugin yet" means the connector works through Conduit today but has no plugin in this repo; contributions welcome. Vendor-hosted connectors appear here only when a plugin covers them; the full catalog, including vendor-hosted MCPs, is in [Conduit's supported vendors](https://conduit.wyre.ai/docs/reference/supported-vendors/).
+
+<!-- CONNECTORS:START generated by scripts/check-connector-tools.mjs --write-readme; edit connectors.json, not this table -->
+| Vendor | Plugin | What the plugin covers | Connector |
+|---|---|---|---|
+| 1Password | [`1password`](msp-claude-plugins/1password/1password) | read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and... | 1password-mcp (source not public yet) |
+| 3CX | [`3cx`](msp-claude-plugins/3cx/3cx) | native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update... | Vendor's own MCP, via Conduit |
+| Abnormal Security | [`abnormal-security`](msp-claude-plugins/abnormal/abnormal-security) | AI-powered email security, phishing detection, account takeover prevention | [abnormal-mcp](https://github.com/WYRE-AI/abnormal-mcp) |
+| Acronis Cyber Protect Cloud | [`acronis`](msp-claude-plugins/acronis/acronis) | backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting | [acronis-mcp](https://github.com/WYRE-AI/acronis-mcp) |
+| Action1 | no plugin yet |  | [action1-mcp](https://github.com/WYRE-AI/action1-mcp) |
+| AlertOps | no plugin yet |  | [alertops-mcp](https://github.com/WYRE-AI/alertops-mcp) |
+| Alga PSA | [`alga-psa`](msp-claude-plugins/alga-psa/alga-psa) | read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own... | [alga-psa-mcp](https://github.com/WYRE-AI/alga-psa-mcp) |
+| Alloy Navigator | no plugin yet |  | [alloy-navigator-mcp](https://github.com/WYRE-AI/alloy-navigator-mcp) |
+| Alternative Payments | [`alternative-payments`](msp-claude-plugins/alternative-payments/alternative-payments) | customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes) | [alternative-payments-mcp](https://github.com/WYRE-AI/alternative-payments-mcp) |
+| Anthropic Admin | [`ai-org-admin`](msp-claude-plugins/anthropic-admin/ai-org-admin) | read-only review of a client's Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption... | anthropic-admin-mcp (source not public yet) |
+| Atera | [`atera`](msp-claude-plugins/atera/atera) | tickets, agents, customers, alerts, SNMP/HTTP monitors | [atera-mcp](https://github.com/WYRE-AI/atera-mcp) |
+| Autotask PSA | [`autotask`](msp-claude-plugins/kaseya/autotask) | tickets, CRM, projects, contracts, billing | [autotask-mcp](https://github.com/WYRE-AI/autotask-mcp) |
+| Auvik | [`auvik`](msp-claude-plugins/auvik/auvik) | network monitoring, device inventory, alerts, configurations, capacity planning across tenants | [auvik-mcp](https://github.com/WYRE-AI/auvik-mcp) |
+| Avanan (Legacy SmartAPI) | no plugin yet |  | [avanan-legacy-mcp](https://github.com/WYRE-AI/avanan-legacy-mcp) |
+| Axcient x360Recover | [`axcient`](msp-claude-plugins/axcient/axcient) | BCDR clients, devices, backup jobs, vaults, and appliances | [axcient-mcp](https://github.com/WYRE-AI/axcient-mcp) |
+| Azure MCP Server | [`azure-mcp`](msp-claude-plugins/azure-mcp/azure-mcp) | read-only Azure observability, cost, and resource-health analysis in natural language: monitoring... | [azure-mcp](https://github.com/Azure/azure-mcp) |
+| BetterStack | [`betterstack`](msp-claude-plugins/betterstack/betterstack) | uptime monitoring, logging, incident management | Vendor's own MCP, via Conduit |
+| Bitdefender GravityZone | no plugin yet |  | [bitdefender-mcp](https://github.com/WYRE-AI/bitdefender-mcp) |
+| Bitwarden | [`bitwarden`](msp-claude-plugins/bitwarden/bitwarden) | read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and... | bitwarden-mcp (source not public yet) |
+| Blackpoint Cyber | [`blackpoint`](msp-claude-plugins/blackpoint/blackpoint) | tenants, assets, detections, vulnerabilities (dark web, external, scans) | [blackpoint-mcp](https://github.com/WYRE-AI/blackpoint-mcp) |
+| Blumira | [`blumira`](msp-claude-plugins/blumira/blumira) | SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis | [blumira-mcp](https://github.com/WYRE-AI/blumira-mcp) |
+| Checkpoint Avanan | [`avanan`](msp-claude-plugins/email-security/checkpoint-avanan) | quarantine and restore, threat event search, and allow/block-list exceptions | [avanan-mcp](https://github.com/WYRE-AI/avanan-mcp) |
+| CIPP | [`cipp`](msp-claude-plugins/cipp/cipp) | Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards... | [cipp-mcp](https://github.com/WYRE-AI/cipp-mcp) |
+| Cisco Duo | no plugin yet |  | [cisco-duo-mcp](https://github.com/WYRE-AI/cisco-duo-mcp) |
+| Cisco Umbrella | no plugin yet |  | [cisco-umbrella-mcp](https://github.com/WYRE-AI/cisco-umbrella-mcp) |
+| Clio | [`clio`](msp-claude-plugins/clio/clio) | legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata)... | [clio-mcp](https://github.com/WYRE-AI/clio-mcp) |
+| ConnectWise Automate | [`connectwise-automate`](msp-claude-plugins/connectwise/automate) | computers, clients, scripts, monitors, alerts | [connectwise-automate-mcp](https://github.com/WYRE-AI/connectwise-automate-mcp) |
+| ConnectWise CPQ | [`connectwise-cpq`](msp-claude-plugins/connectwise/cpq) | quotes, line items, templates, quote customers, payment terms | [connectwise-cpq-mcp](https://github.com/WYRE-AI/connectwise-cpq-mcp) |
+| ConnectWise PSA | [`connectwise-psa`](msp-claude-plugins/connectwise/manage) | tickets, companies, contacts, projects, time | [connectwise-manage-mcp](https://github.com/WYRE-AI/connectwise-manage-mcp) |
+| Cork | no plugin yet |  | [cork-mcp](https://github.com/WYRE-AI/cork-mcp) |
+| Cove Data Protection (N-able) | [`cove`](msp-claude-plugins/cove/cove) | read-only backup health triage, customer and storage inventory, and console access review | cove-mcp (source not public yet) |
+| Crewhu | [`crewhu`](msp-claude-plugins/crewhu/crewhu) | CSAT/NPS surveys, employee recognition, badges, prize redemptions for MSPs | [crewhu-mcp](https://github.com/WYRE-AI/crewhu-mcp) |
+| Customer Thermometer | no plugin yet |  | [customer-thermometer-mcp](https://github.com/WYRE-AI/customer-thermometer-mcp) |
+| CyberQP | no plugin yet |  | [cyberqp-mcp](https://github.com/WYRE-AI/cyberqp-mcp) |
+| Datto BCDR | [`datto-bcdr`](msp-claude-plugins/kaseya/datto-bcdr) | backup status, screenshot verification, recovery points (scaffolding) | [datto-bcdr-mcp](https://github.com/WYRE-AI/datto-bcdr-mcp) |
+| Datto RMM | [`datto-rmm`](msp-claude-plugins/kaseya/datto-rmm) | devices, alerts, jobs, patches, monitoring | [datto-rmm-mcp](https://github.com/WYRE-AI/datto-rmm-mcp) |
+| Datto SaaS Protection | [`datto-saas-protection`](msp-claude-plugins/kaseya/datto-saas-protection) | M365 / Google Workspace seat coverage, backup health, and seat licensing | [datto-saas-protection-mcp](https://github.com/WYRE-AI/datto-saas-protection-mcp) |
+| Dicker Data | no plugin yet |  | [dicker-data-mcp](https://github.com/WYRE-AI/dicker-data-mcp) |
+| DNSFilter | no plugin yet |  | [dnsfilter-mcp](https://github.com/WYRE-AI/dnsfilter-mcp) |
+| Domotz | [`domotz`](msp-claude-plugins/domotz/domotz) | network monitoring, SNMP discovery, device management | [domotz-mcp](https://github.com/WYRE-AI/domotz-mcp) |
+| Dubber | [`dubber`](msp-claude-plugins/dubber/dubber) | capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and... | [dubber-mcp](https://github.com/WYRE-AI/dubber-mcp) |
+| ESET PROTECT | no plugin yet |  | [eset-protect-mcp](https://github.com/WYRE-AI/eset-protect-mcp) |
+| Freshdesk | [`freshdesk`](msp-claude-plugins/freshdesk/freshdesk) | cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA... | [freshdesk-mcp](https://github.com/WYRE-AI/freshdesk-mcp) |
+| GoGetSSL | [`gogetssl`](msp-claude-plugins/gogetssl/gogetssl) | read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and... | gogetssl-mcp (source not public yet) |
+| Gorelo | no plugin yet |  | [gorelo-mcp](https://github.com/WYRE-AI/gorelo-mcp) |
+| HaloPSA | [`halopsa`](msp-claude-plugins/halopsa/halopsa) | tickets, clients, assets, contracts (OAuth 2.0) | [halopsa-mcp](https://github.com/WYRE-AI/halopsa-mcp) |
+| HubSpot | [`hubspot`](msp-claude-plugins/hubspot/hubspot) | contacts, companies, deals, tickets, activities, and pipeline reporting (uses HubSpot's first-party MCP... | Vendor's own MCP, via Conduit |
+| Hudu (API Key) | [`hudu`](msp-claude-plugins/hudu/hudu) | companies, assets, articles, passwords, websites | [hudu-mcp](https://github.com/WYRE-AI/hudu-mcp) |
+| Huntress | [`huntress`](msp-claude-plugins/huntress/huntress) | managed threat detection, incident response, endpoint agent management, escalations, and billing reports | [huntress-mcp](https://github.com/WYRE-AI/huntress-mcp) |
+| ImmyBot | [`immybot`](msp-claude-plugins/immybot/immybot) | desired-state Windows software deployment, maintenance sessions, scripts (Entra ID OAuth) | [immybot-mcp](https://github.com/WYRE-AI/immybot-mcp) |
+| Inforcer | [`inforcer`](msp-claude-plugins/inforcer/inforcer) | Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift... | [inforcer-mcp](https://github.com/WYRE-AI/inforcer-mcp) |
+| IQMS / DELMIAworks | no plugin yet |  | [iqms-mcp](https://github.com/WYRE-AI/iqms-mcp) |
+| Ironscales | [`ironscales`](msp-claude-plugins/ironscales/ironscales) | AI-powered anti-phishing, incident triage, email classification, and crowdsourced threat intelligence | [ironscales-mcp](https://github.com/WYRE-AI/ironscales-mcp) |
+| Island Browser | no plugin yet |  | [island-mcp](https://github.com/WYRE-AI/island-mcp) |
+| IT Glue | [`itglue`](msp-claude-plugins/kaseya/it-glue) | organizations, assets, passwords, flexible assets | [itglue-mcp](https://github.com/WYRE-AI/itglue-mcp) |
+| Jamf Pro | [`jamf`](msp-claude-plugins/jamf/jamf) | Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated... | jamf-mcp (source not public yet) |
+| Kaseya BMS | [`kaseya-bms`](msp-claude-plugins/kaseya/kaseya-bms) | tickets, accounts, contracts, time entries, billing (scaffolding) | [kaseya-bms-mcp](https://github.com/WYRE-AI/kaseya-bms-mcp) |
+| Kaseya Quote Manager | [`kaseya-quote-manager`](msp-claude-plugins/kaseya-quote-manager/kaseya-quote-manager) | read-only quotes, sales orders, purchasing, catalog, CRM, org | [kaseya-quote-manager-mcp](https://github.com/WYRE-AI/kaseya-quote-manager-mcp) |
+| Kaseya VSA | [`kaseya-vsa`](msp-claude-plugins/kaseya/kaseya-vsa) | endpoint monitoring, patch management, agent procedures, remote control (scaffolding) | [kaseya-vsa-mcp](https://github.com/WYRE-AI/kaseya-vsa-mcp) |
+| Keeper Secrets Manager | [`keeper`](msp-claude-plugins/keeper/keeper) | read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics... | [keeper-mcp](https://github.com/WYRE-AI/keeper-mcp) |
+| KnowBe4 | [`knowbe4`](msp-claude-plugins/email-security/knowbe4) | phishing simulation, security awareness training, user risk management | [knowbe4-mcp](https://github.com/WYRE-AI/knowbe4-mcp) |
+| KPN | [`kpn`](msp-claude-plugins/kpn/kpn) | address availability and planned work, line diagnostics, and read-only business-mobile lookups (orders... | [kpn-mcp](https://github.com/WYRE-AI/kpn-mcp) |
+| LastPass (Business + MSP admin) | [`lastpass`](msp-claude-plugins/lastpass/lastpass) | read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing... | lastpass-mcp (source not public yet) |
+| Liongard | [`liongard`](msp-claude-plugins/liongard/liongard) | environments, inspections, systems, detections, alerts, configuration monitoring | [liongard-mcp](https://github.com/WYRE-AI/liongard-mcp) |
+| Mailprotector | [`mailprotector`](msp-claude-plugins/mailprotector/mailprotector) | CloudFilter quarantine triage, allow/block rules, customer and domain onboarding, user syncs, and... | [mailprotector-mcp](https://github.com/WYRE-AI/mailprotector-mcp) |
+| MarketSharp | [`marketsharp`](msp-claude-plugins/marketsharp/marketsharp) | read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting | [marketsharp-mcp](https://github.com/WYRE-AI/marketsharp-mcp) |
+| Meraki | [`meraki`](msp-claude-plugins/meraki/meraki) | Cisco's hosted Meraki MCP: read-only device health, inventory, firewall & VPN review, wireless | Vendor's own MCP, via Conduit |
+| Microsoft 365 | [`m365`](msp-claude-plugins/m365/m365) | users, mailboxes, Teams, OneDrive, licensing, and security posture | [ms-365-mcp-server](https://github.com/WYRE-AI/ms-365-mcp-server) |
+| Microsoft Graph (Enterprise) | [`microsoft-graph`](msp-claude-plugins/microsoft-graph/microsoft-graph) | read-only natural-language queries over Microsoft Entra identity and directory data: users, groups... | Vendor's own MCP, via Conduit |
+| Mimecast | [`mimecast`](msp-claude-plugins/mimecast/mimecast) | message tracking, threat intelligence, queue management, and email security operations | [mimecast-mcp](https://github.com/WYRE-AI/mimecast-mcp) |
+| Moovila | [`moovila`](msp-claude-plugins/moovila/moovila) | read-only project, budget, task, time entry and resource reporting for project profitability and billing... | moovila-mcp (source not public yet) |
+| MSP360 | no plugin yet |  | [msp360-mcp](https://github.com/WYRE-AI/msp360-mcp) |
+| MSPCFO | [`mspcfo`](msp-claude-plugins/mspcfo/mspcfo) | MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization... | Vendor's own MCP, via Conduit |
+| myITprocess (Kaseya) | [`myitprocess`](msp-claude-plugins/myitprocess/myitprocess) | read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and... | myitprocess-mcp (source not public yet) |
+| N-able N-central | [`ncentral`](msp-claude-plugins/ncentral/ncentral) | devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers | [ncentral-mcp](https://github.com/WYRE-AI/ncentral-mcp) |
+| NetSuite | [`netsuite`](msp-claude-plugins/netsuite/netsuite) | records, reports, saved searches, and SuiteQL queries (read-only) | Vendor's own MCP, via Conduit |
+| NinjaOne | [`ninjaone`](msp-claude-plugins/ninjaone/ninjaone-rmm) | devices, organizations, alerts, tickets | [ninjaone-mcp](https://github.com/WYRE-AI/ninjaone-mcp) |
+| Nutanix | [`nutanix`](msp-claude-plugins/nutanix/nutanix) | Prism Central v4 API: VM management, cluster operations, storage, networking via official Nutanix MCP server | [nutanix-mcp](https://github.com/WYRE-AI/nutanix-mcp) |
+| OpenAI Admin | [`openai-admin`](msp-claude-plugins/openai-admin/openai-admin) | read-only review of a client's OpenAI org: seats, projects, service accounts, API and Admin keys, usage... | openai-admin-mcp (source not public yet) |
+| PagerDuty | [`pagerduty`](msp-claude-plugins/pagerduty/pagerduty) | incident management, on-call scheduling, alerting | Vendor's own MCP, via Conduit |
+| PandaDoc | [`pandadoc`](msp-claude-plugins/pandadoc/pandadoc) | documents, templates, e-signatures, and proposal management | Vendor's own MCP, via Conduit |
+| Pax8 | [`pax8`](msp-claude-plugins/pax8/pax8) | companies, products, subscriptions, orders, invoices | Vendor's own MCP, via Conduit |
+| PostHog | [`posthog`](msp-claude-plugins/posthog/posthog) | insights, dashboards, feature flags, cohorts, events (read-only) | Vendor's own MCP, via Conduit |
+| Printix | no plugin yet |  | [printix-mcp](https://github.com/WYRE-AI/printix-mcp) |
+| Proofpoint | [`proofpoint`](msp-claude-plugins/email-security/proofpoint) | TAP, quarantine, threat intel, forensics, URL defense, VAP reports | [proofpoint-mcp](https://github.com/WYRE-AI/proofpoint-mcp) |
+| Proofpoint Essentials | [`proofpoint-essentials`](msp-claude-plugins/email-security/proofpoint-essentials) | MSP org, domain, user, licensing, and reporting management | [proofpoint-essentials-mcp](https://github.com/WYRE-AI/proofpoint-essentials-mcp) |
+| PRTG | no plugin yet |  | [prtg-mcp](https://github.com/WYRE-AI/prtg-mcp) |
+| QuickBooks Online | [`qbo`](msp-claude-plugins/quickbooks/quickbooks-online) | customers, invoices, expenses, payments, reports | [qbo-mcp](https://github.com/WYRE-AI/qbo-mcp) |
+| RoboShadow | no plugin yet |  | [roboshadow-mcp](https://github.com/WYRE-AI/roboshadow-mcp) |
+| RocketCyber | [`rocketcyber`](msp-claude-plugins/kaseya/rocketcyber) | incidents, agents, events, threat detection | [rocketcyber-mcp](https://github.com/WYRE-AI/rocketcyber-mcp) |
+| Rootly | [`rootly`](msp-claude-plugins/rootly/rootly) | incident management, postmortems, SRE automation | Vendor's own MCP, via Conduit |
+| runZero | [`runzero`](msp-claude-plugins/runzero/runzero) | asset discovery, network scanning, inventory management | Vendor's own MCP, via Conduit |
+| SaaS Alerts | [`saas-alerts`](msp-claude-plugins/saas-alerts/saas-alerts) | SaaS security monitoring and alerting for M365 / Google Workspace: alerts, events, anomaly detection... | [saas-alerts-mcp](https://github.com/WYRE-AI/saas-alerts-mcp) |
+| SalesBuildr | [`salesbuildr`](msp-claude-plugins/salesbuildr/salesbuildr) | contacts, companies, opportunities, quotes | [salesbuildr-mcp](https://github.com/WYRE-AI/salesbuildr-mcp) |
+| Salesforce | no plugin yet |  | [salesforce-mcp](https://github.com/WYRE-AI/salesforce-mcp) |
+| ScalePad | [`scalepad`](msp-claude-plugins/scalepad/scalepad) | asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance... | [scalepad-mcp](https://github.com/WYRE-AI/scalepad-mcp) |
+| SentinelOne | [`sentinelone`](msp-claude-plugins/sentinelone/sentinelone) | threat detection, incident response, and endpoint agent management via the Purple AI MCP server | [sentinelone-mcp](https://github.com/WYRE-AI/sentinelone-mcp) |
+| Sherweb | [`sherweb`](msp-claude-plugins/sherweb/sherweb) | distributor billing, service provider management, customer subscriptions | [sherweb-mcp](https://github.com/WYRE-AI/sherweb-mcp) |
+| Slack | [`slack`](msp-claude-plugins/slack/slack) | messages, channels, canvases, files, reactions via Slack's first-party hosted MCP (mcp.slack.com) | Vendor's own MCP (not in Conduit) |
+| Slide | no plugin yet |  | [slide-mcp](https://github.com/WYRE-AI/slide-mcp) |
+| SmileBack | [`smileback`](msp-claude-plugins/smileback/smileback) | read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and... | smileback-mcp (source not public yet) |
+| SpamTitan | [`spamtitan`](msp-claude-plugins/spamtitan/spamtitan) | quarantine queue management, email flow stats, sender allowlist/blocklist for MSPs | [spamtitan-mcp](https://github.com/WYRE-AI/spamtitan-mcp) |
+| Spanning | [`spanning`](msp-claude-plugins/kaseya/spanning) | SaaS backup for M365 / Google Workspace / Salesforce (scaffolding) | [spanning-mcp](https://github.com/WYRE-AI/spanning-mcp) |
+| Stripe | [`stripe`](msp-claude-plugins/stripe/stripe) | payments, subscriptions, invoices, customer management via Stripe's first-party hosted MCP (mcp.stripe.com) | Vendor's own MCP (not in Conduit) |
+| SuperOps | [`superops`](msp-claude-plugins/superops/superops-ai) | tickets, assets, clients, runbooks (GraphQL) | [superops-mcp](https://github.com/WYRE-AI/superops-mcp) |
+| Syncro (API connector) | [`syncro`](msp-claude-plugins/syncro/syncro-msp) | tickets, customers, assets, invoicing | [syncro-mcp](https://github.com/WYRE-AI/syncro-mcp) |
+| Telivy | no plugin yet |  | [telivy-mcp](https://github.com/WYRE-AI/telivy-mcp) |
+| Teramind | no plugin yet |  | [teramind-mcp](https://github.com/WYRE-AI/teramind-mcp) |
+| ThreatLocker | [`threatlocker`](msp-claude-plugins/threatlocker/threatlocker) | zero-trust application allowlisting, approval triage, audit log investigation, computer inventory | [threatlocker-mcp](https://github.com/WYRE-AI/threatlocker-mcp) |
+| Time Doctor | no plugin yet |  | [timedoctor-mcp](https://github.com/WYRE-AI/timedoctor-mcp) |
+| TimeZest | [`timezest`](msp-claude-plugins/timezest/timezest) | tech scheduling against ConnectWise / Autotask / Halo PSA tickets | [timezest-mcp](https://github.com/WYRE-AI/timezest-mcp) |
+| UISP | no plugin yet |  | [uisp-mcp](https://github.com/WYRE-AI/uisp-mcp) |
+| UniFi | no plugin yet |  | [unifi-mcp](https://github.com/WYRE-AI/unifi-mcp) |
+| Unitrends | [`unitrends`](msp-claude-plugins/kaseya/unitrends) | appliances, backup jobs, recovery points, replication, alerts (scaffolding) | [unitrends-mcp](https://github.com/WYRE-AI/unitrends-mcp) |
+| Unitrends UniView | [`unitrends-uniview`](msp-claude-plugins/unitrends-uniview/unitrends-uniview) | read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and... | unitrends-uniview-mcp (source not public yet) |
+| Warmly | [`warmly`](msp-claude-plugins/warmly/warmly) | identified website visitors, account-level engagement, and credit balance | Vendor's own MCP (not in Conduit) |
+| WatchGuard Cloud | no plugin yet |  | [watchguard-cloud-mcp](https://github.com/WYRE-AI/watchguard-cloud-mcp) |
+| Webroot (OpenText) | [`webroot`](msp-claude-plugins/webroot/webroot) | read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits | webroot-mcp (source not public yet) |
+| Xero | [`xero`](msp-claude-plugins/xero/xero) | contacts, invoices, payments, accounts, and financial reports | [xero-mcp](https://github.com/WYRE-AI/xero-mcp) |
+| Yeastar P-Series PBX | no plugin yet |  | [yeastar-mcp](https://github.com/WYRE-AI/yeastar-mcp) |
+| Zabbix | [`zabbix`](msp-claude-plugins/zabbix/zabbix) | read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability... | zabbix-mcp (source not public yet) |
+<!-- CONNECTORS:END -->
+
+### Workflow packs and shared skills
+
+These work across vendors through Conduit's single endpoint and adapt to whichever tools the organization has connected.
+
+<!-- PACKS:START generated by scripts/check-connector-tools.mjs --write-readme -->
+| Plugin | What it does |
+|---|---|
+| [`advanced-workflows`](msp-claude-plugins/advanced-workflows/advanced-workflows) | Vendor-generic MSP automation workflows that adapt to the customer's connected stack. |
+| [`assets-pack`](msp-claude-plugins/assets-pack) | IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected. |
+| [`awareness-pack`](msp-claude-plugins/awareness-pack) | Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected. |
+| [`backup-pack`](msp-claude-plugins/backup-pack) | Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected. |
+| [`cloudops-pack`](msp-claude-plugins/cloudops-pack) | Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected. |
+| [`compliance-pack`](msp-claude-plugins/compliance-pack) | Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires. |
+| [`devops-pack`](msp-claude-plugins/devops-pack) | DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected. |
+| [`finance-pack`](msp-claude-plugins/finance-pack) | Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools. |
+| [`marketing-pack`](msp-claude-plugins/marketing-pack) | MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected. |
+| [`ops-pack`](msp-claude-plugins/ops-pack) | MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected. |
+| [`sales-pack`](msp-claude-plugins/sales-pack) | Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected. |
+| [`secops-pack`](msp-claude-plugins/secops-pack) | Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack. |
+| [`shared-skills`](msp-claude-plugins/shared) | Vendor-agnostic MSP skills - terminology and ticket triage |
+| [`wyre-gateway`](msp-claude-plugins/wyre-gateway) | WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai. |
+<!-- PACKS:END -->
+
+### How plugins stay in sync with connectors
+
+- [`connectors.json`](connectors.json) maps every plugin to the connector(s) it documents and lists every shipped connector, with its repo and container image.
+- [`scripts/connector-tools.snapshot.json`](scripts/connector-tools.snapshot.json) pins each connector's published tool names, captured from the released container images.
+- CI runs [`scripts/check-connector-tools.mjs`](scripts/check-connector-tools.mjs), which fails when a plugin has no mapped connector, when a plugin names a tool its connector does not publish, or when the tables above are stale.
+- When a connector ships new tools, refresh the snapshot with [`scripts/refresh-connector-tools.mjs`](scripts/refresh-connector-tools.mjs). See [CONTRIBUTING.md](CONTRIBUTING.md#connector-mapping).
+
+## What a plugin contains
+
+```text
+msp-claude-plugins/<vendor>/<product>/
+  .claude-plugin/plugin.json   manifest (name, version, description)
+  skills/<skill>/SKILL.md      what Claude loads when the topic comes up
+  agents/<agent>.md            role-based workflows (triage, offboarding, reviews)
+  commands/<command>.md        slash commands, e.g. /autotask:search-tickets
+  GOVERNANCE.md                risk tier of every tool (read, write, destructive, admin)
+  .mcp.json                    optional: the MCP connection the plugin adds
+```
+
+Plugins also install in OpenAI Codex: `codex plugin marketplace add https://github.com/WYRE-AI/msp-claude-plugins` reads the generated [`.agents/plugins/marketplace.json`](.agents/plugins/marketplace.json).
 
 ## Contributing
 
-We welcome contributions at every level — from typo fixes to new platform plugins.
-See [CONTRIBUTING.md](CONTRIBUTING.md) for our tiered contribution guide.
+Fixes and new plugins are welcome, from a typo to a new vendor. Start with [CONTRIBUTING.md](CONTRIBUTING.md) and the [quality standards](msp-claude-plugins/_standards/). AI coding agents should read [AGENTS.md](AGENTS.md) first.
 
-## Evals and production telemetry
+Before opening a pull request, run the same checks CI runs:
 
-The `evals/autotask-psa/` directory contains a small human-review eval set for
-ticket triage, time-entry drafting, and contract checks. The cases are
-harness-neutral so the same plugin behavior can be checked in Claude Code,
-Codex, or another agent workspace before expanding the pattern to other vendor
-plugins.
+```bash
+claude plugin validate .
+node scripts/check-marketplace-drift.mjs --base origin/main
+node scripts/generate-agents-manifest.mjs --check
+node scripts/check-doc-references.mjs
+node scripts/check-tool-anchoring.mjs
+node scripts/check-connector-tools.mjs
+```
 
-If you publish plugins through Telvine, keep runtime telemetry metadata-only:
-`skill.invocation.start`, `skill.invocation.end`, and `skill.invocation.error`
-for skill behavior, plus `plugin.component.invoked` and
-`plugin.component.error` for commands, MCP tools, or other non-skill components.
-Do not emit prompts, customer records, tenant data, connector payloads, tool
-arguments, credentials, browser captures, or model outputs.
+Changing anything inside a plugin needs a `version` bump in its `plugin.json`, or installed copies never update.
 
-## Community
-
-This project is maintained by [WYRE AI](https://wyretechnology.com), a Chattanooga-based
-MSP focused on AI enablement.
-
-- **Questions or feedback?** Open a [Discussion](https://github.com/WYRE-AI/msp-claude-plugins/discussions)
-- **Found a bug?** File an [Issue](https://github.com/WYRE-AI/msp-claude-plugins/issues)
-- **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Using this in your MSP?** We'd love to hear about it — drop us a note in Discussions
+Report bugs and request plugins in [GitHub Issues](https://github.com/WYRE-AI/msp-claude-plugins/issues). For anything else, email [hello@wyre.ai](mailto:hello@wyre.ai).
 
 ## Contributors
 
@@ -275,8 +277,6 @@ This project follows the [All Contributors](https://allcontributors.org) specifi
 
 ## License
 
-Apache 2.0 — see [LICENSE](LICENSE).
+Apache 2.0. See [LICENSE](LICENSE).
 
----
-
-Built by MSPs, for MSPs.
+Maintained by [WYRE AI](https://wyre.ai).

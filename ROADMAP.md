@@ -158,8 +158,8 @@ Contributions that land here reach both consumers automatically: Claude Code use
 on their next `/plugin marketplace update`, and Conduit organizations on the next
 catalog sync. One PR, both audiences.
 
-Questions or ideas? [Discussions](https://github.com/wyre-technology/msp-claude-plugins/discussions)
-or [Discord](https://discord.gg/cCPtPaFw8e).
+Questions or ideas? [Open an issue](https://github.com/WYRE-AI/msp-claude-plugins/issues),
+email hello@wyre.ai, or join [Discord](https://discord.gg/cCPtPaFw8e).
 
 ## Versioning and releases
 

@@ -131,4 +131,4 @@ attach the association.
 ## Related Skills
 
 - [scheduling](../scheduling/SKILL.md) — Booking technicians against PSA tickets
-- [api-patterns](../api-patterns/SKILL.md) — Auth, navigation, polling cadence
+- [api-patterns](../api-patterns/SKILL.md) - Auth, connectivity, polling cadence

@@ -28,7 +28,7 @@ Connect TimeZest once in the Conduit web UI (**Connections → TimeZest**). Cond
 
 ## Skills
 
-- `api-patterns` - Auth, navigation, polling, PSA association payload
+- `api-patterns` - Auth, connectivity, polling, PSA association payload
 - `scheduling` - Primary booking workflow against ConnectWise / Autotask / Halo
 - `agents-and-teams` - Resolving the right technician or round-robin team
 - `appointment-types` - Choosing the appointment type that matches the work
@@ -53,8 +53,7 @@ Connect TimeZest once in the Conduit web UI (**Connections → TimeZest**). Cond
 
 Provided by the TimeZest MCP server through the WYRE MCP Gateway:
 
-### Navigation
-- `timezest_navigate`, `timezest_back`, `timezest_status`
+All tools are listed directly; no navigate step is needed. Use `timezest_status` for orientation and connectivity checks.
 
 ### Agents
 - `timezest_agents_list`, `timezest_agents_get`

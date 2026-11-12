@@ -99,6 +99,10 @@ You are an expert [role] for MSP environments using [vendor]. [Persona prose, 2-
 - Document at least one explicit "stop and ask the human" scenario in Approach
 - See [CONTRIBUTING.md](CONTRIBUTING.md#agent-development-guide) for the full guide and quality checklist
 
+## Connectors
+
+Every plugin maps to the Conduit connector(s) it documents in `connectors.json`, and CI (`scripts/check-connector-tools.mjs`) checks every documented tool name against `scripts/connector-tools.snapshot.json`. When you add a plugin, add its mapping and run `node scripts/check-connector-tools.mjs --write-readme`. Never document a tool that is not in the snapshot; refresh the snapshot instead if the connector really has it (see CONTRIBUTING.md, "Connector mapping").
+
 ## What Not to Do
 
 - Do not add GitHub Actions or CI workflows unless explicitly asked

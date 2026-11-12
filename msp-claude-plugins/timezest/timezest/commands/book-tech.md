@@ -14,7 +14,7 @@ self-service booking link.
 
 - TimeZest MCP server connected with a valid `TIMEZEST_API_TOKEN`
 - The PSA ticket ID and the PSA system it lives in
-- Tools: `timezest_navigate`, `timezest_agents_list`,
+- Tools: `timezest_agents_list`,
   `timezest_teams_list`, `timezest_resources_list`,
   `timezest_appointment_types_list`,
   `timezest_scheduling_create_request`
@@ -28,25 +28,20 @@ self-service booking link.
 
 2. **Resolve the resource**
 
-   - If `resource` names a person: `timezest_navigate` to `agents`,
-     call `timezest_agents_list`, match by name.
-   - If it names a team: navigate to `teams`, call
-     `timezest_teams_list`.
-   - If omitted: navigate to `resources`, call
-     `timezest_resources_list` and pick from the active pool.
+   - If `resource` names a person: call `timezest_agents_list`, match by name.
+   - If it names a team: call `timezest_teams_list`.
+   - If omitted: call `timezest_resources_list` and pick from the active pool.
 
    Confirm ambiguous name matches with the relevant `_get` tool.
 
 3. **Resolve the appointment type**
 
-   `timezest_navigate` to `appointment_types`, call
-   `timezest_appointment_types_list`, and match `appointment_type` by
+   Call `timezest_appointment_types_list`, and match `appointment_type` by
    name and duration. If omitted, the create call will elicit one.
 
 4. **Create the scheduling request**
 
-   `timezest_navigate` to `scheduling`, call
-   `timezest_scheduling_create_request` with:
+   Call `timezest_scheduling_create_request` with:
 
    - `appointmentTypeId` (resolved above)
    - `triggerMode: "pod"` so the PSA workflow fires

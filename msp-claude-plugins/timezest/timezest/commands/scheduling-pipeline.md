@@ -13,15 +13,14 @@ technician or team.
 ## Prerequisites
 
 - TimeZest MCP server connected with a valid `TIMEZEST_API_TOKEN`
-- Tools: `timezest_navigate`, `timezest_scheduling_list`,
+- Tools: `timezest_scheduling_list`,
   `timezest_scheduling_get`
 
 ## Steps
 
 1. **List recent requests**
 
-   `timezest_navigate` to `scheduling`, then call
-   `timezest_scheduling_list`. Scope to `window` with a `createdAt`
+   Call `timezest_scheduling_list`. Scope to `window` with a `createdAt`
    TQL `filter` (e.g. `createdAt:>=2024-01-01`).
 
 2. **Bucket by lifecycle state**

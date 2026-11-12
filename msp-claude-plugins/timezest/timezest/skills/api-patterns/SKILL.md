@@ -1,8 +1,8 @@
 ---
 name: "TimeZest API Patterns"
 description: >
-  TimeZest MCP fundamentals: Bearer token authentication, the navigation
-  pattern, scheduling-request payloads that carry PSA associated_entities
+  TimeZest MCP fundamentals: Bearer token authentication, direct tool
+  calls, scheduling-request payloads that carry PSA associated_entities
   (ConnectWise / Autotask / Halo ticket IDs), and the polling-only update
   model (no webhooks).
 when_to_use: >-
@@ -34,13 +34,10 @@ injects it as `X-Timezest-Api-Token` on every request; nothing is set on
 the client. The TimeZest MCP server forwards it to TimeZest as a
 `Bearer` token, so you do not add the `Bearer ` prefix yourself.
 
-## Navigation Tools
+## Connectivity & Orientation
 
-| Tool | Purpose |
-|------|---------|
-| `timezest_navigate` | Discover the available domains |
-| `timezest_back` | Pop back to the prior context |
-| `timezest_status` | Health/status check |
+All tools are listed directly. Optionally call `timezest_status` to
+confirm connectivity and see the available tools; it does not gate access.
 
 ## Functional Tool Surface
 

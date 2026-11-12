@@ -13,21 +13,20 @@ knows the full menu before creating a scheduling request.
 ## Prerequisites
 
 - TimeZest MCP server connected with a valid `TIMEZEST_API_TOKEN`
-- Tools: `timezest_navigate`, `timezest_resources_list`,
+- Tools: `timezest_resources_list`,
   `timezest_appointment_types_list`
 
 ## Steps
 
 1. **List resources**
 
-   `timezest_navigate` to `resources`, call `timezest_resources_list`
+   Call `timezest_resources_list`
    with `filter: "active:true"` and `pageSize: 100`. Apply `type` if
    the caller passed `agent` or `team`.
 
 2. **List appointment types**
 
-   `timezest_navigate` to `appointment_types`, call
-   `timezest_appointment_types_list` with `active:true`.
+   Call `timezest_appointment_types_list` with `active:true`.
 
 3. **Output**
 
