@@ -3,6 +3,6 @@ contact_links:
   - name: Roadmap
     url: https://github.com/orgs/wyre-technology/projects/1
     about: View the project roadmap to see what's planned and in progress
-  - name: Discussions
-    url: https://github.com/wyre-technology/msp-claude-plugins/discussions
-    about: Ask questions, share ideas, or connect with the community
+  - name: Conduit docs and support
+    url: https://conduit.wyre.ai/docs/reference/conduit-mcp-server/
+    about: Connecting Claude to Conduit. For anything else, email hello@wyre.ai

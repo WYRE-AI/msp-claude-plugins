@@ -11,6 +11,7 @@ Thank you for your interest in contributing to MSP Claude Plugins! This guide co
 - [Command Development Guide](#command-development-guide)
 - [Agent Development Guide](#agent-development-guide)
 - [MCP Server Integration Guide](#mcp-server-integration-guide)
+- [Connector mapping](#connector-mapping)
 - [Testing Requirements](#testing-requirements)
 - [Style Guide](#style-guide)
 - [Pull Request Process](#pull-request-process)
@@ -422,7 +423,7 @@ Conduit forwards only `mcp-session-id` from the client (`buildUpstreamHeaders` i
 
 ### Tool names
 
-Every tool a skill, agent or command names must exist on the live Conduit connector for that vendor (check Conduit's `VENDOR_TOOL_CONFIG` in `src/proxy/result-cache.ts` and the connector's `tools/list`). `scripts/check-tool-anchoring.mjs` only finds documents that name no tool at all; it does not prove a named tool exists. `scripts/tool-drift-audit.mjs` checks names against a live tool list, and only when you pass one (`--live`), so run it with a live list when you add or rename tool references. State each write or admin tool's Conduit tier where you describe it.
+Every tool a skill, agent or command names must exist on the connector for that vendor. `scripts/check-connector-tools.mjs` enforces this in CI against the pinned tool snapshot (see [Connector mapping](#connector-mapping)). `scripts/check-tool-anchoring.mjs` finds documents that name no tool at all. `scripts/tool-drift-audit.mjs` is a deeper local audit against server checkouts or a live tool list (`--live`). State each write or admin tool's Conduit tier where you describe it.
 
 ### Testing MCP Integration
 
@@ -430,7 +431,7 @@ Every tool a skill, agent or command names must exist on the live Conduit connec
 # 1. Install the gateway plugin and connect the vendor in the Conduit web UI
 # 2. Start Claude Code with your plugin
 cd vendor/product
-claude --plugin .
+claude --plugin-dir .
 # 3. Exercise the skills; the vendor's tools come from Conduit
 ```
 
@@ -445,6 +446,39 @@ New vendor MCP servers are built as Conduit sidecars (see the `mcp-vendor-scaffo
 
 ---
 
+
+## Connector mapping
+
+Every plugin is tied to the connector(s) it documents, and every tool name it uses is checked against that connector's published tool list.
+
+| File | What it holds |
+|---|---|
+| [`connectors.json`](connectors.json) | Every connector WYRE ships in the Conduit catalog (slug, display name, repo, container image) and every plugin's `connectors` list. Multi-vendor plugins (packs, shared skills, `wyre-gateway`) map to `conduit`. |
+| [`scripts/connector-tools.snapshot.json`](scripts/connector-tools.snapshot.json) | Pinned tool names per connector, with the image they came from. `tools: null` means no list could be captured offline (vendor-hosted MCPs that need a sign-in). |
+| [`scripts/check-connector-tools.mjs`](scripts/check-connector-tools.mjs) | The CI check. Offline, no network. |
+| [`scripts/refresh-connector-tools.mjs`](scripts/refresh-connector-tools.mjs) | Rebuilds the snapshot from the released images. |
+
+The check fails when:
+
+- a marketplace plugin has no `connectors.json` entry, or maps to an undefined connector;
+- a plugin names a tool (a backticked `lower_snake_case` token with the connector's tool prefix, such as `autotask_` or `hec_`) that the connector does not publish;
+- the README connector and pack tables are stale.
+
+If a doc deliberately names a tool that does not exist ("there is no `x_delete` tool"), add it to that plugin's `ignoreTools` in `connectors.json` with a `reason`.
+
+**Adding a plugin:** add its entry under `plugins` in `connectors.json`, add the plugin name to the connector's `plugins` list, then run `node scripts/check-connector-tools.mjs --write-readme` to regenerate the README tables.
+
+**Adding a connector, or after a connector release:** add or update the connector in `connectors.json`, then refresh its tool list. The refresh pulls the public image with [crane](https://github.com/google/go-containerregistry/blob/main/cmd/crane/README.md) (no Docker needed), starts the server over stdio with dummy credentials, and records `tools/list`, walking `*_navigate` domains. No vendor API is called.
+
+```bash
+node scripts/refresh-connector-tools.mjs --only cipp --latest            # probe :latest, pin its digest
+node scripts/refresh-connector-tools.mjs --only cipp --servers ~/mcp     # also add opt-in tools found in src/
+node scripts/check-connector-tools.mjs --write-readme
+```
+
+`--servers` points at local checkouts of the `WYRE-AI/*-mcp` repos and adds `name: '<prefix>_...'` literals from their `src/`, which covers tools a server hides by default (opt-in or tier-gated). The snapshot is pinned rather than fetched in CI so pull requests stay fast and deterministic; refresh it in the same PR that documents new tools.
+
+---
 
 ## Testing Requirements
 
@@ -590,7 +624,7 @@ Use [Conventional Commits](https://www.conventionalcommits.org/):
 | Channel | Use Case |
 |---------|----------|
 | [GitHub Issues](https://github.com/WYRE-AI/msp-claude-plugins/issues) | Bug reports, feature requests |
-| [GitHub Discussions](https://github.com/WYRE-AI/msp-claude-plugins/discussions) | Questions, ideas, community chat |
+| [hello@wyre.ai](mailto:hello@wyre.ai) | Questions, ideas, Conduit access |
 | PR Comments | Code review, implementation questions |
 
 ### Getting API Access
@@ -599,7 +633,7 @@ If you need API access for testing:
 
 1. **Vendor Partner Programs** - Many vendors have free partner/developer tiers
 2. **Sandbox Environments** - Ask vendor for test environment
-3. **Community Help** - Post in discussions asking for testing help
+3. **Community Help** - Open an issue asking for testing help
 4. **Documentation-Based** - Build from docs, mark as untested
 
 ### New to Contributing?
@@ -613,15 +647,13 @@ Look for issues labeled:
 
 ## Code of Conduct
 
-Please read our [Code of Conduct](CODE_OF_CONDUCT.md) before contributing.
-
 We are committed to providing a welcoming and inclusive environment for all contributors regardless of background, identity, or experience level.
 
 ---
 
 <p align="center">
-  <strong>Questions?</strong> Open an issue or start a discussion.
+  <strong>Questions?</strong> Open an issue or email hello@wyre.ai.
   <br>
   <a href="https://github.com/WYRE-AI/msp-claude-plugins/issues">Issues</a> &bull;
-  <a href="https://github.com/WYRE-AI/msp-claude-plugins/discussions">Discussions</a>
+  <a href="mailto:hello@wyre.ai">hello@wyre.ai</a>
 </p>

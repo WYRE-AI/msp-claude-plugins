@@ -2,7 +2,7 @@
   "$schema": "https://www.schemastore.org/claude-code-marketplace.json",
   "name": "msp-claude-plugins",
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
-  "version": "1.41.0",
+  "version": "1.42.0",
   "owner": {
     "name": "WYRE Technology",
     "email": "aaron@sachshaus.net"
@@ -958,7 +958,7 @@
     {
       "name": "ops-pack",
       "source": "./msp-claude-plugins/ops-pack",
-      "description": "MSP Operations \u2014 cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
+      "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -973,7 +973,7 @@
     {
       "name": "secops-pack",
       "source": "./msp-claude-plugins/secops-pack",
-      "description": "Security Operations \u2014 cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -987,7 +987,7 @@
     {
       "name": "finance-pack",
       "source": "./msp-claude-plugins/finance-pack",
-      "description": "Finance & Billing \u2014 agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
+      "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1001,7 +1001,7 @@
     {
       "name": "compliance-pack",
       "source": "./msp-claude-plugins/compliance-pack",
-      "description": "Compliance \u2014 evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
+      "description": "Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1015,7 +1015,7 @@
     {
       "name": "sales-pack",
       "source": "./msp-claude-plugins/sales-pack",
-      "description": "Sales & Deal Desk \u2014 cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
+      "description": "Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1044,7 +1044,7 @@
     {
       "name": "devops-pack",
       "source": "./msp-claude-plugins/devops-pack",
-      "description": "DevOps & Reliability \u2014 cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
+      "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1059,7 +1059,7 @@
     {
       "name": "cloudops-pack",
       "source": "./msp-claude-plugins/cloudops-pack",
-      "description": "Cloud & Network Infrastructure \u2014 cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.",
+      "description": "Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1073,7 +1073,7 @@
     {
       "name": "awareness-pack",
       "source": "./msp-claude-plugins/awareness-pack",
-      "description": "Security Awareness & Training \u2014 cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
+      "description": "Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1087,7 +1087,7 @@
     {
       "name": "backup-pack",
       "source": "./msp-claude-plugins/backup-pack",
-      "description": "Backup & DR Assurance \u2014 cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
+      "description": "Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1101,7 +1101,7 @@
     {
       "name": "assets-pack",
       "source": "./msp-claude-plugins/assets-pack",
-      "description": "IT Asset Lifecycle \u2014 cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
+      "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -1115,7 +1115,7 @@
     {
       "name": "clio",
       "source": "./msp-claude-plugins/clio/clio",
-      "description": "Clio Manage \u2014 legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
+      "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
       "category": "legal",
       "tags": [
         "clio",
