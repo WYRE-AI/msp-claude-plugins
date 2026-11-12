@@ -2,7 +2,7 @@
   "name": "secops-pack",
   "displayName": "Security Operations",
   "description": "Cross-vendor security alert triage and incident response \u2014 normalizes severity, runs containment playbooks, investigates management-plane tool compromise and ScreenConnect panel-abuse / rogue remote-access client incidents, and builds incident timelines across whatever EDR/MDR/SIEM and RMM stack you have connected.",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

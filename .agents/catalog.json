@@ -4735,7 +4735,7 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [

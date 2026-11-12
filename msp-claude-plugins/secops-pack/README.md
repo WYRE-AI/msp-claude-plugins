@@ -26,7 +26,8 @@ have connected, but none of them are individually required:
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
 - **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
-  installed-software source, both required per client for a usable comparison
+  observed-install source (software inventory or a readable script custom field),
+  both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
 - **Email security** — Mimecast, Proofpoint, Abnormal, Ironscales, Avanan, SpamTitan
 - **PSA** (for ticket cross-referencing and response timelines) and an
@@ -47,7 +48,8 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   malware/ransomware, BEC, and exposed credential), `bec-response`
   (detection and response sequence for Business Email Compromise),
   `shadow-ai` (per-client AI software comparison against Entra enterprise apps,
-  with unsanctioned-tool findings and explicit coverage gaps),
+  with unsanctioned-tool findings, standalone Windows/macOS/Linux detection
+  scripts, and [operator-owned RMM field setup](skills/shadow-ai/references/rmm-setup.md)),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
   or suspected compromise), and `screenconnect-session-hijack-response`
@@ -57,6 +59,19 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,
   `/secops-pack:tenant-exposure`
+
+The Shadow AI skill never uploads, schedules, or runs endpoint scripts. MSPs
+load the [standalone scripts](skills/shadow-ai/scripts/) themselves; only the
+selected RMM field adapter writes a compact result. The skill reads that
+field through verified read-only tools for Datto, NinjaOne, N-central,
+SuperOps, and Syncro. Atera, Automate, and VSA have explicit read-back gaps.
+See the [output contract](skills/shadow-ai/references/output-contract.md) and
+[coverage/maintenance guide](skills/shadow-ai/references/script-maintenance.md).
+
+The PowerShell and macOS scanners have not been run on real Windows or macOS
+endpoints, and no live RMM field write has been exercised. Validation covers
+only Linux fixtures, a real non-root Linux run, and a pwsh fixture run.
+Pilot on one device per OS before deployment.
 
 ## Install
 
