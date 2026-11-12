@@ -13,15 +13,14 @@ cold.
 ## Prerequisites
 
 - TimeZest MCP server connected with a valid `TIMEZEST_API_TOKEN`
-- Tools: `timezest_navigate`, `timezest_scheduling_list`,
+- Tools: `timezest_scheduling_list`,
   `timezest_scheduling_get`
 
 ## Steps
 
 1. **List pending requests**
 
-   `timezest_navigate` to `scheduling`, call
-   `timezest_scheduling_list` with `status: "pending"`.
+   Call `timezest_scheduling_list` with `status: "pending"`.
 
 2. **Filter by age**
 

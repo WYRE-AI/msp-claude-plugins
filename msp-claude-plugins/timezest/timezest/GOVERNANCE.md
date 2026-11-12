@@ -31,7 +31,7 @@ Confirm the live permission grant in the gateway access editor before you rely o
 
 | Tier | What it can do | Tools |
 |---|---|---|
-| **Read** | Cannot change TimeZest state or reach the customer. Safe for autonomous agents. | `timezest_agents_list`, `timezest_agents_get`, `timezest_teams_list`, `timezest_teams_get`, `timezest_appointment_types_list`, `timezest_appointment_types_get`, `timezest_resources_list`, `timezest_scheduling_list`, `timezest_scheduling_get`, `timezest_navigate`, `timezest_back`, `timezest_status` |
+| **Read** | Cannot change TimeZest state or reach the customer. Safe for autonomous agents. | `timezest_agents_list`, `timezest_agents_get`, `timezest_teams_list`, `timezest_teams_get`, `timezest_appointment_types_list`, `timezest_appointment_types_get`, `timezest_resources_list`, `timezest_scheduling_list`, `timezest_scheduling_get`, `timezest_status` |
 | **Write** | Creates a record — and sends the customer an email that cannot be recalled. | `timezest_scheduling_create_request` |
 | **Destructive** | Revokes a booking link or cancels a confirmed appointment. | `timezest_scheduling_cancel` |
 
@@ -40,7 +40,7 @@ create, but its blast radius is not a database row: it emails the
 **customer** a self-service booking link and, in the default `pod`
 trigger mode, fires the PSA workflow that updates the ticket and
 notifies whoever the integration is configured to notify. None of that
-can be un-sent. Nine of the twelve read tools exist precisely so an
+can be un-sent. Nine of the ten read tools exist precisely so an
 agent can resolve the agent, team, and appointment type *before*
 reaching a real person.
 

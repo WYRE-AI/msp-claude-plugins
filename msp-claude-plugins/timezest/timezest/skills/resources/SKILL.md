@@ -35,7 +35,7 @@ other plugin means something else by the word:
 
 ## Domain & Tools
 
-Enter the domain with `timezest_navigate` to `resources`.
+Call the tools below directly.
 
 | Tool | Purpose |
 |------|---------|
@@ -59,16 +59,15 @@ single call surveys the whole bookable surface.
 | Producing a roster or capacity report | Fetching detail for one named resource |
 
 `timezest_resources_list` is list-only — it has no companion `_get`
-tool. To fetch full detail for one resource, drop into the `agents` or
-`teams` domain and use its `_get` tool.
+tool. To fetch full detail for one resource, call `timezest_agents_get`
+or `timezest_teams_get`.
 
 ## Common Workflows
 
 ### Survey the bookable pool
 
-1. `timezest_navigate` to `resources`.
-2. Call `timezest_resources_list` with `filter: "active:true"`.
-3. Group the result by `type` (agents vs teams) to give the dispatcher
+1. Call `timezest_resources_list` with `filter: "active:true"`.
+2. Group the result by `type` (agents vs teams) to give the dispatcher
    the full menu.
 
 ### Resolve a vague request
@@ -76,8 +75,8 @@ tool. To fetch full detail for one resource, drop into the `agents` or
 1. List resources with `active:true`.
 2. Narrow with `type: "agent"` or `type: "team"` if the dispatcher
    leaned one way.
-3. Once a candidate is chosen, switch to the `agents` or `teams`
-   domain for full detail before booking.
+3. Once a candidate is chosen, call `timezest_agents_get` or
+   `timezest_teams_get` for full detail before booking.
 
 ### Build a resource roster
 

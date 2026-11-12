@@ -42,9 +42,7 @@ round-robin pool of them:
 
 ## Domains & Tools
 
-TimeZest's MCP server is navigation-based. Enter a domain with
-`timezest_navigate` before its tools are available; return with
-`timezest_back`.
+Call the agent and team tools below directly.
 
 ### Agents — individual technicians
 
@@ -83,19 +81,17 @@ on. An agent request shows only that one technician's calendar.
 
 ### Resolve a technician by name
 
-1. `timezest_navigate` to `agents`.
-2. Call `timezest_agents_list`. Use a `filter` like `active:true` to
+1. Call `timezest_agents_list`. Use a `filter` like `active:true` to
    skip deactivated technicians.
-3. Match the dispatcher's name against the result. If two agents have
+2. Match the dispatcher's name against the result. If two agents have
    similar names, call `timezest_agents_get` on each to disambiguate.
-4. Carry the resolved `agentId` forward to the scheduling request.
+3. Carry the resolved `agentId` forward to the scheduling request.
 
 ### Resolve a team
 
-1. `timezest_navigate` to `teams`.
-2. Call `timezest_teams_list` with `active:true`.
-3. Match by team name (e.g. "Network", "Onsite Dispatch").
-4. Carry the resolved `teamId` forward.
+1. Call `timezest_teams_list` with `active:true`.
+2. Match by team name (e.g. "Network", "Onsite Dispatch").
+3. Carry the resolved `teamId` forward.
 
 ## Edge Cases
 

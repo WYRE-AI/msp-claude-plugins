@@ -20,7 +20,7 @@ too short.
 
 ## Domain & Tools
 
-Enter the domain with `timezest_navigate` to `appointment_types`.
+Call the tools below directly.
 
 | Tool | Purpose |
 |------|---------|
@@ -61,12 +61,11 @@ rather than assuming a naming convention.
 
 ### Pick the type for a booking
 
-1. `timezest_navigate` to `appointment_types`.
-2. Call `timezest_appointment_types_list` with `active:true`.
-3. Match the type whose `name` and `duration` fit the ticket's work.
-4. If the customer-facing description matters, call
+1. Call `timezest_appointment_types_list` with `active:true`.
+2. Match the type whose `name` and `duration` fit the ticket's work.
+3. If the customer-facing description matters, call
    `timezest_appointment_types_get` to read the full `description`.
-5. Carry the resolved `appointmentTypeId` into
+4. Carry the resolved `appointmentTypeId` into
    `timezest_scheduling_create_request`.
 
 ### Audit available types
