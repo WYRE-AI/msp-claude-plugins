@@ -36,8 +36,11 @@ The NinjaOne Public API uses OAuth 2.0 for authentication and provides RESTful e
 | Region | Base URL |
 |--------|----------|
 | United States | `https://app.ninjarmm.com` |
+| United States (US2) | `https://us2.ninjarmm.com` |
 | European Union | `https://eu.ninjarmm.com` |
 | Oceania | `https://oc.ninjarmm.com` |
+| Canada | `https://ca.ninjarmm.com` |
+| Federal (FedRAMP) | `https://fed.ninjarmm.com` |
 
 Use the base URL matching your NinjaOne instance region.
 
