@@ -39,8 +39,9 @@ corroborating replies from accounts that self-identify as Blackpoint
 (no verified flair). Initial access is unconfirmed; telemetry
 suggests stolen credentials or operator sessions, with no new vulnerability
 confirmed. The exact reverse-pivot mechanism remains an unconfirmed hypothesis.
-See the dated [campaign notes and IOC starting list](references/screenconnect-iocs-nov-2026.md).
-A current build does not establish safety.
+See the dated [campaign notes and IOC starting list](references/screenconnect-iocs-nov-2026.md),
+including the [RMM+ family extensions](references/screenconnect-iocs-nov-2026.md#rmm-family-extensions).
+A current build does not establish safety. Complete the read-only extension check in Step 1a on every run.
 
 ## Anti-triggers
 
@@ -136,6 +137,71 @@ community guidance says unauthorized commands justify assuming **every machine
 in that panel is infected** for containment planning. Lock down the panel
 before endpoint work; retain per-client evidence and confidence separately.
 Panel records may be altered or incomplete: corroborate with independent reads.
+The extension list from this export is required input for Step 1a; if it is
+missing, record a gap and have the operator export Administration > Extensions
+and extension-installation audit records before treating the instance as reviewed.
+
+## Step 1a: Check for the five RMM+ family extensions (read-only)
+
+Look for the five third-party ScreenConnect extensions ConnectWise identified
+for precautionary disabling: Labtech Plus, RMM Plus, RMM+, RMM Plus Password
+Link, and RMM+ Password Link. Use these exact published display names; do not
+invent extension GUIDs, publisher IDs, or package names, which were not
+published. Dated citations, official-status context, the typical
+`App_Extensions` path, and ConnectWise's extension uninstall instructions
+are in the [IOC notes](references/screenconnect-iocs-nov-2026.md#rmm-family-extensions).
+
+ConnectWise states that presence alone does not establish compromise. For this
+workflow, treat any installed copy, enabled or already disabled, as a
+**compromise indicator**. Record the extension name, where it was seen
+(panel list, audit record, or inventory), version if returned, and whether it
+was enabled or disabled. Tell the operator to disable and remove it out of
+band from a clean device, following ConnectWise's extension uninstall
+instructions in the IOC notes, and not to re-enable or reinstall it pending
+further official guidance. Disabling an extension does not remove access
+already established on endpoints; continue the rest of this investigation.
+This skill never disables, uninstalls, or otherwise changes an extension, and
+it introduces no tool call that executes or mutates anything.
+
+### On the ScreenConnect server or instance
+
+There is still no ScreenConnect connector. From the same clean-browser panel
+export in Step 1, review Administration > Extensions and any exported
+extension-installation or audit records. Match the five display names,
+including copies ConnectWise or the operator already disabled. An installed
+copy counts; enabled-only is not the test. Cloud-hosted panels may already
+show these extensions as disabled; still record the hit. If the operator
+cannot export the extension list, record a gap. Do not invent a panel API,
+and do not treat another product as ScreenConnect.
+
+If the ScreenConnect server host is in the active mapped client (the MSP
+internal pass, when the panel is on-premises), also search that host with
+the same scoped RMM installed-software reads already allowed in Step 2.
+Look for the five display names and for extension path text under the
+server's `App_Extensions` directory. Custom install roots are a gap unless
+the operator provides the path. A GUID folder alone is not a hit. Do not
+browse, open, download, or execute extension packages.
+
+### In connected RMM installed-software inventory
+
+Using only the same client-bound, read-only inventory reads already allowed
+in Step 2, including `datto_get_device_audit` with `auditType=software`
+**only**, search returned software names and install paths for the five
+display names. Bind every call to the mapped client or device; never scan
+the portfolio. The JSON example, schema-precedence wording, and every
+existing limit in Step 2 remain unchanged: `auditType=software` only, the
+Graph resource and `$select` pin, single-tenant binding with no
+`allTenants`, the never-call and execution bans, and Step Zero confirmation.
+If a discovered schema cannot express a limit, do not call the tool; record
+a gap. Do not add tools, and do not use a job, script, command, or
+uninstall capability to look for or remove an extension.
+
+Short names such as `RMM+` can collide with unrelated software. A panel
+Extensions-list match is a confirmed hit. An inventory-only match is
+**needs review** unless the panel list corroborates it, or a returned
+install path under the server's `App_Extensions` directory names the
+same extension. Note the version when inventory returns one; any version
+of the five names is still a hit.
 
 ## Step 2: Hunt independent evidence for this client
 
@@ -167,7 +233,7 @@ step must likewise be bound to the mapped client or device.
 | Family | Allowed reads when discovered | Hunt and limits |
 |--------|--------------------------------|-----------------|
 | EDR / MDR | `huntress_incidents_list`, `huntress_signals_list`, `huntress_agents_list`; SentinelOne `list_alerts`, `search_alerts`, `get_alert`, `search_inventory_items`; `blackpoint_detections_list`, `blackpoint_assets_list`; `rocketcyber_list_incidents`, `rocketcyber_list_events`, `rocketcyber_list_agents`, `rocketcyber_list_apps` | Detections and returned process lineage: `ScreenConnect.ClientService.exe` / `ScreenConnect.WindowsClient.exe` spawning cmd, PowerShell, msiexec or curl; browser-token extraction on tech hosts; files, persistence, and network indicators in the IOC reference. Inventory is not process telemetry; ask for out-of-band evidence when lineage is unavailable. |
-| RMM inventory | `ncentral_get_device_assets`; `datto_get_device_audit` with `auditType=software` **only**; `ninjaone_devices_services`; `superops_assets_list`, `superops_assets_get`, `superops_assets_software` | Compare each device's ScreenConnect clients and service paths with approved IDs and known-good binaries. NinjaOne exposes Windows services, not dedicated software inventory here. Datto software audits cannot establish task, service, or process coverage. |
+| RMM inventory | `ncentral_get_device_assets`; `datto_get_device_audit` with `auditType=software` **only**; `ninjaone_devices_services`; `superops_assets_list`, `superops_assets_get`, `superops_assets_software` | Compare each device's ScreenConnect clients and service paths with approved IDs and known-good binaries. Also search returned software names and paths for the five extension display names in Step 1a; do not add reads. NinjaOne exposes Windows services, not dedicated software inventory here. Datto software audits cannot establish task, service, or process coverage. |
 | Network / DNS | DNSFilter query logs, firewall or SIEM logs **if discovered** as verified, client-bound reads; Auvik `auvik_devices_list`, `auvik_alerts_list`, `auvik_networks_list` for supporting inventory/alerts | Search reference indicators, unknown relays on port 8041, and non-MSP `*.screenconnect.com` instances. Auvik device/network inventory does not establish DNS or firewall-log coverage. No usable log read means a gap and a manual export request. |
 | Identity | `cipp_list_user_signin_logs` per user, `cipp_list_mfa_users`, `cipp_list_audit_logs`; `microsoft_graph_suggest_queries` then `microsoft_graph_get` (pinned, see below) | MSP tenant first: each tech with panel access. Review interactive sign-ins, MFA registration, new MFA methods, consents, and inbox-rule changes where CIPP returns them. Graph is limited to the pinned reads below. No suitable candidate, retention or admin permission means a gap, not no activity. |
 | Documentation, names only | `hudu_list_assets`; IT Glue `search_flexible_assets`, `search_configurations`; Keeper `list_secrets`, `list_folders` | Identify panels, admin account names, techs, and other consoles whose browser sessions may reside on their workstations. Titles/folders do not prove a browser held a session. Never retrieve passwords, secrets or TOTP values. |
@@ -273,6 +339,10 @@ report before client passes; do not mix tenants.
   planned tools, and when (UTC). No recorded confirmation means the pass
   did not run.
 - **SC panel data pulled manually: yes/no**; panels, export times, missing records.
+- **RMM+ family extension check:** which of the five display names were
+  present or absent, enabled or disabled, on each panel and in inventory;
+  versions if returned; confirmed versus needs-review; and that disable or
+  removal was recommended out of band only. A missing extension export is a gap, not a clean result.
 - **Not verified / gaps:** unavailable connectors, admin-tier refusals,
   mapping ambiguity, log retention, stale or partial inventories, missing
   process / task / DNS / non-interactive sign-in evidence, and client passes pending.

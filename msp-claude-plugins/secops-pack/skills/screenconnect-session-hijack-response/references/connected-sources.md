@@ -41,6 +41,27 @@ the never-call and execution bans, and Step Zero confirmation. If a
 discovered schema cannot express a limit, do not call the tool; record
 a gap.
 
+## RMM+ family extension check
+
+Step 1a of the skill looks for five third-party ScreenConnect extensions
+that ConnectWise disabled as a precaution on 11/11/2026: Labtech Plus,
+RMM Plus, RMM+, RMM Plus Password Link, and RMM+ Password Link. Exact
+names and citations are in the skill and the
+[IOC notes](screenconnect-iocs-nov-2026.md#rmm-family-extensions). The
+check uses only evidence sources already required or allowed here:
+
+- Manual clean-browser panel exports already required in Step 1
+  (Administration > Extensions and extension-installation audit records).
+  There is still no ScreenConnect connector; do not invent one.
+- The same scoped, read-only RMM installed-software inventory reads
+  already allowed above, including `datto_get_device_audit` with
+  `auditType=software` only. No new tools. The schema-precedence wording
+  and every existing limit remain unchanged.
+
+No official extension GUIDs or package identifiers were published. Do not
+invent them, and do not call any disable, uninstall, job, script, command,
+or other mutation tool. The operator disables or removes a hit out of band.
+
 Conduit classification verified read-only against `origin/main` in
 `/workspace/conduit`, `src/proxy/result-cache.ts` (`VENDOR_TOOL_CONFIG`);
 All 46 vendor tool names cited here also match exact classification keys,

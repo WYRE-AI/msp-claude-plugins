@@ -3,8 +3,12 @@
 Source: [Huntress SOC, posting on r/msp](https://www.reddit.com/r/msp/comments/1xts3f2/active_malware_campaign_abusing_screenconnect/),
 with Huntress replies and self-identified Blackpoint replies linked below. Retrieved/accessed
 **2026-11-11**; thread snapshot through approximately **21:30 UTC**.
-**Last reviewed: 2026-11-11. Status: community-reported; not yet confirmed by
-ConnectWise or a published vendor advisory** (unconfirmed by vendor).
+**Last reviewed: 2026-11-12.** Status: community-reported campaign notes
+remain, now supplemented by a published ConnectWise Trust Center advisory
+(11/11/2026 22:45 UTC, updated 11/12/2026 02:45 UTC) and later Huntress and
+Blackpoint blog posts. Initial access and full scope remain under
+investigation; ConnectWise states it has found no evidence of a compromise
+of its infrastructure or a vulnerability in ScreenConnect itself.
 
 The author is u/andrew-huntress (Huntress staff), posting at approximately
 20:04 UTC, not an anonymous or vendor-advisory attribution. Huntress-Ben adds
@@ -88,10 +92,35 @@ not whether a match proves compromise; every row remains vendor-unconfirmed.
 At the **2026-11-11 ~21:30 UTC** review, the
 [ConnectWise Trust Center advisories](https://www.connectwise.com/company/trust/advisories)
 and [Huntress blog](https://www.huntress.com/blog) had no published entry for
-this November campaign. This is a time-bounded observation, not a claim that
-vendors have no investigation. Check both again and check
-[ScreenConnect security bulletins](https://www.connectwise.com/company/trust/security-bulletins).
-All URLs in this section accessed 2026-11-11.
+this November campaign. That time-bounded observation is now superseded for
+official status. Recheck those sources and
+[ScreenConnect security bulletins](https://www.connectwise.com/company/trust/security-bulletins)
+before each hunt. URLs in the original review were accessed 2026-11-11;
+advisory and blog URLs below were accessed 2026-11-12.
+
+ConnectWise published a Trust Center advisory on 11/11/2026 at 22:45 UTC,
+updated 11/12/2026 at 02:45 UTC, plus
+[partner guidance](https://www.connectwise.com/blog/screenconnect-security-update-guidance-for-partners).
+ConnectWise says it is investigating unauthorized access to certain partner
+ScreenConnect environments, has found no evidence of a compromise of
+ConnectWise infrastructure or a vulnerability in ScreenConnect itself, and
+disabled five independently developed third-party extensions as a
+precaution (see [RMM+ family extensions](#rmm-family-extensions)). Presence
+of those extensions alone does not establish compromise.
+
+Huntress published [SCKit Worm Installs Rogue ScreenConnect Clients and
+Session Cookie Relays Across Hundreds of
+Endpoints](https://www.huntress.com/blog/sckit-worm-rogue-screenconnect)
+on 11/11/2026. It restates the same five extension names and reports the
+activity appears related to RMM+, with versions 1.0.31 and 1.0.32 accepting
+a blank access key if one had never been configured. Blackpoint published
+[ScreenConnect Attack: SCKit Turns Remote Support Into an Attack
+Platform](https://blackpointcyber.com/blog/screenconnect-attack-sckit/).
+It notes the same precautionary disabling and states that Blackpoint found
+no technical link between those extensions and SCKit's RelayTrap execution
+or browser-session collection, leaving first panel access as a separate,
+unresolved question.
+
 
 The Trust Center's September 3 advisory (updated September 9) addressed
 CVE-2026-84869, a guest file-transfer issue fixed in 26.6.5. Cloud instances
@@ -107,6 +136,41 @@ described modified clients propagating to newly connected endpoints and
 suspicious `RunFiles` / `RanFiles` audit entries from `Process: Guest`.
 That supports taking reverse-pivot risk seriously; it does not establish the
 same campaign or the November mechanism. Accessed 2026-11-11.
+
+
+## RMM+ family extensions
+
+ConnectWise identified these five independently developed third-party
+extensions for precautionary disabling. Use the exact published display
+names. No official extension GUIDs, publisher IDs, or package names were
+included in the sources below; do not invent them.
+
+| Display name | Role in public reporting | Sources | Date first listed |
+|--------------|--------------------------|---------|-------------------|
+| Labtech Plus | Precautionary disable list | CW, H, B | 2026-11-11 |
+| RMM Plus | Precautionary disable list | CW, H, B | 2026-11-11 |
+| RMM+ | Precautionary disable list; Huntress reports campaign activity appears related to this extension, including a blank access-key flaw in 1.0.31 and 1.0.32 | CW, H, B | 2026-11-11 |
+| RMM Plus Password Link | Precautionary disable list | CW, H, B | 2026-11-11 |
+| RMM+ Password Link | Precautionary disable list | CW, H, B | 2026-11-11 |
+
+“CW” is the [ConnectWise Trust Center advisory](https://www.connectwise.com/company/trust/advisories)
+and the [partner guidance](https://www.connectwise.com/blog/screenconnect-security-update-guidance-for-partners),
+both listing the same five names. “H” is the [Huntress SCKit
+write-up](https://www.huntress.com/blog/sckit-worm-rogue-screenconnect).
+“B” is the [Blackpoint SCKit post](https://blackpointcyber.com/blog/screenconnect-attack-sckit/).
+All three accessed 2026-11-12. ConnectWise and Blackpoint state that presence
+alone does not establish compromise or SCKit involvement. For this skill,
+an installed copy is still a compromise indicator and must be disabled or
+removed out of band. Operator instructions:
+[Uninstall an extension](https://docs.connectwise.com/ScreenConnect_Documentation/Get_started/Administration_page/Extensions_page#Uninstall_an_extension).
+
+On a default Windows install, ScreenConnect extensions unpack under
+`C:\Program Files (x86)\ScreenConnect\App_Extensions\<GUID>\`. Custom
+install roots are a gap unless the operator provides the path. No official
+GUID was published for these five extensions, so a GUID folder alone is not
+a hit. Do not browse, open, download, or execute extension packages.
+Huntress highlights RMM+ 1.0.31 and 1.0.32 for the blank access-key flaw;
+any version of the five names is still a hit for this skill.
 
 ## Update procedure
 
