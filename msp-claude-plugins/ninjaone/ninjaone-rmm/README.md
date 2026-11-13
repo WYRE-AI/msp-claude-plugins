@@ -48,7 +48,7 @@ There is no per-plugin URL setting, and setting an environment variable does not
 
 ## API Reference
 
-- **Base URLs**: `app.ninjarmm.com` (US), `eu.ninjarmm.com` (EU), `oc.ninjarmm.com` (OC)
+- **Base URLs**: `app.ninjarmm.com` (US), `us2.ninjarmm.com` (US2), `eu.ninjarmm.com` (EU), `oc.ninjarmm.com` (OC), `ca.ninjarmm.com` (CA), `fed.ninjarmm.com` (FED)
 - **Authentication**: OAuth 2.0 with Bearer token
 - **Rate Limits**: Varies by endpoint
 - **Documentation**: [NinjaOne Public API](https://app.ninjarmm.com/apidocs/)

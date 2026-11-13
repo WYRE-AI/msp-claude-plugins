@@ -86,7 +86,7 @@ self-approve deletes.**
 ## What it cannot reach
 
 - Only the NinjaOne organizations the connected credential can reach, and
-  only within the NinjaOne region (US/EU/CA/OC) that credential was
+  only within the NinjaOne region (US/US2/EU/OC/CA/FED) that credential was
   issued for. NinjaOne instances are region-partitioned; one credential
   does not see another region's devices. Conduit controls *who in your
   organisation may use that credential and which tools they may call*,
