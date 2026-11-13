@@ -39,21 +39,9 @@ corroborating replies from accounts that self-identify as Blackpoint
 (no verified flair). Initial access is unconfirmed; telemetry
 suggests stolen credentials or operator sessions, with no new vulnerability
 confirmed. The exact reverse-pivot mechanism remains an unconfirmed hypothesis.
-See the dated [campaign notes and IOC starting list](references/screenconnect-iocs-nov-2026.md).
-A current build does not establish safety.
-
-ConnectWise later published a [Trust Center advisory](https://www.connectwise.com/company/trust/advisories)
-on 11/11/2026 at 22:45 UTC (updated 11/12/2026 at 02:45 UTC) and
-[partner guidance](https://www.connectwise.com/blog/screenconnect-security-update-guidance-for-partners).
-As a precaution it disabled five independently developed third-party
-extensions: Labtech Plus, RMM Plus, RMM+, RMM Plus Password Link, and
-RMM+ Password Link. ConnectWise states their presence alone does not
-establish compromise, and that it has found no evidence of a compromise of
-ConnectWise infrastructure or a vulnerability in ScreenConnect itself.
-Huntress's [SCKit write-up](https://www.huntress.com/blog/sckit-worm-rogue-screenconnect)
-reports the activity appears related to RMM+, including an authentication
-flaw in versions 1.0.31 and 1.0.32 when the access key was left blank.
-Complete the read-only extension check in Step 1a on every run.
+See the dated [campaign notes and IOC starting list](references/screenconnect-iocs-nov-2026.md),
+including the [RMM+ family extensions](references/screenconnect-iocs-nov-2026.md#rmm-family-extensions).
+A current build does not establish safety. Complete the read-only extension check in Step 1a on every run.
 
 ## Anti-triggers
 
@@ -151,46 +139,29 @@ before endpoint work; retain per-client evidence and confidence separately.
 Panel records may be altered or incomplete: corroborate with independent reads.
 The extension list from this export is required input for Step 1a; if it is
 missing, record a gap and have the operator export Administration > Extensions
-and extension-installation audit records before treating the instance as
-reviewed.
+and extension-installation audit records before treating the instance as reviewed.
 
 ## Step 1a: Check for the five RMM+ family extensions (read-only)
 
 Look for the five third-party ScreenConnect extensions ConnectWise identified
-for precautionary disabling. Use these exact published display names; do not
+for precautionary disabling: Labtech Plus, RMM Plus, RMM+, RMM Plus Password
+Link, and RMM+ Password Link. Use these exact published display names; do not
 invent extension GUIDs, publisher IDs, or package names, which were not
-published:
-
-- Labtech Plus
-- RMM Plus
-- RMM+
-- RMM Plus Password Link
-- RMM+ Password Link
-
-**Sources (accessed 2026-11-12):** the [ConnectWise Trust Center
-advisory](https://www.connectwise.com/company/trust/advisories) originally
-published 11/11/2026 at 22:45 UTC and updated 11/12/2026 at 02:45 UTC; the
-same five names in ConnectWise's [partner
-guidance](https://www.connectwise.com/blog/screenconnect-security-update-guidance-for-partners);
-Huntress's [SCKit write-up](https://www.huntress.com/blog/sckit-worm-rogue-screenconnect),
-which restates the same names and reports the activity appears related to
-RMM+; and Blackpoint's [SCKit post](https://blackpointcyber.com/blog/screenconnect-attack-sckit/),
-which notes the same precautionary disabling and that presence alone does not
-establish involvement in SCKit. More source context is in the
-[IOC notes](references/screenconnect-iocs-nov-2026.md#rmm-family-extensions).
+published. Dated citations, official-status context, the typical
+`App_Extensions` path, and ConnectWise's extension uninstall instructions
+are in the [IOC notes](references/screenconnect-iocs-nov-2026.md#rmm-family-extensions).
 
 ConnectWise states that presence alone does not establish compromise. For this
 workflow, treat any installed copy, enabled or already disabled, as a
 **compromise indicator**. Record the extension name, where it was seen
 (panel list, audit record, or inventory), version if returned, and whether it
 was enabled or disabled. Tell the operator to disable and remove it out of
-band from a clean device, following ConnectWise's
-[extension uninstall instructions](https://docs.connectwise.com/ScreenConnect_Documentation/Get_started/Administration_page/Extensions_page#Uninstall_an_extension),
-and not to re-enable or reinstall it pending further official guidance.
-Disabling an extension does not remove access already established on
-endpoints; continue the rest of this investigation. This skill never
-disables, uninstalls, or otherwise changes an extension, and it introduces
-no tool call that executes or mutates anything.
+band from a clean device, following ConnectWise's extension uninstall
+instructions in the IOC notes, and not to re-enable or reinstall it pending
+further official guidance. Disabling an extension does not remove access
+already established on endpoints; continue the rest of this investigation.
+This skill never disables, uninstalls, or otherwise changes an extension, and
+it introduces no tool call that executes or mutates anything.
 
 ### On the ScreenConnect server or instance
 
@@ -207,12 +178,9 @@ If the ScreenConnect server host is in the active mapped client (the MSP
 internal pass, when the panel is on-premises), also search that host with
 the same scoped RMM installed-software reads already allowed in Step 2.
 Look for the five display names and for extension path text under the
-server's `App_Extensions` directory. On a default Windows install that is
-commonly `C:\Program Files (x86)\ScreenConnect\App_Extensions\<GUID>\`;
-custom install roots are a gap unless the operator provides the path. No
-official GUID was published for these five extensions, so a GUID folder
-alone is not a hit. Do not browse, open, download, or execute extension
-packages.
+server's `App_Extensions` directory. Custom install roots are a gap unless
+the operator provides the path. A GUID folder alone is not a hit. Do not
+browse, open, download, or execute extension packages.
 
 ### In connected RMM installed-software inventory
 
@@ -230,10 +198,8 @@ uninstall capability to look for or remove an extension.
 
 Short names such as `RMM+` can collide with unrelated software. A panel
 Extensions-list match is a confirmed hit. An inventory-only match is
-**needs review** unless a returned install path or the panel list
-corroborates it. Note the version when inventory returns one. Huntress
-highlights RMM+ 1.0.31 and 1.0.32 for the blank access-key flaw; any
-version of the five names is still a hit.
+**needs review** unless a returned install path or the panel list corroborates
+it. Note the version when inventory returns one; any version of the five names is still a hit.
 
 ## Step 2: Hunt independent evidence for this client
 
@@ -374,8 +340,7 @@ report before client passes; do not mix tenants.
 - **RMM+ family extension check:** which of the five display names were
   present or absent, enabled or disabled, on each panel and in inventory;
   versions if returned; confirmed versus needs-review; and that disable or
-  removal was recommended out of band only. A missing extension export is a
-  gap, not a clean result.
+  removal was recommended out of band only. A missing extension export is a gap, not a clean result.
 - **Not verified / gaps:** unavailable connectors, admin-tier refusals,
   mapping ambiguity, log retention, stale or partial inventories, missing
   process / task / DNS / non-interactive sign-in evidence, and client passes pending.

@@ -164,6 +164,14 @@ an installed copy is still a compromise indicator and must be disabled or
 removed out of band. Operator instructions:
 [Uninstall an extension](https://docs.connectwise.com/ScreenConnect_Documentation/Get_started/Administration_page/Extensions_page#Uninstall_an_extension).
 
+On a default Windows install, ScreenConnect extensions unpack under
+`C:\Program Files (x86)\ScreenConnect\App_Extensions\<GUID>\`. Custom
+install roots are a gap unless the operator provides the path. No official
+GUID was published for these five extensions, so a GUID folder alone is not
+a hit. Do not browse, open, download, or execute extension packages.
+Huntress highlights RMM+ 1.0.31 and 1.0.32 for the blank access-key flaw;
+any version of the five names is still a hit for this skill.
+
 ## Update procedure
 
 1. Before each hunt, check ConnectWise Trust Center advisories, ScreenConnect
