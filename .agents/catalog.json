@@ -39,7 +39,7 @@
     {
       "name": "3cx",
       "displayName": "3CX",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "3CX - native PBX MCP server: directory/contacts, calls, queues, profiles, and PBX admin/diagnostics (V20 Update 10, Alpha)",
       "category": "productivity",
       "tags": [
@@ -90,7 +90,7 @@
     {
       "name": "abnormal-security",
       "displayName": "Abnormal Security",
-      "version": "0.2.14",
+      "version": "0.2.15",
       "description": "Abnormal Security - AI-powered email security, phishing detection, account takeover prevention",
       "category": "email-security",
       "tags": [
@@ -349,7 +349,7 @@
     {
       "name": "autotask",
       "displayName": "Autotask",
-      "version": "0.6.7",
+      "version": "0.6.8",
       "description": "Kaseya Autotask PSA - tickets, CRM, projects, contracts, billing",
       "category": "psa",
       "tags": [
@@ -624,7 +624,7 @@
     {
       "name": "blumira",
       "displayName": "Blumira",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Blumira - SIEM findings management, device inventory, MSP multi-tenant operations, and security posture analysis",
       "category": "security",
       "tags": [
@@ -766,7 +766,7 @@
     {
       "name": "cipp",
       "displayName": "Cipp",
-      "version": "0.1.11",
+      "version": "0.1.12",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
       "tags": [
@@ -1042,7 +1042,7 @@
     {
       "name": "connectwise-cpq",
       "displayName": "Connectwise CPQ",
-      "version": "1.1.6",
+      "version": "1.1.7",
       "description": "ConnectWise CPQ (Sell/Quosal) - quotes, line items, templates, quote customers, payment terms",
       "category": "sales",
       "tags": [
@@ -1669,7 +1669,7 @@
     {
       "name": "keeper",
       "displayName": "Keeper Secrets Manager",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "description": "Keeper Secrets Manager - read-only secret retrieval: KSM notation field queries, secret and folder discovery, masking semantics, TOTP, and least-privilege KSM application scoping",
       "category": "security",
       "tags": [
@@ -1791,7 +1791,7 @@
     {
       "name": "liongard",
       "displayName": "Liongard",
-      "version": "0.2.10",
+      "version": "0.2.11",
       "description": "Liongard - environments, inspections, systems, detections, alerts, configuration monitoring",
       "category": "rmm",
       "tags": [
@@ -2075,7 +2075,7 @@
     {
       "name": "pandadoc",
       "displayName": "Pandadoc",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "description": "PandaDoc - documents, templates, e-signatures, and proposal management",
       "category": "sales",
       "tags": [
@@ -2246,7 +2246,7 @@
     {
       "name": "posthog",
       "displayName": "Posthog",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "PostHog product analytics - insights, dashboards, feature flags, cohorts, events (read-only)",
       "category": "productivity",
       "tags": [
@@ -2429,7 +2429,7 @@
     {
       "name": "netsuite",
       "displayName": "Netsuite",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "description": "Oracle NetSuite ERP - records, reports, saved searches, and SuiteQL queries (read-only)",
       "category": "accounting",
       "tags": [
@@ -2489,7 +2489,7 @@
     {
       "name": "qbo",
       "displayName": "QuickBooks Online",
-      "version": "0.2.11",
+      "version": "0.2.12",
       "description": "QuickBooks Online - customers, invoices, expenses, payments, reports",
       "category": "accounting",
       "tags": [
@@ -2988,7 +2988,7 @@
     {
       "name": "sherweb",
       "displayName": "Sherweb",
-      "version": "0.3.12",
+      "version": "0.3.13",
       "description": "Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
       "category": "marketplace",
       "tags": [
@@ -3643,7 +3643,7 @@
     {
       "name": "kaseya-vsa",
       "displayName": "Kaseya Vsa",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "description": "Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control (scaffolding)",
       "category": "rmm",
       "tags": [
@@ -3669,7 +3669,7 @@
     {
       "name": "datto-bcdr",
       "displayName": "Datto BCDR",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "description": "Datto BCDR (SIRIS / Alto) - backup status, screenshot verification, recovery points (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3697,7 +3697,7 @@
     {
       "name": "kaseya-bms",
       "displayName": "Kaseya Bms",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "description": "Kaseya BMS PSA - tickets, accounts, contracts, time entries, billing (scaffolding)",
       "category": "psa",
       "tags": [
@@ -3754,7 +3754,7 @@
     {
       "name": "unitrends",
       "displayName": "Unitrends",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "description": "Unitrends - appliances, backup jobs, recovery points, replication, alerts (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3780,7 +3780,7 @@
     {
       "name": "spanning",
       "displayName": "Spanning",
-      "version": "0.2.3",
+      "version": "0.2.4",
       "description": "Spanning Cloud Backup - SaaS backup for M365 / Google Workspace / Salesforce (scaffolding)",
       "category": "bcdr",
       "tags": [
@@ -3936,7 +3936,7 @@
     {
       "name": "xero",
       "displayName": "Xero",
-      "version": "0.2.11",
+      "version": "0.2.12",
       "description": "Xero accounting - contacts, invoices, payments, accounts, and financial reports",
       "category": "accounting",
       "tags": [
@@ -4006,7 +4006,7 @@
     {
       "name": "alternative-payments",
       "displayName": "Alternative Payments",
-      "version": "1.0.8",
+      "version": "1.0.9",
       "description": "Alternative Payments - customers, invoices, hosted payment requests, transactions, payouts, and webhooks (read + safe writes)",
       "category": "accounting",
       "tags": [
@@ -4234,7 +4234,7 @@
     {
       "name": "wyre-gateway",
       "displayName": "Wyre MSP Gateway",
-      "version": "1.4.6",
+      "version": "1.4.7",
       "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
       "category": "productivity",
       "tags": [
@@ -4529,7 +4529,7 @@
     {
       "name": "ncentral",
       "displayName": "Ncentral",
-      "version": "1.0.9",
+      "version": "1.0.10",
       "description": "N-able N-central RMM - devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
       "category": "rmm",
       "tags": [
@@ -4668,7 +4668,7 @@
     {
       "name": "ops-pack",
       "displayName": "MSP Operations",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -4735,7 +4735,7 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.10",
+      "version": "0.1.11",
       "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
@@ -4813,7 +4813,7 @@
     {
       "name": "finance-pack",
       "displayName": "Finance & Billing",
-      "version": "0.1.6",
+      "version": "0.1.7",
       "description": "Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.",
       "category": "workflow-pack",
       "tags": [
@@ -4887,7 +4887,7 @@
     {
       "name": "compliance-pack",
       "displayName": "Compliance",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "Compliance — evidence collection and control drift against CIS/SOC 2/HIPAA and cyber-insurance questionnaires.",
       "category": "workflow-pack",
       "tags": [
@@ -4953,7 +4953,7 @@
     {
       "name": "sales-pack",
       "displayName": "Sales & Deal Desk",
-      "version": "0.1.4",
+      "version": "0.1.5",
       "description": "Sales & Deal Desk — cross-vendor pipeline health, quote-to-close tracking, proposal follow-up, and warm-lead routing across whatever CRM, proposal, distribution, and scheduling tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5024,7 +5024,7 @@
     {
       "name": "marketing-pack",
       "displayName": "MSP Marketing",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "description": "MSP Marketing: anonymized case-study drafting from closed PSA work, with an approval step before any client is named, and review or referral request drafts from survey and ticket data, across whatever PSA, documentation, and survey tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5060,7 +5060,7 @@
     {
       "name": "devops-pack",
       "displayName": "DevOps & Reliability",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "DevOps & Reliability — cross-vendor on-call handoffs, incident postmortems, deploy health, and error-budget tracking across whatever incident-management and observability tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5127,7 +5127,7 @@
     {
       "name": "cloudops-pack",
       "displayName": "Cloud & Network Infrastructure",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Cloud & Network Infrastructure — cross-vendor network and cloud infrastructure operations: device/network health, capacity planning, and cost management across whatever network monitoring and cloud platforms you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5193,7 +5193,7 @@
     {
       "name": "awareness-pack",
       "displayName": "Security Awareness & Training",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Security Awareness & Training — cross-vendor training completion tracking, phishing simulation results, and per-user risk scoring across whatever security-awareness training tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5259,7 +5259,7 @@
     {
       "name": "backup-pack",
       "displayName": "Backup & DR Assurance",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "description": "Backup & DR Assurance — cross-vendor backup job health monitoring, restore-test verification, retention/RPO compliance, and DR readiness across whatever backup and BCDR tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5325,7 +5325,7 @@
     {
       "name": "assets-pack",
       "displayName": "IT Asset Lifecycle",
-      "version": "0.1.5",
+      "version": "0.1.6",
       "description": "IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -5395,7 +5395,7 @@
     {
       "name": "clio",
       "displayName": "Clio",
-      "version": "0.1.8",
+      "version": "0.1.9",
       "description": "Clio Manage — legal practice management: matters, contacts, time/expense activities, tasks, documents (metadata), calendar, and billing",
       "category": "legal",
       "tags": [
@@ -5448,7 +5448,7 @@
     {
       "name": "scalepad",
       "displayName": "Scalepad",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "description": "ScalePad - asset lifecycle management, warranty services, client engagement roadmaps (Lifecycle Manager), compliance (ControlMap), backup monitoring (Backup Radar), and quoting (Quoter)",
       "category": "productivity",
       "tags": [
@@ -5626,7 +5626,7 @@
     {
       "name": "ai-org-admin",
       "displayName": "Ai Org Admin",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Anthropic Admin API - read-only review of a client's Anthropic org: seats, workspaces, API keys, spend, Claude Code adoption, and the compliance activity feed",
       "category": "productivity",
       "tags": [
@@ -5673,7 +5673,7 @@
     {
       "name": "openai-admin",
       "displayName": "Openai Admin",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "OpenAI Admin API - read-only review of a client's OpenAI org: seats, projects, service accounts, API and Admin keys, usage and cost, rate limits, and the audit log",
       "category": "productivity",
       "tags": [
@@ -5716,7 +5716,7 @@
     {
       "name": "jamf",
       "displayName": "Jamf",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Jamf Pro - Mac and iOS inventory, FileVault and passcode compliance, patch posture, onboarding, and admin-gated lock/wipe/unmanage",
       "category": "rmm",
       "tags": [
@@ -5764,7 +5764,7 @@
     {
       "name": "acronis",
       "displayName": "Acronis",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Acronis Cyber Protect Cloud - backup health, protection coverage gaps, EDR incidents, and customer tenant, usage and MFA reporting",
       "category": "bcdr",
       "tags": [
@@ -5810,7 +5810,7 @@
     {
       "name": "bitwarden",
       "displayName": "Bitwarden",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Bitwarden - read-only org audit: members, 2FA, groups, collection access metadata, policies, event log, and subscription (never vault items)",
       "category": "security",
       "tags": [
@@ -5856,7 +5856,7 @@
     {
       "name": "1password",
       "displayName": "1password",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "1Password Business - read-only audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding and seat reviews (never vault contents)",
       "category": "security",
       "tags": [
@@ -5898,7 +5898,7 @@
     {
       "name": "zabbix",
       "displayName": "Zabbix",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Zabbix - read-only NOC problem triage, monitoring coverage and collector health, and customer SLA/availability reporting",
       "category": "network",
       "tags": [
@@ -5940,7 +5940,7 @@
     {
       "name": "lastpass",
       "displayName": "Lastpass",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "LastPass Business and MSP - read-only leaver checks, MFA and security-score posture, privileged-access reviews, and license/billing reconciliation (no vault data)",
       "category": "security",
       "tags": [
@@ -5985,7 +5985,7 @@
     {
       "name": "moovila",
       "displayName": "Moovila",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Moovila - read-only project, budget, task, time entry and resource reporting for project profitability and billing reconciliation",
       "category": "psa",
       "tags": [
@@ -6036,7 +6036,7 @@
     {
       "name": "webroot",
       "displayName": "Webroot",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Webroot (OpenText) GSM - read-only endpoint protection health, threat and DNS/web block review, seat reconciliation, and console audits",
       "category": "security",
       "tags": [
@@ -6082,7 +6082,7 @@
     {
       "name": "cove",
       "displayName": "Cove",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Cove Data Protection (N-able) - read-only backup health triage, customer and storage inventory, and console access review",
       "category": "bcdr",
       "tags": [
@@ -6124,7 +6124,7 @@
     {
       "name": "unitrends-uniview",
       "displayName": "Unitrends Uniview",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Unitrends UniView - read-only cross-customer backup jobs, replication, BackupIQ alerts, appliance health, Endpoint Backup, and Spanning SaaS backup",
       "category": "bcdr",
       "tags": [
@@ -6167,7 +6167,7 @@
     {
       "name": "gogetssl",
       "displayName": "Gogetssl",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "GoGetSSL - read-only certificate expiry tracking, renewal prep (products, prices, DCV emails, CSR checks), and reseller balance and invoice reconciliation",
       "category": "infrastructure",
       "tags": [
@@ -6209,7 +6209,7 @@
     {
       "name": "smileback",
       "displayName": "Smileback",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "SmileBack - read-only CSAT reviews, NPS responses and project surveys for QBR summaries, detractor follow-up and technician coaching",
       "category": "productivity",
       "tags": [
@@ -6252,7 +6252,7 @@
     {
       "name": "myitprocess",
       "displayName": "Myitprocess",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Kaseya myITprocess - read-only vCIO data: alignment scores and reviews, findings, roadmap recommendations and initiatives, and client meetings",
       "category": "productivity",
       "tags": [
@@ -6295,7 +6295,7 @@
     {
       "name": "alga-psa",
       "displayName": "Alga PSA",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Alga PSA - read-only ticket triage, client reviews, time sheet and invoice checks, and project status on your own Alga instance",
       "category": "psa",
       "tags": [
@@ -6341,7 +6341,7 @@
     {
       "name": "dubber",
       "displayName": "Dubber",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "Dubber call recording - capture coverage audits, call retrieval and tagging for disputes and QA, user lifecycle, and Dub.Point and webhook health",
       "category": "productivity",
       "tags": [
@@ -6383,7 +6383,7 @@
     {
       "name": "mspcfo",
       "displayName": "Mspcfo",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "MSPCFO - MSP profitability from PSA data: client P&L, agreement health and pricing, and technician utilization (hosted MCP, OAuth sign-in)",
       "category": "accounting",
       "tags": [
@@ -6425,7 +6425,7 @@
     {
       "name": "marketsharp",
       "displayName": "MarketSharp",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "description": "MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
       "category": "crm",
       "tags": [
