@@ -295,7 +295,7 @@ Each MCP server repository should include:
 
 | Current Location | New Location |
 |-----------------|--------------|
-| `wyre-technology/autotask-mcp` | `wyre-mcp/autotask-mcp` |
+| `WYRE-AI/autotask-mcp` | `wyre-mcp/autotask-mcp` |
 | (new) | `wyre-mcp/mcp-gateway` (fork) |
 | (new) | `wyre-mcp/datto-rmm-mcp` |
 | (new) | `wyre-mcp/itglue-mcp` |
@@ -775,7 +775,7 @@ Headers:
 - [ ] Deploy alongside gateway
 
 ### Phase 3: Autotask Migration (Week 5)
-- [ ] Fork/transfer `wyre-technology/autotask-mcp` → `wyre-mcp/autotask-mcp`
+- [ ] Fork/transfer `WYRE-AI/autotask-mcp` → `wyre-mcp/autotask-mcp`
 - [ ] Adapt to accept credentials via `X-API-Key` / `X-API-Secret` headers
 - [ ] Add gateway route `/v1/autotask/*` → autotask-mcp container
 - [ ] Create Autotask credential entry page in gateway UI

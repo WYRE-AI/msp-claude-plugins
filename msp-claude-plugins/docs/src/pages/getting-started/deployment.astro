@@ -83,7 +83,7 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <h3>Pull and run a pre-built image</h3>
 
   <pre><code class="language-bash"># Pull the latest image
-docker pull ghcr.io/wyre-technology/syncro-mcp:latest
+docker pull ghcr.io/wyre-ai/syncro-mcp:latest
 
 # Run with environment variables
 docker run -d \
@@ -93,7 +93,7 @@ docker run -d \
   -e SYNCRO_SUBDOMAIN="yourcompany" \
   -e MCP_TRANSPORT=http \
   -e NODE_ENV=production \
-  ghcr.io/wyre-technology/syncro-mcp:latest</code></pre>
+  ghcr.io/wyre-ai/syncro-mcp:latest</code></pre>
 
   <h3>Using docker-compose</h3>
 
@@ -103,7 +103,7 @@ docker run -d \
   </p>
 
   <pre><code class="language-bash"># Clone the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
 # Create .env with your credentials
@@ -146,7 +146,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
 
   <h3>Install from GitHub Release</h3>
   <ol>
-    <li>Go to the MCP server's <a href="https://github.com/wyre-technology">GitHub releases page</a></li>
+    <li>Go to the MCP server's <a href="https://github.com/WYRE-AI">GitHub releases page</a></li>
     <li>Download the <code>.mcpb</code> file from the latest release</li>
     <li>Open Claude Desktop → Settings → MCP Servers → Install from file</li>
     <li>Select the downloaded <code>.mcpb</code> file</li>
@@ -172,7 +172,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/wyre-technology/&#123;repo-name&#125;/tree/main</code></pre>
+  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/WYRE-AI/&#123;repo-name&#125;/tree/main</code></pre>
 
   <h3>What happens</h3>
 
@@ -212,12 +212,12 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/wyre-technology/&#123;repo-name&#125;</code></pre>
+  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/WYRE-AI/&#123;repo-name&#125;</code></pre>
 
   <h3>Manual deploy with Wrangler</h3>
 
   <pre><code class="language-bash"># Clone and enter the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
 # Install dependencies and build

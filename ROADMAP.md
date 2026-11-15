@@ -34,7 +34,7 @@ There is one repo and one catalog. It is consumed two ways, and both consume the
 exact same artifact — there is no fork, no parallel format, no "community edition."
 
 ```
-              wyre-technology/msp-claude-plugins
+              WYRE-AI/msp-claude-plugins
         one repo · one marketplace.json · one set of plugins
                 (skills, agents, commands, .mcp.json)
                               │
@@ -43,7 +43,7 @@ exact same artifact — there is no fork, no parallel format, no "community edit
   Claude Code / Claude Desktop            Conduit (conduit.wyre.ai)
   ──────────────────────────              ──────────────────────────
   /plugin marketplace add                 Marketplace ingestion,
-    wyre-technology/msp-claude-plugins    pinned to a git SHA per sync
+    WYRE-AI/msp-claude-plugins    pinned to a git SHA per sync
   /plugin install <name>@msp-claude-plugins
           │                                       │
   plugins run locally: skills,            curated skills catalog with
@@ -67,18 +67,18 @@ governance layer that MSP organizations need, not a different install experience
 
 ## What just shipped
 
-- **Official-format alignment** ([#136](https://github.com/wyre-technology/msp-claude-plugins/pull/136),
+- **Official-format alignment** ([#136](https://github.com/WYRE-AI/msp-claude-plugins/pull/136),
   merged). The marketplace now validates clean against the official Claude Code
   plugin-marketplace spec: real SchemaStore `$schema`, `plugin.json` as the sole
   version authority, entry names aligned with plugin names, and a CI `Validate`
   workflow with a drift check and a **version bump-gate** (see
   [Versioning](#versioning-and-releases) below).
-- **Frontmatter modernization** ([#137](https://github.com/wyre-technology/msp-claude-plugins/pull/137),
+- **Frontmatter modernization** ([#137](https://github.com/WYRE-AI/msp-claude-plugins/pull/137),
   merged). Every command, skill, and agent migrates to the official Claude Code
   frontmatter formats — 252 commands, 301 skills, and a repo-wide fix for invalid
   agent YAML. Per-plugin validation in CI is still advisory pending a follow-up
   cleanup pass, ahead of flipping to hard-fail.
-- **Conduit marketplace ingestion** ([conduit#917](https://github.com/wyre-technology/conduit/pull/917),
+- **Conduit marketplace ingestion** ([conduit#917](https://github.com/WYRE-AI/conduit/pull/917),
   merged). Conduit learns to load skills directly from an official Claude Code
   plugin-marketplace repo — this one. Single pinned SHA per sync, pre-ingestion
   security scanning, provenance recorded. This is what makes "one marketplace, two
@@ -158,7 +158,7 @@ Contributions that land here reach both consumers automatically: Claude Code use
 on their next `/plugin marketplace update`, and Conduit organizations on the next
 catalog sync. One PR, both audiences.
 
-Questions or ideas? [Discussions](https://github.com/wyre-technology/msp-claude-plugins/discussions)
+Questions or ideas? [Discussions](https://github.com/WYRE-AI/msp-claude-plugins/discussions)
 or [Discord](https://discord.gg/cCPtPaFw8e).
 
 ## Versioning and releases

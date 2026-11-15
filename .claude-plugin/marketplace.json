@@ -144,7 +144,7 @@
       "source": "./msp-claude-plugins/cipp/cipp",
       "description": "CIPP (CyberDrain Improved Partner Portal) - Microsoft 365 multi-tenant management for MSPs: tenants, users, mailboxes, conditional access, standards, BPA, licensing, GDAP, and alerts",
       "category": "security",
-      "repository": "https://github.com/wyre-technology/cipp-mcp",
+      "repository": "https://github.com/WYRE-AI/cipp-mcp",
       "tags": [
         "cipp",
         "m365",
@@ -159,7 +159,7 @@
       "source": "./msp-claude-plugins/freshdesk/freshdesk",
       "description": "Freshdesk - cloud helpdesk/PSA ticketing for MSPs: tickets, conversations, contacts, companies, knowledge base, SLA policies, and business hours",
       "category": "psa",
-      "repository": "https://github.com/wyre-technology/freshdesk-mcp",
+      "repository": "https://github.com/WYRE-AI/freshdesk-mcp",
       "tags": [
         "freshdesk",
         "helpdesk",
@@ -173,7 +173,7 @@
       "source": "./msp-claude-plugins/inforcer/inforcer",
       "description": "Inforcer - Microsoft 365 security baseline governance for MSPs: managed tenants, baseline templates, alignment/drift, secure scores, identity inventory, audit events, and assessment runs (read-only, plus one assessment-run action)",
       "category": "security",
-      "repository": "https://github.com/wyre-technology/inforcer-mcp",
+      "repository": "https://github.com/WYRE-AI/inforcer-mcp",
       "tags": [
         "inforcer",
         "m365",

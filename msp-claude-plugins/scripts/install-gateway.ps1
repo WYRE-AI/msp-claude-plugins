@@ -1,5 +1,5 @@
 # MSP MCP Gateway — Installer for Claude Code & Claude Desktop (Windows)
-# Usage: irm https://raw.githubusercontent.com/wyre-technology/msp-claude-plugins/main/msp-claude-plugins/scripts/install-gateway.ps1 | iex
+# Usage: irm https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/scripts/install-gateway.ps1 | iex
 #
 # This script:
 #   1. Detects whether Claude Code CLI and/or Claude Desktop are available

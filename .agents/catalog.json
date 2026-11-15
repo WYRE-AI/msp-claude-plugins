@@ -52,7 +52,7 @@
       ],
       "path": "msp-claude-plugins/3cx/3cx",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -101,7 +101,7 @@
       ],
       "path": "msp-claude-plugins/abnormal/abnormal-security",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -636,7 +636,7 @@
       ],
       "path": "msp-claude-plugins/blumira/blumira",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "agents",
@@ -1682,7 +1682,7 @@
       ],
       "path": "msp-claude-plugins/keeper/keeper",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -1803,7 +1803,7 @@
       ],
       "path": "msp-claude-plugins/liongard/liongard",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "detections",
@@ -2087,7 +2087,7 @@
       ],
       "path": "msp-claude-plugins/pandadoc/pandadoc",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -2257,7 +2257,7 @@
       ],
       "path": "msp-claude-plugins/posthog/posthog",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "posthog": {
           "type": "http",
@@ -2441,7 +2441,7 @@
       ],
       "path": "msp-claude-plugins/netsuite/netsuite",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "netsuite": {
           "type": "http",
@@ -2501,7 +2501,7 @@
       ],
       "path": "msp-claude-plugins/quickbooks/quickbooks-online",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3000,7 +3000,7 @@
       ],
       "path": "msp-claude-plugins/sherweb/sherweb",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3656,7 +3656,7 @@
       ],
       "path": "msp-claude-plugins/kaseya/kaseya-vsa",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3684,7 +3684,7 @@
       ],
       "path": "msp-claude-plugins/kaseya/datto-bcdr",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3710,7 +3710,7 @@
       ],
       "path": "msp-claude-plugins/kaseya/kaseya-bms",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3767,7 +3767,7 @@
       ],
       "path": "msp-claude-plugins/kaseya/unitrends",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3794,7 +3794,7 @@
       ],
       "path": "msp-claude-plugins/kaseya/spanning",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -3947,7 +3947,7 @@
       ],
       "path": "msp-claude-plugins/xero/xero",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "accounts",
@@ -4018,7 +4018,7 @@
       ],
       "path": "msp-claude-plugins/alternative-payments/alternative-payments",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -4246,7 +4246,7 @@
       ],
       "path": "msp-claude-plugins/wyre-gateway",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "msp-mcp-gateway": {
           "type": "http",
@@ -4540,7 +4540,7 @@
       ],
       "path": "msp-claude-plugins/ncentral/ncentral",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "ncentral": {
           "type": "http",
@@ -4682,7 +4682,7 @@
       ],
       "path": "msp-claude-plugins/ops-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -4748,7 +4748,7 @@
       ],
       "path": "msp-claude-plugins/secops-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -4826,7 +4826,7 @@
       ],
       "path": "msp-claude-plugins/finance-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -4900,7 +4900,7 @@
       ],
       "path": "msp-claude-plugins/compliance-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -4967,7 +4967,7 @@
       ],
       "path": "msp-claude-plugins/sales-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5037,7 +5037,7 @@
       ],
       "path": "msp-claude-plugins/marketing-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5074,7 +5074,7 @@
       ],
       "path": "msp-claude-plugins/devops-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5140,7 +5140,7 @@
       ],
       "path": "msp-claude-plugins/cloudops-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5206,7 +5206,7 @@
       ],
       "path": "msp-claude-plugins/awareness-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5272,7 +5272,7 @@
       ],
       "path": "msp-claude-plugins/backup-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5338,7 +5338,7 @@
       ],
       "path": "msp-claude-plugins/assets-pack",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "mcpServers": {
         "conduit": {
           "type": "http",
@@ -5406,7 +5406,7 @@
       ],
       "path": "msp-claude-plugins/clio/clio",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5461,7 +5461,7 @@
       ],
       "path": "msp-claude-plugins/scalepad/scalepad",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5639,7 +5639,7 @@
       ],
       "path": "msp-claude-plugins/anthropic-admin/ai-org-admin",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5686,7 +5686,7 @@
       ],
       "path": "msp-claude-plugins/openai-admin/openai-admin",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5730,7 +5730,7 @@
       ],
       "path": "msp-claude-plugins/jamf/jamf",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5776,7 +5776,7 @@
       ],
       "path": "msp-claude-plugins/acronis/acronis",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5822,7 +5822,7 @@
       ],
       "path": "msp-claude-plugins/bitwarden/bitwarden",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5868,7 +5868,7 @@
       ],
       "path": "msp-claude-plugins/1password/1password",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "account-hygiene",
@@ -5910,7 +5910,7 @@
       ],
       "path": "msp-claude-plugins/zabbix/zabbix",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5951,7 +5951,7 @@
       ],
       "path": "msp-claude-plugins/lastpass/lastpass",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -5997,7 +5997,7 @@
       ],
       "path": "msp-claude-plugins/moovila/moovila",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6048,7 +6048,7 @@
       ],
       "path": "msp-claude-plugins/webroot/webroot",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6094,7 +6094,7 @@
       ],
       "path": "msp-claude-plugins/cove/cove",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "access-review",
@@ -6137,7 +6137,7 @@
       ],
       "path": "msp-claude-plugins/unitrends-uniview/unitrends-uniview",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6179,7 +6179,7 @@
       ],
       "path": "msp-claude-plugins/gogetssl/gogetssl",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6222,7 +6222,7 @@
       ],
       "path": "msp-claude-plugins/smileback/smileback",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6265,7 +6265,7 @@
       ],
       "path": "msp-claude-plugins/myitprocess/myitprocess",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "alignment-reviews",
@@ -6307,7 +6307,7 @@
       ],
       "path": "msp-claude-plugins/alga-psa/alga-psa",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6353,7 +6353,7 @@
       ],
       "path": "msp-claude-plugins/dubber/dubber",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",
@@ -6395,7 +6395,7 @@
       ],
       "path": "msp-claude-plugins/mspcfo/mspcfo",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "agreement-pricing-review",
@@ -6438,7 +6438,7 @@
       ],
       "path": "msp-claude-plugins/marketsharp/marketsharp",
       "license": "Apache-2.0",
-      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
       "skills": [
         {
           "id": "api-patterns",

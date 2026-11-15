@@ -4,12 +4,12 @@
 
 Add Liongard support to the MSP Claude Plugins ecosystem. Liongard is an automated IT documentation and configuration management platform for MSPs. It provides continuous monitoring, inspection, and documentation of IT environments across multiple platforms.
 
-**GitHub Issue:** wyre-technology/msp-claude-plugins#17
+**GitHub Issue:** WYRE-AI/msp-claude-plugins#17
 
 ## Deliverables
 
 1. **node-liongard** — TypeScript client library (`@wyre-technology/node-liongard`)
-2. **liongard-mcp** — MCP server with decision-tree architecture (`wyre-technology/liongard-mcp`)
+2. **liongard-mcp** — MCP server with decision-tree architecture (`WYRE-AI/liongard-mcp`)
 3. **Plugin directory** — Claude Code plugin at `msp-claude-plugins/liongard/liongard/`
 
 ## API Reference
@@ -186,7 +186,7 @@ msp-claude-plugins/liongard/liongard/
 ## Implementation Order
 
 1. `node-liongard` client library (separate repo `@wyre-technology/node-liongard`)
-2. `liongard-mcp` MCP server (separate repo `wyre-technology/liongard-mcp`)
+2. `liongard-mcp` MCP server (separate repo `WYRE-AI/liongard-mcp`)
 3. Plugin directory in monorepo (skills + commands)
 4. Gateway vendor config (in `mcp-gateway`)
 5. Docs site updates (plugin page, MCP server page)

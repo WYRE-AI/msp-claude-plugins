@@ -41,7 +41,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <li>
       <strong>Install the plugin via the Cowork marketplace</strong> — provides skills and slash commands
       (e.g. <code>/search-tickets</code>, <code>/create-ticket</code>). Use the marketplace source
-      <code>wyre-technology/msp-claude-plugins</code>.
+      <code>WYRE-AI/msp-claude-plugins</code>.
     </li>
     <li>
       <strong>Add the MCP gateway server</strong> — easiest via Settings &rarr; Connectors &rarr;
@@ -95,9 +95,9 @@ const baseUrl = import.meta.env.BASE_URL;
   <p>If you only need specific plugins, install them individually:</p>
 
   <div class="not-prose my-6 space-y-3">
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin kaseya-autotask" size="sm" />
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin kaseya-it-glue" size="sm" />
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin sentinelone" size="sm" />
+    <InstallCommand command="/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin kaseya-autotask" size="sm" />
+    <InstallCommand command="/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin kaseya-it-glue" size="sm" />
+    <InstallCommand command="/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin sentinelone" size="sm" />
   </div>
 
   <h3>Available Plugin IDs</h3>
@@ -146,7 +146,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   <pre><code class="language-bash"># Clone the repository
-git clone https://github.com/wyre-technology/msp-claude-plugins.git
+git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # Navigate to a specific plugin
 cd msp-claude-plugins/kaseya/autotask
@@ -172,7 +172,7 @@ claude mcp list
   <p>To update to the latest version:</p>
 
   <div class="not-prose my-6">
-    <InstallCommand command="/plugin marketplace update wyre-technology/msp-claude-plugins" />
+    <InstallCommand command="/plugin marketplace update WYRE-AI/msp-claude-plugins" />
   </div>
 
   <h2>Uninstalling</h2>
@@ -180,7 +180,7 @@ claude mcp list
   <p>To remove the plugins:</p>
 
   <div class="not-prose my-6">
-    <InstallCommand command="/plugin marketplace remove wyre-technology/msp-claude-plugins" />
+    <InstallCommand command="/plugin marketplace remove WYRE-AI/msp-claude-plugins" />
   </div>
 
   <p>To remove the gateway MCP server:</p>

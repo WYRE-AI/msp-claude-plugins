@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # MSP MCP Gateway — Installer for Claude Code & Claude Desktop
-# Usage: curl -fsSL https://raw.githubusercontent.com/wyre-technology/msp-claude-plugins/main/msp-claude-plugins/scripts/install-gateway.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/WYRE-AI/msp-claude-plugins/main/msp-claude-plugins/scripts/install-gateway.sh | bash
 #
 # This script:
 #   1. Detects whether Claude Code CLI and/or Claude Desktop are available
