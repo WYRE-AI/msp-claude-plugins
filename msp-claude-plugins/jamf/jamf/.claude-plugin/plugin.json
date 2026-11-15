@@ -1,6 +1,6 @@
 {
   "name": "jamf",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Jamf Pro Apple device management - Mac and iOS inventory, FileVault and passcode compliance, OS and third-party patch posture, user onboarding, and admin-gated lock/wipe/unmanage",
   "author": {
     "name": "WYRE Technology"

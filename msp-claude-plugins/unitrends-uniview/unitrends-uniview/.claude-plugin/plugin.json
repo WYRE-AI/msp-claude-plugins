@@ -1,6 +1,6 @@
 {
   "name": "unitrends-uniview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugins for Unitrends UniView through Conduit - read-only, cross-customer view of the UniView cloud portal: backup jobs and replication, BackupIQ alerts, appliance health and storage, protected assets, Endpoint Backup, and Spanning SaaS backup",
   "author": {
     "name": "WYRE Technology"

@@ -1,6 +1,6 @@
 {
   "name": "acronis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Acronis Cyber Protect Cloud - backup health triage, protection coverage gaps, EDR incident review, and customer tenant, usage and MFA reporting for MSPs through Conduit",
   "author": {
     "name": "WYRE Technology"

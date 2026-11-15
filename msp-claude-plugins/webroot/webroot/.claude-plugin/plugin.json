@@ -1,6 +1,6 @@
 {
   "name": "webroot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugins for Webroot (OpenText) through Conduit - read-only GSM console visibility: endpoint protection health, threat and DNS/web block review, seat and usage reconciliation, and console admin and agent-command audits for MSPs",
   "author": {
     "name": "WYRE Technology"

@@ -1,6 +1,6 @@
 {
   "name": "gogetssl",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "GoGetSSL - read-only SSL certificate expiry tracking, renewal preparation (products, prices, DCV approver emails, CSR checks), and reseller balance and invoice reconciliation for MSPs",
   "author": {
     "name": "WYRE Technology"

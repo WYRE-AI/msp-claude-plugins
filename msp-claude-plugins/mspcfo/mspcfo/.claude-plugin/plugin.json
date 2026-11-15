@@ -1,6 +1,6 @@
 {
   "name": "mspcfo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MSPCFO — MSP profitability from PSA data: client P&L, agreement health and pricing, technician utilization. Connects to MSPCFO's hosted MCP through Conduit with MSPCFO sign-in (OAuth), no API key",
   "author": {
     "name": "WYRE Technology"
