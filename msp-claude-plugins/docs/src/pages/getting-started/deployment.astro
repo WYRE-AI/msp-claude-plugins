@@ -86,14 +86,21 @@ npx @wyre-technology/syncro-mcp</code></pre>
 docker pull ghcr.io/wyre-ai/syncro-mcp:latest
 
 # Run with environment variables
+# Generate CONDUIT_S2S_SECRET with: openssl rand -hex 32
 docker run -d \
   --name syncro-mcp \
   -p 8080:8080 \
   -e SYNCRO_API_KEY="your-api-key" \
   -e SYNCRO_SUBDOMAIN="yourcompany" \
+  -e AUTH_MODE=env \
+  -e CONDUIT_S2S_SECRET="&lt;output of: openssl rand -hex 32&gt;" \
   -e MCP_TRANSPORT=http \
   -e NODE_ENV=production \
   ghcr.io/wyre-ai/syncro-mcp:latest</code></pre>
+
+  <p>
+    The image defaults to <code>AUTH_MODE=gateway</code>, which ignores <code>SYNCRO_API_KEY</code> and <code>SYNCRO_SUBDOMAIN</code> from the environment, so this example sets <code>AUTH_MODE=env</code>. HTTP transport will not start unless <code>CONDUIT_S2S_SECRET</code> is a real secret (generate one with <code>openssl rand -hex 32</code>; known placeholders such as <code>changeme</code> are rejected). Clients that call <code>/mcp</code> must send the <code>X-Gateway-S2S</code> header. The value is <code>t=&lt;unix seconds&gt;,v1=&lt;hex&gt;</code>, where the hex is HMAC-SHA256 of the literal string <code>t=&lt;unix seconds&gt;</code> keyed with <code>CONDUIT_S2S_SECRET</code>. A missing or invalid header returns 401 before vendor credentials are read.
+  </p>
 
   <h3>Using docker-compose</h3>
 
