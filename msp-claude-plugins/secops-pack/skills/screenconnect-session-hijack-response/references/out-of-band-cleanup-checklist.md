@@ -39,6 +39,13 @@ names. Its persistence list is community-reported and may be incomplete.
   an infected host as compromised. Reimage is the safer path, at the operator's
   decision. Missing utility files do not clear a host: memory-based cookie
   extraction was also reported. Restore access only from a trusted host.
+- [ ] If any of the five RMM+ family extensions in the
+  [IOC notes](screenconnect-iocs-nov-2026.md#rmm-family-extensions) is
+  installed, enabled or already disabled, disable and remove it out of band
+  from a clean device using ConnectWise's
+  [extension uninstall instructions](https://docs.connectwise.com/ScreenConnect_Documentation/Get_started/Administration_page/Extensions_page#Uninstall_an_extension).
+  Do not re-enable or reinstall pending further official guidance. Disabling
+  the extension does not clear endpoints. The skill never performs this change.
 - [ ] After eradication, rotate downstream console and client-side credentials
   in the approved blast-radius order. Confirm instance and technician host
   clients are current; patching alone does not remove this persistence.
