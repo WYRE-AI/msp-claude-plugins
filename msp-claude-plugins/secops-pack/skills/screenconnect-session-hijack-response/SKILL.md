@@ -197,11 +197,13 @@ a gap. Do not add tools, and do not use a job, script, command, or
 uninstall capability to look for or remove an extension.
 
 Short names such as `RMM+` can collide with unrelated software. A panel
-Extensions-list match is a confirmed hit. An inventory-only match is
-**needs review** unless the panel list corroborates it, or a returned
-install path under the server's `App_Extensions` directory names the
-same extension. Note the version when inventory returns one; any version
-of the five names is still a hit.
+Extensions-list match for the same instance is a confirmed hit. An
+inventory-only match is **needs review** unless the panel list of the
+same instance corroborates it, or a returned install path from that
+instance's server host under its `App_Extensions` directory names the
+same extension. If the inventory device cannot be tied to that instance
+and host, keep **needs review**. Note the version when inventory returns
+one; any version of the five names is still a hit.
 
 ## Step 2: Hunt independent evidence for this client
 
