@@ -24,6 +24,9 @@ endpoint installed-software coverage.
 
 ## Anti-triggers
 
+- **Vendor Entra app / Partner Center integration compromise or stolen client
+  secret:** use [Vendor App Compromise Response](../vendor-app-compromise-response/SKILL.md).
+
 - **A single vendor's device or software record:** use `superops-assets`,
   `ncentral-devices`, `immybot-software-deployment`, `datto-rmm-audit`, or
   `ninjaone-devices`.

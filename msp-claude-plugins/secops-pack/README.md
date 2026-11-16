@@ -25,6 +25,9 @@ have connected, but none of them are individually required:
 - **MDR / SOC-managed** — Blackpoint Cyber, RocketCyber
 - **SIEM** — Blumira
 - **Microsoft 365 / identity** — CIPP
+- **Vendor app compromise investigation** — Microsoft Graph / CIPP identity
+  reads are the primary sources, for the partner tenant and each mapped
+  client tenant separately
 - **Shadow AI comparison**: Microsoft Graph or CIPP app inventory and a supported RMM
   installed-software source, both required per client for a usable comparison
 - **SaaS security** — SaaS Alerts
@@ -50,7 +53,9 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   with unsanctioned-tool findings and explicit coverage gaps),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
-  or suspected compromise), and `screenconnect-session-hijack-response`
+  or suspected compromise), `vendor-app-compromise-response` (vendor Entra
+  app-identity investigation, tenant timelines, and operator remediation plans),
+  and `screenconnect-session-hijack-response`
   (panel abuse, rogue clients including modified clients under legitimate IDs,
   technician reverse-pivot exposure, and operator-run out-of-band cleanup)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,

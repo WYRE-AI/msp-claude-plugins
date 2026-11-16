@@ -2745,7 +2745,7 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
     maturity: 'production',
     features: [
@@ -2754,7 +2754,8 @@ export const plugins: Plugin[] = [
       'Containment Playbooks',
       'Msp Tool Compromise Response',
       'Screenconnect Session Hijack Response',
-      'Shadow Ai'
+      'Shadow Ai',
+      'Vendor App Compromise Response'
     ],
     skills: [
       { name: 'alert-severity-normalization', description: 'A common Critical/High/Medium/Low normalized severity model for security alerts, incidents, and findings, with the judgment axes (confidence, mitigation state, blast radius) that place a record in a tier and the mapping from each vendor\'s native terminology — Huntress incident status, SentinelOne threat confidence, Blumira finding priority, CIPP alert queue severity, Blackpoint Cyber SOC severity, SaaS Alerts risk level — plus how to discover which security vendors are actually connected.' },
@@ -2762,7 +2763,8 @@ export const plugins: Plugin[] = [
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
       { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
       { name: 'screenconnect-session-hijack-response', description: 'Read-only investigation of legitimate ScreenConnect panel abuse, rogue remote-access clients, and a reported GUI-session reverse pivot onto technician workstations.' },
-      { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' }
+      { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' },
+      { name: 'vendor-app-compromise-response', description: 'Read-only investigation of vendor Entra application-identity abuse across an MSP partner tenant and mapped client tenants.' }
     ],
     agents: [
       { name: 'incident-timeline-builder', description: 'Use this agent when a security incident needs to be reconstructed into a single chronological timeline suitable for a client-facing incident report, pulling every relevant event across every connected security, PSA, and documentation tool for the client and time window in question.' },
