@@ -955,7 +955,7 @@
     },
     {
       "name": "secops-pack",
-      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "source": {
         "source": "local",
         "path": "./msp-claude-plugins/secops-pack"
@@ -1368,6 +1368,19 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Accounting"
+    },
+    {
+      "name": "marketsharp",
+      "description": "MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
+      "source": {
+        "source": "local",
+        "path": "./msp-claude-plugins/marketsharp/marketsharp"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "CRM"
     }
   ]
 }

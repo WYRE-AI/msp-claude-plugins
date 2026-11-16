@@ -53,8 +53,11 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   with unsanctioned-tool findings and explicit coverage gaps),
   `msp-tool-compromise-response` (cross-tool investigation when an RMM
   or other management-plane platform is implicated in a vendor advisory
-  or suspected compromise), and `vendor-app-compromise-response` (vendor Entra
-  app-identity investigation, tenant timelines, and operator remediation plans)
+  or suspected compromise), `vendor-app-compromise-response` (vendor Entra
+  app-identity investigation, tenant timelines, and operator remediation plans),
+  and `screenconnect-session-hijack-response`
+  (panel abuse, rogue clients including modified clients under legitimate IDs,
+  technician reverse-pivot exposure, and operator-run out-of-band cleanup)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,

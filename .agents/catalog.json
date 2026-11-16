@@ -30,10 +30,10 @@
     }
   },
   "totals": {
-    "packs": 105,
-    "skills": 481,
+    "packs": 106,
+    "skills": 487,
     "commands": 314,
-    "agents": 172
+    "agents": 173
   },
   "packs": [
     {
@@ -4735,8 +4735,8 @@
     {
       "name": "secops-pack",
       "displayName": "Security Operations",
-      "version": "0.1.8",
-      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
+      "version": "0.1.13",
+      "description": "Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.",
       "category": "workflow-pack",
       "tags": [
         "workflow-pack",
@@ -4771,6 +4771,10 @@
         {
           "id": "msp-tool-compromise-response",
           "path": "msp-claude-plugins/secops-pack/skills/msp-tool-compromise-response/SKILL.md"
+        },
+        {
+          "id": "screenconnect-session-hijack-response",
+          "path": "msp-claude-plugins/secops-pack/skills/screenconnect-session-hijack-response/SKILL.md"
         },
         {
           "id": "shadow-ai",
@@ -6419,6 +6423,53 @@
         {
           "id": "profitability-review-analyst",
           "path": "msp-claude-plugins/mspcfo/mspcfo/agents/profitability-review-analyst.md"
+        }
+      ]
+    },
+    {
+      "name": "marketsharp",
+      "displayName": "MarketSharp",
+      "version": "1.0.0",
+      "description": "MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
+      "category": "crm",
+      "tags": [
+        "marketsharp",
+        "crm",
+        "leads",
+        "appointments",
+        "home-improvement",
+        "msp"
+      ],
+      "path": "msp-claude-plugins/marketsharp/marketsharp",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
+      "skills": [
+        {
+          "id": "api-patterns",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/api-patterns/SKILL.md"
+        },
+        {
+          "id": "appointments",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/appointments/SKILL.md"
+        },
+        {
+          "id": "customer-lookup",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/customer-lookup/SKILL.md"
+        },
+        {
+          "id": "lead-pipeline",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/lead-pipeline/SKILL.md"
+        },
+        {
+          "id": "sales-opportunities",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/skills/sales-opportunities/SKILL.md"
+        }
+      ],
+      "commands": [],
+      "agents": [
+        {
+          "id": "marketsharp-customer-briefer",
+          "path": "msp-claude-plugins/marketsharp/marketsharp/agents/marketsharp-customer-briefer.md"
         }
       ]
     }

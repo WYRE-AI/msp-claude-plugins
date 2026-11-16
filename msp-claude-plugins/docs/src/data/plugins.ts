@@ -2745,7 +2745,7 @@ export const plugins: Plugin[] = [
     id: 'secops-pack',
     name: 'Secops Pack',
     vendor: 'Secops-pack',
-    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
+    description: 'Security Operations — cross-vendor alert triage, containment playbooks, management-plane compromise investigation, vendor Entra app-identity compromise investigation, ScreenConnect panel-abuse / rogue remote-access client response, and incident timelines across your EDR/MDR/SIEM and RMM stack.',
     category: 'workflow-pack',
     maturity: 'production',
     features: [
@@ -2753,6 +2753,7 @@ export const plugins: Plugin[] = [
       'Bec Response',
       'Containment Playbooks',
       'Msp Tool Compromise Response',
+      'Screenconnect Session Hijack Response',
       'Shadow Ai',
       'Vendor App Compromise Response'
     ],
@@ -2761,6 +2762,7 @@ export const plugins: Plugin[] = [
       { name: 'bec-response', description: 'Business Email Compromise detection and first response: the signals that reveal it in CIPP/M365 audit logs, mailbox and forwarding rules, and connected email security vendor alerts; the order-dependent response sequence (session revocation, forwarding-rule audit, mailbox rule and delegate cleanup, password reset, MFA re-enrollment, lateral-spread check, recipient notification); and what a defensible incident timeline must capture for insurance or bank-fraud claims.' },
       { name: 'containment-playbooks', description: 'Ordered first-response containment sequences for the most common MSP incident classes — compromised account, malware/ransomware detection, business email compromise, and exposed credential — including why the order matters, which connected tool family (RMM, EDR, CIPP/Entra, PSA, documentation) handles each step, and the evidence-preservation principles that apply across all of them.' },
       { name: 'msp-tool-compromise-response', description: 'Cross-tool investigation of a suspected or vendor-disclosed compromise of an MSP management-plane platform (RMM, remote access, or similar automation).' },
+      { name: 'screenconnect-session-hijack-response', description: 'Read-only investigation of legitimate ScreenConnect panel abuse, rogue remote-access clients, and a reported GUI-session reverse pivot onto technician workstations.' },
       { name: 'shadow-ai', description: 'Per-client comparison of observed RMM installed software with Microsoft 365 / Entra application and service principal inventory, conservative AI product matching, unsanctioned-tool findings, optional consent-risk review, and explicit source-coverage limitations.' },
       { name: 'vendor-app-compromise-response', description: 'Read-only investigation of vendor Entra application-identity abuse across an MSP partner tenant and mapped client tenants.' }
     ],
@@ -3822,6 +3824,39 @@ export const plugins: Plugin[] = [
       docsUrl: ''
     },
     path: 'mspcfo/mspcfo',
+    compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
+  },
+  {
+    id: 'marketsharp',
+    name: 'MarketSharp',
+    vendor: 'Marketsharp',
+    description: 'MarketSharp CRM for home-improvement contractors - read-only customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting',
+    category: 'crm',
+    maturity: 'beta',
+    features: [
+      'Appointments',
+      'Customer Lookup',
+      'Lead Pipeline',
+      'Sales Opportunities'
+    ],
+    skills: [
+      { name: 'appointments', description: 'Reading MarketSharp appointments: the schedule for a date range or one salesperson, appointments changed since a date, appointments for a set of leads or one contact, and the active appointment results and result reasons used to read outcomes.' },
+      { name: 'customer-lookup', description: 'Finding one customer in MarketSharp from whatever the caller gave you (name, phone, email, address or job number) and assembling their contact record, inquiries, appointments, jobs and notes.' },
+      { name: 'lead-pipeline', description: 'Reporting on MarketSharp inquiries (leads): listing them by modified date, appointment window or salesperson, resolving status, lead source and product interest IDs against the company\'s reference lists, counting by status and source, and the appointment default that hides leads nobody has booked yet.' },
+      { name: 'sales-opportunities', description: 'Reporting on sold jobs and open leads from MarketSharp\'s opportunities list: jobs and leads changed since a date with job numbers, sale and contract dates, contract totals, contract status and balance due.' },
+      { name: 'api-patterns', description: 'The MarketSharp tool surface as exposed through Conduit: the 25 read-only tools over the MarketSharp REST API, the Conduit connection fields (Company ID, API key, API secret, optional Employee ID), which tools need the Employee ID or a MarketSharp permission, read-tier access, page-size and record caps, the 200,000-character response cap and how an oversized page is cut, the appointment default on inquiries, date formats, untrusted-content wrapping, retries and errors.' }
+    ],
+    agents: [
+      { name: 'marketsharp-customer-briefer', description: 'Use this agent when someone needs a one-page brief on a customer from MarketSharp before a call, an appointment or a support request: who they are, their leads, appointments, any job and its balance, and recent notes.' }
+    ],
+    commands: [],
+    apiInfo: {
+      baseUrl: '',
+      auth: '',
+      rateLimit: '',
+      docsUrl: ''
+    },
+    path: 'marketsharp/marketsharp',
     compatibility: { claudeCode: true, claudeDesktop: true, validated: false }
   }
 ];
