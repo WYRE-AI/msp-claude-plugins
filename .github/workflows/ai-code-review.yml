@@ -34,7 +34,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Run OpenCodeReview
-        uses: alibaba/open-code-review@375f64cd6f67a48a135da83cfcf59c52669a09cb  # v1.13.3
+        uses: alibaba/open-code-review@0e9060da66af36a96a15516e76a001953095318b  # v1.13.9
         with:
           ocr_version: '1.13.3'
           llm_url: ${{ secrets.OCR_LLM_URL }}
