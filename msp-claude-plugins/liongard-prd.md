@@ -8,7 +8,7 @@ Add Liongard support to the MSP Claude Plugins ecosystem. Liongard is an automat
 
 ## Deliverables
 
-1. **node-liongard** — TypeScript client library (`@wyre-technology/node-liongard`)
+1. **node-liongard** — TypeScript client library (`@wyre-ai/node-liongard`)
 2. **liongard-mcp** — MCP server with decision-tree architecture (`WYRE-AI/liongard-mcp`)
 3. **Plugin directory** — Claude Code plugin at `msp-claude-plugins/liongard/liongard/`
 
@@ -46,7 +46,7 @@ Add Liongard support to the MSP Claude Plugins ecosystem. Liongard is an automat
 ### Authentication
 
 ```typescript
-import { LiongardClient } from '@wyre-technology/node-liongard';
+import { LiongardClient } from '@wyre-ai/node-liongard';
 
 const client = new LiongardClient({
   instance: 'yourcompany',        // {instance}.app.liongard.com
@@ -185,7 +185,7 @@ msp-claude-plugins/liongard/liongard/
 
 ## Implementation Order
 
-1. `node-liongard` client library (separate repo `@wyre-technology/node-liongard`)
+1. `node-liongard` client library (separate repo `@wyre-ai/node-liongard`)
 2. `liongard-mcp` MCP server (separate repo `WYRE-AI/liongard-mcp`)
 3. Plugin directory in monorepo (skills + commands)
 4. Gateway vendor config (in `mcp-gateway`)

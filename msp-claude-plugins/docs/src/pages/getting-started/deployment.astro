@@ -61,7 +61,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   <pre><code class="language-bash"># Example: run the Syncro MCP server
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <p>
     Set the required environment variables before running. Each server's detail page lists the
@@ -71,7 +71,7 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <pre><code class="language-bash"># Set credentials, then run
 export SYNCRO_API_KEY="your-api-key"
 export SYNCRO_SUBDOMAIN="yourcompany"
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <h2>Docker</h2>
 
@@ -279,7 +279,7 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
   mcpServers: {
     "syncro-mcp": {
       command: "npx",
-      args: ["@wyre-technology/syncro-mcp"],
+      args: ["@wyre-ai/syncro-mcp"],
       env: {
         SYNCRO_API_KEY: "your-api-key",
         SYNCRO_SUBDOMAIN: "yourcompany"

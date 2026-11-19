@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/halopsa-mcp",
+  "name": "@wyre-ai/halopsa-mcp",
   "version": "0.0.0-semantically-released",
   "description": "HaloPSA MCP server for Claude",
   "type": "module",

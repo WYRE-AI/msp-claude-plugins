@@ -15,7 +15,7 @@ when_to_use: >-
 
 ## Status note
 
-The MCP server (`kaseya-vsa-mcp`) and SDK (`@wyre-technology/node-kaseya-vsa`) are in development. This skill is reference documentation for the API surface and authentication flow; the implementation will follow the patterns described here.
+The MCP server (`kaseya-vsa-mcp`) and SDK (`@wyre-ai/node-kaseya-vsa`) are in development. This skill is reference documentation for the API surface and authentication flow; the implementation will follow the patterns described here.
 
 ## Overview
 

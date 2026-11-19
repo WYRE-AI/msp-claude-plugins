@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/{{VENDOR}}-mcp",
+  "name": "@wyre-ai/{{VENDOR}}-mcp",
   "version": "0.0.0-semantically-released",
   "description": "{{VENDOR_NAME}} MCP server for Claude",
   "type": "module",

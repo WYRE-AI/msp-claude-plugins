@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/datto-rmm-mcp",
+  "name": "@wyre-ai/datto-rmm-mcp",
   "version": "0.0.0-semantically-released",
   "description": "Datto RMM MCP server for Claude",
   "type": "module",
