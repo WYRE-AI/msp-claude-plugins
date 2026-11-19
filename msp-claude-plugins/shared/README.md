@@ -15,6 +15,7 @@ Vendor-agnostic MSP knowledge that other plugins in this marketplace build on. I
 |-------|--------|
 | `shared-skills-msp-terminology` | MSP acronyms, roles, contract and billing concepts, and the vocabulary used across PSA, RMM, documentation and security platforms |
 | `shared-skills-ticket-triage` | Vendor-agnostic ticket priority, categorisation, routing and first response |
+| `shared-skills-client-onboarding` | Phased runbook for onboarding a new client across PSA, documentation, RMM, security, Microsoft 365, password manager, backup and billing, with plan-first confirmation, dedupe and a handoff report |
 | `shared-skills-incident-correlation` | Combining PSA tickets, RMM device state, documentation assets and configuration changes into one incident summary |
 | `shared-skills-billing-reconciliation` | Matching cloud-marketplace subscriptions (Pax8) against accounting invoices (Xero, QuickBooks Online) |
 | `shared-skills-wyre-gateway-troubleshooting` | Diagnosing missing vendor tools, OAuth failures and expired credentials on the WYRE gateway |
