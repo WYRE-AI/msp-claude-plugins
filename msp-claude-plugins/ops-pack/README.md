@@ -31,6 +31,13 @@ explicitly rather than guessing.
 - `dispatch-prioritization` — how to triage and score an unassigned ticket queue
 - `board-hygiene` — stale-ticket detection, duplicate linking, status-transition
   sanity, and queue-balance checks
+- `client-health-score` — weekly per-client roll-up (device risk, repeat tickets,
+  patch/end-of-life exposure, backup trend, renewals), trend, QBR talking points,
+  and an unbilled-time flag. Composes `assets-pack`, `backup-pack` and
+  `finance-pack` skills instead of duplicating them
+- `device-failure-early-warning` — flags devices likely to fail in 2-4 weeks from
+  30-90 days of RMM telemetry; one draft proactive ticket per client. Needs an RMM
+  (the rest of this pack needs only a PSA). Read-only; never remediates
 
 **Agents**
 - `board-health-auditor` — full board-health sweep with a scored report, worst
@@ -45,6 +52,8 @@ explicitly rather than guessing.
 - `/ops-pack:sla-breaches [window]` — tickets breaching or about to breach SLA
   within a window (default `24h`)
 - `/ops-pack:eod-handoff` — end-of-day handoff summary (no arguments)
+- `/ops-pack:client-health [client]` — weekly client health digest (all clients by default)
+- `/ops-pack:device-risk [client]` — weekly device failure early-warning sweep
 
 ## Install
 
