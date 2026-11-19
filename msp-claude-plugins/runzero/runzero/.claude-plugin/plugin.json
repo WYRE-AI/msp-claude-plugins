@@ -1,9 +1,9 @@
 {
   "name": "runzero",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Claude plugins for RunZero - asset discovery, network scanning, service inventory, OS fingerprinting, wireless detection, and vulnerability reporting for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

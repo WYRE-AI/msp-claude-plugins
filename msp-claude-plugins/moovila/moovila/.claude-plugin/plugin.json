@@ -1,11 +1,11 @@
 {
   "name": "moovila",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugin for Moovila project management - read-only project, budget, task, time entry, and resource reporting through Conduit for MSP project profitability, labor tracking, and billing reconciliation",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

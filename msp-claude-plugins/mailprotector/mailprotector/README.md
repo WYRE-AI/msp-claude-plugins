@@ -54,6 +54,10 @@ export MAILPROTECTOR_RESELLER_ID="12345"
 
 ## Installation
 
+```
+/plugin install mailprotector --marketplace WYRE-AI/msp-claude-plugins
+```
+
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API key and reseller ID and you're done. The gateway passes them to the MCP server as the `X-Mailprotector-Api-Key` and `X-Mailprotector-Reseller-Id` headers; the server translates to the upstream Bearer token.

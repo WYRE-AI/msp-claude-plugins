@@ -45,7 +45,7 @@ These capabilities exist in the Inforcer product UI but are **not exposed throug
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install inforcer
+/plugin install inforcer --marketplace WYRE-AI/msp-claude-plugins
 ```
 
 The plugin connects to the Inforcer MCP server through Conduit:

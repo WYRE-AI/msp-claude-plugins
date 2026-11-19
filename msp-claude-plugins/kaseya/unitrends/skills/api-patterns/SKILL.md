@@ -13,7 +13,7 @@ when_to_use: >-
 
 ## Status note
 
-The MCP server (`unitrends-mcp`) and SDK (`@wyre-technology/node-unitrends`) are in development.
+The MCP server (`unitrends-mcp`) and SDK (`@wyre-ai/node-unitrends`) are in development.
 
 ## Overview
 

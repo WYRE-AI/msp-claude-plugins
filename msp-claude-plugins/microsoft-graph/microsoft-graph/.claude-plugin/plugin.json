@@ -1,9 +1,9 @@
 {
   "name": "microsoft-graph",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Claude plugins for the Microsoft Graph MCP Server for Enterprise (public preview) — query a client's Microsoft Entra identity and directory data (users, groups, applications, devices, admin reporting) in natural language. Read-only, RBAC-honoring access via a RAG-backed suggest-queries workflow.",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

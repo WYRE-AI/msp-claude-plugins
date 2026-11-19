@@ -1,5 +1,11 @@
 # Datto BCDR Plugin
 
+## Installation
+
+```
+/plugin install datto-bcdr --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code skills for working with the Datto BCDR (Backup, Continuity, Disaster Recovery) platform — SIRIS, Alto, and the Datto Backup Portal API.
 
 ## Status

@@ -13,7 +13,7 @@ when_to_use: >-
 
 ## Status note
 
-The MCP server (`spanning-mcp`) and SDK (`@wyre-technology/node-spanning`) are in development.
+The MCP server (`spanning-mcp`) and SDK (`@wyre-ai/node-spanning`) are in development.
 
 ## Overview
 

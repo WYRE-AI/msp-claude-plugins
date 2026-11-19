@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/halopsa-mcp",
+  "name": "@wyre-ai/halopsa-mcp",
   "version": "0.0.0-semantically-released",
   "description": "HaloPSA MCP server for Claude",
   "type": "module",
@@ -22,7 +22,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wyre-technology/halopsa-mcp.git"
+    "url": "git+https://github.com/WYRE-AI/halopsa-mcp.git"
   },
   "keywords": [
     "mcp",
@@ -33,12 +33,12 @@
     "msp",
     "itsm"
   ],
-  "author": "Wyre Technology",
+  "author": "WYRE AI",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/wyre-technology/halopsa-mcp/issues"
+    "url": "https://github.com/WYRE-AI/halopsa-mcp/issues"
   },
-  "homepage": "https://github.com/wyre-technology/halopsa-mcp#readme",
+  "homepage": "https://github.com/WYRE-AI/halopsa-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "@asachs01/node-halopsa": "^1.0.0"

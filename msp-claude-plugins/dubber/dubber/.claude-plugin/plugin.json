@@ -1,11 +1,11 @@
 {
   "name": "dubber",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude plugin for Dubber call recording through Conduit - recording capture coverage audits, call retrieval and tagging for disputes and QA, Dubber user lifecycle, and Dub.Point and webhook health",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

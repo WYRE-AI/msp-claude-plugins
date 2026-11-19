@@ -61,7 +61,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   <pre><code class="language-bash"># Example: run the Syncro MCP server
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <p>
     Set the required environment variables before running. Each server's detail page lists the
@@ -71,7 +71,7 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <pre><code class="language-bash"># Set credentials, then run
 export SYNCRO_API_KEY="your-api-key"
 export SYNCRO_SUBDOMAIN="yourcompany"
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <h2>Docker</h2>
 
@@ -83,17 +83,24 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <h3>Pull and run a pre-built image</h3>
 
   <pre><code class="language-bash"># Pull the latest image
-docker pull ghcr.io/wyre-technology/syncro-mcp:latest
+docker pull ghcr.io/wyre-ai/syncro-mcp:latest
 
 # Run with environment variables
+# Generate CONDUIT_S2S_SECRET with: openssl rand -hex 32
 docker run -d \
   --name syncro-mcp \
   -p 8080:8080 \
   -e SYNCRO_API_KEY="your-api-key" \
   -e SYNCRO_SUBDOMAIN="yourcompany" \
+  -e AUTH_MODE=env \
+  -e CONDUIT_S2S_SECRET="&lt;output of: openssl rand -hex 32&gt;" \
   -e MCP_TRANSPORT=http \
   -e NODE_ENV=production \
-  ghcr.io/wyre-technology/syncro-mcp:latest</code></pre>
+  ghcr.io/wyre-ai/syncro-mcp:latest</code></pre>
+
+  <p>
+    The image defaults to <code>AUTH_MODE=gateway</code>, which ignores <code>SYNCRO_API_KEY</code> and <code>SYNCRO_SUBDOMAIN</code> from the environment, so this example sets <code>AUTH_MODE=env</code>. HTTP transport will not start unless <code>CONDUIT_S2S_SECRET</code> is a real secret (generate one with <code>openssl rand -hex 32</code>; known placeholders such as <code>changeme</code> are rejected). Clients that call <code>/mcp</code> must send the <code>X-Gateway-S2S</code> header. The value is <code>t=&lt;unix seconds&gt;,v1=&lt;hex&gt;</code>, where the hex is HMAC-SHA256 of the literal string <code>t=&lt;unix seconds&gt;</code> keyed with <code>CONDUIT_S2S_SECRET</code>. A missing or invalid header returns 401 before vendor credentials are read.
+  </p>
 
   <h3>Using docker-compose</h3>
 
@@ -103,21 +110,28 @@ docker run -d \
   </p>
 
   <pre><code class="language-bash"># Clone the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
-# Create .env with your credentials
+# Create .env. Generate CONDUIT_S2S_SECRET with: openssl rand -hex 32
 cat &gt; .env &lt;&lt;EOF
 SYNCRO_API_KEY=your-api-key
 SYNCRO_SUBDOMAIN=yourcompany
+AUTH_MODE=env
+CONDUIT_S2S_SECRET=&lt;output of: openssl rand -hex 32&gt;
 EOF
 
-# Start the server
-docker compose up -d</code></pre>
+# Official compose interpolates CONDUIT_S2S_SECRET from .env and will not
+# start without a real secret. It hardcodes AUTH_MODE=gateway and does not
+# load AUTH_MODE or SYNCRO_* from this file, so pass them for env mode:
+docker compose run --service-ports --rm \
+  -e AUTH_MODE=env \
+  -e SYNCRO_API_KEY=your-api-key \
+  -e SYNCRO_SUBDOMAIN=yourcompany \
+  syncro-mcp</code></pre>
 
   <p>
-    The compose file includes health checks, automatic restarts, and production defaults.
-    The server will be available at <code>http://localhost:8080</code>.
+    Compose will not start if <code>CONDUIT_S2S_SECRET</code> is unset or empty; generate one with <code>openssl rand -hex 32</code> and use a real value, not a placeholder. A plain <code>docker compose up</code> keeps the file's <code>AUTH_MODE=gateway</code> default (Syncro credentials then arrive on each <code>/mcp</code> request as <code>X-Syncro-API-Key</code>, not from the environment). The <code>run -e</code> form above matches the Docker command: <code>AUTH_MODE=env</code> with <code>SYNCRO_API_KEY</code> and <code>SYNCRO_SUBDOMAIN</code>. Clients that call <code>/mcp</code> must still send the <code>X-Gateway-S2S</code> header, as described above. The compose file also includes health checks, automatic restarts, and production defaults, and publishes <code>127.0.0.1:8080:8080</code>.
   </p>
 
   <h3>Build from source</h3>
@@ -146,7 +160,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
 
   <h3>Install from GitHub Release</h3>
   <ol>
-    <li>Go to the MCP server's <a href="https://github.com/wyre-technology">GitHub releases page</a></li>
+    <li>Go to the MCP server's <a href="https://github.com/WYRE-AI">GitHub releases page</a></li>
     <li>Download the <code>.mcpb</code> file from the latest release</li>
     <li>Open Claude Desktop → Settings → MCP Servers → Install from file</li>
     <li>Select the downloaded <code>.mcpb</code> file</li>
@@ -172,7 +186,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/wyre-technology/&#123;repo-name&#125;/tree/main</code></pre>
+  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/WYRE-AI/&#123;repo-name&#125;/tree/main</code></pre>
 
   <h3>What happens</h3>
 
@@ -212,12 +226,12 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/wyre-technology/&#123;repo-name&#125;</code></pre>
+  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/WYRE-AI/&#123;repo-name&#125;</code></pre>
 
   <h3>Manual deploy with Wrangler</h3>
 
   <pre><code class="language-bash"># Clone and enter the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
 # Install dependencies and build
@@ -253,6 +267,8 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
   <p>
     Replace <code>localhost:8080</code> with your deployed server's URL for cloud deployments
     (e.g., <code>your-app.ondigitalocean.app</code> or <code>your-worker.workers.dev</code>).
+    For the Node/Docker HTTP server, clients that call <code>/mcp</code> must also send the
+    <code>X-Gateway-S2S</code> header, as described in the Docker section above.
   </p>
 
   <h3>Claude Code (.mcp.json)</h3>
@@ -263,7 +279,7 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
   mcpServers: {
     "syncro-mcp": {
       command: "npx",
-      args: ["@wyre-technology/syncro-mcp"],
+      args: ["@wyre-ai/syncro-mcp"],
       env: {
         SYNCRO_API_KEY: "your-api-key",
         SYNCRO_SUBDOMAIN: "yourcompany"
@@ -329,8 +345,13 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
       </tr>
       <tr>
         <td><code>AUTH_MODE</code></td>
-        <td>Authentication mode (<code>env</code> or <code>gateway</code>)</td>
-        <td>Optional, defaults to <code>env</code></td>
+        <td>Authentication mode (<code>env</code> or <code>gateway</code>). The Docker image and official Compose file default to <code>gateway</code>, which ignores <code>SYNCRO_*</code> from the environment. Use <code>env</code> for the single-tenant examples on this page. Stdio ignores this setting.</td>
+        <td>Optional. Image and Compose default to <code>gateway</code></td>
+      </tr>
+      <tr>
+        <td><code>CONDUIT_S2S_SECRET</code></td>
+        <td>Service-to-service secret required to start the Node/Docker HTTP transport. Generate one with <code>openssl rand -hex 32</code>. Known placeholders are rejected. Official Compose will not start without it. Clients must send <code>X-Gateway-S2S</code> on <code>/mcp</code>.</td>
+        <td>Required for HTTP (Docker and Compose)</td>
       </tr>
     </tbody>
   </table>

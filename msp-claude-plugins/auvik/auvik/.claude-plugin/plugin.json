@@ -1,9 +1,9 @@
 {
   "name": "auvik",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Claude plugins for Auvik - network monitoring, device inventory, alert triage, configuration audit, and capacity planning for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

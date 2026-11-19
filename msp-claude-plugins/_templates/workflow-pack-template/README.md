@@ -69,8 +69,8 @@ msp-claude-plugins/workflow-packs/ops-pack/
   "description": "Cross-vendor service-desk operations: board health, dispatch, SLA pressure, and shift handoffs across your connected PSA and RMM",
   "version": "0.1.0",
   "author": { "name": "MSP Claude Plugins Community" },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }
 ```

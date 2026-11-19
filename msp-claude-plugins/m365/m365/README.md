@@ -1,5 +1,11 @@
 # Microsoft 365 Claude Plugin
 
+## Installation
+
+```
+/plugin install m365 --marketplace WYRE-AI/msp-claude-plugins
+```
+
 A Claude Code plugin for Microsoft 365 administration — users, mailboxes, Teams, licensing, and security posture. Built for MSP technicians who need to query and manage M365 tenants alongside their PSA and RMM tools.
 
 ## What This Plugin Does

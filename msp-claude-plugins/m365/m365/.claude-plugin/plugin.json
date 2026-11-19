@@ -1,9 +1,9 @@
 {
   "name": "m365",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Claude plugins for Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

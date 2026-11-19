@@ -1,11 +1,11 @@
 {
   "name": "acronis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Acronis Cyber Protect Cloud - backup health triage, protection coverage gaps, EDR incident review, and customer tenant, usage and MFA reporting for MSPs through Conduit",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

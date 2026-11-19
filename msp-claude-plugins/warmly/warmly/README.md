@@ -1,5 +1,11 @@
 # Warmly Plugin
 
+## Installation
+
+```
+/plugin install warmly --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code plugin for [Warmly](https://www.warmly.ai) — visitor intelligence and account-level engagement for B2B sales teams.
 
 > **Not currently brokered by Conduit.** Most connectors in this marketplace reach their vendor through the WYRE Conduit gateway (`https://conduit.wyre.ai/v1/mcp`). Warmly does not (nor do `slack` and `stripe`): Conduit has no `warmly` entry, so there is no slug to connect and a connect attempt 404s. The connector was wired only in the older `WYRE-AI/mcp-gateway`, which retired on 30 September 2026; `mcp.wyre.ai` now redirects to Conduit. **There is currently no WYRE connection path for Warmly.**

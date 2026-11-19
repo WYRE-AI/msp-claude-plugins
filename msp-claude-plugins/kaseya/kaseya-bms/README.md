@@ -1,5 +1,11 @@
 # Kaseya BMS Plugin
 
+## Installation
+
+```
+/plugin install kaseya-bms --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code skills for working with the Kaseya BMS PSA platform — tickets, accounts, contracts, time entries, and billing.
 
 ## Status

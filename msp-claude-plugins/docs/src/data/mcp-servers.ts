@@ -70,10 +70,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'connectwise-automate',
     name: 'ConnectWise Automate MCP',
-    npmPackage: '@wyre-technology/connectwise-automate-mcp',
+    npmPackage: '@wyre-ai/connectwise-automate-mcp',
     description: 'MCP server for ConnectWise Automate RMM with decision tree architecture for managing computers, clients, alerts, and scripts.',
     category: 'rmm',
-    repoUrl: 'https://github.com/wyre-technology/connectwise-automate-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/connectwise-automate-mcp',
     companionPluginId: 'connectwise-automate',
     envVars: [
       { name: 'CW_AUTOMATE_SERVER_URL', required: true, description: 'Your ConnectWise Automate server URL' },
@@ -125,7 +125,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers. Navigate to a domain first, then use domain-specific tools.',
-    installCommand: 'npx @wyre-technology/connectwise-automate-mcp',
+    installCommand: 'npx @wyre-ai/connectwise-automate-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
     rateLimit: '60 requests per minute'
@@ -133,10 +133,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'ninjaone',
     name: 'NinjaOne MCP',
-    npmPackage: '@wyre-technology/ninjaone-mcp',
+    npmPackage: '@wyre-ai/ninjaone-mcp',
     description: 'MCP server for NinjaOne (NinjaRMM) with hierarchical tool loading for managing devices, organizations, alerts, and tickets.',
     category: 'rmm',
-    repoUrl: 'https://github.com/wyre-technology/ninjaone-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/ninjaone-mcp',
     companionPluginId: 'ninjaone-rmm',
     envVars: [
       { name: 'NINJAONE_CLIENT_ID', required: true, description: 'OAuth 2.0 Client ID' },
@@ -215,7 +215,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Hierarchical tool loading with navigation-based domain selection and lazy-loaded handlers.',
-    installCommand: 'npx @wyre-technology/ninjaone-mcp',
+    installCommand: 'npx @wyre-ai/ninjaone-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
     rateLimit: 'Varies by endpoint'
@@ -223,10 +223,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'halopsa',
     name: 'HaloPSA MCP',
-    npmPackage: '@wyre-technology/halopsa-mcp',
+    npmPackage: '@wyre-ai/halopsa-mcp',
     description: 'MCP server for HaloPSA with decision tree architecture for managing tickets, clients, assets, agents, and invoices.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/halopsa-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/halopsa-mcp',
     companionPluginId: 'halopsa',
     envVars: [
       { name: 'HALOPSA_CLIENT_ID', required: true, description: 'OAuth 2.0 Client ID' },
@@ -309,7 +309,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers. Navigate to a domain first, then use domain-specific tools.',
-    installCommand: 'npx @wyre-technology/halopsa-mcp',
+    installCommand: 'npx @wyre-ai/halopsa-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
     rateLimit: '500 requests per 3 minutes'
@@ -317,10 +317,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'itglue',
     name: 'IT Glue MCP',
-    npmPackage: '@wyre-technology/itglue-mcp',
+    npmPackage: '@wyre-ai/itglue-mcp',
     description: 'MCP server providing Claude with access to IT Glue documentation, asset management, organizations, passwords, and flexible assets.',
     category: 'documentation',
-    repoUrl: 'https://github.com/wyre-technology/itglue-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/itglue-mcp',
     companionPluginId: 'it-glue',
     envVars: [
       { name: 'ITGLUE_API_KEY', required: true, description: 'Your IT Glue API key (format: ITG.xxx)' },
@@ -384,7 +384,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Flat tool exposure — all tools available immediately. Includes a health check utility tool.',
-    installCommand: 'npx @wyre-technology/itglue-mcp',
+    installCommand: 'npx @wyre-ai/itglue-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '3000 requests per 5 minutes'
@@ -392,10 +392,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'superops',
     name: 'SuperOps.ai MCP',
-    npmPackage: '@wyre-technology/superops-mcp',
+    npmPackage: '@wyre-ai/superops-mcp',
     description: 'MCP server for SuperOps.ai PSA/RMM platform with GraphQL API support for clients, tickets, assets, and technicians.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/superops-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/superops-mcp',
     companionPluginId: 'superops',
     envVars: [
       { name: 'SUPEROPS_API_TOKEN', required: true, description: 'Your SuperOps.ai API token' },
@@ -454,7 +454,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers and custom GraphQL support.',
-    installCommand: 'npx @wyre-technology/superops-mcp',
+    installCommand: 'npx @wyre-ai/superops-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '800 requests per minute'
@@ -462,10 +462,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'atera',
     name: 'Atera MCP',
-    npmPackage: '@wyre-technology/atera-mcp',
+    npmPackage: '@wyre-ai/atera-mcp',
     description: 'MCP server for Atera RMM with decision tree navigation for managing customers, agents, tickets, alerts, and contacts.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/atera-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/atera-mcp',
     companionPluginId: 'atera',
     envVars: [
       { name: 'ATERA_API_KEY', required: true, description: 'Your Atera API key from Admin > API' }
@@ -534,7 +534,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers. Navigate to a domain first, then use domain-specific tools.',
-    installCommand: 'npx @wyre-technology/atera-mcp',
+    installCommand: 'npx @wyre-ai/atera-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '700 requests per minute'
@@ -542,10 +542,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'syncro',
     name: 'Syncro MCP',
-    npmPackage: '@wyre-technology/syncro-mcp',
+    npmPackage: '@wyre-ai/syncro-mcp',
     description: 'MCP server for Syncro MSP with decision tree architecture for managing customers, tickets, assets, contacts, and invoices.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/syncro-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/syncro-mcp',
     companionPluginId: 'syncro',
     envVars: [
       { name: 'SYNCRO_API_KEY', required: true, description: 'Your Syncro API key' },
@@ -619,7 +619,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers. Navigate to a domain first, then use domain-specific tools.',
-    installCommand: 'npx @wyre-technology/syncro-mcp',
+    installCommand: 'npx @wyre-ai/syncro-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '180 requests per minute'
@@ -627,10 +627,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'datto-rmm',
     name: 'Datto RMM MCP',
-    npmPackage: '@wyre-technology/datto-rmm-mcp',
+    npmPackage: '@wyre-ai/datto-rmm-mcp',
     description: 'MCP server for Datto RMM providing device management, monitoring alerts, patch management, and remote job execution.',
     category: 'rmm',
-    repoUrl: 'https://github.com/wyre-technology/datto-rmm-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/datto-rmm-mcp',
     companionPluginId: 'datto-rmm',
     envVars: [
       { name: 'DATTO_API_KEY', required: true, description: 'Datto RMM API key' },
@@ -674,7 +674,7 @@ export const mcpServers: McpServer[] = [
       ]}
     ],
     architecture: 'Flat tool exposure with domain-organized handlers.',
-    installCommand: 'npx @wyre-technology/datto-rmm-mcp',
+    installCommand: 'npx @wyre-ai/datto-rmm-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '600 requests per minute'
@@ -682,10 +682,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'autotask',
     name: 'Autotask MCP',
-    npmPackage: '@wyre-technology/autotask-mcp',
+    npmPackage: '@wyre-ai/autotask-mcp',
     description: 'MCP server for Kaseya Autotask PSA — access companies, contacts, tickets, time entries, projects, contracts, and billing through AI assistants.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/autotask-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/autotask-mcp',
     companionPluginId: 'autotask',
     envVars: [
       { name: 'AUTOTASK_USERNAME', required: true, description: 'Autotask API username (email)' },
@@ -748,7 +748,7 @@ export const mcpServers: McpServer[] = [
       ]}
     ],
     architecture: 'Comprehensive flat tool exposure with intelligent caching and ID-to-name resolution.',
-    installCommand: 'npx @wyre-technology/autotask-mcp',
+    installCommand: 'npx @wyre-ai/autotask-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
     rateLimit: '10,000 requests per hour'
@@ -756,10 +756,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'liongard',
     name: 'Liongard MCP',
-    npmPackage: '@wyre-technology/liongard-mcp',
+    npmPackage: '@wyre-ai/liongard-mcp',
     description: 'MCP server for Liongard with decision tree architecture for managing environments, inspections, systems, detections, alerts, and configuration monitoring.',
     category: 'rmm',
-    repoUrl: 'https://github.com/wyre-technology/liongard-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/liongard-mcp',
     companionPluginId: 'liongard',
     envVars: [
       { name: 'LIONGARD_INSTANCE', required: true, description: 'Your Liongard instance subdomain (e.g., yourcompany)' },
@@ -844,7 +844,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers. Navigate to a domain first, then use domain-specific tools.',
-    installCommand: 'npx @wyre-technology/liongard-mcp',
+    installCommand: 'npx @wyre-ai/liongard-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '300 requests per minute'
@@ -852,10 +852,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'connectwise-manage',
     name: 'ConnectWise Manage MCP',
-    npmPackage: '@wyre-technology/connectwise-manage-mcp',
+    npmPackage: '@wyre-ai/connectwise-manage-mcp',
     description: 'MCP server for ConnectWise Manage (PSA) providing ticket management, company/contact CRM, project management, and time tracking.',
     category: 'psa',
-    repoUrl: 'https://github.com/wyre-technology/connectwise-manage-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/connectwise-manage-mcp',
     companionPluginId: 'connectwise-psa',
     envVars: [
       { name: 'CW_MANAGE_COMPANY_ID', required: true, description: 'ConnectWise company identifier' },
@@ -910,7 +910,7 @@ export const mcpServers: McpServer[] = [
       ]}
     ],
     architecture: 'Decision tree with lazy-loaded domain handlers.',
-    installCommand: 'npx @wyre-technology/connectwise-manage-mcp',
+    installCommand: 'npx @wyre-ai/connectwise-manage-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
     rateLimit: '60 requests per minute'
@@ -918,10 +918,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'hudu',
     name: 'Hudu MCP',
-    npmPackage: '@wyre-technology/hudu-mcp',
+    npmPackage: '@wyre-ai/hudu-mcp',
     description: 'MCP server for Hudu IT documentation platform — manage companies, assets, articles, passwords, websites, folders, procedures, and activity logs.',
     category: 'documentation',
-    repoUrl: 'https://github.com/wyre-technology/hudu-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/hudu-mcp',
     companionPluginId: 'hudu',
     envVars: [
       { name: 'HUDU_BASE_URL', required: true, description: 'Your Hudu instance URL (e.g., https://acme.huducloud.com)' },
@@ -1022,7 +1022,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Flat tool exposure with lazy SDK initialization. All 39 tools available immediately.',
-    installCommand: 'npx @wyre-technology/hudu-mcp',
+    installCommand: 'npx @wyre-ai/hudu-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '300 requests per minute'
@@ -1030,10 +1030,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'rocketcyber',
     name: 'RocketCyber MCP',
-    npmPackage: '@wyre-technology/rocketcyber-mcp',
+    npmPackage: '@wyre-ai/rocketcyber-mcp',
     description: 'MCP server for RocketCyber managed SOC — read-only access to accounts, agents, incidents, events, firewalls, apps, and security status.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/rocketcyber-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/rocketcyber-mcp',
     companionPluginId: 'rocketcyber',
     envVars: [
       { name: 'ROCKETCYBER_API_KEY', required: true, description: 'RocketCyber API key from Provider Settings > API tab' },
@@ -1103,7 +1103,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Flat tool exposure with lazy SDK initialization. All 10 tools available immediately (read-only).',
-    installCommand: 'npx @wyre-technology/rocketcyber-mcp',
+    installCommand: 'npx @wyre-ai/rocketcyber-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
     rateLimit: '60 requests per minute'
@@ -1114,7 +1114,7 @@ export const mcpServers: McpServer[] = [
     npmPackage: 'blumira-mcp',
     description: 'MCP server for the Blumira SIEM platform. Access security findings, agents, users, resolutions, and MSP multi-account management.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/blumira-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/blumira-mcp',
     envVars: [
       { name: 'BLUMIRA_JWT_TOKEN', required: true, description: 'JWT authentication token from your Blumira account' },
     ],
@@ -1163,7 +1163,7 @@ export const mcpServers: McpServer[] = [
     npmPackage: 'domotz-mcp',
     description: 'MCP server for Domotz network monitoring. Monitor agents, devices, network topology, metrics, alerts, and power outlets.',
     category: 'network',
-    repoUrl: 'https://github.com/wyre-technology/domotz-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/domotz-mcp',
     envVars: [
       { name: 'DOMOTZ_API_KEY', required: true, description: 'Your Domotz API key' },
       { name: 'DOMOTZ_REGION', required: false, description: 'API region endpoint (default: us-east-1)' },
@@ -1221,7 +1221,7 @@ export const mcpServers: McpServer[] = [
     npmPackage: 'huntress-mcp',
     description: 'MCP server for the Huntress cybersecurity platform. Manage agents, organizations, incidents, escalations, signals, and users.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/huntress-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/huntress-mcp',
     envVars: [
       { name: 'HUNTRESS_API_KEY', required: true, description: 'Your Huntress API public key' },
       { name: 'HUNTRESS_API_SECRET', required: true, description: 'Your Huntress API secret key' },
@@ -1301,10 +1301,10 @@ export const mcpServers: McpServer[] = [
   {
     id: 'qbo',
     name: 'QuickBooks Online MCP',
-    npmPackage: '@wyre-technology/qbo-mcp',
+    npmPackage: '@wyre-ai/qbo-mcp',
     description: 'MCP server for QuickBooks Online. Manage customers, invoices, expenses, payments, and run financial reports.',
     category: 'accounting',
-    repoUrl: 'https://github.com/wyre-technology/qbo-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/qbo-mcp',
     envVars: [
       { name: 'QBO_ACCESS_TOKEN', required: true, description: 'OAuth 2.0 access token for QuickBooks Online' },
       { name: 'QBO_REALM_ID', required: true, description: 'Your QuickBooks Online company ID (realm ID)' },
@@ -1385,17 +1385,17 @@ export const mcpServers: McpServer[] = [
       },
     ],
     architecture: 'Single TypeScript MCP server supporting both stdio and Streamable HTTP transports.',
-    installCommand: 'npx @wyre-technology/qbo-mcp',
+    installCommand: 'npx @wyre-ai/qbo-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
   },
   {
     id: 'salesbuildr',
     name: 'SalesBuildr MCP',
-    npmPackage: '@wyre-technology/salesbuildr-mcp',
+    npmPackage: '@wyre-ai/salesbuildr-mcp',
     description: 'MCP server for SalesBuildr. Manage companies, contacts, products, opportunities, and quotes in your sales pipeline.',
     category: 'sales',
-    repoUrl: 'https://github.com/wyre-technology/salesbuildr-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/salesbuildr-mcp',
     envVars: [
       { name: 'SALESBUILDR_API_KEY', required: true, description: 'Your SalesBuildr API key' },
       { name: 'SALESBUILDR_BASE_URL', required: false, description: 'Tenant-specific base URL (e.g. https://mytenant.salesbuildr.com)' },
@@ -1453,17 +1453,17 @@ export const mcpServers: McpServer[] = [
       },
     ],
     architecture: 'Single TypeScript MCP server supporting both stdio and Streamable HTTP transports.',
-    installCommand: 'npx @wyre-technology/salesbuildr-mcp',
+    installCommand: 'npx @wyre-ai/salesbuildr-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
   },
   {
     id: 'spamtitan',
     name: 'SpamTitan MCP',
-    npmPackage: '@wyre-technology/spamtitan-mcp',
+    npmPackage: '@wyre-ai/spamtitan-mcp',
     description: 'MCP server for SpamTitan email security. Manage quarantine, allowlists, blocklists, and view email filtering statistics.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/spamtitan-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/spamtitan-mcp',
     envVars: [
       { name: 'SPAMTITAN_API_KEY', required: true, description: 'Your SpamTitan API key' },
       { name: 'SPAMTITAN_BASE_URL', required: false, description: 'SpamTitan API base URL (default: https://api-spamtitan.titanhq.com)' },
@@ -1496,17 +1496,17 @@ export const mcpServers: McpServer[] = [
       },
     ],
     architecture: 'Single TypeScript MCP server supporting both stdio and Streamable HTTP transports.',
-    installCommand: 'npx @wyre-technology/spamtitan-mcp',
+    installCommand: 'npx @wyre-ai/spamtitan-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
   },
   {
     id: 'xero',
     name: 'Xero MCP',
-    npmPackage: '@wyre-technology/xero-mcp',
+    npmPackage: '@wyre-ai/xero-mcp',
     description: 'MCP server for Xero accounting. Manage contacts, invoices, payments, chart of accounts, and run financial reports.',
     category: 'accounting',
-    repoUrl: 'https://github.com/wyre-technology/xero-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/xero-mcp',
     envVars: [
       { name: 'XERO_ACCESS_TOKEN', required: true, description: 'OAuth 2.0 access token for Xero' },
       { name: 'XERO_TENANT_ID', required: true, description: 'Your Xero organisation/tenant ID' },
@@ -1586,17 +1586,17 @@ export const mcpServers: McpServer[] = [
       },
     ],
     architecture: 'Single TypeScript MCP server supporting both stdio and Streamable HTTP transports.',
-    installCommand: 'npx @wyre-technology/xero-mcp',
+    installCommand: 'npx @wyre-ai/xero-mcp',
     dockerAvailable: true,
     mcpbAvailable: false,
   },
   {
     id: 'abnormal',
     name: 'Abnormal Security MCP',
-    npmPackage: '@wyre-technology/abnormal-mcp',
+    npmPackage: '@wyre-ai/abnormal-mcp',
     description: 'MCP server for Abnormal Security — AI-powered email threat detection, message analysis, abuse mailbox triage, and security case investigation.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/abnormal-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/abnormal-mcp',
     companionPluginId: 'abnormal-security',
     envVars: [
       { name: 'ABNORMAL_API_TOKEN', required: true, description: 'Abnormal Security API token (generate in the Abnormal portal under Settings → API)' }
@@ -1643,17 +1643,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision-tree MCP server — start with abnormal_navigate to select a domain, then call domain-specific tools.',
-    installCommand: 'npx @wyre-technology/abnormal-mcp',
+    installCommand: 'npx @wyre-ai/abnormal-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'avanan',
     name: 'Avanan MCP',
-    npmPackage: '@wyre-technology/avanan-mcp',
+    npmPackage: '@wyre-ai/avanan-mcp',
     description: 'MCP server for Check Point Avanan (Harmony Email & Collaboration) — email security events, anti-phishing actions, exception management, and threat search.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/avanan-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/avanan-mcp',
     companionPluginId: 'checkpoint-avanan',
     envVars: [
       { name: 'CHECKPOINT_CLIENT_ID', required: true, description: 'Check Point Infinity Portal API key (Client ID)' },
@@ -1695,17 +1695,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Single TypeScript MCP server with flat tool exposure, authenticating via Check Point Infinity Portal OAuth client credentials.',
-    installCommand: 'npx @wyre-technology/avanan-mcp',
+    installCommand: 'npx @wyre-ai/avanan-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'ironscales',
     name: 'Ironscales MCP',
-    npmPackage: '@wyre-technology/ironscales-mcp',
+    npmPackage: '@wyre-ai/ironscales-mcp',
     description: 'MCP server for Ironscales — phishing incident management, email classification, allowlist management, and automated remediation.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/ironscales-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/ironscales-mcp',
     companionPluginId: 'ironscales',
     envVars: [
       { name: 'IRONSCALES_API_KEY', required: true, description: 'Ironscales API key (generate in the Ironscales partner portal)' },
@@ -1754,17 +1754,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision-tree MCP server with per-domain handlers and Streamable HTTP transport for hosted deployments.',
-    installCommand: 'npx @wyre-technology/ironscales-mcp',
+    installCommand: 'npx @wyre-ai/ironscales-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'knowbe4',
     name: 'KnowBe4 MCP',
-    npmPackage: '@wyre-technology/knowbe4-mcp',
+    npmPackage: '@wyre-ai/knowbe4-mcp',
     description: 'MCP server for KnowBe4 — security awareness training enrollment, phishing simulation results, user risk scoring, and group management.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/knowbe4-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/knowbe4-mcp',
     companionPluginId: 'knowbe4',
     envVars: [
       { name: 'KNOWBE4_API_KEY', required: true, description: 'KnowBe4 API key (generate under Account Settings → API)' },
@@ -1840,17 +1840,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision-tree MCP server with per-domain handlers, supporting multiple KnowBe4 regions (US/EU/CA/UK/DE).',
-    installCommand: 'npx @wyre-technology/knowbe4-mcp',
+    installCommand: 'npx @wyre-ai/knowbe4-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'mimecast',
     name: 'Mimecast MCP',
-    npmPackage: '@wyre-technology/mimecast-mcp',
+    npmPackage: '@wyre-ai/mimecast-mcp',
     description: 'MCP server for Mimecast Email Security — message tracking, threat intelligence search, and held-message queue management.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/mimecast-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/mimecast-mcp',
     companionPluginId: 'mimecast',
     envVars: [
       { name: 'MIMECAST_CLIENT_ID', required: true, description: 'Mimecast API 2.0 client ID' },
@@ -1886,17 +1886,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Single TypeScript MCP server using Mimecast API 2.0 OAuth client credentials, supporting all Mimecast cloud regions.',
-    installCommand: 'npx @wyre-technology/mimecast-mcp',
+    installCommand: 'npx @wyre-ai/mimecast-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'proofpoint',
     name: 'Proofpoint MCP',
-    npmPackage: '@wyre-technology/proofpoint-mcp',
+    npmPackage: '@wyre-ai/proofpoint-mcp',
     description: 'MCP server for Proofpoint Email Protection — TAP (Targeted Attack Protection), threat intelligence, URL Defense, DLP, forensics, and quarantine management.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/proofpoint-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/proofpoint-mcp',
     companionPluginId: 'proofpoint',
     envVars: [
       { name: 'PROOFPOINT_SERVICE_PRINCIPAL', required: true, description: 'Proofpoint TAP service principal' },
@@ -1986,17 +1986,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Single TypeScript MCP server with comprehensive flat tool exposure across TAP, threat intel, URL Defense, DLP, forensics, and policy domains.',
-    installCommand: 'npx @wyre-technology/proofpoint-mcp',
+    installCommand: 'npx @wyre-ai/proofpoint-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'rootly',
     name: 'Rootly MCP',
-    npmPackage: '@wyre-technology/rootly-mcp',
+    npmPackage: '@wyre-ai/rootly-mcp',
     description: 'MCP server for Rootly incident management — incidents, alerts, on-call schedules, teams, and severity management.',
     category: 'security',
-    repoUrl: 'https://github.com/wyre-technology/rootly-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/rootly-mcp',
     companionPluginId: 'rootly',
     envVars: [
       { name: 'ROOTLY_API_KEY', required: true, description: 'Rootly API key (generate in Rootly under Settings → API Keys)' }
@@ -2044,17 +2044,17 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Decision-tree MCP server — start with rootly_navigate to select a domain, then call domain-specific tools.',
-    installCommand: 'npx @wyre-technology/rootly-mcp',
+    installCommand: 'npx @wyre-ai/rootly-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },
   {
     id: 'sherweb',
     name: 'Sherweb MCP',
-    npmPackage: '@wyre-technology/sherweb-mcp',
+    npmPackage: '@wyre-ai/sherweb-mcp',
     description: 'MCP server for Sherweb Partner API — distributor billing, service provider customers, subscriptions, and payable charges.',
     category: 'sales',
-    repoUrl: 'https://github.com/wyre-technology/sherweb-mcp',
+    repoUrl: 'https://github.com/WYRE-AI/sherweb-mcp',
     companionPluginId: 'sherweb',
     envVars: [
       { name: 'SHERWEB_CLIENT_ID', required: true, description: 'Sherweb Partner API client ID' },
@@ -2097,7 +2097,7 @@ export const mcpServers: McpServer[] = [
       }
     ],
     architecture: 'Single TypeScript MCP server with per-domain handlers, authenticating via Sherweb Partner API OAuth (client credentials + subscription key).',
-    installCommand: 'npx @wyre-technology/sherweb-mcp',
+    installCommand: 'npx @wyre-ai/sherweb-mcp',
     dockerAvailable: true,
     mcpbAvailable: true,
   },

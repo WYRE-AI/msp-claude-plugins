@@ -62,6 +62,7 @@ curl -X POST "https://api.superops.ai/msp" \
 ## Installation
 
 ```bash
+/plugin install superops --marketplace WYRE-AI/msp-claude-plugins
 # Clone the repository
 git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 

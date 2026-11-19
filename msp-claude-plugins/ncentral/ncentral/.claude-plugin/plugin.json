@@ -1,12 +1,12 @@
 {
   "name": "ncentral",
-  "version": "1.0.9",
-  "description": "N-able N-central RMM \u2014 devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
+  "version": "1.0.10",
+  "description": "N-able N-central RMM — devices, org units, active issues, scheduled tasks, custom properties for on-prem and hosted servers",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0",
   "keywords": [
     "ncentral",

@@ -66,6 +66,6 @@ jobs:
         uses: peter-evans/repository-dispatch@28959ce8df70de7be546dd1250a005dd32156697 # v4.0.1
         with:
           token: ${{ secrets.GATEWAY_DISPATCH_TOKEN }}
-          repository: wyre-technology/mcp-gateway
+          repository: WYRE-AI/mcp-gateway
           event-type: docs-updated
           client-payload: '{"sha": "${{ github.sha }}"}'

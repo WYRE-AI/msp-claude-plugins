@@ -1,9 +1,9 @@
 {
   "name": "stripe",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Claude plugins for Stripe — payments, subscriptions, invoices, customers via Stripe's first-party hosted MCP server (mcp.stripe.com)",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

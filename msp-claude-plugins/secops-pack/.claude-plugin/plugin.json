@@ -1,12 +1,12 @@
 {
   "name": "secops-pack",
   "displayName": "Security Operations",
-  "description": "Cross-vendor security alert triage and incident response \u2014 normalizes severity, runs containment playbooks, investigates management-plane tool compromise and ScreenConnect panel-abuse / rogue remote-access client incidents, and builds incident timelines across whatever EDR/MDR/SIEM and RMM stack you have connected.",
-  "version": "0.1.12",
+  "description": "Cross-vendor security alert triage and incident response — normalizes severity, runs containment playbooks, investigates management-plane tool compromise and ScreenConnect panel-abuse / rogue remote-access client incidents, and builds incident timelines across whatever EDR/MDR/SIEM and RMM stack you have connected.",
+  "version": "0.1.13",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

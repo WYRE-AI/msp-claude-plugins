@@ -1,9 +1,9 @@
 {
   "name": "warmly",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Warmly visitor intelligence - identified website visitors, account-level engagement, and credit balance",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

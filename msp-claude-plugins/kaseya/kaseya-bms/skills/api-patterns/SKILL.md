@@ -13,7 +13,7 @@ when_to_use: >-
 
 ## Status note
 
-The MCP server (`kaseya-bms-mcp`) and SDK (`@wyre-technology/node-kaseya-bms`) are in development. This skill is reference documentation.
+The MCP server (`kaseya-bms-mcp`) and SDK (`@wyre-ai/node-kaseya-bms`) are in development. This skill is reference documentation.
 
 ## Overview
 

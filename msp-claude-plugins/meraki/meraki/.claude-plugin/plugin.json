@@ -1,9 +1,9 @@
 {
   "name": "meraki",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Claude plugins for Cisco Meraki on Cisco's first-party hosted Meraki MCP (read-only, beta): capability search and Dashboard API reads for organization/network/device inventory, device health and uplinks, wireless (MR), switching (MS), security appliance (MX) firewall & VPN review, and sensor/cellular status for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
