@@ -14,6 +14,7 @@ export interface SharedSkill {
  */
 export const sharedSkills: SharedSkill[] = [
   { name: 'billing-reconciliation', description: 'Reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero, QuickBooks Online): the matching strategy, billing gaps, unbilled subscriptions, and margin discrepancy analysis.' },
+  { name: 'client-onboarding', description: 'Vendor-agnostic runbook for onboarding a new MSP client through Conduit: intake, then PSA, documentation, RMM, security, Microsoft 365, password manager, backup and billing setup, followed by verification and a handoff report.' },
   { name: 'incident-correlation', description: 'Vendor-agnostic cross-tool incident correlation: combining PSA tickets, RMM device state, documentation-platform assets, and configuration- monitoring changes into a unified incident summary across Kaseya, ConnectWise, HaloPSA, Syncro, Atera, and similar MSP stacks.' },
   { name: 'msp-terminology', description: 'MSP industry terminology: acronyms, roles, contract and billing concepts, and the vocabulary used across PSA, RMM, documentation, and security platforms.' },
   { name: 'ticket-triage', description: 'Vendor-agnostic PSA ticket triage: priority determination, categorization, routing, and initial response practices applicable to Autotask, ConnectWise, HaloPSA, and other platforms.' },
@@ -22,6 +23,6 @@ export const sharedSkills: SharedSkill[] = [
 
 export const sharedSkillsMeta = {
   installSlug: 'shared-skills',
-  description: 'Vendor-agnostic MSP skills — terminology, ticket triage, incident correlation, and billing reconciliation',
-  version: '1.1.8',
+  description: 'Vendor-agnostic MSP skills — terminology, ticket triage, incident correlation, billing reconciliation, and client onboarding',
+  version: '1.2.0',
 };
