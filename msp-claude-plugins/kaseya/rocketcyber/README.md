@@ -55,6 +55,7 @@ curl -s "https://api-${ROCKETCYBER_REGION:-us}.rocketcyber.com/v3/accounts" \
 ## Installation
 
 ```bash
+/plugin install rocketcyber --marketplace WYRE-AI/msp-claude-plugins
 # Clone the repository
 git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 

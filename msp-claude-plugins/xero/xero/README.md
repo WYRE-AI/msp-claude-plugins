@@ -38,6 +38,10 @@ export XERO_TENANT_ID="your-tenant-id"
 
 ## Installation
 
+```
+/plugin install xero --marketplace WYRE-AI/msp-claude-plugins
+```
+
 1. Clone this plugin to your Claude plugins directory
 2. Configure environment variables
 3. Optionally install the official MCP server for direct API access: `npm install -g @xeroapi/xero-mcp-server`

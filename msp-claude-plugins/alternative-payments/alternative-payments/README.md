@@ -1,5 +1,11 @@
 # Alternative Payments Plugin
 
+## Installation
+
+```
+/plugin install alternative-payments --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code plugin for the [Alternative Payments](https://www.alternativepayments.io/)
 B2B payments platform integration.
 

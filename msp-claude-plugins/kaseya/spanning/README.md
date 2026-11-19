@@ -1,5 +1,11 @@
 # Spanning Plugin
 
+## Installation
+
+```
+/plugin install spanning --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code skills for working with Spanning Cloud Backup — SaaS backup for Microsoft 365, Google Workspace, and Salesforce.
 
 ## Status

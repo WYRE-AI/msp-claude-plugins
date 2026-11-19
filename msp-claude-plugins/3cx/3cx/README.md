@@ -69,6 +69,10 @@ Both supported paths are covered below and in the `api-patterns` skill.
 
 ## Installation
 
+```
+/plugin install 3cx --marketplace WYRE-AI/msp-claude-plugins
+```
+
 ### Via WYRE Conduit's Vendor Catalog (recommended)
 
 If your organization uses [Conduit](https://conduit.wyre.ai), connect the

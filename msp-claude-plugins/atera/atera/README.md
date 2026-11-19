@@ -54,6 +54,7 @@ curl -s "https://app.atera.com/api/v3/customers" \
 ## Installation
 
 ```bash
+/plugin install atera --marketplace WYRE-AI/msp-claude-plugins
 # Clone the repository
 git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 

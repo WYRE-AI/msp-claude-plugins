@@ -1,5 +1,11 @@
 # Kaseya VSA Plugin
 
+## Installation
+
+```
+/plugin install kaseya-vsa --marketplace WYRE-AI/msp-claude-plugins
+```
+
 Claude Code skills for working with the Kaseya VSA (and VSA 10 / VSA X) RMM platform.
 
 ## Status

@@ -45,6 +45,10 @@ Mimecast operates regional API endpoints. Use the region matching your Mimecast 
 
 ## Installation
 
+```
+/plugin install mimecast --marketplace WYRE-AI/msp-claude-plugins
+```
+
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your Client ID, Client Secret, and select your region.
