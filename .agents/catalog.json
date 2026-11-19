@@ -31,8 +31,8 @@
   },
   "totals": {
     "packs": 106,
-    "skills": 486,
-    "commands": 314,
+    "skills": 488,
+    "commands": 316,
     "agents": 173
   },
   "packs": [
@@ -4668,7 +4668,7 @@
     {
       "name": "ops-pack",
       "displayName": "MSP Operations",
-      "version": "0.1.4",
+      "version": "0.2.0",
       "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -4695,6 +4695,14 @@
           "path": "msp-claude-plugins/ops-pack/skills/board-hygiene/SKILL.md"
         },
         {
+          "id": "client-health-score",
+          "path": "msp-claude-plugins/ops-pack/skills/client-health-score/SKILL.md"
+        },
+        {
+          "id": "device-failure-early-warning",
+          "path": "msp-claude-plugins/ops-pack/skills/device-failure-early-warning/SKILL.md"
+        },
+        {
           "id": "dispatch-prioritization",
           "path": "msp-claude-plugins/ops-pack/skills/dispatch-prioritization/SKILL.md"
         },
@@ -4704,6 +4712,14 @@
         }
       ],
       "commands": [
+        {
+          "id": "client-health",
+          "path": "msp-claude-plugins/ops-pack/commands/client-health.md"
+        },
+        {
+          "id": "device-risk",
+          "path": "msp-claude-plugins/ops-pack/commands/device-risk.md"
+        },
         {
           "id": "eod-handoff",
           "path": "msp-claude-plugins/ops-pack/commands/eod-handoff.md"
