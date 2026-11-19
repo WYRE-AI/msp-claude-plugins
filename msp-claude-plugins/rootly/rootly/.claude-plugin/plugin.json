@@ -1,9 +1,9 @@
 {
   "name": "rootly",
-  "version": "0.2.14",
+  "version": "0.2.15",
   "description": "Claude plugins for Rootly - incident management, response automation, postmortems, service catalog, alert routing, and workflow orchestration",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Read-only 1Password Business/Enterprise security view through Conduit - audit events, shared-vault item usage, sign-in attempts and user inventory for offboarding reviews, sign-in triage and seat audits. Never reads vault contents.",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

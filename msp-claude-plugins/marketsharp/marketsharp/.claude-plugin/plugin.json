@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Claude plugins for MarketSharp through Conduit - read-only access to a home-improvement contractor's CRM: customer lookup, lead and appointment pipeline, and sold-job and balance-due reporting",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

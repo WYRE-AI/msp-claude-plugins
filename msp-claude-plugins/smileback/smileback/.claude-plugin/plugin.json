@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Claude plugins for SmileBack through Conduit - read-only CSAT reviews, NPS responses and project surveys for per-client QBR summaries, detractor follow-up and technician CSAT coaching",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

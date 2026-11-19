@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "GoGetSSL - read-only SSL certificate expiry tracking, renewal preparation (products, prices, DCV approver emails, CSR checks), and reseller balance and invoice reconciliation for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

@@ -33,12 +33,12 @@
     "msp",
     "itsm"
   ],
-  "author": "Wyre Technology",
+  "author": "WYRE AI",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/WYRE-AI/halopsa-mcp/issues"
   },
-  "homepage": "https://github.com/wyre-technology/halopsa-mcp#readme",
+  "homepage": "https://github.com/WYRE-AI/halopsa-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "@asachs01/node-halopsa": "^1.0.0"

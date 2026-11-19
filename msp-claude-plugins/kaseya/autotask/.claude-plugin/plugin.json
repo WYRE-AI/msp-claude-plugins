@@ -3,7 +3,7 @@
   "version": "0.6.8",
   "description": "Claude plugins for Kaseya Autotask PSA - tickets, CRM, projects, contracts, expenses, quotes, quote builder",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

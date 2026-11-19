@@ -1,6 +1,6 @@
 # Roadmap
 
-> Last updated 2026-08-21. Maintained by [WYRE Technology](https://wyretechnology.com).
+> Last updated 2026-08-21. Maintained by [WYRE AI](https://wyre.ai).
 > Live project board: [github.com/orgs/wyre-technology/projects/1](https://github.com/orgs/wyre-technology/projects/1)
 
 This document is the public strategy and roadmap for `msp-claude-plugins`. It says

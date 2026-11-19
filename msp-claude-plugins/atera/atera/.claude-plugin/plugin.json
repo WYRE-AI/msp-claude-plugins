@@ -1,9 +1,9 @@
 {
   "name": "atera",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Claude Code plugin for Atera RMM/PSA - tickets, agents, customers, alerts",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

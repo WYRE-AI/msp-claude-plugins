@@ -1,9 +1,9 @@
 {
   "name": "pax8",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Claude plugins for Pax8 cloud marketplace - companies, products, subscriptions, orders, invoices",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

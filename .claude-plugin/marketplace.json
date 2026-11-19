@@ -4,7 +4,7 @@
   "description": "Community-driven Claude Code plugins for Managed Service Providers. Integrates with PSA, RMM, and documentation tools.",
   "version": "1.43.0",
   "owner": {
-    "name": "WYRE Technology",
+    "name": "WYRE AI",
     "email": "aaron@sachshaus.net"
   },
   "plugins": [

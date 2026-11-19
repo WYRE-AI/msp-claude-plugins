@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Jamf Pro Apple device management - Mac and iOS inventory, FileVault and passcode compliance, OS and third-party patch posture, user onboarding, and admin-gated lock/wipe/unmanage",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
