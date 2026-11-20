@@ -4234,7 +4234,7 @@
     {
       "name": "wyre-gateway",
       "displayName": "Wyre MSP Gateway",
-      "version": "1.4.6",
+      "version": "1.5.0",
       "description": "WYRE MSP Gateway client - cross-vendor orchestration agents (client-360, QBR prep, renewal-risk analysis, security-posture scoring, technician-performance coaching, incident war-room coordination, compliance evidence packaging, onboarding QA, gateway ops). Connects to conduit.wyre.ai.",
       "category": "productivity",
       "tags": [
