@@ -1,7 +1,7 @@
 ---
-description: Portfolio-wide backup job health snapshot - failure count, at-risk clients, and storage trends
-argument-hint: ""
-arguments: []
+description: Portfolio-wide backup job health snapshot - failure count, at-risk clients, and storage trends, with an optional week-over-week trend view
+argument-hint: "[trend]"
+arguments: [mode]
 ---
 
 # Backup Status
@@ -25,7 +25,9 @@ and BCDR tools the org has connected through the gateway.
    connected at once (an on-prem appliance plus a SaaS-backup tenant).
 
 2. **Invoke the `backup-health-auditor` agent** for the full portfolio (no client
-   scope). The agent normalizes image-based appliance backups and SaaS-data snapshot
+   scope). If `mode` is `trend`, ask it for trend mode: 14 days of history scored
+   7-versus-7 days per protected unit, rolled up per client, with draft tickets
+   for Degrading clients. Nothing is created in the PSA. The agent normalizes image-based appliance backups and SaaS-data snapshot
    backups into one comparable health view per the `backup-job-health` skill.
 
 3. **Assemble and return the snapshot**, in the order: active failure streaks →
@@ -35,8 +37,11 @@ and BCDR tools the org has connected through the gateway.
 
 ## Arguments
 
-This command takes no arguments — it always reports the full portfolio across
-whatever backup/BCDR tools are connected. Use `/backup-pack:restore-check [client]`
+- `mode` (optional): `trend` adds the week-over-week trend view and draft tickets.
+  Omit it for the plain snapshot.
+
+The command always reports the full portfolio across whatever backup/BCDR tools
+are connected. Use `/backup-pack:restore-check [client]`
 or `/backup-pack:retention-audit [client]` to scope to a single client.
 
 ## Examples
@@ -45,6 +50,7 @@ or `/backup-pack:retention-audit [client]` to scope to a single client.
 
 ```
 /backup-pack:backup-status
+/backup-pack:backup-status trend
 ```
 
 ## Output
@@ -68,6 +74,11 @@ STORAGE RISK
 --------------------------------------------------------------------------------
 [Client] — [appliance/tenant]: [approaching capacity X% / anomalous growth]
 ...
+
+WEEK-OVER-WEEK TREND (trend mode only)
+--------------------------------------------------------------------------------
+[Client]: Degrading — [reason with numbers]; Drifting/Improving/Stable — counts
+Draft tickets for review: [N] (none created)
 
 PORTFOLIO SUMMARY
 --------------------------------------------------------------------------------

@@ -3054,7 +3054,7 @@ export const plugins: Plugin[] = [
       { name: 'retention-compliance-auditor', description: 'Use this agent when an MSP needs to verify that actual backup retention configuration and cadence meet contracted or required retention/RPO policy, rather than assuming appliance defaults are adequate.' }
     ],
     commands: [
-      { name: '/backup-status', description: 'Portfolio-wide backup job health snapshot - failure count, at-risk clients, and storage trends' },
+      { name: '/backup-status', description: 'Portfolio-wide backup job health snapshot - failure count, at-risk clients, and storage trends, with an optional week-over-week trend view' },
       { name: '/restore-check', description: 'Restore-readiness check - has this actually been restore-tested, for one client or the whole portfolio' },
       { name: '/retention-audit', description: 'Retention and RPO compliance audit against contracted requirements, for one client or the whole portfolio' }
     ],
