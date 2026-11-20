@@ -64,6 +64,12 @@ for "what devices exist."
   Quote Manager, or ConnectWise PSA product catalog when one exists
   (ConnectWise CPQ has no searchable catalog). Drafts the list only; it
   does not create quotes
+- `patch-eol-kev-risk-ranking` : ranks every client's machines, then the
+  clients, by missing patches, OS past end of support, and CISA KEV
+  exposure. Read-only and safe to schedule, composes `eol-eos-flagging`
+  with RMM patch tools and SentinelOne CVE data, and ends in draft
+  tickets that you create yourself. KEV matching needs a catalog you
+  supply, because no connector serves one
 
 **Agents**
 - `warranty-status-auditor` — portfolio-wide (or single-client) warranty

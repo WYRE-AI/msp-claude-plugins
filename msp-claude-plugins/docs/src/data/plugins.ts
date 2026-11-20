@@ -3076,12 +3076,14 @@ export const plugins: Plugin[] = [
     maturity: 'beta',
     features: [
       'Eol Eos Flagging',
+      'Patch Eol Kev Risk Ranking',
       'Refresh Cycle Planning',
       'Refresh Quote List',
       'Warranty Tracking'
     ],
     skills: [
       { name: 'eol-eos-flagging', description: 'End-of-life versus end-of-support risk for devices, OS versions, and firmware: combining RMM inventory (make, model, OS version, firmware) with general lifecycle knowledge, the mandatory verify-against-vendor-lifecycle caveat, what qualifies as a finding versus merely "old", and criticality-first prioritization of the resulting risk list.' },
+      { name: 'patch-eol-kev-risk-ranking', description: 'Ranks every client\'s machines, and then the clients themselves, by three signals: missing patches, OS past end of support, and exposure to CISA Known Exploited Vulnerabilities (KEV).' },
       { name: 'refresh-cycle-planning', description: 'Forward-looking hardware refresh planning: combining warranty expiration, EOL/EOS timing, and device age from whatever RMM and documentation platforms are connected into replace-now / plan-this-year / monitor tiers, laying those tiers onto a dated calendar, surfacing replacement clusters, and keeping an explicit insufficient-data bucket.' },
       { name: 'refresh-quote-list', description: 'Turns a Refresh Cycle Planning calendar into a per-client list of devices to quote, matched against a connected ScalePad Quoter, Kaseya Quote Manager, or ConnectWise PSA product catalog, then hands off to a quoting skill.' },
       { name: 'warranty-tracking', description: 'Endpoint hardware warranty status across whatever RMM platforms (Datto RMM, NinjaOne, N-central, Kaseya VSA, ConnectWise Automate, Atera, SuperOps, Syncro, Action1, ImmyBot) and documentation tools (IT Glue, Hudu) are connected: the reliability spread between OEM-resolved and hand-entered warranty fields, serial/asset-tag cross-referencing when RMM data is missing or stale, and the expired / expiring-soon / covered / unknown bucketing.' }
