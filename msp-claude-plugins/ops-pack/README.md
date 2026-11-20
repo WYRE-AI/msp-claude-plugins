@@ -31,6 +31,9 @@ explicitly rather than guessing.
 - `dispatch-prioritization` — how to triage and score an unassigned ticket queue
 - `board-hygiene` — stale-ticket detection, duplicate linking, status-transition
   sanity, and queue-balance checks
+- `repeat-ticket-root-cause` — recurring-problem detection across 90 days of
+  closed and open tickets, grouped by device, user and issue type, with one
+  draft problem ticket per pattern
 
 **Agents**
 - `board-health-auditor` — full board-health sweep with a scored report, worst
@@ -45,6 +48,8 @@ explicitly rather than guessing.
 - `/ops-pack:sla-breaches [window]` — tickets breaching or about to breach SLA
   within a window (default `24h`)
 - `/ops-pack:eod-handoff` — end-of-day handoff summary (no arguments)
+- `/ops-pack:repeat-tickets [client]` — recurring problems across the last 90
+  days, one draft problem ticket per pattern
 
 ## Install
 
