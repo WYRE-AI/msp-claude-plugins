@@ -31,8 +31,8 @@
   },
   "totals": {
     "packs": 106,
-    "skills": 486,
-    "commands": 314,
+    "skills": 487,
+    "commands": 315,
     "agents": 173
   },
   "packs": [
@@ -4668,7 +4668,7 @@
     {
       "name": "ops-pack",
       "displayName": "MSP Operations",
-      "version": "0.1.4",
+      "version": "0.2.1",
       "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
@@ -4699,6 +4699,10 @@
           "path": "msp-claude-plugins/ops-pack/skills/dispatch-prioritization/SKILL.md"
         },
         {
+          "id": "repeat-ticket-root-cause",
+          "path": "msp-claude-plugins/ops-pack/skills/repeat-ticket-root-cause/SKILL.md"
+        },
+        {
           "id": "sla-escalation-playbooks",
           "path": "msp-claude-plugins/ops-pack/skills/sla-escalation-playbooks/SKILL.md"
         }
@@ -4711,6 +4715,10 @@
         {
           "id": "morning-huddle",
           "path": "msp-claude-plugins/ops-pack/commands/morning-huddle.md"
+        },
+        {
+          "id": "repeat-tickets",
+          "path": "msp-claude-plugins/ops-pack/commands/repeat-tickets.md"
         },
         {
           "id": "sla-breaches",

@@ -2715,11 +2715,13 @@ export const plugins: Plugin[] = [
     features: [
       'Board Hygiene',
       'Dispatch Prioritization',
+      'Repeat Ticket Root Cause',
       'Sla Escalation Playbooks'
     ],
     skills: [
       { name: 'board-hygiene', description: 'Board-wide ticket maintenance, distinct from working any single ticket: stale-ticket detection with per-status staleness thresholds, the Waiting-on-Client rot case and its three valid resolutions, duplicate/related-ticket detection signals and safe linking, and technician queue-balance assessment weighted by more than raw ticket count.' },
       { name: 'dispatch-prioritization', description: 'Priority scoring and assignment for an unassigned PSA ticket queue: the scoring factors (SLA proximity, client tier, ticket age, technician load, skill/category match), how to combine them into an explainable ranked order rather than a black-box formula, and the tool-discovery pattern for finding which PSA and RMM connectors are actually live before calling any vendor\'s tools.' },
+      { name: 'repeat-ticket-root-cause', description: 'Finds problems that keep coming back by grouping 90 days of PSA tickets, closed ones included, by device, user and normalized issue type: how to pull the history from each PSA family, what counts as a pattern, how to separate recurrence from a one-off burst or a single noisy user, how to propose one permanent fix per pattern, and how to hand the result over as a draft problem ticket for a technician to approve.' },
       { name: 'sla-escalation-playbooks', description: 'A cross-PSA escalation framework for SLA pressure: how each PSA family (Autotask, HaloPSA, ConnectWise Manage, Syncro, Kaseya BMS) models SLA/priority state and where breach risk lives in each, a normalized breach-risk state model (healthy, at risk, breached-response, breached-resolution) with the default escalation action per state, how notification audience shifts by contract tier, and the evidence to gather before paging anyone.' }
     ],
     agents: [
@@ -2730,6 +2732,7 @@ export const plugins: Plugin[] = [
     commands: [
       { name: '/eod-handoff', description: 'Generate an end-of-day handoff summary - open high-priority tickets, items awaiting next-shift action, and overnight on-call context if available' },
       { name: '/morning-huddle', description: 'Daily kickoff report - SLA-at-risk count, unassigned queue size, yesterday\'s closed vs. opened, and any overnight escalations' },
+      { name: '/repeat-tickets', description: 'Find recurring problems across 90 days of closed and open tickets and draft one problem ticket per pattern' },
       { name: '/sla-breaches', description: 'List tickets currently breaching or about to breach SLA within a time window, sorted by urgency' }
     ],
     apiInfo: {
