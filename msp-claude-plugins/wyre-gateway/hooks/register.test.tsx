@@ -164,6 +164,9 @@ test('redaction stays linear on adversarial key, value and quote shapes', async 
     'password="'.repeat(20_000),
     `password="${'x\\"'.repeat(50_000)}`,
     `{"a":"${'\\\\\\"'.repeat(30_000)}"}`,
+    '-----BEGIN RSA PRIVATE KEY-----'.repeat(40_000),
+    `-----BEGIN RSA PRIVATE KEY-----${'-----END RSA PRIVATE KEY-----'.repeat(40_000)}`,
+    `[{"token": "abc\\\n"${', "k": "v\\\n"'.repeat(30_000)}]`,
   ]
   for (const text of hostile) {
     const started = performance.now()
@@ -187,6 +190,27 @@ test('a plain-text result scrubs a prose or key=value password with a quote or b
   for (const text of ['The new password is Xy7"Hunter2', 'password=ab"Hunter2', 'password: Xy7\\Hunter2']) {
     expect(redact(text)).not.toContain('Hunter2')
   }
+})
+
+test('a plain-text result with escaped JSON strings inside is decoded before it is scrubbed', async () => {
+  for (const text of [
+    'Found 1 ticket:\n{"note":"a\\npassword: Hunter2"}',
+    'Result: [{"note":"x\\tpassword=Hunter2"}]',
+  ]) {
+    expect(redact(text)).not.toContain('Hunter2')
+  }
+})
+
+test('a backslash before a raw newline does not hide later secrets', async () => {
+  const text = '[{"token": "abc\\\n", "password": "Hunter2", "note": "a\\npassword: Hunter3"}]'
+  expect(redactText(text)).not.toMatch(/Hunter2|Hunter3/)
+})
+
+test('a private key block is redacted, and an unterminated one is left alone', async () => {
+  const key = '-----BEGIN RSA PRIVATE KEY-----\nMIIabc\n-----END RSA PRIVATE KEY-----'
+  expect(redactText(`k: ${key} tail`)).toBe('k: [redacted] tail')
+  expect(redactText(`${key} and ${key}`)).toBe('[redacted] and [redacted]')
+  expect(redactText('-----BEGIN RSA PRIVATE KEY-----\nMIIabc')).toContain('MIIabc')
 })
 
 test('a prose password with a backslash or quote is scrubbed whole (cipp_reset_password)', async () => {

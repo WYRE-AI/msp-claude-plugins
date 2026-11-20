@@ -148,8 +148,13 @@ function luhn(digits: string): boolean {
 // A bare value runs to whitespace or a delimiter, and may not open an object or
 // array. In JSON text a quote ends it (it closes the string around it); in text
 // decoded out of a JSON string a quote is an ordinary password character.
+// Trade-off: in plain mode, JSON embedded after a prose prefix ('Result: {"note":
+// "password=x","id":5}') loses the closing quote of the redacted value and no
+// longer parses. The secret is still removed.
 const bareValue = (plain: boolean) => `[^\\s,;{}[\\]${plain ? '' : '"'}][^\\s,;}\\]${plain ? '' : '"'}]*`
-const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\.)*"`
+// A backslash escapes any one character, a line terminator included, so a closing
+// quote is found whenever one exists and "unclosed" really means "unclosed to the end".
+const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\[\s\S])*"`
 
 // Every scan below is linear: the global pattern matches only a key and its
 // separator, and the value is read (sticky, from where the separator ended) only
@@ -241,13 +246,31 @@ function scrubEscapedStrings(text: string): string {
   return out + text.slice(from)
 }
 
+// Each BEGIN takes the next END marker. With no END left, no later BEGIN can find
+// one either, so stop: a lazy regex would rescan to the end of the text per BEGIN.
+function scrubPrivateKeys(text: string): string {
+  const begin = /-----BEGIN [A-Z ]*PRIVATE KEY-----/g
+  const end = /-----END [A-Z ]*PRIVATE KEY-----/g
+  let out = ''
+  let from = 0
+  for (let b = begin.exec(text); b; b = begin.exec(text)) {
+    end.lastIndex = begin.lastIndex
+    if (!end.exec(text)) break
+
+    out += text.slice(from, b.index) + REDACTED
+    from = begin.lastIndex = end.lastIndex
+  }
+
+  return out + text.slice(from)
+}
+
 const replacing = (pattern: RegExp, replace: (...m: string[]) => string) => (text: string) =>
   text.replace(pattern, replace)
 
 // Text decoded out of a JSON string (plain) has no string literals left to decode.
 const buildRules = (plain: boolean): ((text: string) => string)[] => [
   ...(plain ? [] : [scrubEscapedStrings]),
-  replacing(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, () => REDACTED),
+  scrubPrivateKeys,
   replacing(/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`),
   replacing(/\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/g, () => REDACTED),
   replacing(/\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g, () => REDACTED),
@@ -276,7 +299,11 @@ export function redactText(text: string, plain = false): string {
 // Walks any tool result (MCP content blocks, structuredContent, plain strings):
 // strings are scrubbed, and a string under a secret-looking key is dropped whole.
 export function redact(value: unknown, key = ''): unknown {
-  if (typeof value === 'string') return isSecretKey(key) ? REDACTED : redactText(value, !looksLikeJson(value))
+  if (typeof value === 'string') {
+    if (isSecretKey(key)) return REDACTED
+    // Text that is not JSON may still hold escaped JSON strings: decode them first.
+    return looksLikeJson(value) ? redactText(value) : redactText(scrubEscapedStrings(value), true)
+  }
   if (Array.isArray(value)) return value.map(item => redact(item, key))
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, redact(v, k)]))
