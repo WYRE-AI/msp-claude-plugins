@@ -4,6 +4,9 @@
 export const REDACTED = '[redacted]'
 
 // mcp__<server>__<vendor>__<action>, where <server> is the Conduit connector.
+// The gateway always emits a vendor segment (<slug>__<tool>, conduit__run_code),
+// so mcp__<server>__<tool> with no vendor (conduit-blog, a wyre docs server) is
+// some other MCP server and is not guarded.
 // Matches the plugin-served connector (mcp__plugin_wyre-gateway_msp-mcp-gateway__...),
 // the claude.ai-synced one (mcp__claude_ai_Conduit_Gateway__...) and hand-added
 // servers whose name contains conduit, wyre or msp-gateway anywhere
@@ -60,13 +63,10 @@ export type ConduitCall = {
 
 // Returns null for a tool that does not come from the Conduit gateway.
 export function classify(tool: string): ConduitCall | null {
-  const [prefix, server = '', ...tail] = tool.split('__')
-  if (prefix !== 'mcp' || !CONDUIT_SERVER.test(server) || tail.length === 0) return null
+  const [prefix, server = '', vendor, ...rawParts] = tool.split('__')
+  if (prefix !== 'mcp' || !CONDUIT_SERVER.test(server) || !vendor || rawParts.length === 0) return null
 
-  const rest = tail.join('__')
-  const parts = rest.split('__')
-  const vendor = parts.length > 1 ? parts[0] : rest.split('_')[0]
-  const raw = parts.length > 1 ? parts.slice(1).join('__') : rest
+  const raw = rawParts.join('__')
   // Conduit also names tools <vendor>_<action>: drop the repeated vendor.
   const action = raw.startsWith(`${vendor}_`) ? raw.slice(vendor.length + 1) : raw
   const words = action.split('_')
@@ -145,6 +145,18 @@ function luhn(digits: string): boolean {
   return sum % 10 === 0
 }
 
+// A bare value runs to whitespace or a delimiter. In JSON text a backslash starts
+// an escape: \" and \\ belong to the value (stopping there leaks the rest of
+// Xy7\abc or leaves a stray quote), while \n, \r and \t are whitespace and end it.
+// The first character may not open an object or array.
+const ESCAPE = String.raw`\\[^nrt]`
+const UNQUOTED_VALUE = `(?:[^\\s,;{}[\\]"\\\\]|${ESCAPE})(?:[^\\s,;}\\]"\\\\]|${ESCAPE})*`
+const INSIDE_STRING = new RegExp(`\\b([\\w-]+)(\\s*[:=]\\s*)${UNQUOTED_VALUE}`, 'g')
+
+function scrubSecretPair(all: string, key: string, sep: string): string {
+  return isSecretKey(key) ? `${key}${sep}${REDACTED}` : all
+}
+
 const TEXT_RULES: [RegExp, (...m: string[]) => string][] = [
   [/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, () => REDACTED],
   [/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`],
@@ -157,15 +169,27 @@ const TEXT_RULES: [RegExp, (...m: string[]) => string][] = [
   // replacing only the opener would leave the rest dangling. Secret keys nested
   // inside it are scrubbed by this same rule.
   [
-    /("?)([\w-]+)("?\s*[:=]\s*)("(?:[^"\\]|\\.)*"|[^\s,;{}[\]"][^\s,;}\]"]*)/g,
-    (all, open, key, sep, value) =>
-      !isSecretKey(key)
-        ? all
-        : `${open}${key}${sep}${value.startsWith('"') || open === '"' ? `"${REDACTED}"` : REDACTED}`,
+    new RegExp(`("?)([\\w-]+)("?\\s*[:=]\\s*)("(?:[^"\\\\]|\\\\.)*"|${UNQUOTED_VALUE})`, 'g'),
+    (all, open, key, sep, value) => {
+      if (isSecretKey(key)) {
+        // Quote the value when it was quoted or the key was a JSON key ("password":).
+        // A key inside a string ("Password: x") has no closing quote of its own.
+        const quote = value.startsWith('"') || (open === '"' && sep.startsWith('"'))
+        return `${open}${key}${sep}${quote ? `"${REDACTED}"` : REDACTED}`
+      }
+
+      // A non-secret key keeps its string, but a note field can still hold
+      // "Password: x": scrub inside the string and keep its quotes.
+      return value.startsWith('"')
+        ? `${open}${key}${sep}"${value.slice(1, -1).replace(INSIDE_STRING, scrubSecretPair)}"`
+        : all
+    },
   ],
   // Prose: "The new password is Xy7!abc" (cipp_reset_password answers like this).
-  // The value stops at a quote or backslash so a JSON string keeps its closing quote.
-  [/\b(pass(?:word|code|wd)\s+(?:is|was)\s*:?\s+)[^\s,;"\\]+/gi, (_all, lead) => `${lead}${REDACTED}`],
+  [
+    new RegExp(`\\b(pass(?:word|code|wd)\\s+(?:is|was)\\s*:?\\s+)${UNQUOTED_VALUE}`, 'gi'),
+    (_all, lead) => `${lead}${REDACTED}`,
+  ],
   [/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED],
   // Cards: only a grouped number (4-4-4-4 or Amex 4-6-5, spaces or dashes) that
   // passes Luhn. Bare digit runs are never touched: about 1 in 10 timestamps and

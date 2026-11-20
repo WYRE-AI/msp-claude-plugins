@@ -42,6 +42,10 @@ test('classify reads gateway tool names of both shapes', async () => {
   expect(classify('mcp__conduit-prod__autotask__autotask_update_ticket')?.kind).toBe('write')
   expect(classify('mcp__wyre-conduit-staging__autotask__autotask_update_ticket')?.kind).toBe('write')
   expect(classify('mcp__claude_ai_Conduit_Gateway__autotask__autotask_update_ticket')?.kind).toBe('write')
+  // Other MCP servers whose name merely contains conduit or wyre: no vendor segment.
+  expect(classify('mcp__conduit-blog__list_posts')).toBeNull()
+  expect(classify('mcp__claude_ai_Wyre_Docs__search_docs')).toBeNull()
+  expect(classify('mcp__conduit__conduit__run_code')).toMatchObject({ vendor: 'conduit', kind: 'destructive' })
   expect(classify('mcp__other__thing__update')).toBeNull()
   expect(classify('Bash')).toBeNull()
 })
@@ -107,6 +111,29 @@ test('a password stated in prose is scrubbed (cipp_reset_password)', async () =>
   const out = redactText(cipp)
   expect(out).not.toMatch(/Xy7/)
   expect(JSON.parse(out).id).toBe(1)
+})
+
+test('a credential written inside a JSON string value is scrubbed and the JSON stays valid', async () => {
+  for (const [note, leaked] of [
+    ['Password: Hunter2!', 'Hunter2'],
+    ['password=abc123', 'abc123'],
+    ['api_key=sk_live_xyz more', 'sk_live_xyz'],
+    ['password=ab"cd\nnext line', 'cd'],
+  ] as const) {
+    const out = redactText(JSON.stringify({ note, id: 1 }))
+    expect(out).not.toContain(leaked)
+    expect(JSON.parse(out).id).toBe(1)
+  }
+  expect(redactText('"Password: x"')).toBe('"Password: [redacted]"')
+  expect(JSON.parse(redactText('{"note":"see ticket 12: done"}')).note).toBe('see ticket 12: done')
+})
+
+test('a prose password with a backslash or quote is scrubbed whole (cipp_reset_password)', async () => {
+  for (const password of ['Xy7\\abc', 'Xy7"abc']) {
+    const out = redactText(JSON.stringify({ Results: `The new password is ${password}` }))
+    expect(out).not.toMatch(/abc/)
+    expect(JSON.parse(out).Results).toBe('The new password is [redacted]')
+  }
 })
 
 test('redaction scrubs credentials and PII, keeps JSON valid', async () => {
