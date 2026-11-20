@@ -125,7 +125,8 @@ dropped out of the schedule, a run that now lands at 09:00 instead of 02:00.
 Score every protected unit by comparing the last 7 days against the 7 days
 before them, which needs at least 14 days of job history. Where a connector
 returns less, say the window you could actually cover and score only what it
-supports.
+supports. "Improving" and week-over-week offsite growth need a further
+baseline: last week's report, or 21 days of history.
 
 | Signal | Compare (this week vs prior week) | Drifting (1 pt) | Degrading (2 pts) |
 |---|---|---|---|
@@ -134,13 +135,17 @@ supports.
 | Duration drift | Median run duration, only where runs carry start and end times | Up 25% or more | Up 100% or more, for 3 or more consecutive runs |
 | Silent skip | Assets or seats in the unit's inventory with no run recorded in the last 7 days but with runs in the prior 7 | One asset | Two or more, or any Tier 1 asset |
 | Verification slip (image-based only) | Screenshot verification failure share | Any new failure | Failure on 2 or more consecutive screenshots |
-| Offsite lag (Datto BCDR) | Gap between newest local recovery point and newest offsite point | Gap grew week over week | Gap over 48 hours |
+| Offsite lag (Datto BCDR) | Gap between newest local recovery point and newest offsite point | Gap grew week over week (only with a prior report; the offsite tool returns current status only) | Gap over 48 hours |
 | Storage growth | Daily growth rate, as in Storage-consumption trending above | Rate doubled | Projected full inside 30 days |
 
-Sum the points per unit. 0 is Stable, 1-2 is Drifting, 3 or more is Degrading.
-A unit that is Stable this week but Degrading last week is Improving; say so,
-because it tells the reader a fix worked. Never average away a live failure
-streak: any unit with a current streak is Degrading regardless of its points.
+Sum the points per unit. A unit is Degrading if any single signal reaches the
+Degrading column or the total is 3 or more; otherwise 0 is Stable and 1-2 is
+Drifting. A unit that is Stable this week but was Degrading last week is
+Improving; say so, because it tells the reader a fix worked. That needs last
+week's score from the previous weekly report (or 21 days of history); without
+one, report Improving as not assessable and score offsite lag only against the
+48-hour threshold. Never average away a live failure streak: any unit with a
+current streak is Degrading regardless of its points.
 
 Duration drift and offsite lag are only as good as the fields the connector
 returns. If a run record carries no start and end time, mark duration "unable
@@ -152,7 +157,8 @@ unit's success rate stays at 100%, so compare the asset or seat *inventory*
 against the assets or seats that actually appear in job history.
 
 **Draft tickets, never created tickets.** For every Degrading unit, and every
-Drifting unit that is also Tier 1, draft one ticket per client (not per unit)
+Drifting unit that is also Tier 1 (criticality tiers as defined in
+`restore-test-verification`), draft one ticket per client (not per unit)
 as text for a technician to review: client, the units and signals involved with
 the numbers behind them, last good run, and a suggested first check chosen to
 match the signal (credentials and agent check-in for silent skips, disk and
@@ -175,8 +181,8 @@ Names below are the connected servers' own tools; confirm with
 | Need | Datto BCDR | Unitrends | Datto SaaS Protection | Spanning |
 |---|---|---|---|---|
 | Inventory of protected units | `datto_bcdr_list_devices`, `datto_bcdr_list_assets` | `unitrends_list_appliances`, `unitrends_list_assets` | `datto_saas_list_domains`, `datto_saas_list_seats` | `spanning_list_services`, `spanning_list_users` |
-| Run history | `datto_bcdr_list_backups` (recovery points per asset) | `unitrends_list_job_history`, `unitrends_list_recovery_points` | `datto_saas_list_applications` (`daysUntil: 14` to cover two weeks), `datto_saas_get_backup_stats` (last-7-day status per service) | `spanning_list_backups` |
-| Verification and offsite | `datto_bcdr_list_screenshots`, `datto_bcdr_get_offsite_status` | n/a | n/a | n/a |
+| Run history | `datto_bcdr_list_backups` (recovery points per asset) | `unitrends_list_job_history` (most recent page only, see below), `unitrends_list_recovery_points` | `datto_saas_list_applications` (`daysUntil: 14` to cover two weeks), `datto_saas_get_backup_stats` (last-7-day status per service) | `spanning_list_backups` |
+| Verification and offsite | `datto_bcdr_list_screenshots`, `datto_bcdr_get_offsite_status` | `verifyState` (verified, unverified, failed) on each `unitrends_list_job_history` record | n/a | n/a |
 | Alerts | `datto_bcdr_list_alerts` | `unitrends_list_alerts` | n/a | n/a |
 | Pre-computed rate | n/a | `unitrends_get_success_rate` (pair with job history; a wide window hides recency) | n/a | n/a |
 
@@ -184,11 +190,15 @@ ScalePad Backup Radar (`scalepad_br_backups_list_health`) can supply a
 cross-vendor health record per device when it is connected; it is a convenient
 cross-check, not a substitute for per-vendor run history.
 
-Two scope traps change a trend. Spanning connections are bound to one platform
+Three scope traps change a trend. Spanning connections are bound to one platform
 (M365, Google Workspace or Salesforce), and Spanning and Datto SaaS Protection
 often protect the same mailboxes, so a "dropped" seat may simply live under the
 other product. Unitrends answers per appliance: a clean result from one box says
-nothing about the other nineteen.
+nothing about the other nineteen. And `unitrends_list_job_history` accepts
+`since` and `until` but ignores them, returning only the most recent page
+whatever the range. Derive the window actually covered from the returned
+`startTime` values, and mark the unit's trend "unavailable" when that is under
+14 days.
 
 ## Common Workflows
 
@@ -211,7 +221,12 @@ nothing about the other nineteen.
 
 1. Discover connected backup/BCDR tools via `conduit__search_tools`.
 2. Pull 14 days of run history, inventory and (for image-based tools) screenshot
-   and offsite status per protected unit, per the Tools table.
+   and offsite status per protected unit, per the Tools table. Always pass
+   explicit `since`/`until` to `datto_bcdr_list_alerts`,
+   `unitrends_list_job_history`, `unitrends_get_success_rate` and
+   `spanning_list_audit_log`, and the serial number (from
+   `datto_bcdr_list_devices`) to `datto_bcdr_list_assets`; omitted, these prompt
+   the user and stall a scheduled run.
 3. Score each unit against the trend table and label it Stable, Drifting,
    Degrading or Improving.
 4. Roll up per client: worst unit label, count of units in each label, and the

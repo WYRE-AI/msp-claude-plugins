@@ -27,7 +27,7 @@ and BCDR tools the org has connected through the gateway.
 2. **Invoke the `backup-health-auditor` agent** for the full portfolio (no client
    scope). If `mode` is `trend`, ask it for trend mode: 14 days of history scored
    7-versus-7 days per protected unit, rolled up per client, with draft tickets
-   for Degrading clients. Nothing is created in the PSA. The agent normalizes image-based appliance backups and SaaS-data snapshot
+   for clients with a Degrading unit or a Drifting Tier 1 unit. Nothing is created in the PSA. The agent normalizes image-based appliance backups and SaaS-data snapshot
    backups into one comparable health view per the `backup-job-health` skill.
 
 3. **Assemble and return the snapshot**, in the order: active failure streaks →

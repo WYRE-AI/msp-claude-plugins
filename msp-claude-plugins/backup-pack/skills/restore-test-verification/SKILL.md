@@ -117,14 +117,19 @@ of recovery.
 
 | State | Meaning |
 |---|---|
-| Current | Evidence of type 1-4 dated inside the tier window |
-| Due | Evidence is older than 75% of the window |
-| Overdue | Evidence is older than the window |
+| Current | Evidence of type 1, 2 or 4 dated inside the tier window, or type 3 (screenshot) for Tier 3 |
+| Due | Newest qualifying evidence is older than 75% of the window |
+| Overdue | Newest qualifying evidence is older than the window |
 | Never tested | No type 1-4 evidence found anywhere checked |
-| Continuous only | Only screenshot verification (type 3), no drill. Acceptable for Tier 3 where the vendor offers it; Due for Tier 1 and 2 once the drill window lapses |
+
+For Tier 1 and 2, screenshot verification alone does not make a system
+Current: age it by the newest type 1, 2 or 4 evidence, and treat a system with
+screenshots but no drill on record as Overdue.
 
 Client roll-up: the client takes the worst state among its Tier 1 systems, then
-Tier 2, then Tier 3. Report the oldest evidence age and the count of systems in
+Tier 2, then Tier 3. SaaS tenants (the semi-annual row above) roll up as Tier 2
+unless the org documents them as Tier 1, and the ticket rule below treats them
+that way. Report the oldest evidence age and the count of systems in
 each state, not an average. A client with ten Current workstations and one
 Never-tested domain controller is a Never-tested client.
 
@@ -133,8 +138,8 @@ Where each kind of evidence lives, since few tools log a manual drill:
 | Evidence | Where to look |
 |---|---|
 | Screenshot or boot verification | `datto_bcdr_list_screenshots` per asset; read the status and timestamp of the newest passing result, and count consecutive failures |
-| Restore or recovery events on appliances | `unitrends_list_job_history` and `unitrends_list_recovery_points`; look for restore-type entries rather than backup runs |
-| SaaS restores | `spanning_list_audit_log` (administrative actions including restores; admin-tier read), and for Datto SaaS Protection the PSA or documentation record, since the connector exposes backup status but no restore history |
+| Restore or recovery events on appliances | `unitrends_list_job_history` and `unitrends_list_recovery_points`; look for restore-type entries rather than backup runs. Job history returns only the most recent page whatever `since`/`until` say, so older restore jobs may be missing; treat absence there as inconclusive |
+| SaaS restores | `spanning_list_audit_log` (the admin audit log, including restores; Read tier), and for Datto SaaS Protection the PSA or documentation record, since the connector exposes backup status but no restore history |
 | Deliberate DR drills and spot-check restores | PSA tickets (search closed tickets with restore, DR test or recovery drill wording against the client) and the client's DR runbook or documentation page in IT Glue or Hudu |
 
 A restore found only in a PSA ticket is type 1 or 4 evidence only if the ticket
