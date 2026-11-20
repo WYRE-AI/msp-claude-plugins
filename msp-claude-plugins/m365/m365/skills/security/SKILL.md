@@ -118,7 +118,7 @@ This is the fastest path to a full tenant MFA audit.
 | OATH hardware token | High | |
 | Microsoft Authenticator (OTP) | Medium | Better than SMS |
 | Software OATH (other app) | Medium | |
-| SMS/Phone | Low | Susceptible to SIM swap |
+| SMS/Phone | Low | Susceptible to SIM swap; as a first factor ("Use for sign-in") it is an exposure, see the SMS sweep skill |
 | Password only | None | **Unacceptable for business** |
 
 ## Sign-In Risk and Risky Users
@@ -274,3 +274,6 @@ When a user reports suspicious activity, check these in order:
 - [M365 Users](../users/SKILL.md) - Disable account, revoke sessions
 - [M365 Mailboxes](../mailboxes/SKILL.md) - Inbox rule details, send-on-behalf audit
 - [M365 API Patterns](../api-patterns/SKILL.md) - Auth, audit log query patterns
+- [Entra SMS Sign-In Sweep](../sms-signin-sweep/SKILL.md) - SMS as a first factor, privileged accounts with SMS or voice, and the 2027 retirement, across tenants
+- [Microsoft 365 Reseller Control Audit](../reseller-control-audit/SKILL.md) - Who holds Global Administrator, including service principals and reseller partner groups
+- [Microsoft 365 Outage Response](../outage-response/SKILL.md) - Service-health incidents, client comms and SLA credit claims
