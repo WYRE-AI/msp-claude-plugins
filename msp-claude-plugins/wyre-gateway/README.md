@@ -140,8 +140,12 @@ Claude Code runs the `hooks/` mod in this plugin. It adds client-safety controls
 |---|---|
 | Active client | A line above the prompt: `Client: Acme`. With none selected it reads `Client: none selected. Conduit writes are blocked.` Set it with `/client Acme`; `/client` alone clears it. It starts empty every session and never defaults to the last client. |
 | Write confirm | Every PSA/RMM write and destructive Conduit call asks: `autotask.update_ticket: Write in PSA, fields: id, status. Allow write on Acme?` with `Allow for Acme` or `Cancel`. Never a bare Allow. If the input names a different client (for example `companyName: Globex`) the question opens with a WARNING. |
-| Fail closed | No active client, a dismissed dialog or an error inside the guard all block the call with `Guard unavailable — write blocked (Acme)`. |
-| Redaction | Gateway tool results are scrubbed before the model reads them: password, secret, token and API-key fields, bearer tokens, JWTs, AWS keys, private key blocks, SSNs and card numbers become `[redacted]`. This includes IT Glue and Hudu password values by design. |
+| Fail closed | A write is blocked, never silently allowed. No active client: `wyre-guard: no active client, write blocked. Ask the tech to run /client <name> first.` Cancel: `wyre-guard: <tool> on Acme was cancelled.` A dismissed dialog or an error inside the guard: `wyre-guard: Guard unavailable — write blocked (Acme).` If redaction fails after a tool has already run, the model is told `<tool> ran; its result was withheld by wyre-guard. Do not retry the call.` so it does not repeat the write. |
+| Redaction | Gateway tool results are scrubbed before the model reads them: values under keys that end in password, secret, token, API key, private key, authorization or OTP (`clientSecret`, `refresh_token`; not `tokenExpiry` or `passwordNeverExpires`), bearer tokens, JWTs, AWS keys, private key blocks, SSNs and grouped card numbers (`4111 1111 1111 1111`, Luhn-checked) become `[redacted]`. A password stated in prose (`The new password is ...`) is scrubbed too, so the temporary password from `cipp_reset_password` is withheld from the model and the tech must read it in CIPP. This includes IT Glue and Hudu password values by design. Bare digit runs such as IDs and epoch timestamps are never touched. |
+
+The cross-client warning also checks the Microsoft 365 tenant (`tenantFilter`, `tenantId`, `defaultDomainName`) and always warns on `allTenants`.
+
+The guard covers Conduit tools served by this plugin's `msp-mcp-gateway` server, the claude.ai-synced Conduit connector, and hand-added MCP servers whose name contains `conduit`, `wyre` or `msp-gateway`. A Conduit connection added under any other server name is not guarded.
 
 A call counts as a write unless every word of its action is a known read verb (`get`, `list`, `search`, ...). Unknown actions such as `raw_request` or `custom_mutation` ask. The guard tags the active client and the tool on the status line for every gateway call, reads included.
 
@@ -150,7 +154,7 @@ The guard is a local safety net for the tech's own session. It does not replace 
 ### MSP Team and Enterprise admins
 
 1. Allowlist the `WYRE-AI/msp-claude-plugins` marketplace in managed settings (`strictKnownMarketplaces`).
-2. Pin `wyre-gateway` in managed `enabledPlugins` next to Anthropic's `sec-default` mod so techs cannot drop the guard.
+2. Pin `wyre-gateway` in managed `enabledPlugins` next to Anthropic's `sec-default` mod so techs cannot drop the guard. A tech can still add Conduit under a server name the guard does not recognise, so also restrict which MCP servers can be added (`allowedMcpServers`).
 3. Keep the Conduit connector's own per-tool policy on; the mod is a second layer, not the first.
 
 Ticket/SLA side pane and a client picker fed from the PSA are not part of this pilot.

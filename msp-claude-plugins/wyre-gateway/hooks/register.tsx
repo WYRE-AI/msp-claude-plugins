@@ -2,7 +2,7 @@
 //
 // 1. Active-client chip above the prompt, set only by `/client <name>`.
 // 2. Every write or destructive Conduit tool call asks first, naming the client
-//    and the tool. No active client, or a guard failure, blocks the write.
+//    and the tool. No active client, Cancel, or a guard failure blocks the write.
 // 3. Tool results from the gateway are scrubbed of credentials and PII.
 //
 // Claude Code only. Cowork and chat installs never load hooks/, so they keep
@@ -69,14 +69,22 @@ export const register: Register = on => {
     const ran = await next(e)
     if (ran.deny !== undefined) return ran
 
-    return {
-      result: redact(ran.result),
-      ...(ran.context && { context: ran.context.map(line => String(redact(line))) }),
-      ...(ran.isError && { isError: true as const }),
+    // The tool has already run: a redaction failure must not read as "blocked",
+    // or the model retries and repeats the write.
+    try {
+      return {
+        result: redact(ran.result),
+        ...(ran.context && { context: ran.context.map(line => String(redact(line))) }),
+        ...(ran.isError && { isError: true as const }),
+      }
+    } catch {
+      return {
+        deny: `wyre-guard: ${label} ran; its result was withheld by wyre-guard. Do not retry the call.`,
+      }
     }
   }).catch(async ($, e) => {
-    // Fail closed: a guard error, a dismissed dialog or a redaction failure
-    // never lets the call through, and the client stays named.
+    // Fail closed: a guard error or a dismissed dialog never lets the call
+    // through, and the client stays named.
     const active = await read($, client).catch(() => null)
     const call = classify(e.tool)
     const what = call?.kind === 'read' ? 'call' : 'write'

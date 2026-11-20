@@ -1,11 +1,11 @@
 import { expect, test } from 'claude-code/testing'
 
-import { classify, mismatches, redact, redactText } from './guard'
+import { classify, mismatches, redact, redactText, toolInput } from './guard'
 
 const UPDATE = 'mcp__plugin_wyre-gateway_msp-mcp-gateway__autotask__autotask_update_ticket'
 const SEARCH = 'mcp__plugin_wyre-gateway_msp-mcp-gateway__autotask__autotask_search_tickets'
 
-async function start($: any, on: any, answer: string | Error) {
+async function start($: any, on: any, answer: string | Error, result?: () => unknown) {
   const asked: string[] = []
   on('command.register', () => ({ value: { command: 'client' } }))
   on('session.start', (_: any, e: any) => ({ cwd: e.cwd }))
@@ -18,7 +18,7 @@ async function start($: any, on: any, answer: string | Error) {
     }
 
     return {
-      result: { content: [{ type: 'text', text: '{"password":"hunter2","id":7}' }], isError: false },
+      result: result?.() ?? { content: [{ type: 'text', text: '{"password":"hunter2","id":7}' }], isError: false },
     }
   })
   await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
@@ -36,6 +36,9 @@ test('classify reads gateway tool names of both shapes', async () => {
   expect(classify('mcp__conduit__cipp__cipp_reset_password')?.kind).toBe('destructive')
   expect(classify('mcp__conduit__conduit__audit_log')?.kind).toBe('read')
   expect(classify('mcp__conduit__x__set_status')?.kind).toBe('write')
+  expect(classify('mcp__claude_ai_Conduit__autotask__autotask_update_ticket')).toMatchObject({ vendor: 'autotask', kind: 'write' })
+  expect(classify('mcp__wyre__cipp__cipp_reset_password')?.kind).toBe('destructive')
+  expect(classify('mcp__msp-gateway__autotask__autotask_update_ticket')?.kind).toBe('write')
   expect(classify('mcp__other__thing__update')).toBeNull()
   expect(classify('Bash')).toBeNull()
 })
@@ -43,6 +46,51 @@ test('classify reads gateway tool names of both shapes', async () => {
 test('mismatches flags a client name that is not the active one', async () => {
   expect(mismatches('Acme', { companyName: 'Globex Corp', title: 'x' })).toEqual(['Globex Corp'])
   expect(mismatches('Acme', { companyName: 'Acme Inc' })).toEqual([])
+})
+
+test('mismatches flags a CIPP tenant that is not the active client, and allTenants', async () => {
+  expect(mismatches('Acme', { tenantFilter: 'globex.onmicrosoft.com', userId: 'u1' })).toEqual(['globex.onmicrosoft.com'])
+  expect(mismatches('Acme Corp', { tenantFilter: 'acmecorp.onmicrosoft.com' })).toEqual([])
+  expect(mismatches('Acme', { tenantFilter: 'allTenants' })).toEqual(['allTenants'])
+  expect(mismatches('Acme', { tenant_id: 'Globex', defaultDomainName: 'globex.com' })).toEqual(['Globex', 'globex.com'])
+})
+
+test('toolInput drops engine keys including requestMeta', async () => {
+  expect(toolInput({ tool: 't', tool_use_id: 'i', agentId: 'a', consent: 1, requestMeta: {}, id: 7 })).toEqual({ id: 7 })
+})
+
+test('redaction keeps JSON valid for non-secret keys and non-string values', async () => {
+  const user = '{"passwordNeverExpires":false,"tokenCount":5,"lastPasswordChangeDateTime":"2026-01-01"}'
+  expect(redactText(user)).toBe(user)
+  const out = redactText('{"token":5,"password":false,"api_key":"k","accessToken":"t"}')
+  expect(JSON.parse(out)).toEqual({ token: '[redacted]', password: '[redacted]', api_key: '[redacted]', accessToken: '[redacted]' })
+})
+
+test('redact anchors the secret key', async () => {
+  const kept = { rootPath: 'C:\\data', footprint: 'small', bypassReason: 'x', passedChecks: 'y', tokenExpiry: 'z' }
+  expect(redact(kept)).toEqual(kept)
+  expect(redact({ clientSecret: 'a', refresh_token: 'b', apiKey: 'c', Password: 'd', otp: 'e' })).toEqual({
+    clientSecret: '[redacted]',
+    refresh_token: '[redacted]',
+    apiKey: '[redacted]',
+    Password: '[redacted]',
+    otp: '[redacted]',
+  })
+})
+
+test('redaction leaves 13-digit timestamps and 19-digit IDs alone, scrubs grouped cards', async () => {
+  // 1700000000008 and 1000000000000000009 both pass Luhn; they are not cards.
+  const ids = '{"ts":1700000000008,"id":"1000000000000000009","alert":4111111111111111}'
+  expect(redactText(ids)).toBe(ids)
+  expect(redactText('card 4111 1111 1111 1111 and 4111-1111-1111-1111 and 3782 822463 10005')).toBe(
+    'card [redacted] and [redacted] and [redacted]',
+  )
+  expect(redactText('order 4111 1111 1111 1112')).toBe('order 4111 1111 1111 1112')
+})
+
+test('a password stated in prose is scrubbed (cipp_reset_password)', async () => {
+  expect(redact({ Results: 'The new password is Xy7!abc' })).toEqual({ Results: 'The new password is [redacted]' })
+  expect(redactText('Temporary password: Xy7!abc')).not.toMatch(/Xy7/)
 })
 
 test('redaction scrubs credentials and PII, keeps JSON valid', async () => {
@@ -89,6 +137,19 @@ test('a dismissed dialog fails closed with the client named', async ($, on) => {
   await $.command.run({ command: 'client', args: 'Acme' })
   const ran = await $.tool.call({ tool: UPDATE, id: 1 })
   expect(ran.deny).toBe('wyre-guard: Guard unavailable — write blocked (Acme).')
+})
+
+test('a redaction failure after the tool ran says so, and does not read as blocked', async ($, on) => {
+  // A cyclic result cannot be walked: redact overflows the stack.
+  await start($, on, 'Allow for Acme', () => {
+    const cyclic: Record<string, unknown> = {}
+    cyclic.self = cyclic
+    return cyclic
+  })
+  await $.command.run({ command: 'client', args: 'Acme' })
+  const ran = await $.tool.call({ tool: UPDATE, id: 1 })
+  expect(ran.deny).toMatch(/ran; its result was withheld/)
+  expect(ran.deny).not.toMatch(/blocked/)
 })
 
 test('a read needs no confirmation but its result is redacted', async ($, on) => {

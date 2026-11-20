@@ -4,8 +4,10 @@
 export const REDACTED = '[redacted]'
 
 // mcp__<server>__<vendor>__<action>, where <server> is the Conduit connector.
-// A plugin-served connector is named mcp__plugin_wyre-gateway_msp-mcp-gateway__...
-const CONDUIT_TOOL = /^mcp__.*?(?:msp-mcp-gateway|conduit)__(.+)$/
+// Matches the plugin-served connector (mcp__plugin_wyre-gateway_msp-mcp-gateway__...),
+// the claude.ai-synced one (mcp__claude_ai_Conduit__...) and hand-added servers
+// named conduit, wyre or msp-gateway. A server under any other name is not guarded.
+const CONDUIT_TOOL = /^mcp__.*?(?:msp-mcp-gateway|msp-gateway|conduit|wyre)__(.+)$/i
 
 // Vendor slug (first segment) to the label shown in the confirm dialog.
 const DOMAIN: Record<string, string> = {
@@ -79,16 +81,24 @@ export function classify(tool: string): ConduitCall | null {
 
 // Input fields that name a client. A write whose input names a different
 // client than the active one is the Acme-data-to-Globex mistake this guards.
-const CLIENT_FIELD = /^(company|client|customer|organi[sz]ation|org|tenant|site)(_?name)?$/i
+// tenantFilter is how every CIPP tool scopes the Microsoft 365 tenant.
+const CLIENT_FIELD =
+  /^(?:(?:company|client|customer|organi[sz]ation|org|tenant|site)(?:_?name)?|tenant_?filter|tenant_?id|default_?domain_?name)$/i
+
+// CIPP fans out to every tenant on this value: always worth a warning.
+const ALL_TENANTS = /^all_?tenants$/i
+
+// "Acme Corp" must match the tenant "acmecorp.onmicrosoft.com": compare letters and digits only.
+const squash = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
 
 // Names in the tool input that do not match the active client.
 export function mismatches(active: string, input: Record<string, unknown>): string[] {
-  const want = active.trim().toLowerCase()
+  const want = squash(active)
   return Object.entries(input).flatMap(([key, value]) =>
     CLIENT_FIELD.test(key) &&
     typeof value === 'string' &&
     value.trim() !== '' &&
-    !value.toLowerCase().includes(want)
+    (ALL_TENANTS.test(value.trim()) || !squash(value).includes(want))
       ? [value.trim()]
       : [],
   )
@@ -96,7 +106,7 @@ export function mismatches(active: string, input: Record<string, unknown>): stri
 
 // The tool arguments: everything on the event but the engine's own keys.
 export function toolInput(e: object): Record<string, unknown> {
-  const { tool: _t, tool_use_id: _i, agentId: _a, consent: _c, ...input } = e as Record<string, unknown>
+  const { tool: _t, tool_use_id: _i, agentId: _a, consent: _c, requestMeta: _m, ...input } = e as Record<string, unknown>
   return input
 }
 
@@ -107,8 +117,19 @@ export function impact(call: ConduitCall, input: Record<string, unknown>): strin
   return `${what} in ${call.domain}${fields ? `, fields: ${fields}` : ''}`
 }
 
-const SECRET_KEY =
-  /pass(word|wd)?|secret|token|api[_-]?key|private[_-]?key|authorization|otp|totp|mfa[_-]?seed/i
+// The secret word must end the key, at a word or camelCase boundary:
+// client_secret, accessToken and apiKey match; tokenExpiry, rootPath, footprint
+// and passwordNeverExpires do not.
+const SECRET_WORD = /(?:^|_)(?:pass(?:word|wd)?|secret|token|api_?key|private_?key|authorization|otp|totp|mfa_?seed)s?$/
+
+function isSecretKey(key: string): boolean {
+  const words = key
+    .replace(/([a-z\d])([A-Z])/g, '$1_$2')
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1_$2')
+    .replace(/[^A-Za-z\d]+/g, '_')
+    .toLowerCase()
+  return SECRET_WORD.test(words)
+}
 
 function luhn(digits: string): boolean {
   const d = digits.replace(/\D/g, '')
@@ -127,13 +148,26 @@ const TEXT_RULES: [RegExp, (...m: string[]) => string][] = [
   [/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`],
   [/\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/g, () => REDACTED],
   [/\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g, () => REDACTED],
-  // "password": "x", password=x, api_key: x. A quoted value stays quoted so JSON still parses.
+  // "password": "x", password=x, api_key: x. Only a key that ends in a secret
+  // word counts. A JSON value is replaced by the string "[redacted]", so the
+  // output still parses whether the original was a string, number or boolean.
   [
-    /("?[\w-]*(?:pass(?:word|wd)?|secret|token|api[_-]?key|authorization)[\w-]*"?\s*[:=]\s*)("(?:[^"\\]|\\.)*"|[^\s,;}\]]+)/gi,
-    (_all, lead, value) => `${lead}${value.startsWith('"') ? `"${REDACTED}"` : REDACTED}`,
+    /("?)([\w-]+)("?\s*[:=]\s*)("(?:[^"\\]|\\.)*"|[^\s,;}\]"]+)/g,
+    (all, open, key, sep, value) =>
+      !isSecretKey(key)
+        ? all
+        : `${open}${key}${sep}${value.startsWith('"') || open === '"' ? `"${REDACTED}"` : REDACTED}`,
   ],
+  // Prose: "The new password is Xy7!abc" (cipp_reset_password answers like this).
+  [/\b(pass(?:word|code|wd)\s+(?:is|was)\s*:?\s+)[^\s,;]+/gi, (_all, lead) => `${lead}${REDACTED}`],
   [/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED],
-  [/\b(?:\d[ -]?){12,18}\d\b/g, m => (luhn(m) ? REDACTED : m)],
+  // Cards: only a grouped number (4-4-4-4 or Amex 4-6-5, spaces or dashes) that
+  // passes Luhn. Bare digit runs are never touched: about 1 in 10 timestamps and
+  // numeric IDs pass Luhn by chance, and those must reach the model intact.
+  [
+    /\b\d{4}([ -])\d{4}\1\d{4}\1\d{1,7}\b|\b\d{4}([ -])\d{6}\2\d{5}\b/g,
+    m => (luhn(m) ? REDACTED : m),
+  ],
 ]
 
 export function redactText(text: string): string {
@@ -143,7 +177,7 @@ export function redactText(text: string): string {
 // Walks any tool result (MCP content blocks, structuredContent, plain strings):
 // strings are scrubbed, and a string under a secret-looking key is dropped whole.
 export function redact(value: unknown, key = ''): unknown {
-  if (typeof value === 'string') return SECRET_KEY.test(key) ? REDACTED : redactText(value)
+  if (typeof value === 'string') return isSecretKey(key) ? REDACTED : redactText(value)
   if (Array.isArray(value)) return value.map(item => redact(item))
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, redact(v, k)]))
