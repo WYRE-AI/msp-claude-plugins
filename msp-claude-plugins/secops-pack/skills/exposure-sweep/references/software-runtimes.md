@@ -98,7 +98,7 @@ status.
 | # | Finding | Status |
 |---|---------|--------|
 | 1 | JDK 8 or 11, or `arch` is not `x86_64` or `AMD64` (the scripts then also report `vbmi_cpu=no`) | Not affected by this CVE |
-| 2 | `ver` is `unknown` | Version unverified |
+| 2 | `ver` is `unknown` | Version unverified. Add **(restart required)** when `restart_pending` is `yes`: on RPM-based hosts the upgrade removes the old versioned JDK folder, so a running JVM shows an unreadable `release` and a deleted binary |
 | 3 | `ver` at or above the fixed build for its branch, and `restart_pending` is not `yes` | Fixed |
 | 4 | `src` is `disk`: the JVM was not running at scan time | Affected, not exposed (idle). Lower priority, but it can be started later. A runtime launched in-process by a service the script could not see looks idle, so confirm any idle row under a rank 1 or 2 application |
 | 5 | `vbmi_cpu` is `no` | Affected, not exposed. A virtual machine can land on a different host or cloud instance type later, so patch on the normal cycle |
@@ -109,7 +109,7 @@ status.
 Qualifiers:
 
 - **(restart required)** when `restart_pending` is `yes` on a row that
-  reaches rule 4 or later. The package was upgraded but the running JVM
+  reaches rule 2 or later. The package was upgraded but the running JVM
   still holds the old build, so the version on disk is not the version
   that runs. Such a row never reaches rule 3, so the host is not "Fixed
   since last run" in Step 8 until a later run shows a restarted JVM. If
@@ -117,7 +117,8 @@ Qualifiers:
   it with `jcmd <pid> VM.version`.
 - **(no fix available)** when the vendor has published no fixed build for
   the distribution (see Match versions). Applies to rules 6 to 8. The
-  ticket action is "Apply mitigation, then patch".
+  ticket action is "Apply mitigation, then patch". A rule 6 to 8 row can
+  carry both qualifiers: write "(restart required) (no fix available)".
 
 `mitigation=none` means no mitigation flag was seen on the command line or
 in the JVM environment variables. Flags set in an `@argfile` or a JVM
@@ -184,8 +185,8 @@ be read back. Fields:
 | `pid` | Process id. For `svc` rows on Windows, the Procrun service name |
 | `path` | Path of the `java` binary, `-` when unknown. Quoted |
 | `ver`, `runtime_ver`, `vendor` | `JAVA_VERSION`, `JAVA_RUNTIME_VERSION`, and `IMPLEMENTOR` from the `release` file, each `unknown` when not readable. Quoted |
-| `restart_pending` | `yes` when the running JVM's binary has been replaced on disk (Linux). Then `ver` is the new build on disk, not the one running. `unknown` on Windows |
-| `mitigation` | `intrinsic_off`, `avx_cap`, `none`, or `unknown` for disk rows |
+| `restart_pending` | `yes` when the running JVM's binary or its `libjvm.so` has been replaced on disk (Linux, including `jsvc` rows). Then `ver` is the new build on disk, not the one running, or `unknown` when the old JDK folder was removed. `unknown` on Windows |
+| `mitigation` | `intrinsic_off`, `avx_cap`, `none`, or `unknown` for disk rows and for Windows rows whose command line or service options could not be read |
 | `arch`, `vbmi_cpu` | Machine architecture, and whether the CPU has the four required flags. Not `x86_64` or `AMD64` gives `no`. The Linux script reads the flags; the Windows script reports the CPU model in `cpu` and leaves `vbmi_cpu` at `unknown` on AMD64 |
 
 ### Linux (POSIX sh)
@@ -217,7 +218,11 @@ seen=" "
 n=0
 
 clean() { tr -d '|"[:cntrl:]' | cut -c1-"$1"; }
-release() { sed -n "s/^$1=//p" "$2/release" 2>/dev/null | head -n 1 | clean 80; }
+# Reads at most 8 KB of a regular file only: a FIFO or a symlink to /dev/zero planted
+# as <JAVA_HOME>/release would otherwise hang or exhaust memory in a root job.
+release() { [ -f "$2/release" ] || return 0; head -c 8192 "$2/release" 2>/dev/null | sed -n "s/^$1=//p" | head -n 1 | clean 80; }
+# One environment variable of a process, for example: envvar /proc/123 JAVA_TOOL_OPTIONS
+envvar() { tr '\0' '\n' <"$1/environ" 2>/dev/null | grep "^$2="; }
 
 # The last occurrence of a flag wins. -XX:-UseBASE64Intrinsics and UseAVX=0..2 disable the intrinsic.
 mitigation() {
@@ -242,7 +247,8 @@ report() { # source pid path mitigation restart_pending
 }
 
 # Running JVMs first: the command line shows whether the intrinsic was switched off.
-# A JVM still running after a package upgrade reports its exe as "<path> (deleted)".
+# A JVM still running after a package upgrade reports its exe as "<path> (deleted)", or
+# maps a libjvm.so marked "(deleted)" (jsvc, or a java launcher that loaded the old library).
 for p in /proc/[0-9]*; do
   exe=$(readlink "$p/exe" 2>/dev/null) || continue
   pending=no
@@ -250,19 +256,23 @@ for p in /proc/[0-9]*; do
   case "$exe" in
     */java) src=proc; path=$exe ;;
     */jsvc) # Commons Daemon hosts the JVM in-process; its -home argument names the JDK.
-      src=jsvc; pending=no
+      src=jsvc
       home=$(tr '\0' '\n' <"$p/cmdline" 2>/dev/null | awk '$0 == "-home" { getline; print; exit }')
       if [ -n "$home" ]; then path=$home/bin/java; else path=-; fi ;;
     *) continue ;;
   esac
-  envopts=$(tr '\0' '\n' <"$p/environ" 2>/dev/null | grep -E '^(JAVA_TOOL_OPTIONS|JDK_JAVA_OPTIONS|_JAVA_OPTIONS)=')
-  opts="$envopts $(tr '\0' ' ' <"$p/cmdline" 2>/dev/null)"
+  # jsvc and java both map libjvm.so in-process; a JDK upgrade leaves the old copy mapped.
+  if grep -q 'libjvm\.so (deleted)' "$p/maps" 2>/dev/null; then pending=yes; fi
+  # HotSpot reads JAVA_TOOL_OPTIONS, then JDK_JAVA_OPTIONS and the command line, then
+  # _JAVA_OPTIONS last, and the last flag wins, so build the text in that order.
+  opts="$(envvar "$p" JAVA_TOOL_OPTIONS) $(envvar "$p" JDK_JAVA_OPTIONS) $(tr '\0' ' ' <"$p/cmdline" 2>/dev/null) $(envvar "$p" _JAVA_OPTIONS)"
   report "$src" "${p#/proc/}" "$path" "$(mitigation "$opts")" "$pending"
 done
 
 # Installed and bundled JVMs on disk, skipping container storage. Extend the roots for your app paths.
 disk=$(find /usr/lib/jvm /usr/share /var/lib /opt /usr/local /srv \
-  \( -path /var/lib/docker -o -path /var/lib/containers \) -prune -o \
+  \( -path /var/lib/docker -o -path /var/lib/containers -o -path /var/lib/containerd \
+     -o -path /var/lib/kubelet \) -prune -o \
   -type f -path '*/bin/java' -perm -u+x -print 2>/dev/null)
 while IFS= read -r j; do
   [ -n "$j" ] || continue
@@ -278,7 +288,10 @@ printf 'EXPSWEEP-JAVA v1 ts=%s host=%s summary jvms=%s arch=%s vbmi_cpu=%s\n' "$
 The script reads three JVM environment variables (`JAVA_TOOL_OPTIONS`,
 `JDK_JAVA_OPTIONS`, `_JAVA_OPTIONS`) from each process, because they are a
 common place for JVM flags; running it as root is needed for that. It
-prints only the mitigation result, never the variable contents.
+prints only the mitigation result, never the variable contents. It reads
+each `release` file only when it is a regular file, and only the first 8 KB
+(the Windows script skips one over 64 KB), because the files sit in folders
+a local user may control.
 
 ### Windows (PowerShell)
 
@@ -308,6 +321,7 @@ $rows = New-Object System.Collections.Generic.List[string]
 
 # The last occurrence of a flag wins. -XX:-UseBASE64Intrinsics and UseAVX=0..2 disable the intrinsic.
 function Get-Mitigation([string]$options) {
+    if ([string]::IsNullOrWhiteSpace($options)) { return 'unknown' }
     $intrinsic = [regex]::Matches($options, '[-+]UseBASE64Intrinsics') | Select-Object -Last 1
     $avx = [regex]::Matches($options, 'UseAVX=(\d+)') | Select-Object -Last 1
     if ($intrinsic -and $intrinsic.Value -eq '-UseBASE64Intrinsics') { return 'intrinsic_off' }
@@ -321,7 +335,8 @@ function Get-JavaInfo([string]$path) {
     $values = @{}
     $javaHome = if ($path -ne '-') { Split-Path (Split-Path $path -Parent) -Parent }
     $release = if ($javaHome) { Join-Path $javaHome 'release' }
-    if ($release -and (Test-Path -LiteralPath $release -PathType Leaf)) {
+    # Skip a release file over 64 KB: a real one is under 1 KB, and a local user could plant a huge one.
+    if ($release -and (Test-Path -LiteralPath $release -PathType Leaf) -and (Get-Item -LiteralPath $release).Length -le 65536) {
         foreach ($line in (Get-Content -LiteralPath $release -TotalCount 200)) {
             if ($line -match '^(JAVA_VERSION|JAVA_RUNTIME_VERSION|IMPLEMENTOR)="?([^"]*)"?\s*$') {
                 $values[$Matches[1]] = $Matches[2]
@@ -402,6 +417,9 @@ Known limits:
   `path="-"` and `ver="unknown"`.
 - Procrun services with `Jvm` set to `auto` and no `JavaHome` also show
   `path="-"`. Their mitigation field is still read.
+- Windows `svc` rows come from the registry and do not check that the
+  service is running, so a stopped or disabled service is reported like a
+  running one (it is over-reported, never missed).
 - On Windows, a system-wide `JAVA_TOOL_OPTIONS` is not read, and
   `restart_pending` is always `unknown`.
 

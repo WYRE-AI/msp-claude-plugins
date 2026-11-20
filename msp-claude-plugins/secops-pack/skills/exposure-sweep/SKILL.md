@@ -145,8 +145,9 @@ Give each device exactly one status:
 | Version unverified | Product present, version missing or conflicting |
 | Not assessed | No readable source for the client |
 
-A status may carry one parenthetical qualifier from the mode reference,
-for example "(restart required)", "(idle)", or "(no fix available)". The
+A status may carry parenthetical qualifiers from the mode reference,
+for example "(restart required)", "(idle)", or "(no fix available)"; a row
+can carry "(restart required)" together with "(no fix available)". A
 qualifier adds detail and never creates an eighth status. Where a finding
 could match two rows, the mode reference gives the order to apply them.
 
