@@ -34,9 +34,8 @@ skill is a draft problem ticket for a technician to approve.
   came back.
 - **Investigating one live incident across vendors**, use
   `shared-skills-incident-correlation`.
-- **Predicting hardware failure from RMM telemetry**, use the
-  `device-failure-early-warning` skill in this pack where it is installed.
-  This skill works from ticket text and links, not telemetry.
+- **Predicting hardware failure from RMM telemetry**, this skill does not do
+  that. It works from ticket text and links, not telemetry.
 
 ## Key Concepts
 
@@ -172,11 +171,11 @@ Show the draft and stop. Create it only after a technician approves, using the
 PSA's create-ticket tool (`autotask_create_ticket`, `cw_create_ticket`,
 `halopsa_tickets_create` or `superops_tickets_create`). The Autotask draft
 needs `companyID`, `title` and `description`, plus `dueDateTime` unless the
-category supplies a default due date, or the create is rejected. Where the PSA has a Problem ticket type (Autotask's
-`autotask_create_ticket` takes a `ticketType` picklist value; discover valid
-IDs with `autotask_get_field_info`), use it. Otherwise create a normal ticket
-and prefix the title with "Problem:". Do not close or merge the original
-tickets.
+category supplies a default due date, or the create is rejected. Where the PSA
+has a Problem ticket type (Autotask's `autotask_create_ticket` takes a
+`ticketType` picklist value; discover valid IDs with `autotask_get_field_info`),
+use it. Otherwise create a normal ticket and prefix the title with "Problem:".
+Do not close or merge the original tickets.
 
 ## Error Handling
 

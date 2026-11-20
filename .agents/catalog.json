@@ -4668,7 +4668,7 @@
     {
       "name": "ops-pack",
       "displayName": "MSP Operations",
-      "version": "0.2.1",
+      "version": "0.2.0",
       "description": "MSP Operations — cross-vendor service-desk board health, dispatch prioritization, SLA monitoring, and shift handoffs across whatever PSA/RMM you have connected.",
       "category": "workflow-pack",
       "tags": [
