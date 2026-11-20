@@ -87,6 +87,9 @@ These skills are automatically loaded and inform Claude's responses:
 - **Licensing** — SKUs, seat counts, assignment patterns
 - **Security** — MFA, sign-in risk, conditional access, compromise response
 - **API Patterns** — Graph OData syntax, pagination, throttling, batch requests
+- **Outage Response** — Per-tenant service-health incident IDs, client status drafts, SLA credit claim packs (including CSP-purchased tenants)
+- **Reseller Control Audit** — Who holds Global Administrator across tenants (users and service principals, the MSP's own GDAP access, operator-supplied reseller relationships), federated domains, defederate-or-migrate runbook
+- **Entra SMS Sign-In Sweep** — SMS first-factor exposure, SMS/voice on privileged accounts, hunt and phase-out plan across tenants
 
 ## MSP Use Cases
 

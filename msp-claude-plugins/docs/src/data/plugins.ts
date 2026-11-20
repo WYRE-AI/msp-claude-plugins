@@ -1083,7 +1083,10 @@ export const plugins: Plugin[] = [
       'File Management',
       'License Auditing',
       'Mailbox & Email',
+      'Outage Response',
+      'Reseller Control Audit',
       'Security Posture',
+      'Sms Signin Sweep',
       'Teams Administration',
       'User Management'
     ],
@@ -1092,7 +1095,10 @@ export const plugins: Plugin[] = [
       { name: 'files', description: 'OneDrive personal storage and SharePoint document libraries, both reached through the shared Microsoft Graph `/drives` endpoint: drive and item addressing, sharing permissions, storage quotas, file search, and the offboarding file-transfer workflow.' },
       { name: 'licensing', description: 'The M365 subscription → SKU → service-plan model, seat availability versus consumption, assigning and removing licenses through Graph, the audit workflow for finding unused or misallocated seats, common SKU GUIDs, and licensing error causes.' },
       { name: 'mailboxes', description: 'Exchange Online mailboxes through Microsoft Graph: the four mailbox types and how they differ, message listing and search, inbox rules, out-of-office and forwarding, mailbox size and quota, shared-mailbox access management, and mail flow diagnostics.' },
+      { name: 'outage-response', description: 'Per-tenant response to a Microsoft 365 service incident: reading Microsoft\'s own service-health incident IDs for each client tenant, drafting client status and impact messages from what Microsoft has actually published, and preparing and recording SLA service-credit claims, including the CSP-purchased tenant variant and batching claims across tenants through a distributor.' },
+      { name: 'reseller-control-audit', description: 'Read-only audit across managed Microsoft 365 tenants of who really holds Global Administrator and other privileged roles (users and service principals in the tenant, plus the MSP\'s own GDAP access), which domains are federated to a third-party identity provider, and which tenants a reseller such as GoDaddy appears to control.' },
       { name: 'security', description: 'The M365 tenant security checks that distinguish a secure tenant from a vulnerable one: per-user authentication-method inspection for real MFA enrollment, sign-in risk and risky users, suspicious inbox rules, legacy authentication exposure, conditional access coverage, Secure Score, and the indicator set for a compromised account.' },
+      { name: 'sms-signin-sweep', description: 'Read-only exposure sweep of the SMS authentication method across managed Entra ID tenants: whether SMS is enabled as a first factor ("Use for sign-in"), who actually signs in with SMS, which privileged accounts have SMS or voice registered, what to hunt for in sign-in and audit logs, and a sequenced, operator-approved remediation plan that avoids lockouts and covers the 2027 retirement of Microsoft\'s SMS and voice code delivery.' },
       { name: 'teams', description: 'Microsoft Teams through Microsoft Graph: the Team/Channel/Member/Meeting/Tab object model, team and channel enumeration, membership and ownership changes, online meetings, usage reporting, and the causes behind Teams access failures.' },
       { name: 'users', description: 'The Entra ID user object as M365\'s central identity: key properties and their MSP relevance, account status values, the license assignment model, Graph patterns for listing/searching/creating/disabling users, MFA status checking, and the onboarding and offboarding sequences.' },
       { name: 'api-patterns', description: 'Microsoft Graph fundamentals shared by every M365 skill: Entra token scopes and the per-request Bearer model, OData query operators and filter syntax, @odata.nextLink pagination, delta queries for incremental sync, 429 throttling and retry behavior, JSON batching, and the common Graph error codes.' }

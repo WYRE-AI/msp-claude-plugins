@@ -31,7 +31,7 @@
   },
   "totals": {
     "packs": 106,
-    "skills": 486,
+    "skills": 489,
     "commands": 314,
     "agents": 173
   },
@@ -1850,7 +1850,7 @@
     {
       "name": "m365",
       "displayName": "M365",
-      "version": "0.2.8",
+      "version": "0.3.0",
       "description": "Microsoft 365 - users, mailboxes, Teams, OneDrive, licensing, and security posture",
       "category": "productivity",
       "tags": [
@@ -1885,8 +1885,20 @@
           "path": "msp-claude-plugins/m365/m365/skills/mailboxes/SKILL.md"
         },
         {
+          "id": "outage-response",
+          "path": "msp-claude-plugins/m365/m365/skills/outage-response/SKILL.md"
+        },
+        {
+          "id": "reseller-control-audit",
+          "path": "msp-claude-plugins/m365/m365/skills/reseller-control-audit/SKILL.md"
+        },
+        {
           "id": "security",
           "path": "msp-claude-plugins/m365/m365/skills/security/SKILL.md"
+        },
+        {
+          "id": "sms-signin-sweep",
+          "path": "msp-claude-plugins/m365/m365/skills/sms-signin-sweep/SKILL.md"
         },
         {
           "id": "teams",
