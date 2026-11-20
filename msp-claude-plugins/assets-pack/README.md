@@ -33,6 +33,11 @@ individually required:
 - **Documentation platforms (warranty-data fallback)** — IT Glue, Hudu, for
   manually-documented asset/warranty records when RMM data is incomplete or
   stale
+- **SentinelOne (optional, CVE data)** — the only live source of CVE IDs for
+  `patch-eol-kev-risk-ranking`; its `search_vulnerabilities` tool is read tier
+- **A CISA KEV catalog you supply (optional)** — no connector serves it, so
+  KEV matching in `patch-eol-kev-risk-ranking` reads "not assessed" without
+  a copy of CISA's `known_exploited_vulnerabilities` JSON
 
 A client with only one RMM connected still gets a useful warranty and
 EOL/EOS sweep, even with no documentation platform connected — the pack
@@ -64,6 +69,12 @@ for "what devices exist."
   Quote Manager, or ConnectWise PSA product catalog when one exists
   (ConnectWise CPQ has no searchable catalog). Drafts the list only; it
   does not create quotes
+- `patch-eol-kev-risk-ranking` : ranks every client's machines, then the
+  clients, by missing patches, OS past end of support, and CISA KEV
+  exposure. Read-only and safe to schedule, composes `eol-eos-flagging`
+  with RMM patch tools and SentinelOne CVE data, and ends in draft
+  tickets that you create yourself. KEV matching needs a catalog you
+  supply, because no connector serves one
 
 **Agents**
 - `warranty-status-auditor` — portfolio-wide (or single-client) warranty

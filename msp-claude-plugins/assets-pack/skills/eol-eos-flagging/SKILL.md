@@ -45,6 +45,10 @@ but they are not the same finding and should not be conflated in a report.
 
 ## Anti-triggers
 
+- **Ranking machines across clients by missing patches, EOS, and KEV
+  exposure together:** use
+  [Patch, EOL and KEV Risk Ranking](../patch-eol-kev-risk-ranking/SKILL.md).
+  It calls this skill for the OS signal.
 - **Unsupported software as a scored patch/CVE finding** — an out-of-support
   OS surfaced with an EPSS score and exploit maturity is vulnerability
   management; use `sentinelone-vulnerabilities`.
