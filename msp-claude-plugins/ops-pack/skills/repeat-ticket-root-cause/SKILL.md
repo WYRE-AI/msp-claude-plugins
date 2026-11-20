@@ -128,9 +128,11 @@ what share of tickets had a linked device.
    resolutions already in the history. Compare what technicians did each time:
    the same workaround repeated four times is the clearest sign of a missing
    permanent fix.
-6. Rank patterns by cost: tickets multiplied by time logged, where the PSA
-   exposes time entries (`autotask_search_time_entries`,
+6. Rank patterns by cost: total time logged across the pattern's tickets,
+   where the PSA exposes time entries (`autotask_search_time_entries`,
    `cw_search_time_entries`), otherwise by ticket count, and say which.
+   Do not multiply the two, because the logged hours already cover every
+   ticket in the pattern.
 7. Compare to last week's run, if one was kept, and mark each pattern as
    new, continuing or resolved. A pattern with no new tickets in 30 days
    after a fix is resolved.
