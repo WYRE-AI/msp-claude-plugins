@@ -156,6 +156,10 @@ const bareValue = (plain: boolean) => `[^\\s,;{}[\\]${plain ? '' : '"'}][^\\s,;}
 // quote is found whenever one exists and "unclosed" really means "unclosed to the end".
 const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\[\s\S])*"`
 
+// The letter(s) of a JSON escape (\n, \t, \u000a) that a key or word can follow
+// with no word boundary between them, so "a\npassword: x" is still seen.
+const ESCAPE_LETTER = '(?:[nrtbf]|u[0-9A-Fa-f]{4})'
+
 // Every scan below is linear: the global pattern matches only a key and its
 // separator, and the value is read (sticky, from where the separator ended) only
 // for a secret key. A non-secret pair therefore costs its key, never its value.
@@ -169,7 +173,7 @@ const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\[\s\S])*"`
 // is left alone: replacing only its opener would leave the rest dangling, and
 // secret keys nested inside it are found by this same scan.
 function scrubSecretPairs(text: string, plain: boolean): string {
-  const pair = /("?)(?:(?<=\\)[nrtbf]|(?<![\w-]))([\w-]+)("?\s*[:=]\s*)/g
+  const pair = new RegExp(`("?)(?:(?<=\\\\)${ESCAPE_LETTER}|(?<![\\w-]))([\\w-]+)("?\\s*[:=]\\s*)`, 'g')
   const quoted = new RegExp(QUOTED_VALUE, 'y')
   const bare = new RegExp(bareValue(plain), 'y')
   // A quoted value that never closes runs to the end of the text, and so would
@@ -278,7 +282,7 @@ const buildRules = (plain: boolean): ((text: string) => string)[] => [
   text => scrubSecretPairs(text, plain),
   // Prose: "The new password is Xy7!abc" (cipp_reset_password answers like this).
   replacing(
-    new RegExp(`\\b(pass(?:word|code|wd)\\s+(?:is|was)(?:\\s*:)?\\s+)${bareValue(plain)}`, 'gi'),
+    new RegExp(`(?:\\b|(?<=\\\\${ESCAPE_LETTER}))(pass(?:word|code|wd)\\s+(?:is|was)(?:\\s*:)?\\s+)${bareValue(plain)}`, 'gi'),
     (_all, lead) => `${lead}${REDACTED}`,
   ),
   replacing(/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED),

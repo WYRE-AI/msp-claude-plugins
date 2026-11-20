@@ -208,6 +208,16 @@ test('a stray quote before embedded escaped JSON does not hide a secret', async 
     expect(redact(text)).not.toContain('hunter2')
   }
   expect(redact('He said "hi. {"note":"a\\npassword: hunter2"}')).not.toContain('hunter2')
+  // The prose form ("password is x") and a \u000a escape get the same treatment.
+  for (const leak of [
+    'Screen 5" monitor. {"note":"a\\npassword is hunter2"}',
+    'Screen 5" monitor. {"note":"see\\npasscode was hunter2"}',
+    'a\\npassword is hunter2',
+    'Screen 5" monitor. {"note":"a\\u000apassword: hunter2"}',
+    'Screen 5" monitor. {"note":"a\\u000apassword is hunter2"}',
+  ]) {
+    expect(redact(leak)).not.toContain('hunter2')
+  }
 })
 
 test('a backslash before a raw newline does not hide later secrets', async () => {
