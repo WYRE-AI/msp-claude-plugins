@@ -153,6 +153,42 @@ test('redaction stays linear on a long unbroken string', async () => {
   }
 })
 
+test('redaction stays linear on adversarial key, value and quote shapes', async () => {
+  const hostile = [
+    'a:'.repeat(100_000),
+    'a='.repeat(100_000),
+    JSON.stringify({ url: `https://x/?${Array.from({ length: 10_000 }, (_, i) => `p${i}=${i}`).join('&')}` }),
+    Array.from({ length: 10_000 }, (_, i) => `k${i}=v${i}`).join('|'),
+    JSON.stringify({ d: '\\"'.repeat(100_000) }),
+    `{"${'\\"'.repeat(100_000)}`,
+    'password="'.repeat(20_000),
+    `password="${'x\\"'.repeat(50_000)}`,
+    `{"a":"${'\\\\\\"'.repeat(30_000)}"}`,
+  ]
+  for (const text of hostile) {
+    const started = performance.now()
+    redactText(text)
+    expect(performance.now() - started).toBeLessThan(500)
+  }
+})
+
+test('a double-encoded JSON string is redacted at every depth', async () => {
+  const inner = { Results: 'ok', password: 'Hunter2', note: 'a\npassword: Hunter2' }
+  const twice = JSON.stringify({ data: JSON.stringify(inner) })
+  const thrice = JSON.stringify({ data: JSON.stringify({ data: JSON.stringify(inner) }) })
+  for (const text of [twice, thrice]) {
+    const out = redactText(text)
+    expect(out).not.toContain('Hunter2')
+    expect(JSON.parse(out)).toBeTruthy()
+  }
+})
+
+test('a plain-text result scrubs a prose or key=value password with a quote or backslash', async () => {
+  for (const text of ['The new password is Xy7"Hunter2', 'password=ab"Hunter2', 'password: Xy7\\Hunter2']) {
+    expect(redact(text)).not.toContain('Hunter2')
+  }
+})
+
 test('a prose password with a backslash or quote is scrubbed whole (cipp_reset_password)', async () => {
   for (const password of ['Xy7\\abc', 'Xy7"abc']) {
     const out = redactText(JSON.stringify({ Results: `The new password is ${password}` }))

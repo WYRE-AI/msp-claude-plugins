@@ -151,8 +151,12 @@ function luhn(digits: string): boolean {
 const bareValue = (plain: boolean) => `[^\\s,;{}[\\]${plain ? '' : '"'}][^\\s,;}\\]${plain ? '' : '"'}]*`
 const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\.)*"`
 
-// Scans left to right and rewrites only the value of a secret key. A non-secret
-// pair is skipped without consuming its value, so "Creds: password=x" and
+// Every scan below is linear: the global pattern matches only a key and its
+// separator, and the value is read (sticky, from where the separator ended) only
+// for a secret key. A non-secret pair therefore costs its key, never its value.
+//
+// The scan rewrites only the value of a secret key. A non-secret pair is skipped
+// without consuming its value, so "Creds: password=x" and
 // "url=https://h/?a=1&password=x" still reach the pair inside. The key starts at a
 // word boundary, so a long [\w-] run is scanned once, not once per character.
 // A JSON value becomes the string "[redacted]", so the output still parses
@@ -160,46 +164,89 @@ const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\.)*"`
 // is left alone: replacing only its opener would leave the rest dangling, and
 // secret keys nested inside it are found by this same scan.
 function scrubSecretPairs(text: string, plain: boolean): string {
-  const value = `${QUOTED_VALUE}|${bareValue(plain)}`
-  const pair = new RegExp(`("?)(?<![\\w-])([\\w-]+)("?\\s*[:=]\\s*)(?=(${value}))`, 'g')
+  const pair = /("?)(?<![\w-])([\w-]+)("?\s*[:=]\s*)/g
+  const quoted = new RegExp(QUOTED_VALUE, 'y')
+  const bare = new RegExp(bareValue(plain), 'y')
+  // A quoted value that never closes runs to the end of the text, and so would
+  // every later one: after the first miss, stop trying quoted values.
+  let noMoreQuoted = false
   let out = ''
   let from = 0
   for (let m = pair.exec(text); m; m = pair.exec(text)) {
-    const [head, open, key, sep, found] = m
+    const [head, open, key, sep] = m
     if (!isSecretKey(key)) continue
+
+    const start = m.index + head.length
+    quoted.lastIndex = bare.lastIndex = start
+    let found: RegExpExecArray | null = null
+    if (text[start] === '"' && !noMoreQuoted) {
+      found = quoted.exec(text)
+      noMoreQuoted = !found
+    }
+    found ??= bare.exec(text)
+    if (!found) continue
 
     // Quote the value when it was quoted or the key was a JSON key ("password":).
     // A key inside a string ("Password: x") has no closing quote of its own.
-    const quote = found.startsWith('"') || (open === '"' && sep.startsWith('"'))
-    const start = m.index + head.length
-    out += text.slice(from, start) + (quote ? `"${REDACTED}"` : REDACTED)
-    from = pair.lastIndex = start + found.length
+    const asString = found[0].startsWith('"') || (open === '"' && sep.startsWith('"'))
+    out += text.slice(from, start) + (asString ? `"${REDACTED}"` : REDACTED)
+    from = pair.lastIndex = start + found[0].length
   }
 
   return out + text.slice(from)
 }
 
+const looksLikeJson = (text: string) => /^\s*[{[]/.test(text)
+
 // A JSON string with an escape (\n, \t, \", \\) is decoded before it is scrubbed,
 // so its text is read as written: "a\npassword: x" is two lines, not a key
-// "npassword". A string without an escape is already plain text.
-function scrubEscapedStrings(text: string): string {
-  return text.replace(/"(?:[^"\\]|\\.)*"/g, literal => {
-    if (!literal.includes('\\')) return literal
-    try {
-      const decoded: string = JSON.parse(literal)
+// "npassword". A string without an escape is already plain text. Decoded text
+// that is itself JSON (a double-encoded payload) is parsed and redacted
+// structurally, which reaches any depth of encoding.
+function redactEscaped(literal: string): string {
+  try {
+    const decoded: string = JSON.parse(literal)
+    if (!looksLikeJson(decoded)) {
       const clean = redactText(decoded, true)
       return clean === decoded ? literal : JSON.stringify(clean)
-    } catch {
-      return literal
     }
-  })
+
+    const parsed: unknown = JSON.parse(decoded)
+    const clean = JSON.stringify(redact(parsed))
+    return clean === JSON.stringify(parsed) ? literal : JSON.stringify(clean)
+  } catch {
+    return literal
+  }
+}
+
+// Reads the string literals of JSON text one at a time, each from its own opening
+// quote. A string that never closes runs to the end of the text, and so would every
+// later one (the escapes pair up the same way from there on): stop at the first
+// miss. A global regex would retry at every quote and run quadratic.
+function scrubEscapedStrings(text: string): string {
+  const literal = new RegExp(QUOTED_VALUE, 'y')
+  let out = ''
+  let from = 0
+  for (let at = text.indexOf('"'); at >= 0; at = text.indexOf('"', literal.lastIndex)) {
+    literal.lastIndex = at
+    const found = literal.exec(text)
+    if (!found) break
+
+    if (found[0].includes('\\')) {
+      out += text.slice(from, at) + redactEscaped(found[0])
+      from = literal.lastIndex
+    }
+  }
+
+  return out + text.slice(from)
 }
 
 const replacing = (pattern: RegExp, replace: (...m: string[]) => string) => (text: string) =>
   text.replace(pattern, replace)
 
+// Text decoded out of a JSON string (plain) has no string literals left to decode.
 const buildRules = (plain: boolean): ((text: string) => string)[] => [
-  scrubEscapedStrings,
+  ...(plain ? [] : [scrubEscapedStrings]),
   replacing(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, () => REDACTED),
   replacing(/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`),
   replacing(/\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/g, () => REDACTED),
@@ -229,7 +276,7 @@ export function redactText(text: string, plain = false): string {
 // Walks any tool result (MCP content blocks, structuredContent, plain strings):
 // strings are scrubbed, and a string under a secret-looking key is dropped whole.
 export function redact(value: unknown, key = ''): unknown {
-  if (typeof value === 'string') return isSecretKey(key) ? REDACTED : redactText(value)
+  if (typeof value === 'string') return isSecretKey(key) ? REDACTED : redactText(value, !looksLikeJson(value))
   if (Array.isArray(value)) return value.map(item => redact(item, key))
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, redact(v, k)]))
