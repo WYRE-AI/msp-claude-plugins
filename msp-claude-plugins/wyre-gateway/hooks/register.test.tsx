@@ -128,6 +128,31 @@ test('a credential written inside a JSON string value is scrubbed and the JSON s
   expect(JSON.parse(redactText('{"note":"see ticket 12: done"}')).note).toBe('see ticket 12: done')
 })
 
+test('a credential after an escaped newline or tab, or after a non-secret pair, is scrubbed', async () => {
+  for (const note of [
+    'a: b\npassword: Hunter2',
+    'Notes\napi_key=sk_live_Hunter2',
+    'x\ttoken: Hunter2',
+    'Creds: password=Hunter2',
+    'url=https://x/?a=1&password=Hunter2',
+  ]) {
+    const out = redactText(JSON.stringify({ note, id: 1 }))
+    expect(out).not.toContain('Hunter2')
+    expect(JSON.parse(out).id).toBe(1)
+  }
+  // Text outside a string behaves the same.
+  expect(redactText('Creds: password=Hunter2')).not.toContain('Hunter2')
+})
+
+test('redaction stays linear on a long unbroken string', async () => {
+  const blob = 'A1-b2_'.repeat(100_000)
+  for (const text of [JSON.stringify({ data: blob }), blob]) {
+    const started = performance.now()
+    expect(redactText(text)).toBe(text)
+    expect(performance.now() - started).toBeLessThan(500)
+  }
+})
+
 test('a prose password with a backslash or quote is scrubbed whole (cipp_reset_password)', async () => {
   for (const password of ['Xy7\\abc', 'Xy7"abc']) {
     const out = redactText(JSON.stringify({ Results: `The new password is ${password}` }))

@@ -145,63 +145,85 @@ function luhn(digits: string): boolean {
   return sum % 10 === 0
 }
 
-// A bare value runs to whitespace or a delimiter. In JSON text a backslash starts
-// an escape: \" and \\ belong to the value (stopping there leaks the rest of
-// Xy7\abc or leaves a stray quote), while \n, \r and \t are whitespace and end it.
-// The first character may not open an object or array.
-const ESCAPE = String.raw`\\[^nrt]`
-const UNQUOTED_VALUE = `(?:[^\\s,;{}[\\]"\\\\]|${ESCAPE})(?:[^\\s,;}\\]"\\\\]|${ESCAPE})*`
-const INSIDE_STRING = new RegExp(`\\b([\\w-]+)(\\s*[:=]\\s*)${UNQUOTED_VALUE}`, 'g')
+// A bare value runs to whitespace or a delimiter, and may not open an object or
+// array. In JSON text a quote ends it (it closes the string around it); in text
+// decoded out of a JSON string a quote is an ordinary password character.
+const bareValue = (plain: boolean) => `[^\\s,;{}[\\]${plain ? '' : '"'}][^\\s,;}\\]${plain ? '' : '"'}]*`
+const QUOTED_VALUE = String.raw`"(?:[^"\\]|\\.)*"`
 
-function scrubSecretPair(all: string, key: string, sep: string): string {
-  return isSecretKey(key) ? `${key}${sep}${REDACTED}` : all
+// Scans left to right and rewrites only the value of a secret key. A non-secret
+// pair is skipped without consuming its value, so "Creds: password=x" and
+// "url=https://h/?a=1&password=x" still reach the pair inside. The key starts at a
+// word boundary, so a long [\w-] run is scanned once, not once per character.
+// A JSON value becomes the string "[redacted]", so the output still parses
+// whether the original was a string, number or boolean. An object or array value
+// is left alone: replacing only its opener would leave the rest dangling, and
+// secret keys nested inside it are found by this same scan.
+function scrubSecretPairs(text: string, plain: boolean): string {
+  const value = `${QUOTED_VALUE}|${bareValue(plain)}`
+  const pair = new RegExp(`("?)(?<![\\w-])([\\w-]+)("?\\s*[:=]\\s*)(?=(${value}))`, 'g')
+  let out = ''
+  let from = 0
+  for (let m = pair.exec(text); m; m = pair.exec(text)) {
+    const [head, open, key, sep, found] = m
+    if (!isSecretKey(key)) continue
+
+    // Quote the value when it was quoted or the key was a JSON key ("password":).
+    // A key inside a string ("Password: x") has no closing quote of its own.
+    const quote = found.startsWith('"') || (open === '"' && sep.startsWith('"'))
+    const start = m.index + head.length
+    out += text.slice(from, start) + (quote ? `"${REDACTED}"` : REDACTED)
+    from = pair.lastIndex = start + found.length
+  }
+
+  return out + text.slice(from)
 }
 
-const TEXT_RULES: [RegExp, (...m: string[]) => string][] = [
-  [/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, () => REDACTED],
-  [/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`],
-  [/\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/g, () => REDACTED],
-  [/\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g, () => REDACTED],
-  // "password": "x", password=x, api_key: x. Only a key that ends in a secret
-  // word counts. A JSON value is replaced by the string "[redacted]", so the
-  // output still parses whether the original was a string, number or boolean.
-  // An object or array value is left alone (its { or [ never starts a match):
-  // replacing only the opener would leave the rest dangling. Secret keys nested
-  // inside it are scrubbed by this same rule.
-  [
-    new RegExp(`("?)([\\w-]+)("?\\s*[:=]\\s*)("(?:[^"\\\\]|\\\\.)*"|${UNQUOTED_VALUE})`, 'g'),
-    (all, open, key, sep, value) => {
-      if (isSecretKey(key)) {
-        // Quote the value when it was quoted or the key was a JSON key ("password":).
-        // A key inside a string ("Password: x") has no closing quote of its own.
-        const quote = value.startsWith('"') || (open === '"' && sep.startsWith('"'))
-        return `${open}${key}${sep}${quote ? `"${REDACTED}"` : REDACTED}`
-      }
+// A JSON string with an escape (\n, \t, \", \\) is decoded before it is scrubbed,
+// so its text is read as written: "a\npassword: x" is two lines, not a key
+// "npassword". A string without an escape is already plain text.
+function scrubEscapedStrings(text: string): string {
+  return text.replace(/"(?:[^"\\]|\\.)*"/g, literal => {
+    if (!literal.includes('\\')) return literal
+    try {
+      const decoded: string = JSON.parse(literal)
+      const clean = redactText(decoded, true)
+      return clean === decoded ? literal : JSON.stringify(clean)
+    } catch {
+      return literal
+    }
+  })
+}
 
-      // A non-secret key keeps its string, but a note field can still hold
-      // "Password: x": scrub inside the string and keep its quotes.
-      return value.startsWith('"')
-        ? `${open}${key}${sep}"${value.slice(1, -1).replace(INSIDE_STRING, scrubSecretPair)}"`
-        : all
-    },
-  ],
+const replacing = (pattern: RegExp, replace: (...m: string[]) => string) => (text: string) =>
+  text.replace(pattern, replace)
+
+const buildRules = (plain: boolean): ((text: string) => string)[] => [
+  scrubEscapedStrings,
+  replacing(/-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----/g, () => REDACTED),
+  replacing(/\bBearer\s+[A-Za-z0-9._~+/=-]{12,}/g, () => `Bearer ${REDACTED}`),
+  replacing(/\beyJ[\w-]{8,}\.[\w-]{8,}\.[\w-]{8,}/g, () => REDACTED),
+  replacing(/\b(?:AKIA|ASIA)[0-9A-Z]{16}\b/g, () => REDACTED),
+  // "password": "x", password=x, api_key: x. Only a key that ends in a secret word counts.
+  text => scrubSecretPairs(text, plain),
   // Prose: "The new password is Xy7!abc" (cipp_reset_password answers like this).
-  [
-    new RegExp(`\\b(pass(?:word|code|wd)\\s+(?:is|was)\\s*:?\\s+)${UNQUOTED_VALUE}`, 'gi'),
+  replacing(
+    new RegExp(`\\b(pass(?:word|code|wd)\\s+(?:is|was)\\s*:?\\s+)${bareValue(plain)}`, 'gi'),
     (_all, lead) => `${lead}${REDACTED}`,
-  ],
-  [/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED],
+  ),
+  replacing(/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED),
   // Cards: only a grouped number (4-4-4-4 or Amex 4-6-5, spaces or dashes) that
   // passes Luhn. Bare digit runs are never touched: about 1 in 10 timestamps and
   // numeric IDs pass Luhn by chance, and those must reach the model intact.
-  [
-    /\b\d{4}([ -])\d{4}\1\d{4}\1\d{1,7}\b|\b\d{4}([ -])\d{6}\2\d{5}\b/g,
-    m => (luhn(m) ? REDACTED : m),
-  ],
+  replacing(/\b\d{4}([ -])\d{4}\1\d{4}\1\d{1,7}\b|\b\d{4}([ -])\d{6}\2\d{5}\b/g, m => (luhn(m) ? REDACTED : m)),
 ]
 
-export function redactText(text: string): string {
-  return TEXT_RULES.reduce((out, [pattern, replace]) => out.replace(pattern, replace), text)
+const JSON_RULES = buildRules(false)
+const PLAIN_RULES = buildRules(true)
+
+// `plain` marks text that was decoded out of a JSON string.
+export function redactText(text: string, plain = false): string {
+  return (plain ? PLAIN_RULES : JSON_RULES).reduce((out, rule) => rule(out), text)
 }
 
 // Walks any tool result (MCP content blocks, structuredContent, plain strings):
