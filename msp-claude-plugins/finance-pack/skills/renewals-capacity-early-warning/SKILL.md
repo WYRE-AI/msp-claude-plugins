@@ -3,8 +3,9 @@ name: "Renewals and Capacity Early Warning"
 description: >
   A read-only 60-90 day look-ahead that merges everything about to expire or
   fill up into one ranked list per client: PSA contracts, marketplace
-  subscriptions, hardware warranties, SSL certificates, domain registrations,
-  and on-prem or cloud storage trending toward full. Covers which connected
+  subscriptions, hardware warranties, SSL certificates, domain registrations
+  where a connected source records them, and on-prem or cloud storage trending
+  toward full. Covers which connected
   tool supplies each date, how much to trust it, how to forecast disk
   exhaustion from the readings an RMM actually exposes, and how to turn the
   result into one draft ticket per client so the MSP can quote in time.
@@ -46,8 +47,7 @@ one reseller, and on-prem disk-fill forecasting.
 - **Cloud right-sizing or cloud capacity only:** use
   `cloudops-pack-cloud-capacity-planning`.
 - **A device that is failing now (SMART errors, crashing services):** that is
-  failure prediction, not expiry; use the `ops-pack` device-failure skill if
-  it is installed.
+  failure prediction, not expiry. No skill covers it yet.
 - **A disk already under 10% free, or a certificate that has already
   expired:** that is an incident, not an early warning; work it as a ticket.
 - **Ranking clients by churn risk:** use `finance-pack-churn-scanner`.
@@ -69,12 +69,12 @@ one reseller, and on-prem disk-fill forecasting.
 
 | Item | Tools (when connected) | Trust and caveats |
 |---|---|---|
-| PSA contracts | `autotask_list_expiring_contracts` (`daysAhead: 90`), `cw_search_agreements` | Term end date; note auto-renewal if the tool returns it. HaloPSA and Syncro expose no contract list, so report the contract side as unavailable when they are the only PSA |
+| PSA contracts | `autotask_list_expiring_contracts` (`daysAhead: 90`, `status: 1`, `pageSize: 500`, `includeExpired: true`), `cw_search_agreements` | Term end date; note auto-renewal if the tool returns it. If Autotask returns 500 rows the list may be incomplete: split the request by `companyID` and warn about any company that still reaches the cap. `includeExpired: true` feeds the "already lapsed" list. HaloPSA and Syncro expose no contract list, so report the contract side as unavailable when they are the only PSA |
 | Marketplace subscriptions | `pax8-list-subscriptions`, `sherweb_subscriptions_list` | Commitment end or renewal date. Auto-renewal at list price is the risk |
 | Hardware warranty | `auvik_devices_get_warranty`, `ncentral_get_device_lifecycle`, `datto_get_device` (`warrantyExpiry`, epoch ms), `scalepad_lm_warranty_pricing_list` | Apply the reliability tiers in `assets-pack-warranty-tracking`: an empty field is "unknown", never "expired" |
-| Certificates | `gogetssl_orders_list` with `status: "active"` (`valid_till`), `hudu_list_websites` (`ssl_expiration`, `ssl_issuer`), `yeastar_list_certificates` for PBX certificates | GoGetSSL knows only what was bought there. Hudu records its last scan, not a live check. A certificate on a site, mail host, or VPN that appears in neither source is invisible to this sweep |
+| Certificates | `gogetssl_orders_list` with `status: "active"` (`valid_till`), `hudu_list_websites` (`ssl_expiration`, `ssl_issuer`), `yeastar_list_certificates` for PBX certificates (admin-tier in Conduit; report as unavailable when not listed) | GoGetSSL knows only what was bought there. Hudu records its last scan, not a live check. A certificate on a site, mail host, or VPN that appears in neither source is invisible to this sweep |
 | Domain registrations | No dedicated domain-expiry tool is exposed through Conduit. `hudu_list_websites` may carry registration data where WHOIS monitoring is on | Use a registration expiry field only if the record returns one; otherwise list domain expiry as a gap. `cipp_list_domain_health` reports DNS and email-authentication health, not registration expiry, so it is not a date source |
-| Disk and storage | `datto_get_device_audit` (`hardware.disks[]` with `size` and `freeSpace`), `datto_list_alerts` (`perf_disk_usage_ctx`), `ncentral_get_device_assets`, `ninjaone_alerts_list`, `auvik_statistics_device` for NAS and SAN devices | Mostly point-in-time readings; see the forecast rules below. `datto_get_device_audit` is admin-tier in Conduit |
+| Disk and storage | `datto_get_device_audit` (`hardware.disks[]` with `size` and `freeSpace`), `datto_list_alerts` (`perf_disk_usage_ctx`), `ncentral_get_device_assets`, `ninjaone_alerts_list`, `auvik_statistics_device` for NAS and SAN devices | Mostly point-in-time readings; see the forecast rules below. `datto_get_device_audit` is admin-tier in Conduit; report as unavailable when not listed |
 | Cloud headroom | `azure-mcp__quota`, `azure-mcp__advisor`, DigitalOcean list tools | Take the forecast and its caveats from `cloudops-pack-cloud-capacity-planning` instead of redoing them |
 
 NinjaOne's Conduit tools expose alerts and device records but no volume list,
@@ -113,8 +113,10 @@ Rules for the projection:
 
 - Project only sustained growth. One large copy, or a backup that has not yet
   rotated, is a spike; discard the step change and say so.
-- Give a range: the fill date at the observed average rate, and at the faster
-  of the last two intervals. State the readings used.
+- With three or more readings, give a range: the fill date at the observed
+  average rate, and at the faster of the last two intervals. With exactly two
+  readings there is only one interval, so give one rate and say so. State the
+  readings used.
 - Prioritize servers, file shares, and database volumes. Workstation system
   drives matter only when under 15% free.
 - If a volume was expanded recently, start the trend after the change.
@@ -148,7 +150,9 @@ conversation:
    "unknown" items (warranty field empty, certificate with no expiry) in a
    labeled list rather than omitting them.
 6. **Draft tickets.** One draft per client with items in the first two bands.
-   Watch-band items go in the report only.
+   Watch-band items go in the report only, except a Watch-band item on the same
+   device or quotable action as an Act now or Quote soon item: it goes in that
+   draft and is marked Watch.
 7. **Stop.** Present the report and drafts. Creating tickets or quoting is a
    separate step the technician approves.
 
@@ -158,9 +162,9 @@ conversation:
 Title: Upcoming renewals and capacity: Acme Co (next 60 days)
 Priority: Normal (High only if an Act now item affects production)
 Body:
-- Certificate: portal.acme.example expires 2026-12-14 (31 days). Source: GoGetSSL order. Renew or reissue, confirm the validation contact.
-- Warranty: SRV-FS01 ends 2027-01-20 (68 days, manually maintained field, verify). Quote replacement or extension.
-- Disk: SRV-FS01 D: 412 of 500 GB used. Readings 2026-10-22 (361 GB) and 2026-11-19 (412 GB) give 1.8 GB/day, about 49 days to full at that rate. Plan expansion.
+- Certificate: portal.acme.example expires 2026-12-14 (24 days, Act now). Source: GoGetSSL order. Renew or reissue, confirm the validation contact.
+- Warranty: SRV-FS01 ends 2027-01-20 (61 days, Watch, same device as the disk item; manually maintained field, verify). Quote replacement or extension.
+- Disk: SRV-FS01 D: 412 of 500 GB used. Readings 2026-10-22 (361 GB) and 2026-11-19 (412 GB) give 1.82 GB/day (two readings, so one rate and no range), about 48 days to full with 88 GB free (Quote soon). Plan expansion.
 Not assessed: domain registration expiry (no source connected), NinjaOne disk volumes.
 Evidence window: 2026-11-20 to 2027-02-18.
 ```
@@ -186,9 +190,9 @@ result or from an earlier snapshot you can cite.
 ## Output
 
 Lead with a per-client table sorted by the earliest Act now item, then the
-unassigned section, then the "not assessed" and gaps list. When the `ops-pack`
-client health score skill is installed, this output is its renewals and
-capacity input.
+unassigned section, then the "not assessed" and gaps list. A planned `ops-pack`
+client health score skill (WYREAI-1624) is meant to take this output as its
+renewals and capacity input.
 
 ## Related Skills
 

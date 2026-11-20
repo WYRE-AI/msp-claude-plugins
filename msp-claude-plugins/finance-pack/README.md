@@ -39,7 +39,7 @@ skipping or guessing when a connector is missing.
 - `license-true-up` — marketplace-provisioned vs. billed vs. deployed seat reconciliation
 - `margin-analysis` — per-client/service-line margin, with explicit handling of missing cost data
 - `renewal-and-price-increase-prep` : composes Agreement Reconciliation and Margin Analysis into per-client talking points for a renewal or price-increase conversation, without inventing rates or amounts
-- `renewals-capacity-early-warning`: read-only 60-90 day look-ahead that merges contract, subscription, warranty, certificate, and domain expiry with storage fill forecasts into one draft ticket per client
+- `renewals-capacity-early-warning`: read-only 60-90 day look-ahead that merges contract, subscription, warranty, certificate, and domain expiry (where a connected source records it) with storage fill forecasts into one draft ticket per client
 
 **Agents**
 - `billing-drift-detector` — portfolio-wide contract-vs-invoice mismatch sweep, ranked by dollar impact
