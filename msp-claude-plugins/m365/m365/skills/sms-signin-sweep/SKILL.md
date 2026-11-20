@@ -43,8 +43,8 @@ Start with `conduit__search_tools` and use only discovered read tools. No curate
 | SMS method policy, per tenant | `cipp-official`: `SearchTools`, `GetToolInfo`, `ListGraphRequest`; or one tenant via `microsoft_graph_suggest_queries` then `microsoft_graph_get` | Graph `policies/authenticationMethodsPolicy/authenticationMethodConfigurations/sms`. Read `state`, `includeTargets` (each target has `isUsableForSignIn`) and `excludeTargets`. Admin tier. |
 | Registered methods per user, and admin flag | same routes, Graph `reports/authenticationMethods/userRegistrationDetails` (`isAdmin`, `methodsRegistered`, `isMfaCapable`) | Or `cipp_list_mfa_users` for a CIPP-shaped list; field names differ, so read what comes back. |
 | Per-user SMS sign-in state | same routes, Graph `users/{id}/authentication/phoneMethods` (`smsSignInState`) | One call per user; use for a sample or for privileged users, not a whole tenant. |
-| Sign-in logs | `cipp_list_user_signin_logs` (one user), or `ListGraphRequest` on `auditLogs/signIns` | Admin tier. Rows carry `authenticationDetails` with the method used and whether the step was primary or secondary. |
-| Registration and policy changes | `cipp_list_audit_logs` | Look for security-info registration and removal events and authentication-method policy updates. |
+| Sign-in logs | `cipp_list_user_signin_logs` (one user), or `ListGraphRequest` / `microsoft_graph_get` on `auditLogs/signIns` | Admin tier. Only the Graph `signIns` rows carry `authenticationDetails[]` (`authenticationMethod` such as "Text message", `authenticationStepRequirement` such as "Primary authentication"). The CIPP tool describes time, app, IP, location and success or failure; check whether its rows include method detail before treating them as SMS evidence, and use the Graph route when they do not. |
+| Registration and policy changes | Primary: `ListGraphRequest` / `microsoft_graph_get` on `auditLogs/directoryAudits`. Secondary: `cipp_list_audit_logs` | Admin tier. In `directoryAudits` use category UserManagement for activities such as "User registered security info", "User deleted security info" and "Admin updated security info", and category Policy for authentication-methods policy updates. `cipp_list_audit_logs` returns only what CIPP's audit-log alerting ingests and can be empty when no matching alert rule exists. If only the CIPP route returned nothing, record "not checked", not "clean". |
 | Privileged accounts | `cipp-official` role-assignment read (see `m365-reseller-control-audit`) joined to the registration report | Match `isAdmin` or role holders to SMS or voice registered. |
 
 If the policy cannot be read for a tenant, say "not checked" for that tenant and why. Do not infer it from user data.
@@ -66,7 +66,7 @@ For each tenant read the SMS method configuration and record: `state` (enabled o
 For each tenant where first-factor SMS was on, look for:
 
 - Successful SMS-based sign-ins from new countries, ASNs or devices, or outside the user's normal hours.
-- Phone number or method changes (`cipp_list_audit_logs`): a number added shortly before an SMS sign-in, methods removed, methods added by an admin.
+- Phone number or method changes (`auditLogs/directoryAudits`, then `cipp_list_audit_logs`): a number added shortly before an SMS sign-in, methods removed, methods added by an admin.
 - Follow-on activity in the same window: new inbox rules, forwarding, OAuth app consents (`cipp_bec_check` runs the compromise check for a user; `cipp_list_enterprise_apps` shows new service principals).
 
 Report observations, not verdicts. "Sign-in at <UTC time> from <country> by SMS first factor, number added <time> earlier" is a finding. Whether it is an attack is for the operator and `secops-pack-bec-response`. Do not speculate beyond the log data. Hand each suspicious account to `secops-pack-bec-response` with the evidence list.

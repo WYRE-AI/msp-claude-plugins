@@ -39,7 +39,7 @@ The Conduit `m365` connector has no tools for this area. The service-health read
 | Scope | Tool | Notes |
 |-------|------|-------|
 | One tenant you are signed in to | `microsoft_graph_suggest_queries`, then `microsoft_graph_get` | Admin tier, read-only. Ask for "service health issues" and use the candidate returned. |
-| Every managed tenant | `cipp-official`: `SearchTools`, `GetToolInfo`, then `ListGraphRequest` (or `ExecTool` if `SearchTools` returns a dedicated service-health endpoint) | Admin tier. Read the tool schema with `GetToolInfo` before the first call; the Graph path and tenant arguments come from that schema. |
+| Every managed tenant | `cipp-official`: `SearchTools`, `GetToolInfo`, then `ListGraphRequest` | Admin tier, read-only. Do not use `ExecTool`: it is admin + write and can dispatch any CIPP catalog tool. Read the tool schema with `GetToolInfo` before the first call; the Graph path and tenant arguments come from that schema. |
 | Tenant list and domains | `cipp_list_tenants`, `cipp_get_tenant_details` | Resolve the client name to the `defaultDomainName` first; never guess a tenant identifier. |
 
 The curated `cipp` connector has no service-health tool. Do not invent one. If neither route is connected, say so, ask the operator to paste the incident IDs from the Microsoft 365 admin center (Health > Service health) or the Partner Center service-health view, and record the missing read as a gap (see Gaps).
@@ -101,7 +101,7 @@ Lead with the per-tenant table from step 1. Then list drafts waiting for approva
 
 ## Gotchas
 
-- **Incident IDs differ by tenant view.** Use the ID shown in the tenant's own service health, not one copied from a social post.
+- **Which incidents appear differs by tenant.** Service-health IDs (EX123456, MO123456) are global, but cite an ID only if it appears in that tenant's own service health, not one copied from a social post.
 - **Graph can lag the admin center.** Say "as of <UTC time>" on every table.
 - **Delegated reads in customer tenants need the right GDAP role.** An empty result can be a permissions boundary, not a healthy tenant. Say which it was if you can tell; if not, say it is unknown.
 - **Per-tenant claim hours are the real cost.** Build the pack once and fill rows from `cipp_list_licenses`; do not rewrite the narrative per client.
