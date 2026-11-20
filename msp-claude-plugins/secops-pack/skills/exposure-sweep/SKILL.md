@@ -53,6 +53,9 @@ that talks to it. Run each mode as its own pass and merge the tables.
   `sentinelone-vulnerabilities` or `blackpoint-vulnerability-management`.
 - **Ranking clients by general security posture** - use the
   `/secops-pack:tenant-exposure` command.
+- **Ranking one estate by missing patches, end-of-life systems, and KEV
+  exposure, with no single named CVE** - use `patch-eol-kev-risk-ranking`
+  in assets-pack. Use this skill when one named CVE drives the question.
 - **Reviewing one Meraki firewall's configuration** - use
   `meraki-firewall-review`.
 
@@ -142,6 +145,11 @@ Give each device exactly one status:
 | Version unverified | Product present, version missing or conflicting |
 | Not assessed | No readable source for the client |
 
+A status may carry one parenthetical qualifier from the mode reference,
+for example "(restart required)", "(idle)", or "(no fix available)". The
+qualifier adds detail and never creates an eighth status. Where a finding
+could match two rows, the mode reference gives the order to apply them.
+
 Compare versions inside the device's own branch. A device on an older
 branch needs that branch's fixed build, not a jump to the newest release.
 End-of-life branches with no fix are **replace**, which is a project
@@ -218,7 +226,7 @@ then repeat Steps 2 and 3 and compare by client plus device identifier
 
 | Change | Meaning |
 |--------|---------|
-| Fixed since last run | Version now at or above the fixed build |
+| Fixed since last run | Status is now Fixed: version at or above the fixed build, with no restart pending |
 | Still affected | Same status; report age and the open ticket |
 | Newly affected | New device, or an advisory update widened the range |
 | Not seen | Absent this run. Report as not seen, never as remediated |
