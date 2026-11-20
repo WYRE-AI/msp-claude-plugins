@@ -2789,20 +2789,22 @@ export const plugins: Plugin[] = [
     vendor: 'Finance-pack',
     description: 'Finance & Billing — agreement reconciliation, license true-up, and margin analysis across PSA, accounting, and distribution tools.',
     category: 'workflow-pack',
-    maturity: 'beta',
+    maturity: 'production',
     features: [
       'Agreement Reconciliation',
       'Churn Scanner',
       'License True Up',
       'Margin Analysis',
-      'Renewal And Price Increase Prep'
+      'Renewal And Price Increase Prep',
+      'Renewals Capacity Early Warning'
     ],
     skills: [
       { name: 'agreement-reconciliation', description: 'Reconciling PSA contract/agreement entitlements (seats, hours, recurring services) against invoiced reality in an accounting platform, across any combination of PSA (Autotask, HaloPSA, ConnectWise, Syncro) and accounting platform (QuickBooks Online, Xero).' },
       { name: 'churn-scanner', description: 'Cross-vendor client retention risk ranking from ticket volume, customer sentiment, SLA misses, overdue invoices, upcoming agreement renewals, and RMM availability proxies.' },
       { name: 'license-true-up', description: 'Three-way seat reconciliation per client per SKU: seats provisioned in a cloud marketplace (Pax8, Sherweb) vs. seats billed in accounting or PSA billing vs. seats actually deployed in the tenant (microsoft-graph or CIPP).' },
       { name: 'margin-analysis', description: 'Per-client and per-service-line margin computation for an MSP: revenue from PSA billing or accounting invoices, cost of goods from Pax8/Sherweb wholesale pricing, and estimated labor from PSA time entries × a loaded technician rate.' },
-      { name: 'renewal-and-price-increase-prep', description: 'Composes Agreement Reconciliation and Margin Analysis into per-client talking points for an upcoming renewal or a price-increase conversation.' }
+      { name: 'renewal-and-price-increase-prep', description: 'Composes Agreement Reconciliation and Margin Analysis into per-client talking points for an upcoming renewal or a price-increase conversation.' },
+      { name: 'renewals-capacity-early-warning', description: 'A read-only 60-90 day look-ahead that merges everything about to expire or fill up into one ranked list per client: PSA contracts, marketplace subscriptions, hardware warranties, SSL certificates, domain registrations, and on-prem or cloud storage trending toward full.' }
     ],
     agents: [
       { name: 'billing-drift-detector', description: 'Use this agent when an MSP billing team, controller, or account manager needs to run a portfolio-wide sweep for contract-vs-invoice mismatches — surfacing every client where the PSA agreement and the accounting invoice disagree, ranked by dollar impact.' },
