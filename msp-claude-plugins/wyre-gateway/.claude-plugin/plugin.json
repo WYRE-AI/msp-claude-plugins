@@ -2,7 +2,8 @@
   "name": "wyre-gateway",
   "displayName": "Wyre MSP Gateway",
   "description": "Access all connected MSP tools (Autotask, IT Glue, Datto RMM, etc.) through a single authenticated gateway",
-  "version": "1.4.6",
+  "version": "1.5.0",
+  "types": "./types/index.d.ts",
   "author": {
     "name": "MSP Claude Plugins Community"
   },

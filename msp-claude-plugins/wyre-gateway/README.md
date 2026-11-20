@@ -132,6 +132,29 @@ Tool names are prefixed with the vendor name to avoid collisions:
 
 If your Wyre account belongs to a team or organization, vendor connections are shared across the team. Any team member who connects a vendor makes it available for all team members using the gateway.
 
+## wyre-guard (Claude Code mod)
+
+Claude Code runs the `hooks/` mod in this plugin. It adds client-safety controls on top of the skills and the Conduit connector. Cowork and chat installs do not load `hooks/` and keep working as skills plus the connector only.
+
+| Control | What the tech sees |
+|---|---|
+| Active client | A line above the prompt: `Client: Acme`. With none selected it reads `Client: none selected. Conduit writes are blocked.` Set it with `/client Acme`; `/client` alone clears it. It starts empty every session and never defaults to the last client. |
+| Write confirm | Every PSA/RMM write and destructive Conduit call asks: `autotask.update_ticket: Write in PSA, fields: id, status. Allow write on Acme?` with `Allow for Acme` or `Cancel`. Never a bare Allow. If the input names a different client (for example `companyName: Globex`) the question opens with a WARNING. |
+| Fail closed | No active client, a dismissed dialog or an error inside the guard all block the call with `Guard unavailable — write blocked (Acme)`. |
+| Redaction | Gateway tool results are scrubbed before the model reads them: password, secret, token and API-key fields, bearer tokens, JWTs, AWS keys, private key blocks, SSNs and card numbers become `[redacted]`. This includes IT Glue and Hudu password values by design. |
+
+A call counts as a write unless every word of its action is a known read verb (`get`, `list`, `search`, ...). Unknown actions such as `raw_request` or `custom_mutation` ask. The guard tags the active client and the tool on the status line for every gateway call, reads included.
+
+The guard is a local safety net for the tech's own session. It does not replace Conduit's server-side policy, and a mod is not sandboxed.
+
+### MSP Team and Enterprise admins
+
+1. Allowlist the `WYRE-AI/msp-claude-plugins` marketplace in managed settings (`strictKnownMarketplaces`).
+2. Pin `wyre-gateway` in managed `enabledPlugins` next to Anthropic's `sec-default` mod so techs cannot drop the guard.
+3. Keep the Conduit connector's own per-tool policy on; the mod is a second layer, not the first.
+
+Ticket/SLA side pane and a client picker fed from the PSA are not part of this pilot.
+
 ## Troubleshooting
 
 ### OAuth prompt doesn't appear
