@@ -95,18 +95,19 @@ fell back to subject text and the clusters are weaker for it.
 - A single user producing most of the tickets for a client. Say so. It is a
   conversation to have, not an infrastructure fix.
 
-## Pulling closed-ticket history
+## Pulling the ticket history
 
 Discover the connected PSA's tools with `conduit__search_tools` first. The
-window is 90 days of tickets in any status. The tools differ in how they
-reach closed tickets:
+window is 90 days of tickets in all statuses. Open tickets matter as much as
+closed ones: the latest "return" is often still open. The tools differ in how
+they reach every ticket:
 
-| PSA | Tool | How to reach closed tickets in the window |
+| PSA | Tool | How to reach every ticket in the window |
 |---|---|---|
-| Autotask | `autotask_search_tickets` | Defaults to open tickets only. Pass `status` for the completed status ID, one status per call, with `createdAfter`. Discover status IDs with `autotask_list_ticket_statuses`. Max 500 per page. Linked CI and notes need `autotask_get_ticket_details` per ticket. |
-| ConnectWise PSA | `cw_search_tickets` | Use `conditions` with a date and no status filter, for example `dateEntered > [2026-08-20T00:00:00Z]`. Page with `page` and `pageSize` up to 1000. Configurations per ticket come from `cw_get_ticket_configurations`. |
-| HaloPSA | `halopsa_tickets_list` | `closed_only: true` with `dateoccurred_start` and `dateoccurred_end`, paged with `page_no`. |
-| SuperOps | `superops_tickets_list` | Filters by status, priority, client and technician, but has no date filter. Pull the Resolved and Closed statuses per client and drop tickets outside the window yourself. |
+| Autotask | `autotask_search_tickets` | Defaults to open tickets only, and takes one `status` per call. Make one call with `status` omitted plus `createdAfter` and `companyID` (open tickets), then one call per closed status ID. Discover status IDs with `autotask_list_ticket_statuses`. Max 500 per page. Linked CI and notes need `autotask_get_ticket_details` per ticket. |
+| ConnectWise PSA | `cw_search_tickets` | Use `conditions` with a date and a client filter and no status filter, for example `dateEntered > [<today minus 90 days>] AND company/id = <id>`. Page with `page` and `pageSize` up to 1000. Configurations per ticket come from `cw_get_ticket_configurations`. |
+| HaloPSA | `halopsa_tickets_list` | Omit both `closed_only` and `open_only` (or call once with each), with `client_id` and `dateoccurred_start` / `dateoccurred_end`, paged with `page_no`. |
+| SuperOps | `superops_tickets_list` | Filters by status, priority, client and technician, but has no date filter, and defaults to Resolved and Closed. Pass the open statuses (Open, On Hold, Waiting on third party) as well as Resolved and Closed per client, and drop tickets outside the window yourself. |
 
 Pull per client, not account-wide, so a very large tenant does not hit page
 limits and each cluster stays inside one client. Linking tickets to assets is
@@ -119,7 +120,7 @@ what share of tickets had a linked device.
 
 1. Discover the PSA tools. Resolve status and category IDs from the PSA's own
    list tools rather than assuming their meaning.
-2. For each client, pull the 90-day window in any status, with device, contact,
+2. For each client, pull the 90-day window in all statuses, with device, contact,
    category, subject, created and closed dates.
 3. Drop excluded request types and alert-generated tickets into a "volume
    only" count.
@@ -168,7 +169,10 @@ check that would confirm it.
 One draft per pattern, never per ticket. Include the linked ticket numbers,
 the evidence above and the proposed fix, and leave the assignee empty.
 Show the draft and stop. Create it only after a technician approves, using the
-PSA's create-ticket tool. Where the PSA has a Problem ticket type (Autotask's
+PSA's create-ticket tool (`autotask_create_ticket`, `cw_create_ticket`,
+`halopsa_tickets_create` or `superops_tickets_create`). The Autotask draft
+needs `companyID`, `title` and `description`, plus `dueDateTime` unless the
+category supplies a default due date, or the create is rejected. Where the PSA has a Problem ticket type (Autotask's
 `autotask_create_ticket` takes a `ticketType` picklist value; discover valid
 IDs with `autotask_get_field_info`), use it. Otherwise create a normal ticket
 and prefix the title with "Problem:". Do not close or merge the original
@@ -179,7 +183,8 @@ tickets.
 - **No PSA connected:** say there is no ticket history to analyze and stop.
 - **No closed tickets returned:** check that the closed-status filter was
   applied. On Autotask an omitted `status` returns only open tickets, which
-  gives a false "no repeats" result.
+  gives a false "no repeats" result. The reverse also holds: a closed-only
+  pull misses the open ticket that is the latest return.
 - **Window not fully covered:** if a PSA call paged out or errored partway, say
   which clients were partial and exclude them from the ranking instead of
   ranking a truncated count.
