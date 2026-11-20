@@ -81,6 +81,10 @@ so, rather than assuming untested or silently omitting it.
 - Propose a recommended test schedule per flagged system, prioritized by criticality
   and staleness
 - Run in portfolio-wide or single-client mode
+- Score restore-test recency per system and roll it up per client (worst Tier 1
+  state first) with the oldest evidence age, so clients with no recent restore
+  test are visible at a glance, and draft one restore-test ticket per flagged
+  client for review without creating it
 
 ## Approach
 
@@ -108,7 +112,10 @@ so, rather than assuming untested or silently omitting it.
    overdue Tier 2 and 3, then due-soon systems, then current systems as a summary
    count.
 
-7. Produce the report with a recommended test schedule per flagged system —
+7. Roll the per-system states up per client using the worst Tier 1 state first,
+   and check the PSA for an existing open drill ticket before drafting one.
+
+8. Produce the report with a recommended test schedule per flagged system —
    specific system, recommended test type (matching what's actually available for
    its vendor family), and a target date.
 
@@ -148,6 +155,16 @@ one-line reason each. Omit this section entirely only if everything was assessab
 | P1 | | | |
 | P2 | | | |
 | P3 | | | |
+
+**Client Restore-Test Recency** (portfolio mode)
+
+| Client | Worst state | Oldest evidence | Never / Overdue / Due / Current | Main gap |
+|---|---|---|---|---|
+| [client] | [Never tested / Overdue / Due / Current] | [age in days, type] | [n / n / n / n] | [one sentence] |
+
+**Draft Tickets** (for technician review, none created)
+- [Client]: [subject line] — [systems and evidence age, test type, proposed window,
+  client sign-off needed before any restore touches production]
 
 ## Relationship to `dr-readiness-auditor`
 

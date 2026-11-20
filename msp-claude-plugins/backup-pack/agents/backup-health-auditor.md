@@ -78,6 +78,12 @@ skipping it silently.
   single-client scope
 - Cross-reference active failures against an open PSA ticket where a PSA is
   connected, to avoid redundant flags
+- In trend mode, score each protected unit week over week (success rate, running
+  late, duration drift, silent skips, verification slip, offsite lag, storage
+  growth) per the `backup-job-health` skill, label it Stable, Drifting, Degrading
+  or Improving, and roll that up to one line per client
+- Draft, but never create, one ticket per client with a Degrading unit or a
+  Drifting Tier 1 unit, per the `backup-job-health` skill
 - Explicitly flag any section that couldn't be assessed due to missing connector data
 
 ## Approach
@@ -103,7 +109,14 @@ skipping it silently.
    open ticket referencing it, and note that rather than presenting it as a fresh
    finding.
 
-6. Produce the report, worst-first: longest active failure streaks, then missed
+6. If trend mode was requested (or the run is the weekly review), pull 14 days of
+   history, score each unit 7-versus-7 days, and roll up per client. Where fewer
+   than 14 days came back, say which window was covered and mark the rest "trend
+   unavailable". Draft one ticket per client with a Degrading unit or a Drifting Tier 1 unit
+   (per the `backup-job-health` skill), for review only, after
+   checking the PSA for an existing open ticket.
+
+7. Produce the report, worst-first: longest active failure streaks, then missed
    backups, then storage risk, then a portfolio summary of healthy coverage.
 
 ## Output Format
@@ -127,6 +140,15 @@ skipping it silently.
 
 **Healthy**
 - [N] protected units with no current failure streak, no missed runs, no storage risk
+
+**Week-over-Week Trend** (trend mode only)
+- [Client] — Degrading — [N] units: [one-sentence reason with the numbers, e.g.
+  nightly run time up from 40 min to 2 h 50 min over 5 runs; 2 assets with no run
+  since [date]]
+- [Client] — Drifting / Improving / Stable — counts only
+
+**Draft Tickets** (for technician review, none created)
+- [Client]: [subject line] — [units, signals, last good run, suggested first check]
 
 ---
 

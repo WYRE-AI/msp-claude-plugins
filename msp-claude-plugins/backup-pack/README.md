@@ -32,12 +32,15 @@ missing connector — never a silent guess or a fabricated figure.
 
 **Skills**
 - `backup-job-health` — portfolio-wide job success/failure rate, missed-backup
-  detection, storage-consumption trending, and how to normalize image-based appliance
-  backup and SaaS-data snapshot backup into one comparable health view
+  detection, storage-consumption trending, week-over-week trend scoring (slower
+  jobs, late runs, silently skipped machines, verification and offsite lag), and
+  how to normalize image-based appliance backup and SaaS-data snapshot backup into
+  one comparable health view
 - `restore-test-verification` — the difference between "a backup exists" and "a
   backup is recoverable," a ranked hierarchy of restore evidence (actual restore,
   boot verification, screenshot verification, spot-check restore), and
-  data-criticality-tiered testing cadence
+  data-criticality-tiered testing cadence, and per-client restore-test recency so
+  clients with no recent restore test stand out
 - `retention-rpo-compliance` — checking actual retention configuration and cadence
   against contracted retention/RPO requirements, distinguishing configuration gaps
   from storage-forced retention truncation
@@ -51,12 +54,22 @@ missing connector — never a silent guess or a fabricated figure.
   requirements and actual configuration
 
 **Commands**
-- `/backup-pack:backup-status` — portfolio-wide backup job health snapshot (no
-  arguments)
+- `/backup-pack:backup-status [trend]` — portfolio-wide backup job health snapshot;
+  `trend` adds the week-over-week view
 - `/backup-pack:restore-check [client]` — restore-readiness check for one client or
   the whole portfolio
 - `/backup-pack:retention-audit [client]` — retention/RPO compliance audit for one
   client or the whole portfolio
+
+## Trend and recency (read-only)
+
+The trend view compares the last 7 days against the 7 days before and needs about 14
+days of history from the connected tools. It scores each protected unit Stable,
+Drifting, Degrading or Improving, rolls up to one line per client (backup trend plus
+restore-test recency), and drafts tickets for technician review. It never creates a
+ticket, queues a restore or changes a seat; where a tool returns too little history it
+reports "trend unavailable" instead of guessing. The per-client line is shaped to feed
+a client health score.
 
 ## How this pack relates to `wyre-gateway`'s `dr-readiness-auditor`
 

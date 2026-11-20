@@ -36,8 +36,11 @@ overdue or never tested. Omit `client` to run across the whole portfolio.
 4. **Present the report**, critical findings first — never-tested Tier 1 systems
    lead, followed by overdue systems, then the full status table and a recommended
    test schedule.
-5. **If portfolio-wide**, close with a rollup ranking clients by number of
-   never-tested/overdue mission-critical systems.
+5. **If portfolio-wide**, close with a rollup ranking clients by restore-test
+   recency (worst Tier 1 state first, oldest evidence age, system counts per state)
+   and number of never-tested/overdue mission-critical systems, plus one draft
+   restore-test ticket per flagged client. Drafts are for review; nothing is
+   created in the PSA and no restore is queued.
 
 ## Arguments
 

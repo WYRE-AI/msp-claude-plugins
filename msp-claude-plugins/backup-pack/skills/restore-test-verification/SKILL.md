@@ -7,13 +7,17 @@ description: >
   restore drill, no evidence at all), adequate test cadence per
   data-criticality tier, and why a never-tested backup is the
   highest-priority finding — outranking even an actively failing job.
+  Also scores restore-test recency per client (days since the last real
+  evidence against the tier window) so clients with no recent restore test
+  are flagged and a test is drafted for review.
 when_to_use: >-
   When determining whether a backup is actually recoverable, not just present
   — tracking restore/DR test history, screenshot or boot-verification status,
   and testing cadence adequacy. Use when: restore test, DR test, can we
   actually restore this, backup verification, has this ever been restored,
   restore drill, boot verification, screenshot verification, untested
-  backups.
+  backups, restore test recency, when did we last test a restore, clients
+  with no recent restore test, overdue restore test.
 ---
 
 # Restore-Test Verification
@@ -104,6 +108,56 @@ everything else, including active job failures caught by `backup-job-health` —
 currently-failing job is at least a known, visible problem; a never-tested backup is
 an unknown one that looks fine until the moment it matters most.
 
+### Restore-test recency per client
+
+Recency is the age of the strongest evidence you can actually find, measured
+against the tier window above. Score it per protected system, then roll up per
+client so a service manager sees which clients have gone longest without proof
+of recovery.
+
+| State | Meaning |
+|---|---|
+| Current | Evidence of type 1, 2 or 4 dated inside the tier window, or type 3 (screenshot) for Tier 3 |
+| Due | Newest qualifying evidence is older than 75% of the window |
+| Overdue | Newest qualifying evidence is older than the window |
+| Never tested | No type 1-4 evidence found anywhere checked |
+
+For Tier 1 and 2, screenshot verification alone does not make a system
+Current: age it by the newest type 1, 2 or 4 evidence, and treat a system with
+screenshots but no drill on record as Overdue.
+
+Client roll-up: the client takes the worst state among its Tier 1 systems, then
+Tier 2, then Tier 3. SaaS tenants (the semi-annual row above) roll up as Tier 2
+unless the org documents them as Tier 1, and the ticket rule below treats them
+that way. Report the oldest evidence age and the count of systems in
+each state, not an average. A client with ten Current workstations and one
+Never-tested domain controller is a Never-tested client.
+
+Where each kind of evidence lives, since few tools log a manual drill:
+
+| Evidence | Where to look |
+|---|---|
+| Screenshot or boot verification | `datto_bcdr_list_screenshots` per asset; read the status and timestamp of the newest passing result, and count consecutive failures |
+| Restore or recovery events on appliances | `unitrends_list_job_history` and `unitrends_list_recovery_points`; look for restore-type entries rather than backup runs. Job history returns only the most recent page whatever `since`/`until` say, so older restore jobs may be missing; treat absence there as inconclusive |
+| SaaS restores | `spanning_list_audit_log` (the admin audit log, including restores; Read tier), and for Datto SaaS Protection the PSA or documentation record, since the connector exposes backup status but no restore history |
+| Deliberate DR drills and spot-check restores | PSA tickets (search closed tickets with restore, DR test or recovery drill wording against the client) and the client's DR runbook or documentation page in IT Glue or Hudu |
+
+A restore found only in a PSA ticket is type 1 or 4 evidence only if the ticket
+says what was restored and that it was validated. A closed ticket titled "DR
+test" with no detail is a lead to confirm, not evidence; list it as such.
+
+Do not call `unitrends_queue_restore` or `spanning_queue_restore` to "check" that a restore works. Queueing a restore is a state-changing action
+with its own approval path; this skill only reads history and recommends.
+
+**Draft the test, do not schedule it.** For every client that is Overdue or
+Never tested on a Tier 1 or Tier 2 system, draft one ticket for review: the
+systems and their evidence age, the test type that fits the vendor (boot or
+screenshot review plus a file-level restore for appliance backups; a
+mailbox or OneDrive file spot-check for SaaS backups), a proposed window, and
+the sign-off the client needs to give before a restore touches production.
+Check the PSA for an existing open drill ticket first and reference it instead
+of drafting a duplicate. Do not call a PSA create tool.
+
 ### If no backup/BCDR tool is connected
 
 State plainly that restore-test verification cannot run: "No backup or BCDR connector
@@ -121,6 +175,21 @@ Do not fabricate test dates or pass/fail status.
    never-tested.
 4. Report never-tested Tier 1 systems first, then overdue Tier 1, then the rest in
    descending criticality/staleness order.
+
+### Weekly recency roll-up
+
+1. Run the portfolio sweep above to get the strongest evidence and its date per
+   system.
+2. Apply the recency states per system, then roll up per client using the worst
+   Tier 1 state first.
+3. Report clients ordered Never tested, Overdue, Due, Current, each with oldest
+   evidence age, system counts per state, and one sentence on the main gap. This
+   roll-up sits next to the backup trend label from `backup-job-health` and is
+   what a client health score consumes as its restore-recency input.
+4. Draft the per-client restore-test tickets described above, for review only.
+5. Compare against last week's roll-up if one is available, so a client that
+   moved from Overdue to Current (or the reverse) is called out. If no prior
+   roll-up exists, say this is the baseline rather than inventing a prior state.
 
 ### Single-client restore-readiness check
 
