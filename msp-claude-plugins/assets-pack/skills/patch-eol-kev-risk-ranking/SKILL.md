@@ -46,10 +46,10 @@ report.
 - **Triaging one client's CVEs by EPSS and exploit maturity inside
   SentinelOne:** use `sentinelone-vulnerabilities`. This skill reads the
   same data as one of its inputs and compares across clients.
-- **One client's de-duplicated remediation workplan, grouped by patch
-  action with SLAs:** use the `vulnerability-remediation-prioritizer`
-  agent. This skill ranks machines and clients across the whole book on a
-  fixed ladder and stops at draft tickets.
+- **A de-duplicated remediation workplan grouped by patch action with
+  SLAs:** use the `vulnerability-remediation-prioritizer` agent. This
+  skill instead ranks each machine, then each client, on a fixed tier
+  ladder and stops at draft tickets.
 - **Turning aging hardware into a replacement plan:** use
   [Refresh Cycle Planning](../refresh-cycle-planning/SKILL.md). Its
   replace-now tier is a good place to send what this skill finds.

@@ -3071,7 +3071,7 @@ export const plugins: Plugin[] = [
     id: 'assets-pack',
     name: 'Assets Pack',
     vendor: 'Assets-pack',
-    description: 'IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.',
+    description: 'IT Asset Lifecycle — cross-vendor warranty tracking, end-of-life/end-of-support flagging, patch and KEV risk ranking, and hardware refresh-cycle planning across whatever RMM platforms and documentation tools you have connected.',
     category: 'workflow-pack',
     maturity: 'beta',
     features: [
