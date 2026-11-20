@@ -53,7 +53,11 @@ pack reports what it can verify and calls out, explicitly, what it can't.
   or suspected compromise), and `screenconnect-session-hijack-response`
   (panel abuse, rogue clients including modified clients under legitimate IDs,
   a read-only check for the five RMM+ family extensions, technician
-  reverse-pivot exposure, and operator-run out-of-band cleanup)
+  reverse-pivot exposure, and operator-run out-of-band cleanup), and
+  `exposure-sweep` (which clients run an exploited firewall, VPN, NAS, or
+  runtime version: classify against the advisory, rank internet-facing
+  first, hand the operator a compromise or version check, draft PSA
+  tickets for approval, and diff the next run)
 - **Agents** — `overnight-alert-summarizer`, `incident-timeline-builder`,
   `tenant-exposure-ranker`
 - **Commands** — `/secops-pack:portfolio-sweep`, `/secops-pack:incident-report`,

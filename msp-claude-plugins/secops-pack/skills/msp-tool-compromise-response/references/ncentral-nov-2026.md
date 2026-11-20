@@ -1,11 +1,45 @@
 # N-central November 2026 advisory notes
 
 Operator-facing facts for the first worked example. Re-check the official
-status page before relying on patch or exposure-window details; a
-follow-up hotfix was already signaled. Do not invent IOCs or a complete
-affected-version range.
+status page before relying on patch or exposure-window details; N-able
+has already shipped more than one follow-up hotfix. Do not invent IOCs or
+a complete affected-version range.
 
-## Official remediation
+## Current remediation: HF3
+
+N-able released N-central 2026.4 HF3, build `2026.4.1.39`, on 16
+November 2026 and calls it a critical security update. It supersedes
+HF2. See the [N-able release notes](https://status.n-able.com/release-notes/).
+
+- It fixes 17 more CVEs, CVE-2026-129271 through CVE-2026-129287. They
+  include an MMS3 appliance authentication bypass, several
+  missing-authentication paths in ServerMMS and ServerMMS2,
+  unauthenticated Take Control audit-log tampering (CVE-2026-129278),
+  XXE, SSRF, and a SIS path-traversal RCE. N-able published no CVSS
+  scores, and NVD had no records for them at the time of writing.
+- It removes the Legacy API configuration option, which blocks the
+  "4EverAble2Shell" chain (Apache Axis CVE-2026-90436 plus legacy APIs)
+  published on GitHub on 12 November. Remote control other than Take
+  Control, and the Intune integration, remain blocked.
+  ([SecurityWeek](https://www.securityweek.com/n-able-kills-legacy-apis-patches-17-n-central-zero-days/),
+  [The Hacker News](https://thehackernews.com/2026/11/n-able-patches-17-n-central-flaws-as.html))
+- Every customer, hosted and on-premises, must upgrade Agents and
+  Probes. N-able says older ones are susceptible to impersonation.
+  After upgrading, review the new Inactive Assets tab.
+- As of its 16 November update, Huntress had seen no in-the-wild
+  exploitation of the 17 HF3 CVEs. A public GitHub repo re-posted about
+  24 already-disclosed vulnerabilities with exploit code just after HF3
+  shipped ([r/msp thread](https://www.reddit.com/r/msp/comments/1xy3pg9/)),
+  which makes exploitation easier. The Hacker News reports that
+  attackers exploited the earlier bugs to deploy crypto miners.
+- A 12 November community thread reported two further researcher repos
+  against the HF2 build: "4EverAble2Shell" (unauthenticated RCE with
+  root on the server) and "Agent2Shell" (issues in interacting with
+  Windows agents, claimed to give SYSTEM execution when the appliance ID
+  is known). Treat these claims as unverified apart from what N-able's
+  HF3 notes confirm. HF2 alone is not "patched means safe".
+
+## HF2 history
 
 N-able published [N-central 2026.4 HF2 release notes](https://status.n-able.com/2026/11/10/n-central-2026-4-hf2-release-notes/)
 on 10 November 2026.

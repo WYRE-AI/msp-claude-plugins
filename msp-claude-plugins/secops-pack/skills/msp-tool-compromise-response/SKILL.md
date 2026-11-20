@@ -163,6 +163,15 @@ sign-ins and audit activity in the window with the identity reads
 above when they are connected. The plan is a recommendation. Do not
 reset, revoke, or disable anything.
 
+Some platforms hold credentials of their own that no connected tool
+reads. For NinjaOne, a community report says v16 (11 November 2026)
+turned on technician MFA recovery codes by default. The codes sign in
+without MFA and can change MFA methods, so a code saved in a synced
+folder or password vault is a credential. Ask the operator whether the
+setting is on (Administration, Accounts, Security Settings, Technician
+MFA requirements) and add any saved codes to the rotation plan. NinjaOne
+did not publish this; it comes from a community post, so confirm it in the console.
+
 ## Worked example: N-central, November 2026
 
 Use current official guidance; do not invent IOCs or affected-version
@@ -171,11 +180,14 @@ ranges. Facts and sources are in
 
 1. Confirm whether the server is hosted (N-able upgrades it) or
    on-premises (the customer upgrades it), and whether Agents and
-   Probes have been moved to the vendor's required build. When
+   Probes have been moved to the vendor's required build. The current
+   fix is HF3, build `2026.4.1.39`, which supersedes HF2. When
    connected, `ncentral_server_info` reports server version;
    agent/probe versions only if they already appear on device records
-   (`ncentral_get_device` / `ncentral_get_device_assets`). Otherwise
-   flag upgrade status as unverified in the console.
+   (`ncentral_get_device` / `ncentral_get_device_assets`). Compare each
+   client's Agent and Probe versions to the HF3 build; N-able says older
+   ones are susceptible to impersonation. Otherwise flag upgrade status
+   as unverified in the console.
 2. Collect independent EDR, identity, inventory, and network evidence
    for each mapped client in the exposure window, starting 8 November
    2026 unless the operator sets a different bound (Huntress advised
@@ -188,12 +200,19 @@ ranges. Facts and sources are in
    `ncentral_list_access_groups`, and `ncentral_get_access_group`. There
    is no verified tool for a complete script-library comparison or a
    remote-control session audit. Do not treat those records as
-   sufficient, especially where third-party research described audit
-   integrity issues.
-4. Produce the per-client report and a rotation plan. Recommend (do
+   sufficient. N-able's HF3 notes list unauthenticated Take Control
+   audit-log tampering (CVE-2026-129278) among the fixes, so audit
+   history from an unpatched server can be altered.
+4. Treat the managed Windows endpoints as in scope, not just the
+   appliance. A community-reported research repo ("Agent2Shell") claimed
+   code execution on agents, which N-able had not confirmed, and N-able
+   says unpatched Agents can be impersonated. Apply the same EDR,
+   inventory, and identity evidence to the devices N-central manages.
+5. Produce the per-client report and a rotation plan. Recommend (do
    not execute) following N-able's upgrade order: server to
-   `2026.4.1.26` for on-premises, then Agents, then Probes, and
-   re-check the official status page for any follow-up hotfix.
+   `2026.4.1.39` for on-premises, then Agents, then Probes, then
+   review the Inactive Assets tab, and re-check the official status page
+   for any follow-up hotfix.
 
 Apply the same pattern to ConnectWise Automate, Datto RMM, Kaseya VSA,
 NinjaOne, or another management-plane product: discover its read tools,
