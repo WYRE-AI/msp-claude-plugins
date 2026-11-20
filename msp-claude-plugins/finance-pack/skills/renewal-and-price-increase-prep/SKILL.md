@@ -40,6 +40,8 @@ returned, omit it and say which source was missing.
 - **Building the renewal calendar itself:** use the finance-pack
   `renewal-calendar-builder` agent, or the `/finance-pack:renewals`
   command, then come back here for talking points on a chosen client.
+- **A look-ahead that also covers certificates, warranties, and filling disks:**
+  use [Renewals and Capacity Early Warning](../renewals-capacity-early-warning/SKILL.md).
 
 ## Connected Systems
 
