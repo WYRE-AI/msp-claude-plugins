@@ -164,6 +164,7 @@ test('redaction stays linear on adversarial key, value and quote shapes', async 
     'password="'.repeat(20_000),
     `password="${'x\\"'.repeat(50_000)}`,
     `{"a":"${'\\\\\\"'.repeat(30_000)}"}`,
+    'password is' + ' '.repeat(100_000) + ',',
     '-----BEGIN RSA PRIVATE KEY-----'.repeat(40_000),
     `-----BEGIN RSA PRIVATE KEY-----${'-----END RSA PRIVATE KEY-----'.repeat(40_000)}`,
     `[{"token": "abc\\\n"${', "k": "v\\\n"'.repeat(30_000)}]`,
@@ -199,6 +200,14 @@ test('a plain-text result with escaped JSON strings inside is decoded before it 
   ]) {
     expect(redact(text)).not.toContain('Hunter2')
   }
+})
+
+test('a stray quote before embedded escaped JSON does not hide a secret', async () => {
+  const note = 'Screen 5" monitor. {"note":"a\\npassword: hunter2"}'
+  for (const text of [note, JSON.stringify({ content: [{ type: 'text', text: note }] })]) {
+    expect(redact(text)).not.toContain('hunter2')
+  }
+  expect(redact('He said "hi. {"note":"a\\npassword: hunter2"}')).not.toContain('hunter2')
 })
 
 test('a backslash before a raw newline does not hide later secrets', async () => {
