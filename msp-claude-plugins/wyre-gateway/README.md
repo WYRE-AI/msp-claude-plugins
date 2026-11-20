@@ -145,9 +145,9 @@ Claude Code runs the `hooks/` mod in this plugin. It adds client-safety controls
 
 The cross-client warning also checks the Microsoft 365 tenant (`tenantFilter`, `tenantId`, `defaultDomainName`) and always warns on `allTenants`.
 
-The guard covers Conduit tools served by this plugin's `msp-mcp-gateway` server, the claude.ai-synced Conduit connector, and hand-added MCP servers whose name contains `conduit`, `wyre` or `msp-gateway`. A Conduit connection added under any other server name is not guarded.
+The guard covers Conduit tools served by this plugin's `msp-mcp-gateway` server, the claude.ai-synced Conduit connector, and hand-added MCP servers whose name contains `conduit`, `wyre` or `msp-gateway` anywhere (`conduit-prod`, `wyre-conduit-staging`). A Conduit connection added under any other server name is not guarded.
 
-A call counts as a write unless every word of its action is a known read verb (`get`, `list`, `search`, ...). Unknown actions such as `raw_request` or `custom_mutation` ask. The guard tags the active client and the tool on the status line for every gateway call, reads included.
+A call counts as a write unless its action contains a known read verb (`get`, `list`, `search`, ...) and no write or destructive verb. Unknown actions such as `raw_request` or `custom_mutation` ask. The guard tags the active client and the tool on the status line for every gateway call, reads included.
 
 The guard is a local safety net for the tech's own session. It does not replace Conduit's server-side policy, and a mod is not sandboxed.
 

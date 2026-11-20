@@ -39,6 +39,9 @@ test('classify reads gateway tool names of both shapes', async () => {
   expect(classify('mcp__claude_ai_Conduit__autotask__autotask_update_ticket')).toMatchObject({ vendor: 'autotask', kind: 'write' })
   expect(classify('mcp__wyre__cipp__cipp_reset_password')?.kind).toBe('destructive')
   expect(classify('mcp__msp-gateway__autotask__autotask_update_ticket')?.kind).toBe('write')
+  expect(classify('mcp__conduit-prod__autotask__autotask_update_ticket')?.kind).toBe('write')
+  expect(classify('mcp__wyre-conduit-staging__autotask__autotask_update_ticket')?.kind).toBe('write')
+  expect(classify('mcp__claude_ai_Conduit_Gateway__autotask__autotask_update_ticket')?.kind).toBe('write')
   expect(classify('mcp__other__thing__update')).toBeNull()
   expect(classify('Bash')).toBeNull()
 })
@@ -66,6 +69,14 @@ test('redaction keeps JSON valid for non-secret keys and non-string values', asy
   expect(JSON.parse(out)).toEqual({ token: '[redacted]', password: '[redacted]', api_key: '[redacted]', accessToken: '[redacted]' })
 })
 
+test('redaction keeps JSON valid when a secret key holds an object or array', async () => {
+  const hudu = JSON.stringify({ asset_passwords: [{ id: 1, password: 'x' }] }, null, 2)
+  expect(JSON.parse(redactText(hudu))).toEqual({ asset_passwords: [{ id: 1, password: '[redacted]' }] })
+  for (const json of ['{"token":{"expires":1}}', '{"secrets":["a","b"]}', '{"authorization":{"type":"bearer"}}']) {
+    expect(() => JSON.parse(redactText(json))).not.toThrow()
+  }
+})
+
 test('redact anchors the secret key', async () => {
   const kept = { rootPath: 'C:\\data', footprint: 'small', bypassReason: 'x', passedChecks: 'y', tokenExpiry: 'z' }
   expect(redact(kept)).toEqual(kept)
@@ -91,6 +102,11 @@ test('redaction leaves 13-digit timestamps and 19-digit IDs alone, scrubs groupe
 test('a password stated in prose is scrubbed (cipp_reset_password)', async () => {
   expect(redact({ Results: 'The new password is Xy7!abc' })).toEqual({ Results: 'The new password is [redacted]' })
   expect(redactText('Temporary password: Xy7!abc')).not.toMatch(/Xy7/)
+  // The real path: the result reaches redact() as JSON text in a content block.
+  const cipp = JSON.stringify({ Results: 'Reset the password for jdoe. The new password is Xy7!abc', id: 1 }, null, 2)
+  const out = redactText(cipp)
+  expect(out).not.toMatch(/Xy7/)
+  expect(JSON.parse(out).id).toBe(1)
 })
 
 test('redaction scrubs credentials and PII, keeps JSON valid', async () => {

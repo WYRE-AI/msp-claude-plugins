@@ -5,9 +5,10 @@ export const REDACTED = '[redacted]'
 
 // mcp__<server>__<vendor>__<action>, where <server> is the Conduit connector.
 // Matches the plugin-served connector (mcp__plugin_wyre-gateway_msp-mcp-gateway__...),
-// the claude.ai-synced one (mcp__claude_ai_Conduit__...) and hand-added servers
-// named conduit, wyre or msp-gateway. A server under any other name is not guarded.
-const CONDUIT_TOOL = /^mcp__.*?(?:msp-mcp-gateway|msp-gateway|conduit|wyre)__(.+)$/i
+// the claude.ai-synced one (mcp__claude_ai_Conduit_Gateway__...) and hand-added
+// servers whose name contains conduit, wyre or msp-gateway anywhere
+// (conduit-prod, wyre-conduit-staging). Any other server name is not guarded.
+const CONDUIT_SERVER = /conduit|wyre|msp-(?:mcp-)?gateway/i
 
 // Vendor slug (first segment) to the label shown in the confirm dialog.
 const DOMAIN: Record<string, string> = {
@@ -59,9 +60,10 @@ export type ConduitCall = {
 
 // Returns null for a tool that does not come from the Conduit gateway.
 export function classify(tool: string): ConduitCall | null {
-  const rest = CONDUIT_TOOL.exec(tool)?.[1]
-  if (rest === undefined) return null
+  const [prefix, server = '', ...tail] = tool.split('__')
+  if (prefix !== 'mcp' || !CONDUIT_SERVER.test(server) || tail.length === 0) return null
 
+  const rest = tail.join('__')
   const parts = rest.split('__')
   const vendor = parts.length > 1 ? parts[0] : rest.split('_')[0]
   const raw = parts.length > 1 ? parts.slice(1).join('__') : rest
@@ -151,15 +153,19 @@ const TEXT_RULES: [RegExp, (...m: string[]) => string][] = [
   // "password": "x", password=x, api_key: x. Only a key that ends in a secret
   // word counts. A JSON value is replaced by the string "[redacted]", so the
   // output still parses whether the original was a string, number or boolean.
+  // An object or array value is left alone (its { or [ never starts a match):
+  // replacing only the opener would leave the rest dangling. Secret keys nested
+  // inside it are scrubbed by this same rule.
   [
-    /("?)([\w-]+)("?\s*[:=]\s*)("(?:[^"\\]|\\.)*"|[^\s,;}\]"]+)/g,
+    /("?)([\w-]+)("?\s*[:=]\s*)("(?:[^"\\]|\\.)*"|[^\s,;{}[\]"][^\s,;}\]"]*)/g,
     (all, open, key, sep, value) =>
       !isSecretKey(key)
         ? all
         : `${open}${key}${sep}${value.startsWith('"') || open === '"' ? `"${REDACTED}"` : REDACTED}`,
   ],
   // Prose: "The new password is Xy7!abc" (cipp_reset_password answers like this).
-  [/\b(pass(?:word|code|wd)\s+(?:is|was)\s*:?\s+)[^\s,;]+/gi, (_all, lead) => `${lead}${REDACTED}`],
+  // The value stops at a quote or backslash so a JSON string keeps its closing quote.
+  [/\b(pass(?:word|code|wd)\s+(?:is|was)\s*:?\s+)[^\s,;"\\]+/gi, (_all, lead) => `${lead}${REDACTED}`],
   [/\b\d{3}-\d{2}-\d{4}\b/g, () => REDACTED],
   // Cards: only a grouped number (4-4-4-4 or Amex 4-6-5, spaces or dashes) that
   // passes Luhn. Bare digit runs are never touched: about 1 in 10 timestamps and
@@ -178,7 +184,7 @@ export function redactText(text: string): string {
 // strings are scrubbed, and a string under a secret-looking key is dropped whole.
 export function redact(value: unknown, key = ''): unknown {
   if (typeof value === 'string') return isSecretKey(key) ? REDACTED : redactText(value)
-  if (Array.isArray(value)) return value.map(item => redact(item))
+  if (Array.isArray(value)) return value.map(item => redact(item, key))
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, redact(v, k)]))
   }
