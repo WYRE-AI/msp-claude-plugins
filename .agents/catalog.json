@@ -1929,7 +1929,7 @@
     {
       "name": "ninjaone",
       "displayName": "NinjaOne",
-      "version": "0.2.12",
+      "version": "0.2.13",
       "description": "NinjaOne (NinjaRMM) - devices, organizations, alerts, tickets",
       "category": "rmm",
       "tags": [

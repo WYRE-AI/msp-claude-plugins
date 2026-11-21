@@ -5,8 +5,11 @@
 | Region | Base URL |
 |--------|----------|
 | US | `https://app.ninjarmm.com` |
+| US2 | `https://us2.ninjarmm.com` |
 | EU | `https://eu.ninjarmm.com` |
 | Oceania | `https://oc.ninjarmm.com` |
+| CA | `https://ca.ninjarmm.com` |
+| FED | `https://fed.ninjarmm.com` |
 
 ## Device Roles
 
