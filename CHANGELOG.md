@@ -19,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Skill coverage for tools the shipped connectors added:** `connectwise-psa-procurement` and `connectwise-psa-scheduling`, `autotask-contract-services`, `cipp-secure-score`, `datto-saas-protection-seat-coverage`, `ninjaone-custom-fields`, `sentinelone-threat-intel`; plus new sections for CIPP standards templates, drift/alignment, mailbox usage, trusted senders, enterprise apps and sign-in logs, Datto RMM job results, HaloPSA ticket categories, IT Glue attachments/user metrics/configuration archiving, and Autotask note attachments, resource roles and opportunity updates.
 
+### Changed
+
+- **Marketplace entries now reference the `WYRE-AI` GitHub organization.** The CIPP, Freshdesk and Inforcer entries in `.claude-plugin/marketplace.json` point at `WYRE-AI`, and the install, update and removal commands and Docker image paths in the documentation use `WYRE-AI/msp-claude-plugins` and `ghcr.io/wyre-ai`. Plugin versions bumped in the same change (for example `cipp` 0.1.12 and `wyre-gateway` 1.4.7) follow the references.
+
 ### Removed
 
 - **`syncro` 0.3.0:** the `list-alerts`, `resolve-alert`, `create-appointment` and `log-time` commands. `/v1/syncro` has no alert, appointment or timer tools, so they could not run.
