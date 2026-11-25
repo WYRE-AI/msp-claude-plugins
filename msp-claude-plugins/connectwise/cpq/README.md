@@ -21,7 +21,7 @@ products or agreements.
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install connectwise-cpq --marketplace WYRE-AI/msp-claude-plugins
+/plugin install connectwise-cpq@msp-claude-plugins
 ```
 
 ## Configuration

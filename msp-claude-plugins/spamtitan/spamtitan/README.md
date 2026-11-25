@@ -37,7 +37,8 @@ export SPAMTITAN_BASE_URL="https://your-spamtitan-instance.com"  # for self-host
 ## Installation
 
 ```
-/plugin install spamtitan --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install spamtitan@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

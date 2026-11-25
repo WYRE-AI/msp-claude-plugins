@@ -16,7 +16,8 @@ This plugin provides Claude with deep knowledge of HubSpot CRM, enabling:
 ## Installation
 
 ```
-/plugin install hubspot --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install hubspot@msp-claude-plugins
 ```
 
 The plugin uses Conduit's `hubspot` connector, which is HubSpot's own hosted MCP server (`https://mcp.hubspot.com/anthropic/v1/mcp`). This plugin does not ship a `.mcp.json`:

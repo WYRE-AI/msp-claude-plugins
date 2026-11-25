@@ -45,7 +45,8 @@ To obtain credentials:
 ## Installation
 
 ```
-/plugin install ironscales --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install ironscales@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

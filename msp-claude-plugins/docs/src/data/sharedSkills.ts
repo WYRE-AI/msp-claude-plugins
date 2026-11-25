@@ -10,7 +10,7 @@ export interface SharedSkill {
  * via the `shared-skills` marketplace entry; install with:
  *
  *   /plugin marketplace add WYRE-AI/msp-claude-plugins
- *   /plugin install shared-skills
+ *   /plugin install shared-skills@msp-claude-plugins
  */
 export const sharedSkills: SharedSkill[] = [
   { name: 'billing-reconciliation', description: 'Reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero, QuickBooks Online): the matching strategy, billing gaps, unbilled subscriptions, and margin discrepancy analysis.' },

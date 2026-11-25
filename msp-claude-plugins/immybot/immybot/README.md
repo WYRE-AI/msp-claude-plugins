@@ -15,7 +15,7 @@ Claude Code plugin for [ImmyBot](https://immy.bot) - desired-state Windows softw
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install immybot --marketplace WYRE-AI/msp-claude-plugins
+/plugin install immybot@msp-claude-plugins
 ```
 
 The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/immybot/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.

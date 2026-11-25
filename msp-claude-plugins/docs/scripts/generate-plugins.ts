@@ -592,7 +592,7 @@ export interface SharedSkill {
  * via the \`${meta.installSlug}\` marketplace entry; install with:
  *
  *   /plugin marketplace add WYRE-AI/msp-claude-plugins
- *   /plugin install ${meta.installSlug}
+ *   /plugin install ${meta.installSlug}@msp-claude-plugins
  */
 export const sharedSkills: SharedSkill[] = [
 ${skillsArr}

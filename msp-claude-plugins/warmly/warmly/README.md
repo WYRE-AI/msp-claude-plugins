@@ -3,7 +3,8 @@
 ## Installation
 
 ```
-/plugin install warmly --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install warmly@msp-claude-plugins
 ```
 
 Claude Code plugin for [Warmly](https://www.warmly.ai) — visitor intelligence and account-level engagement for B2B sales teams.

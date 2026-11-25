@@ -3,7 +3,8 @@
 ## Installation
 
 ```
-/plugin install advanced-workflows --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install advanced-workflows@msp-claude-plugins
 ```
 
 Vendor-generic MSP automation skills. Each workflow detects which PSA/RMM/

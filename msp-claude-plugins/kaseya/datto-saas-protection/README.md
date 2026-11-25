@@ -3,7 +3,8 @@
 ## Installation
 
 ```
-/plugin install datto-saas-protection --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install datto-saas-protection@msp-claude-plugins
 ```
 
 Claude Code skills for working with Datto SaaS Protection (formerly Backupify) — cloud-to-cloud backup for Microsoft 365 and Google Workspace.

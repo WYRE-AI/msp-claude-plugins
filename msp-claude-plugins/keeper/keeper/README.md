@@ -69,7 +69,8 @@ copy — do not put it in a ticket, a runbook, or a repo.
 ## Installation
 
 ```
-/plugin install keeper --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install keeper@msp-claude-plugins
 ```
 
 ### Via Conduit (Recommended)

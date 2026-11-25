@@ -113,16 +113,11 @@ const compatibilityBadges = {
 
   <h2>Installation</h2>
 
-  <p>Install this plugin individually:</p>
+  <p>Run these commands inside Claude Code to add the marketplace and install this plugin.</p>
 
-  <div class="not-prose my-6">
-    <InstallCommand command={`/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin ${plugin.id}`} />
-  </div>
-
-  <p>Or install all MSP plugins at once:</p>
-
-  <div class="not-prose my-6">
+  <div class="not-prose my-6 space-y-3">
     <InstallCommand />
+    <InstallCommand command={`/plugin install ${plugin.id}@msp-claude-plugins`} />
   </div>
 
   <h2>Features</h2>

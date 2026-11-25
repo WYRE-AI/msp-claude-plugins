@@ -55,7 +55,8 @@ export MAILPROTECTOR_RESELLER_ID="12345"
 ## Installation
 
 ```
-/plugin install mailprotector --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install mailprotector@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

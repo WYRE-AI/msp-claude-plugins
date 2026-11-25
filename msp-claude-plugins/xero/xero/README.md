@@ -39,7 +39,8 @@ export XERO_TENANT_ID="your-tenant-id"
 ## Installation
 
 ```
-/plugin install xero --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install xero@msp-claude-plugins
 ```
 
 1. Clone this plugin to your Claude plugins directory

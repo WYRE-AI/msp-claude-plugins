@@ -49,7 +49,8 @@ Through Conduit, paste the Service User token and console URL into the SentinelO
 ## Installation
 
 ```
-/plugin install sentinelone --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install sentinelone@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

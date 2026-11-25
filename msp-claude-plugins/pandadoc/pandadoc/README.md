@@ -32,7 +32,8 @@ export PANDADOC_API_KEY="your-api-key"
 ## Installation
 
 ```
-/plugin install pandadoc --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install pandadoc@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

@@ -21,7 +21,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- **Marketplace entries now reference the `WYRE-AI` GitHub organization.** The CIPP, Freshdesk and Inforcer entries in `.claude-plugin/marketplace.json` point at `WYRE-AI`, and the install, update and removal commands and Docker image paths in the documentation use `WYRE-AI/msp-claude-plugins` and `ghcr.io/wyre-ai`. Plugin versions bumped in the same change (for example `cipp` 0.1.12 and `wyre-gateway` 1.4.7) follow the references.
+- **Marketplace entries now reference the `WYRE-AI` GitHub organization.** The CIPP, Freshdesk and Inforcer entries in `.claude-plugin/marketplace.json` point at `WYRE-AI`, and the marketplace registration and Docker image examples use `WYRE-AI/msp-claude-plugins` and `ghcr.io/wyre-ai`. Plugin versions bumped in the same change (for example `cipp` 0.1.12 and `wyre-gateway` 1.4.7) follow the references.
+
+- Documented the two-step Claude Code marketplace install, GitHub Packages authentication for `@wyre-ai` packages, and loopback-only Syncro Docker HTTP with Claude Desktop connecting through the HTTPS gateway.
 
 ### Removed
 

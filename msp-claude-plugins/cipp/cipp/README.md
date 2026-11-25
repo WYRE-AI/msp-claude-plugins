@@ -3,7 +3,8 @@
 ## Installation
 
 ```
-/plugin install cipp --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install cipp@msp-claude-plugins
 ```
 
 Claude plugins for **CIPP (CyberDrain Improved Partner Portal)** — the open-source Microsoft 365 multi-tenant management platform widely used by MSPs.

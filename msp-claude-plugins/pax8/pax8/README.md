@@ -32,7 +32,8 @@ export PAX8_MCP_TOKEN="your-mcp-token"
 ## Installation
 
 ```
-/plugin install pax8 --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install pax8@msp-claude-plugins
 ```
 
 ### Via MCP Gateway (Recommended)

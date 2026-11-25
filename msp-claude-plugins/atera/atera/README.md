@@ -53,8 +53,16 @@ curl -s "https://app.atera.com/api/v3/customers" \
 
 ## Installation
 
+Run these commands inside Claude Code.
+
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install atera@msp-claude-plugins
+```
+
+For a local checkout, run these commands in your shell.
+
 ```bash
-/plugin install atera --marketplace WYRE-AI/msp-claude-plugins
 # Clone the repository
 git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 

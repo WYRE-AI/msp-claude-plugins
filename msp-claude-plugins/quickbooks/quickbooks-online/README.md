@@ -55,7 +55,8 @@ export QBO_ENVIRONMENT="production"  # or "sandbox"
 ## Installation
 
 ```
-/plugin install qbo --marketplace WYRE-AI/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install qbo@msp-claude-plugins
 ```
 
 1. Clone this plugin to your Claude plugins directory
