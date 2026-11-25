@@ -1,9 +1,9 @@
 {
   "name": "huntress",
-  "version": "0.3.9",
+  "version": "0.3.10",
   "description": "Claude plugins for Huntress - managed threat detection, incident response, endpoint agent management, escalations, and billing reports for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

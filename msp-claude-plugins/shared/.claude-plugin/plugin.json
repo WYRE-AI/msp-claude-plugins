@@ -1,9 +1,9 @@
 {
   "name": "shared-skills",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Vendor-agnostic MSP skills — terminology, ticket triage, incident correlation, and billing reconciliation",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "keywords": [

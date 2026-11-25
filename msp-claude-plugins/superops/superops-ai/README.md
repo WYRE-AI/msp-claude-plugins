@@ -61,6 +61,15 @@ curl -X POST "https://api.superops.ai/msp" \
 
 ## Installation
 
+Run these commands inside Claude Code.
+
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install superops@msp-claude-plugins
+```
+
+For a local checkout, run these commands in your shell.
+
 ```bash
 # Clone the repository
 git clone https://github.com/WYRE-AI/msp-claude-plugins.git

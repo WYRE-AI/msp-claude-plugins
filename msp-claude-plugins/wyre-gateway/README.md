@@ -19,7 +19,7 @@ This plugin provides access to:
 
 ## Prerequisites
 
-1. A Wyre Technology account at [conduit.wyre.ai](https://conduit.wyre.ai)
+1. A WYRE AI account at [conduit.wyre.ai](https://conduit.wyre.ai)
 2. At least one vendor connected through the gateway
 
 ## Connecting Vendors

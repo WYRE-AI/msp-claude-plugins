@@ -1,11 +1,11 @@
 {
   "name": "sherweb",
-  "version": "0.3.12",
+  "version": "0.3.13",
   "description": "Claude plugins for Sherweb Partner API - distributor billing, service provider management, customer subscriptions",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

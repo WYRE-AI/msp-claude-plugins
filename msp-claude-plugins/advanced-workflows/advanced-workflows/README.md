@@ -1,5 +1,12 @@
 # Advanced Workflows
 
+## Installation
+
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install advanced-workflows@msp-claude-plugins
+```
+
 Vendor-generic MSP automation skills. Each workflow detects which PSA/RMM/
 chat-delivery vendor a customer has connected and adapts — see the
 `*-tool-map` skills for exactly which vendors are curated per role.

@@ -1,5 +1,12 @@
 # Unitrends Plugin
 
+## Installation
+
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install unitrends@msp-claude-plugins
+```
+
 Claude Code skills for working with Unitrends Backup appliances and Unitrends MSP — backup jobs, recovery points, replication, and alerts.
 
 ## Status

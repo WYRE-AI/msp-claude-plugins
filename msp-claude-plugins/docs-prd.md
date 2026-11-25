@@ -19,21 +19,20 @@ A clean, professional Astro documentation site for the MSP Claude Plugins market
 
 One command to supercharge Claude for MSP workflows.
 
-/plugin marketplace add wyre-technology/msp-claude-plugins
+/plugin marketplace add WYRE-AI/msp-claude-plugins
 
 [Get Started] [Browse Plugins]
 ```
 
 ### Installation Flow
-1. **Recommended (One Command)**
+1. **Register the Marketplace**
    ```
-   /plugin marketplace add wyre-technology/msp-claude-plugins
+   /plugin marketplace add WYRE-AI/msp-claude-plugins
    ```
-   Then restart Claude Code.
 
-2. **Individual Plugins** (if they only want one)
+2. **Install Individual Plugins** (after registering the marketplace)
    ```
-   /plugin marketplace add wyre-technology/msp-claude-plugins --plugin syncro
+   /plugin install syncro@msp-claude-plugins
    ```
 
 3. **Manual (Advanced)**

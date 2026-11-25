@@ -65,7 +65,7 @@ client** — `.mcp.json` declares only the gateway URL:
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install posthog
+/plugin install posthog@msp-claude-plugins
 ```
 
 ## Available Skills

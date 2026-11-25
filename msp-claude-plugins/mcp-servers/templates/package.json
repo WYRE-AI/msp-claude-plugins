@@ -1,5 +1,5 @@
 {
-  "name": "@wyre-technology/{{VENDOR}}-mcp",
+  "name": "@wyre-ai/{{VENDOR}}-mcp",
   "version": "0.0.0-semantically-released",
   "description": "{{VENDOR_NAME}} MCP server for Claude",
   "type": "module",
@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wyre-technology/{{VENDOR}}-mcp.git"
+    "url": "git+https://github.com/WYRE-AI/{{VENDOR}}-mcp.git"
   },
   "keywords": [
     "mcp",
@@ -27,12 +27,12 @@
     "{{VENDOR}}",
     "msp"
   ],
-  "author": "Wyre Technology",
+  "author": "WYRE AI",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/wyre-technology/{{VENDOR}}-mcp/issues"
+    "url": "https://github.com/WYRE-AI/{{VENDOR}}-mcp/issues"
   },
-  "homepage": "https://github.com/wyre-technology/{{VENDOR}}-mcp#readme",
+  "homepage": "https://github.com/WYRE-AI/{{VENDOR}}-mcp#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
     "@asachs01/node-{{VENDOR}}": "^1.0.0"

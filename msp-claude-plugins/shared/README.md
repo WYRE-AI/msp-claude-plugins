@@ -6,7 +6,7 @@ Vendor-agnostic MSP knowledge that other plugins in this marketplace build on. I
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install shared-skills
+/plugin install shared-skills@msp-claude-plugins
 ```
 
 ## Skills

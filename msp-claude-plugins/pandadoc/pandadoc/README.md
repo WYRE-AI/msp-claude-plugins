@@ -31,6 +31,11 @@ export PANDADOC_API_KEY="your-api-key"
 
 ## Installation
 
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install pandadoc@msp-claude-plugins
+```
+
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect -- just paste your API key and you're done.

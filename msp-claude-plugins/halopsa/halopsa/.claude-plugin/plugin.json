@@ -1,9 +1,9 @@
 {
   "name": "halopsa",
-  "version": "0.2.12",
+  "version": "0.2.13",
   "description": "Claude Code plugin for HaloPSA - tickets, clients, assets, contracts",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

@@ -54,6 +54,11 @@ export QBO_ENVIRONMENT="production"  # or "sandbox"
 
 ## Installation
 
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install qbo@msp-claude-plugins
+```
+
 1. Clone this plugin to your Claude plugins directory
 2. Configure environment variables
 3. For automated token refresh, install the SDK: `npm install node-quickbooks`

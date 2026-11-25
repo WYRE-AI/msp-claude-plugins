@@ -41,7 +41,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <li>
       <strong>Install the plugin via the Cowork marketplace</strong> — provides skills and slash commands
       (e.g. <code>/search-tickets</code>, <code>/create-ticket</code>). Use the marketplace source
-      <code>wyre-technology/msp-claude-plugins</code>.
+      <code>WYRE-AI/msp-claude-plugins</code>.
     </li>
     <li>
       <strong>Add the MCP gateway server</strong> — easiest via Settings &rarr; Connectors &rarr;
@@ -79,25 +79,25 @@ const baseUrl = import.meta.env.BASE_URL;
   <p>
     If you want the plugin skills and slash commands <em>without</em> the gateway
     (for example, to use with local MCP servers or just for the domain knowledge),
-    you can install them from the Cowork marketplace.
+    you can install them from the Claude Code marketplace.
   </p>
 
-  <h3>Install All Plugins</h3>
+  <h3>Add the Marketplace</h3>
+
+  <p>Run this command inside Claude Code to register the marketplace.</p>
 
   <div class="not-prose my-6">
     <InstallCommand />
   </div>
 
-  <p>Then restart Claude Code to activate the plugins.</p>
-
   <h3>Install Individual Plugins</h3>
 
-  <p>If you only need specific plugins, install them individually:</p>
+  <p>After adding the marketplace, run the install command for each plugin you want inside Claude Code.</p>
 
   <div class="not-prose my-6 space-y-3">
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin kaseya-autotask" size="sm" />
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin kaseya-it-glue" size="sm" />
-    <InstallCommand command="/plugin marketplace add wyre-technology/msp-claude-plugins --plugin sentinelone" size="sm" />
+    <InstallCommand command="/plugin install autotask@msp-claude-plugins" size="sm" />
+    <InstallCommand command="/plugin install itglue@msp-claude-plugins" size="sm" />
+    <InstallCommand command="/plugin install sentinelone@msp-claude-plugins" size="sm" />
   </div>
 
   <h3>Available Plugin IDs</h3>
@@ -112,17 +112,17 @@ const baseUrl = import.meta.env.BASE_URL;
       </tr>
     </thead>
     <tbody>
-      <tr><td><code>kaseya-autotask</code></td><td>Autotask PSA</td><td>Kaseya</td><td>PSA</td></tr>
-      <tr><td><code>kaseya-datto-rmm</code></td><td>Datto RMM</td><td>Kaseya</td><td>RMM</td></tr>
-      <tr><td><code>kaseya-it-glue</code></td><td>IT Glue</td><td>Kaseya</td><td>Documentation</td></tr>
-      <tr><td><code>kaseya-rocketcyber</code></td><td>RocketCyber</td><td>Kaseya</td><td>Security</td></tr>
+      <tr><td><code>autotask</code></td><td>Autotask PSA</td><td>Kaseya</td><td>PSA</td></tr>
+      <tr><td><code>datto-rmm</code></td><td>Datto RMM</td><td>Kaseya</td><td>RMM</td></tr>
+      <tr><td><code>itglue</code></td><td>IT Glue</td><td>Kaseya</td><td>Documentation</td></tr>
+      <tr><td><code>rocketcyber</code></td><td>RocketCyber</td><td>Kaseya</td><td>Security</td></tr>
       <tr><td><code>atera</code></td><td>Atera</td><td>Atera</td><td>RMM + PSA</td></tr>
       <tr><td><code>halopsa</code></td><td>HaloPSA</td><td>Halo</td><td>PSA</td></tr>
-      <tr><td><code>superops-ai</code></td><td>SuperOps.ai</td><td>SuperOps</td><td>PSA + RMM</td></tr>
+      <tr><td><code>superops</code></td><td>SuperOps.ai</td><td>SuperOps</td><td>PSA + RMM</td></tr>
       <tr><td><code>connectwise-psa</code></td><td>ConnectWise PSA</td><td>ConnectWise</td><td>PSA</td></tr>
       <tr><td><code>connectwise-automate</code></td><td>ConnectWise Automate</td><td>ConnectWise</td><td>RMM</td></tr>
-      <tr><td><code>syncro-msp</code></td><td>Syncro MSP</td><td>Syncro</td><td>PSA + RMM</td></tr>
-      <tr><td><code>ninjaone-rmm</code></td><td>NinjaOne RMM</td><td>NinjaOne</td><td>RMM</td></tr>
+      <tr><td><code>syncro</code></td><td>Syncro MSP</td><td>Syncro</td><td>PSA + RMM</td></tr>
+      <tr><td><code>ninjaone</code></td><td>NinjaOne RMM</td><td>NinjaOne</td><td>RMM</td></tr>
       <tr><td><code>hudu</code></td><td>Hudu</td><td>Hudu</td><td>Documentation</td></tr>
       <tr><td><code>liongard</code></td><td>Liongard</td><td>Liongard</td><td>Documentation</td></tr>
       <tr><td><code>sentinelone</code></td><td>SentinelOne</td><td>SentinelOne</td><td>Security</td></tr>
@@ -133,7 +133,7 @@ const baseUrl = import.meta.env.BASE_URL;
       <tr><td><code>m365</code></td><td>Microsoft 365</td><td>Microsoft</td><td>Productivity</td></tr>
       <tr><td><code>pax8</code></td><td>Pax8</td><td>Pax8</td><td>Marketplace</td></tr>
       <tr><td><code>pandadoc</code></td><td>PandaDoc</td><td>PandaDoc</td><td>Sales</td></tr>
-      <tr><td><code>quickbooks-online</code></td><td>QuickBooks Online</td><td>Intuit</td><td>Accounting</td></tr>
+      <tr><td><code>qbo</code></td><td>QuickBooks Online</td><td>Intuit</td><td>Accounting</td></tr>
       <tr><td><code>xero</code></td><td>Xero</td><td>Xero</td><td>Accounting</td></tr>
       <tr><td><code>salesbuildr</code></td><td>Salesbuildr</td><td>Salesbuildr</td><td>CRM</td></tr>
     </tbody>
@@ -146,7 +146,7 @@ const baseUrl = import.meta.env.BASE_URL;
   </p>
 
   <pre><code class="language-bash"># Clone the repository
-git clone https://github.com/wyre-technology/msp-claude-plugins.git
+git clone https://github.com/WYRE-AI/msp-claude-plugins.git
 
 # Navigate to a specific plugin
 cd msp-claude-plugins/kaseya/autotask
@@ -159,20 +159,16 @@ claude plugin add .</code></pre>
   <p>After installation, verify the plugins are active:</p>
 
   <pre><code class="language-bash"># List connected MCP servers (Claude Code)
-claude mcp list
+claude mcp list</code></pre>
 
-# List installed plugins
-/plugins
-
-# Check a specific skill is available
-/skill kaseya-autotask:tickets</code></pre>
+  <p>Inside Claude Code, open <code>/plugin</code> and check the Installed tab.</p>
 
   <h2>Updating Plugins</h2>
 
   <p>To update to the latest version:</p>
 
   <div class="not-prose my-6">
-    <InstallCommand command="/plugin marketplace update wyre-technology/msp-claude-plugins" />
+    <InstallCommand command="/plugin marketplace update msp-claude-plugins" />
   </div>
 
   <h2>Uninstalling</h2>
@@ -180,7 +176,7 @@ claude mcp list
   <p>To remove the plugins:</p>
 
   <div class="not-prose my-6">
-    <InstallCommand command="/plugin marketplace remove wyre-technology/msp-claude-plugins" />
+    <InstallCommand command="/plugin marketplace remove msp-claude-plugins" />
   </div>
 
   <p>To remove the gateway MCP server:</p>
@@ -197,7 +193,7 @@ claude mcp list
 
   <h3>Command not found errors</h3>
   <p>
-    Verify the plugin is installed with <code>/plugins</code>. If listed but commands
+    Verify the plugin is listed in the Installed tab of <code>/plugin</code>. If listed but commands
     don&apos;t work, try reinstalling the specific plugin.
   </p>
 

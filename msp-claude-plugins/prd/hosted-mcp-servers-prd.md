@@ -154,12 +154,12 @@ Instead of deploying individual MCP servers per vendor, a **unified MCP Gateway*
 
 | Library | npm Package | Status |
 |---------|-------------|--------|
-| `node-datto-rmm` | `@wyre-technology/node-datto-rmm` | ✅ Published |
-| `node-it-glue` | `@wyre-technology/node-it-glue` | ✅ Published |
-| `node-syncro` | `@wyre-technology/node-syncro` | ✅ Published |
-| `node-atera` | `@wyre-technology/node-atera` | ✅ Published |
-| `node-superops` | `@wyre-technology/node-superops` | ✅ Published |
-| `node-halopsa` | `@wyre-technology/node-halopsa` | ✅ Published |
+| `node-datto-rmm` | `@wyre-ai/node-datto-rmm` | ✅ Published |
+| `node-it-glue` | `@wyre-ai/node-it-glue` | ✅ Published |
+| `node-syncro` | `@wyre-ai/node-syncro` | ✅ Published |
+| `node-atera` | `@wyre-ai/node-atera` | ✅ Published |
+| `node-superops` | `@wyre-ai/node-superops` | ✅ Published |
+| `node-halopsa` | `@wyre-ai/node-halopsa` | ✅ Published |
 | `autotask-node` | (local) | ✅ In use by autotask-mcp |
 
 ---
@@ -200,27 +200,27 @@ github.com/wyre-mcp/
 │   └── Accepts creds via headers
 │
 ├── datto-rmm-mcp/            # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-datto-rmm
+│   ├── Uses @wyre-ai/node-datto-rmm
 │   └── Accepts creds via headers
 │
 ├── itglue-mcp/               # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-it-glue
+│   ├── Uses @wyre-ai/node-it-glue
 │   └── Accepts creds via headers
 │
 ├── syncro-mcp/               # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-syncro
+│   ├── Uses @wyre-ai/node-syncro
 │   └── Accepts creds via headers
 │
 ├── atera-mcp/                # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-atera
+│   ├── Uses @wyre-ai/node-atera
 │   └── Accepts creds via headers
 │
 ├── superops-mcp/             # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-superops
+│   ├── Uses @wyre-ai/node-superops
 │   └── Accepts creds via headers
 │
 ├── halopsa-mcp/              # TypeScript MCP server
-│   ├── Uses @wyre-technology/node-halopsa
+│   ├── Uses @wyre-ai/node-halopsa
 │   └── Native OAuth passthrough
 │
 ├── connectwise-psa-mcp/      # TypeScript MCP server (Phase 2)
@@ -295,7 +295,7 @@ Each MCP server repository should include:
 
 | Current Location | New Location |
 |-----------------|--------------|
-| `wyre-technology/autotask-mcp` | `wyre-mcp/autotask-mcp` |
+| `WYRE-AI/autotask-mcp` | `wyre-mcp/autotask-mcp` |
 | (new) | `wyre-mcp/mcp-gateway` (fork) |
 | (new) | `wyre-mcp/datto-rmm-mcp` |
 | (new) | `wyre-mcp/itglue-mcp` |
@@ -752,7 +752,7 @@ Headers:
 
 ### Phase 1: Datto RMM MCP Server (Week 3)
 - [ ] Create repo: `wyre-mcp/datto-rmm-mcp`
-- [ ] Initialize TypeScript project (MCP SDK + @wyre-technology/node-datto-rmm)
+- [ ] Initialize TypeScript project (MCP SDK + @wyre-ai/node-datto-rmm)
 - [ ] Implement tools: list_devices, get_device, list_alerts, resolve_alert, etc.
 - [ ] Accept credentials via `X-API-Key` / `X-API-Secret` headers from gateway
 - [ ] Create Dockerfile and CI/CD workflow
@@ -764,7 +764,7 @@ Headers:
 
 ### Phase 2: IT Glue MCP Server (Week 4)
 - [ ] Create repo: `wyre-mcp/itglue-mcp`
-- [ ] Initialize TypeScript project (MCP SDK + @wyre-technology/node-it-glue)
+- [ ] Initialize TypeScript project (MCP SDK + @wyre-ai/node-it-glue)
 - [ ] Implement tools: search_organizations, get_password, search_configs, etc.
 - [ ] Accept credentials via `X-API-Key` header from gateway
 - [ ] Create Dockerfile and CI/CD workflow
@@ -775,7 +775,7 @@ Headers:
 - [ ] Deploy alongside gateway
 
 ### Phase 3: Autotask Migration (Week 5)
-- [ ] Fork/transfer `wyre-technology/autotask-mcp` → `wyre-mcp/autotask-mcp`
+- [ ] Fork/transfer `WYRE-AI/autotask-mcp` → `wyre-mcp/autotask-mcp`
 - [ ] Adapt to accept credentials via `X-API-Key` / `X-API-Secret` headers
 - [ ] Add gateway route `/v1/autotask/*` → autotask-mcp container
 - [ ] Create Autotask credential entry page in gateway UI
@@ -784,10 +784,10 @@ Headers:
 - [ ] Deploy alongside gateway
 
 ### Phase 4: Community Vendor MCP Servers (Weeks 6-9)
-- [ ] Create `wyre-mcp/syncro-mcp` (TypeScript + @wyre-technology/node-syncro)
-- [ ] Create `wyre-mcp/atera-mcp` (TypeScript + @wyre-technology/node-atera)
-- [ ] Create `wyre-mcp/superops-mcp` (TypeScript + @wyre-technology/node-superops)
-- [ ] Create `wyre-mcp/halopsa-mcp` (TypeScript + @wyre-technology/node-halopsa, native OAuth)
+- [ ] Create `wyre-mcp/syncro-mcp` (TypeScript + @wyre-ai/node-syncro)
+- [ ] Create `wyre-mcp/atera-mcp` (TypeScript + @wyre-ai/node-atera)
+- [ ] Create `wyre-mcp/superops-mcp` (TypeScript + @wyre-ai/node-superops)
+- [ ] Create `wyre-mcp/halopsa-mcp` (TypeScript + @wyre-ai/node-halopsa, native OAuth)
 - [ ] Create `wyre-mcp/connectwise-psa-mcp` (TypeScript, new library needed)
 - [ ] Create `wyre-mcp/connectwise-automate-mcp` (TypeScript, new library needed)
 - [ ] All repos follow standard structure with Dockerfile + CI/CD

@@ -1,11 +1,11 @@
 {
   "name": "liongard",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Claude plugins for Liongard - environments, inspections, systems, detections, agents",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

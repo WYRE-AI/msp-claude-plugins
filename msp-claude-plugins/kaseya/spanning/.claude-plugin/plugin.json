@@ -1,11 +1,11 @@
 {
   "name": "spanning",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Claude plugins for Spanning Cloud Backup - M365 / Google Workspace / Salesforce SaaS backup, restore, audit",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

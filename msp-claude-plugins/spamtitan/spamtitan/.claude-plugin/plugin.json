@@ -1,9 +1,9 @@
 {
   "name": "spamtitan",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Claude plugins for SpamTitan by TitanHQ — quarantine queue management, email flow statistics, sender allowlist and blocklist management for MSPs",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

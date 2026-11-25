@@ -1,9 +1,9 @@
 {
   "name": "knowbe4",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Claude plugins for KnowBe4 - security awareness training, phishing simulation, user risk management",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

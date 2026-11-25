@@ -9,8 +9,8 @@ export interface SharedSkill {
  * Cross-cutting skills that are not tied to a single vendor. Distributed
  * via the `shared-skills` marketplace entry; install with:
  *
- *   /plugin marketplace add wyre-technology/msp-claude-plugins
- *   /plugin install shared-skills
+ *   /plugin marketplace add WYRE-AI/msp-claude-plugins
+ *   /plugin install shared-skills@msp-claude-plugins
  */
 export const sharedSkills: SharedSkill[] = [
   { name: 'billing-reconciliation', description: 'Reconciling cloud marketplace subscriptions (Pax8) against accounting invoices (Xero, QuickBooks Online): the matching strategy, billing gaps, unbilled subscriptions, and margin discrepancy analysis.' },
@@ -23,5 +23,5 @@ export const sharedSkills: SharedSkill[] = [
 export const sharedSkillsMeta = {
   installSlug: 'shared-skills',
   description: 'Vendor-agnostic MSP skills — terminology, ticket triage, incident correlation, and billing reconciliation',
-  version: '1.1.8',
+  version: '1.1.9',
 };

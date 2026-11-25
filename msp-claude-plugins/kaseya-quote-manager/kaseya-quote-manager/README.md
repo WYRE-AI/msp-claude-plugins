@@ -7,7 +7,8 @@ distribution workflows.
 ## Installation
 
 ```
-/plugin marketplace add WYRE-AI/msp-claude-plugins --plugin kaseya-quote-manager
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install kaseya-quote-manager@msp-claude-plugins
 ```
 
 ## Configuration

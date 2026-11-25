@@ -1,9 +1,9 @@
 {
   "name": "connectwise-psa",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Claude Code plugin for ConnectWise PSA (Manage) - tickets, companies, contacts, projects, and time tracking",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://developer.connectwise.com/Products/ConnectWise_PSA",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

@@ -1,6 +1,5 @@
 ---
 import DocsLayout from '@/layouts/DocsLayout.astro';
-import InstallCommand from '@/components/InstallCommand.astro';
 import { mcpServers } from '@/data/mcp-servers';
 
 const baseUrl = import.meta.env.BASE_URL;
@@ -53,15 +52,21 @@ const baseUrl = import.meta.env.BASE_URL;
     </tbody>
   </table>
 
-  <h2>Local (npx)</h2>
+  <h2 id="local-npx">Local (npx)</h2>
 
   <p>
-    The fastest way to run an MCP server. No installation required — npx downloads and runs the
-    package directly from GitHub Package Registry.
+    <code>npx</code> downloads <code>@wyre-ai/*</code> packages from GitHub Packages. Before running
+    these examples, add the following to your user-level <code>~/.npmrc</code> on the machine that
+    launches <code>npx</code>. Use a GitHub personal access token (classic) with
+    <code>read:packages</code> and access to the package. Keep the token out of shared project files.
+    See <a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry">GitHub's npm registry guide</a>.
   </p>
 
+  <pre><code class="language-ini">@wyre-ai:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=&lt;GitHub token with read:packages&gt;</code></pre>
+
   <pre><code class="language-bash"># Example: run the Syncro MCP server
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <p>
     Set the required environment variables before running. Each server's detail page lists the
@@ -71,7 +76,7 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <pre><code class="language-bash"># Set credentials, then run
 export SYNCRO_API_KEY="your-api-key"
 export SYNCRO_SUBDOMAIN="yourcompany"
-npx @wyre-technology/syncro-mcp</code></pre>
+npx @wyre-ai/syncro-mcp</code></pre>
 
   <h2>Docker</h2>
 
@@ -83,17 +88,35 @@ npx @wyre-technology/syncro-mcp</code></pre>
   <h3>Pull and run a pre-built image</h3>
 
   <pre><code class="language-bash"># Pull the latest image
-docker pull ghcr.io/wyre-technology/syncro-mcp:latest
+docker pull ghcr.io/wyre-ai/syncro-mcp:latest
 
 # Run with environment variables
+# Generate CONDUIT_S2S_SECRET with: openssl rand -hex 32
 docker run -d \
   --name syncro-mcp \
-  -p 8080:8080 \
+  -p 127.0.0.1:8080:8080 \
   -e SYNCRO_API_KEY="your-api-key" \
   -e SYNCRO_SUBDOMAIN="yourcompany" \
+  -e AUTH_MODE=env \
+  -e CONDUIT_S2S_SECRET="&lt;output of: openssl rand -hex 32&gt;" \
   -e MCP_TRANSPORT=http \
   -e NODE_ENV=production \
-  ghcr.io/wyre-technology/syncro-mcp:latest</code></pre>
+  ghcr.io/wyre-ai/syncro-mcp:latest</code></pre>
+
+  <p>
+    This single-tenant example uses <code>AUTH_MODE=env</code> to read Syncro credentials from the
+    container environment. The image defaults to <code>AUTH_MODE=gateway</code>. Both modes require
+    a real <code>CONDUIT_S2S_SECRET</code> to start HTTP.
+  </p>
+
+  <p>
+    Keep the raw Node/Docker <code>/mcp</code> backend private. Its published port listens on
+    loopback for a gateway or reverse proxy on the same host. For remote clients, use an
+    authenticated gateway or proxy that terminates TLS and can generate a fresh
+    <code>X-Gateway-S2S</code> proof for each request to the backend. Keep
+    <code>CONDUIT_S2S_SECRET</code> on the signing service and the backend. The header carries a
+    signed proof that can be replayed while valid, so keep it off plaintext network links.
+  </p>
 
   <h3>Using docker-compose</h3>
 
@@ -103,21 +126,28 @@ docker run -d \
   </p>
 
   <pre><code class="language-bash"># Clone the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
-# Create .env with your credentials
+# Create .env. Generate CONDUIT_S2S_SECRET with: openssl rand -hex 32
 cat &gt; .env &lt;&lt;EOF
 SYNCRO_API_KEY=your-api-key
 SYNCRO_SUBDOMAIN=yourcompany
+AUTH_MODE=env
+CONDUIT_S2S_SECRET=&lt;output of: openssl rand -hex 32&gt;
 EOF
 
-# Start the server
-docker compose up -d</code></pre>
+# Official compose interpolates CONDUIT_S2S_SECRET from .env and will not
+# start without a real secret. It hardcodes AUTH_MODE=gateway and does not
+# load AUTH_MODE or SYNCRO_* from this file, so pass them for env mode:
+docker compose run --service-ports --rm \
+  -e AUTH_MODE=env \
+  -e SYNCRO_API_KEY=your-api-key \
+  -e SYNCRO_SUBDOMAIN=yourcompany \
+  syncro-mcp</code></pre>
 
   <p>
-    The compose file includes health checks, automatic restarts, and production defaults.
-    The server will be available at <code>http://localhost:8080</code>.
+    Compose will not start if <code>CONDUIT_S2S_SECRET</code> is unset or empty; generate one with <code>openssl rand -hex 32</code> and use a real value, not a placeholder. A plain <code>docker compose up</code> keeps the file's <code>AUTH_MODE=gateway</code> default (Syncro credentials then arrive on each <code>/mcp</code> request as <code>X-Syncro-API-Key</code>, not from the environment). The <code>run -e</code> form above matches the Docker command: <code>AUTH_MODE=env</code> with <code>SYNCRO_API_KEY</code> and <code>SYNCRO_SUBDOMAIN</code>. The gateway or signing proxy must still supply <code>X-Gateway-S2S</code> to the backend in either mode. The compose file also includes health checks, automatic restarts, and production defaults, and publishes <code>127.0.0.1:8080:8080</code>.
   </p>
 
   <h3>Build from source</h3>
@@ -146,7 +176,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
 
   <h3>Install from GitHub Release</h3>
   <ol>
-    <li>Go to the MCP server's <a href="https://github.com/wyre-technology">GitHub releases page</a></li>
+    <li>Go to the MCP server's <a href="https://github.com/WYRE-AI">GitHub releases page</a></li>
     <li>Download the <code>.mcpb</code> file from the latest release</li>
     <li>Open Claude Desktop → Settings → MCP Servers → Install from file</li>
     <li>Select the downloaded <code>.mcpb</code> file</li>
@@ -172,7 +202,7 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/wyre-technology/&#123;repo-name&#125;/tree/main</code></pre>
+  <pre><code class="language-text">https://cloud.digitalocean.com/apps/new?repo=https://github.com/WYRE-AI/&#123;repo-name&#125;/tree/main</code></pre>
 
   <h3>What happens</h3>
 
@@ -212,12 +242,12 @@ docker build --target production -t syncro-mcp:latest .</code></pre>
     or use the direct URL pattern:
   </p>
 
-  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/wyre-technology/&#123;repo-name&#125;</code></pre>
+  <pre><code class="language-text">https://deploy.workers.cloudflare.com/?url=https://github.com/WYRE-AI/&#123;repo-name&#125;</code></pre>
 
   <h3>Manual deploy with Wrangler</h3>
 
   <pre><code class="language-bash"># Clone and enter the repo
-git clone https://github.com/wyre-technology/syncro-mcp.git
+git clone https://github.com/WYRE-AI/syncro-mcp.git
 cd syncro-mcp
 
 # Install dependencies and build
@@ -232,38 +262,35 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
 
   <h2>Connecting Claude to a Deployed Server</h2>
 
-  <p>
-    Once your MCP server is running (locally or in the cloud), configure Claude to connect to it
-    via HTTP transport.
-  </p>
-
-  <h3>Claude Desktop</h3>
-
-  <p>Add to your <code>claude_desktop_config.json</code>:</p>
-
-  <pre><code class="language-json">{JSON.stringify({
-  mcpServers: {
-    "syncro-mcp": {
-      url: "http://localhost:8080/mcp",
-      transport: "streamable-http"
-    }
-  }
-}, null, 2)}</code></pre>
+  <h3>Claude Desktop (Hosted Gateway)</h3>
 
   <p>
-    Replace <code>localhost:8080</code> with your deployed server's URL for cloud deployments
-    (e.g., <code>your-app.ondigitalocean.app</code> or <code>your-worker.workers.dev</code>).
+    To use hosted Syncro, connect your Syncro account in Conduit. In Claude Desktop, add a custom
+    connector with this gateway URL and complete the OAuth sign-in.
   </p>
 
-  <h3>Claude Code (.mcp.json)</h3>
+  <pre><code>https://conduit.wyre.ai/v1/mcp</code></pre>
 
-  <p>Add to your project's <code>.mcp.json</code>:</p>
+  <p>
+    For a self-hosted Node/Docker backend, enter the HTTPS URL of your authenticated gateway or
+    signing proxy. The URL above is for hosted Conduit. A gateway adds the per-request
+    <code>X-Gateway-S2S</code> header on its upstream request to the raw <code>/mcp</code> server.
+    Claude Desktop's Request headers setting sends fixed values, which cannot generate the fresh
+    proofs that the backend requires. Keep the signing secret in the gateway's server-side configuration.
+  </p>
+
+  <h3>Claude Code (.mcp.json, Local Stdio)</h3>
+
+  <p>
+    Configure <code>~/.npmrc</code> as described in <a href="#local-npx">Local (npx)</a>, then add
+    this local stdio server to your project's <code>.mcp.json</code>.
+  </p>
 
   <pre><code class="language-json">{JSON.stringify({
   mcpServers: {
     "syncro-mcp": {
       command: "npx",
-      args: ["@wyre-technology/syncro-mcp"],
+      args: ["@wyre-ai/syncro-mcp"],
       env: {
         SYNCRO_API_KEY: "your-api-key",
         SYNCRO_SUBDOMAIN: "yourcompany"
@@ -329,8 +356,13 @@ npx wrangler secret put SYNCRO_SUBDOMAIN</code></pre>
       </tr>
       <tr>
         <td><code>AUTH_MODE</code></td>
-        <td>Authentication mode (<code>env</code> or <code>gateway</code>)</td>
-        <td>Optional, defaults to <code>env</code></td>
+        <td>Authentication mode (<code>env</code> or <code>gateway</code>). The Docker image and official Compose file default to <code>gateway</code>, which ignores <code>SYNCRO_*</code> from the environment. Use <code>env</code> for the single-tenant examples on this page. Stdio ignores this setting.</td>
+        <td>Optional. Image and Compose default to <code>gateway</code></td>
+      </tr>
+      <tr>
+        <td><code>CONDUIT_S2S_SECRET</code></td>
+        <td>Service-to-service secret required to start the Node/Docker HTTP transport. Generate one with <code>openssl rand -hex 32</code>. Known placeholders are rejected. Official Compose will not start without it. The gateway or signing proxy uses it to generate <code>X-Gateway-S2S</code> proofs for requests to <code>/mcp</code>.</td>
+        <td>Required for HTTP (Docker and Compose)</td>
       </tr>
     </tbody>
   </table>

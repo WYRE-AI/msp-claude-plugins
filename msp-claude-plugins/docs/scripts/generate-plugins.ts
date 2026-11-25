@@ -591,8 +591,8 @@ export interface SharedSkill {
  * Cross-cutting skills that are not tied to a single vendor. Distributed
  * via the \`${meta.installSlug}\` marketplace entry; install with:
  *
- *   /plugin marketplace add wyre-technology/msp-claude-plugins
- *   /plugin install ${meta.installSlug}
+ *   /plugin marketplace add WYRE-AI/msp-claude-plugins
+ *   /plugin install ${meta.installSlug}@msp-claude-plugins
  */
 export const sharedSkills: SharedSkill[] = [
 ${skillsArr}

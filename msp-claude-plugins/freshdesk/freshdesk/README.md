@@ -13,7 +13,7 @@ Claude Code plugin for [Freshdesk](https://www.freshworks.com/freshdesk/) - clou
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install freshdesk
+/plugin install freshdesk@msp-claude-plugins
 ```
 
 The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/freshdesk/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.

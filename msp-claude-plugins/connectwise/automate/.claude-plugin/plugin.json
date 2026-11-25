@@ -1,9 +1,9 @@
 {
   "name": "connectwise-automate",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "Claude plugins for ConnectWise Automate RMM - computers, scripts, monitors, alerts, and client management",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",

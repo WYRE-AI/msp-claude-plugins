@@ -18,7 +18,7 @@ Claude Code plugin for [SaaS Alerts](https://saasalerts.com) — SaaS security m
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install saas-alerts
+/plugin install saas-alerts@msp-claude-plugins
 ```
 
 The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/saas-alerts/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.

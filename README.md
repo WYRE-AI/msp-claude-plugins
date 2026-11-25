@@ -239,7 +239,7 @@ arguments, credentials, browser captures, or model outputs.
 
 ## Community
 
-This project is maintained by [WYRE AI](https://wyretechnology.com), a Chattanooga-based
+This project is maintained by [WYRE AI](https://wyre.ai), a Chattanooga-based
 MSP focused on AI enablement.
 
 - **Questions or feedback?** Open a [Discussion](https://github.com/WYRE-AI/msp-claude-plugins/discussions)

@@ -14,7 +14,7 @@ when_to_use: >-
 
 ## Status note
 
-The MCP server (`datto-bcdr-mcp`) and SDK (`@wyre-technology/node-datto-bcdr`) are in development. This skill is reference documentation; the implementation will follow these patterns.
+The MCP server (`datto-bcdr-mcp`) and SDK (`@wyre-ai/node-datto-bcdr`) are in development. This skill is reference documentation; the implementation will follow these patterns.
 
 ## Overview
 

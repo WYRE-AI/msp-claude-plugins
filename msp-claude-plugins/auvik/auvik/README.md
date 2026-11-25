@@ -24,7 +24,7 @@ Install via the [MSP Claude Plugins marketplace](https://github.com/WYRE-AI/msp-
 
 ```
 /plugin marketplace add WYRE-AI/msp-claude-plugins
-/plugin install auvik
+/plugin install auvik@msp-claude-plugins
 ```
 
 The plugin connects through [Conduit](https://conduit.wyre.ai) at `https://conduit.wyre.ai/v1/auvik/mcp`. Your MCP client authenticates to Conduit with OAuth (it prompts you to sign in on first use); there are no environment variables or headers to configure on the client.

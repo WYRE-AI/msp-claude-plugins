@@ -9,7 +9,7 @@ build a per-tool allowlist or to check whether a capability exists at all.
 
 Enumerated from `scalepad-mcp` v1.0.2 (`2d58d5f`) by loading each domain
 handler and reading `getTools()`, then resolving every tool to the HTTP verb
-and path its `invoke` reaches through `@wyre-technology/node-scalepad`. The
+and path its `invoke` reaches through `@wyre-ai/node-scalepad`. The
 server registers all 381 upfront — `scalepad_navigate` is a help aid, not a
 gate.
 

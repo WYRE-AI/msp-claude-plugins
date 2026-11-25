@@ -44,6 +44,11 @@ To obtain credentials:
 
 ## Installation
 
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install ironscales@msp-claude-plugins
+```
+
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — enter your API key and Company ID.

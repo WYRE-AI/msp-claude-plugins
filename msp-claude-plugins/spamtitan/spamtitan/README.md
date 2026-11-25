@@ -36,6 +36,11 @@ export SPAMTITAN_BASE_URL="https://your-spamtitan-instance.com"  # for self-host
 
 ## Installation
 
+```
+/plugin marketplace add WYRE-AI/msp-claude-plugins
+/plugin install spamtitan@msp-claude-plugins
+```
+
 ### Via MCP Gateway (Recommended)
 
 Use the [MCP Gateway](https://conduit.wyre.ai) to connect — paste your API key and you're done.

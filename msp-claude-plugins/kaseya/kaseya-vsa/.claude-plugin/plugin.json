@@ -1,11 +1,11 @@
 {
   "name": "kaseya-vsa",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Claude plugins for Kaseya VSA - endpoint monitoring, patch management, agent procedures, remote control",
   "author": {
     "name": "MSP Claude Plugins Community"
   },
-  "homepage": "https://github.com/wyre-technology/msp-claude-plugins",
-  "repository": "https://github.com/wyre-technology/msp-claude-plugins",
+  "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
+  "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
   "license": "Apache-2.0"
 }

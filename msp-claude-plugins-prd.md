@@ -3,7 +3,7 @@
 ## Product Requirements Document
 
 **Version:** 1.0  
-**Author:** Aaron / WYRE Technology  
+**Author:** Aaron / WYRE AI  
 **Date:** February 4, 2026  
 **Status:** Draft
 

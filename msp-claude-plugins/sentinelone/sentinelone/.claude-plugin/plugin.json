@@ -1,9 +1,9 @@
 {
   "name": "sentinelone",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Claude plugins for SentinelOne XDR - threat detection, incident response, and endpoint agent management via the Purple AI MCP server",
   "author": {
-    "name": "WYRE Technology"
+    "name": "WYRE AI"
   },
   "homepage": "https://github.com/WYRE-AI/msp-claude-plugins",
   "repository": "https://github.com/WYRE-AI/msp-claude-plugins",
